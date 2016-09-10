@@ -1,6 +1,3 @@
-function! DeopleteUpdateRemotePlugins(arg)
-  UpdateRemotePlugins
-endfunction
 
 call plug#begin('~/.vim/plugged')
 " colorscheme
@@ -11,9 +8,6 @@ Plug 'tpope/vim-repeat'
 " editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-
-" completion
-Plug 'Shougo/deoplete.nvim', { 'do': function('DeopleteUpdateRemotePlugins') }
 
 " fuzzy search
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -26,7 +20,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'pangloss/vim-javascript' | Plug 'mxw/vim-jsx'
 call plug#end()
 
-let g:deoplete#enable_at_startup=1
 let g:gitgutter_sign_column_always=1
 let g:jsx_ext_required=0
 
