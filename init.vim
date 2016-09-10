@@ -23,15 +23,25 @@ call plug#end()
 let g:gitgutter_sign_column_always=1
 let g:jsx_ext_required=0
 
+set autoindent
+set autoread
+set background=dark
+set backspace=indent,eol,start
 set clipboard+=unnamedplus
-set number ruler showcmd colorcolumn=80
+set display=lastline
+set encoding=utf-8
 set hidden
-set scrolloff=10
+set history=10000
 set ignorecase smartcase
+set incsearch
+set laststatus=2
+set mouse=a
+set number ruler showcmd colorcolumn=80
+set scrolloff=10
+set shiftwidth=2 softtabstop=2 expandtab
+set smarttab
 set ttimeout ttimeoutlen=100
 set updatetime=250 " suggested by vim-gitgutter
-set shiftwidth=2 softtabstop=2 expandtab
-set background=dark
 colorscheme solarized
 
 autocmd FileType vim
