@@ -1,3 +1,4 @@
+set rtp+=/usr/local/opt/fzf
 
 call plug#begin('~/.vim/plugged')
 " colorscheme
@@ -10,7 +11,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 
 " fuzzy search
-Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
 " git integration
