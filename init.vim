@@ -4,12 +4,6 @@ call plug#begin('~/.vim/plugged')
 " colorscheme
 Plug 'altercation/vim-colors-solarized'
 
-Plug 'tpope/vim-repeat'
-
-" editing
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-
 " fuzzy search
 Plug 'junegunn/fzf.vim'
 
