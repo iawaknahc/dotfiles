@@ -21,7 +21,7 @@ set autoindent
 set autoread
 set background=dark
 set backspace=indent,eol,start
-set clipboard+=unnamedplus
+set clipboard=unnamed,unnamedplus
 set display=lastline
 set encoding=utf-8
 set hidden
