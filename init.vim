@@ -25,7 +25,7 @@ set showcmd
 set wildmenu
 set laststatus=2
 set cursorline
-" set termguicolors " assume running on a terminal with true color support
+set termguicolors " assume running on a terminal with true color support
 set background=dark
 syntax on
 colorscheme onedark
