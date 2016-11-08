@@ -59,6 +59,11 @@ set mouse=a
 
 set updatetime=250 " suggested by vim-gitgutter
 
+let mapleader = "\<Space>"
+nnoremap <Leader><Leader> :set hlsearch!<CR>
+nnoremap <Leader>f :Files<CR>
+nnoremap <Leader>b :Buffers<CR>
+
 autocmd FileType vim
   \ setlocal shiftwidth=2 softtabstop=2 expandtab colorcolumn=80
 autocmd FileType python
