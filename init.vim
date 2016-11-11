@@ -1,8 +1,7 @@
 set rtp+=/usr/local/opt/fzf
 
 call plug#begin('~/.vim/plugged')
-" colorscheme
-Plug 'joshdick/onedark.vim'
+Plug 'altercation/vim-colors-solarized'
 
 " fuzzy search
 Plug 'junegunn/fzf.vim'
@@ -25,10 +24,9 @@ set showcmd
 set wildmenu
 set laststatus=2
 set cursorline
-set termguicolors " assume running on a terminal with true color support
 set background=dark
-syntax on
-colorscheme onedark
+syntax enable
+colorscheme solarized
 
 " editing
 set autoindent
