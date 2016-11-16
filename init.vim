@@ -34,7 +34,6 @@ set autoread
 set backspace=indent,eol,start
 set encoding=utf-8
 set hidden
-set history=10000
 set shiftwidth=2
 set softtabstop=2
 set expandtab
