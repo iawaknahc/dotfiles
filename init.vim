@@ -41,6 +41,7 @@ set smarttab
 set scrolloff=10
 set ttimeout
 set ttimeoutlen=100
+set noswapfile
 
 " clipboard
 set clipboard=unnamed,unnamedplus
