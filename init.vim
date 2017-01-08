@@ -76,3 +76,6 @@ autocmd FileType javascript
 
 autocmd FileType sh
   \ setlocal shiftwidth=2 softtabstop=2 expandtab colorcolumn=80
+
+autocmd FileType go
+  \ setlocal shiftwidth=4 tabstop=4 noexpandtab colorcolumn=80
