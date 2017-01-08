@@ -62,11 +62,17 @@ nnoremap <Leader><Leader> :set hlsearch!<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
 
+" file types
+autocmd BufRead,BufNewFile BUCK set filetype=python
+
 autocmd FileType vim
   \ setlocal shiftwidth=2 softtabstop=2 expandtab colorcolumn=80
+
 autocmd FileType python
   \ setlocal shiftwidth=4 softtabstop=4 expandtab colorcolumn=79
+
 autocmd FileType javascript
   \ setlocal shiftwidth=2 softtabstop=2 expandtab colorcolumn=80
+
 autocmd FileType sh
   \ setlocal shiftwidth=2 softtabstop=2 expandtab colorcolumn=80
