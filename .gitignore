@@ -1,1 +1,4 @@
-.dotfiles.git
+*
+!.gitignore
+!.vimrc
+!.tmux.conf
