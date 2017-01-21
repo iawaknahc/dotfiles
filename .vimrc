@@ -1,10 +1,10 @@
-set rtp+=/usr/local/opt/fzf
-
 call plug#begin('~/.vim/plugged')
 Plug 'altercation/vim-colors-solarized'
 
 " fuzzy search
-Plug 'junegunn/fzf.vim'
+if isdirectory('/usr/local/opt/fzf')
+  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+endif
 
 " git integration
 Plug 'airblade/vim-gitgutter'
