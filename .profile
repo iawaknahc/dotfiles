@@ -30,6 +30,15 @@ if [ -d "$HOME/.cargo/bin" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# brew specific
+if [ -x "$(command -v brew)" ]; then
+  # bash specific
+  if [ "$(basename "$SHELL")" = 'bash' ]; then
+    # enable bash completion
+    [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
+  fi
+fi
+
 replace() {
   pattern=$(echo "$1" | perl -pe 's/\//\\\//g')
   replacement=$(echo "$2" | perl -pe 's/\//\\\//g')
