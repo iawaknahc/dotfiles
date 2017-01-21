@@ -39,6 +39,9 @@ if [ -x "$(command -v brew)" ]; then
   fi
 fi
 
+# watchman
+export WATCHMAN_CONFIG_FILE="$HOME/.watchman.json"
+
 replace() {
   pattern=$(echo "$1" | perl -pe 's/\//\\\//g')
   replacement=$(echo "$2" | perl -pe 's/\//\\\//g')
