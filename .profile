@@ -2,7 +2,8 @@ export VISUAL='vim'
 export EDITOR="$VISUAL"
 
 if [ -x "/usr/libexec/java_home" ]; then
-  export JAVA_HOME=$(/usr/libexec/java_home)
+  JAVA_HOME="$(/usr/libexec/java_home)"
+  export JAVA_HOME
 fi
 
 if [ -d "$HOME/android-sdk-macosx" ]; then
