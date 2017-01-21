@@ -8,9 +8,6 @@ Plug 'junegunn/fzf.vim'
 
 " git integration
 Plug 'airblade/vim-gitgutter'
-
-" languages
-Plug 'pangloss/vim-javascript' | Plug 'mxw/vim-jsx'
 call plug#end()
 
 let g:gitgutter_sign_column_always=1
