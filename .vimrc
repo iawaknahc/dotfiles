@@ -22,6 +22,7 @@ set wildmenu
 set laststatus=2
 set cursorline
 set background=dark
+set list listchars=tab:>-,trail:.
 syntax enable
 colorscheme solarized
 
