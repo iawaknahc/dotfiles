@@ -47,3 +47,7 @@ replace() {
   replacement=$(echo "$2" | perl -pe 's/\//\\\//g')
   ag -0ls "$pattern" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
 }
+
+if [ -d "$HOME/.dotfiles.git" ]; then
+  alias dotfiles='git --git-dir="$HOME/.dotfiles.git" --work-tree="$HOME"'
+fi
