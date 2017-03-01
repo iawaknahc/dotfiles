@@ -1,5 +1,6 @@
 *
 !.gitignore
+!.dotfiles.sh
 !.vimrc
 !.tmux.conf
 !.bash_profile
