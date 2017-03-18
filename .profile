@@ -30,6 +30,12 @@ if [ -d "$HOME/.cargo/bin" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# golang
+export GOPATH="$HOME/go"
+if [ -d "$HOME/go/bin" ]; then
+  export PATH="$HOME/go/bin:$PATH"
+fi
+
 # brew specific
 if [ -x "$(command -v brew)" ]; then
   # bash specific
