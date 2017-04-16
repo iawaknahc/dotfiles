@@ -11,7 +11,6 @@ Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 let g:gitgutter_sign_column_always=1
-let g:jsx_ext_required=0
 
 " look
 set colorcolumn=80
