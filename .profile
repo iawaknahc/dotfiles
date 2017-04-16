@@ -1,5 +1,7 @@
 export VISUAL='vim'
 export EDITOR="$VISUAL"
+export PS1='$ '
+export PS2='> '
 
 if [ -x "/usr/libexec/java_home" ]; then
   JAVA_HOME="$(/usr/libexec/java_home)"
