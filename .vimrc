@@ -1,5 +1,6 @@
 call plug#begin('~/.vim/plugged')
-Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+Plug 'elixir-lang/vim-elixir'
 
 " fuzzy search
 if isdirectory('/usr/local/opt/fzf')
@@ -23,7 +24,7 @@ set cursorline
 set background=dark
 set list listchars=tab:>-,trail:.
 syntax enable
-colorscheme solarized
+colorscheme base16-default-dark
 
 " editing
 set autoindent
@@ -39,6 +40,7 @@ set scrolloff=10
 set ttimeout
 set ttimeoutlen=100
 set noswapfile
+set backupcopy=yes
 
 " clipboard
 set clipboard=unnamed,unnamedplus
