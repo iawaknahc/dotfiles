@@ -1,5 +1,5 @@
 call plug#begin('~/.vim/plugged')
-Plug 'chriskempson/base16-vim'
+" elixir
 Plug 'elixir-lang/vim-elixir'
 
 " fuzzy search
@@ -24,7 +24,7 @@ set cursorline
 set background=dark
 set list listchars=tab:>-,trail:.
 syntax enable
-colorscheme base16-default-dark
+colorscheme desert
 
 " editing
 set autoindent
