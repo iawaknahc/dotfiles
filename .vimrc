@@ -5,6 +5,9 @@ call plug#begin('~/.vim/plugged')
 " elixir
 Plug 'elixir-lang/vim-elixir'
 
+" colorscheme
+Plug 'dracula/vim'
+
 " fuzzy search
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -17,6 +20,8 @@ set number
 set laststatus=2
 set cursorline
 set list listchars=tab:>-,trail:.
+set termguicolors
+colorscheme dracula
 
 " editing
 set autoindent
