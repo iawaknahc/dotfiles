@@ -2,7 +2,7 @@ export VISUAL='vim'
 export EDITOR="$VISUAL"
 export PS1='$ '
 export PS2='> '
-export LC_ALL='en_US'
+export LC_ALL='en_US.UTF-8'
 
 if [ -x "/usr/libexec/java_home" ]; then
   JAVA_HOME="$(/usr/libexec/java_home)"
