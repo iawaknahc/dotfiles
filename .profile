@@ -9,15 +9,10 @@ if [ -x "/usr/libexec/java_home" ]; then
   export JAVA_HOME
 fi
 
-if [ -d "$HOME/android-sdk-macosx" ]; then
-  export ANDROID_HOME="$HOME/android-sdk-macosx"
+if [ -d "$HOME/android-sdk" ]; then
+  export ANDROID_HOME="$HOME/android-sdk"
   export ANDROID_SDK="$ANDROID_HOME"
-  export PATH="$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$PATH"
-fi
-
-if [ -d "$HOME/android-ndk-r13" ]; then
-  export ANDROID_NDK="$HOME/android-ndk-r13"
-  export PATH="$ANDROID_NDK:$PATH"
+  export PATH="$ANDROID_SDK/tools/bin:$ANDROID_SDK/platform-tools:$ANDROID_SDK/ndk-bundle:$PATH"
 fi
 
 if [ -x "$(command -v ag)" ]; then
