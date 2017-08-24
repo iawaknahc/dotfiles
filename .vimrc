@@ -31,7 +31,6 @@ set autoindent
 set autoread
 set encoding=utf-8
 set hidden
-set expandtab shiftwidth=2 softtabstop=2
 set smarttab
 set noswapfile
 set backupcopy=yes
@@ -51,6 +50,8 @@ nnoremap <Leader>b :Buffers<CR>
 
 " file types
 autocmd BufRead,BufNewFile BUCK set filetype=python
+autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
 
-autocmd FileType go
-  \ setlocal shiftwidth=4 tabstop=4 noexpandtab colorcolumn=80
+" indentation
+autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4
+autocmd FileType javascript,json,ruby,sh setlocal expandtab shiftwidth=2 softtabstop=2
