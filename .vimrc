@@ -2,7 +2,8 @@ unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 
 call plug#begin('~/.vim/plugged')
-" elixir
+
+" languages
 Plug 'elixir-lang/vim-elixir'
 
 " colorscheme
@@ -21,8 +22,8 @@ set laststatus=2
 set cursorline
 set list listchars=tab:>-,trail:.
 set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 colorscheme dracula
 
 " editing
@@ -43,7 +44,7 @@ set ignorecase
 set smartcase
 set hlsearch
 
-let mapleader = "\<Space>"
+let mapleader="\<Space>"
 nnoremap <Leader><Leader> :set hlsearch!<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
