@@ -5,6 +5,7 @@ call plug#begin('~/.vim/plugged')
 
 " languages
 Plug 'elixir-lang/vim-elixir'
+Plug 'keith/swift.vim'
 
 " colorscheme
 Plug 'dracula/vim'
@@ -60,3 +61,4 @@ autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
 " indentation
 autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4
 autocmd FileType javascript,json,ruby,sh setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType swift setlocal expandtab shiftwidth=4 softtabstop=4
