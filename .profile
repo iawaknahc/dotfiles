@@ -19,9 +19,15 @@ if [ -x "$(command -v ag)" ]; then
   export FZF_DEFAULT_COMMAND='ag -g ""'
 fi
 
+# nvm
 if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+fi
+
+# rbenv
+if [ -x "$(command -v rbenv)" ]; then
+  eval "$(rbenv init -)"
 fi
 
 if [ -d "$HOME/.cargo/bin" ]; then
