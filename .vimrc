@@ -6,6 +6,10 @@ call plug#begin('~/.vim/plugged')
 " languages
 Plug 'elixir-lang/vim-elixir'
 Plug 'keith/swift.vim'
+Plug 'udalov/kotlin-vim'
+Plug 'dart-lang/dart-vim-plugin'
+" Make default shell script as POSIX
+let g:is_posix=1
 
 " colorscheme
 Plug 'dracula/vim'
@@ -57,8 +61,9 @@ nnoremap <Leader>b :Buffers<CR>
 " file types
 autocmd BufRead,BufNewFile BUCK set filetype=python
 autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
+autocmd BufRead,BufNewFile *.gradle set filetype=groovy
 
 " indentation
 autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4
-autocmd FileType javascript,json,ruby,sh setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType swift setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType javascript,json,ruby,sh,yaml setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType swift,rust,groovy,kotlin setlocal expandtab shiftwidth=4 softtabstop=4
