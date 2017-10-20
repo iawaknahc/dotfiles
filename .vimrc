@@ -8,6 +8,8 @@ Plug 'elixir-lang/vim-elixir'
 Plug 'keith/swift.vim'
 Plug 'udalov/kotlin-vim'
 Plug 'dart-lang/dart-vim-plugin'
+Plug 'fatih/vim-go'
+Plug 'reasonml-editor/vim-reason'
 " Make default shell script as POSIX
 let g:is_posix=1
 
