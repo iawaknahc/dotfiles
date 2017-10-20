@@ -46,6 +46,7 @@ set hidden
 set smarttab
 set noswapfile
 set backupcopy=yes
+set expandtab shiftwidth=4 tabstop=4
 
 " clipboard
 set clipboard=unnamed,unnamedplus
@@ -66,6 +67,4 @@ autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
 autocmd BufRead,BufNewFile *.gradle set filetype=groovy
 
 " indentation
-autocmd FileType go setlocal noexpandtab shiftwidth=4 tabstop=4
-autocmd FileType javascript,json,ruby,sh,yaml setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType swift,rust,groovy,kotlin setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType javascript,json,ruby,sh,yaml,vim setlocal expandtab shiftwidth=2 softtabstop=2
