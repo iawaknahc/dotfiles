@@ -61,10 +61,22 @@ nnoremap <Leader><Leader> :set hlsearch!<CR>
 nnoremap <Leader>f :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
 
+function! PythonTemplate()
+  call append(0, '#!/usr/bin/env python')
+  call append(1, 'from __future__ import absolute_import, division, print_function, unicode_literals')
+endfunction
+
+function! ShellTemplate()
+  call append(0, '#!/bin/sh')
+  call append(1, 'set -eu')
+endfunction
+
 " file types
 autocmd BufRead,BufNewFile BUCK set filetype=python
 autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
 autocmd BufRead,BufNewFile *.gradle set filetype=groovy
+autocmd BufNewFile *.py call PythonTemplate()
+autocmd BufNewFile *.sh call ShellTemplate()
 
 " indentation
 autocmd FileType javascript,json,ruby,sh,yaml,vim setlocal expandtab shiftwidth=2 softtabstop=2
