@@ -63,7 +63,8 @@ nnoremap <Leader>b :Buffers<CR>
 
 function! PythonTemplate()
   call append(0, '#!/usr/bin/env python')
-  call append(1, 'from __future__ import absolute_import, division, print_function, unicode_literals')
+  call append(1, '# -*- coding: utf-8 -*-')
+  call append(2, 'from __future__ import absolute_import, division, print_function, unicode_literals')
 endfunction
 
 function! ShellTemplate()
