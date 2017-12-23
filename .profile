@@ -28,7 +28,11 @@ if [ -d "$HOME/android-sdk" ]; then
 fi
 
 # fzf
-if [ -x "$(command -v ag)" ]; then
+if [ -x "$(command -v fd)" ]; then
+  export FZF_DEFAULT_COMMAND='fd --type file'
+elif [ -x "$(command -v rg)" ]; then
+  export FZF_DEFAULT_COMMAND='rg --files'
+elif [ -x "$(command -v ag)" ]; then
   export FZF_DEFAULT_COMMAND='ag -g ""'
 fi
 
