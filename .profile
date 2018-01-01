@@ -60,6 +60,11 @@ if [ -d "$HOME/go" ]; then
   fi
 fi
 
+# opam
+if [ -f "$HOME/.opam/opam-init/init.sh" ]; then
+  . "$HOME/.opam/opam-init/init.sh" 1>/dev/null 2>&1
+fi
+
 # brew specific
 if [ -x "$(command -v brew)" ]; then
   # bash specific
