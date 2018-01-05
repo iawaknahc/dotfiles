@@ -10,9 +10,23 @@ replace() {
   ag -0ls "$pattern" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
 }
 
-if [ -d "$HOME/.dotfiles.git" ]; then
-  alias dotfiles='git --git-dir="$HOME/.dotfiles.git" --work-tree="$HOME"'
-fi
+dotfiles() {
+  git_dir="$HOME/.dotfiles.git"
+  work_tree="$HOME"
+  gitignore="$git_dir/info/exclude"
+
+  case "$1" in
+  'cat-ignore')
+    cat "$gitignore"
+    ;;
+  'write-ignore')
+    cat - > "$gitignore"
+    ;;
+  *)
+    GIT_DIR="$git_dir" GIT_WORK_TREE="$work_tree" git "$@"
+    ;;
+  esac
+}
 
 # java
 if [ -x "/usr/libexec/java_home" ]; then

@@ -1,42 +1,40 @@
 #!/bin/sh
+set -eu
 
 git_dir="$HOME/.dotfiles.git"
 work_tree="$HOME"
+gitignore="*
+!.bash_profile
+!.bashrc
+!.dotfiles.sh
+!.profile
+!.tmux.conf
+!.vimrc
+!.watchman.json"
 
-log_error() {
+error() {
   >&2 echo "$@"
+  exit 1
 }
 
 dotfiles() {
-  git --git-dir="$git_dir" --work-tree="$work_tree" "$@"
+  GIT_DIR="$git_dir" GIT_WORK_TREE="$work_tree" git "$@"
 }
 
 if [ "$#" -ne 1 ]; then
-  log_error "expected your dotfiles repository url"
-  exit 1
+  error 'expected your dotfiles repository url'
 fi
 
 if [ -e "$git_dir" ]; then
-  log_error "$git_dir exists"
-  exit 1
+  error "$git_dir exists"
 fi
 
-dotfiles init
-dotfiles remote add origin "$1"
-dotfiles fetch origin
-output=$(2>&1 dotfiles checkout -b master origin/master)
-if [ "$?" -ne 0 ]; then
-  output=$(echo "$output" | grep -e '^\t' | perl -p -e 's/^\t//')
-  temp_dir=$(cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 32)
-  temp_dir="$work_tree/$temp_dir"
-  echo "making temp dir: $temp_dir"
-  mkdir "$temp_dir"
-  echo "$output" |
-  while IFS= read -r line; do
-    oldpath="$work_tree/$line"
-    newpath="$temp_dir/$line"
-    echo "moving $oldpath to $newpath"
-    mv "$oldpath" "$newpath"
-  done
-  dotfiles checkout -b master origin/master
-fi
+dotfiles init \
+  && dotfiles remote add origin "$1" \
+  && dotfiles fetch origin \
+  && dotfiles checkout -b m origin/master \
+  && echo "$gitignore" > "$git_dir/info/exclude"
+# I could not figure out why the following line
+# must be executed on its own. Otherwise
+# git will complain branch `master` not found.
+dotfiles branch -m master
