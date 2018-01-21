@@ -34,7 +34,7 @@ set noswapfile
 set scrolloff=5
 
 " clipboard
-set clipboard=unnamed,unnamedplus
+set clipboard=unnamed
 
 " mouse
 set mouse=a
