@@ -24,6 +24,7 @@ set lazyredraw
 set synmaxcol=120
 
 " editing
+set autoread
 set autoindent
 set backspace=indent,eol,start
 set backupcopy=yes
