@@ -78,23 +78,19 @@ augroup END
 " indentation
 augroup MyIndentation
   autocmd!
-  let s:four_tab = ['go']
-  let s:two_space = [
-    \'css',
-    \'html',
-    \'javascript',
-    \'json',
-    \'ocaml',
-    \'ruby',
-    \'scss',
-    \'sh',
-    \'vim',
-    \'yaml',
-  \]
-  execute 'autocmd FileType '
-    \. join(s:four_tab, ',')
-    \. ' setlocal noexpandtab shiftwidth=4 tabstop=4'
-  execute 'autocmd FileType '
-    \. join(s:two_space, ',')
-    \. ' setlocal expandtab shiftwidth=2 softtabstop=2'
+  autocmd FileType
+    \ go
+    \ setlocal noexpandtab shiftwidth=4 tabstop=4
+  autocmd FileType
+    \ css,
+    \ html,
+    \ javascript,
+    \ json,
+    \ ocaml,
+    \ ruby,
+    \ scss,
+    \ sh,
+    \ vim,
+    \ yaml
+    \ setlocal expandtab shiftwidth=2 softtabstop=2
 augroup END
