@@ -45,6 +45,8 @@ set ignorecase
 set incsearch
 set smartcase
 
+" mapping
+nnoremap Y y$
 nnoremap <Space><Space> :set hlsearch!<CR>
 nnoremap <Space>f :Files<CR>
 nnoremap <Space>b :Buffers<CR>
