@@ -91,9 +91,3 @@ fi
 
 # watchman
 export WATCHMAN_CONFIG_FILE="$HOME/.watchman.json"
-
-# base16-shell
-if [ -n "$PS1" ]; then
-  BASE16_SHELL="$HOME/.base16-shell"
-  [ -s "$BASE16_SHELL/profile_helper.sh" ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-fi
