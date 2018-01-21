@@ -49,13 +49,13 @@ nnoremap <Space><Space> :set hlsearch!<CR>
 nnoremap <Space>f :Files<CR>
 nnoremap <Space>b :Buffers<CR>
 
-function! PythonTemplate()
+function! s:PythonTemplate()
   call append(0, '#!/usr/bin/env python')
   call append(1, '# -*- coding: utf-8 -*-')
   call append(2, 'from __future__ import absolute_import, division, print_function, unicode_literals')
 endfunction
 
-function! ShellTemplate()
+function! s:ShellTemplate()
   call append(0, '#!/bin/sh')
   call append(1, 'set -eu')
 endfunction
@@ -71,8 +71,8 @@ augroup END
 " useful template
 augroup MyTemplate
   autocmd!
-  autocmd BufNewFile *.py call PythonTemplate()
-  autocmd BufNewFile *.sh call ShellTemplate()
+  autocmd BufNewFile *.py call s:PythonTemplate()
+  autocmd BufNewFile *.sh call s:ShellTemplate()
 augroup END
 
 " indentation
