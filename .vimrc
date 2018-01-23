@@ -6,6 +6,8 @@ call plug#begin('~/.vim/plugged')
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 endif
+Plug 'leafgarland/typescript-vim'
+Plug 'reasonml-editor/vim-reason-plus'
 call plug#end()
 
 " look
