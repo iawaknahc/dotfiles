@@ -2,12 +2,14 @@
 let g:is_posix=1
 
 call plug#begin('~/.vim/plugged')
-" fuzzy search
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 endif
 Plug 'leafgarland/typescript-vim'
 Plug 'reasonml-editor/vim-reason-plus'
+if executable('opam') && executable('ocamlmerlin')
+  Plug (substitute(system('opam config var share'),'\n$','','''') . '/merlin/vim')
+endif
 call plug#end()
 
 " look
