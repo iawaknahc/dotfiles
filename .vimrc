@@ -17,8 +17,12 @@ set laststatus=2
 set list listchars=tab:>-,trail:.
 set number
 set ruler
-set ttimeout ttimeoutlen=100
+
+" command completion
 set wildmenu
+set wildmode=longest:full,full
+
+set ttimeout ttimeoutlen=100
 
 " responsiveness
 set nocursorline
