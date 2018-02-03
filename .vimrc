@@ -17,7 +17,6 @@ set laststatus=2
 set list listchars=tab:>-,trail:.
 set number
 set ruler
-set showcmd
 set ttimeout ttimeoutlen=100
 set wildmenu
 
