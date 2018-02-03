@@ -47,6 +47,7 @@ set hlsearch
 set ignorecase
 set incsearch
 set smartcase
+set nowrapscan
 
 " mapping
 nnoremap Y y$
