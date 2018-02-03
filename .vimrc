@@ -25,8 +25,6 @@ set wildmode=longest:full,full
 set ttimeout ttimeoutlen=100
 
 " responsiveness
-set nocursorline
-set nocursorcolumn
 set lazyredraw
 set synmaxcol=120
 
