@@ -85,8 +85,8 @@ if [ -d "$HOME/go" ]; then
 fi
 
 # opam
-if [ -f "$HOME/.opam/opam-init/init.sh" ]; then
-  . "$HOME/.opam/opam-init/init.sh" 1>/dev/null 2>&1
+if [ -x "$(command -v opam)" ]; then
+  eval "$(opam config env)"
 fi
 
 # brew specific
