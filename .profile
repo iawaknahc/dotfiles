@@ -45,10 +45,9 @@ if [ -x "/usr/libexec/java_home" ]; then
 fi
 
 # android
-if [ -d "$HOME/android-sdk" ]; then
-  export ANDROID_HOME="$HOME/android-sdk"
-  export ANDROID_SDK="$ANDROID_HOME"
-  export PATH="$ANDROID_SDK/tools/bin:$ANDROID_SDK/platform-tools:$ANDROID_SDK/ndk-bundle:$PATH"
+if [ -d "/usr/local/share/android-sdk" ]; then
+  ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+  export ANDROID_SDK_ROOT
 fi
 
 # fzf
