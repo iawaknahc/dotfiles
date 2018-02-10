@@ -44,11 +44,11 @@ fi
 
 # fzf
 if [ -x "$(command -v fd)" ]; then
-  export FZF_DEFAULT_COMMAND='fd --type file'
+  export FZF_DEFAULT_COMMAND='fd --type file --hidden'
 elif [ -x "$(command -v rg)" ]; then
-  export FZF_DEFAULT_COMMAND='rg --files'
+  export FZF_DEFAULT_COMMAND='rg --files --hidden'
 elif [ -x "$(command -v ag)" ]; then
-  export FZF_DEFAULT_COMMAND='ag -g ""'
+  export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 fi
 
 # nvm
