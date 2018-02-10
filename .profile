@@ -6,9 +6,18 @@ export LC_ALL='en_US.UTF-8'
 set -o vi
 
 replace() {
-  pattern=$(echo "$1" | perl -pe 's/\//\\\//g')
-  replacement=$(echo "$2" | perl -pe 's/\//\\\//g')
-  ag -0ls "$pattern" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
+  searcher=''
+  if [ -x "$(command -v rg)" ]; then
+    searcher='rg'
+  elif [ -x "$(command -v ag)" ]; then
+    searcher='ag'
+  else
+    1>&2 echo 'neither rg nor ag is in PATH'
+    return 1
+  fi
+  pattern=$(printf '%s' "$1" | perl -pe 's/\//\\\//g')
+  replacement=$(printf '%s' "$2" | perl -pe 's/\//\\\//g')
+  "$searcher" -0ls "$1" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
 }
 
 dotfiles() {
