@@ -10,6 +10,7 @@ Plug 'reasonml-editor/vim-reason-plus'
 if executable('opam') && executable('ocamlmerlin')
   Plug (substitute(system('opam config var share'),'\n$','','''') . '/merlin/vim')
 endif
+Plug 'iawaknahc/vim-colorscheme-simple'
 call plug#end()
 
 " look
@@ -17,6 +18,7 @@ set laststatus=2
 set list listchars=tab:>-,trail:.
 set number
 set ruler
+colorscheme simple
 
 " command completion
 set wildmenu
