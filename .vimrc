@@ -40,6 +40,9 @@ set hidden
 set noswapfile
 set scrolloff=5
 
+" indentation
+set expandtab shiftwidth=2 softtabstop=2
+
 " clipboard
 set clipboard=unnamed
 
@@ -89,16 +92,6 @@ augroup MyIndentation
     \ go
     \ setlocal noexpandtab shiftwidth=4 tabstop=4
   autocmd FileType
-    \ css,
-    \html,
-    \javascript,
-    \json,
-    \ocaml,
-    \reason,
-    \ruby,
-    \scss,
-    \sh,
-    \vim,
-    \yaml
-    \ setlocal expandtab shiftwidth=2 softtabstop=2
+    \ java
+    \ setlocal expandtab shiftwidth=4 softtabstop=4
 augroup END
