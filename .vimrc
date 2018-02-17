@@ -55,8 +55,6 @@ set smartcase
 " mapping
 nnoremap Y y$
 nnoremap <Space><Space> :set hlsearch!<CR>
-nnoremap <Space>f :Files<CR>
-nnoremap <Space>b :Buffers<CR>
 
 function! s:PythonTemplate()
   call append(0, '#!/usr/bin/env python')
