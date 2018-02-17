@@ -79,6 +79,10 @@ fi
 
 # opam
 if [ -x "$(command -v opam)" ]; then
+  # Workaround the following issue by
+  # running the command twice
+  # https://github.com/ocaml/opam/issues/2159
+  eval "$(opam config env)"
   eval "$(opam config env)"
 fi
 
