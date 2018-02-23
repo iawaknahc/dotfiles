@@ -11,7 +11,17 @@ if executable('opam') && executable('ocamlmerlin')
   Plug (substitute(system('opam config var share'),'\n$','','''') . '/merlin/vim')
 endif
 Plug 'iawaknahc/vim-colorscheme-simple'
+Plug 'w0rp/ale'
 call plug#end()
+
+" ALE
+let g:ale_fix_on_save=1
+let g:ale_fixers={}
+let g:ale_fixers['javascript']=['prettier']
+let g:ale_fixers['typescript']=['prettier']
+let g:ale_javascript_prettier_use_local_config=1
+let g:ale_lint_on_insert_leave=1
+let g:ale_lint_on_text_changed='never'
 
 " look
 set laststatus=2
