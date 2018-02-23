@@ -88,9 +88,9 @@ augroup END
 augroup MyIndentation
   autocmd!
   autocmd FileType
-    \ go
-    \ setlocal noexpandtab shiftwidth=4 tabstop=4
+        \ go
+        \ setlocal noexpandtab shiftwidth=4 tabstop=4
   autocmd FileType
-    \ java
-    \ setlocal expandtab shiftwidth=4 softtabstop=4
+        \ java
+        \ setlocal expandtab shiftwidth=4 softtabstop=4
 augroup END
