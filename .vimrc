@@ -51,9 +51,8 @@ set mouse=a
 
 " search
 set hlsearch
-set ignorecase
+set ignorecase smartcase
 set incsearch
-set smartcase
 
 " mapping
 nnoremap Y y$
