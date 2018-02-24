@@ -39,14 +39,12 @@ set ttimeout ttimeoutlen=100
 
 " responsiveness
 set lazyredraw
-set synmaxcol=120
 
 " editing
 set autoread
 set autoindent
 set backspace=indent,eol,start
 set backupcopy=yes
-set encoding=utf-8
 set hidden
 set noswapfile
 set scrolloff=5
