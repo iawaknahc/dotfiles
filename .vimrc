@@ -48,6 +48,7 @@ set backupcopy=yes
 set hidden
 set noswapfile
 set scrolloff=5
+set nofoldenable
 
 " indentation
 set expandtab shiftwidth=2 softtabstop=2
