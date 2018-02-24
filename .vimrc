@@ -35,8 +35,6 @@ silent! colorscheme simple
 set wildmenu
 set wildmode=longest:full,full
 
-set ttimeout ttimeoutlen=100
-
 " responsiveness
 set lazyredraw
 
