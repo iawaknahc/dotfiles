@@ -81,9 +81,10 @@ endfunction
 " file types
 augroup MyFileType
   autocmd!
-  autocmd BufRead,BufNewFile BUCK set filetype=python
-  autocmd BufRead,BufNewFile Podfile,*.podspec set filetype=ruby
-  autocmd BufRead,BufNewFile *.gradle set filetype=groovy
+  autocmd BufRead,BufNewFile jbuild setlocal filetype=lisp
+  autocmd BufRead,BufNewFile BUCK setlocal filetype=python
+  autocmd BufRead,BufNewFile Podfile,*.podspec setlocal filetype=ruby
+  autocmd BufRead,BufNewFile *.gradle setlocal filetype=groovy
 augroup END
 
 " useful template
