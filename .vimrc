@@ -78,8 +78,8 @@ function! s:ShellTemplate()
   call append(1, 'set -eu')
 endfunction
 
-" file types
-augroup MyFileType
+" additional file types
+augroup MyAdditionFileType
   autocmd!
   autocmd BufRead,BufNewFile jbuild setlocal filetype=lisp
   autocmd BufRead,BufNewFile BUCK setlocal filetype=python
@@ -94,8 +94,8 @@ augroup MyTemplate
   autocmd BufNewFile *.sh call s:ShellTemplate()
 augroup END
 
-" indentation
-augroup MyIndentation
+" file type extras
+augroup MyFileTypeExtras
   autocmd!
   autocmd FileType
         \ go
@@ -103,4 +103,7 @@ augroup MyIndentation
   autocmd FileType
         \ java
         \ setlocal expandtab shiftwidth=4 softtabstop=4
+  autocmd FileType
+        \ gitcommit
+        \ setlocal spell spelllang=en_us
 augroup END
