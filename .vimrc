@@ -67,17 +67,6 @@ set incsearch
 nnoremap Y y$
 nnoremap <Space><Space> :set hlsearch!<CR>
 
-function! s:PythonTemplate()
-  call append(0, '#!/usr/bin/env python')
-  call append(1, '# -*- coding: utf-8 -*-')
-  call append(2, 'from __future__ import absolute_import, division, print_function, unicode_literals')
-endfunction
-
-function! s:ShellTemplate()
-  call append(0, '#!/bin/sh')
-  call append(1, 'set -eu')
-endfunction
-
 " additional file types
 augroup MyAdditionFileType
   autocmd!
@@ -85,13 +74,6 @@ augroup MyAdditionFileType
   autocmd BufRead,BufNewFile BUCK setlocal filetype=python
   autocmd BufRead,BufNewFile Podfile,*.podspec setlocal filetype=ruby
   autocmd BufRead,BufNewFile *.gradle setlocal filetype=groovy
-augroup END
-
-" useful template
-augroup MyTemplate
-  autocmd!
-  autocmd BufNewFile *.py call s:PythonTemplate()
-  autocmd BufNewFile *.sh call s:ShellTemplate()
 augroup END
 
 " file type extras
