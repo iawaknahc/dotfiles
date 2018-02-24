@@ -53,7 +53,7 @@ set scrolloff=5
 set expandtab shiftwidth=2 softtabstop=2
 
 " clipboard
-set clipboard=unnamed
+set clipboard+=unnamed
 
 " mouse
 set mouse=a
