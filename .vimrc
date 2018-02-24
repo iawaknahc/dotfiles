@@ -1,4 +1,4 @@
-" Make default shell script as POSIX
+" make syntax/sh.vim need not to guess shell script type
 let g:is_posix=1
 
 call plug#begin('~/.vim/plugged')
@@ -44,6 +44,8 @@ set lazyredraw
 set autoread
 set autoindent
 set backspace=indent,eol,start
+" force vim not to rename when saving a file
+" since renaming may break some file watching programs e.g. webpack
 set backupcopy=yes
 set hidden
 set noswapfile
