@@ -28,7 +28,7 @@ set laststatus=2
 set list listchars=tab:>-,trail:.
 set number
 set ruler
-colorscheme simple
+silent! colorscheme simple
 
 " command completion
 set wildmenu
