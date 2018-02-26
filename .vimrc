@@ -67,6 +67,10 @@ set incsearch
 nnoremap Y y$
 nnoremap <Space><Space> :set hlsearch!<CR>
 
+" commands
+command! -nargs=1 Spaces execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
+command! -nargs=1 Tabs   execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " noexpandtab"
+
 " additional file types
 augroup MyAdditionFileType
   autocmd!
