@@ -90,6 +90,6 @@ augroup MyFileTypeExtras
         \ java
         \ setlocal expandtab shiftwidth=4 softtabstop=4
   autocmd FileType
-        \ gitcommit
+        \ gitcommit,text,markdown
         \ setlocal spell spelllang=en_us
 augroup END
