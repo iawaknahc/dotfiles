@@ -1,6 +1,16 @@
 " make syntax/sh.vim need not to guess shell script type
 let g:is_posix=1
 
+" ALE
+let g:ale_fix_on_save=1
+let g:ale_fixers={}
+let g:ale_fixers['go']=['gofmt', 'goimports']
+let g:ale_fixers['javascript']=['prettier']
+let g:ale_fixers['typescript']=['prettier']
+let g:ale_javascript_prettier_use_local_config=1
+let g:ale_lint_on_text_changed='never'
+
+" plugins installed with vim-plug
 call plug#begin('~/.vim/plugged')
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -14,14 +24,9 @@ Plug 'iawaknahc/vim-colorscheme-simple'
 Plug 'w0rp/ale'
 call plug#end()
 
-" ALE
-let g:ale_fix_on_save=1
-let g:ale_fixers={}
-let g:ale_fixers['go']=['gofmt', 'goimports']
-let g:ale_fixers['javascript']=['prettier']
-let g:ale_fixers['typescript']=['prettier']
-let g:ale_javascript_prettier_use_local_config=1
-let g:ale_lint_on_text_changed='never'
+" plugins distributed with vim
+packadd matchit
+packadd justify
 
 " look
 set laststatus=2
