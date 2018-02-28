@@ -69,8 +69,11 @@ set ignorecase smartcase
 set incsearch
 
 " mapping
+let mapleader=' '
 nnoremap Y y$
-nnoremap <Space><Space> :set hlsearch!<CR>
+nnoremap <Space> <Nop>
+nnoremap <Leader><Space> :set hlsearch!<CR>
+nnoremap <Leader>b :Buffers<CR>
 
 " commands
 command! -nargs=1 Spaces execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
