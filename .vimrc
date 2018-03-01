@@ -22,82 +22,10 @@ if executable('opam') && executable('ocamlmerlin')
 endif
 Plug 'iawaknahc/vim-colorscheme-simple'
 Plug 'w0rp/ale'
-Plug 'prabirshrestha/async.vim' | Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'iawaknahc/vim-lsp-defaults'
 call plug#end()
-
-" LSP
-function! s:SetupLSP(filetype)
-  execute 'autocmd FileType ' . a:filetype . ' nnoremap <C-]> :LspDefinition<CR>'
-  execute 'autocmd FileType ' . a:filetype . ' nnoremap K :LspHover<CR>'
-  execute 'autocmd FileType ' . a:filetype . ' setlocal omnifunc=lsp#complete'
-endfunction
-augroup MyLSP
-  autocmd!
-  " python
-  " pip3 install python-language-server
-  if executable('pyls')
-    call s:SetupLSP('python')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pyls',
-          \ 'cmd': { server_info -> ['pyls'] },
-          \ 'whitelist': ['python'],
-          \ })
-  endif
-  " golang
-  " go get -u github.com/sourcegraph/go-langserver
-  if executable('go-langserver')
-    call s:SetupLSP('go')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'go-langserver',
-          \ 'cmd': { server_info -> ['go-langserver', '-mode', 'stdio'] },
-          \ 'whitelist': ['go'],
-          \ })
-  endif
-  " css
-  " yarn global add vscode-css-languageserver-bin
-  if executable('css-languageserver')
-    call s:SetupLSP('css')
-    call s:SetupLSP('scss')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'css-languageserver',
-          \ 'cmd': { server_info -> [&shell, &shellcmdflag, 'css-languageserver --stdio']},
-          \ 'whitelist': ['css', 'scss'],
-          \ })
-  endif
-  " typescript
-  " yarn global add typescript-language-server
-  if executable('typescript-language-server')
-    call s:SetupLSP('typescript')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'typescript-language-server',
-          \ 'cmd': { server_info -> [&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-          \ 'root_uri': { server_info -> lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-          \ 'whitelist': ['typescript'],
-          \ })
-  endif
-  " flow
-  " yarn global add flow-language-server
-  if executable('flow-language-server')
-    call s:SetupLSP('javascript')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'flow-language-server',
-          \ 'cmd': { server_info -> [&shell, &shellcmdflag, 'flow-language-server --stdio']},
-          \ 'root_uri': { server_info -> lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.flowconfig'))},
-          \ 'whitelist': ['javascript'],
-          \ })
-  endif
-  " ocaml and reasonml
-  " yarn global add ocaml-language-server
-  if executable('ocaml-language-server')
-    call s:SetupLSP('ocaml')
-    call s:SetupLSP('reason')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'ocaml-language-server',
-          \ 'cmd': { server_info -> [&shell, &shellcmdflag, 'ocaml-language-server --stdio']},
-          \ 'whitelist': ['reason', 'ocaml'],
-          \ })
-  endif
-augroup END
 
 " plugins distributed with vim
 packadd matchit
