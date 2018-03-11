@@ -45,7 +45,7 @@ syntax enable
 
 " look
 set laststatus=2
-set list listchars=tab:>-,trail:.
+set list listchars=tab:>-,trail:~
 set number
 set ruler
 silent! colorscheme simple
