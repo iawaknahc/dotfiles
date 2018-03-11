@@ -42,6 +42,51 @@ dotfiles() {
   esac
 }
 
+brew_install() {
+  if ! >/dev/null brew ls --versions "$1"; then
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install "$@"
+  fi
+}
+
+brew_cask_install() {
+  if ! >/dev/null brew cask ls --versions "$1"; then
+    HOMEBREW_NO_AUTO_UPDATE=1 brew cask install "$@"
+  fi
+}
+
+setup_this_machine() {
+  if ! [ -x "$(command -v brew)" ]; then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew tap caskroom/cask
+    brew tap caskroom/fonts
+  fi
+
+  brew update
+
+  brew_install aria2
+  brew_install fd
+  brew_install fzf
+  brew_install git
+  brew_install gnupg
+  brew_install go
+  brew_install hadolint
+  brew_install opam
+  brew_install reattach-to-user-namespace
+  brew_install ripgrep
+  brew_install shellcheck
+  brew_install tmux
+  brew_install unrar
+  brew_install vim
+  brew_install yarn --without-node
+
+  brew_cask_install 1password
+  brew_cask_install android-sdk
+  brew_cask_install android-platform-tools
+  brew_cask_install docker
+  brew_cask_install google-chrome
+  brew_cask_install mpv
+  brew_cask_install font-source-han-noto-cjk
+}
 
 # android
 if [ -d "/usr/local/share/android-sdk" ]; then
