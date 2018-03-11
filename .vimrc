@@ -44,8 +44,7 @@ set ruler
 silent! colorscheme simple
 
 " command completion
-set wildmenu
-set wildmode=longest:full,full
+set wildmenu wildmode=longest:full,full
 
 " responsiveness
 set lazyredraw
