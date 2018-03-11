@@ -24,17 +24,24 @@ endif
 packadd matchit
 packadd justify
 
-" plugins installed with vim-plug
-call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'reasonml-editor/vim-reason-plus'
-Plug 'iawaknahc/vim-colorscheme-simple'
-Plug 'w0rp/ale'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'iawaknahc/vim-lsp-defaults'
-call plug#end()
+" Declare plugins
+if exists('*minpac#init')
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('w0rp/ale')
+  call minpac#add('leafgarland/typescript-vim')
+  call minpac#add('reasonml-editor/vim-reason-plus')
+  call minpac#add('iawaknahc/vim-colorscheme-simple')
+  call minpac#add('prabirshrestha/async.vim')
+  call minpac#add('prabirshrestha/vim-lsp')
+  call minpac#add('iawaknahc/vim-lsp-defaults')
+endif
+command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
+command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
+
+filetype plugin indent on
+syntax enable
 
 " look
 set laststatus=2
