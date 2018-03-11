@@ -57,6 +57,10 @@ set noswapfile
 set scrolloff=5
 set nofoldenable
 
+" Make escape sequence timeout faster
+" e.g. <Esc>O (Return to normal mode and then press O)
+set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
+
 " indentation
 set expandtab shiftwidth=2 softtabstop=2
 

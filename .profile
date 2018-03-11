@@ -20,6 +20,10 @@ replace() {
   "$searcher" -0ls "$1" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
 }
 
+backup_macos() {
+  COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
+}
+
 dotfiles() {
   git_dir="$HOME/.dotfiles.git"
   work_tree="$HOME"
