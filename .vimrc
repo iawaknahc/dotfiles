@@ -75,7 +75,6 @@ set clipboard+=unnamed
 set mouse=a
 
 " search
-set hlsearch
 set ignorecase smartcase
 set incsearch
 
