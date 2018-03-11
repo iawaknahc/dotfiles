@@ -42,11 +42,6 @@ dotfiles() {
   esac
 }
 
-# java
-if [ -x "/usr/libexec/java_home" ]; then
-  JAVA_HOME="$(/usr/libexec/java_home)"
-  export JAVA_HOME
-fi
 
 # android
 if [ -d "/usr/local/share/android-sdk" ]; then
@@ -63,14 +58,10 @@ elif [ -x "$(command -v ag)" ]; then
   export FZF_DEFAULT_COMMAND='ag -g "" --hidden'
 fi
 
-# rbenv
-if [ -x "$(command -v rbenv)" ]; then
-  eval "$(rbenv init -)"
-fi
-
-# rust
-if [ -d "$HOME/.cargo/bin" ]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
+# asdf
+if [ -d "$HOME/.asdf" ]; then
+  . "$HOME/.asdf/asdf.sh"
+  . "$HOME/.asdf/completions/asdf.bash"
 fi
 
 # golang
@@ -79,6 +70,11 @@ if [ -d "$HOME/go" ]; then
   if [ -d "$HOME/go/bin" ]; then
     export PATH="$HOME/go/bin:$PATH"
   fi
+fi
+
+# rust
+if [ -d "$HOME/.cargo/bin" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # opam
