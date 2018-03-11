@@ -10,26 +10,31 @@ let g:ale_fixers['typescript']=['prettier']
 let g:ale_javascript_prettier_use_local_config=1
 let g:ale_lint_on_text_changed='never'
 
+" Activate plugins in other locations
+if isdirectory('/usr/local/opt/fzf')
+  set runtimepath+=/usr/local/opt/fzf
+endif
+if executable('opam') && executable('ocamlmerlin')
+  execute 'set runtimepath+='
+        \ . substitute(system('opam config var share'),'\n$','','''')
+        \ . '/merlin/vim'
+endif
+
+" Activate plugins distributed with vim
+packadd matchit
+packadd justify
+
 " plugins installed with vim-plug
 call plug#begin('~/.vim/plugged')
-if isdirectory('/usr/local/opt/fzf')
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-endif
+Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'reasonml-editor/vim-reason-plus'
-if executable('opam') && executable('ocamlmerlin')
-  Plug (substitute(system('opam config var share'),'\n$','','''') . '/merlin/vim')
-endif
 Plug 'iawaknahc/vim-colorscheme-simple'
 Plug 'w0rp/ale'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'iawaknahc/vim-lsp-defaults'
 call plug#end()
-
-" plugins distributed with vim
-packadd matchit
-packadd justify
 
 " look
 set laststatus=2
