@@ -87,7 +87,6 @@ setup_this_machine() {
 
   brew_cask_install 1password
   brew_cask_install android-sdk
-  brew_cask_install android-platform-tools
   brew_cask_install docker
   brew_cask_install google-chrome
   brew_cask_install mpv
@@ -96,8 +95,11 @@ setup_this_machine() {
 
 # android
 if [ -d "/usr/local/share/android-sdk" ]; then
-  ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-  export ANDROID_SDK_ROOT
+  export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+  export ANDROID_HOME="$ANDROID_SDK_ROOT"
+  if [ -d "/usr/local/share/android-sdk/platform-tools" ]; then
+    export PATH="/usr/local/share/android-sdk/platform-tools:$PATH"
+  fi
 fi
 
 # fzf
