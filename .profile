@@ -130,6 +130,11 @@ if [ -d "$HOME/.cargo/bin" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# flutter
+if [ -d "$HOME/flutter/bin" ]; then
+  export PATH="$HOME/flutter/bin:$PATH"
+fi
+
 # opam
 if [ -x "$(command -v opam)" ]; then
   # Workaround the following issue by
