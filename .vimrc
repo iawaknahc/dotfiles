@@ -96,15 +96,6 @@ nnoremap <Leader>b :Buffers<CR>
 command! -nargs=1 Spaces execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
 command! -nargs=1 Tabs   execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " noexpandtab"
 
-" additional file types
-augroup MyAdditionFileType
-  autocmd!
-  autocmd BufRead,BufNewFile jbuild setlocal filetype=lisp
-  autocmd BufRead,BufNewFile BUCK setlocal filetype=python
-  autocmd BufRead,BufNewFile Podfile,*.podspec setlocal filetype=ruby
-  autocmd BufRead,BufNewFile *.gradle setlocal filetype=groovy
-augroup END
-
 " file type extras
 augroup MyFileTypeExtras
   autocmd!
