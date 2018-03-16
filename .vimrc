@@ -11,14 +11,10 @@ let g:ale_javascript_prettier_use_local_config=1
 let g:ale_lint_on_text_changed='never'
 
 " Activate plugins in other locations
-if isdirectory('/usr/local/opt/fzf')
-  set runtimepath+=/usr/local/opt/fzf
-endif
-if executable('opam') && executable('ocamlmerlin')
-  execute 'set runtimepath+='
-        \ . substitute(system('opam config var share'),'\n$','','''')
-        \ . '/merlin/vim'
-endif
+set runtimepath+=/usr/local/opt/fzf
+silent! execute 'set runtimepath+='
+      \ . substitute(system('opam config var share'),'\n$','','''')
+      \ . '/merlin/vim'
 
 " Activate plugins distributed with vim
 packadd matchit
