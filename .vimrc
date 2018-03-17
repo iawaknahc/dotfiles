@@ -29,6 +29,7 @@ if exists('*minpac#init')
   call minpac#add('leafgarland/typescript-vim')
   call minpac#add('reasonml-editor/vim-reason-plus')
   call minpac#add('iawaknahc/vim-colorscheme-simple')
+  call minpac#add('iawaknahc/vim-synindent')
   call minpac#add('prabirshrestha/async.vim')
   call minpac#add('prabirshrestha/vim-lsp')
   call minpac#add('iawaknahc/vim-lsp-defaults')
@@ -68,9 +69,6 @@ set nofoldenable
 " e.g. <Esc>O (Return to normal mode and then press O)
 set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 
-" indentation
-set expandtab shiftwidth=2 softtabstop=2
-
 " clipboard
 set clipboard+=unnamed
 
@@ -95,12 +93,6 @@ command! -nargs=1 Tabs   execute "setlocal tabstop=" . <args> . " shiftwidth=" .
 " file type extras
 augroup MyFileTypeExtras
   autocmd!
-  autocmd FileType
-        \ go
-        \ setlocal noexpandtab shiftwidth=4 tabstop=4
-  autocmd FileType
-        \ java
-        \ setlocal expandtab shiftwidth=4 softtabstop=4
   autocmd FileType
         \ gitcommit,text,markdown
         \ setlocal spell spelllang=en_us
