@@ -17,8 +17,8 @@ silent! execute 'set runtimepath+='
       \ . '/merlin/vim'
 
 " Activate plugins distributed with vim
-packadd matchit
-packadd justify
+packadd! matchit
+packadd! justify
 
 " Declare plugins
 if exists('*minpac#init')
