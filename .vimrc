@@ -25,8 +25,8 @@ packadd! justify
 if exists('*minpac#init')
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
+  call minpac#add('w0rp/ale', {'type': 'opt'})
   call minpac#add('junegunn/fzf.vim')
-  call minpac#add('w0rp/ale')
   call minpac#add('pangloss/vim-javascript')
   call minpac#add('mxw/vim-jsx')
   call minpac#add('leafgarland/typescript-vim')
@@ -37,6 +37,7 @@ if exists('*minpac#init')
   call minpac#add('prabirshrestha/vim-lsp')
   call minpac#add('iawaknahc/vim-lsp-defaults')
 endif
+packadd! ale
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 
