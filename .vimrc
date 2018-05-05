@@ -48,7 +48,7 @@ set lazyredraw
 set autoread
 set autoindent
 set backspace=indent,eol,start
-" force vim not to rename when saving a file
+" Force vim not to rename when saving a file
 " since renaming may break some file watching programs e.g. webpack
 set backupcopy=yes
 set hidden
