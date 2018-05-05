@@ -10,13 +10,10 @@ let g:ale_lint_on_text_changed='never'
 
 " Activate plugins in other locations
 set runtimepath+=/usr/local/opt/fzf
-silent! execute 'set runtimepath+='
-      \ . substitute(system('opam config var share'),'\n$','','''')
-      \ . '/merlin/vim'
 
 " Activate plugins distributed with vim
+" https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
-packadd! justify
 
 " Declare plugins
 if exists('*minpac#init')
