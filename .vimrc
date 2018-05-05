@@ -26,9 +26,6 @@ if exists('*minpac#init')
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('iawaknahc/vim-colorscheme-simple')
   call minpac#add('iawaknahc/vim-synindent')
-  call minpac#add('prabirshrestha/async.vim')
-  call minpac#add('prabirshrestha/vim-lsp')
-  call minpac#add('iawaknahc/vim-lsp-defaults')
 endif
 packadd! ale
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
