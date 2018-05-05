@@ -1,6 +1,3 @@
-" make syntax/sh.vim need not to guess shell script type
-let g:is_posix=1
-
 " ALE
 let g:ale_fix_on_save=1
 let g:ale_fixers={}
