@@ -1,12 +1,13 @@
 " ALE
 let g:ale_fix_on_save=1
-let g:ale_fixers={}
-let g:ale_fixers['go']=['gofmt', 'goimports']
-let g:ale_fixers['javascript']=['prettier']
-let g:ale_fixers['typescript']=['prettier']
-let g:ale_fixers['css']=['prettier']
-let g:ale_fixers['scss']=['prettier']
 let g:ale_lint_on_text_changed='never'
+let g:ale_fixers={
+      \ 'go': ['gofmt', 'goimports'],
+      \ 'javascript': ['prettier'],
+      \ 'typescript': ['prettier'],
+      \ 'css': ['prettier'],
+      \ 'scss': ['prettier'],
+      \ }
 
 " Activate plugins in other locations
 set runtimepath+=/usr/local/opt/fzf
@@ -31,20 +32,18 @@ command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 filetype plugin indent on
 syntax enable
 
-" look
-set laststatus=2
+" Look
+set laststatus=2 number ruler
 set list listchars=tab:>-,trail:~
-set number
-set ruler
 silent! colorscheme simple
 
-" command completion
+" Command completion
 set wildmenu wildmode=longest:full,full
 
-" responsiveness
+" Responsiveness
 set lazyredraw
 
-" editing
+" Editing
 set autoread
 set autoindent
 set backspace=indent,eol,start
@@ -55,36 +54,29 @@ set hidden
 set noswapfile
 set scrolloff=5
 set nofoldenable
-
+set clipboard+=unnamed
+set mouse=a
 " Make escape sequence timeout faster
 " e.g. <Esc>O (Return to normal mode and then press O)
 set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 
-" clipboard
-set clipboard+=unnamed
-
-" mouse
-set mouse=a
-
-" search
+" Search
 set ignorecase smartcase
 set incsearch
 
-" mapping
+" Mapping
 let mapleader=' '
 nnoremap Y y$
 nnoremap <Space> <Nop>
 nnoremap <Leader><Space> :set hlsearch!<CR>
 nnoremap <Leader>b :Buffers<CR>
 
-" commands
+" Command
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
 command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " noexpandtab"
 
-" file type extras
+" File type extras
 augroup MyFileTypeExtras
   autocmd!
-  autocmd FileType
-        \ gitcommit,text,markdown
-        \ setlocal spell spelllang=en_us
+  autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
