@@ -7,6 +7,7 @@ let g:ale_fixers={
       \ 'typescript': ['prettier'],
       \ 'css': ['prettier'],
       \ 'scss': ['prettier'],
+      \ 'python': ['isort'],
       \ }
 
 " Activate plugins in other locations
@@ -78,5 +79,6 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 " File type extras
 augroup MyFileTypeExtras
   autocmd!
+  autocmd BufRead,BufNewFile dune*,jbuild* set filetype=clojure
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
