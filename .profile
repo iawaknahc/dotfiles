@@ -49,11 +49,14 @@ dotfiles() {
 }
 
 # android
-if [ -d "/usr/local/share/android-sdk" ]; then
-  export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+if [ -d "${HOME}/Library/Android/sdk" ]; then
+  export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
-  if [ -d "/usr/local/share/android-sdk/platform-tools" ]; then
-    export PATH="/usr/local/share/android-sdk/platform-tools:$PATH"
+  if [ -d "${ANDROID_SDK_ROOT}/platform-tools" ]; then
+    export PATH="${ANDROID_SDK_ROOT}/platform-tools:$PATH"
+  fi
+  if [ -d "${ANDROID_SDK_ROOT}/tools/bin" ]; then
+    export PATH="${ANDROID_SDK_ROOT}/tools/bin:$PATH"
   fi
 fi
 
