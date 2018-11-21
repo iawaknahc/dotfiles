@@ -67,12 +67,6 @@ elif [ -x "$(command -v rg)" ]; then
   export FZF_DEFAULT_COMMAND='rg --files --hidden'
 fi
 
-# asdf
-if [ -d "$HOME/.asdf" ]; then
-  . "$HOME/.asdf/asdf.sh"
-  . "$HOME/.asdf/completions/asdf.bash"
-fi
-
 # golang
 if [ -d "$HOME/go" ]; then
   export GOPATH="$HOME/go"
