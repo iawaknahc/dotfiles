@@ -98,6 +98,3 @@ if [ -x "$(command -v brew)" ]; then
     [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
   fi
 fi
-
-# watchman
-export WATCHMAN_CONFIG_FILE="$HOME/.watchman.json"
