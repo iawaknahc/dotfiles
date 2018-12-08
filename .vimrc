@@ -8,6 +8,7 @@ let g:ale_fixers={
       \ 'css': ['prettier'],
       \ 'scss': ['prettier'],
       \ 'python': ['isort'],
+      \ 'ocaml': ['ocamlformat'],
       \ }
 
 " Activate plugins in other locations
