@@ -1,9 +1,9 @@
 " ALE
 let g:ale_fix_on_save=1
 let g:ale_lint_on_text_changed='never'
-" dartanalyzer is too slow
+" dartanalyzer is too slow so we only enable dart_language_server
 let g:ale_linters={
-      \ 'dart': [],
+      \ 'dart': ['language_server'],
       \ 'typescript': ['tsserver', 'tslint'],
       \ }
 let g:ale_fixers={
@@ -16,11 +16,7 @@ let g:ale_fixers={
       \ 'ocaml': ['ocamlformat'],
       \ 'dart': ['dartfmt'],
       \ }
-if executable("flutter")
-  let s:flutter_dart_sdk_root = fnamemodify(system('command -v flutter'), ':h') . '/cache/dart-sdk/bin'
-  let g:ale_dart_dartfmt_executable = s:flutter_dart_sdk_root . '/dartfmt'
-  let g:ale_dart_dartfmt_options = '--fix'
-endif
+let g:ale_dart_dartfmt_options = '--fix'
 
 " Activate plugins in other locations
 set runtimepath+=/usr/local/opt/fzf
