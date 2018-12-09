@@ -63,7 +63,7 @@ fi
 # golang
 if [ -d "$HOME/go" ]; then
   export GOPATH="$HOME/go"
-  export PATH="$HOME/go/bin:$PATH"
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
 # rust
