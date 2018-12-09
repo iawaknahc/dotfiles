@@ -90,6 +90,11 @@ if [ -x "$(command -v opam)" ]; then
   eval "$(opam env)"
 fi
 
+# gem
+if [ -x "$(command -v gem)" ]; then
+  export PATH="$(gem env gemdir)/bin:$PATH"
+fi
+
 # brew specific
 if [ -x "$(command -v brew)" ]; then
   # bash specific
