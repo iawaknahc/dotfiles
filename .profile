@@ -49,12 +49,8 @@ dotfiles() {
 if [ -d "${HOME}/Library/Android/sdk" ]; then
   export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
-  if [ -d "${ANDROID_SDK_ROOT}/platform-tools" ]; then
-    export PATH="${ANDROID_SDK_ROOT}/platform-tools:$PATH"
-  fi
-  if [ -d "${ANDROID_SDK_ROOT}/tools/bin" ]; then
-    export PATH="${ANDROID_SDK_ROOT}/tools/bin:$PATH"
-  fi
+  export PATH="${ANDROID_SDK_ROOT}/platform-tools:$PATH"
+  export PATH="${ANDROID_SDK_ROOT}/tools/bin:$PATH"
 fi
 
 # fzf
@@ -67,13 +63,11 @@ fi
 # golang
 if [ -d "$HOME/go" ]; then
   export GOPATH="$HOME/go"
-  if [ -d "$HOME/go/bin" ]; then
-    export PATH="$HOME/go/bin:$PATH"
-  fi
+  export PATH="$HOME/go/bin:$PATH"
 fi
 
 # rust
-if [ -d "$HOME/.cargo/bin" ]; then
+if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
