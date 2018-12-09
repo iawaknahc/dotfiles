@@ -4,6 +4,7 @@ let g:ale_lint_on_text_changed='never'
 " dartanalyzer is too slow
 let g:ale_linters={
       \ 'dart': [],
+      \ 'typescript': ['tsserver', 'tslint'],
       \ }
 let g:ale_fixers={
       \ 'go': ['gofmt'],
@@ -92,6 +93,7 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 " File type extras
 augroup MyFileTypeExtras
   autocmd!
+  autocmd BufRead,BufNewFile *.ts,*.tsx set filetype=typescript
   autocmd BufRead,BufNewFile dune*,jbuild* set filetype=clojure
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
