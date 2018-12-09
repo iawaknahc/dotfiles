@@ -12,18 +12,15 @@ export LC_ALL='en_US.UTF-8'
 set -o vi
 
 replace() {
-  searcher=''
-  if [ -x "$(command -v rg)" ]; then
-    searcher='rg'
-  elif [ -x "$(command -v ag)" ]; then
-    searcher='ag'
-  else
-    1>&2 echo 'neither rg nor ag is in PATH'
+  # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
+  # This is a command that combine rg and sed to perform search-and-replace.
+  if [ ! -x "$(command -v rg)" ]; then
+    1>&2 echo 'rg is not in PATH'
     return 1
   fi
-  pattern=$(printf '%s' "$1" | perl -pe 's/\//\\\//g')
-  replacement=$(printf '%s' "$2" | perl -pe 's/\//\\\//g')
-  "$searcher" -0ls "$1" | xargs -0 perl -pi -e "s/$pattern/$replacement/g"
+  pattern="$(printf '%s' "$1" | sed 's/\//\\\//g')"
+  replacement="$(printf '%s' "$2" | sed 's/\//\\\//g')"
+  rg "$1" --files-with-matches -0 | xargs -0 sed -i '' "s/$pattern/$replacement/g"
 }
 
 backup_macos() {
