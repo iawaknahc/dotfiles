@@ -1,6 +1,10 @@
 " ALE
 let g:ale_fix_on_save=1
 let g:ale_lint_on_text_changed='never'
+" dartanalyzer is too slow
+let g:ale_linters={
+      \ 'dart': [],
+      \ }
 let g:ale_fixers={
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier'],
@@ -9,7 +13,13 @@ let g:ale_fixers={
       \ 'scss': ['prettier'],
       \ 'python': ['isort'],
       \ 'ocaml': ['ocamlformat'],
+      \ 'dart': ['dartfmt'],
       \ }
+if executable("flutter")
+  let s:flutter_dart_sdk_root = fnamemodify(system('command -v flutter'), ':h') . '/cache/dart-sdk/bin'
+  let g:ale_dart_dartfmt_executable = s:flutter_dart_sdk_root . '/dartfmt'
+  let g:ale_dart_dartfmt_options = '--fix'
+endif
 
 " Activate plugins in other locations
 set runtimepath+=/usr/local/opt/fzf
@@ -23,11 +33,13 @@ if exists('*minpac#init')
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('w0rp/ale', {'type': 'opt'})
+  call minpac#add('dart-lang/dart-vim-plugin', {'type': 'opt'})
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('iawaknahc/vim-colorscheme-simple')
   call minpac#add('iawaknahc/vim-synindent')
 endif
 packadd! ale
+packadd! dart-vim-plugin
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 
