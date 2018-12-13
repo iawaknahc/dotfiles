@@ -27,22 +27,21 @@ backup_macos() {
   COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
 }
 
-dotfiles() {
-  git_dir="$HOME/.dotfiles.git"
-  work_tree="$HOME"
-  gitignore="$git_dir/info/exclude"
+set_git_dir_and_git_work_tree() {
+  if [ "$PWD" = "$HOME" ]; then
+    GIT_DIR="$HOME/.dotfiles.git"
+    export GIT_DIR
+    GIT_WORK_TREE="$HOME"
+    export GIT_WORK_TREE
+  else
+    unset GIT_DIR
+    unset GIT_WORK_TREE
+  fi
+}
 
-  case "$1" in
-  'cat-ignore')
-    cat "$gitignore"
-    ;;
-  'write-ignore')
-    cat - > "$gitignore"
-    ;;
-  *)
-    GIT_DIR="$git_dir" GIT_WORK_TREE="$work_tree" git "$@"
-    ;;
-  esac
+cd() {
+  builtin cd "$@"
+  set_git_dir_and_git_work_tree
 }
 
 # android
@@ -100,3 +99,5 @@ if [ -x "$(command -v brew)" ]; then
     [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
   fi
 fi
+
+set_git_dir_and_git_work_tree
