@@ -18,9 +18,6 @@ let g:ale_fixers={
       \ }
 let g:ale_dart_dartfmt_options = '--fix'
 
-" Activate plugins in other locations
-set runtimepath+=/usr/local/opt/fzf
-
 " Activate plugins distributed with vim
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
@@ -32,6 +29,7 @@ if exists('*minpac#init')
   call minpac#add('w0rp/ale', {'type': 'opt'})
   call minpac#add('dart-lang/dart-vim-plugin', {'type': 'opt'})
   call minpac#add('soywod/typescript.vim', {'type': 'opt'})
+  call minpac#add('junegunn/fzf')
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('iawaknahc/vim-colorscheme-simple')
   call minpac#add('iawaknahc/vim-synindent')
