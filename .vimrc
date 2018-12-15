@@ -31,12 +31,14 @@ if exists('*minpac#init')
   call minpac#add('k-takata/minpac', {'type': 'opt'})
   call minpac#add('w0rp/ale', {'type': 'opt'})
   call minpac#add('dart-lang/dart-vim-plugin', {'type': 'opt'})
+  call minpac#add('soywod/typescript.vim', {'type': 'opt'})
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('iawaknahc/vim-colorscheme-simple')
   call minpac#add('iawaknahc/vim-synindent')
 endif
-packadd! ale
-packadd! dart-vim-plugin
+silent! packadd! ale
+silent! packadd! dart-vim-plugin
+silent! packadd! typescript.vim
 command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
 command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
 command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
@@ -90,7 +92,6 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 " File type extras
 augroup MyFileTypeExtras
   autocmd!
-  autocmd BufRead,BufNewFile *.ts,*.tsx set filetype=typescript
   autocmd BufRead,BufNewFile dune*,jbuild* set filetype=clojure
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
