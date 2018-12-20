@@ -29,6 +29,7 @@ if exists('*packager#init')
   call packager#add('w0rp/ale', {'type': 'opt'})
   call packager#add('dart-lang/dart-vim-plugin', {'type': 'opt'})
   call packager#add('soywod/typescript.vim', {'type': 'opt'})
+  call packager#add('rgrinberg/vim-ocaml', {'type': 'opt'})
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
   call packager#add('iawaknahc/vim-colorscheme-simple')
@@ -38,6 +39,7 @@ endif
 silent! packadd! ale
 silent! packadd! dart-vim-plugin
 silent! packadd! typescript.vim
+silent! packadd! vim-ocaml
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
@@ -92,6 +94,5 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 " File type extras
 augroup MyFileTypeExtras
   autocmd!
-  autocmd BufRead,BufNewFile dune*,jbuild* set filetype=clojure
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
