@@ -27,21 +27,8 @@ backup_macos() {
   COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
 }
 
-set_git_dir_and_git_work_tree() {
-  if [ "$PWD" = "$HOME" ]; then
-    GIT_DIR="$HOME/.dotfiles.git"
-    export GIT_DIR
-    GIT_WORK_TREE="$HOME"
-    export GIT_WORK_TREE
-  else
-    unset GIT_DIR
-    unset GIT_WORK_TREE
-  fi
-}
-
-cd() {
-  builtin cd "$@"
-  set_git_dir_and_git_work_tree
+g() {
+  GIT_DIR="$HOME/.dotfiles.git" GIT_WORK_TREE="$HOME" git "$@"
 }
 
 # android
@@ -99,5 +86,3 @@ if [ -x "$(command -v brew)" ]; then
     [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
   fi
 fi
-
-set_git_dir_and_git_work_tree
