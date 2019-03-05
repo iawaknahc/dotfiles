@@ -4,7 +4,7 @@ let g:ale_lint_on_text_changed='never'
 " dartanalyzer is too slow so we only enable dart_language_server
 let g:ale_linters={
       \ 'dart': ['language_server'],
-      \ 'typescript': ['tsserver', 'tslint'],
+      \ 'typescript': ['tsserver', 'tslint', 'eslint'],
       \ }
 let g:ale_fixers={
       \ 'go': ['gofmt'],
