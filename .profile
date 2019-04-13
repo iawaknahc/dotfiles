@@ -41,9 +41,9 @@ fi
 
 # fzf
 if [ -x "$(command -v fd)" ]; then
-  export FZF_DEFAULT_COMMAND='fd --type file --hidden'
+  export FZF_DEFAULT_COMMAND='fd --type file'
 elif [ -x "$(command -v rg)" ]; then
-  export FZF_DEFAULT_COMMAND='rg --files --hidden'
+  export FZF_DEFAULT_COMMAND='rg --files'
 fi
 
 # golang
