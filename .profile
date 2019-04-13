@@ -8,7 +8,7 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 export PS1='$ '
 export PS2='> '
-export LC_ALL='en_US.UTF-8'
+export LC_ALL=en_US.UTF-8
 set -o vi
 
 replace() {
@@ -79,7 +79,7 @@ fi
 # brew specific
 if [ -x "$(command -v brew)" ]; then
   # bash specific
-  if [ "$(basename "$SHELL")" = 'bash' ]; then
+  if [ "$(basename "$SHELL")" = bash ]; then
     # enable bash completion
     [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
   fi
