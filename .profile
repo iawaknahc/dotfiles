@@ -1,10 +1,10 @@
 # https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
-if [ -f "/etc/profile" ]; then
-  PATH=""
-  . "/etc/profile"
+if [ -f /etc/profile ]; then
+  PATH=''
+  . /etc/profile
 fi
 
-export VISUAL='vim'
+export VISUAL=vim
 export EDITOR="$VISUAL"
 export PS1='$ '
 export PS2='> '
@@ -32,11 +32,11 @@ g() {
 }
 
 # android
-if [ -d "${HOME}/Library/Android/sdk" ]; then
-  export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
+if [ -d "$HOME/Library/Android/sdk" ]; then
+  export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
-  export PATH="${ANDROID_SDK_ROOT}/platform-tools:$PATH"
-  export PATH="${ANDROID_SDK_ROOT}/tools/bin:$PATH"
+  export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+  export PATH="$ANDROID_SDK_ROOT/tools/bin:$PATH"
 fi
 
 # fzf
@@ -69,7 +69,7 @@ if [ -d "$HOME/flutter" ]; then
 fi
 
 # opam
-[ -r "$HOME/.opam/opam-init/init.sh" ] && >/dev/null 2>&1 . "$HOME/.opam/opam-init/init.sh"  || true
+[ -r "$HOME/.opam/opam-init/init.sh" ] && >/dev/null 2>&1 . "$HOME/.opam/opam-init/init.sh" || true
 
 # gem
 if [ -x "$(command -v gem)" ]; then
