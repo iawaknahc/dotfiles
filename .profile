@@ -69,9 +69,7 @@ if [ -d "$HOME/flutter" ]; then
 fi
 
 # opam
-if [ -x "$(command -v opam)" ]; then
-  eval "$(opam env)"
-fi
+[ -r "$HOME/.opam/opam-init/init.sh" ] && >/dev/null 2>&1 . "$HOME/.opam/opam-init/init.sh"  || true
 
 # gem
 if [ -x "$(command -v gem)" ]; then
