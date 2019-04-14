@@ -26,19 +26,14 @@ packadd! matchit
 if exists('*packager#init')
   call packager#init()
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  call packager#add('w0rp/ale', {'type': 'opt'})
-  call packager#add('dart-lang/dart-vim-plugin', {'type': 'opt'})
-  call packager#add('soywod/typescript.vim', {'type': 'opt'})
-  call packager#add('rgrinberg/vim-ocaml', {'type': 'opt'})
+  call packager#add('w0rp/ale')
+  call packager#add('dart-lang/dart-vim-plugin')
+  call packager#add('soywod/typescript.vim')
+  call packager#add('rgrinberg/vim-ocaml')
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
   call packager#add('tpope/vim-sleuth')
 endif
-
-silent! packadd! ale
-silent! packadd! dart-vim-plugin
-silent! packadd! typescript.vim
-silent! packadd! vim-ocaml
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
