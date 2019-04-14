@@ -32,7 +32,7 @@ if exists('*packager#init')
   call packager#add('rgrinberg/vim-ocaml', {'type': 'opt'})
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
-  call packager#add('iawaknahc/vim-synindent')
+  call packager#add('tpope/vim-sleuth')
 endif
 
 silent! packadd! ale
