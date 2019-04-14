@@ -45,7 +45,6 @@ filetype plugin on
 " Look
 set laststatus=2 number ruler
 set list listchars=tab:>-,trail:~
-silent! colorscheme simple
 
 " Command completion
 set wildmenu wildmode=longest:full,full
