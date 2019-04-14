@@ -44,7 +44,8 @@ command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
 command! PackStatus packadd vim-packager | source $MYVIMRC | call packager#status()
 
-filetype plugin indent on
+filetype on
+filetype plugin on
 
 " Look
 set laststatus=2 number ruler
