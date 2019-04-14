@@ -32,7 +32,6 @@ if exists('*packager#init')
   call packager#add('rgrinberg/vim-ocaml', {'type': 'opt'})
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
-  call packager#add('iawaknahc/vim-colorscheme-simple')
   call packager#add('iawaknahc/vim-synindent')
 endif
 
@@ -46,7 +45,6 @@ command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean(
 command! PackStatus packadd vim-packager | source $MYVIMRC | call packager#status()
 
 filetype plugin indent on
-syntax enable
 
 " Look
 set laststatus=2 number ruler
