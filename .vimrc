@@ -33,6 +33,7 @@ if exists('*packager#init')
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
   call packager#add('tpope/vim-sleuth')
+  call packager#add('dracula/vim')
 endif
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
@@ -45,6 +46,15 @@ filetype plugin on
 " Look
 set laststatus=2 number ruler
 set list listchars=tab:>-,trail:~
+" According to :h xterm-true-color
+" t_8f and t_8b are only set when $TERM is xterm*
+" In tmux, $TERM is screen by default.
+" Therefore, we have to set them explicitly here.
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+syntax on
+silent! colorscheme dracula
 
 " Command completion
 set wildmenu wildmode=longest:full,full
