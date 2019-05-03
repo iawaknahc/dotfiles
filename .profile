@@ -53,6 +53,11 @@ if [ -d "$HOME/go" ]; then
   export PATH="$GOPATH/bin:$PATH"
 fi
 
+# vg
+if [ -x "$(command -v vg)" ]; then
+  eval "$(vg eval --shell bash)"
+fi
+
 # rust
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
