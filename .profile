@@ -90,3 +90,11 @@ if [ -x "$(command -v brew)" ]; then
     [ -f "$(brew --prefix)/etc/bash_completion" ] && . "$(brew --prefix)/etc/bash_completion"
   fi
 fi
+
+# asdf
+if [ -r "$HOME"/.asdf/asdf.sh ]; then
+  . "$HOME"/.asdf/asdf.sh
+fi
+if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
+  . "$HOME"/.asdf/completions/asdf.bash
+fi
