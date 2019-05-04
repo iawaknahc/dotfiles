@@ -9,7 +9,10 @@ export EDITOR="$VISUAL"
 export PS1='$ '
 export PS2='> '
 export LC_ALL=en_US.UTF-8
+
 set -o vi
+
+alias lisp='rlwrap sbcl'
 
 replace() {
   # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
