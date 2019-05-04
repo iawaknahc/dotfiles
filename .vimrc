@@ -12,11 +12,12 @@ let g:ale_fixers={
       \ 'typescript': ['prettier'],
       \ 'css': ['prettier'],
       \ 'scss': ['prettier'],
-      \ 'python': ['isort'],
+      \ 'python': ['isort', 'black'],
       \ 'ocaml': ['ocamlformat'],
       \ 'dart': ['dartfmt'],
       \ }
 let g:ale_dart_dartfmt_options = '--fix'
+let g:ale_python_black_options = '--fast'
 
 " Activate plugins distributed with vim
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
