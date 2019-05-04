@@ -89,7 +89,7 @@ if [ -x "$(command -v brew)" ]; then
   # bash specific
   if [ "$(basename "$SHELL")" = bash ]; then
     # enable bash completion
-    [ -f "/usr/local/etc/bash_completion" ] && . "/usr/local/etc/bash_completion"
+    [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
   fi
 fi
 
