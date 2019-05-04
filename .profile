@@ -77,10 +77,9 @@ fi
 # opam
 [ -r "$HOME/.opam/opam-init/init.sh" ] && >/dev/null 2>&1 . "$HOME/.opam/opam-init/init.sh" || true
 
-# gem
-if [ -x "$(command -v gem)" ]; then
-  export PATH="$(gem env gemdir)/bin:$PATH"
-fi
+# ruby/gem
+# ruby installed from brew is not symlinked to /usr/local/bin
+# See brew info ruby for more details.
 
 # brew specific
 if [ -x "$(command -v brew)" ]; then
