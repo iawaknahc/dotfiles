@@ -13,6 +13,7 @@ export LC_ALL=en_US.UTF-8
 set -o vi
 
 alias lisp='rlwrap sbcl'
+alias g='git --git-dir="$HOME/.dotfiles.git" --work-tree="$HOME"'
 
 replace() {
   # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
@@ -28,10 +29,6 @@ replace() {
 
 backup_macos() {
   COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
-}
-
-g() {
-  GIT_DIR="$HOME/.dotfiles.git" GIT_WORK_TREE="$HOME" git "$@"
 }
 
 # android
