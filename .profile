@@ -53,11 +53,6 @@ if [ -d "$HOME/go" ]; then
   export PATH="$GOPATH/bin:$PATH"
 fi
 
-# vg
-if [ -x "$(command -v vg)" ]; then
-  eval "$(vg eval --shell bash)"
-fi
-
 # rust
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
@@ -100,4 +95,11 @@ if [ -r "$HOME"/.asdf/asdf.sh ]; then
 fi
 if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
+fi
+
+# vg
+# This must be the last thing otherwise
+# vg deactivate will wipe out the preceding items in PATH
+if [ -x "$(command -v vg)" ]; then
+  eval "$(vg eval --shell bash)"
 fi
