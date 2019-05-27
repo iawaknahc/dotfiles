@@ -7,6 +7,8 @@ let g:ale_linters={
       \ 'typescript': ['tsserver', 'tslint', 'eslint'],
       \ }
 let g:ale_fixers={
+      \ 'c': ['clang-format'],
+      \ 'cpp': ['clang-format'],
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier'],
       \ 'typescript': ['prettier'],
@@ -18,6 +20,8 @@ let g:ale_fixers={
       \ }
 let g:ale_dart_dartfmt_options = '--fix'
 let g:ale_python_black_options = '--fast'
+let g:ale_cpp_clang_options = '-std=c++17 -Wall -Wextra -Wpedantic'
+let g:ale_cpp_gcc_options = g:ale_cpp_clang_options
 
 " Activate plugins distributed with vim
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
