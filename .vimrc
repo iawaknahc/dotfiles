@@ -83,6 +83,15 @@ set mouse=a
 " Make escape sequence timeout faster
 " e.g. <Esc>O (Return to normal mode and then press O)
 set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
+" Tell vim to respect the eol convention of the file.
+" If we want to add eol, :set endofline and :w
+" If we want to remove eol, :set noendofline and :w
+" It is particularly useful when we have to deal with
+" Kubernetes secret file.
+" If the secret file has eol, then when it is used as
+" environment variable, the newline character will
+" appear at the end, which is almost unexpected.
+set nofixendofline
 
 " Search
 set ignorecase smartcase
