@@ -22,6 +22,7 @@ let g:ale_dart_dartfmt_options = '--fix'
 let g:ale_python_black_options = '--fast'
 let g:ale_cpp_clang_options = '-std=c++17 -Wall -Wextra -Wpedantic'
 let g:ale_cpp_gcc_options = g:ale_cpp_clang_options
+let g:ale_go_golangci_lint_options = '--fast'
 
 " Activate plugins distributed with vim
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
