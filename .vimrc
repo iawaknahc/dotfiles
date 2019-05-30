@@ -40,6 +40,7 @@ if exists('*packager#init')
   call packager#add('junegunn/fzf.vim')
   call packager#add('tpope/vim-sleuth')
   call packager#add('dracula/vim')
+  call packager#add('chrisbra/Colorizer')
 endif
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
