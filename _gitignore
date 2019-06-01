@@ -1,8 +1,0 @@
-*
-!_gitignore
-!.bash_profile
-!.bashrc
-!.dotfiles.sh
-!.profile
-!.tmux.conf
-!.vimrc
