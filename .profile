@@ -1,5 +1,5 @@
 # https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
-if [ -f /etc/profile ]; then
+if [ -r /etc/profile ]; then
   PATH=''
   . /etc/profile
 fi
