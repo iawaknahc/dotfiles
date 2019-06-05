@@ -39,7 +39,7 @@ if exists('*packager#init')
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
   call packager#add('tpope/vim-sleuth')
-  call packager#add('dracula/vim')
+  call packager#add('dracula/vim', {'name': 'dracula'})
   call packager#add('chrisbra/Colorizer')
 endif
 
@@ -65,7 +65,11 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 syntax on
-silent! colorscheme dracula
+" Since dracula@2
+" we need to packadd! it first
+" before we can activate the colorscheme
+" See https://github.com/dracula/vim/issues/140
+silent! packadd! dracula | colorscheme dracula
 
 " Command completion
 set wildmenu wildmode=longest:full,full
