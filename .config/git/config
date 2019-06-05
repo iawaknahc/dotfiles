@@ -1,0 +1,18 @@
+[commit]
+  verbose = 2
+
+[diff]
+  algorithm = histogram
+
+[difftool]
+  trustExitCode = true
+
+[push]
+  default = nothing
+
+# [status]
+#   branch = true
+#   short = true
+
+[user]
+  useConfigOnly = true
