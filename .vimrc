@@ -50,6 +50,10 @@ command! PackStatus packadd vim-packager | source $MYVIMRC | call packager#statu
 filetype on
 filetype plugin on
 
+" Security
+" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set nomodeline
+
 " Look
 set laststatus=2 number ruler
 set list listchars=tab:>-,trail:~
