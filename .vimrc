@@ -3,6 +3,7 @@ let g:ale_fix_on_save=1
 let g:ale_lint_on_text_changed='never'
 " dartanalyzer is too slow so we only enable dart_language_server
 let g:ale_linters={
+      \ 'go': ['gofmt', 'golint', 'govet', 'golangci-lint', 'gopls'],
       \ 'dart': ['language_server'],
       \ 'typescript': ['tsserver', 'tslint', 'eslint'],
       \ }
