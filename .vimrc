@@ -18,6 +18,7 @@ let g:ale_fixers={
       \ 'python': ['isort', 'black'],
       \ 'ocaml': ['ocamlformat'],
       \ 'dart': ['dartfmt'],
+      \ 'sh': ['shfmt'],
       \ }
 let g:ale_dart_dartfmt_options = '--fix'
 let g:ale_python_black_options = '--fast'
