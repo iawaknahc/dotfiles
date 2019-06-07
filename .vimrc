@@ -104,6 +104,7 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " environment variable, the newline character will
 " appear at the end, which is almost unexpected.
 set nofixendofline
+set omnifunc=ale#completion#OmniFunc
 
 " Search
 set ignorecase smartcase
