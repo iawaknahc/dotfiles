@@ -18,7 +18,7 @@ replace() {
   # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
   # This is a command that combine rg and sed to perform search-and-replace.
   if [ ! -x "$(command -v rg)" ]; then
-    1>&2 echo 'rg is not in PATH'
+    echo 1>&2 'rg is not in PATH'
     return 1
   fi
   pattern="$(printf '%s' "$1" | sed 's/\//\\\//g')"
@@ -69,7 +69,7 @@ if [ -d "$HOME/flutter" ]; then
 fi
 
 # opam
-[ -r "$HOME/.opam/opam-init/init.sh" ] && >/dev/null 2>&1 . "$HOME/.opam/opam-init/init.sh" || true
+[ -r "$HOME/.opam/opam-init/init.sh" ] && . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh" || true
 
 # ruby/gem
 # ruby installed from brew is not symlinked to /usr/local/bin
