@@ -29,12 +29,13 @@ let g:ale_go_golangci_lint_options = '--fast'
 " Activate plugins distributed with vim
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
+packadd! ale
 
 " Declare plugins
 if exists('*packager#init')
   call packager#init()
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  call packager#add('w0rp/ale')
+  call packager#add('w0rp/ale', {'type': 'opt'})
   call packager#add('dart-lang/dart-vim-plugin')
   call packager#add('HerringtonDarkholme/yats.vim')
   call packager#add('rgrinberg/vim-ocaml')
