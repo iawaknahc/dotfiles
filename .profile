@@ -71,10 +71,6 @@ fi
 # opam
 [ -r "$HOME/.opam/opam-init/init.sh" ] && . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh" || true
 
-# ruby/gem
-# ruby installed from brew is not symlinked to /usr/local/bin
-# See brew info ruby for more details.
-
 # brew specific
 if [ -x "$(command -v brew)" ]; then
   # bash specific
