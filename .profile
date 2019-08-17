@@ -95,10 +95,3 @@ fi
 if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
 fi
-
-# vg
-# This must be the last thing otherwise
-# vg deactivate will wipe out the preceding items in PATH
-if [ -x "$(command -v vg)" ]; then
-  eval "$(vg eval --shell bash)"
-fi
