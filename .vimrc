@@ -26,25 +26,36 @@ let g:ale_cpp_clang_options = '-std=c++17 -Wall -Wextra -Wpedantic'
 let g:ale_cpp_gcc_options = g:ale_cpp_clang_options
 let g:ale_go_golangci_lint_options = '--fast'
 
-" Activate plugins distributed with vim
+" Activate plugins distributed with VIM
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
-packadd! ale
 
-" Declare plugins
+" Declare package
 if exists('*packager#init')
   call packager#init()
+  " The package manager itself
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  call packager#add('w0rp/ale', {'type': 'opt'})
+  " Language
   call packager#add('dart-lang/dart-vim-plugin')
   call packager#add('HerringtonDarkholme/yats.vim')
   call packager#add('rgrinberg/vim-ocaml')
+  " Lint
+  " ALE is optional because sometimes we want to turn it off entirely.
+  call packager#add('w0rp/ale', {'type': 'opt'})
+  " Fuzzy finder
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
-  call packager#add('tpope/vim-sleuth')
+  " Colorscheme
   call packager#add('dracula/vim', {'name': 'dracula'})
+  " Set indentation automatically
+  call packager#add('tpope/vim-sleuth')
+  " Show the color of the color code
+  " VIM itself is assumed to be running with true color
   call packager#add('chrisbra/Colorizer')
 endif
+
+" Enable optional packages
+packadd! ale
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
@@ -68,9 +79,7 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 syntax on
-" Since dracula@2
-" we need to packadd! it first
-" before we can activate the colorscheme
+" Since dracula@2 we need to packadd! it first before we can activate the colorscheme
 " See https://github.com/dracula/vim/issues/140
 silent! packadd! dracula | colorscheme dracula
 
@@ -84,8 +93,8 @@ set lazyredraw
 set autoread
 set autoindent
 set backspace=indent,eol,start
-" Force vim not to rename when saving a file
-" since renaming may break some file watching programs e.g. webpack
+" Tell VIM not to rename when saving a file
+" Renaming may break some file watching programs e.g. webpack
 set backupcopy=yes
 set hidden
 set noswapfile
@@ -96,14 +105,12 @@ set mouse=a
 " Make escape sequence timeout faster
 " e.g. <Esc>O (Return to normal mode and then press O)
 set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
-" Tell vim to respect the eol convention of the file.
-" If we want to add eol, :set endofline and :w
-" If we want to remove eol, :set noendofline and :w
-" It is particularly useful when we have to deal with
-" Kubernetes secret file.
-" If the secret file has eol, then when it is used as
-" environment variable, the newline character will
-" appear at the end, which is almost unexpected.
+" Tell VIM to respect the EOL convention of the file.
+" If we want to add EOL, :set endofline and :w
+" If we want to remove EOL, :set noendofline and :w
+" It is particularly useful when we have to deal with Kubernetes secret file.
+" If the secret file has EOL and is used as environment variable,
+" the newline character will appear at the end, which is almost unexpected.
 set nofixendofline
 set omnifunc=ale#completion#OmniFunc
 
