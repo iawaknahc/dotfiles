@@ -1,5 +1,9 @@
 [commit]
+  gpgSign = true
   verbose = 2
+
+[tag]
+  gpgSign = true
 
 [diff]
   algorithm = histogram
