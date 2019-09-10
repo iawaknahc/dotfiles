@@ -39,6 +39,7 @@ if exists('*packager#init')
   call packager#add('dart-lang/dart-vim-plugin')
   call packager#add('HerringtonDarkholme/yats.vim')
   call packager#add('rgrinberg/vim-ocaml')
+  call packager#add('pangloss/vim-javascript')
   " Lint
   " ALE is optional because sometimes we want to turn it off entirely.
   call packager#add('w0rp/ale', {'type': 'opt'})
