@@ -46,12 +46,6 @@ elif [ -x "$(command -v rg)" ]; then
   export FZF_DEFAULT_COMMAND='rg --files'
 fi
 
-# golang
-if [ -d "$HOME/go" ]; then
-  export GOPATH="$HOME/go"
-  export PATH="$GOPATH/bin:$PATH"
-fi
-
 # rust
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
