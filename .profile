@@ -12,8 +12,6 @@ export LANG=en_US.UTF-8
 
 set -o vi
 
-alias lisp='rlwrap sbcl'
-
 replace() {
   # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
   # This is a command that combine rg and sed to perform search-and-replace.
