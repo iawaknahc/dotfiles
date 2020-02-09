@@ -4,7 +4,18 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
-export VISUAL=vim
+# Use nvim if it is installed
+if [ -x "$(command -v nvim)" ]; then
+  VIM=nvim
+  alias vi='nvim'
+  alias vim='nvim'
+  alias view='nvim -R'
+  alias vimdiff='nvim -d'
+else
+  VIM=vim
+fi
+
+export VISUAL="$VIM"
 export EDITOR="$VISUAL"
 export PS1='$ '
 export PS2='> '
