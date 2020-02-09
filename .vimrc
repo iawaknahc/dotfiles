@@ -72,6 +72,7 @@ filetype plugin on
 set nomodeline
 
 " Look
+set guicursor=
 set laststatus=2 number ruler
 set list listchars=tab:>-,trail:~
 " According to :h xterm-true-color
