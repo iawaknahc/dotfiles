@@ -6,6 +6,7 @@ let g:ale_linters={
       \ 'go': ['gofmt', 'golint', 'govet', 'golangci-lint', 'gopls'],
       \ 'dart': ['language_server'],
       \ 'typescript': ['tsserver', 'tslint', 'eslint'],
+      \ 'typescriptreact': ['tsserver', 'tslint', 'eslint'],
       \ }
 let g:ale_fixers={
       \ 'c': ['clang-format'],
@@ -13,6 +14,7 @@ let g:ale_fixers={
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier'],
       \ 'typescript': ['prettier'],
+      \ 'typescriptreact': ['prettier'],
       \ 'css': ['prettier'],
       \ 'scss': ['prettier'],
       \ 'python': ['isort', 'black'],
