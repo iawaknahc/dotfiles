@@ -117,6 +117,10 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " the newline character will appear at the end, which is almost unexpected.
 set nofixendofline
 set omnifunc=ale#completion#OmniFunc
+if has('nvim')
+  set inccommand=nosplit
+endif
+
 
 " Search
 set ignorecase smartcase
