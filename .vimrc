@@ -64,8 +64,10 @@ command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
 command! PackStatus packadd vim-packager | source $MYVIMRC | call packager#status()
 
+" neovim defaults to filetype plugin indent on
 filetype on
 filetype plugin on
+filetype indent off
 
 " Security
 " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
