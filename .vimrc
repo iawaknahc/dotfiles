@@ -130,7 +130,10 @@ set incsearch
 
 " Mapping
 let mapleader=' '
+" Y is the same as yy by default. But Y being y$ is more useful.
 nnoremap Y y$
+" Disable Ex mode
+nnoremap Q <Nop>
 nnoremap <Space> <Nop>
 nnoremap <Leader><Space> :set hlsearch!<CR>
 nnoremap <Leader>b :Buffers<CR>
