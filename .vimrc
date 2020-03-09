@@ -99,9 +99,8 @@ set lazyredraw
 set autoread
 set autoindent
 set backspace=indent,eol,start
-" Tell VIM not to rename when saving a file
-" Renaming may break some file watching programs e.g. webpack
-set backupcopy=yes
+" Directly write to file when saving
+set nobackup nowritebackup
 set hidden
 set noswapfile
 set scrolloff=5
