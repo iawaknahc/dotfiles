@@ -75,7 +75,13 @@ set nomodeline
 
 " Look
 set guicursor=
-set laststatus=2 number ruler
+set number
+set laststatus=2
+set statusline=
+set statusline+=%f%m%r%h%w%=
+set statusline+=%-14.(%{&filetype}%)
+set statusline+=%-20.(%{&fileencoding}\ %{&fileformat}\ %{&eol?'eol':'noeol'}%)
+set statusline+=%-12.(%l:%c%V%)%3P
 set list listchars=tab:>-,trail:~
 " According to :h xterm-true-color
 " t_8f and t_8b are only set when $TERM is xterm*
