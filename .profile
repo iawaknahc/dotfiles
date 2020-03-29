@@ -31,7 +31,8 @@ export PS1='$ '
 export PS2='> '
 
 # Set locale
-export LANG=C.UTF-8
+# LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
+export LANG=en_US.UTF-8
 
 # Turn on vi mode
 set -o vi
