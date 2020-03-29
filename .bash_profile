@@ -1,3 +1,3 @@
-if [ -s "$HOME/.bashrc" ]; then
-  . "$HOME/.bashrc"
+if [ -s "$HOME/.profile" ]; then
+  . "$HOME/.profile"
 fi
