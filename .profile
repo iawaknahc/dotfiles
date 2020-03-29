@@ -1,3 +1,11 @@
+# bash -il reads the FIRST file in this order: .bash_profile .bash_login .profile
+# bash -i reads .bashrc
+# ==> .bash_profile and .bashrc must source .profile
+
+# zsh -i --login reads ALL files in this order: .zprofile .zshrc .zlogin
+# zsh -i reads .zshrc
+# ==> .zshrc must source .profile
+
 # https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
 if [ -r /etc/profile ]; then
   PATH=''
@@ -5,23 +13,47 @@ if [ -r /etc/profile ]; then
 fi
 
 # Use nvim if it is installed
+VIM=vim
 if [ -x "$(command -v nvim)" ]; then
   VIM=nvim
   alias vi='nvim'
   alias vim='nvim'
   alias view='nvim -R'
   alias vimdiff='nvim -d'
-else
-  VIM=vim
 fi
-
 export VISUAL="$VIM"
-export EDITOR="$VISUAL"
+export EDITOR="$VIM"
+
+# Configure prompt
 export PS1='$ '
 export PS2='> '
+
 export LANG=en_US.UTF-8
 
+# Turn on vi mode
 set -o vi
+
+# zsh
+if [ -n "$ZSH_VERSION" ]; then
+  # Reduce ESC timeout
+  export KEYTIMEOUT=1
+  # Make backspace able to delete any characters
+  bindkey "^?" backward-delete-char
+  # Make CTRL-w able to delete the whole word
+  bindkey "^W" backward-kill-word
+  # Enable completion
+  autoload -U compinit && compinit
+fi
+
+# bash
+if [ -n "$BASH_VERSION" ]; then
+  # Enable bash completion
+  # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
+  # in order to use existing completions.
+  # bash-completion@2 requires bash >= 4, use chsh to change login shell.
+  export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+  [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
+fi
 
 replace() {
   # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
@@ -72,19 +104,8 @@ if [ -d "$HOME/flutter" ]; then
 fi
 
 # opam
-[ -r "$HOME/.opam/opam-init/init.sh" ] && . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh" || true
-
-# brew specific
-if [ -x "$(command -v brew)" ]; then
-  # bash specific
-  if [ "$(basename "$SHELL")" = bash ]; then
-    # Enable bash completion
-    # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
-    # in order to use existing completions.
-    # bash-completion@2 requires bash >= 4, use chsh to change login shell.
-    export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-    [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
-  fi
+if [ -r "$HOME/.opam/opam-init/init.sh" ]; then
+  . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh"
 fi
 
 # asdf
