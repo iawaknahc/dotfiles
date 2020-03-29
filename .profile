@@ -28,7 +28,8 @@ export EDITOR="$VIM"
 export PS1='$ '
 export PS2='> '
 
-export LANG=en_US.UTF-8
+# Set locale
+export LANG=C.UTF-8
 
 # Turn on vi mode
 set -o vi
