@@ -45,8 +45,10 @@ if [ -n "$ZSH_VERSION" ]; then
   bindkey "^?" backward-delete-char
   # Make CTRL-w able to delete the whole word
   bindkey "^W" backward-kill-word
-  # Enable completion
-  autoload -U compinit && compinit
+  # Enable native completion
+  autoload compinit && compinit
+  # Enable bash completion
+  autoload bashcompinit && bashcompinit
 fi
 
 # bash
