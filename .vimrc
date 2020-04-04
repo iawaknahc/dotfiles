@@ -1,20 +1,26 @@
 " ALE
+let g:ale_linters_explicit=1
 let g:ale_fix_on_save=1
 let g:ale_lint_on_text_changed='never'
-" dartanalyzer is too slow so we only enable dart_language_server
 let g:ale_linters={
-      \ 'go': ['gofmt', 'golint', 'govet', 'golangci-lint', 'gopls'],
-      \ 'dart': ['language_server'],
-      \ 'typescript': ['tsserver', 'tslint', 'eslint'],
-      \ 'typescriptreact': ['tsserver', 'tslint', 'eslint'],
+      \ 'go': ['golint', 'govet', 'golangci-lint'],
+      \ 'javascript': ['eslint'],
+      \ 'javascriptreact': ['eslint'],
+      \ 'javascript.jsx': ['eslint'],
+      \ 'typescript': ['tslint', 'eslint'],
+      \ 'typescriptreact': ['tslint', 'eslint'],
+      \ 'typescript.jsx': ['tslint', 'eslint'],
       \ }
 let g:ale_fixers={
       \ 'c': ['clang-format'],
       \ 'cpp': ['clang-format'],
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier'],
+      \ 'javascriptreact': ['prettier'],
+      \ 'javascript.jsx': ['prettier'],
       \ 'typescript': ['prettier'],
       \ 'typescriptreact': ['prettier'],
+      \ 'typescript.tsx': ['prettier'],
       \ 'css': ['prettier'],
       \ 'scss': ['prettier'],
       \ 'python': ['isort', 'black'],
@@ -24,9 +30,6 @@ let g:ale_fixers={
       \ }
 let g:ale_dart_dartfmt_options = '--fix'
 let g:ale_python_black_options = '--fast'
-let g:ale_cpp_clang_options = '-std=c++17 -Wall -Wextra -Wpedantic'
-let g:ale_cpp_gcc_options = g:ale_cpp_clang_options
-let g:ale_go_golangci_lint_options = '--fast'
 
 " Activate plugins distributed with VIM
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
@@ -74,6 +77,7 @@ filetype indent off
 set nomodeline
 
 " Look
+set signcolumn=yes
 set guicursor=
 set number
 set laststatus=2
@@ -123,11 +127,6 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " If the secret file has EOL and is used as environment variable,
 " the newline character will appear at the end, which is almost unexpected.
 set nofixendofline
-set omnifunc=ale#completion#OmniFunc
-if has('nvim')
-  set inccommand=nosplit
-endif
-
 
 " Search
 set ignorecase smartcase
