@@ -87,11 +87,14 @@ if [ -d "/usr/local/share/android-sdk" ]; then
 fi
 
 # fzf
-if [ -x "$(command -v fd)" ]; then
-  export FZF_DEFAULT_COMMAND='fd --type file'
-elif [ -x "$(command -v rg)" ]; then
-  export FZF_DEFAULT_COMMAND='rg --files'
+export FZF_DEFAULT_COMMAND='
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git ls-files --cached --others --exclude-standard
+else
+  # In case fzf is run at / or HOME
+  find . -type f -maxdepth 3
 fi
+'
 
 # rust
 if [ -d "$HOME/.cargo" ]; then
