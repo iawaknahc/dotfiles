@@ -61,17 +61,8 @@ if [ -n "$BASH_VERSION" ]; then
   [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
 fi
 
-replace() {
-  # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#search-and-replace
-  # This is a command that combine rg and sed to perform search-and-replace.
-  if [ ! -x "$(command -v rg)" ]; then
-    echo 1>&2 'rg is not in PATH'
-    return 1
-  fi
-  pattern="$(printf '%s' "$1" | sed 's/\//\\\//g')"
-  replacement="$(printf '%s' "$2" | sed 's/\//\\\//g')"
-  rg "$1" --files-with-matches -0 | xargs -0 sed -i '' "s/$pattern/$replacement/g"
-}
+# Find and replace
+# fastmod --accept-all --print-changed-files [-i] [-m] REGEX SUBST [PATH...]
 
 backup_macos() {
   COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
