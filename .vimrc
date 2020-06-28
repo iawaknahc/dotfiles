@@ -76,9 +76,6 @@ filetype indent off
 " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 set nomodeline
 
-" Code completion
-set omnifunc=v:lua.vim.lsp.omnifunc
-
 " Look
 set signcolumn=yes
 set guicursor=
