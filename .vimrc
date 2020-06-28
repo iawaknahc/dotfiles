@@ -152,5 +152,9 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 " File type extras
 augroup MyFileTypeExtras
   autocmd!
+  " By default, filetype.vim treats *.env as sh
+  " *.env files will then be ALE-fixed with shfmt on save.
+  " But this is sometimes undesired because some envvars may have trailing whitespaces.
+  autocmd BufNewFile,BufRead *.env setlocal filetype=
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
