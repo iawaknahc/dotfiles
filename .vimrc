@@ -156,5 +156,9 @@ augroup MyFileTypeExtras
   " *.env files will then be ALE-fixed with shfmt on save.
   " But this is sometimes undesired because some envvars may have trailing whitespaces.
   autocmd BufNewFile,BufRead *.env setlocal filetype=
+  " Disable auto-wrapping of text and comment
+  autocmd FileType * setlocal formatoptions-=c
+  autocmd FileType * setlocal formatoptions-=t
+  " Enable spellchecking
   autocmd FileType gitcommit,text,markdown setlocal spell spelllang=en_us
 augroup END
