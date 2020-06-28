@@ -24,6 +24,10 @@ nvim_lsp.jsonls.setup({
 nvim_lsp.tsserver.setup({})
 nvim_lsp.gopls.setup({})
 nvim_lsp.flow.setup({})
+-- multiple language server enabled for a buffer will cause
+-- previous messages to be overridden.
+-- https://github.com/neovim/neovim/issues/12105
+-- nvim_lsp.efm.setup({})
 EOF
 
   nnoremap <Leader><c-]> <cmd>lua vim.lsp.buf.definition()<CR>

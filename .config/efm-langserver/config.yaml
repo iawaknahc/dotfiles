@@ -1,0 +1,25 @@
+version: 2
+tools:
+  eslint: &eslint
+    lint-command: "npx --no-install --quiet eslint --format unix --stdin"
+    lint-ignore-exit-code: false
+    lint-stdin: true
+  golangci-lint: &golangci-lint
+    lint-command: "golangci-lint run --out-format=line-number --print-issued-lines=false --fast"
+    lint-ignore-exit-code: false
+    lint-stdin: false
+languages:
+  go:
+  - <<: *golangci-lint
+  javascript:
+  - <<: *eslint
+  javascriptreact:
+  - <<: *eslint
+  javascript.jsx:
+  - <<: *eslint
+  typescript:
+  - <<: *eslint
+  typescriptreact:
+  - <<: *eslint
+  typescript.jsx:
+  - <<: *eslint
