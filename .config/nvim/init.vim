@@ -7,8 +7,10 @@ set inccommand=nosplit
 
 if has('nvim-0.5.0')
   if exists('*packager#init')
-    call packager#add('neovim/nvim-lsp')
-    call packager#add('nvim-treesitter/nvim-treesitter')
+    " The plugin installed here must be opt
+    " so vanilla vim will not load them.
+    call packager#add('neovim/nvim-lsp', {'type': 'opt'})
+    call packager#add('nvim-treesitter/nvim-treesitter', {'type': 'opt'})
   endif
 
   silent! packadd nvim-lsp
