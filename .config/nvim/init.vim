@@ -11,47 +11,48 @@ if has('nvim-0.5.0')
     call packager#add('nvim-treesitter/nvim-treesitter')
   endif
 
-  packadd nvim-lsp
-  packadd nvim-treesitter
+  silent! packadd nvim-lsp
+  silent! packadd nvim-treesitter
 
-  if exists('g:nvim_lsp')
 lua <<EOF
-local nvim_lsp = require'nvim_lsp'
-nvim_lsp.cssls.setup({})
-nvim_lsp.html.setup({})
-nvim_lsp.jsonls.setup({
-  cmd = {"json-languageserver", "--stdio"},
-})
-nvim_lsp.tsserver.setup({})
-nvim_lsp.gopls.setup({})
-nvim_lsp.flow.setup({})
--- multiple language server enabled for a buffer will cause
--- previous messages to be overridden.
--- https://github.com/neovim/neovim/issues/12105
--- nvim_lsp.efm.setup({})
+local status, nvim_lsp = pcall(require, 'nvim_lsp')
+if (status) then
+  nvim_lsp.cssls.setup({})
+  nvim_lsp.html.setup({})
+  nvim_lsp.jsonls.setup({
+    cmd = {"json-languageserver", "--stdio"},
+  })
+  nvim_lsp.tsserver.setup({})
+  nvim_lsp.gopls.setup({})
+  nvim_lsp.flow.setup({})
+  -- multiple language server enabled for a buffer will cause
+  -- previous messages to be overridden.
+  -- https://github.com/neovim/neovim/issues/12105
+  -- nvim_lsp.efm.setup({})
+end
 EOF
-  endif
 
-  if exists('g:loaded_nvim_treesitter')
 lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {
-    'c',
-    'lua',
-    'go',
-    'javascript',
-    'typescript',
-    'bash',
-    'python',
-    'markdown',
-    'html',
-    'css',
-  },
-  highlight = {
-    enable = true,
-  },
-}
+local status, nvim_ts = pcall(require, 'nvim-treesitter.configs')
+if (status) then
+  nvim_ts.setup {
+    ensure_installed = {
+      'c',
+      'lua',
+      'go',
+      'javascript',
+      'typescript',
+      'bash',
+      'python',
+      'markdown',
+      'html',
+      'css',
+    },
+    highlight = {
+      enable = true,
+    },
+  }
+end
 EOF
-  endif
 
 endif

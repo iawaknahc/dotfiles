@@ -61,7 +61,7 @@ if exists('*packager#init')
 endif
 
 " Enable optional packages
-packadd! ale
+silent! packadd! ale
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
@@ -101,7 +101,8 @@ set termguicolors
 syntax on
 " Since dracula@2 we need to packadd! it first before we can activate the colorscheme
 " See https://github.com/dracula/vim/issues/140
-silent! packadd! dracula | colorscheme dracula
+silent! packadd! dracula
+silent! colorscheme dracula
 
 " Command completion
 set wildmenu wildmode=longest:full,full
