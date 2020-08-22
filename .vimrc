@@ -89,12 +89,14 @@ set statusline+=%-12.(%l:%c%V%)%3P
 set list listchars=tab:>-,trail:~
 " Highlight textwidth+1
 set colorcolumn=+1
-" According to :h xterm-true-color
-" t_8f and t_8b are only set when $TERM is xterm*
-" In tmux, $TERM is screen by default.
-" Therefore, we have to set them explicitly here.
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+if !has('nvim')
+  " According to :h xterm-true-color
+  " t_8f and t_8b are only set when $TERM is xterm*
+  " In tmux, $TERM is screen by default.
+  " Therefore, we have to set them explicitly here.
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 set termguicolors
 syntax on
 " Since dracula@2 we need to packadd! it first before we can activate the colorscheme
