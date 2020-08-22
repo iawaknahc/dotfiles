@@ -29,18 +29,5 @@ nvim_lsp.flow.setup({})
 -- https://github.com/neovim/neovim/issues/12105
 -- nvim_lsp.efm.setup({})
 EOF
-
-  nnoremap <Leader><c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-  nnoremap <Leader>K     <cmd>lua vim.lsp.buf.hover()<CR>
-
-  augroup MyLSP
-    autocmd!
-    autocmd FileType css,scss,less setlocal omnifunc=v:lua.vim.lsp.omnifunc
-    autocmd FileType html setlocal omnifunc=v:lua.vim.lsp.omnifunc
-    autocmd FileType json setlocal omnifunc=v:lua.vim.lsp.omnifunc
-    autocmd FileType go setlocal omnifunc=v:lua.vim.lsp.omnifunc
-    autocmd FileType javascript,javascriptreact,javascript.jsx,typescript,typescriptreact,typescript.tsx setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  augroup END
-
   endif
 endif
