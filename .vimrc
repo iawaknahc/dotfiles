@@ -58,6 +58,8 @@ if exists('*packager#init')
   " Show the color of the color code
   " VIM itself is assumed to be running with true color
   call packager#add('chrisbra/Colorizer')
+  " Markdown table made easy.
+  call packager#add('junegunn/vim-easy-align')
 endif
 
 " Enable optional packages
