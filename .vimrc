@@ -12,8 +12,6 @@ let g:ale_linters={
       \ 'typescript.jsx': ['tslint', 'eslint'],
       \ }
 let g:ale_fixers={
-      \ 'c': ['clang-format'],
-      \ 'cpp': ['clang-format'],
       \ 'go': ['gofmt'],
       \ 'javascript': ['prettier'],
       \ 'javascriptreact': ['prettier'],
