@@ -61,10 +61,6 @@ if [ -n "$BASH_VERSION" ]; then
   [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
 fi
 
-backup_macos() {
-  COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
-}
-
 # android
 if [ -d "/usr/local/share/android-sdk" ]; then
   export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
