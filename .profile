@@ -61,9 +61,6 @@ if [ -n "$BASH_VERSION" ]; then
   [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
 fi
 
-# Find and replace
-# fastmod --accept-all --print-changed-files [-i] [-m] REGEX SUBST [PATH...]
-
 backup_macos() {
   COPYFILE_DISABLE=true tar czf "$1" -C "$HOME" Library/Keychains .ssh .gnupg
 }
