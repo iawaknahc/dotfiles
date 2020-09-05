@@ -76,7 +76,7 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git ls-files --cached --others --exclude-standard
 else
   # In case fzf is run at / or HOME
-  find . -type f -maxdepth 3
+  find . -type f -maxdepth 2
 fi
 '
 
