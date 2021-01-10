@@ -21,9 +21,7 @@ local status, lspconfig = pcall(require, 'lspconfig')
 if (status) then
   lspconfig.cssls.setup({})
   lspconfig.html.setup({})
-  lspconfig.jsonls.setup({
-    cmd = {"json-languageserver", "--stdio"},
-  })
+  lspconfig.jsonls.setup({})
   lspconfig.tsserver.setup({})
   lspconfig.gopls.setup({})
   lspconfig.flow.setup({})
