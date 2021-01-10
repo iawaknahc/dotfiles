@@ -9,28 +9,28 @@ if has('nvim-0.5.0')
   if exists('*packager#init')
     " The plugin installed here must be opt
     " so vanilla vim will not load them.
-    call packager#add('neovim/nvim-lsp', {'type': 'opt'})
+    call packager#add('neovim/nvim-lspconfig', {'type': 'opt'})
     call packager#add('nvim-treesitter/nvim-treesitter', {'type': 'opt'})
   endif
 
-  silent! packadd nvim-lsp
+  silent! packadd nvim-lspconfig
   silent! packadd nvim-treesitter
 
 lua <<EOF
-local status, nvim_lsp = pcall(require, 'nvim_lsp')
+local status, lspconfig = pcall(require, 'lspconfig')
 if (status) then
-  nvim_lsp.cssls.setup({})
-  nvim_lsp.html.setup({})
-  nvim_lsp.jsonls.setup({
+  lspconfig.cssls.setup({})
+  lspconfig.html.setup({})
+  lspconfig.jsonls.setup({
     cmd = {"json-languageserver", "--stdio"},
   })
-  nvim_lsp.tsserver.setup({})
-  nvim_lsp.gopls.setup({})
-  nvim_lsp.flow.setup({})
+  lspconfig.tsserver.setup({})
+  lspconfig.gopls.setup({})
+  lspconfig.flow.setup({})
   -- multiple language server enabled for a buffer will cause
   -- previous messages to be overridden.
   -- https://github.com/neovim/neovim/issues/12105
-  -- nvim_lsp.efm.setup({})
+  -- lspconfig.efm.setup({})
 end
 EOF
 
