@@ -25,9 +25,12 @@ if (status) then
   lspconfig.tsserver.setup({})
   lspconfig.gopls.setup({})
   lspconfig.flow.setup({})
-  -- multiple language server enabled for a buffer will cause
-  -- previous messages to be overridden.
+  -- multiple language server enabled for a buffer will
+  -- cause previous messages to be overridden.
   -- https://github.com/neovim/neovim/issues/12105
+  --
+  -- The above issue was claimed to be resolved.
+  -- But I still could not get it working for eslint :(
   -- lspconfig.efm.setup({})
 end
 EOF
