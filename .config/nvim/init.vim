@@ -39,21 +39,8 @@ lua <<EOF
 local status, nvim_ts = pcall(require, 'nvim-treesitter.configs')
 if (status) then
   nvim_ts.setup {
-    ensure_installed = {
-      'c',
-      'lua',
-      'go',
-      'javascript',
-      'typescript',
-      'bash',
-      'python',
-      'markdown',
-      'html',
-      'css',
-    },
-    highlight = {
-      enable = true,
-    },
+    ensure_installed = 'maintained',
+    highlight = { enable = true },
   }
 end
 EOF
