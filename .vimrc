@@ -1,3 +1,6 @@
+" vim-polyglot
+let g:polyglot_disabled = ['autoindent', 'sensible']
+
 " ALE
 let g:ale_linters_explicit=1
 let g:ale_fix_on_save=1
@@ -39,11 +42,7 @@ if exists('*packager#init')
   " The package manager itself
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
   " Language
-  call packager#add('dart-lang/dart-vim-plugin')
-  call packager#add('HerringtonDarkholme/yats.vim')
-  call packager#add('ocaml/vim-ocaml')
-  call packager#add('pangloss/vim-javascript')
-  call packager#add('jparise/vim-graphql')
+  call packager#add('sheerun/vim-polyglot')
   " Lint
   " ALE is optional because sometimes we want to turn it off entirely.
   call packager#add('w0rp/ale', {'type': 'opt'})
