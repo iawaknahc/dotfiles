@@ -62,8 +62,8 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # android
-if [ -d "/usr/local/share/android-sdk" ]; then
-  export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+if [ -d "/Users/louischan/Library/Android/sdk" ]; then
+  export ANDROID_SDK_ROOT="/Users/louischan/Library/Android/sdk"
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
   export PATH="$ANDROID_SDK_ROOT/tools:$PATH"
   export PATH="$ANDROID_SDK_ROOT/tools/bin:$PATH"
