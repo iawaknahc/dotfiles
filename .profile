@@ -108,3 +108,8 @@ fi
 if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
 fi
+
+# icu4c from homebrew
+if [ -d "/usr/local/opt/icu4c/lib/pkgconfig" ]; then
+  export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
+fi
