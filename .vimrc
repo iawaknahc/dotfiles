@@ -32,6 +32,11 @@ let g:ale_fixers={
 let g:ale_dart_dartfmt_options = '--fix'
 let g:ale_python_black_options = '--fast'
 
+" For the builtin json.vim
+let g:vim_json_conceal=0
+" For elzr/vim-json
+let g:vim_json_syntax_conceal=0
+
 " Activate plugins distributed with VIM
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
