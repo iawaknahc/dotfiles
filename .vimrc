@@ -63,6 +63,7 @@ if exists('*packager#init')
   call packager#add('chrisbra/Colorizer')
   " Markdown table made easy.
   call packager#add('junegunn/vim-easy-align')
+  call packager#add('Yggdroot/indentLine')
 endif
 
 " Enable optional packages
