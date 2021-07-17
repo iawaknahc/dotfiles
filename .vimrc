@@ -157,8 +157,7 @@ nnoremap <Leader>b :Buffers<CR>
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
 command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " noexpandtab"
 
-" File type extras
-augroup MyFileTypeExtras
+augroup MyVimAutocommands
   autocmd!
   " By default, filetype.vim treats *.env as sh
   " *.env files will then be ALE-fixed with shfmt on save.
