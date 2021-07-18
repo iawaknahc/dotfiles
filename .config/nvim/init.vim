@@ -41,6 +41,7 @@ local on_attach = function(client, bufnr)
   else
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>r', "<Cmd>lua vim.lsp.buf.references()<CR>", map_opts)
   end
+  vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 end
 
 local servers = {
