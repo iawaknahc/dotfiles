@@ -18,7 +18,8 @@ if exists('*packager#init')
 endif
 
 silent! packadd nvim-lspconfig
-silent! packadd nvim-treesitter
+" nvim-treesitter is not very stable
+" silent! packadd nvim-treesitter
 silent! packadd popup.nvim
 silent! packadd plenary.nvim
 silent! packadd telescope.nvim
