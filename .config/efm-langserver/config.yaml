@@ -9,9 +9,13 @@ tools:
     - "%f(%l,%c): %rror %m"
   golangci-lint: &golangci-lint
     lint-command: "golangci-lint run --out-format=line-number --print-issued-lines=false --fast"
+  gofmt: &gofmt
+    format-command: 'gofmt -s'
+    format-stdin: true
 languages:
   go:
   - <<: *golangci-lint
+  - <<: *gofmt
   javascript:
   - <<: *eslint
   javascriptreact:
