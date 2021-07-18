@@ -44,29 +44,28 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 end
 
-local servers = {
-  "cssls",
-  "html",
-  "jsonls",
-  "tsserver",
-  "gopls",
-  "flow",
-  -- multiple language server enabled for a buffer will
-  -- cause previous messages to be overridden.
-  -- https://github.com/neovim/neovim/issues/12105
-  --
-  -- The above issue was claimed to be resolved.
-  -- But I still could not get it working for eslint :(
-  -- "efm",
-}
-
 local status, lspconfig = pcall(require, 'lspconfig')
 if (status) then
-  for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-      on_attach = on_attach,
-    }
-  end
+  lspconfig.cssls.setup { on_attach = on_attach }
+  lspconfig.html.setup { on_attach = on_attach }
+  lspconfig.jsonls.setup { on_attach = on_attach }
+  lspconfig.tsserver.setup {
+    on_attach = function(client, bufnr)
+      -- prettier is a better tool for formatting.
+      -- So here we stop tsserver from formatting our code.
+      client.resolved_capabilities.document_formatting = false
+      on_attach(client, bufnr)
+    end,
+  }
+  lspconfig.gopls.setup {
+    on_attach = function(client, bufnr)
+      -- gopls can run gofmt for us,
+      -- but it is hard to disable efm by filetype.
+      client.resolved_capabilities.document_formatting = false
+      on_attach(client, bufnr)
+    end,
+  }
+  lspconfig.efm.setup { on_attach = on_attach }
 end
 EOF
 
