@@ -18,6 +18,8 @@ tools:
     - '%f:%l:%c: %trror: %m'
     - '%f:%l:%c: %tarning: %m'
     - '%f:%l:%c: %tote: %m'
+  prettier-js: &prettier-js
+    format-command: "npx --no-install --quiet prettier"
 languages:
   sh:
   - <<: *shellcheck
@@ -26,13 +28,19 @@ languages:
   - <<: *gofmt
   javascript:
   - <<: *eslint
+  - <<: *prettier-js
   javascriptreact:
   - <<: *eslint
+  - <<: *prettier-js
   javascript.jsx:
   - <<: *eslint
+  - <<: *prettier-js
   typescript:
   - <<: *eslint
+  - <<: *prettier-js
   typescriptreact:
   - <<: *eslint
+  - <<: *prettier-js
   typescript.jsx:
   - <<: *eslint
+  - <<: *prettier-js
