@@ -12,7 +12,15 @@ tools:
   gofmt: &gofmt
     format-command: 'gofmt -s'
     format-stdin: true
+  shellcheck: &shellcheck
+    lint-command: 'shellcheck --format=gcc --color=never --shell=sh --enable=all --external-sources'
+    lint-formats:
+    - '%f:%l:%c: %trror: %m'
+    - '%f:%l:%c: %tarning: %m'
+    - '%f:%l:%c: %tote: %m'
 languages:
+  sh:
+  - <<: *shellcheck
   go:
   - <<: *golangci-lint
   - <<: *gofmt
