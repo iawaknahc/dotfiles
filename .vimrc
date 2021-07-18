@@ -152,6 +152,7 @@ nnoremap Q <Nop>
 nnoremap <Space> <Nop>
 nnoremap <Leader><Space> :set hlsearch!<CR>
 nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>f :Files<CR>
 
 " Command
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
