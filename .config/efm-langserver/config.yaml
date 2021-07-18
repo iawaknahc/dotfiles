@@ -1,13 +1,14 @@
 version: 2
 tools:
   eslint: &eslint
-    lint-command: "npx --no-install --quiet eslint --format unix --stdin"
-    lint-ignore-exit-code: false
+    lint-command: "npx --no-install --quiet eslint --format visualstudio --stdin --stdin-filename ${INPUT}"
+    lint-ignore-exit-code: true
     lint-stdin: true
+    lint-formats:
+    - "%f(%l,%c): %tarning %m"
+    - "%f(%l,%c): %rror %m"
   golangci-lint: &golangci-lint
     lint-command: "golangci-lint run --out-format=line-number --print-issued-lines=false --fast"
-    lint-ignore-exit-code: false
-    lint-stdin: false
 languages:
   go:
   - <<: *golangci-lint
