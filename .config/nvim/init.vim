@@ -29,21 +29,36 @@ if has('nvim-0.5.0')
 
 " Configure lspconfig
 lua <<EOF
-local status, lspconfig = pcall(require, 'lspconfig')
-if (status) then
-  lspconfig.cssls.setup({})
-  lspconfig.html.setup({})
-  lspconfig.jsonls.setup({})
-  lspconfig.tsserver.setup({})
-  lspconfig.gopls.setup({})
-  lspconfig.flow.setup({})
+local on_attach = function(client, bufnr)
+  local map_opts = { noremap = true }
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', map_opts)
+end
+
+local servers = {
+  "cssls",
+  "html",
+  "jsonls",
+  "tsserver",
+  "gopls",
+  "flow",
   -- multiple language server enabled for a buffer will
   -- cause previous messages to be overridden.
   -- https://github.com/neovim/neovim/issues/12105
   --
   -- The above issue was claimed to be resolved.
   -- But I still could not get it working for eslint :(
-  -- lspconfig.efm.setup({})
+  -- "efm",
+}
+
+local status, lspconfig = pcall(require, 'lspconfig')
+if (status) then
+  for _, lsp in ipairs(servers) do
+    lspconfig[lsp].setup {
+      on_attach = on_attach,
+    }
+  end
 end
 EOF
 
@@ -72,14 +87,14 @@ local status, compe = pcall(require, 'compe')
 if (status) then
   vim.o.completeopt = "menuone,noselect"
   compe.setup {
-    enabled = true;
-    autocomplete = true;
+    enabled = true,
+    autocomplete = true,
     source = {
-      path = true;
-      buffer = true;
-      nvim_lsp = true;
-      nvim_lua = true;
-    };
+      path = true,
+      buffer = true,
+      nvim_lsp = true,
+      nvim_lua = true,
+    },
   }
 end
 EOF
