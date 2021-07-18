@@ -67,7 +67,7 @@ if exists('*packager#init')
 endif
 
 " Enable optional packages
-silent! packadd! ale
+" silent! packadd! ale
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
