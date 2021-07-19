@@ -18,11 +18,17 @@ tools:
     - '%f:%l:%c: %trror: %m'
     - '%f:%l:%c: %tarning: %m'
     - '%f:%l:%c: %tote: %m'
+  hadolint: &hadolint
+    lint-command: 'hadolint --no-color --format tty'
+    lint-formats:
+    - '%f:%l %m'
   prettier-js: &prettier-js
     format-command: "npx --no-install --quiet prettier"
 languages:
   sh:
   - <<: *shellcheck
+  dockerfile:
+  - <<: *hadolint
   go:
   - <<: *golangci-lint
   - <<: *gofmt
