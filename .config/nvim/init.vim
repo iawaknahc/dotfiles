@@ -70,6 +70,22 @@ if (status) then
     }
   end
 
+  if not lspconfig.efm_go then
+    configs.efm_go = {
+      default_config = {
+        cmd = {
+          'efm-langserver',
+          '-c',
+          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/go.yaml'),
+        },
+        root_dir = function(fname)
+          return lspconfig.util.root_pattern('go.mod', 'main.go')(fname)
+        end,
+        filetypes = { 'go', 'gomod' },
+      }
+    }
+  end
+
   lspconfig.cssls.setup { on_attach = on_attach }
   lspconfig.html.setup { on_attach = on_attach }
   lspconfig.jsonls.setup { on_attach = on_attach }
@@ -81,15 +97,9 @@ if (status) then
       on_attach(client, bufnr)
     end,
   }
-  lspconfig.gopls.setup {
-    on_attach = function(client, bufnr)
-      -- gopls can run gofmt for us,
-      -- but it is hard to disable efm by filetype.
-      client.resolved_capabilities.document_formatting = false
-      on_attach(client, bufnr)
-    end,
-  }
+  lspconfig.gopls.setup { on_attach = on_attach }
   lspconfig.efm_javascript.setup { on_attach = on_attach }
+  lspconfig.efm_go.setup { on_attach = on_attach }
 end
 EOF
 

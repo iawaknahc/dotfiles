@@ -1,0 +1,8 @@
+version: 2
+tools:
+  golangci-lint: &golangci-lint
+    lint-command: "golangci-lint run --out-format=line-number --print-issued-lines=false"
+    lint-stdin: true
+languages:
+  go:
+  - <<: *golangci-lint
