@@ -86,6 +86,20 @@ if (status) then
     }
   end
 
+  if not lspconfig.efm_general then
+    configs.efm_general = {
+      default_config = {
+        cmd = {
+          'efm-langserver',
+          '-c',
+          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/general.yaml'),
+        },
+        root_dir = lspconfig.util.path.dirname,
+        filetypes = { 'sh', 'dockerfile' },
+      }
+    }
+  end
+
   lspconfig.cssls.setup { on_attach = on_attach }
   lspconfig.html.setup { on_attach = on_attach }
   lspconfig.jsonls.setup { on_attach = on_attach }
@@ -100,6 +114,7 @@ if (status) then
   lspconfig.gopls.setup { on_attach = on_attach }
   lspconfig.efm_javascript.setup { on_attach = on_attach }
   lspconfig.efm_go.setup { on_attach = on_attach }
+  lspconfig.efm_general.setup { on_attach = on_attach }
 end
 EOF
 

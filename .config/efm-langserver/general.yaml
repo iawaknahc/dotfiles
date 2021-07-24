@@ -1,0 +1,17 @@
+version: 2
+tools:
+  shellcheck: &shellcheck
+    lint-command: 'shellcheck --format=gcc --color=never --shell=sh --enable=all --external-sources'
+    lint-formats:
+    - '%f:%l:%c: %trror: %m'
+    - '%f:%l:%c: %tarning: %m'
+    - '%f:%l:%c: %tote: %m'
+  hadolint: &hadolint
+    lint-command: 'hadolint --no-color --format tty'
+    lint-formats:
+    - '%f:%l %m'
+languages:
+  sh:
+  - <<: *shellcheck
+  dockerfile:
+  - <<: *hadolint
