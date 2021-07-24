@@ -1,37 +1,6 @@
 " vim-polyglot
 let g:polyglot_disabled = ['autoindent', 'sensible']
 
-" ALE
-let g:ale_linters_explicit=1
-let g:ale_fix_on_save=1
-let g:ale_lint_on_text_changed='never'
-let g:ale_linters={
-      \ 'go': ['golint', 'govet', 'golangci-lint'],
-      \ 'javascript': ['eslint'],
-      \ 'javascriptreact': ['eslint'],
-      \ 'javascript.jsx': ['eslint'],
-      \ 'typescript': ['tslint', 'eslint'],
-      \ 'typescriptreact': ['tslint', 'eslint'],
-      \ 'typescript.jsx': ['tslint', 'eslint'],
-      \ }
-let g:ale_fixers={
-      \ 'go': ['gofmt'],
-      \ 'javascript': ['prettier'],
-      \ 'javascriptreact': ['prettier'],
-      \ 'javascript.jsx': ['prettier'],
-      \ 'typescript': ['prettier'],
-      \ 'typescriptreact': ['prettier'],
-      \ 'typescript.tsx': ['prettier'],
-      \ 'css': ['prettier'],
-      \ 'scss': ['prettier'],
-      \ 'python': ['isort', 'black'],
-      \ 'ocaml': ['ocamlformat'],
-      \ 'dart': ['dartfmt'],
-      \ 'sh': ['shfmt'],
-      \ }
-let g:ale_dart_dartfmt_options = '--fix'
-let g:ale_python_black_options = '--fast'
-
 " For the builtin json.vim
 let g:vim_json_conceal=0
 " For elzr/vim-json
@@ -48,9 +17,6 @@ if exists('*packager#init')
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
   " Language
   call packager#add('sheerun/vim-polyglot')
-  " Lint
-  " ALE is optional because sometimes we want to turn it off entirely.
-  call packager#add('w0rp/ale', {'type': 'opt'})
   " Fuzzy finder
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
@@ -65,9 +31,6 @@ if exists('*packager#init')
   call packager#add('junegunn/vim-easy-align')
   call packager#add('Yggdroot/indentLine')
 endif
-
-" Enable optional packages
-" silent! packadd! ale
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
 command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
@@ -161,8 +124,8 @@ command! -nargs=1 Tab   execute "setlocal tabstop=" . <args> . " shiftwidth=" . 
 augroup MyVimAutocommands
   autocmd!
   " By default, filetype.vim treats *.env as sh
-  " *.env files will then be ALE-fixed with shfmt on save.
-  " But this is sometimes undesired because some envvars may have trailing whitespaces.
+  " We do NOT want to run any before-save fix on *.env
+  " For example, some envvars may have trailing whitespaces we do want to preserve.
   autocmd BufNewFile,BufRead *.env setlocal filetype=
   " Disable auto-wrapping of text and comment
   autocmd FileType * setlocal formatoptions-=c
