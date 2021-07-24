@@ -7,31 +7,9 @@ tools:
     lint-formats:
     - "%f(%l,%c): %tarning %m"
     - "%f(%l,%c): %rror %m"
-  golangci-lint: &golangci-lint
-    lint-command: "golangci-lint run --out-format=line-number --print-issued-lines=false --fast"
-  gofmt: &gofmt
-    format-command: 'gofmt -s'
-    format-stdin: true
-  shellcheck: &shellcheck
-    lint-command: 'shellcheck --format=gcc --color=never --shell=sh --enable=all --external-sources'
-    lint-formats:
-    - '%f:%l:%c: %trror: %m'
-    - '%f:%l:%c: %tarning: %m'
-    - '%f:%l:%c: %tote: %m'
-  hadolint: &hadolint
-    lint-command: 'hadolint --no-color --format tty'
-    lint-formats:
-    - '%f:%l %m'
   prettier-js: &prettier-js
     format-command: "npx --no-install --quiet prettier"
 languages:
-  sh:
-  - <<: *shellcheck
-  dockerfile:
-  - <<: *hadolint
-  go:
-  - <<: *golangci-lint
-  - <<: *gofmt
   javascript:
   - <<: *eslint
   - <<: *prettier-js
@@ -47,6 +25,6 @@ languages:
   typescriptreact:
   - <<: *eslint
   - <<: *prettier-js
-  typescript.jsx:
+  typescript.tsx:
   - <<: *eslint
   - <<: *prettier-js

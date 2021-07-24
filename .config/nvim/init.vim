@@ -46,6 +46,30 @@ end
 
 local status, lspconfig = pcall(require, 'lspconfig')
 if (status) then
+  local configs = require'lspconfig/configs'
+  if not lspconfig.efm_javascript then
+    configs.efm_javascript = {
+      default_config = {
+        cmd = {
+          'efm-langserver',
+          '-c',
+          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/javascript.yaml'),
+        },
+        root_dir = function(fname)
+          return lspconfig.util.root_pattern('package.json')(fname)
+        end,
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+        },
+      }
+    }
+  end
+
   lspconfig.cssls.setup { on_attach = on_attach }
   lspconfig.html.setup { on_attach = on_attach }
   lspconfig.jsonls.setup { on_attach = on_attach }
@@ -65,7 +89,7 @@ if (status) then
       on_attach(client, bufnr)
     end,
   }
-  lspconfig.efm.setup { on_attach = on_attach }
+  lspconfig.efm_javascript.setup { on_attach = on_attach }
 end
 EOF
 
