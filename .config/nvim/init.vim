@@ -26,7 +26,9 @@ silent! packadd plenary.nvim
 silent! packadd telescope.nvim
 silent! packadd gitsigns.nvim
 silent! packadd nvim-compe
-silent! packadd indent-blankline.nvim
+" indent-blankline does not work with listchars :(
+" https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
+" silent! packadd indent-blankline.nvim
 silent! packadd nvim-colorizer.lua
 
 " Configure lspconfig
