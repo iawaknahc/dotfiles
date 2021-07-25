@@ -1,11 +1,6 @@
 " vim-polyglot
 let g:polyglot_disabled = ['autoindent', 'sensible']
 
-" For the builtin json.vim
-let g:vim_json_conceal=0
-" For elzr/vim-json
-let g:vim_json_syntax_conceal=0
-
 " Activate plugins distributed with VIM
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
@@ -29,7 +24,6 @@ if exists('*packager#init')
   call packager#add('chrisbra/Colorizer')
   " Markdown table made easy.
   call packager#add('junegunn/vim-easy-align')
-  call packager#add('Yggdroot/indentLine')
 endif
 
 command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })

@@ -15,6 +15,7 @@ if exists('*packager#init')
   call packager#add('nvim-telescope/telescope.nvim', {'type': 'opt'})
   call packager#add('lewis6991/gitsigns.nvim', {'type': 'opt'})
   call packager#add('hrsh7th/nvim-compe', {'type': 'opt'})
+  call packager#add('lukas-reineke/indent-blankline.nvim', {'type': 'opt'})
 endif
 
 silent! packadd nvim-lspconfig
@@ -25,6 +26,7 @@ silent! packadd plenary.nvim
 silent! packadd telescope.nvim
 silent! packadd gitsigns.nvim
 silent! packadd nvim-compe
+silent! packadd indent-blankline.nvim
 
 " Configure lspconfig
 lua <<EOF
