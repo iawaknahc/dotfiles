@@ -7,9 +7,6 @@ if exists('*packager#init')
   call packager#init()
   " The package manager itself
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  " Fuzzy finder
-  call packager#add('junegunn/fzf')
-  call packager#add('junegunn/fzf.vim')
   " Colorscheme
   call packager#add('dracula/vim', {'name': 'dracula'})
   " Set indentation automatically
