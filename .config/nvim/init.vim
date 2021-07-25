@@ -16,6 +16,7 @@ if exists('*packager#init')
   call packager#add('lewis6991/gitsigns.nvim', {'type': 'opt'})
   call packager#add('hrsh7th/nvim-compe', {'type': 'opt'})
   call packager#add('lukas-reineke/indent-blankline.nvim', {'type': 'opt'})
+  call packager#add('norcalli/nvim-colorizer.lua', {'type': 'opt'})
 endif
 
 silent! packadd nvim-lspconfig
@@ -26,6 +27,7 @@ silent! packadd telescope.nvim
 silent! packadd gitsigns.nvim
 silent! packadd nvim-compe
 silent! packadd indent-blankline.nvim
+silent! packadd nvim-colorizer.lua
 
 " Configure lspconfig
 lua <<EOF
@@ -193,6 +195,16 @@ if (status) then
   vim.api.nvim_set_keymap('n', '<Leader>f', "<Cmd>lua require('telescope.builtin').git_files()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>b', "<Cmd>lua require('telescope.builtin').buffers()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>g', "<Cmd>lua require('telescope.builtin').live_grep()<CR>", map_opts)
+end
+EOF
+
+" Configure nvim-colorizer
+lua <<EOF
+local status, colorizer = pcall(require, 'colorizer')
+if (status) then
+  colorizer.setup(nil, {
+    css = true,
+  })
 end
 EOF
 

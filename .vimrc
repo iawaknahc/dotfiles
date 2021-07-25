@@ -11,9 +11,6 @@ if exists('*packager#init')
   call packager#add('dracula/vim', {'name': 'dracula'})
   " Set indentation automatically
   call packager#add('tpope/vim-sleuth')
-  " Show the color of the color code
-  " VIM itself is assumed to be running with true color
-  call packager#add('chrisbra/Colorizer')
   " Markdown table made easy.
   call packager#add('junegunn/vim-easy-align')
 endif
