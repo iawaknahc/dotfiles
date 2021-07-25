@@ -213,5 +213,5 @@ EOF
 augroup MyNeovimAutocommands
   autocmd!
   " https://neovim.io/news/2021/07
-  autocmd TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+  autocmd TextYankPost * lua vim.highlight.on_yank()
 augroup END
