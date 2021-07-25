@@ -9,7 +9,7 @@ if exists('*packager#init')
   " The plugin installed here must be opt
   " so vanilla vim will not load them.
   call packager#add('neovim/nvim-lspconfig', {'type': 'opt'})
-  call packager#add('nvim-treesitter/nvim-treesitter', {'type': 'opt'})
+  call packager#add('nvim-treesitter/nvim-treesitter', {'type': 'opt', 'branch': '0.5-compat'})
   call packager#add('nvim-lua/popup.nvim', {'type': 'opt'})
   call packager#add('nvim-lua/plenary.nvim', {'type': 'opt'})
   call packager#add('nvim-telescope/telescope.nvim', {'type': 'opt'})
@@ -19,8 +19,7 @@ if exists('*packager#init')
 endif
 
 silent! packadd nvim-lspconfig
-" nvim-treesitter is not very stable
-" silent! packadd nvim-treesitter
+silent! packadd nvim-treesitter
 silent! packadd popup.nvim
 silent! packadd plenary.nvim
 silent! packadd telescope.nvim
@@ -126,7 +125,10 @@ local status, nvim_ts = pcall(require, 'nvim-treesitter.configs')
 if (status) then
   nvim_ts.setup {
     ensure_installed = 'maintained',
-    highlight = { enable = true },
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
+    },
   }
 end
 EOF

@@ -1,6 +1,3 @@
-" vim-polyglot
-let g:polyglot_disabled = ['autoindent', 'sensible']
-
 " Activate plugins distributed with VIM
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
@@ -10,8 +7,6 @@ if exists('*packager#init')
   call packager#init()
   " The package manager itself
   call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  " Language
-  call packager#add('sheerun/vim-polyglot')
   " Fuzzy finder
   call packager#add('junegunn/fzf')
   call packager#add('junegunn/fzf.vim')
@@ -61,7 +56,6 @@ if !has('nvim')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 set termguicolors
-syntax on
 " Since dracula@2 we need to packadd! it first before we can activate the colorscheme
 " See https://github.com/dracula/vim/issues/140
 silent! packadd! dracula
