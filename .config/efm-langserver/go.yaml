@@ -1,6 +1,8 @@
 version: 2
 tools:
-  # golangci-lint does not work for single file.
+  gofmt: &gofmt
+    format-command: "gofmt -s"
+    format-stdin: true
 languages:
-  go: []
-  #- <<: *golangci-lint
+  go:
+  - <<: *gofmt

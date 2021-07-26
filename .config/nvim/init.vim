@@ -117,7 +117,14 @@ lspconfig.tsserver.setup {
     on_attach(client, bufnr)
   end,
 }
-lspconfig.gopls.setup { on_attach = on_attach }
+lspconfig.gopls.setup {
+  on_attach = function(client, bufnr)
+    -- gopls takes sometime to start up.
+    -- It does not respond to format command during startup.
+    client.resolved_capabilities.document_formatting = false
+    on_attach(client, bufnr)
+  end,
+}
 lspconfig.efm_javascript.setup { on_attach = on_attach }
 lspconfig.efm_go.setup { on_attach = on_attach }
 lspconfig.efm_general.setup { on_attach = on_attach }
