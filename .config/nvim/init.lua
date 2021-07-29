@@ -147,10 +147,7 @@ local status, packer = pcall(require, 'packer')
 if not status then return end
 packer.startup(function(use)
   use 'wbthomason/packer.nvim'
-  use {
-    'neovim/nvim-lspconfig',
-    config = config_lspconfig,
-  }
+  use { 'neovim/nvim-lspconfig', config = config_lspconfig }
   use {
     'nvim-treesitter/nvim-treesitter',
     branch = '0.5-compat',
@@ -166,10 +163,7 @@ packer.startup(function(use)
   }
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
-  use {
-    'nvim-telescope/telescope.nvim',
-    config = config_telescope,
-  }
+  use { 'nvim-telescope/telescope.nvim', config = config_telescope }
   use {
     'lewis6991/gitsigns.nvim',
     config = function()
@@ -196,7 +190,7 @@ packer.startup(function(use)
   -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
   -- use 'lukas-reineke/indent-blankline.nvim'
   use 'norcalli/nvim-colorizer.lua'
-  use 'dracula/vim'
+  use { 'dracula/vim', as = 'dracula' }
   use 'tpope/vim-sleuth'
   use 'junegunn/vim-easy-align'
 end)
