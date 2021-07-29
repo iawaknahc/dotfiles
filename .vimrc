@@ -33,9 +33,6 @@ if !has('nvim')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 set termguicolors
-" Since dracula@2 we need to packadd! it first before we can activate the colorscheme
-" See https://github.com/dracula/vim/issues/140
-silent! packadd! dracula
 silent! colorscheme dracula
 
 " Command completion
@@ -79,8 +76,6 @@ nnoremap Y y$
 nnoremap Q <Nop>
 nnoremap <Space> <Nop>
 nnoremap <Leader><Space> :set hlsearch!<CR>
-nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>f :Files<CR>
 
 " Command
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
