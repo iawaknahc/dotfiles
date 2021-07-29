@@ -2,23 +2,6 @@
 " https://github.com/vim/vim/tree/master/runtime/pack/dist/opt
 packadd! matchit
 
-" Declare package
-if exists('*packager#init')
-  call packager#init()
-  " The package manager itself
-  call packager#add('kristijanhusak/vim-packager', {'type': 'opt'})
-  " Colorscheme
-  call packager#add('dracula/vim', {'name': 'dracula'})
-  " Set indentation automatically
-  call packager#add('tpope/vim-sleuth')
-  " Markdown table made easy.
-  call packager#add('junegunn/vim-easy-align')
-endif
-
-command! -bang PackUpdate packadd vim-packager | source $MYVIMRC | call packager#update({ 'force_hooks': '<bang>' })
-command! PackClean packadd vim-packager | source $MYVIMRC | call packager#clean()
-command! PackStatus packadd vim-packager | source $MYVIMRC | call packager#status()
-
 " neovim defaults to filetype plugin indent on
 filetype on
 filetype plugin on

@@ -5,31 +5,30 @@ source ~/.vimrc
 
 set inccommand=nosplit
 
-if exists('*packager#init')
-  " The plugin installed here must be opt
-  " so vanilla vim will not load them.
-  call packager#add('neovim/nvim-lspconfig', {'type': 'opt'})
-  call packager#add('nvim-treesitter/nvim-treesitter', {'type': 'opt', 'branch': '0.5-compat'})
-  call packager#add('nvim-lua/popup.nvim', {'type': 'opt'})
-  call packager#add('nvim-lua/plenary.nvim', {'type': 'opt'})
-  call packager#add('nvim-telescope/telescope.nvim', {'type': 'opt'})
-  call packager#add('lewis6991/gitsigns.nvim', {'type': 'opt'})
-  call packager#add('hrsh7th/nvim-compe', {'type': 'opt'})
-  call packager#add('lukas-reineke/indent-blankline.nvim', {'type': 'opt'})
-  call packager#add('norcalli/nvim-colorizer.lua', {'type': 'opt'})
-endif
-
-silent! packadd nvim-lspconfig
-silent! packadd nvim-treesitter
-silent! packadd popup.nvim
-silent! packadd plenary.nvim
-silent! packadd telescope.nvim
-silent! packadd gitsigns.nvim
-silent! packadd nvim-compe
-" indent-blankline does not work with listchars :(
-" https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
-" silent! packadd indent-blankline.nvim
-silent! packadd nvim-colorizer.lua
+lua <<EOF
+local status, packer = pcall(require, 'packer')
+if not status then return end
+packer.startup(function(use)
+  use 'wbthomason/packer.nvim'
+  use 'neovim/nvim-lspconfig'
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    branch = '0.5-compat',
+  }
+  use 'nvim-lua/popup.nvim'
+  use 'nvim-lua/plenary.nvim'
+  use 'nvim-telescope/telescope.nvim'
+  use 'lewis6991/gitsigns.nvim'
+  use 'hrsh7th/nvim-compe'
+  -- indent-blankline does not work with listchars :(
+  -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
+  -- use 'lukas-reineke/indent-blankline.nvim'
+  use 'norcalli/nvim-colorizer.lua'
+  use 'dracula/vim'
+  use 'tpope/vim-sleuth'
+  use 'junegunn/vim-easy-align'
+end)
+EOF
 
 " Configure lspconfig
 lua <<EOF
