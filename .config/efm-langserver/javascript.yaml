@@ -8,7 +8,8 @@ tools:
     - "%f(%l,%c): %tarning %m"
     - "%f(%l,%c): %rror %m"
   prettier-js: &prettier-js
-    format-command: "npx --no-install --quiet prettier"
+    format-command: "npx --no-install --quiet prettier --stdin-filepath ${INPUT}"
+    format-stdin: true
 languages:
   javascript:
   - <<: *eslint
