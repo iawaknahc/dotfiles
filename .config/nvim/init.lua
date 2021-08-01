@@ -3,9 +3,11 @@ vim.cmd [[
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
+]]
 
-set inccommand=nosplit
+vim.o.inccommand = 'nosplit'
 
+vim.cmd [[
 augroup MyNeovimAutocommands
   autocmd!
   " https://neovim.io/news/2021/07
