@@ -144,6 +144,12 @@ return packer.startup(function(use)
   use 'wbthomason/packer.nvim'
   use { 'neovim/nvim-lspconfig', config = config_lspconfig }
   use {
+    'onsails/vimway-lsp-diag.nvim',
+    config = function()
+      require("vimway-lsp-diag").init()
+    end,
+  }
+  use {
     'nvim-treesitter/nvim-treesitter',
     branch = '0.5-compat',
     config = function()
