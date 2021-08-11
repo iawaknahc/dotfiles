@@ -8,7 +8,7 @@ function config_lspconfig()
     local map_opts = { noremap = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', map_opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', map_opts)
     if (has_telescope) then
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>r', "<Cmd>lua require('telescope.builtin').lsp_references()<CR>", map_opts)
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>d', "<Cmd>lua require('telescope.builtin').lsp_document_diagnostics()<CR>", map_opts)
