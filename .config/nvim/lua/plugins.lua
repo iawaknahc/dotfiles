@@ -96,6 +96,7 @@ function config_lspconfig()
     end,
   }
   lspconfig.ocamllsp.setup { on_attach = on_attach }
+  lspconfig.rls.setup { on_attach = on_attach }
   lspconfig.efm_javascript.setup { on_attach = on_attach }
   lspconfig.efm_go.setup { on_attach = on_attach }
   lspconfig.efm_general.setup { on_attach = on_attach }
