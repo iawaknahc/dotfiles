@@ -181,6 +181,13 @@ return packer.startup(function(use)
   -- use 'lukas-reineke/indent-blankline.nvim'
   use 'norcalli/nvim-colorizer.lua'
   use { 'dracula/vim', as = 'dracula' }
-  use 'tpope/vim-sleuth'
+  use {
+    'tpope/vim-sleuth',
+    config = function()
+      -- Prevent this plugin to turn on filetype indentation.
+      -- https://github.com/tpope/vim-sleuth/blob/v1.2/plugin/sleuth.vim#L181
+      vim.g.did_indent_on = true
+    end,
+  }
   use 'junegunn/vim-easy-align'
 end)
