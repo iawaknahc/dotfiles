@@ -16,11 +16,16 @@ set signcolumn=yes
 set guicursor=
 set number
 set laststatus=2
+let g:statusline_fileformat = {
+      \ 'dos': 'CRLF',
+      \ 'unix': 'LF',
+      \ 'mac': 'CR',
+      \ }
 set statusline=
-set statusline+=%f%m%r%h%w%=
-set statusline+=%-14.(%{&filetype}%)
-set statusline+=%-20.(%{&fileencoding}\ %{&fileformat}\ %{&eol?'eol':'noeol'}%)
-set statusline+=%-12.(%l:%c%V%)%3P
+set statusline+=%f%m%r%h%w
+set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
+" 99999:99999 is more than enough.
+set statusline+=%=%5l:%-5c\ %3p%%
 set list listchars=tab:>-,trail:~
 " Highlight textwidth+1
 set colorcolumn=+1
