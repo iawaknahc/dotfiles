@@ -13,6 +13,11 @@ function config_lspconfig()
     vim.api.nvim_command[[autocmd User LspDiagnosticsChanged lua vim.lsp.diagnostic.set_loclist({open_loclist = false})]]
   end
 
+  -- Some language servers require snippet support to provide completion.
+  -- However, this setup does NOT take advantage of LSP snippet yet.
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+
   if not lspconfig.efm_javascript then
     configs.efm_javascript = {
       default_config = {
@@ -66,8 +71,14 @@ function config_lspconfig()
     }
   end
 
-  lspconfig.cssls.setup { on_attach = on_attach }
-  lspconfig.html.setup { on_attach = on_attach }
+  lspconfig.cssls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }
+  lspconfig.html.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }
   lspconfig.jsonls.setup {
     on_attach = function(client, bufnr)
       client.resolved_capabilities.document_formatting = false
