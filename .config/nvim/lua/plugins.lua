@@ -14,9 +14,23 @@ function config_lspconfig()
   end
 
   -- Some language servers require snippet support to provide completion.
-  -- However, this setup does NOT take advantage of LSP snippet yet.
+  -- We us nvim-cmp and luasnip together to provide snippet completion.
   local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.textDocument.completion.completionItem.documentationFormat = { 'markdown' }
   capabilities.textDocument.completion.completionItem.snippetSupport = true
+  capabilities.textDocument.completion.completionItem.preselectSupport = true
+  capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
+  capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
+  capabilities.textDocument.completion.completionItem.deprecatedSupport = true
+  capabilities.textDocument.completion.completionItem.commitCharactersSupport = true
+  capabilities.textDocument.completion.completionItem.tagSupport = { valueSet = { 1 } }
+  capabilities.textDocument.completion.completionItem.resolveSupport = {
+    properties = {
+      'documentation',
+      'detail',
+      'additionalTextEdits',
+    }
+  }
 
   if not lspconfig.efm_javascript then
     configs.efm_javascript = {
@@ -173,19 +187,85 @@ return packer.startup(function(use)
     end,
   }
   use {
-    'hrsh7th/nvim-compe',
+    'hrsh7th/nvim-cmp',
     config = function()
-      vim.o.completeopt = "menuone,noselect"
-      require('compe').setup {
-        enabled = true,
-        autocomplete = true,
-        source = {
-          path = true,
-          buffer = true,
-          nvim_lsp = true,
-          nvim_lua = true,
+      local cmp = require('cmp')
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            local luasnip = require('luasnip')
+            luasnip.lsp_expand(args.body)
+          end,
         },
+        mapping = {
+          ['<C-Space>'] = function(core, fallback)
+            if vim.fn.pumvisible() == 1 then
+              cmp.mapping.close()(core, fallback)
+            else
+              cmp.mapping.complete()(core)
+            end
+          end,
+          ['<CR>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+          }),
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          {
+            name = 'buffer',
+            get_bufnrs = function()
+              return vim.api.nvim_list_bufs()()
+            end,
+          },
+          { name = 'path' },
+        }
       }
+    end,
+  }
+  use {
+    'hrsh7th/cmp-nvim-lsp',
+    config = function()
+      require('cmp_nvim_lsp').setup()
+    end,
+  }
+  use { 'hrsh7th/cmp-buffer' }
+  use { 'hrsh7th/cmp-path' }
+  -- luasnip is used to expand LSP snippet.
+  -- We do not define any additional snippets.
+  use {
+    'L3MON4D3/LuaSnip',
+    config = function()
+      local luasnip = require('luasnip')
+
+      function t(str)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
+      end
+
+      _G.tab_complete = function()
+        if vim.fn.pumvisible() == 1 then
+          return t "<C-n>"
+        elseif luasnip.expand_or_jumpable() then
+          return t "<Plug>luasnip-expand-or-jump"
+        else
+          return t "<Tab>"
+        end
+      end
+
+      _G.s_tab_complete = function()
+        if vim.fn.pumvisible() == 1 then
+          return t "<C-p>"
+        elseif luasnip and luasnip.jumpable(-1) then
+          return t "<Plug>luasnip-jump-prev"
+        else
+          return t "<S-Tab>"
+        end
+      end
+
+      vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+      vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+      vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+      vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
     end,
   }
   -- indent-blankline does not work with listchars :(
