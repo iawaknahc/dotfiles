@@ -282,4 +282,5 @@ return packer.startup(function(use)
     end,
   }
   use 'junegunn/vim-easy-align'
+  use 'tversteeg/registers.nvim'
 end)
