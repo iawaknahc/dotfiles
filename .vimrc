@@ -26,7 +26,7 @@ set statusline+=%f%m%r%h%w
 set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
 " 99999:99999 is more than enough.
 set statusline+=%=%5l:%-5c\ %3p%%
-set list listchars=tab:>-,trail:~
+set list listchars=tab:>-,lead:.,trail:~,nbsp:+
 " Highlight textwidth+1
 set colorcolumn=+1
 if !has('nvim')
