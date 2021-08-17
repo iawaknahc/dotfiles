@@ -2,6 +2,13 @@ function config_lspconfig()
   local lspconfig = require('lspconfig')
   local configs = require('lspconfig/configs')
 
+  local null_ls = require("null-ls")
+  null_ls.config {
+    sources = {
+      null_ls.builtins.formatting.gofmt,
+    },
+  }
+
   -- on_attach sets up things that are common to all LSP servers.
   local on_attach = function(client, bufnr)
     local map_opts = { noremap = true }
@@ -55,22 +62,6 @@ function config_lspconfig()
     }
   end
 
-  if not lspconfig.efm_go then
-    configs.efm_go = {
-      default_config = {
-        cmd = {
-          'efm-langserver',
-          '-c',
-          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/go.yaml'),
-        },
-        root_dir = function(fname)
-          return lspconfig.util.root_pattern('go.mod', 'main.go')(fname)
-        end,
-        filetypes = { 'go', 'gomod' },
-      }
-    }
-  end
-
   if not lspconfig.efm_general then
     configs.efm_general = {
       default_config = {
@@ -119,7 +110,7 @@ function config_lspconfig()
   lspconfig.rls.setup { on_attach = on_attach }
   lspconfig.sqls.setup { on_attach = on_attach }
   lspconfig.efm_javascript.setup { on_attach = on_attach }
-  lspconfig.efm_go.setup { on_attach = on_attach }
+  lspconfig['null-ls'].setup { on_attach = on_attach }
   lspconfig.efm_general.setup { on_attach = on_attach }
 end
 
@@ -163,7 +154,13 @@ return packer.startup(function(use)
   vim.cmd [[autocmd BufWritePost plugins.lua source <afile> | PackerCompile]]
 
   use 'wbthomason/packer.nvim'
-  use { 'neovim/nvim-lspconfig', config = config_lspconfig }
+  use 'nvim-lua/plenary.nvim'
+  use { 'neovim/nvim-lspconfig' }
+  use {
+    'jose-elias-alvarez/null-ls.nvim',
+    config = config_lspconfig,
+    requires = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+  }
   use {
     'nvim-treesitter/nvim-treesitter',
     branch = '0.5-compat',
@@ -178,7 +175,6 @@ return packer.startup(function(use)
     end,
   }
   use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
   use { 'nvim-telescope/telescope.nvim', config = config_telescope }
   use {
     'lewis6991/gitsigns.nvim',

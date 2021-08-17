@@ -1,8 +1,0 @@
-version: 2
-tools:
-  gofmt: &gofmt
-    format-command: "gofmt -s"
-    format-stdin: true
-languages:
-  go:
-  - <<: *gofmt
