@@ -2,12 +2,25 @@ function config_lspconfig()
   local lspconfig = require('lspconfig')
   local configs = require('lspconfig/configs')
 
-  local null_ls = require("null-ls")
+  local null_ls = require('null-ls')
+  local null_ls_helpers = require('null-ls.helpers')
+
+  function npm_tool(category, binary_name)
+    return null_ls_helpers.conditional(function(utils)
+      local project_local_bin = 'node_modules/.bin/' .. binary_name
+      return null_ls.builtins[category][binary_name].with {
+        command = utils.root_has_file(project_local_bin) and project_local_bin or binary_name
+      }
+    end)
+  end
+
   null_ls.config {
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.formatting.gofmt,
+      npm_tool('diagnostics', 'eslint'),
+      npm_tool('formatting', 'prettier'),
     },
   }
 
@@ -40,29 +53,6 @@ function config_lspconfig()
       'additionalTextEdits',
     }
   }
-
-  if not lspconfig.efm_javascript then
-    configs.efm_javascript = {
-      default_config = {
-        cmd = {
-          'efm-langserver',
-          '-c',
-          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/javascript.yaml'),
-        },
-        root_dir = function(fname)
-          return lspconfig.util.root_pattern('package.json')(fname)
-        end,
-        filetypes = {
-          'javascript',
-          'javascriptreact',
-          'javascript.jsx',
-          'typescript',
-          'typescriptreact',
-          'typescript.tsx',
-        },
-      }
-    }
-  end
 
   lspconfig.cssls.setup {
     capabilities = capabilities,
@@ -97,7 +87,6 @@ function config_lspconfig()
   lspconfig.ocamllsp.setup { on_attach = on_attach }
   lspconfig.rls.setup { on_attach = on_attach }
   lspconfig.sqls.setup { on_attach = on_attach }
-  lspconfig.efm_javascript.setup { on_attach = on_attach }
   lspconfig['null-ls'].setup { on_attach = on_attach }
 end
 
