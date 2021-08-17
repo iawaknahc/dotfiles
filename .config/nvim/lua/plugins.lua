@@ -5,6 +5,8 @@ function config_lspconfig()
   local null_ls = require("null-ls")
   null_ls.config {
     sources = {
+      null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.formatting.gofmt,
     },
   }
@@ -62,20 +64,6 @@ function config_lspconfig()
     }
   end
 
-  if not lspconfig.efm_general then
-    configs.efm_general = {
-      default_config = {
-        cmd = {
-          'efm-langserver',
-          '-c',
-          lspconfig.util.path.join(vim.loop.os_homedir(), '.config/efm-langserver/general.yaml'),
-        },
-        root_dir = lspconfig.util.path.dirname,
-        filetypes = { 'sh', 'dockerfile' },
-      }
-    }
-  end
-
   lspconfig.cssls.setup {
     capabilities = capabilities,
     on_attach = on_attach,
@@ -111,7 +99,6 @@ function config_lspconfig()
   lspconfig.sqls.setup { on_attach = on_attach }
   lspconfig.efm_javascript.setup { on_attach = on_attach }
   lspconfig['null-ls'].setup { on_attach = on_attach }
-  lspconfig.efm_general.setup { on_attach = on_attach }
 end
 
 function config_telescope()
