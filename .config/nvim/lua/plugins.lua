@@ -5,13 +5,11 @@ function config_lspconfig()
   local null_ls = require('null-ls')
   local null_ls_helpers = require('null-ls.helpers')
 
-  function npm_tool(category, binary_name)
-    return null_ls_helpers.conditional(function(utils)
+  function node_modules_bin(utils)
+    return function(binary_name)
       local project_local_bin = 'node_modules/.bin/' .. binary_name
-      return null_ls.builtins[category][binary_name].with {
-        command = utils.root_has_file(project_local_bin) and project_local_bin or binary_name
-      }
-    end)
+      return utils.root_has_file(project_local_bin) and project_local_bin or binary_name
+    end
   end
 
   null_ls.config {
@@ -19,8 +17,18 @@ function config_lspconfig()
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
       null_ls.builtins.formatting.gofmt,
-      npm_tool('diagnostics', 'eslint'),
-      npm_tool('formatting', 'prettier'),
+      null_ls.builtins.diagnostics.eslint_d,
+      null_ls.builtins.formatting.prettierd.with {
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "css",
+          "scss",
+          "html",
+        }
+      },
     },
   }
 
