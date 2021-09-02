@@ -24,9 +24,9 @@ function config_lspconfig()
           "javascriptreact",
           "typescript",
           "typescriptreact",
-          "css",
-          "scss",
-          "html",
+          -- "css",
+          -- "scss",
+          -- "html",
         }
       },
     },
