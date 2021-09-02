@@ -3,14 +3,6 @@ function config_lspconfig()
   local configs = require('lspconfig/configs')
 
   local null_ls = require('null-ls')
-  local null_ls_helpers = require('null-ls.helpers')
-
-  function node_modules_bin(utils)
-    return function(binary_name)
-      local project_local_bin = 'node_modules/.bin/' .. binary_name
-      return utils.root_has_file(project_local_bin) and project_local_bin or binary_name
-    end
-  end
 
   null_ls.config {
     sources = {
