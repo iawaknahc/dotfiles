@@ -126,7 +126,9 @@ function config_telescope()
   }
 
   local map_opts = { noremap = true }
-  vim.api.nvim_set_keymap('n', '<Leader>f', "<Cmd>lua require('telescope.builtin').git_files()<CR>", map_opts)
+  -- git_files does not respect cwd.
+  -- Sometimes, my cwd is a subdirectory of the project root.
+  vim.api.nvim_set_keymap('n', '<Leader>f', "<Cmd>lua require('telescope.builtin').find_files()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>b', "<Cmd>lua require('telescope.builtin').buffers()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>g', "<Cmd>lua require('telescope.builtin').live_grep()<CR>", map_opts)
 end
