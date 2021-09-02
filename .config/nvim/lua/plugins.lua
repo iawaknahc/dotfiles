@@ -31,6 +31,8 @@ function config_lspconfig()
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', map_opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
+    vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.o.completeopt = 'menu,menuone,noselect'
     vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
     vim.api.nvim_command[[autocmd User LspDiagnosticsChanged lua vim.lsp.diagnostic.set_loclist({open_loclist = false})]]
   end
@@ -190,13 +192,10 @@ return packer.startup(function(use)
           end,
         },
         mapping = {
-          ['<C-Space>'] = function(core, fallback)
-            if vim.fn.pumvisible() == 1 then
-              cmp.mapping.close()(core, fallback)
-            else
-              cmp.mapping.complete()(core)
-            end
-          end,
+          -- Ctrl-Space is my tmux prefix.
+          -- nvim-cmp by default show completion menu when there is at least 1 character.
+          -- To show the completion menu when there is no character, use omni completion.
+          ['<C-e>'] = cmp.mapping.close(),
           ['<CR>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
