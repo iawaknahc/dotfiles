@@ -139,8 +139,49 @@ function config_telescope()
     end
   end
 
+  -- registers() is require("telescope.builtin").registers()
+  -- except that only nonempty registers are shown.
+  _G.registers = function()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local make_entry = require("telescope.make_entry")
+    local sorters = require("telescope.sorters")
+    local actions = require("telescope.actions")
+    local opts = {}
+
+    local all_registers = { '"', "_", "#", "=", "_", "/", "*", "+", ":", ".", "%" }
+    for i = 0, 9 do
+      table.insert(all_registers, tostring(i))
+    end
+    for i = 65, 90 do
+      table.insert(all_registers, string.char(i))
+    end
+
+    local nonempty_registers = {}
+    for i, v in ipairs(all_registers) do
+      if vim.trim(vim.fn.getreg(v)) ~= "" then
+        table.insert(nonempty_registers, v)
+      end
+    end
+
+    pickers.new(opts, {
+      prompt_title = "Registers",
+      finder = finders.new_table {
+        results = nonempty_registers,
+        entry_maker = make_entry.gen_from_registers(opts),
+      },
+      sorter = sorters.get_levenshtein_sorter(),
+      attach_mappings = function(_, map)
+        actions.select_default:replace(actions.paste_register)
+        map("i", "<C-e>", actions.edit_register)
+        return true
+      end,
+    }):find()
+  end
+
   local map_opts = { noremap = true }
   vim.api.nvim_set_keymap('n', '<Leader>f', "<Cmd>lua _G.project_files()<CR>", map_opts)
+  vim.api.nvim_set_keymap('n', '<Leader>r', "<Cmd>lua _G.registers()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>b', "<Cmd>lua require('telescope.builtin').buffers()<CR>", map_opts)
   vim.api.nvim_set_keymap('n', '<Leader>g', "<Cmd>lua require('telescope.builtin').live_grep()<CR>", map_opts)
 end
@@ -273,5 +314,4 @@ return packer.startup(function(use)
     end,
   }
   use 'junegunn/vim-easy-align'
-  use 'tversteeg/registers.nvim'
 end)
