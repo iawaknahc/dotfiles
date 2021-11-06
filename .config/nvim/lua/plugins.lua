@@ -237,85 +237,15 @@ return packer.startup(function(use)
   use 'nvim-lua/popup.nvim'
   use { 'nvim-telescope/telescope.nvim', config = config_telescope }
 
+  -- Use C-h to jump to the next snippet mark.
   use {
-    'hrsh7th/nvim-cmp',
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
     config = function()
-      local cmp = require('cmp')
-      cmp.setup {
-        snippet = {
-          expand = function(args)
-            local luasnip = require('luasnip')
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = {
-          -- Ctrl-Space is my tmux prefix.
-          -- nvim-cmp by default show completion menu when there is at least 1 character.
-          -- To show the completion menu when there is no character, use omni completion.
-          ['<C-e>'] = cmp.mapping.close(),
-          ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          }),
-        },
-        sources = {
-          { name = 'nvim_lsp' },
-          {
-            name = 'buffer',
-            get_bufnrs = function()
-              return vim.api.nvim_list_bufs()()
-            end,
-          },
-          { name = 'path' },
-        }
-      }
+      local coq_settings = {}
+      coq_settings["auto_start"] = "shut-up"
+      coq_settings["display.icons.mode"] = "none"
+      vim.g.coq_settings = coq_settings
     end,
   }
-  use {
-    'hrsh7th/cmp-nvim-lsp',
-    config = function()
-      require('cmp_nvim_lsp').setup()
-    end,
-  }
-  use { 'hrsh7th/cmp-buffer' }
-  use { 'hrsh7th/cmp-path' }
-
-  -- luasnip is used to expand LSP snippet.
-  -- We do not define any additional snippets.
-  use {
-    'L3MON4D3/LuaSnip',
-    config = function()
-      local luasnip = require('luasnip')
-
-      function t(str)
-        return vim.api.nvim_replace_termcodes(str, true, true, true)
-      end
-
-      _G.tab_complete = function()
-        if vim.fn.pumvisible() == 1 then
-          return t "<C-n>"
-        elseif luasnip.expand_or_jumpable() then
-          return t "<Plug>luasnip-expand-or-jump"
-        else
-          return t "<Tab>"
-        end
-      end
-
-      _G.s_tab_complete = function()
-        if vim.fn.pumvisible() == 1 then
-          return t "<C-p>"
-        elseif luasnip and luasnip.jumpable(-1) then
-          return t "<Plug>luasnip-jump-prev"
-        else
-          return t "<S-Tab>"
-        end
-      end
-
-      vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-      vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-      vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-      vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-    end,
-  }
-
 end)
