@@ -191,7 +191,8 @@ local status, packer = pcall(require, 'packer')
 if not status then return end
 
 return packer.startup(function(use)
-  vim.cmd [[autocmd BufWritePost plugins.lua source <afile> | PackerCompile]]
+  -- This autocmd will cause errors if this file is saved a few times.
+  -- vim.cmd [[autocmd BufWritePost plugins.lua source <afile> | PackerCompile]]
 
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
