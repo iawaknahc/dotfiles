@@ -90,6 +90,7 @@ function config_lspconfig()
   lspconfig.rls.setup { on_attach = on_attach }
   lspconfig.sqls.setup { on_attach = on_attach }
   lspconfig['null-ls'].setup { on_attach = on_attach }
+  lspconfig.clojure_lsp.setup { on_attach = on_attach }
 end
 
 function config_telescope()
