@@ -190,12 +190,36 @@ return packer.startup(function(use)
 
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
-  use { 'neovim/nvim-lspconfig' }
+  use 'norcalli/nvim-colorizer.lua'
+  use { 'dracula/vim', as = 'dracula' }
+  use 'junegunn/vim-easy-align'
+  -- indent-blankline does not work with listchars :(
+  -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
+  -- use 'lukas-reineke/indent-blankline.nvim'
+
+  use {
+    'tpope/vim-sleuth',
+    config = function()
+      -- Prevent this plugin to turn on filetype indentation.
+      -- https://github.com/tpope/vim-sleuth/blob/v1.2/plugin/sleuth.vim#L181
+      vim.g.did_indent_on = true
+    end,
+  }
+
+  use {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup()
+    end,
+  }
+
+  use 'neovim/nvim-lspconfig'
   use {
     'jose-elias-alvarez/null-ls.nvim',
     config = config_lspconfig,
     requires = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
   }
+
   use {
     'nvim-treesitter/nvim-treesitter',
     branch = '0.5-compat',
@@ -209,14 +233,10 @@ return packer.startup(function(use)
       }
     end,
   }
+
   use 'nvim-lua/popup.nvim'
   use { 'nvim-telescope/telescope.nvim', config = config_telescope }
-  use {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end,
-  }
+
   use {
     'hrsh7th/nvim-cmp',
     config = function()
@@ -259,6 +279,7 @@ return packer.startup(function(use)
   }
   use { 'hrsh7th/cmp-buffer' }
   use { 'hrsh7th/cmp-path' }
+
   -- luasnip is used to expand LSP snippet.
   -- We do not define any additional snippets.
   use {
@@ -296,18 +317,5 @@ return packer.startup(function(use)
       vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
     end,
   }
-  -- indent-blankline does not work with listchars :(
-  -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
-  -- use 'lukas-reineke/indent-blankline.nvim'
-  use 'norcalli/nvim-colorizer.lua'
-  use { 'dracula/vim', as = 'dracula' }
-  use {
-    'tpope/vim-sleuth',
-    config = function()
-      -- Prevent this plugin to turn on filetype indentation.
-      -- https://github.com/tpope/vim-sleuth/blob/v1.2/plugin/sleuth.vim#L181
-      vim.g.did_indent_on = true
-    end,
-  }
-  use 'junegunn/vim-easy-align'
+
 end)
