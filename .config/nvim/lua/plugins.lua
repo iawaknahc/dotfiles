@@ -23,7 +23,6 @@ function config_lspconfig()
       },
     },
   }
-
   -- on_attach sets up things that are common to all LSP servers.
   local on_attach = function(client, bufnr)
     local map_opts = { noremap = true }
@@ -56,41 +55,36 @@ function config_lspconfig()
     }
   }
 
-  lspconfig.cssls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-  }
-  lspconfig.html.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-  }
-  lspconfig.jsonls.setup {
-    on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      on_attach(client, bufnr)
-    end,
-  }
-  lspconfig.tsserver.setup {
-    on_attach = function(client, bufnr)
-      -- prettier is a better tool for formatting.
-      -- So here we stop tsserver from formatting our code.
-      client.resolved_capabilities.document_formatting = false
-      on_attach(client, bufnr)
-    end,
-  }
-  lspconfig.gopls.setup {
-    on_attach = function(client, bufnr)
-      -- gopls takes sometime to start up.
-      -- It does not respond to format command during startup.
-      client.resolved_capabilities.document_formatting = false
-      on_attach(client, bufnr)
-    end,
-  }
-  lspconfig.ocamllsp.setup { on_attach = on_attach }
-  lspconfig.rls.setup { on_attach = on_attach }
-  lspconfig.sqls.setup { on_attach = on_attach }
-  lspconfig['null-ls'].setup { on_attach = on_attach }
-  lspconfig.clojure_lsp.setup { on_attach = on_attach }
+  local setup = function(server_name, opts)
+    local opts = opts or {}
+    local disable_formatting = opts.disable_formatting or false
+    lspconfig[server_name].setup {
+      capabilities = capabilities,
+      on_attach = function(client, bufnr)
+        if disable_formatting then
+          client.resolved_capabilities.document_formatting = false
+        end
+        on_attach(client, bufnr)
+      end,
+    }
+  end
+
+  setup("cssls")
+  setup("html")
+  setup("jsonls", {
+    disable_formatting = true,
+  })
+  setup("tsserver", {
+    disable_formatting = true,
+  })
+  setup("gopls", {
+    disable_formatting = true,
+  })
+  setup("ocamllsp")
+  setup("rls")
+  setup("sqls")
+  setup("null-ls")
+  setup("clojure_lsp")
 end
 
 function config_telescope()
