@@ -5,8 +5,6 @@ let &packpath = &runtimepath
 source ~/.vimrc
 ]]
 
-vim.o.inccommand = 'nosplit'
-
 vim.cmd [[
 augroup MyNeovimAutocommands
   autocmd!

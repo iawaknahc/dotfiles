@@ -28,12 +28,12 @@ function config_lspconfig()
     local map_opts = { noremap = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', map_opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.diagnostic.open_float()<CR>', map_opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
     vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.o.completeopt = 'menu,menuone,noselect'
     vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
-    vim.api.nvim_command[[autocmd User LspDiagnosticsChanged lua vim.lsp.diagnostic.set_loclist({open_loclist = false})]]
+    vim.api.nvim_command[[autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})]]
   end
 
   -- Some language servers require snippet support to provide completion.
@@ -222,7 +222,6 @@ return packer.startup(function(use)
 
   use {
     'nvim-treesitter/nvim-treesitter',
-    branch = '0.5-compat',
     config = function()
       require('nvim-treesitter.configs').setup {
         ensure_installed = 'maintained',
