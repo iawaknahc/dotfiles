@@ -1,7 +1,26 @@
+-- on_attach sets up things that are common to all LSP servers.
+function on_attach(client, bufnr)
+  local map_opts = { noremap = true }
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.diagnostic.open_float()<CR>', map_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
+  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.o.completeopt = 'menu,menuone,noselect'
+  vim.cmd [[
+    augroup MyLSPAutoCommands
+      autocmd! * <buffer>
+      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+      autocmd DiagnosticChanged <buffer> lua vim.diagnostic.setloclist({open = false})
+    augroup END
+  ]]
+end
+
 function config_null_ls()
   local null_ls = require('null-ls')
 
   null_ls.setup {
+    on_attach = on_attach,
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
@@ -25,24 +44,6 @@ end
 function config_lspconfig()
   local lspconfig = require('lspconfig')
   local configs = require('lspconfig/configs')
-
-  -- on_attach sets up things that are common to all LSP servers.
-  local on_attach = function(client, bufnr)
-    local map_opts = { noremap = true }
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.diagnostic.open_float()<CR>', map_opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
-    vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-    vim.o.completeopt = 'menu,menuone,noselect'
-    vim.cmd [[
-      augroup MyLSPAutoCommands
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        autocmd DiagnosticChanged <buffer> lua vim.diagnostic.setloclist({open = false})
-      augroup END
-    ]]
-  end
 
   local setup = function(server_name, opts)
     local opts = opts or {}
