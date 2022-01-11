@@ -37,9 +37,9 @@ function config_lspconfig()
     vim.o.completeopt = 'menu,menuone,noselect'
     vim.cmd [[
       augroup MyLSPAutoCommands
-        autocmd!
+        autocmd! * <buffer>
         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
+        autocmd DiagnosticChanged <buffer> lua vim.diagnostic.setloclist({open = false})
       augroup END
     ]]
   end
