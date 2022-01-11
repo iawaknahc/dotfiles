@@ -1,10 +1,7 @@
-function config_lspconfig()
-  local lspconfig = require('lspconfig')
-  local configs = require('lspconfig/configs')
-
+function config_null_ls()
   local null_ls = require('null-ls')
 
-  null_ls.config {
+  null_ls.setup {
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
@@ -23,6 +20,12 @@ function config_lspconfig()
       },
     },
   }
+end
+
+function config_lspconfig()
+  local lspconfig = require('lspconfig')
+  local configs = require('lspconfig/configs')
+
   -- on_attach sets up things that are common to all LSP servers.
   local on_attach = function(client, bufnr)
     local map_opts = { noremap = true }
@@ -32,37 +35,23 @@ function config_lspconfig()
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
     vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.o.completeopt = 'menu,menuone,noselect'
-    vim.api.nvim_command[[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
-    vim.api.nvim_command[[autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})]]
+    vim.cmd [[
+      augroup MyLSPAutoCommands
+        autocmd!
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})
+      augroup END
+    ]]
   end
-
-  -- Some language servers require snippet support to provide completion.
-  -- We us nvim-cmp and luasnip together to provide snippet completion.
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.documentationFormat = { 'markdown' }
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities.textDocument.completion.completionItem.preselectSupport = true
-  capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
-  capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
-  capabilities.textDocument.completion.completionItem.deprecatedSupport = true
-  capabilities.textDocument.completion.completionItem.commitCharactersSupport = true
-  capabilities.textDocument.completion.completionItem.tagSupport = { valueSet = { 1 } }
-  capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-      'documentation',
-      'detail',
-      'additionalTextEdits',
-    }
-  }
 
   local setup = function(server_name, opts)
     local opts = opts or {}
     local disable_formatting = opts.disable_formatting or false
     lspconfig[server_name].setup {
-      capabilities = capabilities,
       on_attach = function(client, bufnr)
         if disable_formatting then
           client.resolved_capabilities.document_formatting = false
+          client.resolved_capabilities.document_range_formatting = false
         end
         on_attach(client, bufnr)
       end,
@@ -83,7 +72,6 @@ function config_lspconfig()
   setup("ocamllsp")
   setup("rls")
   setup("sqls")
-  setup("null-ls")
   setup("clojure_lsp")
 end
 
@@ -213,11 +201,14 @@ return packer.startup(function(use)
     end,
   }
 
-  use 'neovim/nvim-lspconfig'
+  use {
+    'neovim/nvim-lspconfig',
+    config = config_lspconfig,
+  }
   use {
     'jose-elias-alvarez/null-ls.nvim',
-    config = config_lspconfig,
-    requires = {'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    config = config_null_ls,
+    requires = { 'nvim-lua/plenary.nvim' },
   }
 
   use {
