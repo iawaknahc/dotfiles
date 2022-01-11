@@ -67,6 +67,9 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " It is particularly useful when we have to deal with Kubernetes secret file.
 " If the secret file has EOL and is used as environment variable,
 " the newline character will appear at the end, which is almost unexpected.
+" However, lsp requires fixendofline to remove extra lines at the end of file.
+" Therefore, this option should be set on buffer with lsp.
+" See https://github.com/neovim/neovim/blob/e41e8b3fda42308b4c77fb0e52a9719ef4d543d8/runtime/lua/vim/lsp/util.lua#L478
 set nofixendofline
 
 " Search

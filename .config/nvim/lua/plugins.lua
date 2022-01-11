@@ -5,7 +5,8 @@ function on_attach(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.diagnostic.open_float()<CR>', map_opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
-  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
+  vim.o.fixendofline = true
   vim.o.completeopt = 'menu,menuone,noselect'
   vim.cmd [[
     augroup MyLSPAutoCommands
