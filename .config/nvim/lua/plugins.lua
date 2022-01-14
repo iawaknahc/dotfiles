@@ -73,6 +73,7 @@ function config_lspconfig()
   })
   setup("rls")
   setup("sqls")
+  setup("pyright")
 end
 
 function config_telescope()
