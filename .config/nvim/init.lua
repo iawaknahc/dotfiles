@@ -14,3 +14,13 @@ augroup END
 ]]
 
 require('plugins')
+
+vim.diagnostic.config {
+  virtual_text = {
+    source = true,
+  },
+  float = {
+    source = true,
+  },
+  severity_sort = true,
+}
