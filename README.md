@@ -6,5 +6,12 @@ stow -vv .
 ```
 
 ```sh
-npm install -g eslint_d @fsouza/prettierd vscode-langservers-extracted typescript-language-server
+brew install gopls
+npm install -g \
+  eslint_d \
+  @fsouza/prettierd \
+  vscode-langservers-extracted \
+  typescript-language-server \
+  pyright
+go install github.com/lighttiger2505/sqls@latest
 ```
