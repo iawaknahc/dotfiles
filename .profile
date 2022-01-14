@@ -85,6 +85,12 @@ if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# golang
+if [ -x "$(command -v go)" ]; then
+  GOPATH="$(go env GOPATH)"
+  export PATH="$GOPATH/bin:$PATH"
+fi
+
 # flutter
 if [ -d "$HOME/flutter" ]; then
   # Make flutter available
