@@ -71,10 +71,8 @@ function config_lspconfig()
   setup("gopls", {
     disable_formatting = true,
   })
-  setup("ocamllsp")
   setup("rls")
   setup("sqls")
-  setup("clojure_lsp")
 end
 
 function config_telescope()
