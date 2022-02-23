@@ -14,6 +14,10 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
+if [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # Use nvim if it is installed
 VIM=vim
 if [ -x "$(command -v nvim)" ]; then
@@ -115,7 +119,8 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
 fi
 
-# icu4c from homebrew
-if [ -d "/usr/local/opt/icu4c/lib/pkgconfig" ]; then
-  export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
+if [ -x "$(command -v brew)" ]; then
+  if [ -d "$(brew --prefix)/opt/icu4c/lib/pkgconfig" ]; then
+    export PKG_CONFIG_PATH="$(brew --prefix)/opt/icu4c/lib/pkgconfig"
+  fi
 fi
