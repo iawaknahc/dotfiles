@@ -55,16 +55,6 @@ if [ -n "$ZSH_VERSION" ]; then
   autoload bashcompinit && bashcompinit
 fi
 
-# bash
-if [ -n "$BASH_VERSION" ]; then
-  # Enable bash completion
-  # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
-  # in order to use existing completions.
-  # bash-completion@2 requires bash >= 4, use chsh to change login shell.
-  export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-  [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] && . "/usr/local/etc/profile.d/bash_completion.sh"
-fi
-
 # android
 if [ -d "/Users/louischan/Library/Android/sdk" ]; then
   export ANDROID_SDK_ROOT="/Users/louischan/Library/Android/sdk"
@@ -120,7 +110,18 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
 fi
 
 if [ -x "$(command -v brew)" ]; then
-  if [ -d "$(brew --prefix)/opt/icu4c/lib/pkgconfig" ]; then
-    export PKG_CONFIG_PATH="$(brew --prefix)/opt/icu4c/lib/pkgconfig"
+  BREW_PREFIX="$(brew --prefix)"
+  if [ -d "$BREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
+    export PKG_CONFIG_PATH="$BREW_PREFIX/opt/icu4c/lib/pkgconfig"
+  fi
+
+  # bash
+  if [ -n "$BASH_VERSION" ]; then
+    # Enable bash completion
+    # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
+    # in order to use existing completions.
+    # bash-completion@2 requires bash >= 4, use chsh to change login shell.
+    export BASH_COMPLETION_COMPAT_DIR="$BREW_PREFIX/etc/bash_completion.d"
+    [ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
   fi
 fi
