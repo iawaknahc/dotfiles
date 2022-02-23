@@ -1,9 +1,5 @@
 [commit]
-  gpgSign = true
   verbose = 2
-
-[tag]
-  gpgSign = true
 
 [diff]
   algorithm = histogram
@@ -13,10 +9,6 @@
 
 [push]
   default = nothing
-
-# [status]
-#   branch = true
-#   short = true
 
 [user]
   useConfigOnly = true
