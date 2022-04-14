@@ -115,6 +115,10 @@ if [ -x "$(command -v brew)" ]; then
     export PKG_CONFIG_PATH="$BREW_PREFIX/opt/icu4c/lib/pkgconfig"
   fi
 
+  # Make libraries installed by homebrew visible to Cgo.
+  export CGO_CFLAGS="-I$(brew --prefix)/include"
+  export CGO_LDFLAGS="-L$(brew --prefix)/lib"
+
   # bash
   if [ -n "$BASH_VERSION" ]; then
     # Enable bash completion
