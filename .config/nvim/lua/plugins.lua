@@ -1,10 +1,10 @@
 -- on_attach sets up things that are common to all LSP servers.
 function on_attach(client, bufnr)
-  local map_opts = { noremap = true }
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', map_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', map_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g?', '<Cmd>lua vim.diagnostic.open_float()<CR>', map_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', map_opts)
+  local map_opts = { buffer = true }
+  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, map_opts)
+  vim.keymap.set('n', '<C-]>', function() vim.lsp.buf.definition() end, map_opts)
+  vim.keymap.set('n', 'g?', function() vim.diagnostic.open_float() end, map_opts)
+  vim.keymap.set('n', 'ga', function() vim.lsp.buf.code_action() end, map_opts)
   vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
   vim.o.fixendofline = true
   vim.o.completeopt = 'menu,menuone,noselect'
@@ -104,7 +104,7 @@ function config_telescope()
     },
   }
 
-  _G.project_files = function()
+  local project_files = function()
     local git_files = require("telescope.builtin").git_files
     local find_files = require("telescope.builtin").find_files
     local ok = pcall(git_files, {
@@ -126,7 +126,7 @@ function config_telescope()
 
   -- registers() is require("telescope.builtin").registers()
   -- except that only nonempty registers are shown.
-  _G.registers = function()
+  local registers = function()
     local pickers = require("telescope.pickers")
     local finders = require("telescope.finders")
     local make_entry = require("telescope.make_entry")
@@ -164,11 +164,10 @@ function config_telescope()
     }):find()
   end
 
-  local map_opts = { noremap = true }
-  vim.api.nvim_set_keymap('n', '<Leader>f', "<Cmd>lua _G.project_files()<CR>", map_opts)
-  vim.api.nvim_set_keymap('n', '<Leader>r', "<Cmd>lua _G.registers()<CR>", map_opts)
-  vim.api.nvim_set_keymap('n', '<Leader>b', "<Cmd>lua require('telescope.builtin').buffers()<CR>", map_opts)
-  vim.api.nvim_set_keymap('n', '<Leader>g', "<Cmd>lua require('telescope.builtin').live_grep()<CR>", map_opts)
+  vim.keymap.set('n', '<Leader>f', project_files)
+  vim.keymap.set('n', '<Leader>r', registers)
+  vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end)
+  vim.keymap.set('n', '<Leader>g', function() require('telescope.builtin').live_grep() end)
 end
 
 local status, packer = pcall(require, 'packer')
