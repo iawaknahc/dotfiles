@@ -178,7 +178,6 @@ return packer.startup(function(use)
   -- vim.cmd [[autocmd BufWritePost plugins.lua source <afile> | PackerCompile]]
 
   use 'wbthomason/packer.nvim'
-  use 'nvim-lua/plenary.nvim'
   use 'norcalli/nvim-colorizer.lua'
   use { 'dracula/vim', as = 'dracula' }
   use 'junegunn/vim-easy-align'
@@ -285,8 +284,11 @@ return packer.startup(function(use)
     end,
   }
 
-  use 'nvim-lua/popup.nvim'
-  use { 'nvim-telescope/telescope.nvim', config = config_telescope }
+  use {
+    'nvim-telescope/telescope.nvim',
+    config = config_telescope,
+    requires = { 'nvim-lua/plenary.nvim' },
+  }
 
   -- Use C-h to jump to the next snippet mark.
   use {
