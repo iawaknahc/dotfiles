@@ -71,7 +71,7 @@ function config_lspconfig()
   setup("gopls", {
     disable_formatting = true,
   })
-  setup("rls")
+  setup("rust_analyzer")
   setup("sqls")
   setup("pyright")
   setup("dartls")
