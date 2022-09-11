@@ -203,13 +203,42 @@ return packer.startup(function(use)
   }
 
   use {
+    'williamboman/mason.nvim',
+    config = function()
+      require("mason").setup()
+    end,
+  }
+  use {
+    'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require("mason-lspconfig").setup({
+        automatic_installation = true,
+      })
+    end,
+    after = 'mason.nvim',
+  }
+  use {
     'neovim/nvim-lspconfig',
+    after = 'mason-lspconfig.nvim',
     config = config_lspconfig,
   }
   use {
     'jose-elias-alvarez/null-ls.nvim',
     config = config_null_ls,
     requires = { 'nvim-lua/plenary.nvim' },
+  }
+  use {
+    'jayp0521/mason-null-ls.nvim',
+    after = {
+      'null-ls.nvim',
+      'mason.nvim',
+    },
+    config = function()
+      require('mason-null-ls').setup({
+        automatic_installation = true,
+      })
+      require('mason-null-ls').check_install(true)
+    end,
   }
 
   use {

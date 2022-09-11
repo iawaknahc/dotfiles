@@ -85,6 +85,11 @@ if [ -x "$(command -v go)" ]; then
   export PATH="$GOPATH/bin:$PATH"
 fi
 
+# mason
+if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
+  export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+fi
+
 # flutter
 if [ -d "$HOME/flutter" ]; then
   # Make flutter available
