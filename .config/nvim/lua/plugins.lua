@@ -8,13 +8,17 @@ function on_attach(client, bufnr)
   vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
   vim.o.fixendofline = true
   vim.o.completeopt = 'menu,menuone,noselect'
-  vim.cmd [[
-    augroup MyLSPAutoCommands
-      autocmd! * <buffer>
-      autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
-      autocmd DiagnosticChanged <buffer> lua vim.diagnostic.setloclist({open = false})
-    augroup END
-  ]]
+  local group = vim.api.nvim_create_augroup("LSPAutoCommands", { clear = true })
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    buffer = bufnr,
+    callback = function() vim.lsp.buf.format() end,
+    group = group,
+  })
+  vim.api.nvim_create_autocmd("DiagnosticChanged", {
+    buffer = bufnr,
+    callback = function() vim.diagnostic.setloclist({open = false}) end,
+    group = group,
+  })
 end
 
 function config_null_ls()

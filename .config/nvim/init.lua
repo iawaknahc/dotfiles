@@ -5,13 +5,12 @@ let &packpath = &runtimepath
 source ~/.vimrc
 ]]
 
-vim.cmd [[
-augroup MyNeovimAutocommands
-  autocmd!
-  " https://neovim.io/news/2021/07
-  autocmd TextYankPost * lua vim.highlight.on_yank()
-augroup END
-]]
+local yankGroup = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
+  callback = function() vim.highlight.on_yank() end,
+  group = yankGroup,
+})
 
 require('plugins')
 
