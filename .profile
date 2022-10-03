@@ -92,6 +92,7 @@ fi
 
 # flutter
 if [ -d "$HOME/flutter" ]; then
+  export FLUTTER_ROOT="$HOME/flutter"
   # Make flutter available
   export PATH="$HOME/flutter/bin:$PATH"
   # Make the executables of embedded dark-sdk, say dartfmt, available
