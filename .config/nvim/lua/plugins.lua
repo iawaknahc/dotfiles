@@ -11,7 +11,7 @@ function on_attach(client, bufnr)
   vim.cmd [[
     augroup MyLSPAutoCommands
       autocmd! * <buffer>
-      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+      autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
       autocmd DiagnosticChanged <buffer> lua vim.diagnostic.setloclist({open = false})
     augroup END
   ]]
@@ -52,8 +52,8 @@ function config_lspconfig()
     lspconfig[server_name].setup {
       on_attach = function(client, bufnr)
         if disable_formatting then
-          client.resolved_capabilities.document_formatting = false
-          client.resolved_capabilities.document_range_formatting = false
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
         end
         on_attach(client, bufnr)
       end,
