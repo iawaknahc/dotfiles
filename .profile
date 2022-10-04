@@ -14,10 +14,6 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
-if [ -x "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 # Use nvim if it is installed
 VIM=vim
 if [ -x "$(command -v nvim)" ]; then
@@ -116,9 +112,11 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
 fi
 
 if [ -x "$(command -v brew)" ]; then
-  BREW_PREFIX="$(brew --prefix)"
-  if [ -d "$BREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
-    export PKG_CONFIG_PATH="$BREW_PREFIX/opt/icu4c/lib/pkgconfig"
+  # Make HOMEBREW_PREFIX and friends available.
+  eval "$(brew shellenv)"
+
+  if [ -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
+    export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
   fi
 
   # Make libraries installed by homebrew visible to Cgo.
@@ -131,7 +129,7 @@ if [ -x "$(command -v brew)" ]; then
     # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
     # in order to use existing completions.
     # bash-completion@2 requires bash >= 4, use chsh to change login shell.
-    export BASH_COMPLETION_COMPAT_DIR="$BREW_PREFIX/etc/bash_completion.d"
-    [ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
+    export BASH_COMPLETION_COMPAT_DIR="$HOMEBREW_PREFIX/etc/bash_completion.d"
+    [ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
   fi
 fi
