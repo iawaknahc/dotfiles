@@ -56,8 +56,8 @@ if [ -n "$ZSH_VERSION" ]; then
 fi
 
 # android
-if [ -d "/Users/louischan/Library/Android/sdk" ]; then
-  export ANDROID_SDK_ROOT="/Users/louischan/Library/Android/sdk"
+if [ -d "$HOME/Library/Android/sdk" ]; then
+  export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
   export PATH="$ANDROID_SDK_ROOT/tools:$PATH"
   export PATH="$ANDROID_SDK_ROOT/tools/bin:$PATH"
