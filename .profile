@@ -14,6 +14,11 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
+# Homebrew on M1 mac
+if [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # Use nvim if it is installed
 VIM=vim
 if [ -x "$(command -v nvim)" ]; then
