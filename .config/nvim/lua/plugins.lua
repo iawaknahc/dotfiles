@@ -65,7 +65,9 @@ function config_lspconfig()
   end
 
   setup("cssls")
-  setup("html")
+  setup("html", {
+    disable_formatting = true,
+  })
   setup("jsonls", {
     disable_formatting = true,
   })
