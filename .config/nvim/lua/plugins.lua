@@ -64,25 +64,58 @@ function config_lspconfig()
     }
   end
 
-  setup("cssls")
+  -- Data
+  setup("jsonls", {
+    disable_formatting = true,
+  })
+  setup("yamlls", {
+    disable_formatting = true,
+  })
+  setup("taplo", {
+    disable_formatting = true,
+  })
+
+  -- Scripting
+  setup("awk_ls", {
+    disable_formatting = true,
+  })
+  setup("bashls", {
+    disable_formatting = true,
+  })
+
+  -- SQL
+  setup("sqls", {
+    disable_formatting = true,
+  })
+
+  -- GraphQL
+  setup("graphql", {
+    disable_formatting = true,
+  })
+
+  -- Markup
   setup("html", {
     disable_formatting = true,
   })
-  setup("jsonls", {
+  setup("cssls")
+  setup("tailwindcss")
+
+  -- Programming
+  setup("gopls", {
     disable_formatting = true,
   })
   setup("tsserver", {
     disable_formatting = true,
   })
-  setup("gopls", {
-    disable_formatting = true,
-  })
-  setup("rust_analyzer")
-  setup("sqls", {
-    disable_formatting = true,
-  })
   setup("pyright")
+  setup("denols", {
+    disable_formatting = true,
+  })
+  setup("clojure_lsp")
+  setup("rust_analyzer")
   setup("dartls")
+  setup("ocamllsp")
+  setup("sourcekit")
 end
 
 function config_telescope()
