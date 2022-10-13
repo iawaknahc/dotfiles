@@ -78,7 +78,9 @@ function config_lspconfig()
     disable_formatting = true,
   })
   setup("rust_analyzer")
-  setup("sqls")
+  setup("sqls", {
+    disable_formatting = true,
+  })
   setup("pyright")
   setup("dartls")
 end
