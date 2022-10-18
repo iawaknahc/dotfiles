@@ -15,6 +15,7 @@ if [ -r /etc/profile ]; then
 fi
 
 # Homebrew on M1 mac
+# This must happen before asdf otherwise asdf binaries will never be used.
 if [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -117,9 +118,6 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
 fi
 
 if [ -x "$(command -v brew)" ]; then
-  # Make HOMEBREW_PREFIX and friends available.
-  eval "$(brew shellenv)"
-
   if [ -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
     export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
   fi
