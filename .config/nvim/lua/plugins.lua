@@ -102,13 +102,15 @@ function config_lspconfig()
   }
   lspconfig["tsserver"].setup {
     on_attach = disable_formatting,
+    root_dir = lspconfig.util.root_pattern("package.json"),
+  }
+  lspconfig["denols"].setup {
+    on_attach = disable_formatting,
+    root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
   }
   lspconfig["pyright"].setup {
     on_attach = on_attach,
   }
-  -- setup("denols", {
-  --   disable_formatting = true,
-  -- })
   lspconfig["clojure_lsp"].setup {
     on_attach = on_attach,
   }
