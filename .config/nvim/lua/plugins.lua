@@ -50,72 +50,80 @@ function config_lspconfig()
   local lspconfig = require('lspconfig')
   local configs = require('lspconfig/configs')
 
-  local setup = function(server_name, opts)
-    local opts = opts or {}
-    local disable_formatting = opts.disable_formatting or false
-    lspconfig[server_name].setup {
-      on_attach = function(client, bufnr)
-        if disable_formatting then
-          client.server_capabilities.documentFormattingProvider = false
-          client.server_capabilities.documentRangeFormattingProvider = false
-        end
-        on_attach(client, bufnr)
-      end,
-    }
+  local disable_formatting = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+    on_attach(client, bufnr)
   end
 
   -- Data
-  setup("jsonls", {
-    disable_formatting = true,
-  })
-  setup("yamlls", {
-    disable_formatting = true,
-  })
-  setup("taplo", {
-    disable_formatting = true,
-  })
+  lspconfig["jsonls"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["yamlls"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["taplo"].setup {
+    on_attach = disable_formatting,
+  }
 
   -- Scripting
-  setup("awk_ls", {
-    disable_formatting = true,
-  })
-  setup("bashls", {
-    disable_formatting = true,
-  })
+  lspconfig["awk_ls"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["bashls"].setup {
+    on_attach = disable_formatting,
+  }
 
   -- SQL
-  setup("sqls", {
-    disable_formatting = true,
-  })
+  lspconfig["sqls"].setup {
+    on_attach = disable_formatting,
+  }
 
   -- GraphQL
-  setup("graphql", {
-    disable_formatting = true,
-  })
+  lspconfig["graphql"].setup {
+    on_attach = disable_formatting,
+  }
 
   -- Markup
-  setup("html", {
-    disable_formatting = true,
-  })
-  setup("cssls")
-  setup("tailwindcss")
+  lspconfig["html"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["cssls"].setup {
+    on_attach = on_attach,
+  }
+  lspconfig["tailwindcss"].setup {
+    on_attach = on_attach,
+  }
 
   -- Programming
-  setup("gopls", {
-    disable_formatting = true,
-  })
-  setup("tsserver", {
-    disable_formatting = true,
-  })
-  setup("pyright")
-  setup("denols", {
-    disable_formatting = true,
-  })
-  setup("clojure_lsp")
-  setup("rust_analyzer")
-  setup("dartls")
-  setup("ocamllsp")
-  setup("sourcekit")
+  lspconfig["gopls"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["tsserver"].setup {
+    on_attach = disable_formatting,
+  }
+  lspconfig["pyright"].setup {
+    on_attach = on_attach,
+  }
+  -- setup("denols", {
+  --   disable_formatting = true,
+  -- })
+  lspconfig["clojure_lsp"].setup {
+    on_attach = on_attach,
+  }
+  lspconfig["rust_analyzer"].setup {
+    on_attach = on_attach,
+  }
+  lspconfig["dartls"].setup {
+    on_attach = on_attach,
+  }
+  lspconfig["ocamllsp"].setup {
+    on_attach = on_attach,
+  }
+  lspconfig["sourcekit"].setup {
+    on_attach = on_attach,
+  }
 end
 
 function config_telescope()
