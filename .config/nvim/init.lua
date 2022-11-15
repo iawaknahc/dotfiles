@@ -12,6 +12,23 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   group = yankGroup,
 })
 
+local lspGroup = vim.api.nvim_create_augroup("LSPAutoCommands", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = lspGroup,
+  callback = function()
+    vim.lsp.buf.format({
+      async = false,
+      timeout_ms = 1000,
+    })
+  end,
+})
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
+  group = lspGroup,
+  callback = function()
+    vim.diagnostic.setloclist({ open = false })
+  end,
+})
+
 require('plugins')
 
 vim.diagnostic.config {

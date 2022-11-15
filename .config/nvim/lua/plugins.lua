@@ -1,24 +1,13 @@
 -- on_attach sets up things that are common to all LSP servers.
 function on_attach(client, bufnr)
-  local map_opts = { buffer = true }
-  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, map_opts)
-  vim.keymap.set('n', '<C-]>', function() vim.lsp.buf.definition() end, map_opts)
-  vim.keymap.set('n', 'g?', function() vim.diagnostic.open_float() end, map_opts)
-  vim.keymap.set('n', 'ga', function() vim.lsp.buf.code_action() end, map_opts)
+  local map_opts = { noremap = true, buffer = bufnr }
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
+  vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, map_opts)
+  vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
+  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, map_opts)
   vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
   vim.o.fixendofline = true
   vim.o.completeopt = 'menu,menuone,noselect'
-  local group = vim.api.nvim_create_augroup("LSPAutoCommands", { clear = true })
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    buffer = bufnr,
-    callback = function() vim.lsp.buf.format() end,
-    group = group,
-  })
-  vim.api.nvim_create_autocmd("DiagnosticChanged", {
-    buffer = bufnr,
-    callback = function() vim.diagnostic.setloclist({open = false}) end,
-    group = group,
-  })
 end
 
 function config_null_ls()
