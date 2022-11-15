@@ -29,7 +29,6 @@ function config_null_ls()
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
-      null_ls.builtins.formatting.gofmt,
       null_ls.builtins.diagnostics.eslint_d,
       null_ls.builtins.formatting.prettierd.with {
         filetypes = {
@@ -98,7 +97,7 @@ function config_lspconfig()
 
   -- Programming
   lspconfig["gopls"].setup {
-    on_attach = disable_formatting,
+    on_attach = on_attach,
   }
   lspconfig["tsserver"].setup {
     on_attach = disable_formatting,
