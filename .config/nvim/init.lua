@@ -28,6 +28,21 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
     vim.diagnostic.setloclist({ open = false })
   end,
 })
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = lspGroup,
+  callback = function(args)
+    local bufnr = args.buf
+
+    local map_opts = { noremap = true, buffer = bufnr }
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
+    vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, map_opts)
+    vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
+    vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, map_opts)
+    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+    vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+    vim.bo[bufnr].fixendofline = true
+  end,
+})
 
 require('plugins')
 
@@ -40,3 +55,5 @@ vim.diagnostic.config {
   },
   severity_sort = true,
 }
+
+vim.o.completeopt = 'menu,menuone,noselect'

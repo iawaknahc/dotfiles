@@ -1,20 +1,7 @@
--- on_attach sets up things that are common to all LSP servers.
-function on_attach(client, bufnr)
-  local map_opts = { noremap = true, buffer = bufnr }
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
-  vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, map_opts)
-  vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
-  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, map_opts)
-  vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
-  vim.o.fixendofline = true
-  vim.o.completeopt = 'menu,menuone,noselect'
-end
-
 function config_null_ls()
   local null_ls = require('null-ls')
 
   null_ls.setup {
-    on_attach = on_attach,
     sources = {
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.hadolint,
@@ -36,12 +23,10 @@ end
 
 function config_lspconfig()
   local lspconfig = require('lspconfig')
-  local configs = require('lspconfig/configs')
 
   local disable_formatting = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
-    on_attach(client, bufnr)
   end
 
   -- Data
@@ -77,17 +62,11 @@ function config_lspconfig()
   lspconfig["html"].setup {
     on_attach = disable_formatting,
   }
-  lspconfig["cssls"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["tailwindcss"].setup {
-    on_attach = on_attach,
-  }
+  lspconfig["cssls"].setup {}
+  lspconfig["tailwindcss"].setup {}
 
   -- Programming
-  lspconfig["gopls"].setup {
-    on_attach = on_attach,
-  }
+  lspconfig["gopls"].setup {}
   lspconfig["tsserver"].setup {
     on_attach = disable_formatting,
     root_dir = lspconfig.util.root_pattern("package.json"),
@@ -96,24 +75,12 @@ function config_lspconfig()
     on_attach = disable_formatting,
     root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
   }
-  lspconfig["pyright"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["clojure_lsp"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["rust_analyzer"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["dartls"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["ocamllsp"].setup {
-    on_attach = on_attach,
-  }
-  lspconfig["sourcekit"].setup {
-    on_attach = on_attach,
-  }
+  lspconfig["pyright"].setup {}
+  lspconfig["clojure_lsp"].setup {}
+  lspconfig["rust_analyzer"].setup {}
+  lspconfig["dartls"].setup {}
+  lspconfig["ocamllsp"].setup {}
+  lspconfig["sourcekit"].setup {}
 end
 
 function config_telescope()
