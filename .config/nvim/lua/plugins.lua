@@ -174,6 +174,9 @@ function config_telescope()
   vim.keymap.set('n', '<Leader>r', registers)
   vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end)
   vim.keymap.set('n', '<Leader>g', function() require('telescope.builtin').live_grep() end)
+  -- Diagnostics is preferred over loclist because it supports severity.
+  --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
+  vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
 end
 
 local status, packer = pcall(require, 'packer')
