@@ -1,3 +1,18 @@
+# zsh -i --login reads ALL files in this order: .zprofile .zshrc .zlogin
+# zsh -i reads .zshrc
+# ==> .zshrc must source .profile
+
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi
+
+# Reduce ESC timeout
+export KEYTIMEOUT=1
+# Make backspace able to delete any characters
+bindkey "^?" backward-delete-char
+# Make CTRL-w able to delete the whole word
+bindkey "^W" backward-kill-word
+# Enable native completion
+autoload compinit && compinit
+# Enable bash completion
+autoload bashcompinit && bashcompinit

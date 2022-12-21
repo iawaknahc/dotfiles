@@ -2,10 +2,6 @@
 # bash -i reads .bashrc
 # ==> .bash_profile and .bashrc must source .profile
 
-# zsh -i --login reads ALL files in this order: .zprofile .zshrc .zlogin
-# zsh -i reads .zshrc
-# ==> .zshrc must source .profile
-
 # Allow this file to be sourced more than once
 # Both tmux and the shell sources this file.
 # See https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
@@ -42,20 +38,6 @@ export LANG=en_US.UTF-8
 
 # Turn on vi mode
 set -o vi
-
-# zsh
-if [ -n "$ZSH_VERSION" ]; then
-  # Reduce ESC timeout
-  export KEYTIMEOUT=1
-  # Make backspace able to delete any characters
-  bindkey "^?" backward-delete-char
-  # Make CTRL-w able to delete the whole word
-  bindkey "^W" backward-kill-word
-  # Enable native completion
-  autoload compinit && compinit
-  # Enable bash completion
-  autoload bashcompinit && bashcompinit
-fi
 
 # android
 if [ -d "$HOME/Library/Android/sdk" ]; then
