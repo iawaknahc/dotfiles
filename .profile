@@ -1,7 +1,3 @@
-# bash -il reads the FIRST file in this order: .bash_profile .bash_login .profile
-# bash -i reads .bashrc
-# ==> .bash_profile and .bashrc must source .profile
-
 # Allow this file to be sourced more than once
 # Both tmux and the shell sources this file.
 # See https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
