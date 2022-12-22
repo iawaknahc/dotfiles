@@ -257,6 +257,7 @@ return packer.startup(function(use)
           "css",
           "dart",
           "dockerfile",
+          "fish",
           "go",
           "gomod",
           "gowork",
