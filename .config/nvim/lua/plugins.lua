@@ -49,7 +49,7 @@ function config_lspconfig()
   }
 
   -- SQL
-  lspconfig["sqls"].setup {
+  lspconfig["sqlls"].setup {
     on_attach = disable_formatting,
   }
 
