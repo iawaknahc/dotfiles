@@ -50,14 +50,14 @@ if test -x "$(command -v go)"
 end
 
 if test -d "$HOME/.local/share/nvim/mason/bin"
-  fish_add_path "$HOME/.local/share/nvim/mason/bin"
+  fish_add_path -P "$HOME/.local/share/nvim/mason/bin"
 end
 
 if test -d "$HOME/flutter"
   set -gx FLUTTER_ROOT "$HOME/flutter"
-  fish_add_path "$FLUTTER_ROOT/bin"
-  fish_add_path "$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-  fish_add_path "$FLUTTER_ROOT/.pub-cache/bin"
+  fish_add_path -P "$FLUTTER_ROOT/bin"
+  fish_add_path -P "$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
+  fish_add_path -P "$FLUTTER_ROOT/.pub-cache/bin"
 end
 
 if test -r "$HOME/.opam/opam-init/init.fish"
