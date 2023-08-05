@@ -1,5 +1,7 @@
 function config()
   local actions = require('telescope.actions')
+  local builtin = require('telescope.builtin')
+
   require('telescope').setup {
     defaults = {
       vimgrep_arguments = {
@@ -45,53 +47,13 @@ function config()
     end
   end
 
-  -- registers() is require("telescope.builtin").registers()
-  -- except that only nonempty registers are shown.
-  local registers = function()
-    local pickers = require("telescope.pickers")
-    local finders = require("telescope.finders")
-    local make_entry = require("telescope.make_entry")
-    local sorters = require("telescope.sorters")
-    local actions = require("telescope.actions")
-    local opts = {}
-
-    local all_registers = { '"', "_", "#", "=", "_", "/", "*", "+", ":", ".", "%" }
-    for i = 0, 9 do
-      table.insert(all_registers, tostring(i))
-    end
-    for i = 65, 90 do
-      table.insert(all_registers, string.char(i))
-    end
-
-    local nonempty_registers = {}
-    for i, v in ipairs(all_registers) do
-      if vim.trim(vim.fn.getreg(v)) ~= "" then
-        table.insert(nonempty_registers, v)
-      end
-    end
-
-    pickers.new(opts, {
-      prompt_title = "Registers",
-      finder = finders.new_table {
-        results = nonempty_registers,
-        entry_maker = make_entry.gen_from_registers(opts),
-      },
-      sorter = sorters.get_levenshtein_sorter(),
-      attach_mappings = function(_, map)
-        actions.select_default:replace(actions.paste_register)
-        map("i", "<C-e>", actions.edit_register)
-        return true
-      end,
-    }):find()
-  end
-
   vim.keymap.set('n', '<Leader>f', project_files)
-  vim.keymap.set('n', '<Leader>r', registers)
-  vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end)
-  vim.keymap.set('n', '<Leader>g', function() require('telescope.builtin').live_grep() end)
+  vim.keymap.set('n', '<Leader>b', builtin.buffers)
+  vim.keymap.set('n', '<Leader>g', builtin.live_grep)
   -- Diagnostics is preferred over loclist because it supports severity.
   --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
-  vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
+  -- Turns out I actually did not use this.
+  --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
 end
 
 return {
