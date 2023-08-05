@@ -34,10 +34,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local bufnr = args.buf
 
     local map_opts = { noremap = true, buffer = bufnr }
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, map_opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, map_opts)
     vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, map_opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
+    -- signature_help should be handled by a plugin.
+    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, map_opts)
+    -- implementation is usually a list. It should be handled by telescope.
+    -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
+    vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, map_opts)
     vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
-    vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, map_opts)
+    -- gopls supports rename.
+    vim.keymap.set('n', 'grn', vim.lsp.buf.rename, map_opts)
+    -- Most LSP servers do not provide code action.
+    -- vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, map_opts)
     vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     vim.bo[bufnr].fixendofline = true

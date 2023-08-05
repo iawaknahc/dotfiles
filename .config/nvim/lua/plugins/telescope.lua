@@ -50,6 +50,7 @@ function config()
   vim.keymap.set('n', '<Leader>f', project_files)
   vim.keymap.set('n', '<Leader>b', builtin.buffers)
   vim.keymap.set('n', '<Leader>g', builtin.live_grep)
+  vim.keymap.set('n', 'gi', builtin.lsp_implementations)
   -- Diagnostics is preferred over loclist because it supports severity.
   --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
   -- Turns out I actually did not use this.
