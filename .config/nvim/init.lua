@@ -44,8 +44,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-require('plugins')
-
 vim.diagnostic.config {
   virtual_text = {
     source = true,
@@ -57,3 +55,7 @@ vim.diagnostic.config {
 }
 
 vim.o.completeopt = 'menu,menuone,noselect'
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup("plugins")
