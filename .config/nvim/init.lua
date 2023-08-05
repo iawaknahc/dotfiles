@@ -38,9 +38,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, map_opts)
     vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, map_opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, map_opts)
-    -- signature_help should be handled by a plugin.
+    -- signature_help is handled by lsp_signature
     -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, map_opts)
-    -- implementation is usually a list. It should be handled by telescope.
+    -- implementation is usually a list. It is handled by telescope.
     -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
     vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, map_opts)
     vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
