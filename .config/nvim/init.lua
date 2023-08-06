@@ -19,6 +19,15 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format({
       async = false,
       timeout_ms = 1000,
+      filter = function(client)
+        local allowed = {'null-ls', 'gopls'}
+        for i, v in ipairs(allowed) do
+          if client.name == v then
+            return true
+          end
+        end
+        return false
+      end,
     })
   end,
 })
