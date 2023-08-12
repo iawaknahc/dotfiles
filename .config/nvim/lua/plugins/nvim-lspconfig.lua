@@ -44,6 +44,7 @@ function config()
     group = lspGroup,
     callback = function(args)
       local bufnr = args.buf
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
 
       local map_opts = { noremap = true, buffer = bufnr }
       vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, map_opts)
@@ -64,24 +65,14 @@ function config()
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
       vim.bo[bufnr].fixendofline = true
 
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = lspGroup,
-        callback = function()
-          vim.lsp.buf.format({
-            async = false,
-            timeout_ms = 1000,
-            filter = function(client)
-              local allowed = {'null-ls', 'gopls'}
-              for i, v in ipairs(allowed) do
-                if client.name == v then
-                  return true
-                end
-              end
-              return false
-            end,
-          })
-        end,
-      })
+      if client.name == "gopls" then
+        vim.api.nvim_create_autocmd("BufWritePost", {
+          group = lspGroup,
+          callback = function()
+            vim.lsp.buf.format()
+          end,
+        })
+      end
 
     end,
   })
