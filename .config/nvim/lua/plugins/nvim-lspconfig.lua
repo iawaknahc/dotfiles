@@ -56,7 +56,6 @@ function config()
       -- implementation is usually a list. It is handled by telescope.
       -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
       vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, map_opts)
-      vim.keymap.set('n', 'g?', vim.diagnostic.open_float, map_opts)
       -- gopls supports rename.
       vim.keymap.set('n', 'grn', vim.lsp.buf.rename, map_opts)
       -- Most LSP servers do not provide code action.

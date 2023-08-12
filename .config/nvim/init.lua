@@ -36,6 +36,10 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 })
 
 
+-- Key mappings
+vim.keymap.set('n', 'g?', vim.diagnostic.open_float, { noremap = true })
+
+
 -- Set up lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 vim.opt.rtp:prepend(lazypath)
