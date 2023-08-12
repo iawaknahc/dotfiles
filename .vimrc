@@ -40,6 +40,9 @@ endif
 set termguicolors
 silent! colorscheme dracula
 
+" Completion
+set completeopt=menu,menuone,noselect
+
 " Command completion
 set wildmenu wildmode=longest:full,full
 
