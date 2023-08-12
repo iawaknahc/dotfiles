@@ -1,0 +1,12 @@
+import:
+- ~/.config/alacritty/dracula.yml
+
+env:
+  TERM: alacritty-direct
+
+font:
+  normal:
+    family: "Source Han Mono"
+  size: 13
+  offset:
+    x: 1
