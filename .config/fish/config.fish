@@ -79,3 +79,5 @@ if test -x "$(command -v brew)"
   set -gx CGO_CFLAGS "-I$(brew --prefix)/include"
   set -gx CGO_LDFLAGS "-L$(brew --prefix)/lib"
 end
+
+fish_config theme choose "Dracula Official"
