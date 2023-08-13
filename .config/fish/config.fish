@@ -72,12 +72,14 @@ if test -r "$HOME/.asdf/completions/asdf.fish"
 end
 
 if test -x "$(command -v brew)"
+  set HOMEBREW_PREFIX "$(brew --prefix)"
+
   if test -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
     set -gx PKG_CONFIG_PATH "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
   end
 
-  set -gx CGO_CFLAGS "-I$(brew --prefix)/include"
-  set -gx CGO_LDFLAGS "-L$(brew --prefix)/lib"
+  set -gx CGO_CFLAGS "-I$HOMEBREW_PREFIX/include"
+  set -gx CGO_LDFLAGS "-L$HOMEBREW_PREFIX/lib"
 end
 
 fish_config theme choose "Dracula Official"
