@@ -32,6 +32,10 @@ else
 end
 '
 
+if test -d "/Applications/kitty.app/Contents/MacOS"
+  fish_add_path -P "/Applications/kitty.app/Contents/MacOS"
+end
+
 if test -d "$HOME/Library/Android/sdk"
   set -gx ANDROID_SDK_ROOT "$HOME/Library/Android/sdk"
   set -gx ANDROID_HOME "$ANDROID_SDK_ROOT"

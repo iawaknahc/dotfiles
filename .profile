@@ -35,6 +35,11 @@ export LANG=en_US.UTF-8
 # Turn on vi mode
 set -o vi
 
+# kitty
+if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
+  export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
+fi
+
 # android
 if [ -d "$HOME/Library/Android/sdk" ]; then
   export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
