@@ -40,6 +40,11 @@ if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
   export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
 fi
 
+# wezterm
+if [ -d "/Applications/WezTerm.app/Contents/MacOS" ]; then
+  export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
+fi
+
 # android
 if [ -d "$HOME/Library/Android/sdk" ]; then
   export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
