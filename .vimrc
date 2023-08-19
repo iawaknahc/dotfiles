@@ -37,7 +37,6 @@ if !has('nvim')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
 set termguicolors
-silent! colorscheme dracula
 
 " Completion
 set completeopt=menu,menuone,noselect
