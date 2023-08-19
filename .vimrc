@@ -13,7 +13,6 @@ set nomodeline
 
 " Look
 set signcolumn=yes
-set guicursor=
 set number
 set laststatus=2
 let g:statusline_fileformat = {
