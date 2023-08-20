@@ -14,4 +14,4 @@
   useConfigOnly = true
 
 [diff "blackbox"]
-  textconv = gpg --use-agent -q --batch --decrypt
+  textconv = gpg --quiet --batch --decrypt
