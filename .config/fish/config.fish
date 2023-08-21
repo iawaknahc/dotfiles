@@ -42,6 +42,11 @@ if test -r "$HOME/.asdf/completions/asdf.fish"
   source "$HOME/.asdf/completions/asdf.fish"
 end
 
+# delta
+if test -x "$(command -v delta)"
+  set -gx GIT_PAGER delta
+end
+
 # flutter
 if test -d "$HOME/flutter"
   set -gx FLUTTER_ROOT "$HOME/flutter"

@@ -43,6 +43,11 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
 fi
 
+# delta
+if [ -x "$(command -v delta)" ]; then
+  export GIT_PAGER='delta'
+fi
+
 # flutter
 if [ -d "$HOME/flutter" ]; then
   export FLUTTER_ROOT="$HOME/flutter"
