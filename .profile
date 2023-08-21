@@ -12,38 +12,19 @@ if [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Use nvim if it is installed
-VIM=vim
-if [ -x "$(command -v nvim)" ]; then
-  VIM=nvim
-  alias vi='nvim'
-  alias vim='nvim'
-  alias view='nvim -R'
-  alias vimdiff='nvim -d'
-fi
-export VISUAL="$VIM"
-export EDITOR="$VIM"
-
-# Configure prompt
-export PS1='$ '
-export PS2='> '
+# Turn on vi mode
+set -o vi
 
 # Set locale
 # LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
 export LANG=en_US.UTF-8
 
-# Turn on vi mode
-set -o vi
+# Configure prompt
+export PS1='$ '
+export PS2='> '
 
-# kitty
-if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
-  export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
-fi
-
-# wezterm
-if [ -d "/Applications/WezTerm.app/Contents/MacOS" ]; then
-  export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
-fi
+# The rest of this file MUST BE sorted by the name of the section.
+# The name of the section is the comment.
 
 # android
 if [ -d "$HOME/Library/Android/sdk" ]; then
@@ -54,30 +35,12 @@ if [ -d "$HOME/Library/Android/sdk" ]; then
   export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
 fi
 
-# fzf
-export FZF_DEFAULT_COMMAND='
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  git ls-files --cached --others --exclude-standard
-else
-  # In case fzf is run at / or HOME
-  find . -type f -maxdepth 2
+# asdf
+if [ -r "$HOME"/.asdf/asdf.sh ]; then
+  . "$HOME"/.asdf/asdf.sh
 fi
-'
-
-# rust
-if [ -d "$HOME/.cargo" ]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
-fi
-
-# golang
-if [ -x "$(command -v go)" ]; then
-  GOPATH="$(go env GOPATH)"
-  export PATH="$GOPATH/bin:$PATH"
-fi
-
-# mason
-if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
-  export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
+  . "$HOME"/.asdf/completions/asdf.bash
 fi
 
 # flutter
@@ -92,19 +55,23 @@ if [ -d "$HOME/flutter" ]; then
   export PATH="$HOME/flutter/.pub-cache/bin:$PATH"
 fi
 
-# opam
-if [ -r "$HOME/.opam/opam-init/init.sh" ]; then
-  . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh"
+# fzf
+export FZF_DEFAULT_COMMAND='
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git ls-files --cached --others --exclude-standard
+else
+  # In case fzf is run at / or HOME
+  find . -type f -maxdepth 2
+fi
+'
+
+# golang
+if [ -x "$(command -v go)" ]; then
+  GOPATH="$(go env GOPATH)"
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
-# asdf
-if [ -r "$HOME"/.asdf/asdf.sh ]; then
-  . "$HOME"/.asdf/asdf.sh
-fi
-if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
-  . "$HOME"/.asdf/completions/asdf.bash
-fi
-
+# homebrew
 if [ -x "$(command -v brew)" ]; then
   if [ -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
     export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
@@ -123,4 +90,41 @@ if [ -x "$(command -v brew)" ]; then
     export BASH_COMPLETION_COMPAT_DIR="$HOMEBREW_PREFIX/etc/bash_completion.d"
     [ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
   fi
+fi
+
+# kitty
+if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
+  export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
+fi
+
+# mason
+if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
+  export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+fi
+
+# nvim
+VIM=vim
+if [ -x "$(command -v nvim)" ]; then
+  VIM=nvim
+  alias vi='nvim'
+  alias vim='nvim'
+  alias view='nvim -R'
+  alias vimdiff='nvim -d'
+fi
+export VISUAL="$VIM"
+export EDITOR="$VIM"
+
+# opam
+if [ -r "$HOME/.opam/opam-init/init.sh" ]; then
+  . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh"
+fi
+
+# rust
+if [ -d "$HOME/.cargo" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+# wezterm
+if [ -d "/Applications/WezTerm.app/Contents/MacOS" ]; then
+  export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
 fi
