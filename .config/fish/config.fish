@@ -43,9 +43,10 @@ if test -r "$HOME/.asdf/completions/asdf.fish"
 end
 
 # delta
-if test -x "$(command -v delta)"
-  set -gx GIT_PAGER delta
-end
+# I have tried it out for a day but I still prefer the good old diff.
+# if test -x "$(command -v delta)"
+#   set -gx GIT_PAGER delta
+# end
 
 # flutter
 if test -d "$HOME/flutter"

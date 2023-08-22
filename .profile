@@ -44,9 +44,10 @@ if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
 fi
 
 # delta
-if [ -x "$(command -v delta)" ]; then
-  export GIT_PAGER='delta'
-fi
+# I have tried it out for a day but I still prefer the good old diff.
+# if [ -x "$(command -v delta)" ]; then
+#   export GIT_PAGER='delta'
+# fi
 
 # flutter
 if [ -d "$HOME/flutter" ]; then
