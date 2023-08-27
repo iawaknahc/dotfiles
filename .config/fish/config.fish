@@ -111,6 +111,11 @@ if test -r "$HOME/.opam/opam-init/init.fish"
   source "$HOME/.opam/opam-init/init.fish"
 end
 
+# python
+if test -x "$(command -v python3)"
+  alias jsontool='python3 -m json.tool --no-ensure-ascii'
+end
+
 # rust
 if test -d "$HOME/.cargo"
   fish_add_path -P "$HOME/.cargo/bin"

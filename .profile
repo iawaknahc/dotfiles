@@ -125,6 +125,11 @@ if [ -r "$HOME/.opam/opam-init/init.sh" ]; then
   . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh"
 fi
 
+# python
+if [ -x "$(command -v python3)" ]; then
+  alias jsontool='python3 -m json.tool --no-ensure-ascii'
+fi
+
 # rust
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
