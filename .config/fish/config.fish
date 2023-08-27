@@ -114,6 +114,10 @@ end
 # python
 if test -x "$(command -v python3)"
   alias jsontool='python3 -m json.tool --no-ensure-ascii'
+  alias percent_encode_path_segment='python3 -c \'import sys,urllib.parse as u;[print(u.quote(l,safe=\\\':@$&+=\\\'))for l in sys.stdin.read().splitlines()]\''
+  alias percent_decode_path_segment='python3 -c \'import sys,urllib.parse as u;[print(u.unquote(l))for l in sys.stdin.read().splitlines()]\''
+  alias percent_encode_query_component='python3 -c \'import sys,urllib.parse as u;[print(u.quote_plus(l))for l in sys.stdin.read().splitlines()]\''
+  alias percent_decode_query_component='python3 -c \'import sys,urllib.parse as u;[print(u.unquote_plus(l))for l in sys.stdin.read().splitlines()]\''
 end
 
 # rust
