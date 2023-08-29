@@ -6,12 +6,6 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
-# Homebrew on M1 mac
-# This must happen before asdf otherwise asdf binaries will never be used.
-if [ -x "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 # Turn on vi mode
 set -o vi
 
@@ -33,14 +27,6 @@ if [ -d "$HOME/Library/Android/sdk" ]; then
   export PATH="$ANDROID_SDK_ROOT/tools:$PATH"
   export PATH="$ANDROID_SDK_ROOT/tools/bin:$PATH"
   export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
-fi
-
-# asdf
-if [ -r "$HOME"/.asdf/asdf.sh ]; then
-  . "$HOME"/.asdf/asdf.sh
-fi
-if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
-  . "$HOME"/.asdf/completions/asdf.bash
 fi
 
 # delta
@@ -78,6 +64,9 @@ if [ -x "$(command -v go)" ]; then
 fi
 
 # homebrew
+if [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 if [ -x "$(command -v brew)" ]; then
   if [ -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
     export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
@@ -142,4 +131,13 @@ fi
 # wezterm
 if [ -d "/Applications/WezTerm.app/Contents/MacOS" ]; then
   export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
+fi
+
+# asdf
+# asdf must be the last one because it has to be appear earlier in PATH.
+if [ -r "$HOME"/.asdf/asdf.sh ]; then
+  . "$HOME"/.asdf/asdf.sh
+fi
+if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
+  . "$HOME"/.asdf/completions/asdf.bash
 fi

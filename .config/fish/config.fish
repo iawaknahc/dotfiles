@@ -7,12 +7,6 @@ if test -x /usr/libexec/path_helper
   /usr/libexec/path_helper -c | source
 end
 
-# Homebrew on M1 mac
-# This must happen before asdf otherwise asdf binaries will never be used.
-if test -x /opt/homebrew/bin/brew
-  /opt/homebrew/bin/brew shellenv | source
-end
-
 # Turn on vi mode
 fish_vi_key_bindings
 
@@ -32,14 +26,6 @@ if test -d "$HOME/Library/Android/sdk"
   fish_add_path -P "$ANDROID_SDK_ROOT/tools"
   fish_add_path -P "$ANDROID_SDK_ROOT/tools/bin"
   fish_add_path -P "$ANDROID_SDK_ROOT/platform-tools"
-end
-
-# asdf
-if test -r "$HOME/.asdf/asdf.fish"
-  source "$HOME/.asdf/asdf.fish"
-end
-if test -r "$HOME/.asdf/completions/asdf.fish"
-  source "$HOME/.asdf/completions/asdf.fish"
 end
 
 # delta
@@ -73,6 +59,9 @@ if test -x "$(command -v go)"
 end
 
 # homebrew
+if test -x /opt/homebrew/bin/brew
+  /opt/homebrew/bin/brew shellenv | source
+end
 if test -x "$(command -v brew)"
   set HOMEBREW_PREFIX "$(brew --prefix)"
 
@@ -128,4 +117,13 @@ end
 # wezterm
 if test -d "/Applications/WezTerm.app/Contents/MacOS"
   fish_add_path -P "/Applications/WezTerm.app/Contents/MacOS"
+end
+
+# asdf
+# asdf must be the last one because it has to be appear earlier in PATH.
+if test -r "$HOME/.asdf/asdf.fish"
+  source "$HOME/.asdf/asdf.fish"
+end
+if test -r "$HOME/.asdf/completions/asdf.fish"
+  source "$HOME/.asdf/completions/asdf.fish"
 end
