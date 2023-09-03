@@ -1,0 +1,13 @@
+||google.*/search$removeparam=client
+
+||www.amazon.*$removeparam=ref_
+||www.amazon.*$removeparam=ref
+||www.amazon.*$removeparam=_ref
+||www.amazon.*$removeparam=_encoding
+||www.amazon.*$removeparam=content-id
+||www.amazon.*$removeparam=th
+||www.amazon.*$removeparam=fpw
+||www.amazon.*$removeparam=fpl
+||www.amazon.*$removeparam=psc
+||www.amazon.*$removeparam=ie
+||www.amazon.*$removeparam=showVariations
