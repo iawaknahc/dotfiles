@@ -1,15 +1,16 @@
 ||google.*/search$removeparam=client
 
-||www.amazon.*$removeparam=ref
-||www.amazon.*$removeparam=ref_
-||www.amazon.*$removeparam=_ref
-||www.amazon.*$removeparam=_encoding
-||www.amazon.*$removeparam=content-id
-||www.amazon.*$removeparam=crid
-||www.amazon.*$removeparam=fpl
-||www.amazon.*$removeparam=fpw
-||www.amazon.*$removeparam=ie
-||www.amazon.*$removeparam=psc
-||www.amazon.*$removeparam=showVariations
-||www.amazon.*$removeparam=sprefix
-||www.amazon.*$removeparam=th
+! read.amazon.com, www.amazon.com, www.amazon.co.jp
+||amazon.*$removeparam=ref
+||amazon.*$removeparam=ref_
+||amazon.*$removeparam=_ref
+||amazon.*$removeparam=_encoding
+||amazon.*$removeparam=content-id
+||amazon.*$removeparam=crid
+||amazon.*$removeparam=fpl
+||amazon.*$removeparam=fpw
+||amazon.*$removeparam=ie
+||amazon.*$removeparam=psc
+||amazon.*$removeparam=showVariations
+||amazon.*$removeparam=sprefix
+||amazon.*$removeparam=th
