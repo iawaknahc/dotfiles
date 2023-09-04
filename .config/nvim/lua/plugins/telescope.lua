@@ -47,14 +47,17 @@ function config()
     end
   end
 
+  -- Inspired by Helix space mode f
   vim.keymap.set('n', '<Leader>f', project_files)
+  -- Inspired by Helix space mode b
   vim.keymap.set('n', '<Leader>b', builtin.buffers)
   vim.keymap.set('n', '<Leader>g', builtin.live_grep)
+  -- Inspired by Helix goto mode i
   vim.keymap.set('n', 'gi', builtin.lsp_implementations)
   -- Diagnostics is preferred over loclist because it supports severity.
   --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
-  -- Turns out I actually did not use this.
-  --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
+  -- Inspired by Helix space mode d
+  vim.keymap.set('n', '<Leader>d', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
 end
 
 return {
