@@ -1,7 +1,9 @@
 function config()
   local formatter = require("formatter")
   local util = require("formatter.util")
-  local prettierd = require("formatter.defaults.prettierd")
+  -- I used to use prettierd but it seems that it is not compatible with projects
+  -- that have prettier plugins installed.
+  local prettier = require("formatter.defaults.prettier")
 
   local formatterGroup = vim.api.nvim_create_augroup("MyFormatterAutoCommands", { clear = true })
 
@@ -12,10 +14,11 @@ function config()
 
   formatter.setup {
     filetype = {
-      javascript = { prettierd },
-      javascriptreact = { prettierd },
-      typescript = { prettierd },
-      typescriptreact = { prettierd },
+      javascript = { prettier },
+      javascriptreact = { prettier },
+      typescript = { prettier },
+      typescriptreact = { prettier },
+      css = { prettier },
     },
   }
 end
