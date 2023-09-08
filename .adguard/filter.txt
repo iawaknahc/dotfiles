@@ -1,5 +1,5 @@
-! Allow q only
-||google.*/search$removeparam=~q
+! If we only allow q, then the page-based pagination will break.
+! ||google.*/search$removeparam=~q
 
 ! read.amazon.com, www.amazon.com, www.amazon.co.jp
 ||amazon.*$removeparam=ref
