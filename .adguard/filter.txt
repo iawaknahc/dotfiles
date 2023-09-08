@@ -1,4 +1,5 @@
-||google.*/search$removeparam=client
+! Allow q only
+||google.*/search$removeparam=~q
 
 ! read.amazon.com, www.amazon.com, www.amazon.co.jp
 ||amazon.*$removeparam=ref
