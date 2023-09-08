@@ -44,10 +44,13 @@ vim.keymap.set('n', 'g?', vim.diagnostic.open_float, { noremap = true })
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
-  -- Automatically check for update.
-  checker = {
-    enabled = true,
-  },
+  -- I used to enable auto check for update.
+  -- But this will cause lazy to write :messages on every launch,
+  -- consuming some of my keystrokes.
+  -- This is quite annoying.
+  -- checker = {
+  --   enabled = true,
+  -- },
   -- Do not detect change when I am editing plugin configs.
   change_detection = {
     enabled = false,
