@@ -1,10 +1,10 @@
 return {
   {
-    'leoluz/nvim-dap-go',
+    "leoluz/nvim-dap-go",
     dependencies = {
-      'mfussenegger/nvim-dap',
+      "mfussenegger/nvim-dap",
     },
-    main = 'dap-go',
+    main = "dap-go",
     opts = {
       delve = {
         -- The workflow of debug a program is:
@@ -21,13 +21,13 @@ return {
       },
       dap_configurations = {
         {
-          type = 'go',
-          request = 'attach',
-          name = 'attach-remote-delve',
+          type = "go",
+          request = "attach",
+          name = "attach-remote-delve",
           -- https://github.com/go-delve/delve/blob/b5c9edccffb8d6903811d7dacbc38a2076f61382/service/dap/server.go#L1813
-          mode = 'remote',
-        }
-      }
+          mode = "remote",
+        },
+      },
     },
-  }
+  },
 }

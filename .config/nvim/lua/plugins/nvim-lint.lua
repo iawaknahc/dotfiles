@@ -1,12 +1,12 @@
 function config()
-  local lint = require('lint')
+  local lint = require("lint")
   lint.linters_by_ft = {
-    javascript = { 'eslint' },
-    javascriptreact = { 'eslint' },
-    typescript = { 'eslint' },
-    typescriptreact = { 'eslint' },
-    sh = { 'shellcheck' },
-    dockerfile = { 'hadolint' },
+    javascript = { "eslint" },
+    javascriptreact = { "eslint" },
+    typescript = { "eslint" },
+    typescriptreact = { "eslint" },
+    sh = { "shellcheck" },
+    dockerfile = { "hadolint" },
   }
 
   local lintGroup = vim.api.nvim_create_augroup("MyLintAutoCommands", { clear = true })
@@ -20,7 +20,7 @@ end
 
 return {
   {
-    'mfussenegger/nvim-lint',
+    "mfussenegger/nvim-lint",
     config = config,
-  }
+  },
 }

@@ -1,10 +1,10 @@
 return {
   {
-    'williamboman/mason-lspconfig.nvim',
+    "williamboman/mason-lspconfig.nvim",
     dependencies = {
       "williamboman/mason.nvim",
     },
-    main = 'mason-lspconfig',
+    main = "mason-lspconfig",
     opts = {
       automatic_installation = true,
     },

@@ -1,16 +1,24 @@
 function config()
   local formatter = require("formatter")
   local util = require("formatter.util")
-  -- I used to use prettierd but it seems that it is not compatible with projects
-  -- that have prettier plugins installed.
-  local prettier = require("formatter.defaults.prettier")
 
   local formatterGroup = vim.api.nvim_create_augroup("MyFormatterAutoCommands", { clear = true })
-
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = formatterGroup,
-    command = 'FormatWriteLock',
+    command = "FormatWriteLock",
   })
+
+  local prettier = {
+    exe = "./node_modules/.bin/prettier",
+    args = {
+      "--stdin-filepath",
+      util.escape_path(util.get_current_buffer_file_path()),
+    },
+    stdin = true,
+  }
+
+  -- I used to use prettierd but it seems that it is not compatible with projects
+  -- that have prettier plugins installed.
 
   formatter.setup {
     filetype = {
@@ -19,13 +27,14 @@ function config()
       typescript = { prettier },
       typescriptreact = { prettier },
       css = { prettier },
+      lua = { require("formatter.filetypes.lua").stylua },
     },
   }
 end
 
 return {
   {
-    'mhartington/formatter.nvim',
+    "mhartington/formatter.nvim",
     config = config,
-  }
+  },
 }

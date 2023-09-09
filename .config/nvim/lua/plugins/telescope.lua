@@ -1,22 +1,22 @@
 function config()
-  local actions = require('telescope.actions')
-  local builtin = require('telescope.builtin')
+  local actions = require("telescope.actions")
+  local builtin = require("telescope.builtin")
 
-  require('telescope').setup {
+  require("telescope").setup {
     defaults = {
       vimgrep_arguments = {
-        'rg',
-        '--no-heading',
-        '--with-filename',
-        '--line-number',
-        '--column',
-        '--smart-case',
-        '--ignore',
-        '--hidden',
-        '--color=never',
+        "rg",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "--ignore",
+        "--hidden",
+        "--color=never",
         -- Explicitly ignore .git because it is a hidden file that is not in .gitignore.
         -- https://github.com/BurntSushi/ripgrep/issues/1509#issuecomment-595942433
-        '--glob=!.git/',
+        "--glob=!.git/",
       },
       mappings = {
         i = {
@@ -48,24 +48,26 @@ function config()
   end
 
   -- Inspired by Helix space mode f
-  vim.keymap.set('n', '<Leader>f', project_files)
+  vim.keymap.set("n", "<Leader>f", project_files)
   -- Inspired by Helix space mode b
-  vim.keymap.set('n', '<Leader>b', builtin.buffers)
-  vim.keymap.set('n', '<Leader>g', builtin.live_grep)
+  vim.keymap.set("n", "<Leader>b", builtin.buffers)
+  vim.keymap.set("n", "<Leader>g", builtin.live_grep)
   -- Inspired by Helix goto mode i
-  vim.keymap.set('n', 'gi', builtin.lsp_implementations)
+  vim.keymap.set("n", "gi", builtin.lsp_implementations)
   -- Diagnostics is preferred over loclist because it supports severity.
   --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
   -- Inspired by Helix space mode d
-  vim.keymap.set('n', '<Leader>d', function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end)
+  vim.keymap.set("n", "<Leader>d", function()
+    require("telescope.builtin").diagnostics({ bufnr = 0 })
+  end)
 end
 
 return {
   {
-    'nvim-telescope/telescope.nvim',
+    "nvim-telescope/telescope.nvim",
     dependencies = {
-      'nvim-lua/plenary.nvim',
+      "nvim-lua/plenary.nvim",
     },
     config = config,
-  }
+  },
 }

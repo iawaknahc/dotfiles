@@ -6,7 +6,6 @@ let &packpath = &runtimepath
 source ~/.vimrc
 ]]
 
-
 -- Set nvim-specific options
 vim.diagnostic.config {
   virtual_text = {
@@ -18,12 +17,13 @@ vim.diagnostic.config {
   severity_sort = true,
 }
 
-
 -- Set up autocommands
 local yankGroup = vim.api.nvim_create_augroup("MyYankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
-  callback = function() vim.highlight.on_yank() end,
+  callback = function()
+    vim.highlight.on_yank()
+  end,
   group = yankGroup,
 })
 
@@ -35,10 +35,8 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
   end,
 })
 
-
 -- Key mappings
-vim.keymap.set('n', 'g?', vim.diagnostic.open_float, { noremap = true })
-
+vim.keymap.set("n", "g?", vim.diagnostic.open_float, { noremap = true })
 
 -- Set up lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

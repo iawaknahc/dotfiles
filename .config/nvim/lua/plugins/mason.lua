@@ -1,7 +1,7 @@
 return {
   {
-    'williamboman/mason.nvim',
-    main = 'mason',
+    "williamboman/mason.nvim",
+    main = "mason",
     config = true,
   },
 }
