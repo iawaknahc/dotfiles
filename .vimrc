@@ -16,10 +16,10 @@ set signcolumn=yes
 set number
 set laststatus=2
 let g:statusline_fileformat = {
-      \ 'dos': 'CRLF',
-      \ 'unix': 'LF',
-      \ 'mac': 'CR',
-      \ }
+  \ 'dos': 'CRLF',
+  \ 'unix': 'LF',
+  \ 'mac': 'CR',
+  \ }
 set statusline=
 set statusline+=%f%m%r%h%w
 set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
