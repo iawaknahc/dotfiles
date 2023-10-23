@@ -70,15 +70,6 @@ function config()
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
       vim.bo[bufnr].fixendofline = true
-
-      if client.name == "gopls" then
-        vim.api.nvim_create_autocmd("BufWritePost", {
-          group = lspGroup,
-          callback = function()
-            vim.lsp.buf.format()
-          end,
-        })
-      end
     end,
   })
 end
