@@ -127,3 +127,12 @@ end
 if test -r "$HOME/.asdf/completions/asdf.fish"
   source "$HOME/.asdf/completions/asdf.fish"
 end
+
+# sqlite3
+# sqlite3 must appear AFTER android because ANDROID_SDK_ROOT/platform-tools
+# contains an ancient copy of sqlite3.
+if test -x "$(command -v brew)"
+  if test -x "$(brew --prefix)/opt/sqlite3/bin/sqlite3"
+    fish_add_path -P "$(brew --prefix)/opt/sqlite3/bin"
+  end
+end

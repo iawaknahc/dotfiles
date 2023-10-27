@@ -141,3 +141,12 @@ fi
 if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
 fi
+
+# sqlite3
+# sqlite3 must appear AFTER android because ANDROID_SDK_ROOT/platform-tools
+# contains an ancient copy of sqlite3.
+if [ -x "$(command -v brew)" ]; then
+  if [ -x "$(brew --prefix)/opt/sqlite3/bin/sqlite3" ]; then
+    export PATH="$(brew --prefix)/opt/sqlite3/bin:$PATH"
+  fi
+fi
