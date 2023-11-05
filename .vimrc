@@ -25,7 +25,12 @@ set statusline+=%f%m%r%h%w
 set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
 " 99999:99999 is more than enough.
 set statusline+=%=%5l:%-5c\ %3p%%
-set list listchars=tab:>-,lead:.,trail:~,nbsp:+
+" lead:. is taken from the help of neovim.
+" trail:- is the default of neovim.
+" nbsp:+ is the default of neovim.
+" tab:>  is the default of neovim. We change it to tab:>_ so that
+" the space is visible and distinguishable from leading spaces.
+set list listchars=tab:>_,lead:.,trail:-,nbsp:+
 " Highlight textwidth+1
 set colorcolumn=+1
 
