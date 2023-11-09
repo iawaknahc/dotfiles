@@ -42,6 +42,24 @@ local function eol_color(_)
   end
 end
 
+local function navic()
+  local status, n = pcall(require, "nvim-navic")
+  if status then
+    if n.is_available() then
+      return n.get_location()
+    end
+  end
+  return ""
+end
+
+local function navic_cond()
+  local status, n = pcall(require, "nvim-navic")
+  if status then
+    return n.is_available()
+  end
+  return false
+end
+
 return {
   {
     "nvim-lualine/lualine.nvim",
@@ -64,6 +82,9 @@ return {
         },
         lualine_y = { "%5l:%-5c" },
         lualine_z = { "%3p%%" },
+      },
+      winbar = {
+        lualine_c = { { navic, cond = navic_cond, draw_empty = true } },
       },
     },
   },
