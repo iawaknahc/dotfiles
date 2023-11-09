@@ -20,20 +20,11 @@ let g:statusline_fileformat = {
   \ 'unix': 'LF',
   \ 'mac': 'CR',
   \ }
-if has('nvim-0.2.1')
-  set winbar=%f
-  set statusline=
-  set statusline+=%m%r%h%w
-  set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
-  " 99999:99999 is more than enough.
-  set statusline+=%=%5l:%-5c\ %3p%%
-else
-  set statusline=
-  set statusline+=%f%m%r%h%w
-  set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
-  " 99999:99999 is more than enough.
-  set statusline+=%=%5l:%-5c\ %3p%%
-endif
+set statusline=
+set statusline+=%f%m%r%h%w
+set statusline+=%=%{&filetype}\ %{&fileencoding}\ %{g:statusline_fileformat[&fileformat]}\ %{&eol?'eol':'noeol'}
+" 99999:99999 is more than enough.
+set statusline+=%=%5l:%-5c\ %3p%%
 " lead:. is taken from the help of neovim.
 " trail:- is the default of neovim.
 " nbsp:+ is the default of neovim.
