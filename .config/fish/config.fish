@@ -20,12 +20,20 @@ fish_config theme choose "Dracula Official"
 # The name of the section is the comment.
 
 # android
-if test -d "$HOME/Library/Android/sdk"
-  set -gx ANDROID_SDK_ROOT "$HOME/Library/Android/sdk"
-  set -gx ANDROID_HOME "$ANDROID_SDK_ROOT"
-  fish_add_path -P "$ANDROID_SDK_ROOT/tools"
-  fish_add_path -P "$ANDROID_SDK_ROOT/tools/bin"
-  fish_add_path -P "$ANDROID_SDK_ROOT/platform-tools"
+if test -d "/Applications/Android Studio Giraffle.app"
+  # The default location of when Android Studio installs the SDK.
+  if test -d "$HOME/Library/Android/sdk"
+    # ANDROID_SDK_ROOT is deprecated
+    # https://developer.android.com/tools/variables
+    # set -gx ANDROID_SDK_ROOT "$HOME/Library/Android/sdk"
+    set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
+    # https://developer.android.com/tools/variables
+    fish_add_path -P "$ANDROID_HOME/tools"
+    fish_add_path -P "$ANDROID_HOME/tools/bin"
+    fish_add_path -P "$ANDROID_HOME/platform-tools"
+  end
+
+  set -gx JAVA_HOME "/Applications/Android Studio Giraffle.app/Contents/jbr/Contents/Home"
 end
 
 # delta
