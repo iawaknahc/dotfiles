@@ -25,16 +25,21 @@ local simple = {
 }
 
 function config()
+  local capabilities = require("cmp_nvim_lsp").default_capabilities()
   local lspconfig = require("lspconfig")
 
   for i, v in ipairs(simple) do
-    lspconfig[v].setup {}
+    lspconfig[v].setup {
+      capabilities = capabilities,
+    }
   end
 
   lspconfig["tsserver"].setup {
+    capabilities = capabilities,
     root_dir = lspconfig.util.root_pattern("package.json"),
   }
   lspconfig["denols"].setup {
+    capabilities = capabilities,
     root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
   }
 
@@ -79,6 +84,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
     config = config,
   },
