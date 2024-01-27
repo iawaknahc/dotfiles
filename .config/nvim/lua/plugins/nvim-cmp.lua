@@ -27,12 +27,16 @@ function config()
     end
   end
 
+  local mapping_cmdline = cmp.mapping.preset.cmdline({
+    ["<Tab>"] = {
+      c = tab_completion,
+    },
+  })
+  mapping_cmdline["<C-J>"] = mapping_cmdline["<C-N>"]
+  mapping_cmdline["<C-K>"] = mapping_cmdline["<C-P>"]
+
   cmp.setup.cmdline({ "/", "?" }, {
-    mapping = cmp.mapping.preset.cmdline({
-      ["<Tab>"] = {
-        c = tab_completion,
-      },
-    }),
+    mapping = mapping_cmdline,
     sources = {
       source_buffer,
       { name = "nvim_lsp_document_symbol" },
@@ -40,17 +44,21 @@ function config()
   })
 
   cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline({
-      ["<Tab>"] = {
-        c = tab_completion,
-      },
-    }),
+    mapping = mapping_cmdline,
     sources = {
       source_buffer,
       source_path,
       { name = "cmdline" },
     },
   })
+
+  local mapping_insert = cmp.mapping.preset.insert({
+    ["<CR>"] = {
+      i = enter_completion,
+    },
+  })
+  mapping_insert["<C-J>"] = mapping_insert["<C-N>"]
+  mapping_insert["<C-K>"] = mapping_insert["<C-P>"]
 
   cmp.setup({
     preselect = cmp.PreselectMode.None,
@@ -59,11 +67,7 @@ function config()
         vim.fn["vsnip#anonymous"](args.body)
       end,
     },
-    mapping = cmp.mapping.preset.insert({
-      ["<CR>"] = {
-        i = enter_completion,
-      },
-    }),
+    mapping = mapping_insert,
     sources = {
       source_buffer,
       source_path,
