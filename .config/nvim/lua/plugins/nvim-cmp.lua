@@ -8,6 +8,7 @@ function config()
     },
   }
   local source_path = { name = "path" }
+  local source_cmdline_history = { name = "cmdline_history" }
 
   local tab_completion = function(fallback)
     if cmp.visible() and cmp.get_selected_entry() then
@@ -39,6 +40,7 @@ function config()
     mapping = mapping_cmdline,
     sources = {
       source_buffer,
+      source_cmdline_history,
       { name = "nvim_lsp_document_symbol" },
     },
   })
@@ -49,6 +51,7 @@ function config()
       source_buffer,
       source_path,
       { name = "cmdline" },
+      source_cmdline_history,
     },
   })
 
@@ -88,6 +91,7 @@ return {
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
+    "dmitmel/cmp-cmdline-history",
     "hrsh7th/cmp-nvim-lua",
     "hrsh7th/cmp-nvim-lsp-signature-help",
     "hrsh7th/cmp-nvim-lsp-document-symbol",
