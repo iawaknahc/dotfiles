@@ -6,6 +6,13 @@ let &packpath = &runtimepath
 source ~/.vimrc
 ]]
 
+-- colorcolumn
+local colorcolumn = {}
+for i = 1, 100 do
+  table.insert(colorcolumn, "+" .. i)
+end
+vim.wo.colorcolumn = table.concat(colorcolumn, ",")
+
 -- Set nvim-specific options
 vim.diagnostic.config {
   virtual_text = {

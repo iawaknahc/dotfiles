@@ -31,7 +31,7 @@ set statusline+=%=%5l:%-5c\ %3p%%
 " tab:>  is the default of neovim. We change it to tab:>_ so that
 " the space is visible and distinguishable from leading spaces.
 set list listchars=tab:>_,lead:.,trail:-,nbsp:+
-" Highlight textwidth+1
+" We color more columns in init.lua
 set colorcolumn=+1
 set breakindent
 
