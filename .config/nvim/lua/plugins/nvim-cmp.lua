@@ -65,6 +65,10 @@ function config()
 
   cmp.setup({
     preselect = cmp.PreselectMode.None,
+    -- nvim-cmp itself does not require a snippet engine to run.
+    -- But some LSP servers like CSS only return snippet items.
+    -- Therefore a snippet engine is required.
+    -- See https://github.com/hrsh7th/nvim-cmp/issues/373#issuecomment-947359057
     snippet = {
       expand = function(args)
         vim.fn["vsnip#anonymous"](args.body)
