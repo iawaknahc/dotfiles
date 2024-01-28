@@ -33,10 +33,31 @@ function config()
     },
   })
 
+  local make_jump = function(direction)
+    return function(fallback)
+      local luasnip = require("luasnip")
+      if luasnip.jumpable(direction) then
+        luasnip.jump(direction)
+      else
+        fallback()
+      end
+    end
+  end
+  local tab = make_jump(1)
+  local s_tab = make_jump(-1)
+
   local mapping_insert = cmp.mapping.preset.insert()
   mapping_insert["<CR>"] = mapping_insert["<C-Y>"]
   mapping_insert["<C-J>"] = mapping_insert["<C-N>"]
   mapping_insert["<C-K>"] = mapping_insert["<C-P>"]
+  mapping_insert["<Tab>"] = {
+    i = tab,
+    s = tab,
+  }
+  mapping_insert["<S-Tab>"] = {
+    i = s_tab,
+    s = s_tab,
+  }
 
   cmp.setup({
     preselect = cmp.PreselectMode.None,
@@ -46,7 +67,7 @@ function config()
     -- See https://github.com/hrsh7th/nvim-cmp/issues/373#issuecomment-947359057
     snippet = {
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
+        require("luasnip").lsp_expand(args.body)
       end,
     },
     mapping = mapping_insert,
@@ -54,7 +75,6 @@ function config()
       source_buffer,
       source_path,
       { name = "nvim_lsp" },
-      { name = "vsnip" },
       { name = "nvim_lua" },
       { name = "nvim_lsp_signature_help" },
     },
@@ -64,8 +84,7 @@ end
 return {
   "hrsh7th/nvim-cmp",
   dependencies = {
-    "hrsh7th/vim-vsnip",
-    "hrsh7th/cmp-vsnip",
+    "L3MON4D3/LuaSnip",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
