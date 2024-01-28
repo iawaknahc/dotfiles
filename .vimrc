@@ -33,6 +33,7 @@ set statusline+=%=%5l:%-5c\ %3p%%
 set list listchars=tab:>_,lead:.,trail:-,nbsp:+
 " Highlight textwidth+1
 set colorcolumn=+1
+set breakindent
 
 " https://sw.kovidgoyal.net/kitty/faq/#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
 if !has('nvim')
