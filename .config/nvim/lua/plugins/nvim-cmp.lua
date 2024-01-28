@@ -10,29 +10,7 @@ function config()
   local source_path = { name = "path" }
   local source_cmdline_history = { name = "cmdline_history" }
 
-  local tab_completion = function(fallback)
-    if cmp.visible() and cmp.get_selected_entry() then
-      cmp.confirm()
-    elseif cmp.visible() then
-      cmp.select_next_item()
-    else
-      fallback()
-    end
-  end
-
-  local enter_completion = function(fallback)
-    if cmp.visible() and cmp.get_selected_entry() then
-      cmp.confirm()
-    else
-      fallback()
-    end
-  end
-
-  local mapping_cmdline = cmp.mapping.preset.cmdline({
-    ["<Tab>"] = {
-      c = tab_completion,
-    },
-  })
+  local mapping_cmdline = cmp.mapping.preset.cmdline()
   mapping_cmdline["<C-J>"] = mapping_cmdline["<C-N>"]
   mapping_cmdline["<C-K>"] = mapping_cmdline["<C-P>"]
 
@@ -55,11 +33,8 @@ function config()
     },
   })
 
-  local mapping_insert = cmp.mapping.preset.insert({
-    ["<CR>"] = {
-      i = enter_completion,
-    },
-  })
+  local mapping_insert = cmp.mapping.preset.insert()
+  mapping_insert["<CR>"] = mapping_insert["<C-Y>"]
   mapping_insert["<C-J>"] = mapping_insert["<C-N>"]
   mapping_insert["<C-K>"] = mapping_insert["<C-P>"]
 
