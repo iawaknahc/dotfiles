@@ -1,0 +1,33 @@
+# This theme assumes the terminal is Dracula.
+# In particular, red is Dracula Red and brred is Dracula Orange.
+fish_color_normal normal
+fish_color_command blue
+fish_color_keyword brred
+fish_color_quote yellow
+fish_color_redirection normal
+fish_color_end brred
+fish_color_error red
+fish_color_param cyan
+fish_color_comment black
+fish_color_selection '--background=black'
+fish_color_search_match '--background=black'
+fish_color_operator green
+fish_color_escape magenta
+fish_color_autosuggestion black
+fish_color_cancel red --reverse
+fish_color_option brred
+fish_color_history_current --bold
+fish_color_status red
+fish_color_valid_path --underline
+
+fish_color_cwd green
+fish_color_cwd_root red
+fish_color_host cyan
+fish_color_host_remote cyan
+fish_color_user blue
+
+fish_pager_color_progress black
+fish_pager_color_completion normal
+fish_pager_color_description black
+fish_pager_color_prefix blue
+fish_pager_color_selected_background --reverse

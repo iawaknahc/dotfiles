@@ -14,7 +14,7 @@ fish_vi_key_bindings
 set -gx LANG en_US.UTF-8
 
 # Set theme
-fish_config theme choose "Dracula Official"
+fish_config theme choose "MyDracula"
 
 # The rest of this file MUST BE sorted by the name of the section.
 # The name of the section is the comment.
