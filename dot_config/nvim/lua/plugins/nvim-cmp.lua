@@ -11,6 +11,12 @@ function config()
       end,
     },
   }
+  local source_tmux = {
+    name = "tmux",
+    option = {
+      all_panes = true,
+    },
+  }
   local source_path = { name = "path" }
   local source_cmdline_history = { name = "cmdline_history" }
 
@@ -22,6 +28,7 @@ function config()
     mapping = mapping_cmdline,
     sources = {
       source_buffer,
+      source_tmux,
       source_cmdline_history,
       { name = "nvim_lsp_document_symbol" },
     },
@@ -31,6 +38,7 @@ function config()
     mapping = mapping_cmdline,
     sources = {
       source_buffer,
+      source_tmux,
       source_path,
       { name = "cmdline" },
       source_cmdline_history,
@@ -77,6 +85,7 @@ function config()
     mapping = mapping_insert,
     sources = {
       source_buffer,
+      source_tmux,
       source_path,
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
@@ -97,6 +106,7 @@ return {
     "hrsh7th/cmp-nvim-lua",
     "hrsh7th/cmp-nvim-lsp-signature-help",
     "hrsh7th/cmp-nvim-lsp-document-symbol",
+    "andersevenrud/cmp-tmux",
   },
   config = config,
 }
