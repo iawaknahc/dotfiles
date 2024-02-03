@@ -5,6 +5,10 @@ function config()
     name = "buffer",
     option = {
       keyword_pattern = [[\k\+]],
+      -- complete from all buffers.
+      get_bufnrs = function()
+        return vim.api.nvim_list_bufs()
+      end,
     },
   }
   local source_path = { name = "path" }
