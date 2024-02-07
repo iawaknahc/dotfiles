@@ -12,6 +12,7 @@ return {
       typescript = prettier,
       typescriptreact = prettier,
       css = prettier,
+      dart = { "dart_format" },
     },
   },
 }
