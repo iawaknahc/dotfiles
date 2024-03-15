@@ -1,6 +1,14 @@
 return {
   {
     "leoluz/nvim-dap-go",
+    keys = {
+      { "<F5>" },
+      { "<F10>" },
+      { "<F11>" },
+      { "<F12>" },
+      { "<Leader>R" },
+      { "<Leader>K" },
+    },
     dependencies = {
       "mfussenegger/nvim-dap",
     },

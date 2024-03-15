@@ -1,6 +1,14 @@
 return {
   {
     "mfussenegger/nvim-dap",
+    keys = {
+      { "<F5>" },
+      { "<F10>" },
+      { "<F11>" },
+      { "<F12>" },
+      { "<Leader>R" },
+      { "<Leader>K" },
+    },
     config = function()
       local dap = require("dap")
       local widgets = require("dap.ui.widgets")
