@@ -48,7 +48,12 @@ function config()
   local make_jump = function(direction)
     return function(fallback)
       local luasnip = require("luasnip")
-      if luasnip.jumpable(direction) then
+      -- locally_jumpable() means the cursor is now inside a snippet
+      -- region and is jumpable.
+      -- jumpable() ignores the current position of the cursor.
+      -- If we use jumpable(), then pressing tab will jump back to the snippet,
+      -- causing unwanted cursor movement.
+      if luasnip.locally_jumpable(direction) then
         luasnip.jump(direction)
       else
         fallback()
