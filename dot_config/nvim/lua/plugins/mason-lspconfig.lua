@@ -1,6 +1,9 @@
 return {
   {
     "williamboman/mason-lspconfig.nvim",
+    cmd = {
+      "Mason",
+    },
     dependencies = {
       "williamboman/mason.nvim",
     },
