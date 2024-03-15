@@ -65,6 +65,13 @@ end
 return {
   {
     "nvim-telescope/telescope.nvim",
+    keys = {
+      { "<Leader>f" },
+      { "<Leader>b" },
+      { "<Leader>g" },
+      { "gi" },
+      { "<Leader>d" },
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
