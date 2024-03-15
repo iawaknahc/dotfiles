@@ -2,6 +2,8 @@ local prettier = { { "prettierd", "prettier" } }
 
 return {
   "stevearc/conform.nvim",
+  event = { "BufWritePre" },
+  cmd = { "ConformInfo" },
   opts = {
     format_on_save = {},
     formatters_by_ft = {
