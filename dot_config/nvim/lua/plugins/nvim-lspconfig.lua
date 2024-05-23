@@ -59,8 +59,6 @@ function config()
       -- Inspired by :help CTRL-]
       vim.keymap.set("n", "<C-]>", vim.lsp.buf.definition, map_opts)
       -- vim.lsp.buf.hover is mapped to K by default since neovim 0.10.0
-      -- signature_help is handled by lsp_signature
-      -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, map_opts)
       -- implementation is usually a list. It is handled by telescope.
       -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
 
