@@ -1,4 +1,4 @@
-function config()
+local function config()
   local actions = require("telescope.actions")
   local builtin = require("telescope.builtin")
 

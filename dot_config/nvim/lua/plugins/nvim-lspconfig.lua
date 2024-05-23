@@ -24,11 +24,11 @@ local simple = {
   "sourcekit",
 }
 
-function config()
+local function config()
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
   local lspconfig = require("lspconfig")
 
-  for i, v in ipairs(simple) do
+  for _, v in ipairs(simple) do
     lspconfig[v].setup {
       capabilities = capabilities,
     }
@@ -48,7 +48,7 @@ function config()
     -- Copied from https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
     on_init = function(client)
       local path = client.workspace_folders[1].name
-      if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+      if vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc") then
         return
       end
 
@@ -79,7 +79,6 @@ function config()
     group = lspGroup,
     callback = function(args)
       local bufnr = args.buf
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
 
       local map_opts = { noremap = true, buffer = bufnr }
       -- omnifunc and tagfunc are set by default.

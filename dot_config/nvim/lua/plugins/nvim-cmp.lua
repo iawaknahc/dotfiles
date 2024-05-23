@@ -1,4 +1,4 @@
-function config()
+local function config()
   local cmp = require("cmp")
 
   local source_buffer = {

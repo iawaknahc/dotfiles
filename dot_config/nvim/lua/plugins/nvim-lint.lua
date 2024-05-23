@@ -1,4 +1,4 @@
-function config()
+local function config()
   local lint = require("lint")
   lint.linters_by_ft = {
     javascript = { "eslint" },
