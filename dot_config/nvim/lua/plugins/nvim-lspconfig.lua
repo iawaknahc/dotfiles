@@ -52,13 +52,15 @@ function config()
       local client = vim.lsp.get_client_by_id(args.data.client_id)
 
       local map_opts = { noremap = true, buffer = bufnr }
+      -- omnifunc and tagfunc are set by default.
+      -- tagfunc is set, so CTRL-] works automatically.
+      -- Since CTRL-] is vim.lsp.buf.definition, we need not map gd (Helix goto mode d)
+
       -- Inspired by gd
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, map_opts)
-      -- Inspired by Helix goto mode d
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, map_opts)
-      -- Inspired by :help CTRL-]
-      vim.keymap.set("n", "<C-]>", vim.lsp.buf.definition, map_opts)
+
       -- vim.lsp.buf.hover is mapped to K by default since neovim 0.10.0
+
       -- implementation is usually a list. It is handled by telescope.
       -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
 
@@ -69,7 +71,6 @@ function config()
       -- Inspired by Helix space mode a
       vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, map_opts)
 
-      -- omnifunc and tagfunc are set by default.
       vim.bo[bufnr].fixendofline = true
     end,
   })
