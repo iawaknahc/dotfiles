@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 })
 
 -- Key mappings
-vim.keymap.set("n", "g?", vim.diagnostic.open_float, { noremap = true })
+-- vim.diagnostic.open_float is mapped to <C-W>d since neovim 0.10.0
 
 -- Set up lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
