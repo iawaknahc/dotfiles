@@ -100,6 +100,11 @@ local function config()
       -- Inspired by Helix space mode a
       vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, map_opts)
 
+      -- Toggle inlay hint
+      vim.keymap.set("n", "<Leader>h", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+      end, map_opts)
+
       vim.bo[bufnr].fixendofline = true
     end,
   })
