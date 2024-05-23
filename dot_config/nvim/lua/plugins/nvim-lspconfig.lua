@@ -15,7 +15,6 @@ local simple = {
   "cssls",
   "tailwindcss",
   -- Programming
-  "gopls",
   "pyright",
   "clojure_lsp",
   "rust_analyzer",
@@ -34,10 +33,28 @@ local function config()
     }
   end
 
+  lspconfig["gopls"].setup {
+    capabilities = capabilities,
+    settings = {
+      gopls = {
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          compositeLiteralTypes = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+      },
+    },
+  }
+
   lspconfig["tsserver"].setup {
     capabilities = capabilities,
     root_dir = lspconfig.util.root_pattern("package.json"),
   }
+
   lspconfig["denols"].setup {
     capabilities = capabilities,
     root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
