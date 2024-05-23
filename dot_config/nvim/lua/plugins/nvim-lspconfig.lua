@@ -71,8 +71,7 @@ function config()
       -- Inspired by Helix space mode a
       vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, map_opts)
 
-      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-      vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+      -- omnifunc and tagfunc are set by default.
       vim.bo[bufnr].fixendofline = true
     end,
   })
