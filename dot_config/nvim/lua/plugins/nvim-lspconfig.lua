@@ -16,11 +16,7 @@ local simple = {
   "tailwindcss",
   -- Programming
   "pyright",
-  "clojure_lsp",
-  "rust_analyzer",
   "dartls",
-  "ocamllsp",
-  "sourcekit",
 }
 
 local function config()
