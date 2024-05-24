@@ -134,6 +134,7 @@ local function config()
       vim.keymap.set("n", "<Leader>h", function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
       end, map_opts)
+      vim.lsp.inlay_hint.enable()
 
       vim.bo[bufnr].fixendofline = true
     end,
