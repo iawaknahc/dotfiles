@@ -128,11 +128,50 @@ local function config()
 
       -- Toggle inlay hint
       vim.keymap.set("n", "<Leader>h", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
+          bufnr = bufnr,
+        }), {
+          bufnr = bufnr,
+        })
       end, map_opts)
-      vim.lsp.inlay_hint.enable()
+
+      -- Enable inlay hint initially
+      vim.lsp.inlay_hint.enable(true, {
+        bufnr = bufnr,
+      })
 
       vim.bo[bufnr].fixendofline = true
+    end,
+  })
+
+  -- Disable inlay hint when entering insert mode.
+  vim.api.nvim_create_autocmd("InsertEnter", {
+    group = lspGroup,
+    callback = function(args)
+      local bufnr = args.buf
+
+      vim.b.inlay_hint_is_enabled = vim.lsp.inlay_hint.is_enabled({
+        bufnr = bufnr,
+      })
+
+      vim.lsp.inlay_hint.enable(false, {
+        bufnr = bufnr,
+      })
+    end,
+  })
+
+  -- Restore inlay hint when leaving insert mode.
+  vim.api.nvim_create_autocmd("InsertLeave", {
+    group = lspGroup,
+    callback = function(args)
+      local bufnr = args.buf
+
+      local is_enabled = vim.b.inlay_hint_is_enabled
+      if is_enabled ~= nil then
+        vim.lsp.inlay_hint.enable(is_enabled, {
+          bufnr = bufnr,
+        })
+      end
     end,
   })
 end
