@@ -105,6 +105,7 @@ if [ -x "$(command -v nvim)" ]; then
   alias vim='nvim'
   alias view='nvim -R'
   alias vimdiff='nvim -d'
+  export MANPAGER='nvim +Man!'
 fi
 export VISUAL="$VIM"
 export EDITOR="$VIM"

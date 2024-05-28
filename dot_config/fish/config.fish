@@ -99,6 +99,7 @@ if test -x "$(command -v nvim)"
   alias vim='nvim'
   alias view='nvim -R'
   alias vimdiff='nvim -d'
+  set -gx MANPAGER 'nvim +Man!'
 end
 set -gx VISUAL "$VIM"
 set -gx EDITOR "$VIM"
