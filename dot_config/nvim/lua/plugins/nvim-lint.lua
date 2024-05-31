@@ -22,5 +22,6 @@ return {
   {
     "mfussenegger/nvim-lint",
     config = config,
+    event = { "BufWritePre" },
   },
 }
