@@ -52,7 +52,7 @@ end
 
 # fzf
 set -gx FZF_DEFAULT_COMMAND '
-if rev-parse --is-inside-work-tree >/dev/null 2>&1
+if git rev-parse --is-inside-work-tree
   git ls-files --cached --others --exclude-standard
 else
   # In case fzf is run at / or HOME
