@@ -1,6 +1,9 @@
 return {
   {
     "SmiteshP/nvim-navic",
+    event = {
+      "VeryLazy",
+    },
     opts = {
       -- stylua: ignore
       icons = {

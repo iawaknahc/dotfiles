@@ -63,6 +63,8 @@ end
 return {
   {
     "nvim-lualine/lualine.nvim",
+    -- rg "lazy = false" shows eagerly loaded plugins.
+    lazy = false,
     opts = {
       options = {
         icons_enabled = false,

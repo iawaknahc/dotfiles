@@ -1,8 +1,9 @@
 return {
   {
     "dracula/vim",
-    name = "dracula",
+    -- rg "lazy = false" shows eagerly loaded plugins.
     lazy = false,
+    name = "dracula",
     config = function()
       vim.cmd [[colorscheme dracula]]
       -- Make inlay hint less visually prominent.
