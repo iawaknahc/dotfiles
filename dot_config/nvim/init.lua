@@ -15,7 +15,12 @@ vim.o.list = true
 -- nbsp:+ is the default of neovim.
 -- tab:>  is the default of neovim. We change it to tab:>_ so that
 -- the space is visible and distinguishable from leading spaces.
-vim.o.listchars = "tab:>_,lead:.,trail:-,nbsp:+"
+vim.opt.listchars = {
+  tab = ">_",
+  lead = ".",
+  trail = "-",
+  nbsp = "+",
+}
 vim.o.breakindent = true
 
 -- colorcolumn
@@ -23,13 +28,13 @@ local colorcolumn = {}
 for i = 1, 100 do
   table.insert(colorcolumn, "+" .. i)
 end
-vim.o.colorcolumn = table.concat(colorcolumn, ",")
+vim.opt.colorcolumn = colorcolumn
 
 -- Completion
-vim.o.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- Command completion
-vim.o.wildmode = "longest:full,full"
+vim.opt.wildmode = { "longest:full", "full" }
 
 -- Editing
 vim.o.backup = false
@@ -37,7 +42,7 @@ vim.o.writebackup = false
 vim.o.swapfile = false
 vim.o.scrolloff = 5
 vim.o.foldenable = false
-vim.o.clipboard = "unnamed"
+vim.opt.clipboard:append({ "unnamed" })
 vim.o.fixendofline = false
 
 -- Search
@@ -128,7 +133,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 
 -- Set up lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-vim.opt.rtp:prepend(lazypath)
+vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup("plugins", {
   -- I used to enable auto check for update.
   -- But this will cause lazy to write :messages on every launch,
