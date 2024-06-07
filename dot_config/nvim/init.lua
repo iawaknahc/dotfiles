@@ -135,6 +135,11 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup("plugins", {
+  defaults = {
+    -- lazy by default.
+    lazy = true,
+  },
+
   -- I used to enable auto check for update.
   -- But this will cause lazy to write :messages on every launch,
   -- consuming some of my keystrokes.
@@ -142,6 +147,7 @@ require("lazy").setup("plugins", {
   -- checker = {
   --   enabled = true,
   -- },
+
   -- Do not detect change when I am editing plugin configs.
   change_detection = {
     enabled = false,
