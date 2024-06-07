@@ -1,9 +1,6 @@
--- neovim defaults to filetype plugin indent on
-vim.cmd [[
-filetype on
-filetype plugin on
-filetype indent off
-]]
+-- The default is :filetype detection:ON plugin:ON indent:ON
+-- We want to turn off indent.
+vim.cmd.filetype("indent", "off")
 
 -- Security
 -- https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
