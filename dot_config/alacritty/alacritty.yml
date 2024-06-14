@@ -4,6 +4,9 @@ import:
 font:
   normal:
     family: "Source Han Mono"
-  size: 13
+    style: "N"
+  italic:
+    style: "N Italic"
+  size: 16
   offset:
     x: 1
