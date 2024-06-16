@@ -65,6 +65,9 @@ end
 return {
   {
     "nvim-telescope/telescope.nvim",
+    cmd = {
+      "Telescope",
+    },
     keys = {
       { "<Leader>f" },
       { "<Leader>b" },
