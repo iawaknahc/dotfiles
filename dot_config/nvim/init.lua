@@ -76,6 +76,14 @@ vim.api.nvim_create_user_command("Tab", function(t)
 end, {
   nargs = 1,
 })
+-- :HighlightGroupAtCursor prints out the highlight groups at cursor.
+-- Useful for debugging colorscheme.
+-- The motivation was to debug why @diff.plus has a different green color from the colorscheme.
+vim.api.nvim_create_user_command("HighlightGroupAtCursor", function()
+  print(vim.inspect(vim.treesitter.get_captures_at_cursor()))
+end, {
+  nargs = 0,
+})
 
 -- Set nvim-specific options
 vim.diagnostic.config {
