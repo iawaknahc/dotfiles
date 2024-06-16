@@ -16,7 +16,8 @@ def fzf(os_windows: Any) -> Optional[int]:
     KITTY_LISTEN_ON = os.environ["KITTY_LISTEN_ON"]
     args = [
         "/usr/local/bin/fzf",
-        "--reverse",
+        "--disabled",
+        "--layout=reverse",
         "--delimiter=:",
         "--preview",
         f"kitty @ --to {KITTY_LISTEN_ON} get-text --ansi --match id:{{2}}",
