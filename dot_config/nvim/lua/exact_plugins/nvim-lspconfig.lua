@@ -134,11 +134,9 @@ local function config()
           bufnr = bufnr,
         })
       end, map_opts)
-
-      -- Enable inlay hint initially
-      vim.lsp.inlay_hint.enable(true, {
-        bufnr = bufnr,
-      })
+      -- After trying inlay hint for some time,
+      -- I found it quite annoying.
+      -- So do not enable it initially.
 
       vim.bo[bufnr].fixendofline = true
     end,
