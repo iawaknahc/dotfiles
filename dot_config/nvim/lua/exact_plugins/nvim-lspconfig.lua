@@ -178,7 +178,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     event = {
-      "VeryLazy",
+      -- According to :h lspconfig-setup, nvim-lspconfig starts
+      -- LSP server in FileType event.
+      "FileType",
     },
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
