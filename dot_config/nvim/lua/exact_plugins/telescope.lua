@@ -1,6 +1,25 @@
+local function project_files()
+  local git_files = require("telescope.builtin").git_files
+  local find_files = require("telescope.builtin").find_files
+  local ok = pcall(git_files, {
+    use_git_root = false,
+  })
+  if not ok then
+    find_files({
+      find_command = {
+        "find",
+        ".",
+        "-type",
+        "f",
+        "-maxdepth",
+        "2",
+      },
+    })
+  end
+end
+
 local function config()
   local actions = require("telescope.actions")
-  local builtin = require("telescope.builtin")
 
   require("telescope").setup {
     defaults = {
@@ -26,40 +45,6 @@ local function config()
       },
     },
   }
-
-  local project_files = function()
-    local git_files = require("telescope.builtin").git_files
-    local find_files = require("telescope.builtin").find_files
-    local ok = pcall(git_files, {
-      use_git_root = false,
-    })
-    if not ok then
-      find_files({
-        find_command = {
-          "find",
-          ".",
-          "-type",
-          "f",
-          "-maxdepth",
-          "2",
-        },
-      })
-    end
-  end
-
-  -- Inspired by Helix space mode f
-  vim.keymap.set("n", "<Leader>f", project_files)
-  -- Inspired by Helix space mode b
-  vim.keymap.set("n", "<Leader>b", builtin.buffers)
-  vim.keymap.set("n", "<Leader>g", builtin.live_grep)
-  -- Inspired by Helix goto mode i
-  vim.keymap.set("n", "gi", builtin.lsp_implementations)
-  -- Diagnostics is preferred over loclist because it supports severity.
-  --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
-  -- Inspired by Helix space mode d
-  vim.keymap.set("n", "<Leader>d", function()
-    require("telescope.builtin").diagnostics({ bufnr = 0 })
-  end)
 end
 
 return {
@@ -69,11 +54,40 @@ return {
       "Telescope",
     },
     keys = {
-      { "<Leader>f" },
-      { "<Leader>b" },
-      { "<Leader>g" },
-      { "gi" },
-      { "<Leader>d" },
+      -- Inspired by Helix space mode f
+      {
+        "<Leader>f", project_files,
+        desc = "Open project files"
+      },
+      -- Inspired by Helix space mode b
+      {
+        "<Leader>b", function()
+          require("telescope.builtin").buffers()
+        end,
+        desc = "Open buffers",
+      },
+      {
+        "<Leader>g", function()
+          require("telescope.builtin").live_grep()
+        end,
+        desc = "Live grep",
+      },
+      -- Inspired by Helix goto mode i
+      {
+        "gi", function()
+          require("telescope.builtin").lsp_implementations()
+        end,
+        desc = "Open implementations",
+      },
+      -- Diagnostics is preferred over loclist because it supports severity.
+      --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
+      -- Inspired by Helix space mode d
+      {
+        "<Leader>d", function()
+          require("telescope.builtin").diagnostics({ bufnr = 0 })
+        end,
+        desc = "Open diagnostics",
+      },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",
