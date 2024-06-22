@@ -51,7 +51,7 @@ vim.o.smartcase = true
 
 -- Mapping
 vim.g.mapleader = " "
-vim.keymap.set("n", "<Leader><Space>", ":set hlsearch!<CR>", { remap = false })
+vim.keymap.set("n", "<Leader><Space>", ":set hlsearch!<CR>", { desc = "Toggle highlight search" })
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
