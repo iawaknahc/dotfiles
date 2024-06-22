@@ -105,39 +105,6 @@ local function config()
     group = lspGroup,
     callback = function(args)
       local bufnr = args.buf
-
-      local map_opts = { noremap = true, buffer = bufnr }
-      -- omnifunc and tagfunc are set by default.
-      -- tagfunc is set, so CTRL-] works automatically.
-      -- Since CTRL-] is vim.lsp.buf.definition, we need not map gd (Helix goto mode d)
-
-      -- Inspired by gd
-      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, map_opts)
-
-      -- vim.lsp.buf.hover is mapped to K by default since neovim 0.10.0
-
-      -- implementation is usually a list. It is handled by telescope.
-      -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, map_opts)
-
-      -- Inspired by Helix goto mode y
-      vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, map_opts)
-      -- Inspired by Helix space mode r
-      vim.keymap.set("n", "<Leader>r", vim.lsp.buf.rename, map_opts)
-      -- Inspired by Helix space mode a
-      vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, map_opts)
-
-      -- Toggle inlay hint
-      vim.keymap.set("n", "<Leader>h", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
-          bufnr = bufnr,
-        }), {
-          bufnr = bufnr,
-        })
-      end, map_opts)
-      -- After trying inlay hint for some time,
-      -- I found it quite annoying.
-      -- So do not enable it initially.
-
       vim.bo[bufnr].fixendofline = true
     end,
   })
@@ -181,6 +148,45 @@ return {
       -- According to :h lspconfig-setup, nvim-lspconfig starts
       -- LSP server in FileType event.
       "FileType",
+    },
+    keys = {
+      -- omnifunc and tagfunc are set by default.
+      -- tagfunc is set, so CTRL-] works automatically.
+      -- Since CTRL-] is vim.lsp.buf.definition, we need not map gd (Helix goto mode d)
+
+      -- Inspired by gd
+      {
+        "gD", vim.lsp.buf.declaration,
+        desc = "Go to declaration",
+      },
+
+      -- implementation is usually a list. It is handled by telescope.
+
+      -- Inspired by Helix goto mode y
+      {
+        "gy", vim.lsp.buf.type_definition,
+        desc = "Go to type definition",
+      },
+
+      -- Uncoming default mapping
+      {
+        "crn", vim.lsp.buf.rename,
+        desc = "Rename",
+      },
+
+      -- After trying inlay hint for some time,
+      -- I found it quite annoying.
+      -- So do not enable it initially.
+      {
+        "<Leader>h", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
+            bufnr = 0,
+          }), {
+            bufnr = 0,
+          })
+        end,
+        desc = "Toggle inlay hints",
+      },
     },
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
