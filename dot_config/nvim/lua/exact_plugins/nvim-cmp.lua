@@ -27,21 +27,23 @@ local function config()
   cmp.setup.cmdline({ "/", "?" }, {
     mapping = mapping_cmdline,
     sources = {
+      -- The order implies priority.
+      { name = "nvim_lsp_document_symbol" },
       source_buffer,
       source_tmux,
       source_cmdline_history,
-      { name = "nvim_lsp_document_symbol" },
     },
   })
 
   cmp.setup.cmdline(":", {
     mapping = mapping_cmdline,
     sources = {
+      -- The order implies priority.
+      { name = "cmdline" },
+      source_cmdline_history,
       source_buffer,
       source_tmux,
       source_path,
-      { name = "cmdline" },
-      source_cmdline_history,
     },
   })
 
@@ -89,12 +91,12 @@ local function config()
     },
     mapping = mapping_insert,
     sources = {
+      { name = "nvim_lsp_signature_help" },
+      { name = "nvim_lsp" },
+      { name = "nvim_lua" },
       source_buffer,
       source_tmux,
       source_path,
-      { name = "nvim_lsp" },
-      { name = "nvim_lua" },
-      { name = "nvim_lsp_signature_help" },
     },
   })
 end
