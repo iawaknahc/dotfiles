@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name        webike-helper
-// @namespace   iawaknahc
 // @match       https://www.webike.hk/
 // @match       https://www.webike.hk/ps/*/
 // @grant       GM_openInTab

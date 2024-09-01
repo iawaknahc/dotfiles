@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name        amazon-rewrite-url
-// @namespace   iawaknahc
 // @match       https://www.amazon.com/*
 // @run-at      document-idle
 // @require https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@2,npm/@violentmonkey/ui@0.7
