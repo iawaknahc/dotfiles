@@ -75,6 +75,11 @@ if test -x "$(command -v go)"
   fish_add_path -P "$GOPATH/bin"
 end
 
+# google-cloud-sdk
+if test -f "$HOME/google-cloud-sdk/path.fish.inc"
+  source "$HOME/google-cloud-sdk/path.fish.inc"
+end
+
 # homebrew
 if test -x /opt/homebrew/bin/brew
   /opt/homebrew/bin/brew shellenv | source

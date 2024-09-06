@@ -63,6 +63,11 @@ if [ -x "$(command -v go)" ]; then
   export PATH="$GOPATH/bin:$PATH"
 fi
 
+# google-cloud-sdk
+if [ -f "$HOME/google-cloud-sdk/path.bash.inc" ]; then
+  . "$HOME/google-cloud-sdk/path.bash.inc"
+fi
+
 # homebrew
 if [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
