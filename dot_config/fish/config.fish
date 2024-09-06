@@ -100,6 +100,19 @@ if test -d "$HOME/.local/share/nvim/mason/bin"
   fish_add_path -P "$HOME/.local/share/nvim/mason/bin"
 end
 
+# nix
+# For some unknown reason, this file is not executable.
+if test -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+  source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+  # The above script use "fish_add_path --global", which writes to
+  # $fish_user_paths.
+  # I do not use $fish_user_paths so I have to repeat what the script does here.
+  # But this time, with "fish_add_path -P".
+  set -e fish_user_paths
+  fish_add_path -P "/nix/var/nix/profiles/default/bin"
+  fish_add_path -P  "$HOME/.nix-profile/bin"
+end
+
 # nvim
 set VIM vim
 if test -x "$(command -v nvim)"
