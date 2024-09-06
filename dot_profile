@@ -92,11 +92,6 @@ if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
   export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
 fi
 
-# mason
-if [ -d "$HOME/.local/share/nvim/mason/bin" ]; then
-  export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
-fi
-
 # nvim
 VIM=vim
 if [ -x "$(command -v nvim)" ]; then

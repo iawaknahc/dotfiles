@@ -95,11 +95,6 @@ if test -d "/Applications/kitty.app/Contents/MacOS"
   fish_add_path -P "/Applications/kitty.app/Contents/MacOS"
 end
 
-# mason
-if test -d "$HOME/.local/share/nvim/mason/bin"
-  fish_add_path -P "$HOME/.local/share/nvim/mason/bin"
-end
-
 # nix
 # For some unknown reason, this file is not executable.
 if test -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
