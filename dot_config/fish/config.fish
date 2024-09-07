@@ -14,11 +14,10 @@ fish_vi_key_bindings
 set -gx LANG en_US.UTF-8
 
 # terminfo
-# Use the ncurses installed from homebrew.
-if test -x "$(command -v brew)"
-  set ncurses_root "$(brew --prefix ncurses)"
-  if test -d "$ncurses_root"
-    fish_add_path -P "$ncurses_root/bin"
+# iTerm does not set TERMINFO automatically, so we help it here.
+if [ "$TERM_PROGRAM" = "iTerm.app" ]
+  if test -d "/Applications/iTerm.app/Contents/Resources/terminfo"
+    set -gx TERMINFO "/Applications/iTerm.app/Contents/Resources/terminfo"
   end
 end
 
