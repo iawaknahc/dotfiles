@@ -1,3 +1,7 @@
+echo 'sourcing .bashrc'
+echo "$(shopt login_shell)"
+echo "\$- is $-"
+
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi

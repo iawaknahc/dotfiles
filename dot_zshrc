@@ -2,6 +2,9 @@
 # zsh -i reads .zshrc
 # ==> .zshrc must source .profile
 
+echo 'sourcing .zshrc'
+echo "\$- is $-"
+
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi

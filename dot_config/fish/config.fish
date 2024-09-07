@@ -1,3 +1,5 @@
+echo 'sourcing config.fish'
+
 # Allow this file to be sourced more than once
 # Both tmux and the shell sources this file.
 # See https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
