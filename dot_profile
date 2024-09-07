@@ -109,6 +109,11 @@ if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
   export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
 fi
 
+# nix
+if [ -r "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+  . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+fi
+
 # nvim
 VIM=vim
 if [ -x "$(command -v nvim)" ]; then
