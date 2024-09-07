@@ -29,20 +29,16 @@ fish_config theme choose "MyDracula"
 # The name of the section is the comment.
 
 # android
-if test -d "/Applications/Android Studio Giraffle.app"
-  # The default location of when Android Studio installs the SDK.
-  if test -d "$HOME/Library/Android/sdk"
-    # ANDROID_SDK_ROOT is deprecated
-    # https://developer.android.com/tools/variables
-    # set -gx ANDROID_SDK_ROOT "$HOME/Library/Android/sdk"
-    set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
-    # https://developer.android.com/tools/variables
-    fish_add_path -P "$ANDROID_HOME/tools"
-    fish_add_path -P "$ANDROID_HOME/tools/bin"
-    fish_add_path -P "$ANDROID_HOME/platform-tools"
-  end
-
-  set -gx JAVA_HOME "/Applications/Android Studio Giraffle.app/Contents/jbr/Contents/Home"
+# The default location of when Android Studio installs the SDK.
+if test -d "$HOME/Library/Android/sdk"
+  # ANDROID_SDK_ROOT is deprecated
+  # https://developer.android.com/tools/variables
+  set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
+  fish_add_path -P --append "$ANDROID_HOME/tools"
+  fish_add_path -P --append "$ANDROID_HOME/tools/bin"
+  # A binary sqlite3 lives here. So we want the binary provided by Android appear
+  # at the end in PATH.
+  fish_add_path -P --append "$ANDROID_HOME/platform-tools"
 end
 
 # delta
@@ -157,13 +153,4 @@ if test -r "$HOME/.asdf/asdf.fish"
 end
 if test -r "$HOME/.asdf/completions/asdf.fish"
   source "$HOME/.asdf/completions/asdf.fish"
-end
-
-# sqlite3
-# sqlite3 must appear AFTER android because ANDROID_SDK_ROOT/platform-tools
-# contains an ancient copy of sqlite3.
-if test -x "$(command -v brew)"
-  if test -x "$(brew --prefix)/opt/sqlite3/bin/sqlite3"
-    fish_add_path -P "$(brew --prefix)/opt/sqlite3/bin"
-  end
 end

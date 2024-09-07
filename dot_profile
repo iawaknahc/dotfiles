@@ -21,12 +21,16 @@ export PS2='> '
 # The name of the section is the comment.
 
 # android
+# The default location of when Android Studio installs the SDK.
 if [ -d "$HOME/Library/Android/sdk" ]; then
-  export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+  # ANDROID_SDK_ROOT is deprecated
+  # https://developer.android.com/tools/variables
   export ANDROID_HOME="$ANDROID_SDK_ROOT"
-  export PATH="$ANDROID_SDK_ROOT/tools:$PATH"
-  export PATH="$ANDROID_SDK_ROOT/tools/bin:$PATH"
-  export PATH="$ANDROID_SDK_ROOT/platform-tools:$PATH"
+  export PATH="$PATH:$ANDROID_SDK_ROOT/tools"
+  export PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
+  # A binary sqlite3 lives here. So we want the binary provided by Android appear
+  # at the end in PATH.
+  export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
 fi
 
 # delta
@@ -141,13 +145,4 @@ if [ -r "$HOME"/.asdf/asdf.sh ]; then
 fi
 if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
   . "$HOME"/.asdf/completions/asdf.bash
-fi
-
-# sqlite3
-# sqlite3 must appear AFTER android because ANDROID_SDK_ROOT/platform-tools
-# contains an ancient copy of sqlite3.
-if [ -x "$(command -v brew)" ]; then
-  if [ -x "$(brew --prefix)/opt/sqlite3/bin/sqlite3" ]; then
-    export PATH="$(brew --prefix)/opt/sqlite3/bin:$PATH"
-  fi
 fi
