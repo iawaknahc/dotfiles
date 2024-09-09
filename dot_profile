@@ -9,6 +9,9 @@ if [ -r /etc/profile ]; then
   . /etc/profile
 fi
 
+# Add ~/.local/bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # Turn on vi mode
 set -o vi
 

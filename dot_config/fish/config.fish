@@ -9,6 +9,9 @@ if test -x /usr/libexec/path_helper
   /usr/libexec/path_helper -c | source
 end
 
+# Add ~/.local/bin to PATH
+fish_add_path -P "$HOME/.local/bin"
+
 # Turn on vi mode
 fish_vi_key_bindings
 
