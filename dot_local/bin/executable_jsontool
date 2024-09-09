@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+# vim: set filetype=python
+
+import argparse
+import json
+import sys
+
+
+class Formatter(argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
+    pass
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="A simplified version of python -m json.tool",
+        formatter_class=Formatter,
+    )
+
+    parser.add_argument("--sort-keys",
+        help="Sort the keys in objects",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument("--compact",
+        help="Remove whitespaces",
+        action="store_true",
+        default=False,
+    )
+
+    args = parser.parse_args()
+
+    dump_args = {
+        "ensure_ascii": False,
+        "allow_nan": False,
+        "sort_keys": args.sort_keys,
+    }
+    if args.compact:
+        dump_args["indent"] = None
+        dump_args["separators"] = (",", ":")
+    else:
+        dump_args["indent"] = 2
+
+    with sys.stdin as input:
+        doc = json.load(input)
+        with sys.stdout as output:
+            json.dump(doc, output, **dump_args)
+            output.write("\n")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        # The internet says 130 is a common exit code whent the program
+        # was terminated with CTRL-C.
+        sys.exit(130)
+    except BrokenPipeError as exc:
+        sys.exit(exc.errno)
