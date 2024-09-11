@@ -1,4 +1,4 @@
-echo 'sourcing config.fish'
+echo "sourcing $(status filename)"
 
 # Allow this file to be sourced more than once
 # Both tmux and the shell sources this file.

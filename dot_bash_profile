@@ -2,9 +2,10 @@
 # bash -i reads .bashrc
 # ==> .bash_profile and .bashrc must source .profile
 
-echo 'sourcing .bash_profile'
+echo "sourcing $BASH_SOURCE"
 echo "$(shopt login_shell)"
-echo "\$- is $-"
+echo "\$0: $0"
+echo "\$-: $-"
 
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"

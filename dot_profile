@@ -1,5 +1,7 @@
-echo 'sourcing .profile'
-echo "\$- is $-"
+echo "sourcing .profile"
+echo "\$BASH_SOURCE: $BASH_SOURCE"
+echo "\$0: $0"
+echo "\$-: $-"
 
 # Allow this file to be sourced more than once
 # Both tmux and the shell sources this file.

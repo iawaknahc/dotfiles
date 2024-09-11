@@ -2,8 +2,11 @@
 # zsh -i reads .zshrc
 # ==> .zshrc must source .profile
 
-echo 'sourcing .zshrc'
-echo "\$- is $-"
+# man zshmisc and search for %N
+# This is from https://stackoverflow.com/a/75564098
+echo "sourcing ${(%):-%N}"
+echo "\$0: $0"
+echo "\$-: $-"
 
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"
