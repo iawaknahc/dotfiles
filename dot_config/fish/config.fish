@@ -117,10 +117,10 @@ end
 set VIM vim
 if test -x "$(command -v nvim)"
     set VIM nvim
-    alias vi='nvim'
-    alias vim='nvim'
-    alias view='nvim -R'
-    alias vimdiff='nvim -d'
+    abbr -a vi nvim
+    abbr -a vim nvim
+    abbr -a view nvim -R
+    abbr -a vimdiff nvim -d
     set -gx MANPAGER 'nvim +Man!'
 end
 set -gx VISUAL "$VIM"
