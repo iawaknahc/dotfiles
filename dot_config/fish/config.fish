@@ -29,6 +29,9 @@ end
 # Set theme
 fish_config theme choose MyDracula
 
+# Unconditional abbreviations
+abbr -a k kubectl
+
 # The rest of this file MUST BE sorted by the name of the section.
 # The name of the section is the comment.
 
