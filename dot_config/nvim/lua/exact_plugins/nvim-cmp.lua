@@ -49,14 +49,8 @@ local function config()
 
   local make_jump = function(direction)
     return function(fallback)
-      local luasnip = require("luasnip")
-      -- locally_jumpable() means the cursor is now inside a snippet
-      -- region and is jumpable.
-      -- jumpable() ignores the current position of the cursor.
-      -- If we use jumpable(), then pressing tab will jump back to the snippet,
-      -- causing unwanted cursor movement.
-      if luasnip.locally_jumpable(direction) then
-        luasnip.jump(direction)
+      if vim.snippet.active({ direction = direction }) then
+        vim.snippet.jump(direction)
       else
         fallback()
       end
@@ -84,9 +78,10 @@ local function config()
     -- But some LSP servers like CSS only return snippet items.
     -- Therefore a snippet engine is required.
     -- See https://github.com/hrsh7th/nvim-cmp/issues/373#issuecomment-947359057
+    -- As of nvim 0.10, it provides a native snippet engine.
     snippet = {
       expand = function(args)
-        require("luasnip").lsp_expand(args.body)
+        vim.snippet.expand(args.body)
       end,
     },
     mapping = mapping_insert,
@@ -105,7 +100,6 @@ return {
   "hrsh7th/nvim-cmp",
   event = { "InsertEnter", "CmdlineEnter" },
   dependencies = {
-    "L3MON4D3/LuaSnip",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
