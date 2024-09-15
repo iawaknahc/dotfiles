@@ -3,12 +3,12 @@ foreground = "#f8f8f2"
 background = "#282a36"
 
 [colors.cursor]
-text = "CellForeground"
-cursor = "#44475a"
+text = "CellBackground"
+cursor = "CellForeground"
 
 [colors.vi_mode_cursor]
-text = "CellForeground"
-cursor = "#44475a"
+text = "CellBackground"
+cursor = "CellForeground"
 
 [colors.search.matches]
 background = "#50fa7b"
