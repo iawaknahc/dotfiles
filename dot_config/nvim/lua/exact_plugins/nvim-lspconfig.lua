@@ -160,9 +160,11 @@ return {
         desc = "Go to declaration",
       },
 
-      -- implementation is usually a list. It is handled by telescope.
+      -- Other LSP features are handled by telescope.
 
       -- Inspired by Helix goto mode y
+      -- Technically speaking, this can be handled by telescope as well,
+      -- as Telescope has builtin.lsp_type_definitions.
       {
         "gy", vim.lsp.buf.type_definition,
         desc = "Go to type definition",
