@@ -89,6 +89,9 @@ return {
       -- r stands for references.
       -- When this is used on a function,
       -- the results are similar to listing incoming calls.
+      -- In a future release of neovim, there is a default mapping gr
+      -- that does the same thing with the quickfix list.
+      -- See https://github.com/neovim/neovim/pull/28500
       {
         "<Leader>r", function()
           require("telescope.builtin").lsp_references()
