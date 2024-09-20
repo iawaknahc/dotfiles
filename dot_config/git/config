@@ -2,18 +2,25 @@
   path = ~/.config/delta/delta.conf
 
 [commit]
+  # Show git diff --cached and git diff at the end of the commit message template.
+  # https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---verbose
   verbose = 2
 
 [diff]
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffalgorithm
   algorithm = histogram
 
 [difftool]
   trustExitCode = true
 
 [push]
+  # Always be explicit.
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushdefault
   default = nothing
 
 [user]
+  # Always be explicit
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-useruseConfigOnly
   useConfigOnly = true
 
 [diff "blackbox"]
