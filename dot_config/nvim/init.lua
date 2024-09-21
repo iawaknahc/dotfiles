@@ -51,6 +51,10 @@ vim.o.smartcase = true
 
 -- Mapping
 vim.g.mapleader = " "
+vim.keymap.set("n", "<Space>", "<Nop>", { desc = "Disable :h <Space>" })
+vim.keymap.set("n", "gh", "<Nop>", { desc = "Disable :h gh" })
+vim.keymap.set("n", "gH", "<Nop>", { desc = "Disable :h gH" })
+vim.keymap.set("n", "g<C-h>", "<Nop>", { desc = "Disable :h g_CTRL-H" })
 vim.keymap.set("n", "<Leader><Space>", ":set hlsearch!<CR>", { desc = "Toggle highlight search" })
 
 -- Command

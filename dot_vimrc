@@ -81,7 +81,14 @@ let mapleader=' '
 nnoremap Y y$
 " Disable Ex mode
 nnoremap Q <Nop>
+" Disable :h <Space>
 nnoremap <Space> <Nop>
+" Disable :h gh
+nnoremap gh <Nop>
+" Disable :h gH
+nnoremap gH <Nop>
+" Disable :h g_CTRL-H
+nnoremap g<C-h> <Nop>
 nnoremap <Leader><Space> :set hlsearch!<CR>
 
 " Command
