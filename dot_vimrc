@@ -90,7 +90,8 @@ nnoremap gh <Nop>
 nnoremap gH <Nop>
 " Disable :h g_CTRL-H
 nnoremap g<C-h> <Nop>
-nnoremap <Leader><Space> :set hlsearch!<CR>
+" neovim :h CTRL-L-default with nohlsearch changed to hlsearch!
+nnoremap <C-l> <Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>
 
 " Command
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"

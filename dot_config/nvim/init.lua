@@ -55,7 +55,9 @@ vim.keymap.set("n", "<Space>", "<Nop>", { desc = "Disable :h <Space>" })
 vim.keymap.set("n", "gh", "<Nop>", { desc = "Disable :h gh" })
 vim.keymap.set("n", "gH", "<Nop>", { desc = "Disable :h gH" })
 vim.keymap.set("n", "g<C-h>", "<Nop>", { desc = "Disable :h g_CTRL-H" })
-vim.keymap.set("n", "<Leader><Space>", ":set hlsearch!<CR>", { desc = "Toggle highlight search" })
+vim.keymap.set("n", "<C-l>", "<Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>", {
+  desc = ":h CTRL-L-default with nohlsearch changed to hlsearch!",
+})
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
