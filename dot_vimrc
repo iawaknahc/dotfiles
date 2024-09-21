@@ -73,6 +73,8 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 set nofixendofline
 
 " Search
+" Turn on hlsearch initially so that the results are highlighted by default.
+set hlsearch
 set ignorecase smartcase
 set incsearch
 
