@@ -2,6 +2,13 @@
 -- We want to turn off indent.
 vim.cmd.filetype("indent", "off")
 
+-- Legacy syntax is turned on by default (:h nvim-defaults).
+-- We want to turn it off here.
+-- If we run :scriptnames, we see synload.vim is still sourced.
+-- This is probably due to this trick.
+-- https://github.com/neovim/neovim/blob/v0.10.1/runtime/lua/vim/treesitter/highlighter.lua#L138
+vim.cmd.syntax("off")
+
 -- Security
 -- https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 vim.o.modeline = false
