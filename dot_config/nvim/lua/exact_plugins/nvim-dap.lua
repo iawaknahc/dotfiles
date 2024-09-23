@@ -1,6 +1,7 @@
 return {
   {
     "mfussenegger/nvim-dap",
+    enabled = true,
     keys = {
       {
         "<F5>", function()

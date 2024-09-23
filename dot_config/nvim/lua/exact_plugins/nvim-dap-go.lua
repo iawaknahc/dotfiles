@@ -1,6 +1,7 @@
 return {
   {
     "leoluz/nvim-dap-go",
+    enabled = true,
     keys = {
       { "<F5>" },
       { "<F10>" },

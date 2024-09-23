@@ -17,6 +17,7 @@
 return {
   {
     "dracula/vim",
+    enabled = true,
     -- rg "lazy = false" shows eagerly loaded plugins.
     lazy = false,
     name = "dracula",

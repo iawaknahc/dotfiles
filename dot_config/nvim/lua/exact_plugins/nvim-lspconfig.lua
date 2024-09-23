@@ -144,6 +144,7 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
+    enabled = true,
     event = {
       -- According to :h lspconfig-setup, nvim-lspconfig starts
       -- LSP server in FileType event.

@@ -1,6 +1,7 @@
 return {
   {
     "luukvbaal/statuscol.nvim",
+    enabled = true,
     event = {
       "VeryLazy",
     },

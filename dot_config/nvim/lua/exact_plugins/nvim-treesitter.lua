@@ -1,6 +1,7 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    enabled = true,
     -- rg "lazy = false" shows eagerly loaded plugins.
     lazy = false,
     build = ":TSUpdate",
