@@ -13,6 +13,8 @@ set nomodeline
 
 " Look
 set signcolumn=yes
+" The default is 4.
+set numberwidth=1
 set number
 set showcmd
 set laststatus=2

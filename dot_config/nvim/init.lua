@@ -14,7 +14,10 @@ vim.cmd.syntax("off")
 vim.o.modeline = false
 
 -- Look
-vim.o.signcolumn = "yes"
+-- Always reserve 1 column for vim-gitgutter and 2 columns for vim.diagnostic
+vim.o.signcolumn = "auto:3-9"
+-- The default is 4.
+vim.o.numberwidth = 1
 vim.o.number = true
 vim.o.list = true
 -- lead:. is taken from the help of neovim.
@@ -103,7 +106,7 @@ end, {
   nargs = 0,
 })
 
--- Set nvim-specific options
+-- diagnostic
 vim.diagnostic.config {
   virtual_text = {
     source = true,
