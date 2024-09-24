@@ -39,6 +39,7 @@ vim.opt.colorcolumn = colorcolumn
 
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.o.pumheight=10
 
 -- Command completion
 vim.opt.wildmode = { "longest:full", "full" }

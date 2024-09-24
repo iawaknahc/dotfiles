@@ -39,6 +39,8 @@ set termguicolors
 
 " Completion
 set completeopt=menu,menuone,noselect
+" Show at most 10 items only
+set pumheight=10
 
 " Command completion
 set wildmenu wildmode=longest:full,full
