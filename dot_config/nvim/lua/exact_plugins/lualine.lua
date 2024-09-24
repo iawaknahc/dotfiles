@@ -75,8 +75,8 @@ return {
       },
       sections = {
         lualine_a = { "%f%m%r%h%w" },
-        lualine_b = { "diagnostics" },
-        lualine_c = {},
+        lualine_b = { "diff" },
+        lualine_c = { "diagnostics" },
         lualine_x = {
           filetype,
           { fileencoding, color = fileencoding_color },
