@@ -56,6 +56,10 @@ set backspace=indent,eol,start
 set nobackup nowritebackup
 set hidden
 set noswapfile
+" This controls how often the swapfile is written.
+" This also controls how often vim-gitgutter updates the signs.
+" :h updatetime
+set updatetime=100
 set scrolloff=5
 set nofoldenable
 set clipboard+=unnamed
