@@ -437,3 +437,9 @@ hi { "@tag", link = "DraculaCyan" }
 hi { "@tag.builtin", link = "DraculaCyan" }
 hi { "@tag.attribute", link = "DraculaGreenItalic" }
 hi { "@tag.delimiter" }
+
+
+-- :help gitgutter-highlights
+hi { "GitGutterAdd", link = "Added" }
+hi { "GitGutterChange", link = "Changed" }
+hi { "GitGutterDelete", link = "Removed" }
