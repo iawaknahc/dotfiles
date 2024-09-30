@@ -32,6 +32,7 @@ vim.opt.listchars = {
   nbsp = "+",
 }
 vim.o.breakindent = true
+vim.cmd.colorscheme("mydracula")
 
 -- colorcolumn
 local colorcolumn = {}
