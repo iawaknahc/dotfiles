@@ -136,7 +136,7 @@ hi { "DraculaDiffChange", link = "DraculaOrange" }
 hi { "DraculaDiffDelete", link = "DraculaRed" }
 hi { "DraculaDiffText", link = "DraculaOrangeInverse" }
 
-hi { "DraculaInlayHint", link = "SpecialComment" }
+hi { "DraculaInlayHint", fg = comment, bg = bg_dark, italic = true }
 
 -- These originally do not appear in the source repo.
 hi { "DraculaWildMenu", fg = purple, bold = true, reverse = true}
@@ -320,6 +320,13 @@ hi { "DiagnosticSignOk", link = "DiagnosticOk" }
 
 hi { "DiagnosticDeprecated", link = "Comment" }
 hi { "DiagnosticUnnecessary", link = "Comment" }
+
+
+-- :help lsp-highlight
+hi { "LspReferenceText", link = "DraculaSelection" }
+hi { "LspReferenceRead", link = "DraculaSelection" }
+hi { "LspReferenceWrite", link = "DraculaSelection" }
+hi { "LspInlayHint", link = "DraculaInlayHint" }
 
 
 -- :help treesitter-highlight-groups
