@@ -46,6 +46,7 @@ hi { "DraculaBgDarker", bg = bg_darker }
 hi { "DraculaFg", fg = fg }
 hi { "DraculaFgUnderline", underline = true }
 hi { "DraculaFgBold", bold = true }
+hi { "DraculaFgItalic", italic = true }
 hi { "DraculaFgStrikethrough", strikethrough = true }
 
 -- comment
@@ -313,3 +314,120 @@ hi { "DiagnosticSignOk", link = "DiagnosticOk" }
 
 hi { "DiagnosticDeprecated", link = "Comment" }
 hi { "DiagnosticUnnecessary", link = "Comment" }
+
+
+-- :help treesitter-highlight-groups
+hi { "@variable", link = "Identifier" }
+hi { "@variable.builtin", link = "DraculaPurpleItalic" }
+hi { "@variable.parameter", link = "DraculaOrangeItalic" }
+hi { "@variable.parameter.builtin", link = "Keyword" }
+hi { "@variable.member", link = "DraculaOrange" }
+
+hi { "@constant", link = "Constant" }
+hi { "@constant.builtin", link = "Constant" }
+hi { "@constant.macro", link = "Macro" }
+
+hi { "@module", link = "Structure" }
+hi { "@module.builtin", link = "Special" }
+
+hi { "@label", link = "DraculaPurpleItalic" }
+
+hi { "@string", link = "String" }
+hi { "@string.documentation", link = "Comment" }
+hi { "@string.regexp", link = "@string.special" }
+hi { "@string.escape", link = "@string.special" }
+hi { "@string.special", link = "SpecialChar" }
+hi { "@string.special.symbol", link = "DraculaPurple" }
+hi { "@string.special.url", link = "Underlined" }
+
+hi { "@character", link = "Character" }
+hi { "@character.special", link = "SpecialChar" }
+
+hi { "@boolean", link = "Boolean" }
+
+hi { "@number", link = "Number" }
+hi { "@number.float", link = "Float" }
+
+hi { "@type", link = "Type" }
+hi { "@type.builtin", link = "Special" }
+hi { "@type.definition", link = "Typedef" }
+
+hi { "@attribute", link = "DraculaGreenItalic" }
+hi { "@attribute.builtin", link = "Special" }
+
+hi { "@property", link = "Identifier" }
+
+hi { "@function", link = "Function" }
+hi { "@function.builtin", link = "DraculaCyan" }
+-- hi { "@function.call" }
+hi { "@function.macro", link = "Function" }
+-- hi { "@function.method" }
+-- hi { "@function.method.call" }
+
+hi { "@constructor", link = "DraculaCyan" }
+
+hi { "@operator", link = "Operator" }
+
+hi { "@keyword", link = "Keyword" }
+hi { "@keyword.coroutine", link = "Keyword" }
+hi { "@keyword.function", link = "Keyword" }
+hi { "@keyword.operator", link = "Operator" }
+hi { "@keyword.import", link = "Keyword" }
+hi { "@keyword.type", link = "Keyword" }
+hi { "@keyword.modifier", link = "Keyword" }
+hi { "@keyword.repeat", link = "Keyword" }
+hi { "@keyword.return", link = "Keyword" }
+hi { "@keyword.return", link = "Keyword" }
+hi { "@keyword.debug", link = "Keyword" }
+hi { "@keyword.exception", link = "Keyword" }
+hi { "@keyword.conditional", link = "Keyword" }
+hi { "@keyword.conditional.ternary", link = "Keyword" }
+hi { "@keyword.directive", link = "Keyword" }
+hi { "@keyword.directive.define", link = "Keyword" }
+
+hi { "@punctuation.delimiter", link = "Delimiter" }
+hi { "@punctuation.bracket" }
+hi { "@punctuation.special", link = "Special" }
+
+hi { "@comment", link = "Comment" }
+hi { "@comment.documentation", link = "Comment" }
+hi { "@comment.error", link = "DiagnosticError" }
+hi { "@comment.warning", link = "DiagnosticWarn" }
+hi { "@comment.note", link = "DiagnosticInfo" }
+hi { "@comment.todo", link = "Todo" }
+
+hi { "@markup.strong", link = "DraculaFgBold" }
+hi { "@markup.italic", link = "DraculaFgItalic" }
+hi { "@markup.strikethrough", link = "DraculaFgStrikethrough" }
+hi { "@markup.underline", link = "Underlined" }
+
+hi { "@markup.heading", link = "DraculaYellow" }
+hi { "@markup.heading.1", link = "DraculaYellow" }
+hi { "@markup.heading.2", link = "DraculaYellow" }
+hi { "@markup.heading.3", link = "DraculaYellow" }
+hi { "@markup.heading.4", link = "DraculaYellow" }
+hi { "@markup.heading.5", link = "DraculaYellow" }
+hi { "@markup.heading.6", link = "DraculaYellow" }
+
+-- hi { "@markup.quote" }
+-- hi { "@markup.math" }
+
+hi { "@markup.link", link = "Underlined" }
+hi { "@markup.link.label", link = "SpecialChar" }
+hi { "@markup.link.url", link = "DraculaYellow" }
+
+hi { "@markup.raw", link = "DraculaYellow" }
+hi { "@markup.raw.block", link = "DraculaYellow" }
+
+hi { "@markup.list", link = "Special" }
+hi { "@markup.list.checked", link = "DraculaGreen" }
+hi { "@markup.list.unchecked", link = "DraculaRed" }
+
+hi { "@diff.plus", link = "Added" }
+hi { "@diff.minus", link = "Removed" }
+hi { "@diff.delta", link = "Changed" }
+
+hi { "@tag", link = "DraculaCyan" }
+hi { "@tag.builtin", link = "DraculaCyan" }
+hi { "@tag.attribute", link = "DraculaGreenItalic" }
+hi { "@tag.delimiter" }
