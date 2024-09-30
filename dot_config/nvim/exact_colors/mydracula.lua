@@ -443,3 +443,37 @@ hi { "@tag.delimiter" }
 hi { "GitGutterAdd", link = "Added" }
 hi { "GitGutterChange", link = "Changed" }
 hi { "GitGutterDelete", link = "Removed" }
+
+
+-- :help cmp-highlight
+hi { "CmpItemAbbr" }
+hi { "CmpItemAbbrDeprecated", link = "DraculaError" }
+hi { "CmpItemAbbrMatch", link = "DraculaCyan" }
+hi { "CmpItemAbbrMatchFuzzy", link = "DraculaCyan" }
+hi { "CmpItemMenu", link = "Comment" }
+hi { "CmpItemKind" }
+hi { "CmpItemKindEvent" }
+hi { "CmpItemKindUnit" }
+hi { "CmpItemKindSnippet" }
+hi { "CmpItemKindText" }
+hi { "CmpItemKindColor", link = "DraculaYellow" }
+hi { "CmpItemKindFile", link = "DraculaYellow" }
+hi { "CmpItemKindFolder", link = "DraculaYellow" }
+hi { "CmpItemKindModule", link = "DraculaYellow" }
+hi { "CmpItemKindValue", link = "DraculaYellow" }
+hi { "CmpItemKindField", link = "DraculaOrange" }
+hi { "CmpItemKindReference", link = "DraculaOrange" }
+hi { "CmpItemKindClass", link = "DraculaCyan" }
+hi { "CmpItemKindConstructor", link = "DraculaCyan" }
+hi { "CmpItemKindInterface", link = "DraculaCyan" }
+hi { "CmpItemKindTypeParameter", link = "DraculaCyan" }
+hi { "CmpItemKindVariable", link = "DraculaPurpleItalic" }
+hi { "CmpItemKindEnum", link = "Keyword" }
+hi { "CmpItemKindKeyword", link = "Keyword" }
+hi { "CmpItemKindOperator", link = "Operator" }
+hi { "CmpItemKindStruct", link = "Structure" }
+hi { "CmpItemKindConstant", link = "Constant" }
+hi { "CmpItemKindEnumMember", link = "Constant" }
+hi { "CmpItemKindProperty", link = "Identifier" }
+hi { "CmpItemKindFunction", link = "Function" }
+hi { "CmpItemKindMethod", link = "Function" }
