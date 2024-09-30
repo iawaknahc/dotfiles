@@ -38,6 +38,7 @@ vim.o.background = 'dark'
 -- bg
 hi { "DraculaBgLighter", bg = bg_lighter }
 hi { "DraculaBgLight", bg = bg_light }
+hi { "DraculaBgLightBold", bg = bg_light, bold = true }
 hi { "DraculaBg", bg = bg }
 hi { "DraculaBgDark", bg = bg_dark }
 hi { "DraculaBgDarker", bg = bg_darker }
@@ -67,6 +68,7 @@ hi { "DraculaCyanUndercurl", fg = cyan, sp = cyan, undercurl = true }
 -- green
 hi { "DraculaGreen", fg = green }
 hi { "DraculaGreenBold", fg = green, bold = true }
+hi { "DraculaGreenBoldInverse", fg = green, bold = true, reverse = true }
 hi { "DraculaGreenItalic", fg = green, italic = true }
 hi { "DraculaGreenUnderline", fg = green, underline = true }
 hi { "DraculaGreenItalicUnderline", fg = green, italic = true, underline = true }
@@ -75,6 +77,7 @@ hi { "DraculaGreenUndercurl", fg = green, sp = green, undercurl = true }
 -- orange
 hi { "DraculaOrange", fg = orange }
 hi { "DraculaOrangeBold", fg = orange, bold = true }
+hi { "DraculaOrangeBoldInverse", fg = orange, bold = true, reverse = true }
 hi { "DraculaOrangeItalic", fg = orange, italic = true }
 hi { "DraculaOrangeBoldItalic", fg = orange, bold = true, italic = true }
 hi { "DraculaOrangeInverse", fg = orange, reverse = true }
@@ -88,15 +91,18 @@ hi { "DraculaPinkItalic", fg = pink, italic = true }
 hi { "DraculaPurple", fg = purple }
 hi { "DraculaPurpleBold", fg = purple, bold = true }
 hi { "DraculaPurpleItalic", fg = purple, italic = true }
+hi { "DraculaPurpleBoldInverse", fg = purple, bold = true, reverse = true }
 
 -- red
 hi { "DraculaRed", fg = red }
+hi { "DraculaRedBoldInverse", fg = red, bold = true, reverse = true }
 hi { "DraculaRedItalic", fg = red, italic = true }
 hi { "DraculaRedInverse", fg = red, reverse = true }
 hi { "DraculaRedUndercurl", fg = red, sp = red, undercurl = true }
 
 -- yellow
 hi { "DraculaYellow", fg = yellow }
+hi { "DraculaYellowBoldInverse", fg = yellow, bold = true, reverse = true }
 hi { "DraculaYellowItalic", fg = yellow, italic = true }
 
 
