@@ -132,11 +132,11 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
 })
 
 local spellCheckGroup = vim.api.nvim_create_augroup("MySpellCheck", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "gitcommit", "text" , "markdown" },
+vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.wo.spell = true
-    vim.bo.spelllang = "en_us"
+    vim.opt.spelllang = { "en_us", "cjk" }
+    vim.opt.spelloptions = { "camel" }
   end,
   group = spellCheckGroup,
 })
