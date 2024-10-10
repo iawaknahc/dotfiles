@@ -2,8 +2,9 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     enabled = true,
-    -- rg "lazy = false" shows eagerly loaded plugins.
-    lazy = false,
+    event = {
+      "VeryLazy",
+    },
     build = ":TSUpdate",
     main = "nvim-treesitter.configs",
     opts = {
@@ -95,7 +96,9 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
-    lazy = false,
+    event = {
+      "VeryLazy",
+    },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
