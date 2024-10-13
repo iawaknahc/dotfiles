@@ -134,6 +134,11 @@ if test -r "$HOME/.opam/opam-init/init.fish"
     source "$HOME/.opam/opam-init/init.fish"
 end
 
+# ripgrep
+if test -r "$HOME/.config/ripgrep/ripgreprc"
+    set -gx RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep/ripgreprc"
+end
+
 # rust
 if test -d "$HOME/.cargo"
     fish_add_path -P "$HOME/.cargo/bin"

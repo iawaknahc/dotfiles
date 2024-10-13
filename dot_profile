@@ -157,6 +157,11 @@ if [ -x "$(command -v python3)" ]; then
   alias percent_decode_query_component='python3 -c "import sys,urllib.parse as u;[print(u.unquote_plus(l))for l in sys.stdin.read().splitlines()]"'
 fi
 
+# ripgrep
+if [ -r "$HOME/.config/ripgrep/ripgreprc" ]; then
+  export RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep/ripgreprc"
+fi
+
 # rust
 if [ -d "$HOME/.cargo" ]; then
   export PATH="$HOME/.cargo/bin:$PATH"
