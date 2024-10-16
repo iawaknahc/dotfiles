@@ -64,6 +64,7 @@ vim.o.fixendofline = false
 -- Search
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.wrapscan = false
 
 -- Mapping
 vim.g.mapleader = " "

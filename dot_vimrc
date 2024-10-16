@@ -85,6 +85,7 @@ set nofixendofline
 set hlsearch
 set ignorecase smartcase
 set incsearch
+set nowrapscan
 
 " Mapping
 let mapleader=' '
