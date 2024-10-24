@@ -159,7 +159,7 @@ fi
 
 # ripgrep
 if [ -r "$HOME/.config/ripgrep/ripgreprc" ]; then
-  export RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep/ripgreprc"
+  export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 fi
 
 # rust
