@@ -84,9 +84,7 @@ if [ -x "$(command -v go)" ]; then
 fi
 
 # google-cloud-sdk
-if [ -f "$HOME/google-cloud-sdk/path.bash.inc" ]; then
-  . "$HOME/google-cloud-sdk/path.bash.inc"
-fi
+# See .bash_profile, .bashrc, and .zshrc
 
 # homebrew
 if [ -x "/opt/homebrew/bin/brew" ]; then
