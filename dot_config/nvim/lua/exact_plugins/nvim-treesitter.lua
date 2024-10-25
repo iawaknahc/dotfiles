@@ -51,6 +51,7 @@ return {
         "markdown",
         "markdown_inline",
         "menhir",
+        "nix",
         "objc",
         "ocaml",
         "ocaml_interface",
