@@ -78,10 +78,13 @@ function set_path
     end
 
     # golang
-    if test -x "$(command -v go)"
-        set GOPATH "$(go env GOPATH)"
-        fish_add_path -P "$GOPATH/bin"
-    end
+    # I no longer install go system-wide.
+    # If go is installed with asdf, then the binaries installed with `go install` are made
+    # available with `asdf reshim`.
+    #if test -x "$(command -v go)"
+    #    set GOPATH "$(go env GOPATH)"
+    #    fish_add_path -P "$GOPATH/bin"
+    #end
 
     # google-cloud-sdk
     if test -d "$HOME/google-cloud-sdk"
