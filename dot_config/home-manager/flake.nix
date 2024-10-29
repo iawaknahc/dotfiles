@@ -9,19 +9,15 @@
   };
 
   outputs = { nixpkgs, home-manager, ... }:
-    let
-      system = "x86_64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      homeConfigurations."louischan" = home-manager.lib.homeManagerConfiguration {
+    let mkConfig = { system }:
+      let pkgs = nixpkgs.legacyPackages.${system};
+      in home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
         modules = [ ./home.nix ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
       };
+    in {
+      # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
+      homeConfigurations."louischan@louischan-personal" = mkConfig { system = "x86_64-darwin"; };
+      homeConfigurations."louischan@louischan" = mkConfig { system = "aarch64-darwin"; };
     };
 }
