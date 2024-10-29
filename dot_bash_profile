@@ -2,10 +2,13 @@
 # bash -i reads .bashrc
 # ==> .bash_profile and .bashrc must source .profile
 
+if shopt -q login_shell; then
+  echo "login shell: true"
+else
+  echo "login shell: false"
+fi
+
 echo "sourcing $BASH_SOURCE"
-echo "$(shopt login_shell)"
-echo "\$0: $0"
-echo "\$-: $-"
 
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"

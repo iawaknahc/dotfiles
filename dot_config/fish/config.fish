@@ -1,3 +1,9 @@
+if status is-login
+    echo "login shell: true"
+else
+    echo "login shell: false"
+end
+
 echo "sourcing $(status filename)"
 
 function before_set_path

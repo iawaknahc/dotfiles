@@ -1,7 +1,4 @@
 echo "sourcing .profile"
-echo "\$BASH_SOURCE: $BASH_SOURCE"
-echo "\$0: $0"
-echo "\$-: $-"
 
 before_set_path() {
   # Turn on vi mode
