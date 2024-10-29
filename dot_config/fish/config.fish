@@ -79,8 +79,11 @@ if test -x "$(command -v go)"
 end
 
 # google-cloud-sdk
-if test -f "$HOME/google-cloud-sdk/path.fish.inc"
-    source "$HOME/google-cloud-sdk/path.fish.inc"
+if test -d "$HOME/google-cloud-sdk"
+    # If you have read the source code of "$HOME/google-cloud-sdk/path.fish.inc",
+    # you can see that all it does is add google-cloud-sdk/bin to PATH.
+    # So we do that ourselves here.
+    fish_add_path -P "$HOME/google-cloud-sdk/bin"
 end
 
 # homebrew
