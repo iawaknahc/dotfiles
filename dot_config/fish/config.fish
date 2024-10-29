@@ -44,14 +44,11 @@ end
 end
 
 function set_path
-    # Allow this file to be sourced more than once
-    # Both tmux and the shell sources this file.
-    # See https://superuser.com/questions/544989/does-tmux-sort-the-path-variable
-    if test -x /usr/libexec/path_helper
-        set -gx PATH ''
-        # Cause path_helper to output csh commands.
-        /usr/libexec/path_helper -c | source
-    end
+    # We used to reset PATH to an empty string here.
+    # With
+    # 1. In iTerm.app, set shell to Custom Shell. This means $SHELL is correct.
+    # 2. With tmux 3.5a, the default-command is left unset.
+    # Then when open a new tmux window, the shell is only sourced once.
 
     # Add ~/.local/bin to PATH
     fish_add_path -P "$HOME/.local/bin"
