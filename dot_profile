@@ -9,7 +9,7 @@ before_set_path() {
   export LANG=en_US.UTF-8
 
   # Configure prompt
-  export PS1='$ '
+  export PS1="[$SHLVL] \$ "
   export PS2='> '
 
   # delta
