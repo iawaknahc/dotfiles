@@ -18,6 +18,8 @@ function before_set_path
 
     # Unconditional abbreviations
     abbr -a k kubectl
+    abbr -a nix-update-packages 'nix flake update --flake ~/.config/home-manager && home-manager switch'
+    abbr -a nix-housekeep 'home-manager expire-generations now && nix-collect-garbage -d'
 
     # delta
     # I have tried it out for a day but I still prefer the good old diff.
