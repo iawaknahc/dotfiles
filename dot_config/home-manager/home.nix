@@ -70,6 +70,9 @@
     pkgs.pinentry_mac
     pkgs.prettierd
     pkgs.pyright
+    # qrencode generates QR code locally.
+    # Ideal for sensitive contents.
+    pkgs.qrencode
     pkgs.ripgrep
     pkgs.shellcheck
     pkgs.shfmt
