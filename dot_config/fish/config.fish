@@ -180,3 +180,8 @@ if test -z "$IN_NIX_SHELL"
     set_path
 end
 after_set_path
+
+if test -x "$(command -v direnv)"
+    set -g direnv_fish_mode disable_arrow
+    direnv hook fish | source
+end

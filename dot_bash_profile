@@ -13,3 +13,7 @@ echo "sourcing $BASH_SOURCE"
 if [ -s "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi
+
+if [ -x "$(command -v direnv)" ]; then
+  eval "$(direnv hook bash)"
+fi

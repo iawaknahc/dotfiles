@@ -51,6 +51,7 @@
     pkgs.blackbox
     pkgs.chezmoi
     pkgs.delve
+    pkgs.direnv
     pkgs.exiftool
     pkgs.eza
     pkgs.fastmod
