@@ -65,6 +65,7 @@
     pkgs.jq
     pkgs.lua-language-server
     pkgs.neovim
+    pkgs.nix-direnv
     pkgs.nodePackages.bash-language-server
     pkgs.nodePackages.graphql-language-service-cli
     pkgs.nodePackages.typescript-language-server
