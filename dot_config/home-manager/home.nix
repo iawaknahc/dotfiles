@@ -46,7 +46,7 @@
     pkgs.zsh
 
     # The following packages are not present in stock macOS.
-    pkgs._1password
+    pkgs._1password-cli
     pkgs.bash-completion
     pkgs.bfs
     pkgs.blackbox
