@@ -36,6 +36,7 @@
     pkgs.less
     pkgs.ncurses
     pkgs.openssh
+    pkgs.openssl
     pkgs.patch
     pkgs.perl
     pkgs.unzip
