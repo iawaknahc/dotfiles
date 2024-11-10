@@ -71,6 +71,7 @@
     pkgs.nodePackages.graphql-language-service-cli
     pkgs.nodePackages.typescript-language-server
     pkgs.pinentry_mac
+    pkgs.pinentry-tty
     pkgs.prettierd
     pkgs.pyright
     # qrencode generates QR code locally.
