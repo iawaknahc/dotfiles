@@ -55,7 +55,11 @@ return {
         "objc",
         "ocaml",
         "ocaml_interface",
-        "ocamllex",
+        -- nvim-treesitter thinks this need to require generate from grammar.
+        -- Generate from grammar requires node.
+        -- I do not want to install node globally just for install a parser.
+        -- See https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/install.lua#L371
+        -- "ocamllex",
         "passwd",
         "perl",
         "php",
@@ -69,7 +73,11 @@ return {
         "sql",
         "starlark",
         "svelte",
-        "swift",
+        -- nvim-treesitter thinks this need to require generate from grammar.
+        -- Generate from grammar requires node.
+        -- I do not want to install node globally just for install a parser.
+        -- See https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/install.lua#L371
+        -- "swift",
         "toml",
         "tsx",
         "typescript",
@@ -84,19 +92,20 @@ return {
         additional_vim_regex_highlighting = false,
         -- Disable highlight on large files.
         -- This can avoid hang.
-        disable = function (_, bufnr)
+        disable = function(_, bufnr)
           local max_filesize = 100 * 1024 -- 100KiB
           local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
           if ok and stats and stats.size > max_filesize then
             return true
           end
           return false
-        end
+        end,
       },
     },
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
+    enabled = true,
     event = {
       "VeryLazy",
     },
