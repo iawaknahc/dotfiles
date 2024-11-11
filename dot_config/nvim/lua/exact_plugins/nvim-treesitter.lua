@@ -71,6 +71,7 @@ return {
         "rust",
         "scss",
         "sql",
+        "ssh_config",
         "starlark",
         "svelte",
         -- nvim-treesitter thinks this need to require generate from grammar.
