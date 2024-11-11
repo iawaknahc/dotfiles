@@ -86,5 +86,12 @@
     pkgs.vscode-langservers-extracted
     pkgs.wget
     pkgs.yaml-language-server
+
+    # The following are fonts.
+    # The monospace font I use.
+    pkgs.source-han-mono
+    # CJK fonts
+    pkgs.source-han-sans
+    pkgs.source-han-serif
   ];
 }
