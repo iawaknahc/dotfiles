@@ -83,6 +83,9 @@
     pkgs.stylua
     pkgs.tailwindcss-language-server
     pkgs.tmux
+    # Some parsers like ocamllex and swift requires the tree-sitter executable.
+    # So we install it for them.
+    pkgs.tree-sitter
     pkgs.vscode-langservers-extracted
     pkgs.wget
     pkgs.yaml-language-server
