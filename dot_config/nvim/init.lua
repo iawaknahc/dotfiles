@@ -43,7 +43,7 @@ vim.opt.colorcolumn = colorcolumn
 
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.o.pumheight=10
+vim.o.pumheight = 10
 
 -- Command mode
 -- shell by default is $SHELL.
@@ -58,7 +58,7 @@ vim.o.swapfile = false
 -- This controls how often the swapfile is written.
 -- This also controls how often vim-gitgutter updates the signs.
 -- :h updatetime
-vim.o.updatetime=100
+vim.o.updatetime = 100
 vim.o.scrolloff = 5
 vim.o.foldenable = false
 vim.opt.clipboard:append({ "unnamed" })
@@ -127,7 +127,7 @@ vim.diagnostic.config {
 -- We do NOT want to run any before-save fix on *.env
 -- For example, some envvars may have trailing whitespaces we do want to preserve.
 local dotEnvGroup = vim.api.nvim_create_augroup("MyDotEnv", { clear = true })
-vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   pattern = "*.env",
   callback = function()
     vim.bo.filetype = ""
