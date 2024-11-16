@@ -79,17 +79,8 @@ def parse_line(line) -> HighlightGroup:
     return HighlightGroup(line=line, name=name, cleared=cleared, links_to=links_to, attributes=attributes)
 
 
-# This program takes the output of the following command, and
+# This program takes the output of my fish abbreviation nvim-highlight, and
 # prints out any highlight group that are not linked to Dracula yet.
-#
-# nvim -Es -u ~/.config/nvim/init.lua +'set nonumber' +"put =execute('highlight')" +'g/^$/d' +%print
-#
-# -Es causes :print prints to stdout, instead of showing the output with the builtin pager.
-# -u reverts the effect of -Es, because the presence of -Es implies user config is not loaded.
-# :set nonumber turns off line number.
-# :put =execute('highlight') puts the output of the Ex command into the buffer.
-# :g/^$/d deletes any empty lines.
-# :print finally prints to stdout.
 def main():
     lines = read_lines(sys.stdin)
 
