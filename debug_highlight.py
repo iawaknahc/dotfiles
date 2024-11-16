@@ -1,5 +1,6 @@
 import sys
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -7,10 +8,10 @@ class HighlightGroup:
     line: str
     name: str
     cleared: bool
-    links_to: str | None
+    links_to: Optional[str]
     attributes: dict[str, str]
 
-    def __init__(self, *, line: str, name: str, cleared: bool = False, links_to: str | None = None, attributes: dict[str, str] = None):
+    def __init__(self, *, line: str, name: str, cleared: bool = False, links_to: Optional[str] = None, attributes: Optional[dict[str, str]] = None):
         self.line = line
         self.name = name
         self.cleared = cleared
@@ -35,6 +36,7 @@ def read_lines(f) -> list[str]:
         if line.startswith(" "):
             # If the line start with spaces, then it is a continuation of the last line.
             line = line.lstrip(" ")
+            assert last_line is not None
             last_line = last_line + " " + line
         else:
             # Otherwise we encounter a separate line, the last line is complete.
