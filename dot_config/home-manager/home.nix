@@ -9,11 +9,16 @@
   # https://nix-community.github.io/home-manager/options.xhtml#opt-home.stateVersion
   home.stateVersion = "24.05";
 
+  # https://nixos.wiki/wiki/Unfree_Software
+  nixpkgs.config.allowUnfree = true;
+
   # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.home-manager.enable
   programs.home-manager.enable = true;
 
-  # https://nixos.wiki/wiki/Unfree_Software
-  nixpkgs.config.allowUnfree = true;
+  # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.enable
+  programs.neovim.enable = true;
+  # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withNodeJs
+  programs.neovim.withNodeJs = true;
 
   # https://nix-community.github.io/home-manager/options.xhtml#opt-home.packages
   home.packages = [
@@ -65,7 +70,6 @@
     pkgs.hadolint
     pkgs.jq
     pkgs.lua-language-server
-    pkgs.neovim
     pkgs.nix-direnv
     pkgs.nodePackages.bash-language-server
     pkgs.nodePackages.graphql-language-service-cli
