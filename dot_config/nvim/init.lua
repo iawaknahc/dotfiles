@@ -45,7 +45,10 @@ vim.opt.colorcolumn = colorcolumn
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.pumheight=10
 
--- Command completion
+-- Command mode
+-- shell by default is $SHELL.
+-- But I do not want neovim to run command with fish.
+vim.o.shell = "sh"
 vim.opt.wildmode = { "longest:full", "full" }
 
 -- Editing
