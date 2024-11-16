@@ -73,11 +73,13 @@ return {
         "objdump",
         "ocaml",
         "ocaml_interface",
-        -- nvim-treesitter thinks this need to require generate from grammar.
+
+        -- nvim-treesitter thinks this parser require generate from grammar.
         -- Generate from grammar requires node.
-        -- I do not want to install node globally just for install a parser.
         -- See https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/install.lua#L371
-        -- "ocamllex",
+        -- To make node available to neovim, we need to set programs.neovim.withNodeJs = true in home-manager.
+        "ocamllex",
+
         "pem",
         "passwd",
         "perl",
@@ -103,11 +105,13 @@ return {
         "scss",
         "sql",
         "ssh_config",
-        -- nvim-treesitter thinks this need to require generate from grammar.
+
+        -- nvim-treesitter thinks this parser require generate from grammar.
         -- Generate from grammar requires node.
-        -- I do not want to install node globally just for install a parser.
         -- See https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/install.lua#L371
-        -- "swift",
+        -- To make node available to neovim, we need to set programs.neovim.withNodeJs = true in home-manager.
+        "swift",
+
         "tmux",
         "toml",
         "tsv",
