@@ -29,6 +29,11 @@ function before_set_path
     # :print finally prints to stdout.
     abbr -a nvim-highlight -- nvim -Es -u ~/.config/nvim/init.lua +"'set nonumber'" "+\"put =execute('highlight')\"" +"'g/^\$/d'" +%print
 
+    # https://www.w3.org/TR/SRI/#integrity-metadata
+    abbr -a sri-sha256 --set-cursor -- 'openssl sha256 -binary % | openssl base64 | xargs printf "sha256-%s\n"'
+    abbr -a sri-sha384 --set-cursor -- 'openssl sha384 -binary % | openssl base64 | xargs printf "sha384-%s\n"'
+    abbr -a sri-sha512 --set-cursor -- 'openssl sha512 -binary % | openssl base64 | xargs printf "sha512-%s\n"'
+
     # delta
     # I have tried it out for a day but I still prefer the good old diff.
     # if test -x "$(command -v delta)"
