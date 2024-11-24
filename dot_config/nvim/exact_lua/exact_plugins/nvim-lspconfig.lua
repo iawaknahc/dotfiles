@@ -17,6 +17,8 @@ local simple = {
   -- Programming
   "pyright",
   "dartls",
+  -- Spell checking
+  "typos_lsp",
 }
 
 local function config()
@@ -157,7 +159,8 @@ return {
 
       -- Inspired by gd
       {
-        "gD", vim.lsp.buf.declaration,
+        "gD",
+        vim.lsp.buf.declaration,
         desc = "Go to declaration",
       },
 
@@ -167,14 +170,16 @@ return {
       -- Technically speaking, this can be handled by telescope as well,
       -- as Telescope has builtin.lsp_type_definitions.
       {
-        "gy", vim.lsp.buf.type_definition,
+        "gy",
+        vim.lsp.buf.type_definition,
         desc = "Go to type definition",
       },
 
       -- Upcoming default mapping
       -- See https://github.com/neovim/neovim/pull/28500
       {
-        "crn", vim.lsp.buf.rename,
+        "crn",
+        vim.lsp.buf.rename,
         desc = "Rename",
       },
       -- Upcoming default mapping
@@ -189,7 +194,8 @@ return {
       -- I found it quite annoying.
       -- So do not enable it initially.
       {
-        "<Leader>h", function()
+        "<Leader>h",
+        function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
             bufnr = 0,
           }), {
