@@ -44,3 +44,7 @@
 
 [diff "blackbox"]
   textconv = gpg --quiet --batch --decrypt
+
+# Ask git to always use ssh instead of https
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
