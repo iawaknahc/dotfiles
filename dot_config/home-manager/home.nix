@@ -100,6 +100,9 @@
     pkgs.shfmt
     pkgs.stylua
     pkgs.tailwindcss-language-server
+    # Taplo is a language server for TOML, and more.
+    # See https://taplo.tamasfe.dev/
+    pkgs.taplo
     pkgs.tmux
     # Some parsers like ocamllex and swift requires the tree-sitter executable.
     # So we install it for them.
