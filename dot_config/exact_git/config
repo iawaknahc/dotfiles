@@ -46,5 +46,6 @@
   textconv = gpg --quiet --batch --decrypt
 
 # Ask git to always use ssh instead of https
+# This config conflicts with cr, see https://github.com/helm/chart-releaser/issues/124
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
