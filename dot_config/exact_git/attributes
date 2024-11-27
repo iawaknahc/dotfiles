@@ -1,0 +1,2 @@
+*.gpg diff=blackbox
+trustdb.gpg !diff
