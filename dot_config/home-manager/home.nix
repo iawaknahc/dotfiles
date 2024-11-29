@@ -82,6 +82,7 @@
     pkgs.gnupg
     pkgs.gopls
     pkgs.hadolint
+    pkgs.imagemagick
     pkgs.jq
     pkgs.lua-language-server
     pkgs.nix-direnv
