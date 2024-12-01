@@ -63,6 +63,8 @@ vim.o.scrolloff = 5
 vim.o.foldenable = false
 vim.opt.clipboard:append({ "unnamed" })
 vim.o.fixendofline = false
+-- Make ~ an operator
+vim.o.tildeop = true
 
 -- Search
 vim.o.ignorecase = true

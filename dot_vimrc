@@ -82,6 +82,8 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " Therefore, this option should be set on buffer with lsp.
 " See https://github.com/neovim/neovim/blob/e41e8b3fda42308b4c77fb0e52a9719ef4d543d8/runtime/lua/vim/lsp/util.lua#L478
 set nofixendofline
+" Make ~ an operator.
+set tildeop
 
 " Search
 " Turn on hlsearch initially so that the results are highlighted by default.
