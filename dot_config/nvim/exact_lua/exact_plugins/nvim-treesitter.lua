@@ -9,6 +9,63 @@ return {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     build = ":TSUpdate",
+    -- Make ; and , work with the new movements.
+    -- In particular, ; and , are overridden, so f,F,t,T has to be remapped to restore the original behavior.
+    -- See https://github.com/nvim-treesitter/nvim-treesitter-textobjects#:~:text=you%20can%20make%20the%20movements%20repeatable%20like
+    keys = {
+      {
+        ";",
+        function()
+          require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move()
+        end,
+        mode = { "n", "x", "o" },
+        desc = ":help ;",
+      },
+      {
+        ",",
+        function()
+          require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_opposite()
+        end,
+        mode = { "n", "x", "o" },
+        desc = ":help ,",
+      },
+      {
+        "f",
+        function()
+          return require("nvim-treesitter.textobjects.repeatable_move").builtin_f_expr()
+        end,
+        mode = { "n", "x", "o" },
+        expr = true,
+        desc = ":help f",
+      },
+      {
+        "F",
+        function()
+          return require("nvim-treesitter.textobjects.repeatable_move").builtin_F_expr()
+        end,
+        mode = { "n", "x", "o" },
+        expr = true,
+        desc = ":help F",
+      },
+      {
+        "t",
+        function()
+          return require("nvim-treesitter.textobjects.repeatable_move").builtin_t_expr()
+        end,
+        mode = { "n", "x", "o" },
+        expr = true,
+        desc = ":help t",
+      },
+      {
+        "T",
+        function()
+          return require("nvim-treesitter.textobjects.repeatable_move").builtin_T_expr()
+        end,
+        mode = { "n", "x", "o" },
+        expr = true,
+        desc = ":help T",
+      },
+    },
     config = function()
       local configs = require("nvim-treesitter.configs")
       configs.setup {
