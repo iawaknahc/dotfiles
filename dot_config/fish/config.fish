@@ -41,14 +41,10 @@ function before_set_path
     # end
 
     # fzf
-    set -gx FZF_DEFAULT_COMMAND '
-if git rev-parse --is-inside-work-tree
-  git ls-files --cached --others --exclude-standard
-else
-  # In case fzf is run at / or HOME
-  find . -type f -maxdepth 2
-end
-'
+    set -gx FZF_DEFAULT_COMMAND true
+    if test -r "$HOME/.config/fzf/config"
+        set -gx FZF_DEFAULT_OPTS_FILE "$HOME/.config/fzf/config"
+    end
 
     # ripgrep
     if test -r "$HOME/.config/ripgrep/ripgreprc"
