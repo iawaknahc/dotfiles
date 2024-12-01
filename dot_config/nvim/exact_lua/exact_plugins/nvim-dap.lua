@@ -28,13 +28,13 @@ return {
         desc = "Debugger step out",
       },
       {
-        "<Leader>R", function()
+        "<Space>R", function()
           require("dap").repl.toggle()
         end,
         desc = "Debugger toggle REPL",
       },
       {
-        "<Leader>K", function()
+        "<Space>K", function()
           require("dap.ui.widgets").hover()
         end,
         mode = {"n", "v"},

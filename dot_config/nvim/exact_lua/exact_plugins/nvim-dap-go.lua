@@ -7,8 +7,8 @@ return {
       { "<F10>" },
       { "<F11>" },
       { "<F12>" },
-      { "<Leader>R" },
-      { "<Leader>K" },
+      { "<Space>R" },
+      { "<Space>K" },
     },
     dependencies = {
       "mfussenegger/nvim-dap",

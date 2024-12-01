@@ -93,7 +93,6 @@ set incsearch
 set nowrapscan
 
 " Mapping
-let mapleader=' '
 " Y is the same as yy by default. But Y being y$ is more useful.
 nnoremap Y y$
 " Disable Ex mode

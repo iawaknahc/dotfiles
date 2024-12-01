@@ -72,7 +72,6 @@ vim.o.smartcase = true
 vim.o.wrapscan = false
 
 -- Mapping
-vim.g.mapleader = " "
 vim.keymap.set("n", "<Space>", "<Nop>", { desc = "Disable :h <Space>" })
 vim.keymap.set("n", "gh", "<Nop>", { desc = "Disable :h gh" })
 vim.keymap.set("n", "gH", "<Nop>", { desc = "Disable :h gH" })

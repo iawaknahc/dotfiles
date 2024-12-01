@@ -194,7 +194,7 @@ return {
       -- I found it quite annoying.
       -- So do not enable it initially.
       {
-        "<Leader>h",
+        "<Space>h",
         function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
             bufnr = 0,
