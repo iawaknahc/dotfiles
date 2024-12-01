@@ -58,19 +58,36 @@ return {
       -- Start of general pickers
       -- Inspired by Helix space mode f
       {
-        "<Leader>f", project_files,
-        desc = "Open project files"
+        "<Leader>f",
+        project_files,
+        desc = "Open project files",
       },
       -- Inspired by Helix space mode b
       {
-        "<Leader>b", function()
+        "<Leader>b",
+        function()
           require("telescope.builtin").buffers()
         end,
         desc = "Open buffers",
       },
+      {
+        "<Leader>:",
+        function()
+          require("telescope.builtin").commands()
+        end,
+        desc = "Pick commands",
+      },
+      {
+        "<Leader>j",
+        function()
+          require("telescope.builtin").jumplist()
+        end,
+        desc = "Pick from jumplist",
+      },
       -- g stands for grep.
       {
-        "<Leader>g", function()
+        "<Leader>g",
+        function()
           require("telescope.builtin").live_grep()
         end,
         desc = "Open live grep",
@@ -82,7 +99,8 @@ return {
       -- Helix also has goto mode i to "go to implementation".
       -- Since here we are opening a picker, so this should be a space mode keymap.
       {
-        "<Leader>i", function()
+        "<Leader>i",
+        function()
           require("telescope.builtin").lsp_implementations()
         end,
         desc = "Open implementations of the interface under the cursor",
@@ -94,14 +112,16 @@ return {
       -- that does the same thing with the quickfix list.
       -- See https://github.com/neovim/neovim/pull/28500
       {
-        "<Leader>r", function()
+        "<Leader>r",
+        function()
           require("telescope.builtin").lsp_references()
         end,
         desc = "Open references to the symbol under the cursor",
       },
       -- c stands for incoming "c"alls.
       {
-        "<Leader>c", function()
+        "<Leader>c",
+        function()
           require("telescope.builtin").lsp_incoming_calls()
         end,
         desc = "Open incoming calls to the function under the cursor",
@@ -109,14 +129,16 @@ return {
       -- C stands for outgoing "c"alls.
       -- It is C because outgoing calls are less common.
       {
-        "<Leader>C", function()
+        "<Leader>C",
+        function()
           require("telescope.builtin").lsp_outgoing_calls()
         end,
         desc = "Open outgoing calls from the function under the cursor",
       },
       -- s stands for "s"ymbols.
       {
-        "<Leader>s", function()
+        "<Leader>s",
+        function()
           require("telescope.builtin").lsp_document_symbols()
         end,
         desc = "Open symbols in the current buffer",
@@ -125,7 +147,8 @@ return {
       -- It is S because it lists more results.
       -- There is also lsp_workspace_symbols but gopls does not give any results.
       {
-        "<Leader>S", function()
+        "<Leader>S",
+        function()
           require("telescope.builtin").lsp_dynamic_workspace_symbols()
         end,
         desc = "Open symbols in the workspace",
@@ -134,13 +157,15 @@ return {
       --vim.keymap.set('n', '<Leader>l', function() require('telescope.builtin').loclist({ show_line = false }) end)
       -- Inspired by Helix space mode d
       {
-        "<Leader>d", function()
+        "<Leader>d",
+        function()
           require("telescope.builtin").diagnostics({ bufnr = 0 })
         end,
         desc = "Open diagnostics of the current buffer",
       },
       {
-        "<Leader>D", function()
+        "<Leader>D",
+        function()
           require("telescope.builtin").diagnostics({ bufnr = nil })
         end,
         desc = "Open diagnostics of all buffers",
