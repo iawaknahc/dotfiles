@@ -141,6 +141,17 @@ return {
             return false
           end,
         },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            -- This overrides :h gv
+            init_selection = "gv",
+            -- There is no v_CTRL-K nor v_CTRL-J.
+            node_incremental = "<C-k>",
+            node_decremental = "<C-j>",
+            scope_incremental = false,
+          },
+        },
         textobjects = {
           select = {
             enable = true,
