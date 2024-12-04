@@ -118,6 +118,16 @@ return {
     },
     config = function()
       require("fzf-lua").setup({
+        fzf_opts = {
+          ["--layout"] = "default",
+        },
+        winopts = {
+          preview = {
+            vertical = "up:50%",
+            horizontal = "right:50%",
+            delay = 10,
+          },
+        },
         defaults = {
           git_icons = false,
           file_icons = false,
