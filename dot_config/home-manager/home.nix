@@ -81,6 +81,8 @@
     pkgs.fzf
     pkgs.gnupg
     pkgs.gopls
+    # pprof requires this graph visualization software to generate graphs.
+    pkgs.graphviz
     pkgs.hadolint
     pkgs.imagemagick
     pkgs.jq
