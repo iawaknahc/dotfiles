@@ -32,6 +32,37 @@ FORMATS = [
     "http",
 ]
 
+def abs_delta(d: timedelta) -> timedelta:
+    if d < timedelta():
+        return +d
+    return d
+
+
+def guess_from(input: str) -> tuple[str, datetime]:
+    match = RE_RFC3339.match(input)
+    if match is not None:
+        return ("rfc3339", parse_input("rfc3339", input))
+    try:
+        # If this does not raise, then input looks like an integer.
+        _ = int(input)
+    except ValueError:
+        return ("http", parse_input("http", input))
+
+    dt_assuming_ms = parse_input("unix_ms", input)
+    try:
+        # If this raises, then input is too big to be assumed as unix seconds.
+        dt_assuming_s = parse_input("unix_s", input)
+    except ValueError:
+        return ("unix_ms", dt_assuming_ms)
+
+    now = datetime.now(timezone.utc).astimezone()
+
+    timedelta_assuming_s = abs_delta(now - dt_assuming_s)
+    timedelta_assuming_ms = abs_delta(now - dt_assuming_ms)
+    if timedelta_assuming_s < timedelta_assuming_ms:
+        return ("unix_s", dt_assuming_s)
+    return ("unix_ms", dt_assuming_ms)
+
 
 def parse_input(format: str, input: str) -> datetime:
     local = datetime.now(timezone.utc).astimezone().tzinfo
@@ -128,29 +159,35 @@ def main():
         help="Output timezone, for example, Asia/Hong_Kong. If not given, the system timezone is used.",
     )
     parser.add_argument("--from",
-        help="From format",
+        help="From format. If not given, it is guessed from input.",
         choices=FORMATS,
-        required=True,
     )
     parser.add_argument("--to",
-        help="To format",
+        help="To format. If not given, it is equal to --from.",
         choices=FORMATS,
-        required=True,
     )
     parser.add_argument("input",
-        help="Input specified in the format indicated by --from.",
+        help="Input",
         nargs=1,
     )
 
     args = parser.parse_args()
-    tzname = args.tz
-    from_ = getattr(args, "from")
-    to = args.to
-    input = args.input[0]
+    tzname: Optional[str] = args.tz
+    from_: Optional[str] = getattr(args, "from")
+    to: Optional[str] = args.to
 
-    dt = parse_input(from_, input)
+    input: str = args.input[0]
+    input = input.strip()
+
+    if from_ is None:
+        (from_, dt) = guess_from(input)
+    else:
+        dt = parse_input(from_, input)
+
+    if to is None:
+        to = from_
+
     tz = parse_timezone(tzname)
-
     if tz is not None:
         dt = dt.astimezone(tz)
 
