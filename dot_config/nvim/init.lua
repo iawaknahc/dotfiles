@@ -164,7 +164,11 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 -- Set up lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 vim.opt.runtimepath:prepend(lazypath)
-require("lazy").setup("plugins", {
+require("lazy").setup({
+  -- See https://lazy.folke.io/usage/structuring
+  spec = {
+    { import = "plugins" },
+  },
   defaults = {
     -- lazy by default.
     lazy = true,
