@@ -1,3 +1,8 @@
+-- moonwalk and fennel
+require("moonwalk").add_loader("fnl", function(src)
+  return require("fennel").compileString(src)
+end)
+
 -- The default is :filetype detection:ON plugin:ON indent:ON
 -- We want to turn off indent.
 vim.cmd.filetype("indent", "off")
