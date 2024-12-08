@@ -2,28 +2,37 @@
 (let [lazypath (vim.fs.joinpath (vim.fn.stdpath :data) :/lazy/lazy.nvim)]
   (vim.opt.runtimepath:prepend lazypath))
 
-(fn get_extension [filename ext]
+(fn get-extension [filename ext]
   (filename:sub (- (+ (length ext) 1))))
 
-(fn strip_extension [filename ext]
+(fn strip-extension [filename ext]
   (filename:sub 1 (- (+ (length ext) 2))))
+
+(fn list-concat [a b]
+  (-> []
+      (vim.list_extend a)
+      (vim.list_extend b)))
 
 (local PLUGINS :plugins)
 
-(local specs [])
-(each [_ lang (ipairs [:lua :fnl])]
-  (let [findpath (vim.fs.joinpath (vim.fn.stdpath :config) lang PLUGINS)
-        findopts {:path findpath :type :file :limit math.huge}
-        findinput (fn [name]
-                    (if (= (get_extension name lang) (.. "." lang)) true
-                        false))
-        paths (vim.fs.find findinput findopts)]
-    (each [_ path (ipairs paths)]
-      (let [basename (vim.fs.basename path)
-            without_ext (strip_extension basename lang)
-            module_name (.. PLUGINS "." without_ext)
-            spec (require module_name)]
-        (table.insert specs spec)))))
+(local specs (accumulate [specs [] _ lang (ipairs [:lua :fnl])]
+               (let [find-path (vim.fs.joinpath (vim.fn.stdpath :config) lang
+                                                PLUGINS)
+                     find-opts {:path find-path :type :file :limit math.huge}
+                     find-input (fn [name]
+                                  (if (= (get-extension name lang)
+                                         (.. "." lang))
+                                      true
+                                      false))
+                     find-results (vim.fs.find find-input find-opts)
+                     specs-in-lang (icollect [_ path (ipairs find-results)]
+                                     (let [basename (vim.fs.basename path)
+                                           without-ext (strip-extension basename
+                                                                        lang)
+                                           module-name (.. PLUGINS "."
+                                                           without-ext)]
+                                       (require module-name)))]
+                 (list-concat specs specs-in-lang))))
 
 (let [setup (. (require :lazy) :setup)]
   (setup {:spec specs
@@ -52,3 +61,6 @@
                        :start "🚀"
                        :task "📌"
                        :lazy "💤"}}}))
+
+; Return nil because this module is intended for side effects.
+nil
