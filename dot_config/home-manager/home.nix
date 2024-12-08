@@ -76,6 +76,19 @@
     pkgs.eza
     pkgs.fastmod
     pkgs.fd
+
+    # The REPL of Fennel without readline is very limited.
+    # So we install readline for it.
+    # See https://fennel-lang.org/setup#adding-readline-support-to-fennel
+    # Note that the parenthesis around this is very important.
+    # Otherwise, the function is not called and it becomes an item in the list, which is unexpected.
+    (pkgs.luajitPackages.fennel.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [
+        pkgs.readline
+        pkgs.luajitPackages.readline
+      ];
+    }))
+
     pkgs.ffmpeg
     pkgs.fish
     pkgs.fnlfmt
