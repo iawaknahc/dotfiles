@@ -11,6 +11,7 @@ return {
     formatters_by_ft = {
       go = { "gofmt" },
       lua = { "stylua" },
+      fennel = { "fnlfmt" },
       javascript = prettier,
       javascriptreact = prettier,
       typescript = prettier,

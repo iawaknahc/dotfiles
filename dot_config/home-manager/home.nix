@@ -78,6 +78,7 @@
     pkgs.fd
     pkgs.ffmpeg
     pkgs.fish
+    pkgs.fnlfmt
     pkgs.fzf
     pkgs.gnupg
     pkgs.gopls
