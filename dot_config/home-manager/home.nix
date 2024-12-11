@@ -58,6 +58,10 @@
     pkgs.openssl
     pkgs.patch
     pkgs.perl
+    # Install GNU Time
+    # This program does not come with a manpage.
+    # Instead, it uses GNU Texinfo.
+    pkgs.time
     pkgs.unzip
     pkgs.vim
     pkgs.xz
