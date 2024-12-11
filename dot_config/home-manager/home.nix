@@ -124,6 +124,8 @@
     # Taplo is a language server for TOML, and more.
     # See https://taplo.tamasfe.dev/
     pkgs.taplo
+    # Install GNU Texinfo to view documentation of GNU software, such as GNU Time.
+    pkgs.texinfoInteractive
     pkgs.tmux
     # Some parsers like ocamllex and swift requires the tree-sitter executable.
     # So we install it for them.
