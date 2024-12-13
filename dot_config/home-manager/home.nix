@@ -41,10 +41,27 @@
     pkgs.bzip2
     pkgs.dig
     pkgs.coreutils-prefixed
-    # The curl installed with nix cannot connect to https://localhost
-    # So let's not use it until it is solved.
-    # See https://github.com/NixOS/nixpkgs/issues/337982
-    # pkgs.curl
+    # In case you need to curl a website whose TLS certificate is signed by
+    # a locally trusted CA, like the one created by mkcert,
+    # you need to set SSL_CERT_FILE to point to a full CA bundle.
+    # You can use the command macos-ca-certs to generate such a CA bundle.
+    (pkgs.curl.override {
+      brotliSupport = true;
+      gsaslSupport = true;
+      http2Support = true;
+      # http3Support requires a TLS library supporting QUIC,
+      # in which openssl does not support QUIC.
+      http3Support = false;
+      websocketSupport = true;
+      idnSupport = true;
+      ldapSupport = true;
+      opensslSupport = true;
+      pslSupport = true;
+      rtmpSupport = true;
+      scpSupport = true;
+      zlibSupport = true;
+      zstdSupport = true;
+    })
     pkgs.diffutils
     pkgs.file
     pkgs.findutils
