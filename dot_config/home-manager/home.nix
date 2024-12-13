@@ -41,7 +41,10 @@
     pkgs.bzip2
     pkgs.dig
     pkgs.coreutils-prefixed
-    pkgs.curl
+    # The curl installed with nix cannot connect to https://localhost
+    # So let's not use it until it is solved.
+    # See https://github.com/NixOS/nixpkgs/issues/337982
+    # pkgs.curl
     pkgs.diffutils
     pkgs.file
     pkgs.findutils
