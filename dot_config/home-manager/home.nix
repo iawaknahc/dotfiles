@@ -150,6 +150,7 @@
     pkgs.taplo
     # Install GNU Texinfo to view documentation of GNU software, such as GNU Time.
     pkgs.texinfoInteractive
+    pkgs.tlrc
     pkgs.tmux
     # Some parsers like ocamllex and swift requires the tree-sitter executable.
     # So we install it for them.
