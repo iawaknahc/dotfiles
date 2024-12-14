@@ -148,6 +148,11 @@
            :callback (fn [] (setbo! :filetype ""))
            :group (augroup! :MyDotEnv {:clear true})})
 
+(autocmd! [:BufNewFile :BufRead]
+          {:pattern :*.cheat
+           :callback (fn [] (setbo! :filetype :sh))
+           :group (augroup! :MyNaviCheat {:clear true})})
+
 (autocmd! [:TextYankPost]
           {:pattern "*"
            :callback (fn [] (vim.highlight.on_yank))

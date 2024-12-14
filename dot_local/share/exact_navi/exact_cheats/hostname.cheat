@@ -1,0 +1,10 @@
+% hostname
+
+# Get "friendly" name
+scutil --get ComputerName
+
+# Get the name of the Bonjour / mDNS / ZeroConf host name
+scutil --get LocalHostName
+
+# Get whatever hostname command returns
+scutil --get HostName

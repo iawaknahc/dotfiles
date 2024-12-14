@@ -1,0 +1,77 @@
+% sh
+
+# string equality
+[ a = b ]
+
+# string inquality
+[ a != b ]
+
+# string lexicographically less than
+[ a \< b ]
+
+# string lexicographically greater than
+[ a \> b ]
+
+# integer equality
+[ 0 -eq 1 ]
+
+# integer inquality
+[ 0 -ne 1 ]
+
+# integer greater than
+[ 0 -gt 1 ]
+
+# integer greater than or equal to
+[ 0 -ge 1 ]
+
+# integer less than
+[ 0 -lt 1 ]
+
+# integer less than or equal to
+[ 0 -le 1 ]
+
+# logical negation
+[ ! a ]
+
+# logical and
+[ a -a b ]
+
+# logical or
+[ a -o b ]
+
+# check if sub is a substring of full
+printf "$full\n" | grep >/dev/null -F "$sub"
+
+# count the number of non-overlapping substring
+printf "$full\n" | grep -F -o "$sub" | wc -l
+
+# check prefix
+case "$s" in "$prefix"*) true ;; *) false ;; esac
+
+# check suffix
+case "$s" in *"$suffix") true ;; *) false ;; esac
+
+# repeat string
+awk -v s="$str" -v n=10 'BEGIN{for(i=0;i<n;++i)printf("%s",s)}'
+
+# trim leading spaces
+printf "$s" | sed 's/^[[:space:]]*//g'
+
+# trim trailing spaces
+printf "$s" | sed 's/[[:space:]]*$//g'
+
+# trim leading and trailing spaces
+printf "$s" | sed 's/^[[:space:]]*//g' | sed 's/[[:space:]]*$//g'
+
+# remove prefix
+${s#"$prefix"}
+
+# remove suffix
+${s%"$suffix"}
+
+# perform arithmetic operation
+$(( 1 + 2))
+
+# print and run a command
+; The trick is to create a subshell, set -x, and run the command
+(set -x && echo hello)

@@ -1,0 +1,7 @@
+% nix
+
+# Update flake.lock, and then update packages
+nix flake update --flake ~/.config/home-manager && home-manager switch
+
+# Remove home-manager generations, and then perform gc
+home-manager expire-generations now && nix-collect-garbage -d

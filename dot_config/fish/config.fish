@@ -18,8 +18,6 @@ function before_set_path
 
     # Unconditional abbreviations
     abbr -a k kubectl
-    abbr -a nix-update-packages 'nix flake update --flake ~/.config/home-manager && home-manager switch'
-    abbr -a nix-housekeep 'home-manager expire-generations now && nix-collect-garbage -d'
     # TLRC_CONFIG was implemented but not released yet.
     # https://github.com/tldr-pages/tlrc/issues/89
     abbr -a tldr tldr --config ~/.config/tlrc/config.toml

@@ -1,0 +1,4 @@
+% perl
+
+# Find builtin Perl programs on macOS
+grep -E "^#!.*perl" -r /usr/bin -l 2>/dev/null | sort
