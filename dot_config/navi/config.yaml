@@ -1,0 +1,11 @@
+# The directory is not exact_navi because navi writes log next to the config file.
+# See https://github.com/denisidoro/navi/blob/master/docs/navi_config.md#logging
+
+finder:
+  command: fzf
+  overrides: --height 100%
+  overrides_var: --height 100%
+
+shell:
+  command: sh
+  finder_command: sh
