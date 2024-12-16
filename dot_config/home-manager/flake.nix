@@ -17,7 +17,6 @@
       };
     in {
       # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
-      homeConfigurations."louischan@louischan-personal" = mkConfig { system = "x86_64-darwin"; };
       homeConfigurations."louischan@louischan-m4" = mkConfig { system = "aarch64-darwin"; };
       homeConfigurations."louischan@louischan-work" = mkConfig { system = "aarch64-darwin"; };
     };
