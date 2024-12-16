@@ -19,6 +19,8 @@ local simple = {
   "dartls",
   -- Spell checking
   "typos_lsp",
+  -- Nix
+  "nil_ls",
 }
 
 local function config()

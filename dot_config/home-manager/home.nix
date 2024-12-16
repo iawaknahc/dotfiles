@@ -127,6 +127,9 @@
     pkgs.lua-language-server
     pkgs.mkcert
     pkgs.navi
+    # nil the the language server for Nix.
+    # See https://github.com/oxalica/nil
+    pkgs.nil
     pkgs.nixfmt-rfc-style
     pkgs.nix-direnv
     # nssTools includes a program called certutil,
