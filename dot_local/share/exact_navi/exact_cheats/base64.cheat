@@ -1,0 +1,13 @@
+% base64
+
+# base64 encode
+base64
+
+# base64 decode
+base64 -D
+
+# base64url encode
+base64 | tr '+/' '-_' | tr -d '='
+
+# base64url decode
+gbasenc --base64url --decode --ignore-garbage
