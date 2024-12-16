@@ -19,6 +19,7 @@ return {
       css = prettier,
       dart = { "dart_format" },
       fish = { "fish_indent" },
+      nix = { "nixfmt" },
     },
   },
 }

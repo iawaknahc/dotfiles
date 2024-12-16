@@ -127,6 +127,7 @@
     pkgs.lua-language-server
     pkgs.mkcert
     pkgs.navi
+    pkgs.nixfmt-rfc-style
     pkgs.nix-direnv
     # nssTools includes a program called certutil,
     # which is required by mkcert to install CA for Firefox.
