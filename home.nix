@@ -246,4 +246,11 @@
     enable = true;
     source = ./.infokey;
   };
+
+  # .local/bin
+  home.file.".local/bin" = {
+    enable = true;
+    recursive = true;
+    source = ./.local/bin;
+  };
 }
