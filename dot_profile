@@ -45,6 +45,24 @@ set_path() {
   # 2. With tmux 3.5a, the default-command is left unset.
   # Then when open a new tmux window, the shell is only sourced once.
 
+  # nix
+  if [ -r "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+    . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+
+    # nix and bash
+    if [ -n "$BASH_VERSION" ]; then
+      # Enable bash completion
+      if [ -r "$HOME/.nix-profile/share/bash-completion/bash_completion" ]; then
+        . "$HOME/.nix-profile/share/bash-completion/bash_completion"
+      fi
+    fi
+  fi
+
+  # home-manager
+  if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+  fi
+
   # Add ~/.local/bin to PATH
   export PATH="$HOME/.local/bin:$PATH"
 
@@ -120,19 +138,6 @@ set_path() {
   # kitty
   if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
     export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
-  fi
-
-  # nix
-  if [ -r "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
-    . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-
-    # nix and bash
-    if [ -n "$BASH_VERSION" ]; then
-      # Enable bash completion
-      if [ -r "$HOME/.nix-profile/share/bash-completion/bash_completion" ]; then
-        . "$HOME/.nix-profile/share/bash-completion/bash_completion"
-      fi
-    fi
   fi
 
   # opam

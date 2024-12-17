@@ -90,6 +90,7 @@
 
     # The following packages are not present in stock macOS.
     pkgs._1password-cli
+    pkgs.babelfish
     pkgs.bash-completion
     pkgs.bfs
     pkgs.blackbox

@@ -68,6 +68,26 @@ function set_path
     # 2. With tmux 3.5a, the default-command is left unset.
     # Then when open a new tmux window, the shell is only sourced once.
 
+    # nix
+    # For some unknown reason, this file is not executable.
+    if test -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+        source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+        # The above script use "fish_add_path --global", which writes to
+        # $fish_user_paths.
+        # I do not use $fish_user_paths so I have to repeat what the script does here.
+        # But this time, with "fish_add_path -P".
+        set -e fish_user_paths
+        fish_add_path -P /nix/var/nix/profiles/default/bin
+        fish_add_path -P "$HOME/.nix-profile/bin"
+    end
+
+    # home-manager
+    if test -x "$(command -v babelfish)"
+        if test -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+            babelfish <"$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" | source
+        end
+    end
+
     # Add ~/.local/bin to PATH
     fish_add_path -P "$HOME/.local/bin"
 
@@ -130,19 +150,6 @@ function set_path
     # kitty
     if test -d "/Applications/kitty.app/Contents/MacOS"
         fish_add_path -P "/Applications/kitty.app/Contents/MacOS"
-    end
-
-    # nix
-    # For some unknown reason, this file is not executable.
-    if test -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
-        source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
-        # The above script use "fish_add_path --global", which writes to
-        # $fish_user_paths.
-        # I do not use $fish_user_paths so I have to repeat what the script does here.
-        # But this time, with "fish_add_path -P".
-        set -e fish_user_paths
-        fish_add_path -P /nix/var/nix/profiles/default/bin
-        fish_add_path -P "$HOME/.nix-profile/bin"
     end
 
     # opam
