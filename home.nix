@@ -188,4 +188,62 @@
     pkgs.source-han-sans
     pkgs.source-han-serif
   ];
+
+  # POSIX-ish shells
+  home.file.".profile" = {
+    enable = true;
+    source = ./.profile;
+  };
+  home.file.".bashrc" = {
+    enable = true;
+    source = ./.bashrc;
+  };
+  home.file.".bash_profile" = {
+    enable = true;
+    source = ./.bash_profile;
+  };
+  home.file.".zshrc" = {
+    enable = true;
+    source = ./.zshrc;
+  };
+  home.file.".zprofile" = {
+    enable = true;
+    source = ./.zprofile;
+  };
+  home.file.".zlogin" = {
+    enable = true;
+    source = ./.zlogin;
+  };
+  home.file.".zlogout" = {
+    enable = true;
+    source = ./.zlogout;
+  };
+  home.file.".zshenv" = {
+    enable = true;
+    source = ./.zshenv;
+  };
+
+  # vim
+  home.file.".vimrc" = {
+    enable = true;
+    source = ./.vimrc;
+  };
+
+  # tmux
+  home.file.".tmux.conf" = {
+    enable = true;
+    source = ./.tmux.conf;
+  };
+
+  # stylua
+  home.file.".stylua.toml" = {
+    enable = true;
+    source = ./.stylua.toml;
+  };
+
+  # GNU info
+  home.file.".infokey" = {
+    enable = true;
+    source = ./.infokey;
+  };
 }
