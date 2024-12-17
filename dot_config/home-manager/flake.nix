@@ -43,6 +43,9 @@
           {
             "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
+              extraSpecialArgs = {
+                inherit nixpkgs;
+              };
               modules = [ ./home.nix ];
             };
           }
