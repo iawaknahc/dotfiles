@@ -331,4 +331,11 @@
     recursive = true;
     source = ./.config/pip;
   };
+
+  # .config/ripgrep
+  xdg.configFile."ripgrep" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/ripgrep;
+  };
 }
