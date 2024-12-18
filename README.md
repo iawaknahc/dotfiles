@@ -27,21 +27,3 @@ home-manager switch
 git add .
 git commit
 ```
-
-## Fennel
-
-To update `~/.config/nvim/lua/fennel.lua`, do
-
-```
-git clone git@github.com:bakpakin/Fennel.git
-cd Fennel
-git checkout TAG
-make fennel.lua
-cp fennel.lua ~/.config.nvim/lua/fennel.lua
-```
-
-To update `~/.config/nvim/lua/moonwalk.lua`, do
-
-```
-wget https://raw.githubusercontent.com/gpanders/nvim-moonwalk/refs/heads/master/lua/moonwalk.lua -O ~/.config/nvim/lua/moonwalk.lua
-```
