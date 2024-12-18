@@ -280,4 +280,11 @@
     recursive = true;
     source = ./.config/delta;
   };
+
+  # .config/fd/
+  xdg.configFile."fd" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/fd;
+  };
 }
