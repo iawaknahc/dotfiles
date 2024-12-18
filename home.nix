@@ -287,4 +287,11 @@
     recursive = true;
     source = ./.config/fd;
   };
+
+  # .config/fzf/
+  xdg.configFile."fzf" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/fzf;
+  };
 }
