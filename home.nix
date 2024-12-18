@@ -301,4 +301,11 @@
     recursive = true;
     source = ./.config/git;
   };
+
+  # .config/kitty/
+  xdg.configFile."kitty" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/kitty;
+  };
 }
