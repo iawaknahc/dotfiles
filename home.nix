@@ -274,4 +274,11 @@
     recursive = true;
     source = ./.config/bat;
   };
+
+  # .config/delta/
+  xdg.configFile."delta" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/delta;
+  };
 }
