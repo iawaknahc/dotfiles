@@ -294,4 +294,11 @@
     recursive = true;
     source = ./.config/fzf;
   };
+
+  # .config/git/
+  xdg.configFile."git" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/git;
+  };
 }
