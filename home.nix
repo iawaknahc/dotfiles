@@ -324,4 +324,11 @@
     recursive = true;
     source = ./.config/nix;
   };
+
+  # .config/pip
+  xdg.configFile."pip" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/pip;
+  };
 }
