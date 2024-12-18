@@ -345,4 +345,11 @@
     recursive = true;
     source = ./.config/tlrc;
   };
+
+  # .config/wezterm
+  xdg.configFile."wezterm" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/wezterm;
+  };
 }
