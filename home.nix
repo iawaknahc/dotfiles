@@ -288,6 +288,16 @@
     source = ./.config/fd;
   };
 
+  # .config/fish/
+  # When we were still using chezmoi, we use exact_conf.d/.gitkeep
+  # to make sure extra files in ~/.config/fish/conf.d/ are removed.
+  # That behavior can be replicated with home.activation.
+  xdg.configFile."fish" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/fish;
+  };
+
   # .config/fzf/
   xdg.configFile."fzf" = {
     enable = true;
