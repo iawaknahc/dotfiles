@@ -113,7 +113,6 @@ in
     pkgs.bash-completion
     pkgs.bfs
     pkgs.blackbox
-    pkgs.chezmoi
     pkgs.delve
     pkgs.direnv
     pkgs.exiftool

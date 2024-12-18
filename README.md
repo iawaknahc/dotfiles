@@ -1,24 +1,27 @@
 ## Setting up a new machine
 
 ```sh
-git clone git@github.com:iawaknahc/dotfiles.git ~/.local/share/chezmoi
-chezmoi apply --verbose
+git clone git@github.com:iawaknahc/dotfiles.git ~/.config/home-manager
+sudo vim /etc/nix/nix.conf
+# Add the following line to /etc/nix/nix.conf
+#
+# extra-experimental-features = nix-command flakes
+#
+# We need that because passing it to nix does not propagate to home-manager.
+nix run home-manager/master -- switch
 ```
 
 ## Making changes
 
 ```
-# Make your change in the destination directory, that is, in $HOME.
-# One big reason is that the filetype detection and syntax highlighting will just work.
-# If you make change in the source directory, due to the naming convention of chezmoi,
-# filetype detection will not work most of the time.
+cd ~/.config/home-manager
 
-# After you have finished making changes, run this.
-chezmoi re-add
+# Make your changes.
+# You cannot make changes directly to the managed files because
+# they are symlinks to files in the nix store.
 
-# And then go to the source directory, and review the changes.
-cd ~/.local/share/chezmoi
-git status
+# Apply the changes.
+home-manager switch
 
 # Finally, use ordinary git commands to record the changes.
 git add .
