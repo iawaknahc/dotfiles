@@ -253,4 +253,11 @@
     recursive = true;
     source = ./.local/bin;
   };
+
+  # .local/share/navi/cheats/
+  home.file.".local/share/navi/cheats" = {
+    enable = true;
+    recursive = true;
+    source = ./.local/share/navi/cheats;
+  };
 }
