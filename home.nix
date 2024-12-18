@@ -338,4 +338,11 @@
     recursive = true;
     source = ./.config/ripgrep;
   };
+
+  # .config/tlrc
+  xdg.configFile."tlrc" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/tlrc;
+  };
 }
