@@ -1,4 +1,0 @@
-## The typical workflow is
-## 1. Move cursor to the bad word, press zg to add the word to this file.
-## 2. chezmoi add ~/.config/nvim/spell/en.utf-8.add
-## 3. Commit
