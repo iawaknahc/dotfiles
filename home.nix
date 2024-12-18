@@ -319,6 +319,15 @@
     source = ./.config/kitty;
   };
 
+  # .config/navi
+  # navi is known to write log files to XDG_CONFIG_HOME
+  # See https://github.com/denisidoro/navi/blob/master/docs/navi_config.md#logging
+  xdg.configFile."navi" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/navi;
+  };
+
   # .config/nix/
   # home-manager actually cannot bootstrap itself in a flake-based setup.
   # When ~/.config/nix/nix.conf is absent, extra-experimental-features = nix-command flakes is absent.
