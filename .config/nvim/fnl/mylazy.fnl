@@ -18,7 +18,9 @@
 (local specs (accumulate [specs [] _ lang (ipairs [:lua :fnl])]
                (let [find-path (vim.fs.joinpath (vim.fn.stdpath :config) lang
                                                 PLUGINS)
-                     find-opts {:path find-path :type :file :limit math.huge}
+                     ;; We use home-manager to manage files.
+                     ;; So the files are either symlinks or regular files.
+                     find-opts {:path find-path :limit math.huge}
                      find-input (fn [name]
                                   (if (= (get-extension name lang)
                                          (.. "." lang))

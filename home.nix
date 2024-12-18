@@ -344,6 +344,13 @@
     source = ./.config/nix;
   };
 
+  # .config/nvim
+  xdg.configFile."nvim" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/nvim;
+  };
+
   # .config/pip
   xdg.configFile."pip" = {
     enable = true;

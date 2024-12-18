@@ -43,6 +43,8 @@ augroup END]],
 end
 
 local function compile(path)
+    -- MODIFICATION: Resolve possible symlink
+    path = vim.loop.fs_realpath(path)
     local ext = path:match("[^/.]%.(.-)$")
     local func = loaders[ext].func
     local luapath = cachedir .. "/moonwalk" .. path:gsub("%." .. ext .. "$", ".lua")
