@@ -260,4 +260,11 @@
     recursive = true;
     source = ./.local/share/navi/cheats;
   };
+
+  # .config/alacritty/
+  xdg.configFile."alacritty" = {
+    enable = true;
+    recursive = true;
+    source = ./.config/alacritty;
+  };
 }
