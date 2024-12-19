@@ -383,19 +383,13 @@ lib.mkMerge [
 
   # ripgrep
   {
-    home.packages = [
-      (wrapProgramForPackage pkgs.ripgrep ''
-        wrapProgram $out/bin/rg \
-          --set-default \
-            RIPGREP_CONFIG_PATH \
-            ${lib.escapeShellArg "${config.home.homeDirectory}/.config/ripgrep/ripgreprc"}
-      '')
+    programs.ripgrep.enable = true;
+    programs.ripgrep.arguments = [
+      # Search hidden files by default.
+      "--hidden"
+      # Ignore .git
+      "--glob=!.git/"
     ];
-    xdg.configFile."ripgrep" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/ripgrep;
-    };
   }
 
   # nvim
