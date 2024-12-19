@@ -11,14 +11,6 @@ before_set_path() {
   # Configure prompt
   export PS1="[$SHLVL] \$ "
   export PS2='> '
-
-  # terminfo
-  # iTerm does not set TERMINFO automatically, so we help it here.
-  if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
-    if [ -d "/Applications/iTerm.app/Contents/Resources/terminfo" ]; then
-      export TERMINFO="/Applications/iTerm.app/Contents/Resources/terminfo"
-    fi
-  fi
 }
 
 set_path() {

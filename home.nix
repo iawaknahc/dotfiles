@@ -493,4 +493,18 @@ lib.mkMerge [
       (pkgs.writeScriptBin basename text)
     ) (pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing ./.local/bin));
   }
+
+  # iTerm
+  # iTerm does not set TERMINFO automatically, so we help it here.
+  # Note that this is written in sh.
+  # Fish shell sources hm-session-vars.sh with babelfish.
+  {
+    home.sessionVariablesExtra = ''
+      if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
+        if [ -d "/Applications/iTerm.app/Contents/Resources/terminfo" ]; then
+          export TERMINFO="/Applications/iTerm.app/Contents/Resources/terminfo"
+        fi
+      fi
+    '';
+  }
 ]

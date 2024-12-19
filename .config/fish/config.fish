@@ -18,14 +18,6 @@ function before_set_path
 
     # Unconditional abbreviations
     abbr -a k kubectl
-
-    # terminfo
-    # iTerm does not set TERMINFO automatically, so we help it here.
-    if [ "$TERM_PROGRAM" = "iTerm.app" ]
-        if test -d "/Applications/iTerm.app/Contents/Resources/terminfo"
-            set -gx TERMINFO "/Applications/iTerm.app/Contents/Resources/terminfo"
-        end
-    end
 end
 
 function set_path
