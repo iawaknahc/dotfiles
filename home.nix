@@ -363,22 +363,14 @@ lib.mkMerge [
 
   # fzf
   {
-    home.packages = [
-      (wrapProgramForPackage pkgs.fzf ''
-        wrapProgram $out/bin/fzf \
-          --set-default \
-            FZF_DEFAULT_COMMAND \
-            true \
-          --set-default \
-            FZF_DEFAULT_OPTS_FILE \
-            ${lib.escapeShellArg "${config.home.homeDirectory}/.config/fzf/config"}
-      '')
+    programs.fzf.enable = true;
+    programs.fzf.defaultCommand = "true";
+    programs.fzf.defaultOptions = [
+      "--with-shell='sh -c'"
+      "--height=40%"
+      "--layout=reverse"
+      "--border"
     ];
-    xdg.configFile."fzf" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/fzf;
-    };
   }
 
   # ripgrep
