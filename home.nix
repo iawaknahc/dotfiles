@@ -5,6 +5,15 @@
   config,
   ...
 }:
+let
+  wrapProgramForPackage = (
+    package: postInstall:
+    package.overrideAttrs (prev: {
+      nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+      postInstall = (prev.postInstall or "") + postInstall;
+    })
+  );
+in
 # Since we have to generate xdg.configFile dynamically for Fennel compilation in Nvim,
 # we need to use mkMerge to work around { xdg.configFile = { ... } } and { xdg.configFile."a" = { ... } }
 # cannot appear in the same attrset lexically.
@@ -354,20 +363,15 @@ lib.mkMerge [
   # fzf
   {
     home.packages = [
-      (pkgs.fzf.overrideAttrs (prev: {
-        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-        postInstall =
-          (prev.postInstall or "")
-          + ''
-            wrapProgram $out/bin/fzf \
-              --set-default \
-                FZF_DEFAULT_COMMAND \
-                true \
-              --set-default \
-                FZF_DEFAULT_OPTS_FILE \
-                ${lib.escapeShellArg "${config.home.homeDirectory}/.config/fzf/config"}
-          '';
-      }))
+      (wrapProgramForPackage pkgs.fzf ''
+        wrapProgram $out/bin/fzf \
+          --set-default \
+            FZF_DEFAULT_COMMAND \
+            true \
+          --set-default \
+            FZF_DEFAULT_OPTS_FILE \
+            ${lib.escapeShellArg "${config.home.homeDirectory}/.config/fzf/config"}
+      '')
     ];
     xdg.configFile."fzf" = {
       enable = true;
@@ -379,17 +383,12 @@ lib.mkMerge [
   # ripgrep
   {
     home.packages = [
-      (pkgs.ripgrep.overrideAttrs (prev: {
-        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-        postInstall =
-          (prev.postInstall or "")
-          + ''
-            wrapProgram $out/bin/rg \
-              --set-default \
-                RIPGREP_CONFIG_PATH \
-                ${lib.escapeShellArg "${config.home.homeDirectory}/.config/ripgrep/ripgreprc"}
-          '';
-      }))
+      (wrapProgramForPackage pkgs.ripgrep ''
+        wrapProgram $out/bin/rg \
+          --set-default \
+            RIPGREP_CONFIG_PATH \
+            ${lib.escapeShellArg "${config.home.homeDirectory}/.config/ripgrep/ripgreprc"}
+      '')
     ];
     xdg.configFile."ripgrep" = {
       enable = true;
@@ -496,15 +495,10 @@ lib.mkMerge [
   # https://github.com/tldr-pages/tlrc/issues/89
   {
     home.packages = [
-      (pkgs.tlrc.overrideAttrs (prev: {
-        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-        postInstall =
-          (prev.postInstall or "")
-          + ''
-            wrapProgram $out/bin/tldr \
-              --add-flags "--config ~/.config/tlrc/config.toml"
-          '';
-      }))
+      (wrapProgramForPackage pkgs.tlrc ''
+        wrapProgram $out/bin/tldr \
+          --add-flags "--config ~/.config/tlrc/config.toml"
+      '')
     ];
     xdg.configFile."tlrc" = {
       enable = true;
