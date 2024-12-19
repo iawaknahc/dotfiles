@@ -19,11 +19,6 @@ function before_set_path
     # Unconditional abbreviations
     abbr -a k kubectl
 
-    # https://www.w3.org/TR/SRI/#integrity-metadata
-    abbr -a sri-sha256 --set-cursor -- 'openssl sha256 -binary % | openssl base64 | xargs printf "sha256-%s\n"'
-    abbr -a sri-sha384 --set-cursor -- 'openssl sha384 -binary % | openssl base64 | xargs printf "sha384-%s\n"'
-    abbr -a sri-sha512 --set-cursor -- 'openssl sha512 -binary % | openssl base64 | xargs printf "sha512-%s\n"'
-
     # terminfo
     # iTerm does not set TERMINFO automatically, so we help it here.
     if [ "$TERM_PROGRAM" = "iTerm.app" ]
