@@ -47,14 +47,6 @@ function set_path
     # The rest of this file MUST BE sorted by the name of the section.
     # The name of the section is the comment.
 
-    # flutter
-    if test -d "$HOME/flutter"
-        set -gx FLUTTER_ROOT "$HOME/flutter"
-        fish_add_path -P "$FLUTTER_ROOT/bin"
-        fish_add_path -P "$FLUTTER_ROOT/bin/cache/dart-sdk/bin"
-        fish_add_path -P "$FLUTTER_ROOT/.pub-cache/bin"
-    end
-
     # google-cloud-sdk
     if test -d "$HOME/google-cloud-sdk"
         # If you have read the source code of "$HOME/google-cloud-sdk/path.fish.inc",
