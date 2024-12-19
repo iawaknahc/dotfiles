@@ -47,14 +47,6 @@ function set_path
     # The rest of this file MUST BE sorted by the name of the section.
     # The name of the section is the comment.
 
-    # google-cloud-sdk
-    if test -d "$HOME/google-cloud-sdk"
-        # If you have read the source code of "$HOME/google-cloud-sdk/path.fish.inc",
-        # you can see that all it does is add google-cloud-sdk/bin to PATH.
-        # So we do that ourselves here.
-        fish_add_path -P "$HOME/google-cloud-sdk/bin"
-    end
-
     # homebrew
     if test -x /opt/homebrew/bin/brew
         /opt/homebrew/bin/brew shellenv | source

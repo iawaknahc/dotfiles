@@ -37,14 +37,6 @@ set_path() {
   # The rest of this file MUST BE sorted by the name of the section.
   # The name of the section is the comment.
 
-  # google-cloud-sdk
-  if [ -d "$HOME/google-cloud-sdk" ]; then
-    # If you have read the source code of "$HOME/google-cloud-sdk/path.bash.inc",
-    # you can see that all it does is add google-cloud-sdk/bin to PATH.
-    # So we do that ourselves here.
-    export PATH="$HOME/google-cloud-sdk/bin:$PATH"
-  fi
-
   # homebrew
   if [ -x "/opt/homebrew/bin/brew" ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
