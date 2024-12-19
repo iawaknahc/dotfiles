@@ -24,12 +24,6 @@ function before_set_path
     abbr -a sri-sha384 --set-cursor -- 'openssl sha384 -binary % | openssl base64 | xargs printf "sha384-%s\n"'
     abbr -a sri-sha512 --set-cursor -- 'openssl sha512 -binary % | openssl base64 | xargs printf "sha512-%s\n"'
 
-    # delta
-    # I have tried it out for a day but I still prefer the good old diff.
-    # if test -x "$(command -v delta)"
-    #   set -gx GIT_PAGER delta
-    # end
-
     # terminfo
     # iTerm does not set TERMINFO automatically, so we help it here.
     if [ "$TERM_PROGRAM" = "iTerm.app" ]
@@ -111,26 +105,6 @@ function set_path
 
         set -gx CGO_CFLAGS "-I$HOMEBREW_PREFIX/include"
         set -gx CGO_LDFLAGS "-L$HOMEBREW_PREFIX/lib"
-    end
-
-    # kitty
-    if test -d "/Applications/kitty.app/Contents/MacOS"
-        fish_add_path -P "/Applications/kitty.app/Contents/MacOS"
-    end
-
-    # opam
-    if test -r "$HOME/.opam/opam-init/init.fish"
-        source "$HOME/.opam/opam-init/init.fish"
-    end
-
-    # rust
-    if test -d "$HOME/.cargo"
-        fish_add_path -P "$HOME/.cargo/bin"
-    end
-
-    # wezterm
-    if test -d "/Applications/WezTerm.app/Contents/MacOS"
-        fish_add_path -P "/Applications/WezTerm.app/Contents/MacOS"
     end
 
     # asdf

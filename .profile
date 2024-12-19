@@ -12,12 +12,6 @@ before_set_path() {
   export PS1="[$SHLVL] \$ "
   export PS2='> '
 
-  # delta
-  # I have tried it out for a day but I still prefer the good old diff.
-  # if [ -x "$(command -v delta)" ]; then
-  #   export GIT_PAGER='delta'
-  # fi
-
   # terminfo
   # iTerm does not set TERMINFO automatically, so we help it here.
   if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
@@ -110,26 +104,6 @@ set_path() {
       export BASH_COMPLETION_COMPAT_DIR="$HOMEBREW_PREFIX/etc/bash_completion.d"
       [ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
     fi
-  fi
-
-  # kitty
-  if [ -d "/Applications/kitty.app/Contents/MacOS" ]; then
-    export PATH="/Applications/kitty.app/Contents/MacOS:$PATH"
-  fi
-
-  # opam
-  if [ -r "$HOME/.opam/opam-init/init.sh" ]; then
-    . >/dev/null 2>&1 "$HOME/.opam/opam-init/init.sh"
-  fi
-
-  # rust
-  if [ -d "$HOME/.cargo" ]; then
-    export PATH="$HOME/.cargo/bin:$PATH"
-  fi
-
-  # wezterm
-  if [ -d "/Applications/WezTerm.app/Contents/MacOS" ]; then
-    export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
   fi
 
   # asdf
