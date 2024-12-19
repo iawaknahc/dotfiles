@@ -10,9 +10,6 @@ function before_set_path
     # Turn on vi mode
     fish_vi_key_bindings
 
-    # Set locale
-    set -gx LANG en_US.UTF-8
-
     # Set theme
     fish_config theme choose MyDracula
 

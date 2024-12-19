@@ -38,6 +38,10 @@ lib.mkMerge [
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.stateVersion
     home.stateVersion = "24.05";
 
+    # Set LANG.
+    # LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
+    home.language.base = "en_US.UTF-8";
+
     # https://nixos.wiki/wiki/Unfree_Software
     nixpkgs.config.allowUnfree = true;
 

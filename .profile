@@ -4,10 +4,6 @@ before_set_path() {
   # Turn on vi mode
   set -o vi
 
-  # Set locale
-  # LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
-  export LANG=en_US.UTF-8
-
   # Configure prompt
   export PS1="[$SHLVL] \$ "
   export PS2='> '
