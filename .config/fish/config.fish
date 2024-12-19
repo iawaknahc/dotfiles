@@ -41,12 +41,6 @@ function before_set_path
     #   set -gx GIT_PAGER delta
     # end
 
-    # fzf
-    set -gx FZF_DEFAULT_COMMAND true
-    if test -r "$HOME/.config/fzf/config"
-        set -gx FZF_DEFAULT_OPTS_FILE "$HOME/.config/fzf/config"
-    end
-
     # ripgrep
     if test -r "$HOME/.config/ripgrep/ripgreprc"
         set -gx RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep/ripgreprc"

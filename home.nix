@@ -109,7 +109,6 @@ lib.mkMerge [
       pkgs.ffmpeg
       pkgs.fish
       pkgs.fnlfmt
-      pkgs.fzf
       pkgs.gnupg
       pkgs.gopls
       # pprof requires this graph visualization software to generate graphs.
@@ -300,13 +299,6 @@ lib.mkMerge [
       source = ./.config/fish;
     };
 
-    # .config/fzf/
-    xdg.configFile."fzf" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/fzf;
-    };
-
     # .config/git/
     xdg.configFile."git" = {
       enable = true;
@@ -372,6 +364,31 @@ lib.mkMerge [
       enable = true;
       recursive = true;
       source = ./.config/wezterm;
+    };
+  }
+
+  # fzf
+  {
+    home.packages = [
+      (pkgs.fzf.overrideAttrs (prev: {
+        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+        postInstall =
+          (prev.postInstall or "")
+          + ''
+            wrapProgram $out/bin/fzf \
+              --set-default \
+                FZF_DEFAULT_COMMAND \
+                true \
+              --set-default \
+                FZF_DEFAULT_OPTS_FILE \
+                ${lib.escapeShellArg "${config.home.homeDirectory}/.config/fzf/config"}
+          '';
+      }))
+    ];
+    xdg.configFile."fzf" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/fzf;
     };
   }
 

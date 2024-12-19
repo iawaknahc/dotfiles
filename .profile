@@ -18,12 +18,6 @@ before_set_path() {
   #   export GIT_PAGER='delta'
   # fi
 
-  # fzf
-  export FZF_DEFAULT_COMMAND='true'
-  if [ -r "$HOME/.config/fzf/config" ]; then
-    export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/config"
-  fi
-
   # ripgrep
   if [ -r "$HOME/.config/ripgrep/ripgreprc" ]; then
     export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
