@@ -66,9 +66,6 @@ function set_path
         end
     end
 
-    # Add ~/.local/bin to PATH
-    fish_add_path -P "$HOME/.local/bin"
-
     # The rest of this file MUST BE sorted by the name of the section.
     # The name of the section is the comment.
 

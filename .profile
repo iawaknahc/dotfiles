@@ -52,9 +52,6 @@ set_path() {
     . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
   fi
 
-  # Add ~/.local/bin to PATH
-  export PATH="$HOME/.local/bin:$PATH"
-
   # The rest of this file MUST BE sorted by the name of the section.
   # The name of the section is the comment.
 
