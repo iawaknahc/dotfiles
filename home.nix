@@ -145,7 +145,6 @@ lib.mkMerge [
       pkgs.taplo
       # Install GNU Texinfo to view documentation of GNU software, such as GNU Time.
       pkgs.texinfoInteractive
-      pkgs.tlrc
       pkgs.tmux
       # Some parsers like ocamllex and swift requires the tree-sitter executable.
       # So we install it for them.
@@ -344,13 +343,6 @@ lib.mkMerge [
       source = ./.config/pip;
     };
 
-    # .config/tlrc
-    xdg.configFile."tlrc" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/tlrc;
-    };
-
     # .config/wezterm
     xdg.configFile."wezterm" = {
       enable = true;
@@ -484,4 +476,27 @@ lib.mkMerge [
         ];
     }
   )
+
+  # tlrc
+  # TLRC_CONFIG was implemented but not released yet.
+  # So we need to wrap it and prepend --config
+  # https://github.com/tldr-pages/tlrc/issues/89
+  {
+    home.packages = [
+      (pkgs.tlrc.overrideAttrs (prev: {
+        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+        postInstall =
+          (prev.postInstall or "")
+          + ''
+            wrapProgram $out/bin/tldr \
+              --add-flags "--config ~/.config/tlrc/config.toml"
+          '';
+      }))
+    ];
+    xdg.configFile."tlrc" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/tlrc;
+    };
+  }
 ]

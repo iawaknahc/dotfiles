@@ -18,9 +18,6 @@ function before_set_path
 
     # Unconditional abbreviations
     abbr -a k kubectl
-    # TLRC_CONFIG was implemented but not released yet.
-    # https://github.com/tldr-pages/tlrc/issues/89
-    abbr -a tldr tldr --config ~/.config/tlrc/config.toml
 
     # -Es causes :print prints to stdout, instead of showing the output with the builtin pager.
     # -u reverts the effect of -Es, because the presence of -Es implies user config is not loaded.
