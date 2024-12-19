@@ -113,7 +113,6 @@ lib.mkMerge [
       pkgs.exiftool
       pkgs.eza
       pkgs.fastmod
-      pkgs.fd
       pkgs.ffmpeg
       pkgs.fish
       pkgs.fnlfmt
@@ -281,13 +280,6 @@ lib.mkMerge [
       source = ./.config/delta;
     };
 
-    # .config/fd/
-    xdg.configFile."fd" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/fd;
-    };
-
     # .config/fish/
     # When we were still using chezmoi, we use exact_conf.d/.gitkeep
     # to make sure extra files in ~/.config/fish/conf.d/ are removed.
@@ -358,6 +350,15 @@ lib.mkMerge [
     programs.direnv.enable = true;
     # Install nix-direnv to ~/.config/direnv/lib/hm-nix-direnv.sh
     programs.direnv.nix-direnv.enable = true;
+  }
+
+  # fd
+  {
+    programs.fd.enable = true;
+    programs.fd.ignores = [
+      # Ignore .git even -H is used.
+      ".git/"
+    ];
   }
 
   # fzf
