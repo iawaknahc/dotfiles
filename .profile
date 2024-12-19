@@ -80,15 +80,6 @@ set_path() {
     export PATH="$HOME/flutter/.pub-cache/bin:$PATH"
   fi
 
-  # golang
-  # I no longer install go system-wide.
-  # If go is installed with asdf, then the binaries installed with `go install` are made
-  # available with `asdf reshim`.
-  # if [ -x "$(command -v go)" ]; then
-  #   GOPATH="$(go env GOPATH)"
-  #   export PATH="$GOPATH/bin:$PATH"
-  # fi
-
   # google-cloud-sdk
   if [ -d "$HOME/google-cloud-sdk" ]; then
     # If you have read the source code of "$HOME/google-cloud-sdk/path.bash.inc",
