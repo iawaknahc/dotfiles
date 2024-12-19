@@ -12,9 +12,6 @@ function before_set_path
 
     # Set theme
     fish_config theme choose MyDracula
-
-    # Unconditional abbreviations
-    abbr -a k kubectl
 end
 
 function set_path
