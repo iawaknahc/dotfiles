@@ -110,7 +110,6 @@ lib.mkMerge [
       pkgs.bfs
       pkgs.blackbox
       pkgs.delve
-      pkgs.direnv
       pkgs.exiftool
       pkgs.eza
       pkgs.fastmod
@@ -351,6 +350,14 @@ lib.mkMerge [
       recursive = true;
       source = ./.config/wezterm;
     };
+  }
+
+  # direnv
+  {
+    # Install the binary direnv.
+    programs.direnv.enable = true;
+    # Install nix-direnv to ~/.config/direnv/lib/hm-nix-direnv.sh
+    programs.direnv.nix-direnv.enable = true;
   }
 
   # fzf
