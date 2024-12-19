@@ -511,4 +511,20 @@ lib.mkMerge [
       fi
     '';
   }
+
+  # Android SDK
+  {
+    home.sessionVariablesExtra = ''
+      if [ -d "$HOME/Library/Android/sdk" ]; then
+        # ANDROID_SDK_ROOT is deprecated
+        # https://developer.android.com/tools/variables
+        export ANDROID_HOME="$HOME/Library/Android/sdk"
+        export PATH="$PATH:$ANDROID_HOME/tools"
+        export PATH="$PATH:$ANDROID_HOME/tools/bin"
+        # A binary sqlite3 lives here. So we want the binary provided by Android appear
+        # at the end in PATH.
+        export PATH="$PATH:$ANDROID_HOME/platform-tools"
+      fi
+    '';
+  }
 ]

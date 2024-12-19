@@ -37,19 +37,6 @@ set_path() {
   # The rest of this file MUST BE sorted by the name of the section.
   # The name of the section is the comment.
 
-  # android
-  # The default location of when Android Studio installs the SDK.
-  if [ -d "$HOME/Library/Android/sdk" ]; then
-    # ANDROID_SDK_ROOT is deprecated
-    # https://developer.android.com/tools/variables
-    export ANDROID_HOME="$ANDROID_SDK_ROOT"
-    export PATH="$PATH:$ANDROID_SDK_ROOT/tools"
-    export PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
-    # A binary sqlite3 lives here. So we want the binary provided by Android appear
-    # at the end in PATH.
-    export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
-  fi
-
   # flutter
   if [ -d "$HOME/flutter" ]; then
     export FLUTTER_ROOT="$HOME/flutter"

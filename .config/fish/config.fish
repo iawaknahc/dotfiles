@@ -47,19 +47,6 @@ function set_path
     # The rest of this file MUST BE sorted by the name of the section.
     # The name of the section is the comment.
 
-    # android
-    # The default location of when Android Studio installs the SDK.
-    if test -d "$HOME/Library/Android/sdk"
-        # ANDROID_SDK_ROOT is deprecated
-        # https://developer.android.com/tools/variables
-        set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
-        fish_add_path -P --append "$ANDROID_HOME/tools"
-        fish_add_path -P --append "$ANDROID_HOME/tools/bin"
-        # A binary sqlite3 lives here. So we want the binary provided by Android appear
-        # at the end in PATH.
-        fish_add_path -P --append "$ANDROID_HOME/platform-tools"
-    end
-
     # flutter
     if test -d "$HOME/flutter"
         set -gx FLUTTER_ROOT "$HOME/flutter"
