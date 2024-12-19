@@ -154,8 +154,6 @@ lib.mkMerge [
       # Taplo is a language server for TOML, and more.
       # See https://taplo.tamasfe.dev/
       pkgs.taplo
-      # Install GNU Texinfo to view documentation of GNU software, such as GNU Time.
-      pkgs.texinfoInteractive
       pkgs.tmux
       # Some parsers like ocamllex and swift requires the tree-sitter executable.
       # So we install it for them.
@@ -554,5 +552,12 @@ lib.mkMerge [
         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
       fi
     '';
+  }
+
+  # GNU Info
+  # The module sets home.extraOutputsToInstall so it is better to use it,
+  # than to installing the package directly.
+  {
+    programs.info.enable = true;
   }
 ]
