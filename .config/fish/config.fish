@@ -19,14 +19,6 @@ function before_set_path
     # Unconditional abbreviations
     abbr -a k kubectl
 
-    # -Es causes :print prints to stdout, instead of showing the output with the builtin pager.
-    # -u reverts the effect of -Es, because the presence of -Es implies user config is not loaded.
-    # :set nonumber turns off line number.
-    # :put =execute('highlight') puts the output of the Ex command into the buffer.
-    # :g/^$/d deletes any empty lines.
-    # :print finally prints to stdout.
-    abbr -a nvim-highlight -- nvim -Es -u ~/.config/nvim/init.lua +"'set nonumber'" "+\"put =execute('highlight')\"" +"'g/^\$/d'" +%print
-
     # https://www.w3.org/TR/SRI/#integrity-metadata
     abbr -a sri-sha256 --set-cursor -- 'openssl sha256 -binary % | openssl base64 | xargs printf "sha256-%s\n"'
     abbr -a sri-sha384 --set-cursor -- 'openssl sha384 -binary % | openssl base64 | xargs printf "sha384-%s\n"'
