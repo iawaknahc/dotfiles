@@ -136,7 +136,6 @@ lib.mkMerge [
       # qrencode generates QR code locally.
       # Ideal for sensitive contents.
       pkgs.qrencode
-      pkgs.ripgrep
       pkgs.shellcheck
       pkgs.shfmt
       pkgs.stylua
@@ -345,13 +344,6 @@ lib.mkMerge [
       source = ./.config/pip;
     };
 
-    # .config/ripgrep
-    xdg.configFile."ripgrep" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/ripgrep;
-    };
-
     # .config/tlrc
     xdg.configFile."tlrc" = {
       enable = true;
@@ -389,6 +381,28 @@ lib.mkMerge [
       enable = true;
       recursive = true;
       source = ./.config/fzf;
+    };
+  }
+
+  # ripgrep
+  {
+    home.packages = [
+      (pkgs.ripgrep.overrideAttrs (prev: {
+        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+        postInstall =
+          (prev.postInstall or "")
+          + ''
+            wrapProgram $out/bin/rg \
+              --set-default \
+                RIPGREP_CONFIG_PATH \
+                ${lib.escapeShellArg "${config.home.homeDirectory}/.config/ripgrep/ripgreprc"}
+          '';
+      }))
+    ];
+    xdg.configFile."ripgrep" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/ripgrep;
     };
   }
 

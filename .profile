@@ -18,11 +18,6 @@ before_set_path() {
   #   export GIT_PAGER='delta'
   # fi
 
-  # ripgrep
-  if [ -r "$HOME/.config/ripgrep/ripgreprc" ]; then
-    export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
-  fi
-
   # terminfo
   # iTerm does not set TERMINFO automatically, so we help it here.
   if [ "$TERM_PROGRAM" = "iTerm.app" ]; then

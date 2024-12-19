@@ -41,11 +41,6 @@ function before_set_path
     #   set -gx GIT_PAGER delta
     # end
 
-    # ripgrep
-    if test -r "$HOME/.config/ripgrep/ripgreprc"
-        set -gx RIPGREP_CONFIG_PATH "$HOME/.config/ripgrep/ripgreprc"
-    end
-
     # terminfo
     # iTerm does not set TERMINFO automatically, so we help it here.
     if [ "$TERM_PROGRAM" = "iTerm.app" ]
