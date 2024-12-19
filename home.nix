@@ -5,22 +5,6 @@
   config,
   ...
 }:
-let
-  # The REPL of Fennel without readline is very limited.
-  # So we install readline for it.
-  # See https://fennel-lang.org/setup#adding-readline-support-to-fennel
-  # Note that the parenthesis around this is very important.
-  # Otherwise, the function is not called and it becomes an item in the list, which is unexpected.
-  fennel = (
-    pkgs.luajitPackages.fennel.overrideAttrs (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [
-        pkgs.readline
-        pkgs.luajitPackages.readline
-      ];
-    })
-  );
-  gpgHomeDir = "${config.home.homeDirectory}/.gnupg";
-in
 # Since we have to generate xdg.configFile dynamically for Fennel compilation in Nvim,
 # we need to use mkMerge to work around { xdg.configFile = { ... } } and { xdg.configFile."a" = { ... } }
 # cannot appear in the same attrset lexically.
@@ -55,20 +39,6 @@ lib.mkMerge [
     # This can always be reproduced when I am editing a Go file with gopls enabled.
     # When I type a package identifier, a dot and then i_CTRL-X_CTRL-O, I will see this bug.
     # See https://github.com/neovim/neovim/issues/30688
-
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.enable
-    programs.neovim.enable = true;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withNodeJs
-    programs.neovim.withNodeJs = false;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withPython3
-    programs.neovim.withPython3 = false;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withRuby
-    programs.neovim.withRuby = false;
-    # Instead of enabling nodejs support in neovim, we just make nodejs available to neovim,
-    # for nvim-treesitter to compile parser from grammar.
-    programs.neovim.extraPackages = [
-      pkgs.nodejs
-    ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.packages
     home.packages = [
@@ -136,7 +106,6 @@ lib.mkMerge [
       pkgs.eza
       pkgs.fastmod
       pkgs.fd
-      fennel
       pkgs.ffmpeg
       pkgs.fish
       pkgs.fnlfmt
@@ -234,17 +203,19 @@ lib.mkMerge [
     home.activation.createGPGHomeDir =
       lib.hm.dag.entryBetween [ "linkGeneration" ] [ "writeBoundary" ]
         ''
-          run mkdir -m700 -p $VERBOSE_ARG ${pkgs.lib.strings.escapeShellArgs [ "${gpgHomeDir}" ]}
+          run mkdir -m700 -p $VERBOSE_ARG ${
+            pkgs.lib.strings.escapeShellArgs [ "${config.programs.gpg.homedir}" ]
+          }
         '';
-    home.file."${gpgHomeDir}/gpg.conf" = {
+    home.file."${config.programs.gpg.homedir}/gpg.conf" = {
       enable = true;
       source = ./.gnupg/gpg.conf;
     };
-    home.file."${gpgHomeDir}/dirmngr.conf" = {
+    home.file."${config.programs.gpg.homedir}/dirmngr.conf" = {
       enable = true;
       source = ./.gnupg/dirmngr.conf;
     };
-    home.file."${gpgHomeDir}/gpg-agent.conf" = {
+    home.file."${config.programs.gpg.homedir}/gpg-agent.conf" = {
       enable = true;
       # pinentry-program accepts only absolute path.
       # See https://dev.gnupg.org/T4588
@@ -375,22 +346,6 @@ lib.mkMerge [
       source = ./.config/nix;
     };
 
-    # .config/nvim
-    xdg.configFile."nvim/init.lua" = {
-      enable = true;
-      source = ./.config/nvim/init.lua;
-    };
-    xdg.configFile."nvim/colors" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/nvim/colors;
-    };
-    xdg.configFile."nvim/lua" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/nvim/lua;
-    };
-
     # .config/pip
     xdg.configFile."pip" = {
       enable = true;
@@ -420,33 +375,82 @@ lib.mkMerge [
     };
   }
 
+  # nvim
   {
-    xdg.configFile =
-      let
-        nvimFennelDir = ./.config/nvim/fnl;
-        nvimFennelFileList = pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing nvimFennelDir);
-      in
-      pkgs.lib.pipe nvimFennelFileList [
-        (builtins.map (
-          path:
-          let
-            relativePathString = pkgs.lib.strings.removePrefix ((builtins.toString nvimFennelDir) + "/") (
-              builtins.toString path
-            );
-            target = (pkgs.lib.strings.removeSuffix ".fnl" relativePathString) + ".lua";
-            compiledSourceCode = builtins.readFile "${pkgs.runCommand "fennel" { } ''
-              ${fennel}/bin/fennel --compile ${path} > $out
-            ''}";
-          in
-          {
-            "nvim/lua/${target}" = {
-              enable = true;
-              text = compiledSourceCode;
-            };
-          }
-
-        ))
-        pkgs.lib.attrsets.mergeAttrsList
-      ];
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.enable
+    programs.neovim.enable = true;
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withNodeJs
+    programs.neovim.withNodeJs = false;
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withPython3
+    programs.neovim.withPython3 = false;
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withRuby
+    programs.neovim.withRuby = false;
+    # Instead of enabling nodejs support in neovim, we just make nodejs available to neovim,
+    # for nvim-treesitter to compile parser from grammar.
+    programs.neovim.extraPackages = [
+      pkgs.nodejs
+    ];
+    xdg.configFile."nvim/init.lua" = {
+      enable = true;
+      source = ./.config/nvim/init.lua;
+    };
+    xdg.configFile."nvim/colors" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/nvim/colors;
+    };
+    xdg.configFile."nvim/lua" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/nvim/lua;
+    };
   }
+
+  (
+    let
+      # The REPL of Fennel without readline is very limited.
+      # So we install readline for it.
+      # See https://fennel-lang.org/setup#adding-readline-support-to-fennel
+      # Note that the parenthesis around this is very important.
+      # Otherwise, the function is not called and it becomes an item in the list, which is unexpected.
+      fennel = (
+        pkgs.luajitPackages.fennel.overrideAttrs (oldAttrs: {
+          buildInputs = oldAttrs.buildInputs ++ [
+            pkgs.readline
+            pkgs.luajitPackages.readline
+          ];
+        })
+      );
+    in
+    {
+      home.packages = [ fennel ];
+      xdg.configFile =
+        let
+          nvimFennelDir = ./.config/nvim/fnl;
+          nvimFennelFileList = pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing nvimFennelDir);
+        in
+        pkgs.lib.pipe nvimFennelFileList [
+          (builtins.map (
+            path:
+            let
+              relativePathString = pkgs.lib.strings.removePrefix ((builtins.toString nvimFennelDir) + "/") (
+                builtins.toString path
+              );
+              target = (pkgs.lib.strings.removeSuffix ".fnl" relativePathString) + ".lua";
+              compiledSourceCode = builtins.readFile "${pkgs.runCommand "fennel" { } ''
+                ${fennel}/bin/fennel --compile ${path} > $out
+              ''}";
+            in
+            {
+              "nvim/lua/${target}" = {
+                enable = true;
+                text = compiledSourceCode;
+              };
+            }
+
+          ))
+          pkgs.lib.attrsets.mergeAttrsList
+        ];
+    }
+  )
 ]
