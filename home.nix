@@ -386,13 +386,14 @@ lib.mkMerge [
 
   # nvim
   {
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.enable
     programs.neovim.enable = true;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withNodeJs
+    home.sessionVariables = lib.mkIf config.programs.neovim.enable {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      MANPAGER = "nvim +Man!";
+    };
     programs.neovim.withNodeJs = false;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withPython3
     programs.neovim.withPython3 = false;
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.neovim.withRuby
     programs.neovim.withRuby = false;
     # Instead of enabling nodejs support in neovim, we just make nodejs available to neovim,
     # for nvim-treesitter to compile parser from grammar.

@@ -121,18 +121,12 @@ set_path() {
 }
 
 after_set_path() {
-  # nvim
-  VIM=vim
   if [ -x "$(command -v nvim)" ]; then
-    VIM=nvim
     alias vi='nvim'
     alias vim='nvim'
     alias view='nvim -R'
     alias vimdiff='nvim -d'
-    export MANPAGER='nvim +Man!'
   fi
-  export VISUAL="$VIM"
-  export EDITOR="$VIM"
 }
 
 before_set_path

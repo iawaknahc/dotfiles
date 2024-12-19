@@ -113,18 +113,12 @@ function set_path
 end
 
 function after_set_path
-    # nvim
-    set VIM vim
     if test -x "$(command -v nvim)"
-        set VIM nvim
         abbr -a vi nvim
         abbr -a vim nvim
         abbr -a view nvim -R
         abbr -a vimdiff nvim -d
-        set -gx MANPAGER 'nvim +Man!'
     end
-    set -gx VISUAL "$VIM"
-    set -gx EDITOR "$VIM"
 end
 
 before_set_path
