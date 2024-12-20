@@ -44,21 +44,6 @@ function set_path
     # The rest of this file MUST BE sorted by the name of the section.
     # The name of the section is the comment.
 
-    # homebrew
-    if test -x /opt/homebrew/bin/brew
-        /opt/homebrew/bin/brew shellenv | source
-    end
-    if test -x "$(command -v brew)"
-        set HOMEBREW_PREFIX "$(brew --prefix)"
-
-        if test -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
-            set -gx PKG_CONFIG_PATH "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
-        end
-
-        set -gx CGO_CFLAGS "-I$HOMEBREW_PREFIX/include"
-        set -gx CGO_LDFLAGS "-L$HOMEBREW_PREFIX/lib"
-    end
-
     # asdf
     # asdf must be the last one because it has to be appear earlier in PATH.
     if test -r "$HOME/.asdf/asdf.fish"

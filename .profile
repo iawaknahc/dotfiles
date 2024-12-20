@@ -37,30 +37,6 @@ set_path() {
   # The rest of this file MUST BE sorted by the name of the section.
   # The name of the section is the comment.
 
-  # homebrew
-  if [ -x "/opt/homebrew/bin/brew" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
-  if [ -x "$(command -v brew)" ]; then
-    if [ -d "$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig" ]; then
-      export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
-    fi
-
-    # Make libraries installed by homebrew visible to Cgo.
-    export CGO_CFLAGS="-I$(brew --prefix)/include"
-    export CGO_LDFLAGS="-L$(brew --prefix)/lib"
-
-    # homebrew and bash
-    if [ -n "$BASH_VERSION" ]; then
-      # Enable bash completion
-      # If bash-completion is >= 2, then we need to define BASH_COMPLETION_COMPAT_DIR
-      # in order to use existing completions.
-      # bash-completion@2 requires bash >= 4, use chsh to change login shell.
-      export BASH_COMPLETION_COMPAT_DIR="$HOMEBREW_PREFIX/etc/bash_completion.d"
-      [ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ] && . "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
-    fi
-  fi
-
   # asdf
   # asdf must be the last one because it has to be appear earlier in PATH.
   if [ -r "$HOME"/.asdf/asdf.sh ]; then
