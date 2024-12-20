@@ -6,10 +6,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
   outputs =
-    { nixpkgs, home-manager, ... }:
+    {
+      nixpkgs,
+      home-manager,
+      mac-app-util,
+      ...
+    }:
     let
       systems = [
         "x86_64-linux"
@@ -46,7 +52,10 @@
               extraSpecialArgs = {
                 inherit nixpkgs;
               };
-              modules = [ ./home.nix ];
+              modules = [
+                mac-app-util.homeManagerModules.default
+                ./home.nix
+              ];
             };
           }
         ))
