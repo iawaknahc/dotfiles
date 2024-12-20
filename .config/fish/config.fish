@@ -40,18 +40,6 @@ function set_path
             babelfish <"$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" | source
         end
     end
-
-    # The rest of this file MUST BE sorted by the name of the section.
-    # The name of the section is the comment.
-
-    # asdf
-    # asdf must be the last one because it has to be appear earlier in PATH.
-    if test -r "$HOME/.asdf/asdf.fish"
-        source "$HOME/.asdf/asdf.fish"
-    end
-    if test -r "$HOME/.asdf/completions/asdf.fish"
-        source "$HOME/.asdf/completions/asdf.fish"
-    end
 end
 
 function after_set_path

@@ -33,22 +33,6 @@ set_path() {
   if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
     . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
   fi
-
-  # The rest of this file MUST BE sorted by the name of the section.
-  # The name of the section is the comment.
-
-  # asdf
-  # asdf must be the last one because it has to be appear earlier in PATH.
-  if [ -r "$HOME"/.asdf/asdf.sh ]; then
-    . "$HOME"/.asdf/asdf.sh
-
-    # asdf and bash
-    if [ -n "$BASH_VERSION" ]; then
-      if [ -r "$HOME"/.asdf/completions/asdf.bash ]; then
-        . "$HOME"/.asdf/completions/asdf.bash
-      fi
-    fi
-  fi
 }
 
 after_set_path() {
