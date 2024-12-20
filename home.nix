@@ -107,7 +107,6 @@ lib.mkMerge [
 
       # The following packages are not present in stock macOS.
       pkgs._1password-cli
-      pkgs.babelfish
       pkgs.bfs
       pkgs.blackbox
       pkgs.delve
@@ -115,7 +114,6 @@ lib.mkMerge [
       pkgs.eza
       pkgs.fastmod
       pkgs.ffmpeg
-      pkgs.fish
       pkgs.fnlfmt
       pkgs.gnupg
       pkgs.gopls
@@ -245,16 +243,6 @@ lib.mkMerge [
       source = ./.config/delta;
     };
 
-    # .config/fish/
-    # When we were still using chezmoi, we use exact_conf.d/.gitkeep
-    # to make sure extra files in ~/.config/fish/conf.d/ are removed.
-    # That behavior can be replicated with home.activation.
-    xdg.configFile."fish" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/fish;
-    };
-
     # .config/git/
     xdg.configFile."git" = {
       enable = true;
@@ -380,6 +368,49 @@ lib.mkMerge [
     '';
   }
 
+  # fish
+  # When we were still using chezmoi, we use exact_conf.d/.gitkeep
+  # to make sure extra files in ~/.config/fish/conf.d/ are removed.
+  # That behavior can be replicated with home.activation.
+  {
+    programs.fish.enable = true;
+    home.packages = [ pkgs.babelfish ];
+    programs.fish.shellInit = ''
+      if status is-login
+          echo "login shell: true"
+      else
+          echo "login shell: false"
+      end
+      echo "sourcing $(status filename)"
+
+      source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+      # The above script use "fish_add_path --global", which writes to
+      # $fish_user_paths.
+      # I do not use $fish_user_paths so I have to repeat what the script does here.
+      # But this time, with "fish_add_path -P".
+      set --erase fish_user_paths
+      fish_add_path -P /nix/var/nix/profiles/default/bin
+      fish_add_path -P "$HOME/.nix-profile/bin"
+    '';
+    programs.fish.interactiveShellInit = ''
+      # Turn on vi mode
+      fish_vi_key_bindings
+
+      # Set theme
+      fish_config theme choose MyDracula
+    '';
+    xdg.configFile."fish/themes" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/fish/themes;
+    };
+    xdg.configFile."fish/functions" = {
+      enable = true;
+      recursive = true;
+      source = ./.config/fish/functions;
+    };
+  }
+
   # direnv
   {
     # Install the binary direnv.
@@ -409,6 +440,7 @@ lib.mkMerge [
     ];
     programs.fzf.enableBashIntegration = false;
     programs.fzf.enableZshIntegration = false;
+    programs.fzf.enableFishIntegration = false;
   }
 
   # ripgrep
