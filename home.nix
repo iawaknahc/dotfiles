@@ -612,14 +612,15 @@ lib.mkMerge [
 
   # Google Cloud SDK
   {
-    home.sessionVariablesExtra = ''
-      if [ -d "$HOME/google-cloud-sdk" ]; then
-        # If you have read the source code of "$HOME/google-cloud-sdk/path.bash.inc",
-        # you can see that all it does is add google-cloud-sdk/bin to PATH.
-        # So we do that ourselves here.
-        export PATH="$HOME/google-cloud-sdk/bin:$PATH"
-      fi
-    '';
+    home.packages = [
+      (pkgs.google-cloud-sdk.withExtraComponents (
+        with pkgs.google-cloud-sdk.components;
+        [
+          gke-gcloud-auth-plugin
+          gsutil
+        ]
+      ))
+    ];
   }
 
   # GNU Info
