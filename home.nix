@@ -56,7 +56,6 @@ lib.mkMerge [
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.packages
     home.packages = [
       # The following packages replace programs that ship with macOS.
-      pkgs.bashInteractive
       pkgs.bzip2
       pkgs.dig
       pkgs.coreutils-prefixed
@@ -110,7 +109,6 @@ lib.mkMerge [
       # The following packages are not present in stock macOS.
       pkgs._1password-cli
       pkgs.babelfish
-      pkgs.bash-completion
       pkgs.bfs
       pkgs.blackbox
       pkgs.delve
@@ -172,18 +170,6 @@ lib.mkMerge [
     ];
 
     # POSIX-ish shells
-    home.file.".profile" = {
-      enable = true;
-      source = ./.profile;
-    };
-    home.file.".bashrc" = {
-      enable = true;
-      source = ./.bashrc;
-    };
-    home.file.".bash_profile" = {
-      enable = true;
-      source = ./.bash_profile;
-    };
     home.file.".zshrc" = {
       enable = true;
       source = ./.zshrc;
@@ -346,6 +332,44 @@ lib.mkMerge [
     };
   }
 
+  # shell aliases for bash, zsh, and fish
+  {
+    home.shellAliases = {
+      vi = "nvim";
+      vim = "nvim";
+      view = "nvim -R";
+      vimdiff = "nvim -d";
+    };
+  }
+
+  # bash
+  # bash -il reads the FIRST file in this order: .bash_profile .bash_login .profile
+  # bash -i reads .bashrc
+  {
+    programs.bash.enable = true;
+    home.packages = [ pkgs.bash-completion ];
+    programs.bash.bashrcExtra = ''
+      if shopt -q login_shell; then
+        echo "login shell: true"
+      else
+        echo "login shell: false"
+      fi
+      echo "sourcing $BASH_SOURCE"
+
+      . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+
+      # Turn on vi mode
+      set -o vi
+
+      # Configure prompt
+      export PS1="[$SHLVL] \$ "
+      export PS2='> '
+    '';
+    programs.bash.profileExtra = ''
+      echo "sourcing .profile"
+    '';
+  }
+
   # direnv
   {
     # Install the binary direnv.
@@ -373,6 +397,7 @@ lib.mkMerge [
       "--layout=reverse"
       "--border"
     ];
+    programs.fzf.enableBashIntegration = false;
   }
 
   # ripgrep
