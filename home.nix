@@ -412,6 +412,23 @@ lib.mkMerge [
     };
   }
 
+  # nushell
+  # TODO
+  # 1. nix and home-manager shell configuration.
+  # 2. colorscheme.
+  # 3. check login shell.
+  {
+    programs.nushell.enable = true;
+    programs.nushell.shellAliases = config.home.shellAliases;
+    programs.nushell.envFile.source = ./.config/nushell/env.nu;
+    programs.nushell.configFile.source = ./.config/nushell/config.nu;
+    programs.carapace.enable = true;
+    programs.carapace.enableBashIntegration = false;
+    programs.carapace.enableFishIntegration = false;
+    programs.carapace.enableNushellIntegration = true;
+    programs.carapace.enableZshIntegration = false;
+  }
+
   # direnv
   {
     # Install the binary direnv.

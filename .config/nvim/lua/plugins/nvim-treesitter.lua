@@ -130,6 +130,7 @@ return {
           "ninja",
           "nginx",
           "nix",
+          "nu",
           "objc",
           "objdump",
           "ocaml",
