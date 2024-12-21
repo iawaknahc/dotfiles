@@ -1,7 +1,7 @@
 {
   inputs = {
-    # Track the rolling release.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,15 +12,12 @@
   outputs =
     {
       nixpkgs,
+      flake-utils,
       home-manager,
       mac-app-util,
       ...
     }:
     let
-      systems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
       machines = [
         {
           hostname = "louischan-m4";
@@ -35,7 +32,7 @@
       ];
     in
     {
-      formatter = nixpkgs.lib.attrsets.genAttrs systems (
+      formatter = flake-utils.lib.eachDefaultSystem (
         system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style
       );
       # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
