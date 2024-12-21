@@ -5,6 +5,8 @@
 
   nixpkgs,
   home-manager,
+  username,
+  homeDirectory,
   ...
 }:
 let
@@ -35,10 +37,8 @@ lib.mkMerge [
       "home-manager=${home-manager.outPath}"
     ];
 
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-home.username
-    home.username = "louischan";
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-home.homeDirectory
-    home.homeDirectory = "/Users/louischan";
+    home.username = username;
+    home.homeDirectory = homeDirectory;
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.stateVersion
     home.stateVersion = "24.05";

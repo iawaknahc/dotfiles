@@ -23,11 +23,13 @@
           hostname = "louischan-m4";
           system = "aarch64-darwin";
           username = "louischan";
+          homeDirectory = "/Users/louischan";
         }
         {
           hostname = "louischan-work";
           system = "aarch64-darwin";
           username = "louischan";
+          homeDirectory = "/Users/louischan";
         }
       ];
     in
@@ -40,14 +42,20 @@
         (builtins.map (
           {
             hostname,
-            username,
             system,
+            username,
+            homeDirectory,
           }:
           {
             "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
               extraSpecialArgs = {
-                inherit nixpkgs home-manager;
+                inherit
+                  nixpkgs
+                  home-manager
+                  username
+                  homeDirectory
+                  ;
               };
               modules = [
                 mac-app-util.homeManagerModules.default
