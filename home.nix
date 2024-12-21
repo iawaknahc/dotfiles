@@ -47,6 +47,17 @@ lib.mkMerge [
     # LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
     home.language.base = "en_US.UTF-8";
 
+    # Set XDG_CACHE_HOME, XDG_CONFIG_HOME, XDG_DATA_HOME, XDG_STATE_HOME
+    # This is necessary when a CLI program is written is Rust, and use
+    # https://github.com/dirs-dev/directories-rs
+    # That library does not follow XDG convention when the platform is macOS.
+    # See https://github.com/dirs-dev/directories-rs/issues/47#issuecomment-2278253036
+    # It seems that if the CLI program has switched to
+    # https://github.com/lunacookies/etcetera
+    # and use XDG convention, it would behave in a way most people expect.
+    xdg.enable = true;
+    xdg.cacheHome = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Caches";
+
     # https://nixos.wiki/wiki/Unfree_Software
     nixpkgs.config.allowUnfree = true;
 
