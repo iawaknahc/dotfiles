@@ -1,4 +1,4 @@
-print "sourcing env.nu"
+print $"sourcing ($nu.env-path)"
 
 # nushell < 0.101 does not increment SHLVL.
 # See https://github.com/nushell/nushell/issues/14384

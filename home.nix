@@ -416,7 +416,6 @@ lib.mkMerge [
   # TODO
   # 1. nix and home-manager shell configuration.
   # 2. colorscheme.
-  # 3. check login shell.
   {
     programs.nushell.enable = true;
     programs.nushell.shellAliases = config.home.shellAliases;
