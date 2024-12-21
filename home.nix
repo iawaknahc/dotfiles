@@ -342,6 +342,8 @@ lib.mkMerge [
       # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
       # That will cause nested shell to source the script more than once.
       export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
+      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
+      unset XDG_DATA_DIRS
 
       # Turn on vi mode
       set -o vi
@@ -384,6 +386,8 @@ lib.mkMerge [
       # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
       # That will cause nested shell to source the script more than once.
       export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
+      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
+      unset XDG_DATA_DIRS
 
       # Configure prompt
       export PS1="[$SHLVL] \$ "
@@ -410,6 +414,8 @@ lib.mkMerge [
       # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
       # That will cause nested shell to source the script more than once.
       set --export __ETC_PROFILE_NIX_SOURCED "$__ETC_PROFILE_NIX_SOURCED"
+      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
+      set --erase XDG_DATA_DIRS
 
       # The above script use "fish_add_path --global", which writes to
       # $fish_user_paths.
