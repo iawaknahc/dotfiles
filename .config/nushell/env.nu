@@ -20,3 +20,17 @@ $env.PROMPT_INDICATOR_VI_INSERT = {||
 $env.PROMPT_COMMAND = {||
   $"(ansi yellow_bold)[($env.SHLVL)](ansi reset)"
 }
+
+def --env source_bash [p] {
+  bash -c $"source '($p)' && env" |
+    lines |
+    parse --regex '^(?P<name>[A-Z][a-zA-Z0-9_]*)=(?<value>.*)$' |
+    where { |x| ($x.name not-in $env) or ($env | get $x.name) != $x.value } |
+    where name not-in ['_', 'SHLVL', 'LAST_EXIT_CODE', 'DIRS_POSITION'] |
+    transpose --header-row |
+    into record |
+    load-env
+}
+
+source_bash /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+source_bash $"($env.HOME)/.nix-profile/etc/profile.d/hm-session-vars.sh"
