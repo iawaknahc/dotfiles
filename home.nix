@@ -339,6 +339,9 @@ lib.mkMerge [
       echo "sourcing $BASH_SOURCE"
 
       . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
+      # That will cause nested shell to source the script more than once.
+      export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
 
       # Turn on vi mode
       set -o vi
@@ -378,6 +381,9 @@ lib.mkMerge [
       echo "sourcing ''${(%):-%N}"
 
       . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
+      # That will cause nested shell to source the script more than once.
+      export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
 
       # Configure prompt
       export PS1="[$SHLVL] \$ "
@@ -401,6 +407,10 @@ lib.mkMerge [
       echo "sourcing $(status filename)"
 
       source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
+      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
+      # That will cause nested shell to source the script more than once.
+      set --export __ETC_PROFILE_NIX_SOURCED "$__ETC_PROFILE_NIX_SOURCED"
+
       # The above script use "fish_add_path --global", which writes to
       # $fish_user_paths.
       # I do not use $fish_user_paths so I have to repeat what the script does here.
