@@ -50,7 +50,7 @@
             "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
               extraSpecialArgs = {
-                inherit nixpkgs;
+                inherit nixpkgs home-manager;
               };
               modules = [
                 mac-app-util.homeManagerModules.default

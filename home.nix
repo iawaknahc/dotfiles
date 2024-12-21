@@ -1,8 +1,10 @@
 {
   pkgs,
-  nixpkgs,
   lib,
   config,
+
+  nixpkgs,
+  home-manager,
   ...
 }:
 let
@@ -28,7 +30,10 @@ lib.mkMerge [
     # 2. NIX_PATH="" nix repl -f <nixpkgs>
     # 2 should say nixpkgs is not found.
     # https://nix-community.github.io/home-manager/options.xhtml#opt-nix.nixPath
-    nix.nixPath = [ "nixpkgs=${nixpkgs.outPath}" ];
+    nix.nixPath = [
+      "nixpkgs=${nixpkgs.outPath}"
+      "home-manager=${home-manager.outPath}"
+    ];
 
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.username
     home.username = "louischan";
