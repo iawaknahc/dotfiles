@@ -490,6 +490,9 @@ lib.mkMerge [
         vimcmd_replace_symbol = "[R](bold cyan)";
         vimcmd_visual_symbol = "[V](bold purple)";
       };
+      # It is a known issue that SHLVL does not work in bash
+      # See https://github.com/starship/starship/issues/2407#issuecomment-1433682262
+      # See https://github.com/starship/starship/pull/4912
       shlvl = {
         disabled = false;
         threshold = 0;
