@@ -22,14 +22,27 @@ $env.config.show_banner = false
 $env.config.edit_mode = "vi";
 $env.PROMPT_COMMAND_RIGHT = ""
 $env.PROMPT_INDICATOR_VI_NORMAL = {||
-  $"(ansi red_bold)[N](ansi reset) $ "
+  let mode = $"(ansi red_bold)N(ansi reset)"
+  let exit_code = $env.LAST_EXIT_CODE
+  let prompt = if $exit_code == 0 {
+    $"$"
+  } else {
+    $"(ansi red_bold)($exit_code) $(ansi reset)"
+  }
+  $"($mode) ($prompt) "
 }
 $env.PROMPT_INDICATOR_VI_INSERT = {||
-  $"(ansi green_bold)[I](ansi reset) $ "
+  let mode = $"(ansi green_bold)I(ansi reset)"
+  let exit_code = $env.LAST_EXIT_CODE
+  let prompt = if $exit_code == 0 {
+    $"$"
+  } else {
+    $"(ansi red_bold)($exit_code) $(ansi reset)"
+  }
+  $"($mode) ($prompt) "
 }
-
 $env.PROMPT_COMMAND = {||
-  $"(ansi yellow_bold)[($env.SHLVL)](ansi reset)"
+  $"(ansi white_bold)nu(ansi reset)(ansi yellow_bold)($env.SHLVL)(ansi reset)"
 }
 
 export-env {
