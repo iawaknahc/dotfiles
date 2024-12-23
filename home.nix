@@ -484,7 +484,7 @@ lib.mkMerge [
     programs.starship.settings = {
       add_newline = false;
       follow_symlinks = false;
-      format = "$shell$shlvl$character $status ";
+      format = "$direnv$shell$shlvl$character $status ";
       shell = {
         disabled = false;
         format = "[$indicator]($style)";
@@ -520,6 +520,12 @@ lib.mkMerge [
         not_found_symbol = "[$status \\$](bold red)";
         sigint_symbol = "[$status \\$](bold red)";
         signal_symbol = "[$status \\$](bold red)";
+      };
+      direnv = {
+        disabled = false;
+        format = "[$loaded]($style)";
+        loaded_msg = ".";
+        unloaded_msg = "";
       };
     };
   }
