@@ -484,7 +484,7 @@ lib.mkMerge [
     programs.starship.settings = {
       add_newline = false;
       follow_symlinks = false;
-      format = "$direnv$shell$shlvl$character $status ";
+      format = "$kubernetes$direnv$shell$shlvl$character $status ";
       shell = {
         disabled = false;
         format = "[$indicator]($style)";
@@ -526,6 +526,10 @@ lib.mkMerge [
         format = "[$loaded]($style)";
         loaded_msg = ".";
         unloaded_msg = "";
+      };
+      kubernetes = {
+        disabled = false;
+        format = "[\\($context\\)]($style)";
       };
     };
   }
