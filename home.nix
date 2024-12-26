@@ -749,37 +749,58 @@ lib.mkMerge [
   # kitty
   {
     programs.kitty.enable = true;
-    programs.kitty.extraConfig = ''
+    programs.kitty.shellIntegration.mode = "disabled";
+    programs.kitty.environment = {
+      SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish";
+    };
+    programs.kitty.settings = {
       # shell
-      shell ${config.home.homeDirectory}/.nix-profile/bin/fish --interactive --login
-      env SHELL=${config.home.homeDirectory}/.nix-profile/bin/fish
-
-      # Colorscheme
-      include ./dracula.conf
-
+      shell = "${config.home.homeDirectory}/.nix-profile/bin/fish --interactive --login";
+      # color
+      include = "${./.config/kitty/dracula.conf}";
       # Do not check for update.
-      update_check_interval 0
-
+      update_check_interval = 0;
+      # Remote control
+      listen_on = "unix:/tmp/mykitty";
+      allow_remote_control = "socket-only";
+      # Stop the cursor from blinking
+      cursor_blink_interval = 0;
+      # font
+      font_family = "Source Code Pro Medium";
+      italic_font = "Source Code Pro Medium Italic";
+      bold_font = "Source Code Pro Bold";
+      bold_italic_font = "Source Code Pro Bold Italic";
+      font_size = 16.0;
+      disable_ligatures = "always";
+      undercurl_style = "thick-sparse";
+      # Selection and clipboard
+      strip_trailing_spaces = "smart";
+      # macOS
+      macos_quit_when_last_window_closed = "yes";
+      # When we enable shell integration,
+      # we may want to set this back to -1.
+      # See https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.confirm_os_window_close
+      confirm_os_window_close = 0;
+    };
+    programs.kitty.keybindings = {
+      # Make ctrl+shift+6 the same as ctrl+6
+      # This makes CTRL-^ works in vim again.
+      #
+      # ESC [ \x16 ; 5 ~
+      #   ^     ^  ^ ^ ^
+      #   |     |  | | |- End of CSI
+      #   |     |  | |- The modifier 1+4, which is ctrl.
+      #   |     |  |- The separator
+      #   |     |- The byte of the key "6", which is 0x16.
+      #   |- Start of Control Sequence Introducer (CSI)
+      #
+      # See https://en.wikipedia.org/wiki/ANSI_escape_code#Terminal_input_sequences
+      "ctrl+shift+6" = "send_text \e[\x16;5~";
+    };
+    programs.kitty.extraConfig = ''
       # tmux bind-key R
       #map ctrl+space>shift+r load_config_file
 
-      # Remote control
-      listen_on            unix:/tmp/mykitty
-      allow_remote_control socket-only
-
-      # Stop the cursor from blinking.
-      cursor_blink_interval 0
-
-      # Font
-      font_family       Source Code Pro Medium
-      italic_font       Source Code Pro Medium Italic
-      bold_font         Source Code Pro Bold
-      bold_italic_font  Source Code Pro Bold Italic
-      font_size         18.0
-      disable_ligatures always
-      #modify_font       strikethrough_position  4px
-      #modify_font       strikethrough_thickness 1px
-      undercurl_style   thick-sparse
       # kitty main font must be monospace.
       # We ask kitty to use this font for CJK.
       symbol_map        U+4E00-U+9FFF   Source Han Mono
@@ -831,35 +852,7 @@ lib.mkMerge [
       #map ctrl+space>shift+j move_window down
       #map ctrl+space>shift+h move_window left
       #map ctrl+space>w       launch --type overlay ~/.config/kitty/choose_tab.py
-
-      # Selection and clipboard
-      strip_trailing_spaces smart
-
-      # Make ctrl+shift+6 the same as ctrl+6
-      # This makes CTRL-^ works in vim again.
-      #
-      # ESC [ \x16 ; 5 ~
-      #   ^     ^  ^ ^ ^
-      #   |     |  | | |- End of CSI
-      #   |     |  | |- The modifier 1+4, which is ctrl.
-      #   |     |  |- The separator
-      #   |     |- The byte of the key "6", which is 0x16.
-      #   |- Start of Control Sequence Introducer (CSI)
-      #
-      # See https://en.wikipedia.org/wiki/ANSI_escape_code#Terminal_input_sequences
-      map ctrl+shift+6 send_text \e[\x16;5~
-
-      macos_quit_when_last_window_closed yes
-      # When we enable shell integration,
-      # we may want to set this back to -1.
-      # See https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.confirm_os_window_close
-      confirm_os_window_close 0
     '';
-    xdg.configFile."kitty/dracula.conf" = {
-      enable = true;
-      source = ./.config/kitty/dracula.conf;
-    };
-    programs.kitty.shellIntegration.mode = "disabled";
   }
 
   # alacritty
