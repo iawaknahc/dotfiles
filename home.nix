@@ -262,13 +262,6 @@ lib.mkMerge [
       source = ./.local/share/navi/cheats;
     };
 
-    # .config/alacritty/
-    xdg.configFile."alacritty" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/alacritty;
-    };
-
     # .config/bat/
     xdg.configFile."bat" = {
       enable = true;
@@ -867,5 +860,39 @@ lib.mkMerge [
       source = ./.config/kitty/dracula.conf;
     };
     programs.kitty.shellIntegration.mode = "disabled";
+  }
+
+  # alacritty
+  {
+    programs.alacritty.enable = true;
+    programs.alacritty.settings = {
+      general.import = [ ./.config/alacritty/dracula.toml ];
+      terminal.shell = {
+        program = "${config.home.homeDirectory}/.nix-profile/bin/fish";
+        args = [
+          "--login"
+          "--interactive"
+        ];
+      };
+      env = {
+        SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish";
+      };
+      font = {
+        size = 16;
+        normal = {
+          family = "Source Code Pro";
+          style = "Medium";
+        };
+        italic = {
+          style = "Medium Italic";
+        };
+        bold = {
+          style = "Bold";
+        };
+        bold_italic = {
+          style = "Bold Italic";
+        };
+      };
+    };
   }
 ]
