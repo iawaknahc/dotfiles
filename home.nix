@@ -177,7 +177,15 @@ lib.mkMerge [
       pkgs.shellcheck
       pkgs.shfmt
       pkgs.stylua
-      pkgs.tailwindcss-language-server
+      # It is observed that 0.0.27 tailwindcss-language-server is not an executable.
+      # Let's fix that ourselves.
+      (pkgs.tailwindcss-language-server.overrideAttrs (prev: {
+        postInstall =
+          (prev.postInstall or "")
+          + ''
+            chmod u+x $out/lib/tailwindcss-language-server/packages/tailwindcss-language-server/bin/tailwindcss-language-server
+          '';
+      }))
       # Taplo is a language server for TOML, and more.
       # See https://taplo.tamasfe.dev/
       pkgs.taplo
