@@ -7,6 +7,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
+    wezterm = {
+      url = "github:wez/wezterm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -15,6 +19,7 @@
       flake-utils,
       home-manager,
       mac-app-util,
+      wezterm,
       ...
     }:
     let
@@ -56,6 +61,7 @@
                   username
                   homeDirectory
                   ;
+                wezterm = wezterm.packages.${system}.default;
               };
               modules = [
                 mac-app-util.homeManagerModules.default

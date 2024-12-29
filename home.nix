@@ -7,6 +7,7 @@
   home-manager,
   username,
   homeDirectory,
+  wezterm,
   ...
 }:
 let
@@ -321,13 +322,6 @@ lib.mkMerge [
       enable = true;
       recursive = true;
       source = ./.config/pip;
-    };
-
-    # .config/wezterm
-    xdg.configFile."wezterm" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/wezterm;
     };
   }
 
@@ -895,5 +889,74 @@ lib.mkMerge [
         };
       };
     };
+  }
+
+  # wezterm
+  {
+    programs.wezterm.enable = true;
+    # 20240203-110809-5046fc22 has the following issue.
+    # https://github.com/wez/wezterm/issues/5990
+    programs.wezterm.package = wezterm;
+    programs.wezterm.enableBashIntegration = false;
+    programs.wezterm.enableZshIntegration = false;
+    programs.wezterm.extraConfig = ''
+      local wezterm = require("wezterm")
+      local config = wezterm.config_builder()
+
+      config.window_close_confirmation = "NeverPrompt"
+
+      -- shell
+      config.default_prog = {
+        "${config.home.homeDirectory}/.nix-profile/bin/fish",
+        "--login",
+        "--interactive",
+      }
+      config.set_environment_variables = {
+        SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish",
+      }
+
+      -- tab
+      config.enable_tab_bar = false
+
+      -- font
+      config.font_size = 16.0
+      config.font = wezterm.font_with_fallback({
+        { family = "Source Code Pro", weight = "Medium" },
+        { family = "Source Han Mono", weight = "Medium" },
+      })
+
+      -- color
+      config.force_reverse_video_cursor = true
+      config.colors = {
+        foreground = "#f8f8f2",
+        background = "#282a36",
+
+        selection_fg = "none",
+        selection_bg = "#44475a",
+
+        ansi = {
+          "#44475a",
+          "#ff5555",
+          "#50fa7b",
+          "#f1fa8c",
+          "#8be9fd",
+          "#ff79c6",
+          "#bd93f9",
+          "#f8f8f2",
+        },
+        brights = {
+          "#6272a4",
+          "#ffb86c",
+          "#50fa7b",
+          "#f1fa8c",
+          "#8be9fd",
+          "#ff79c6",
+          "#bd93f9",
+          "#f8f8f2",
+        },
+      }
+
+      return config
+    '';
   }
 ]
