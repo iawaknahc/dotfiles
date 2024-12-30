@@ -355,6 +355,11 @@ lib.mkMerge [
       # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
       unset XDG_DATA_DIRS
 
+      # Ensure SHELL is correctly set.
+      # Note that this must appear after we have set up the PATH,
+      # otherwise, `command -v bash` points to a bash that is not installed by Nix.
+      export SHELL="$(command -v bash)"
+
       # Turn on vi mode
       set -o vi
     '';
@@ -394,6 +399,11 @@ lib.mkMerge [
       export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
       # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
       unset XDG_DATA_DIRS
+
+      # Ensure SHELL is correctly set.
+      # Note that this must appear after we have set up the PATH,
+      # otherwise, `command -v zsh` points to a zsh that is not installed by Nix.
+      export SHELL="$(command -v zsh)"
     '';
   }
 
@@ -426,6 +436,11 @@ lib.mkMerge [
       set --erase fish_user_paths
       fish_add_path -P /nix/var/nix/profiles/default/bin
       fish_add_path -P "$HOME/.nix-profile/bin"
+
+      # Ensure SHELL is correctly set.
+      # Note that this must appear after we have set up the PATH,
+      # otherwise, `command -v fish` is an empty string.
+      set --global --export SHELL "$(command -v fish)"
     '';
     programs.fish.interactiveShellInit = ''
       # Turn on vi mode
@@ -751,9 +766,6 @@ lib.mkMerge [
   {
     programs.kitty.enable = true;
     programs.kitty.shellIntegration.mode = "disabled";
-    programs.kitty.environment = {
-      SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish";
-    };
     programs.kitty.settings = {
       # shell
       shell = "${config.home.homeDirectory}/.nix-profile/bin/fish --interactive --login";
@@ -868,9 +880,6 @@ lib.mkMerge [
           "--interactive"
         ];
       };
-      env = {
-        SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish";
-      };
       font = {
         size = 16;
         normal = {
@@ -911,9 +920,6 @@ lib.mkMerge [
         "${config.home.homeDirectory}/.nix-profile/bin/fish",
         "--login",
         "--interactive",
-      }
-      config.set_environment_variables = {
-        SHELL = "${config.home.homeDirectory}/.nix-profile/bin/fish",
       }
 
       -- tab
