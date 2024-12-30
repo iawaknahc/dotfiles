@@ -7,7 +7,6 @@
   home-manager,
   username,
   homeDirectory,
-  wezterm,
   ...
 }:
 let
@@ -894,14 +893,16 @@ lib.mkMerge [
   # wezterm
   {
     programs.wezterm.enable = true;
-    # 20240203-110809-5046fc22 has the following issue.
-    # https://github.com/wez/wezterm/issues/5990
-    programs.wezterm.package = wezterm;
     programs.wezterm.enableBashIntegration = false;
     programs.wezterm.enableZshIntegration = false;
     programs.wezterm.extraConfig = ''
       local wezterm = require("wezterm")
       local config = wezterm.config_builder()
+
+      -- The default in 20240203-110809-5046fc22 is still "OpenGL".
+      -- Use platform-specific GPU backend.
+      -- See https://github.com/wez/wezterm/issues/5990
+      config.front_end = "WebGpu"
 
       config.window_close_confirmation = "NeverPrompt"
 
