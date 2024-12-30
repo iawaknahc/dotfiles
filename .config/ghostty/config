@@ -1,6 +1,9 @@
-font-family = "Source Code Pro Medium"
-font-family-bold = "Source Code Pro Bold"
-font-family-bold-italic = "Source Code Pro Bold Italic"
+# ghostty embeds JetBrains Mono by default.
+# So it is unnecessary to configure font.
+# But I am not a fan of ligatures.
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
 font-size = 16
 
 command = $HOME/.nix-profile/bin/fish --login --interactive

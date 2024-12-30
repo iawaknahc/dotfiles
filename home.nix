@@ -200,14 +200,8 @@ lib.mkMerge [
 
       # The following are fonts.
 
-      # These fonts, despite their name, are not recognized by macOS as fixed-width.
-      # As such, programs like kitty which only accepts monospace font cannot use them.
-      pkgs.source-han-mono
-      pkgs.source-han-code-jp
-      pkgs.notonoto
-
       # This one is recognized as fixed-width.
-      pkgs.source-code-pro
+      pkgs.jetbrains-mono
 
       # CJK fonts
       pkgs.source-han-sans
@@ -779,10 +773,10 @@ lib.mkMerge [
       # Stop the cursor from blinking
       cursor_blink_interval = 0;
       # font
-      font_family = "Source Code Pro Medium";
-      italic_font = "Source Code Pro Medium Italic";
-      bold_font = "Source Code Pro Bold";
-      bold_italic_font = "Source Code Pro Bold Italic";
+      font_family = "JetBrains Mono NL Medium";
+      italic_font = "JetBrains Mono NL Medium Italic";
+      bold_font = "JetBrains Mono NL Bold";
+      bold_italic_font = "JetBrains Mono NL Bold Italic";
       font_size = 16.0;
       disable_ligatures = "always";
       undercurl_style = "thick-sparse";
@@ -883,11 +877,11 @@ lib.mkMerge [
       font = {
         size = 16;
         normal = {
-          family = "Source Code Pro";
-          style = "Medium";
+          family = "JetBrains Mono NL";
+          style = "Regular";
         };
         italic = {
-          style = "Medium Italic";
+          style = "Regular Italic";
         };
         bold = {
           style = "Bold";
@@ -926,11 +920,14 @@ lib.mkMerge [
       config.enable_tab_bar = false
 
       -- font
-      config.font_size = 16.0
-      config.font = wezterm.font_with_fallback({
-        { family = "Source Code Pro", weight = "Medium" },
-        { family = "Source Han Mono", weight = "Medium" },
+      -- wezterm embeds JetBrains Mono by default.
+      -- So it is unnecessary to configure font.
+      -- But I am not a fan of ligatures.
+      config.font = wezterm.font({
+        family = "JetBrains Mono",
+        harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
       })
+      config.font_size = 16.0
 
       -- color
       config.force_reverse_video_cursor = true
