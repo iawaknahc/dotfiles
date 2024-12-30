@@ -960,4 +960,12 @@ lib.mkMerge [
       return config
     '';
   }
+
+  # ghostty
+  {
+    xdg.configFile."ghostty/config" = {
+      enable = true;
+      source = ./.config/ghostty/config;
+    };
+  }
 ]

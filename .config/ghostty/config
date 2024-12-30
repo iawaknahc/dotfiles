@@ -1,0 +1,33 @@
+font-family = "Source Code Pro Medium"
+font-family-bold = "Source Code Pro Bold"
+font-family-bold-italic = "Source Code Pro Bold Italic"
+font-size = 16
+
+command = $HOME/.nix-profile/bin/fish --login --interactive
+
+# I use fish vi mode.
+# When the mode is normal, the cursor does not become block.
+# As a workaround, let's always use a block.
+cursor-style = block
+shell-integration = none
+cursor-style-blink = false
+
+palette = 0=#44475a
+palette = 1=#ff5555
+palette = 2=#50fa7b
+palette = 3=#f1fa8c
+palette = 4=#8be9fd
+palette = 5=#ff79c6
+palette = 6=#bd93f9
+palette = 7=#f8f8f2
+palette = 8=#6272a4
+palette = 9=#ffb86c
+palette = 10=#50fa7b
+palette = 11=#f1fa8c
+palette = 12=#8be9fd
+palette = 13=#ff79c6
+palette = 14=#bd93f9
+palette = 15=#f8f8f2
+background = 282a36
+foreground = f8f8f2
+cursor-invert-fg-bg = true
