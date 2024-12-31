@@ -690,17 +690,48 @@ lib.mkMerge [
     ) (pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing ./.local/bin));
   }
 
-  # iTerm
-  # iTerm does not set TERMINFO automatically, so we help it here.
+  # TERMINFO and TERMINFO_DIRS
+  #
+  # We have 2 problems to deal with.
+  # 1. Some terminal emulators, like iTerm2, does not set TERMINFO at all. But it does include its terminfo in its application directory.
+  # 2. Some terminal emulators, like kitty and ghostty, set TERMINFO to their application directory containing only their terminfo.
+  #    This is fine as long as we do not use tmux.
+  #
+  # For problem 1, we help those terminal emulators to set TERMINFO. Then problem 1 becomes problem 2.
+  # For problem 2, we unset TERMINFO, and set TERMINFO_DIRS correctly.
+  #
   # Note that this is written in sh.
   # Fish shell sources hm-session-vars.sh with babelfish.
   {
     home.sessionVariablesExtra = ''
+      term="unknown-terminal"
+
+      if [ -n "$TERM_PROGRAM" ]; then
+        term="$TERM_PROGRAM@$TERM_PROGRAM_VERSION"
+      elif [ -n "$TERM" ]; then
+        term="$TERM"
+      fi
+      if [ -n "$TERM" ]; then
+        echo "$term sets \$TERM to $TERM"
+      fi
+
       if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
         if [ -d "/Applications/iTerm.app/Contents/Resources/terminfo" ]; then
           export TERMINFO="/Applications/iTerm.app/Contents/Resources/terminfo"
         fi
       fi
+
+      if [ -n "$TERMINFO" ]; then
+        echo "$term sets \$TERMINFO to $TERMINFO"
+        echo "unset TERMINFO and set TERMINFO_DIRS instead"
+
+        export TERMINFO_DIRS="$TERMINFO:${config.home.homeDirectory}/.nix-profile/share/terminfo:$TERMINFO_DIRS"
+        unset TERMINFO
+      else
+        export TERMINFO_DIRS="${config.home.homeDirectory}/.nix-profile/share/terminfo:$TERMINFO_DIRS"
+      fi
+
+      unset term
     '';
   }
 
@@ -866,6 +897,10 @@ lib.mkMerge [
   {
     programs.alacritty.enable = true;
     programs.alacritty.settings = {
+      env = {
+        # Study .tmux.conf before you change this.
+        TERM = "alacritty";
+      };
       general.import = [ ./.config/alacritty/dracula.toml ];
       terminal.shell = {
         program = "${config.home.homeDirectory}/.nix-profile/bin/fish";
@@ -908,6 +943,9 @@ lib.mkMerge [
       config.front_end = "WebGpu"
 
       config.window_close_confirmation = "NeverPrompt"
+
+      -- $TERM
+      config.term = "wezterm"
 
       -- shell
       config.default_prog = {
