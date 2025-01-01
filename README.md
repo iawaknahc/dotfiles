@@ -27,3 +27,14 @@ home-manager switch
 git add .
 git commit
 ```
+
+## Uninstall home-manager
+
+```
+# Open Terminal.app and make sure the shell is /bin/zsh
+# This is to ensure we are not running something that we are going to uninstall.
+
+source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+# Replace the actual path to nixpkgs.
+NIX_PATH="nixpkgs=/nix/store/q3f93ffmyiwswycpwk9gs39lvm1c6qq2-nixpkgs/nixpkgs" nix run home-manager/master -- uninstall
+```
