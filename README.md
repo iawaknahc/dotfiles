@@ -1,13 +1,14 @@
-## Setting up a new machine
+## Install nix
+
+Download the installer at https://github.com/DeterminateSystems/nix-installer/releases
+and then run it.
+
+Assume the installation IS NOT customized.
+
+## Install home-manager
 
 ```sh
 git clone git@github.com:iawaknahc/dotfiles.git ~/.config/home-manager
-sudo vim /etc/nix/nix.conf
-# Add the following line to /etc/nix/nix.conf
-#
-# extra-experimental-features = nix-command flakes
-#
-# We need that because passing it to nix does not propagate to home-manager.
 nix run home-manager/master -- switch
 ```
 
