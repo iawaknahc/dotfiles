@@ -1,6 +1,10 @@
 # ghostty embeds JetBrains Mono by default.
 # So it is unnecessary to configure font.
 # But I am not a fan of ligatures.
+font-style = Light
+font-style-bold = Bold
+font-style-italic = "Light Italic"
+font-style-bold-italic = "Bold Italic"
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig

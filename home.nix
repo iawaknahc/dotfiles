@@ -804,8 +804,8 @@ lib.mkMerge [
       # Stop the cursor from blinking
       cursor_blink_interval = 0;
       # font
-      font_family = "JetBrains Mono NL Medium";
-      italic_font = "JetBrains Mono NL Medium Italic";
+      font_family = "JetBrains Mono NL Light";
+      italic_font = "JetBrains Mono NL Light Italic";
       bold_font = "JetBrains Mono NL Bold";
       bold_italic_font = "JetBrains Mono NL Bold Italic";
       font_size = 13.0;
@@ -913,10 +913,10 @@ lib.mkMerge [
         size = 13;
         normal = {
           family = "JetBrains Mono NL";
-          style = "Regular";
+          style = "Light";
         };
         italic = {
-          style = "Regular Italic";
+          style = "Light Italic";
         };
         bold = {
           style = "Bold";
@@ -961,10 +961,50 @@ lib.mkMerge [
       -- wezterm embeds JetBrains Mono by default.
       -- So it is unnecessary to configure font.
       -- But I am not a fan of ligatures.
-      config.font = wezterm.font({
+      config.font = wezterm.font_with_fallback({
         family = "JetBrains Mono",
         harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
       })
+      config.font_rules = {
+        {
+          intensity = "Normal",
+          italic = false,
+          font = wezterm.font_with_fallback({
+            family = "JetBrains Mono",
+            weight = "Light",
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+        {
+          intensity = "Normal",
+          italic = true,
+          font = wezterm.font_with_fallback({
+            family = "JetBrains Mono",
+            weight = "Light",
+            italic = true,
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+        {
+          intensity = "Bold",
+          italic = false,
+          font = wezterm.font_with_fallback({
+            family = "JetBrains Mono",
+            weight = "Bold",
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+        {
+          intensity = "Bold",
+          italic = true,
+          font = wezterm.font_with_fallback({
+            family = "JetBrains Mono",
+            weight = "Bold",
+            italic = true,
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+      }
       config.font_size = 13.0
 
       -- color
