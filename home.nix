@@ -429,7 +429,7 @@ lib.mkMerge [
       # But this time, with "fish_add_path -P".
       set --erase fish_user_paths
       fish_add_path -P /nix/var/nix/profiles/default/bin
-      fish_add_path -P "$HOME/.nix-profile/bin"
+      fish_add_path -P "${config.home.profileDirectory}/bin"
 
       # Ensure SHELL is correctly set.
       # Note that this must appear after we have set up the PATH,
@@ -725,10 +725,10 @@ lib.mkMerge [
         echo "$term sets \$TERMINFO to $TERMINFO"
         echo "unset TERMINFO and set TERMINFO_DIRS instead"
 
-        export TERMINFO_DIRS="$TERMINFO:${config.home.homeDirectory}/.nix-profile/share/terminfo:$TERMINFO_DIRS"
+        export TERMINFO_DIRS="$TERMINFO:${config.home.profileDirectory}/share/terminfo:$TERMINFO_DIRS"
         unset TERMINFO
       else
-        export TERMINFO_DIRS="${config.home.homeDirectory}/.nix-profile/share/terminfo:$TERMINFO_DIRS"
+        export TERMINFO_DIRS="${config.home.profileDirectory}/share/terminfo:$TERMINFO_DIRS"
       fi
 
       unset term
@@ -793,7 +793,7 @@ lib.mkMerge [
     programs.kitty.shellIntegration.mode = "disabled";
     programs.kitty.settings = {
       # shell
-      shell = "${config.home.homeDirectory}/.nix-profile/bin/fish --interactive --login";
+      shell = "${config.home.profileDirectory}/bin/fish --interactive --login";
       # color
       include = "${./.config/kitty/dracula.conf}";
       # Do not check for update.
@@ -903,7 +903,7 @@ lib.mkMerge [
       };
       general.import = [ ./.config/alacritty/dracula.toml ];
       terminal.shell = {
-        program = "${config.home.homeDirectory}/.nix-profile/bin/fish";
+        program = "${config.home.profileDirectory}/bin/fish";
         args = [
           "--login"
           "--interactive"
@@ -953,7 +953,7 @@ lib.mkMerge [
 
       -- shell
       config.default_prog = {
-        "${config.home.homeDirectory}/.nix-profile/bin/fish",
+        "${config.home.profileDirectory}/bin/fish",
         "--login",
         "--interactive",
       }
