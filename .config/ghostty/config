@@ -4,7 +4,7 @@
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
-font-size = 16
+font-size = 13
 
 command = $HOME/.nix-profile/bin/fish --login --interactive
 

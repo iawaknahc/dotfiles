@@ -808,7 +808,7 @@ lib.mkMerge [
       italic_font = "JetBrains Mono NL Medium Italic";
       bold_font = "JetBrains Mono NL Bold";
       bold_italic_font = "JetBrains Mono NL Bold Italic";
-      font_size = 16.0;
+      font_size = 13.0;
       disable_ligatures = "always";
       undercurl_style = "thick-sparse";
       # Selection and clipboard
@@ -910,7 +910,7 @@ lib.mkMerge [
         ];
       };
       font = {
-        size = 16;
+        size = 13;
         normal = {
           family = "JetBrains Mono NL";
           style = "Regular";
@@ -965,7 +965,7 @@ lib.mkMerge [
         family = "JetBrains Mono",
         harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
       })
-      config.font_size = 16.0
+      config.font_size = 13.0
 
       -- color
       config.force_reverse_video_cursor = true
