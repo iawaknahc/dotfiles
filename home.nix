@@ -973,7 +973,8 @@ lib.mkMerge [
         {
           intensity = "Normal",
           italic = false,
-          font = wezterm.font_with_fallback({
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
             family = "JetBrains Mono",
             weight = "Light",
             harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
@@ -982,7 +983,8 @@ lib.mkMerge [
         {
           intensity = "Normal",
           italic = true,
-          font = wezterm.font_with_fallback({
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
             family = "JetBrains Mono",
             weight = "Light",
             italic = true,
@@ -992,7 +994,8 @@ lib.mkMerge [
         {
           intensity = "Bold",
           italic = false,
-          font = wezterm.font_with_fallback({
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
             family = "JetBrains Mono",
             weight = "Bold",
             harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
@@ -1001,9 +1004,31 @@ lib.mkMerge [
         {
           intensity = "Bold",
           italic = true,
-          font = wezterm.font_with_fallback({
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
             family = "JetBrains Mono",
             weight = "Bold",
+            italic = true,
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+        {
+          intensity = "Half",
+          italic = false,
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
+            family = "JetBrains Mono",
+            weight = "Thin",
+            harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
+          }),
+        },
+        {
+          intensity = "Half",
+          italic = true,
+          -- wezterm.font_with_fallback DOES NOT work here.
+          font = wezterm.font({
+            family = "JetBrains Mono",
+            weight = "Thin",
             italic = true,
             harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
           }),
