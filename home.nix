@@ -946,6 +946,10 @@ lib.mkMerge [
 
       -- $TERM
       config.term = "wezterm"
+      config.set_environment_variables = {
+        -- If we do not set TERMINFO, when wezterm starts, it complains TERM=wezterm is not found.
+        TERMINFO = "${config.home.profileDirectory}/share/terminfo",
+      }
 
       -- shell
       config.default_prog = {
