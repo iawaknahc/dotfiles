@@ -1,3 +1,8 @@
+-- We have a convention here NOT to use reverse, except for cursor.
+-- In ghostty, if cursor-invert-fg-bg = true, then a double reverse will cancel the effect of the cursor.
+-- Thus the cursor becomes invisible.
+-- So we DO NOT use reverse
+
 -- palette
 local fg = "#f8f8f2"
 
@@ -19,7 +24,6 @@ local purple = "#bd93f9"
 local red = "#ff5555"
 local yellow = "#f1fa8c"
 
-
 -- helper functions
 local function hi(opts)
   local name = opts[1]
@@ -27,13 +31,11 @@ local function hi(opts)
   vim.api.nvim_set_hl(0, name, opts)
 end
 
-
 -- This is how a colorscheme should start
-vim.cmd[[
+vim.cmd [[
 hi! clear
 ]]
-vim.o.background = 'dark'
-
+vim.o.background = "dark"
 
 -- bg
 hi { "DraculaBgLighter", bg = bg_lighter }
@@ -68,7 +70,7 @@ hi { "DraculaCyanUndercurl", fg = cyan, sp = cyan, undercurl = true }
 -- green
 hi { "DraculaGreen", fg = green }
 hi { "DraculaGreenBold", fg = green, bold = true }
-hi { "DraculaGreenBoldInverse", fg = green, bold = true, reverse = true }
+hi { "DraculaGreenBoldInverse", fg = bg, bg = green, bold = true }
 hi { "DraculaGreenItalic", fg = green, italic = true }
 hi { "DraculaGreenUnderline", fg = green, underline = true }
 hi { "DraculaGreenItalicUnderline", fg = green, italic = true, underline = true }
@@ -77,10 +79,10 @@ hi { "DraculaGreenUndercurl", fg = green, sp = green, undercurl = true }
 -- orange
 hi { "DraculaOrange", fg = orange }
 hi { "DraculaOrangeBold", fg = orange, bold = true }
-hi { "DraculaOrangeBoldInverse", fg = orange, bold = true, reverse = true }
+hi { "DraculaOrangeBoldInverse", fg = bg, bg = orange, bold = true }
 hi { "DraculaOrangeItalic", fg = orange, italic = true }
 hi { "DraculaOrangeBoldItalic", fg = orange, bold = true, italic = true }
-hi { "DraculaOrangeInverse", fg = orange, reverse = true }
+hi { "DraculaOrangeInverse", fg = bg, bg = orange }
 hi { "DraculaOrangeUndercurl", fg = orange, sp = orange, undercurl = true }
 
 -- pink
@@ -91,20 +93,19 @@ hi { "DraculaPinkItalic", fg = pink, italic = true }
 hi { "DraculaPurple", fg = purple }
 hi { "DraculaPurpleBold", fg = purple, bold = true }
 hi { "DraculaPurpleItalic", fg = purple, italic = true }
-hi { "DraculaPurpleBoldInverse", fg = purple, bold = true, reverse = true }
+hi { "DraculaPurpleBoldInverse", fg = bg, bg = purple, bold = true }
 
 -- red
 hi { "DraculaRed", fg = red }
-hi { "DraculaRedBoldInverse", fg = red, bold = true, reverse = true }
+hi { "DraculaRedBoldInverse", fg = bg, bg = red, bold = true }
 hi { "DraculaRedItalic", fg = red, italic = true }
-hi { "DraculaRedInverse", fg = red, reverse = true }
+hi { "DraculaRedInverse", fg = bg, bg = red }
 hi { "DraculaRedUndercurl", fg = red, sp = red, undercurl = true }
 
 -- yellow
 hi { "DraculaYellow", fg = yellow }
-hi { "DraculaYellowBoldInverse", fg = yellow, bold = true, reverse = true }
+hi { "DraculaYellowBoldInverse", fg = bg, bg = yellow, bold = true }
 hi { "DraculaYellowItalic", fg = yellow, italic = true }
-
 
 -- semantics
 hi { "DraculaError", link = "DraculaRed" }
@@ -125,9 +126,9 @@ hi { "DraculaInfoLine", link = "DraculaCyanUndercurl" }
 hi { "DraculaHintLine", link = "DraculaCyanUndercurl" }
 hi { "DraculaOkLine", link = "DraculaGreenUndercurl" }
 
-hi { "DraculaTodo", fg = cyan, bold = true, reverse = true }
-hi { "DraculaSearch", fg = green, reverse = true }
-hi { "DraculaCurSearch", fg = yellow, reverse = true }
+hi { "DraculaTodo", fg = bg, bg = cyan, bold = true }
+hi { "DraculaSearch", fg = bg, bg = green }
+hi { "DraculaCurSearch", fg = bg, bg = yellow }
 hi { "DraculaBoundary", fg = comment, bg = bg_dark }
 hi { "DraculaWinSeparator", link = "DraculaBoundary" }
 hi { "DraculaLink", fg = cyan, underline = true }
@@ -139,7 +140,7 @@ hi { "DraculaDiffText", link = "DraculaOrangeInverse" }
 hi { "DraculaInlayHint", fg = comment, bg = bg_dark, italic = true }
 
 -- These originally do not appear in the source repo.
-hi { "DraculaWildMenu", fg = purple, bold = true, reverse = true}
+hi { "DraculaWildMenu", fg = bg, bg = purple, bold = true }
 hi { "DraculaStatusLine", bg = bg_lighter, bold = true }
 hi { "DraculaStatusLineNC", bg = bg_light }
 hi { "DraculaCursor", reverse = true }
@@ -240,7 +241,6 @@ hi { "TabLine", link = "DraculaBoundary" }
 hi { "TabLineFill", link = "DraculaBgDark" }
 hi { "TabLineSel" }
 
-
 -- :help group-name
 hi { "Underlined", link = "DraculaFgUnderline" }
 hi { "Tag", link = "DraculaCyan" }
@@ -286,7 +286,6 @@ hi { "Added", link = "DraculaGreen" }
 hi { "Changed", link = "DraculaDiffChange" }
 hi { "Removed", link = "DraculaDiffDelete" }
 
-
 -- :help diagnostic-highlights
 hi { "DiagnosticError", link = "DraculaError" }
 hi { "DiagnosticWarn", link = "DraculaWarn" }
@@ -321,13 +320,11 @@ hi { "DiagnosticSignOk", link = "DiagnosticOk" }
 hi { "DiagnosticDeprecated", link = "Comment" }
 hi { "DiagnosticUnnecessary", link = "Comment" }
 
-
 -- :help lsp-highlight
 hi { "LspReferenceText", link = "DraculaSelection" }
 hi { "LspReferenceRead", link = "DraculaSelection" }
 hi { "LspReferenceWrite", link = "DraculaSelection" }
 hi { "LspInlayHint", link = "DraculaInlayHint" }
-
 
 -- :help treesitter-highlight-groups
 hi { "@variable", link = "Identifier" }
@@ -445,12 +442,10 @@ hi { "@tag.builtin", link = "DraculaCyan" }
 hi { "@tag.attribute", link = "DraculaGreenItalic" }
 hi { "@tag.delimiter" }
 
-
 -- :help gitgutter-highlights
 hi { "GitGutterAdd", link = "Added" }
 hi { "GitGutterChange", link = "Changed" }
 hi { "GitGutterDelete", link = "Removed" }
-
 
 -- :help cmp-highlight
 hi { "CmpItemAbbr" }
