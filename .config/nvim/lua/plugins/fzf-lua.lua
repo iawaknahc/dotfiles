@@ -35,11 +35,18 @@ return {
         desc = "Pick from jumplist",
       },
       {
-        "<Space>/",
+        "<Space>g",
         function()
           require("fzf-lua").live_grep()
         end,
-        desc = "Open live grep",
+        desc = "Live grep in the current project",
+      },
+      {
+        "<Space>/",
+        function()
+          require("fzf-lua").lgrep_curbuf()
+        end,
+        desc = "Live grep in the current buffer",
       },
 
       -- Helix space mode usually opens pickers.
