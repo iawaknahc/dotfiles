@@ -171,9 +171,6 @@ lib.mkMerge [
       pkgs.pinentry-tty
       pkgs.prettierd
       pkgs.pyright
-      # qrencode generates QR code locally.
-      # Ideal for sensitive contents.
-      pkgs.qrencode
       pkgs.shellcheck
       pkgs.shfmt
       pkgs.stylua
@@ -1062,4 +1059,15 @@ lib.mkMerge [
       source = ./.config/ghostty/config;
     };
   }
+
+  # QR code
+  {
+    home.packages = [
+      # qrencode generates QR code locally.
+      pkgs.qrencode
+      # zbar offers an executable zbarimg to read QR code locally.
+      pkgs.zbar
+    ];
+  }
+
 ]
