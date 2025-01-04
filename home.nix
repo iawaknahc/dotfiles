@@ -675,7 +675,7 @@ lib.mkMerge [
   # We have 2 problems to deal with.
   # 1. Some terminal emulators, like iTerm2, does not set TERMINFO at all. But it does include its terminfo in its application directory.
   # 2. Some terminal emulators, like kitty and ghostty, set TERMINFO to their application directory containing only their terminfo.
-  #    This is fine as long as we do not use tmux.
+  #    This will cause tic(1) writing to TERMINFO. See https://github.com/ghostty-org/ghostty/discussions/4557#discussioncomment-11733059
   #
   # For problem 1, we help those terminal emulators to set TERMINFO. Then problem 1 becomes problem 2.
   # For problem 2, we unset TERMINFO, and set TERMINFO_DIRS correctly.
