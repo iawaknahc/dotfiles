@@ -3,7 +3,7 @@
 Download the installer at https://github.com/DeterminateSystems/nix-installer/releases
 and then run it.
 
-Assume the installation IS NOT customized.
+Assume the installation IS NOT customized. So `nix-command` and `flakes` are assumed to be enabled.
 
 ## Install home-manager
 

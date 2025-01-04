@@ -294,22 +294,6 @@ lib.mkMerge [
       source = ./.config/navi;
     };
 
-    # .config/nix/
-    # home-manager actually cannot bootstrap itself in a flake-based setup.
-    # When ~/.config/nix/nix.conf is absent, extra-experimental-features = nix-command flakes is absent.
-    # The absence makes home-manager fail to run, thus nix.conf is not written.
-    # The documentation says invoking home-manager with --extra-experimental-features = nix-command flakes should do the job.
-    # But somehow the flag is not propagated correctly.
-    #
-    # To work around this, we have to edit /etc/nix/nix.conf to enable nix-command and flakes.
-    # So that ~/.config/nix/nix.conf is written once.
-    # After that we can revert the changes in /etc/nix/nix.conf
-    xdg.configFile."nix" = {
-      enable = true;
-      recursive = true;
-      source = ./.config/nix;
-    };
-
     # .config/pip
     xdg.configFile."pip" = {
       enable = true;
