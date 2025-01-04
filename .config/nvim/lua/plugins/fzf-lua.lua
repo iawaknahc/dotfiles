@@ -48,6 +48,20 @@ return {
         end,
         desc = "Live grep in the current buffer",
       },
+      {
+        "<Space>l",
+        function()
+          require("fzf-lua").blines()
+        end,
+        desc = "Fuzzy search the lines in the current buffer",
+      },
+      {
+        "<Space>L",
+        function()
+          require("fzf-lua").lines()
+        end,
+        desc = "Fuzzy search all lines in open buffers",
+      },
 
       -- Helix space mode usually opens pickers.
       -- Helix also has goto mode i to "go to implementation".
