@@ -110,7 +110,6 @@ lib.mkMerge [
       pkgs.gnutar
       pkgs.gzip
       pkgs.less
-      pkgs.ncurses
       pkgs.openssh
       pkgs.openssl
       pkgs.patch
@@ -1070,4 +1069,20 @@ lib.mkMerge [
     ];
   }
 
+  # ncurses, TERMINFO, TERMINFO_DIRS
+  {
+    home.packages = [
+      pkgs.ncurses
+    ];
+    # Nix install all terminfo (not limited to ncurses, but also any package that come with a terminfo, like alacritty) to ~/.nix-profile/share/terminfo
+    # But this is not a standard location.
+    # ~/.terminfo is a standard location that will be read by ncurses and unibilium, and
+    # it is inside home directory, which can be managed by home-manager.
+    # So we make a symlink ~/.terminfo -> ~/.nix-profile/share/terminfo
+    home.file.".terminfo" = {
+      enable = true;
+      recursive = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.profileDirectory}/share/terminfo";
+    };
+  }
 ]
