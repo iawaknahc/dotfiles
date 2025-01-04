@@ -10,7 +10,7 @@ return {
         function()
           require("fzf-lua").git_files()
         end,
-        desc = "Open project files",
+        desc = "Open file in the current project",
       },
       -- Inspired by Helix space mode b
       {
@@ -18,14 +18,14 @@ return {
         function()
           require("fzf-lua").buffers()
         end,
-        desc = "Open buffers",
+        desc = "Pick from open buffers",
       },
       {
         "<Space>:",
         function()
           require("fzf-lua").commands()
         end,
-        desc = "Open buffers",
+        desc = "Fuzzy search commands",
       },
       {
         "<Space>j",
