@@ -61,6 +61,9 @@ export-env {
     $t | transpose --header-row | into record | load-env
   }
 
-  source_bash /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  source_bash $"($env.HOME)/.nix-profile/etc/profile.d/hm-session-vars.sh"
+  # I do not use nu as my main shell for now.
+  # So we do not need to source the following script.
+  # The environment variables are inherited from the main shell.
+  #source_bash /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  #source_bash $"($env.HOME)/.nix-profile/etc/profile.d/hm-session-vars.sh"
 }

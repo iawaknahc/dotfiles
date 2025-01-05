@@ -301,13 +301,6 @@ lib.mkMerge [
       fi
       echo "sourcing $BASH_SOURCE"
 
-      . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
-      # That will cause nested shell to source the script more than once.
-      export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
-      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
-      unset XDG_DATA_DIRS
-
       # Ensure SHELL is correctly set.
       # Note that this must appear after we have set up the PATH,
       # otherwise, `command -v bash` points to a bash that is not installed by Nix.
@@ -346,13 +339,6 @@ lib.mkMerge [
       # This is from https://stackoverflow.com/a/75564098
       echo "sourcing ''${(%):-%N}"
 
-      . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
-      # That will cause nested shell to source the script more than once.
-      export __ETC_PROFILE_NIX_SOURCED="$__ETC_PROFILE_NIX_SOURCED"
-      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
-      unset XDG_DATA_DIRS
-
       # Ensure SHELL is correctly set.
       # Note that this must appear after we have set up the PATH,
       # otherwise, `command -v zsh` points to a zsh that is not installed by Nix.
@@ -374,21 +360,6 @@ lib.mkMerge [
           echo "login shell: false"
       end
       echo "sourcing $(status filename)"
-
-      source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish"
-      # The above script sets __ETC_PROFILE_NIX_SOURCED but does not export it.
-      # That will cause nested shell to source the script more than once.
-      set --export __ETC_PROFILE_NIX_SOURCED "$__ETC_PROFILE_NIX_SOURCED"
-      # The above script exports XDG_DATA_DIRS, claiming to provide bash completion.
-      set --erase XDG_DATA_DIRS
-
-      # The above script use "fish_add_path --global", which writes to
-      # $fish_user_paths.
-      # I do not use $fish_user_paths so I have to repeat what the script does here.
-      # But this time, with "fish_add_path -P".
-      set --erase fish_user_paths
-      fish_add_path -P /nix/var/nix/profiles/default/bin
-      fish_add_path -P "${config.home.profileDirectory}/bin"
 
       # Ensure SHELL is correctly set.
       # Note that this must appear after we have set up the PATH,
