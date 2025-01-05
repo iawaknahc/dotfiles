@@ -61,23 +61,9 @@ lib.mkMerge [
       # a locally trusted CA, like the one created by mkcert,
       # you need to set SSL_CERT_FILE to point to a full CA bundle.
       # You can use the command macos-ca-certs to generate such a CA bundle.
-      (pkgs.curl.override {
-        brotliSupport = true;
-        gsaslSupport = true;
-        http2Support = true;
-        # http3Support requires a TLS library supporting QUIC,
-        # in which openssl does not support QUIC.
-        http3Support = false;
-        websocketSupport = true;
-        idnSupport = true;
-        ldapSupport = true;
-        opensslSupport = true;
-        pslSupport = true;
-        rtmpSupport = true;
-        scpSupport = true;
-        zlibSupport = true;
-        zstdSupport = true;
-      })
+      # curlFull is the curl we are looking for.
+      # https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/top-level/all-packages.nix#L3030
+      pkgs.curlFull
       pkgs.diffutils
       pkgs.file
       pkgs.findutils
