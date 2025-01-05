@@ -6,6 +6,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     mac-app-util.url = "github:hraban/mac-app-util";
   };
 
@@ -14,6 +18,7 @@
       nixpkgs,
       flake-utils,
       home-manager,
+      nix-darwin,
       mac-app-util,
       ...
     }:
@@ -61,6 +66,24 @@
                 mac-app-util.homeManagerModules.default
                 ./home.nix
               ];
+            };
+          }
+        ))
+        nixpkgs.lib.attrsets.mergeAttrsList
+      ];
+      darwinConfigurations = nixpkgs.lib.pipe machines [
+        (builtins.map (
+          {
+            hostname,
+            system,
+            ...
+          }:
+          {
+            "${hostname}" = nix-darwin.lib.darwinSystem {
+              modules = [ ./darwin.nix ];
+              specialArgs = {
+                nixpkgsHostPlatform = system;
+              };
             };
           }
         ))

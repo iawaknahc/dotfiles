@@ -1,16 +1,29 @@
-## Install nix
+## Install nix with nix-installer
 
-Download the installer at https://github.com/DeterminateSystems/nix-installer/releases
+Download nix-installer at https://github.com/DeterminateSystems/nix-installer/releases
 and then run it.
 
 Assume the installation IS NOT customized. So `nix-command` and `flakes` are assumed to be enabled.
 
-## Install home-manager
+nix-installer does a couple of things, some of those will be taken over by nix-darwin:
+
+- [/etc/synthetic.conf](https://github.com/LnL7/nix-darwin/blob/master/modules/system/base.nix)
+- [/etc/nix/nix.conf](https://github.com/LnL7/nix-darwin/blob/master/modules/nix/default.nix#L54)
+- [/Library/LaunchDaemons/org.nixos.nix-daemon.plist](https://github.com/LnL7/nix-darwin/blob/master/modules/services/nix-daemon.nix#L46)
+- [/etc/bashrc](https://github.com/LnL7/nix-darwin/blob/master/modules/programs/bash/default.nix#L56)
+- [/etc/zshrc](https://github.com/LnL7/nix-darwin/blob/master/modules/programs/zsh/default.nix#L177)
+- [/etc/zshenv](https://github.com/LnL7/nix-darwin/blob/master/modules/programs/zsh/default.nix#L131)
+
+## Install nix-darwin and home-manager
 
 ```sh
 git clone git@github.com:iawaknahc/dotfiles.git ~/dotfiles
+
 ln -s ~/dotfiles ~/.config/home-manager
-nix run home-manager/master -- switch
+sudo ln -s ~/dotfiles /etc/nix-darwin
+
+nix run nix-darwin -- switch
+nix run home-manager -- switch
 ```
 
 ## Making changes
@@ -36,7 +49,11 @@ git commit
 # Open Terminal.app and make sure the shell is /bin/zsh
 # This is to ensure we are not running something that we are going to uninstall.
 
-source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-# Replace the actual path to nixpkgs.
-NIX_PATH="nixpkgs=/nix/store/q3f93ffmyiwswycpwk9gs39lvm1c6qq2-nixpkgs/nixpkgs" nix run home-manager/master -- uninstall
+nix --extra-experimental-features "nix-command flakes" run home-manager -- uninstall
+```
+
+## Uninstall nix-darwin
+
+```
+nix --extra-experimental-features "nix-command flakes" run nix-darwin#darwin-uninstaller
 ```
