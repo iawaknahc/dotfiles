@@ -56,8 +56,6 @@
               pkgs = nixpkgs.legacyPackages.${system};
               extraSpecialArgs = {
                 inherit
-                  nixpkgs
-                  home-manager
                   username
                   homeDirectory
                   ;
@@ -82,7 +80,9 @@
             "${hostname}" = nix-darwin.lib.darwinSystem {
               modules = [ ./darwin.nix ];
               specialArgs = {
+                inherit nixpkgs home-manager nix-darwin;
                 nixpkgsHostPlatform = system;
+                darwin-config = ./darwin.nix;
               };
             };
           }

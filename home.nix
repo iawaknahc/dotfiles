@@ -3,8 +3,6 @@
   lib,
   config,
 
-  nixpkgs,
-  home-manager,
   username,
   homeDirectory,
   ...
@@ -23,20 +21,6 @@ in
 # cannot appear in the same attrset lexically.
 lib.mkMerge [
   {
-    # This causes home-manager to include NIX_PATH in its shell script.
-    # My shell sources that shell script and have NIX_PATH properly set.
-    #
-    # nix repl -f <nixpkgs> now correctly loads this nixpkgs.
-    # To verify this claim, we should
-    # 1. sudo nix-channel --remove nixpkgs
-    # 2. NIX_PATH="" nix repl -f <nixpkgs>
-    # 2 should say nixpkgs is not found.
-    # https://nix-community.github.io/home-manager/options.xhtml#opt-nix.nixPath
-    nix.nixPath = [
-      "nixpkgs=${nixpkgs.outPath}"
-      "home-manager=${home-manager.outPath}"
-    ];
-
     home.username = username;
     home.homeDirectory = homeDirectory;
 
