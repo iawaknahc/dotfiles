@@ -700,10 +700,8 @@ lib.mkMerge [
         echo "$term sets \$TERMINFO to $TERMINFO"
         echo "unset TERMINFO and set TERMINFO_DIRS instead"
 
-        export TERMINFO_DIRS="$TERMINFO:${config.home.profileDirectory}/share/terminfo:$TERMINFO_DIRS"
+        export TERMINFO_DIRS="$TERMINFO:$TERMINFO_DIRS"
         unset TERMINFO
-      else
-        export TERMINFO_DIRS="${config.home.profileDirectory}/share/terminfo:$TERMINFO_DIRS"
       fi
 
       unset term
@@ -1073,11 +1071,8 @@ lib.mkMerge [
     # But this is not a standard location.
     # ~/.terminfo is a standard location that will be read by ncurses and unibilium, and
     # it is inside home directory, which can be managed by home-manager.
-    # So we make a symlink ~/.terminfo -> ~/.nix-profile/share/terminfo
-    home.file.".terminfo" = {
-      enable = true;
-      recursive = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.profileDirectory}/share/terminfo";
-    };
+    #
+    # nix-darwin sets TERMINFO_DIRS to include ~/.nix-profile/share/terminfo by default.
+    # So we have nothing to do.
   }
 ]
