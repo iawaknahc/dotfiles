@@ -1,7 +1,9 @@
 % nix
 
 # Update flake.lock, and then update packages
-nix flake update --flake ~/.config/home-manager && home-manager switch
+; `nix flake update --flake` does not support symlink.
+; So we cd into the symlink and run `nix flake update --flake` there.
+sh -c 'cd ~/dotfiles && nix flake update --flake . && home-manager switch'
 
 # Remove home-manager generations, and then perform gc
 home-manager expire-generations now && nix-collect-garbage -d

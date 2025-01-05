@@ -8,14 +8,15 @@ Assume the installation IS NOT customized. So `nix-command` and `flakes` are ass
 ## Install home-manager
 
 ```sh
-git clone git@github.com:iawaknahc/dotfiles.git ~/.config/home-manager
+git clone git@github.com:iawaknahc/dotfiles.git ~/dotfiles
+ln -s ~/dotfiles ~/.config/home-manager
 nix run home-manager/master -- switch
 ```
 
 ## Making changes
 
 ```
-cd ~/.config/home-manager
+cd ~/dotfiles
 
 # Make your changes.
 # You cannot make changes directly to the managed files because
