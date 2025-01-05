@@ -24,7 +24,20 @@ local simple = {
 }
 
 local function config()
-  local capabilities = require("cmp_nvim_lsp").default_capabilities()
+  local capabilities = require("cmp_nvim_lsp").default_capabilities({
+    -- neovim@0.10.2 has a issue with :h i_CTRL-X_CTRL-O
+    -- This can always be reproduced when I am editing a Go file with gopls enabled.
+    -- When I type a package identifier, a dot and then i_CTRL-X_CTRL-O, I will see this bug.
+    --
+    -- It turns out cmp_nvim_lsp set insertReplaceSupport to true, which breaks the builtin omnifunc.
+    -- See https://github.com/neovim/neovim/issues/30688#issuecomment-2405554279 for the details of this issue.
+    --
+    -- The documentation of cmp_nvim_lsp does mention it breaks the builtin omnifunc.
+    -- See https://github.com/hrsh7th/cmp-nvim-lsp?tab=readme-ov-file#capabilities
+    --
+    -- To learn what capabilities nvim support, see https://github.com/neovim/neovim/pull/30333#issuecomment-2341355785
+    insertReplaceSupport = false,
+  })
   local lspconfig = require("lspconfig")
 
   for _, v in ipairs(simple) do

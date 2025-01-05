@@ -67,11 +67,6 @@ lib.mkMerge [
     # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.home-manager.enable
     programs.home-manager.enable = true;
 
-    # neovim@0.10.2 has a bug with :h i_CTRL-X_CTRL-O
-    # This can always be reproduced when I am editing a Go file with gopls enabled.
-    # When I type a package identifier, a dot and then i_CTRL-X_CTRL-O, I will see this bug.
-    # See https://github.com/neovim/neovim/issues/30688
-
     # https://nix-community.github.io/home-manager/options.xhtml#opt-home.packages
     home.packages = [
       # The following packages replace programs that ship with macOS.
