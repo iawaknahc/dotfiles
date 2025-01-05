@@ -38,4 +38,7 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
+
+  # Use TouchID for sudo.
+  security.pam.enableSudoTouchIdAuth = true;
 }
