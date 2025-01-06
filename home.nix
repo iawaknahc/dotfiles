@@ -70,9 +70,11 @@ lib.mkMerge [
         npmDepsHash = "sha256-3IJaQm54e1zbbh4VHhz2YHfnq5VaVy9iWAelXZKo1/c=";
         npmBuildScript = "prepublishOnly";
         patches = [
-          # I tried to set buildInputs = [ pkgs.git ];
-          # But it still says git not found.
-          # So I decided to patch the build script not to use git.
+          # Even I can set nativeBuildInputs = [ pkgs.git ];
+          # to make git available to this derivation,
+          # src is still not a git repository.
+          # Running git add -A will error-out.
+          # So we need to patch the build script to exclude that git command.
           (pkgs.writeText "cronstrue-build-patch" ''
             diff --git i/package.json w/package.json
             index 0002a89..a2cc19e 100644
