@@ -1054,4 +1054,12 @@ lib.mkMerge [
     # nix-darwin sets TERMINFO_DIRS to include ~/.nix-profile/share/terminfo by default.
     # So we have nothing to do.
   }
+
+  # CLI database
+  {
+    home.packages = [
+      pkgs.duckdb
+      pkgs.sqlite-interactive
+    ];
+  }
 ]
