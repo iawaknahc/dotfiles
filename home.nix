@@ -55,8 +55,42 @@ lib.mkMerge [
     home.packages = [
       # The following packages replace programs that ship with macOS.
       pkgs.bzip2
-      pkgs.dig
       pkgs.coreutils-prefixed
+
+      # cronstrue is a simple program to turn a cron expression into something human-readable.
+      (pkgs.buildNpmPackage {
+        pname = "cronstrue";
+        version = "2.52.0";
+        src = pkgs.fetchFromGitHub {
+          owner = "bradymholt";
+          repo = "cRonstrue";
+          rev = "v2.52.0";
+          hash = "sha256-4jTfgdopM8TEA1eke0p6Dtj9Jz1xvs0oVcXm2JYrRmc=";
+        };
+        npmDepsHash = "sha256-3IJaQm54e1zbbh4VHhz2YHfnq5VaVy9iWAelXZKo1/c=";
+        npmBuildScript = "prepublishOnly";
+        patches = [
+          # I tried to set buildInputs = [ pkgs.git ];
+          # But it still says git not found.
+          # So I decided to patch the build script not to use git.
+          (pkgs.writeText "cronstrue-build-patch" ''
+            diff --git i/package.json w/package.json
+            index 0002a89..a2cc19e 100644
+            --- i/package.json
+            +++ w/package.json
+            @@ -67,7 +67,7 @@
+                 "start": "npm run build",
+                 "build": "npx tsc -p ./src --emitDeclarationOnly",
+                 "test": "npx mocha --reporter spec --require ts-node/register \"./test/**/*.ts\"",
+            -    "prepublishOnly": "rm -rf ./dist && ./node_modules/webpack-cli/bin/cli.js && git add -A"
+            +    "prepublishOnly": "rm -rf ./dist && ./node_modules/webpack-cli/bin/cli.js"
+               },
+               "dependencies": {}
+             }
+          '')
+        ];
+      })
+
       # In case you need to curl a website whose TLS certificate is signed by
       # a locally trusted CA, like the one created by mkcert,
       # you need to set SSL_CERT_FILE to point to a full CA bundle.
@@ -64,7 +98,9 @@ lib.mkMerge [
       # curlFull is the curl we are looking for.
       # https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/top-level/all-packages.nix#L3030
       pkgs.curlFull
+
       pkgs.diffutils
+      pkgs.dig
       pkgs.file
       pkgs.findutils
       pkgs.gawk
