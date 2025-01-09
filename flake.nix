@@ -11,6 +11,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mac-app-util.url = "github:hraban/mac-app-util";
+    android-nixpkgs = {
+      url = "github:tadfisher/android-nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -20,6 +24,7 @@
       home-manager,
       nix-darwin,
       mac-app-util,
+      android-nixpkgs,
       ...
     }:
     let
@@ -63,6 +68,18 @@
               modules = [
                 mac-app-util.homeManagerModules.default
                 ./home.nix
+
+                android-nixpkgs.hmModule
+                # android-nixpkgs.hmModule assumes pkgs.androidSdk is present.
+                # pkgs.androidSdk can be added by the provided overlay.
+                (
+                  { ... }:
+                  {
+                    nixpkgs.overlays = [
+                      android-nixpkgs.overlays.default
+                    ];
+                  }
+                )
               ];
             };
           }
