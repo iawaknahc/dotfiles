@@ -687,8 +687,12 @@ lib.mkMerge [
     '';
   }
 
-  # Android SDK
+  # Android application development
   {
+    # Set JAVA_HOME
+    programs.java.enable = true;
+    programs.java.package = pkgs.temurin-bin;
+
     # To make AndroidStudio.app to use this SDK,
     # Edit ~/Library/Application Support/Google/AndroidStudio{version}/options/jdk.table.xml and
     # Edit ~/Library/Application Support/Google/AndroidStudio{version}/options/other.xml
