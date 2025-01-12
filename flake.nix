@@ -63,23 +63,12 @@
                 inherit
                   username
                   homeDirectory
+                  android-nixpkgs
                   ;
               };
               modules = [
                 mac-app-util.homeManagerModules.default
                 ./home.nix
-
-                android-nixpkgs.hmModule
-                # android-nixpkgs.hmModule assumes pkgs.androidSdk is present.
-                # pkgs.androidSdk can be added by the provided overlay.
-                (
-                  { ... }:
-                  {
-                    nixpkgs.overlays = [
-                      android-nixpkgs.overlays.default
-                    ];
-                  }
-                )
               ];
             };
           }
