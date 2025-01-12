@@ -3,7 +3,6 @@
   home.packages = [
     pkgs._1password-cli
     pkgs.bfs
-    pkgs.blackbox
     pkgs.delve
     pkgs.exiftool
     pkgs.eza
