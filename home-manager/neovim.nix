@@ -16,6 +16,14 @@ lib.mkMerge [
   }
 
   {
+    home.packages = [
+      # Some parsers like ocamllex and swift requires the tree-sitter executable.
+      # So we install it for them.
+      pkgs.tree-sitter
+    ];
+  }
+
+  {
     programs.neovim.enable = true;
     home.sessionVariables = lib.mkIf config.programs.neovim.enable {
       EDITOR = "nvim";

@@ -41,9 +41,10 @@
     ./home-manager/wezterm.nix
     ./home-manager/ghostty.nix
 
+    ./home-manager/replace-macos-stock-programs.nix
     ./home-manager/simple-programs.nix
+    ./home-manager/language-servers.nix
 
-    ./home-manager/tailwindcss-language-server.nix
     ./home-manager/cronstrue.nix
     ./home-manager/json5.nix
     ./home-manager/mkcert.nix
