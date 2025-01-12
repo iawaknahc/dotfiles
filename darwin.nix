@@ -30,6 +30,9 @@
     # To debug the evaluated config of home-manager or nix-darwin,
     # we can load the flake in repl.
     # cd ~/dotfiles; nix repl .
+
+    # NOTE(nixd): See ./.config/nvim/lua/plugins/nvim-lspconfig.lua for details.
+    { for-nixd = "${./.}"; }
   ];
 
   nix.settings.experimental-features = "nix-command flakes";

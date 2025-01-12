@@ -41,6 +41,13 @@
           username = "louischan";
           homeDirectory = "/Users/louischan";
         }
+        # NOTE(nixd): See ./.config/nvim/lua/plugins/nvim-lspconfig.lua for details.
+        {
+          hostname = "nixd";
+          system = "aarch64-darwin";
+          username = "nixd";
+          homeDirectory = "/homeless-shelter";
+        }
       ];
     in
     {
