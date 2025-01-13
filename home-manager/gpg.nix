@@ -1,36 +1,36 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
 {
+  programs.gpg.enable = true;
   home.packages = [
-    pkgs.gnupg
     pkgs.pinentry_mac
     pkgs.pinentry-tty
   ];
-  home.activation.createGPGHomeDir =
-    lib.hm.dag.entryBetween [ "linkGeneration" ] [ "writeBoundary" ]
-      ''
-        run mkdir -m700 -p $VERBOSE_ARG ${
-          pkgs.lib.strings.escapeShellArgs [ "${config.programs.gpg.homedir}" ]
-        }
-      '';
-  home.file."${config.programs.gpg.homedir}/gpg.conf" = {
-    enable = true;
-    source = ../.gnupg/gpg.conf;
+
+  programs.gpg.settings = {
+    # Change the default output format to ASCII armored
+    armor = true;
+    # DO NOT specify with-fingerprint as that will cause gpg to
+    # print the fingerprint with spaces.
+    # It makes copying hard.
+    with-fingerprint = false;
+    # Always show the fingerprint of a subkey.
+    with-subkey-fingerprints = true;
+    # Always show the keygrip.
+    with-keygrip = true;
+
+    # Change some defaults implied by programs.gpg.settings.
+    cert-digest-algo = "SHA256";
+    s2k-digest-algo = "SHA256";
   };
-  home.file."${config.programs.gpg.homedir}/dirmngr.conf" = {
-    enable = true;
-    source = ../.gnupg/dirmngr.conf;
-  };
-  home.file."${config.programs.gpg.homedir}/gpg-agent.conf" = {
-    enable = true;
+
+  home.file."${config.programs.gpg.homedir}/dirmngr.conf".source = ../.gnupg/dirmngr.conf;
+  home.file."${config.programs.gpg.homedir}/gpg-agent.conf".text = ''
     # pinentry-program accepts only absolute path.
     # See https://dev.gnupg.org/T4588
-    text = ''
-      pinentry-program ${pkgs.pinentry_mac}/bin/pinentry-mac
-    '';
-  };
+    pinentry-program ${pkgs.pinentry_mac}/bin/pinentry-mac
+  '';
 }
