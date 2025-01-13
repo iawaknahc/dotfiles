@@ -1,8 +1,7 @@
 { pkgs, ... }:
 {
-  home.packages = [ pkgs.vim ];
-  home.file.".vimrc" = {
-    enable = true;
-    source = ../.vimrc;
-  };
+  # The home-manager module programs.vim does not write $HOME/.vimrc.
+  # So I did not use it.
+  home.packages = [ pkgs.vim-full ];
+  home.file.".vimrc".source = ../.vimrc;
 }
