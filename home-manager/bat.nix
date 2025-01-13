@@ -1,9 +1,14 @@
-{ pkgs, ... }:
+{ ... }:
 {
-  home.packages = [ pkgs.bat ];
-  xdg.configFile."bat" = {
-    enable = true;
-    recursive = true;
-    source = ../.config/bat;
+  programs.bat.enable = true;
+  programs.bat.config = {
+    theme = "Dracula";
+
+    # Make bat works like cat
+    style = "plain";
+    paging = "never";
+
+    # Assume the underlying terminal supports italic.
+    italic-text = "always";
   };
 }
