@@ -9,6 +9,8 @@
     pkgs.fastmod
     pkgs.ffmpeg
     pkgs.fnlfmt
+    # It provides gh-md-toc
+    pkgs.github-markdown-toc-go
     # pprof requires this graph visualization software to generate graphs.
     pkgs.graphviz
     pkgs.hadolint
