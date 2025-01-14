@@ -42,7 +42,6 @@
     # where PLUGIN_NAME is the pname of a Nix vimPlugin.
     # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
     lz-n
-    rtp-nvim
 
     # treesitter
     {
@@ -117,53 +116,8 @@
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-cmp.lua;
-      plugin = nvim-cmp;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-nvim-lsp;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-buffer;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-path;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-cmdline;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-cmdline-history;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-nvim-lua;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-nvim-lsp-document-symbol;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-nvim-lsp-signature-help;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = cmp-tmux;
+      config = builtins.readFile ../.config/nvim/lua/lzn/blink-cmp.lua;
+      plugin = blink-cmp;
     }
 
     # Format on save.
