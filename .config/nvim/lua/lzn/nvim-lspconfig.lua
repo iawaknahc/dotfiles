@@ -182,71 +182,65 @@ local function config()
   })
 end
 
-return {
-  {
-    "neovim/nvim-lspconfig",
-    enabled = true,
-    event = {
-      -- According to :h lspconfig-setup, nvim-lspconfig starts
-      -- LSP server in FileType event.
-      "FileType",
+require("lz.n").load {
+  "nvim-lspconfig",
+  after = function()
+    -- Ask nvim-cmp to load, which in turn loads cmp-nvim-lsp.
+    require("lz.n").trigger_load("nvim-cmp")
+    config()
+  end,
+  event = { "FileType" },
+  keys = {
+    -- omnifunc and tagfunc are set by default.
+    -- tagfunc is set, so CTRL-] works automatically.
+    -- Since CTRL-] is vim.lsp.buf.definition, we need not map gd (Helix goto mode d)
+
+    -- Inspired by gd
+    {
+      "gD",
+      vim.lsp.buf.declaration,
+      desc = "Go to declaration",
     },
-    keys = {
-      -- omnifunc and tagfunc are set by default.
-      -- tagfunc is set, so CTRL-] works automatically.
-      -- Since CTRL-] is vim.lsp.buf.definition, we need not map gd (Helix goto mode d)
 
-      -- Inspired by gd
-      {
-        "gD",
-        vim.lsp.buf.declaration,
-        desc = "Go to declaration",
-      },
+    -- Other LSP features are handled by telescope.
 
-      -- Other LSP features are handled by telescope.
-
-      -- Inspired by Helix goto mode y
-      -- Technically speaking, this can be handled by telescope as well,
-      -- as Telescope has builtin.lsp_type_definitions.
-      {
-        "gy",
-        vim.lsp.buf.type_definition,
-        desc = "Go to type definition",
-      },
-
-      -- Upcoming default mapping
-      -- See https://github.com/neovim/neovim/pull/28500
-      {
-        "crn",
-        vim.lsp.buf.rename,
-        desc = "Rename",
-      },
-      -- Upcoming default mapping
-      -- See https://github.com/neovim/neovim/pull/28500
-      -- But this opens the quickfix list, the UX is not as good as telescope.
-      -- {
-      --   "gr", vim.lsp.buf.references,
-      --   desc = "List references to the symbol under the cursor",
-      -- },
-
-      -- After trying inlay hint for some time,
-      -- I found it quite annoying.
-      -- So do not enable it initially.
-      {
-        "<Space>h",
-        function()
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
-            bufnr = 0,
-          }), {
-            bufnr = 0,
-          })
-        end,
-        desc = "Toggle inlay hints",
-      },
+    -- Inspired by Helix goto mode y
+    -- Technically speaking, this can be handled by telescope as well,
+    -- as Telescope has builtin.lsp_type_definitions.
+    {
+      "gy",
+      vim.lsp.buf.type_definition,
+      desc = "Go to type definition",
     },
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
+
+    -- Upcoming default mapping
+    -- See https://github.com/neovim/neovim/pull/28500
+    {
+      "crn",
+      vim.lsp.buf.rename,
+      desc = "Rename",
     },
-    config = config,
+    -- Upcoming default mapping
+    -- See https://github.com/neovim/neovim/pull/28500
+    -- But this opens the quickfix list, the UX is not as good as telescope.
+    -- {
+    --   "gr", vim.lsp.buf.references,
+    --   desc = "List references to the symbol under the cursor",
+    -- },
+
+    -- After trying inlay hint for some time,
+    -- I found it quite annoying.
+    -- So do not enable it initially.
+    {
+      "<Space>h",
+      function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({
+          bufnr = 0,
+        }), {
+          bufnr = 0,
+        })
+      end,
+      desc = "Toggle inlay hints",
+    },
   },
 }
