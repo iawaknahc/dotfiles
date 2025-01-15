@@ -38,9 +38,25 @@ require("lz.n").load {
         },
       },
       keymap = {
+        preset = "default",
+        -- In insert mode, Tab should insert a horizontal tab.
+        -- Enter is more convenient than C-y.
         ["<CR>"] = { "accept", "fallback" },
+
+        -- C-j and C-k is more convenient than C-n and C-p
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
+        cmdline = {
+          preset = "default",
+          -- Tab is a muscle memory from interactive shell.
+          ["<Tab>"] = { "select_next", "fallback" },
+          -- Shift-tab is the inverse of Tab.
+          ["<S-Tab>"] = { "select_prev", "fallback" },
+
+          -- C-j and C-k is more convenient than C-n and C-p
+          ["<C-j>"] = { "select_next", "fallback" },
+          ["<C-k>"] = { "select_prev", "fallback" },
+        },
       },
     })
   end,
