@@ -4,21 +4,20 @@
 
   config = {
     home.packages = [
+      pkgs.awk-language-server
+      pkgs.bash-language-server
+      pkgs.fish-lsp
       pkgs.gopls
       pkgs.lua-language-server
-
       # nil the the language server for Nix.
       # See https://github.com/oxalica/nil
       pkgs.nil
       pkgs.nixd
-
-      pkgs.nodePackages.bash-language-server
       pkgs.nodePackages.graphql-language-service-cli
-      pkgs.nodePackages.typescript-language-server
       pkgs.pyright
-      # Taplo is a language server for TOML, and more.
-      # See https://taplo.tamasfe.dev/
+      pkgs.sqls
       pkgs.taplo
+      pkgs.typescript-language-server
       pkgs.typos-lsp
       pkgs.vscode-langservers-extracted
       pkgs.yaml-language-server
