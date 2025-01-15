@@ -2,6 +2,10 @@ require("lz.n").load {
   "blink.cmp",
   event = { "InsertEnter", "CmdlineEnter" },
   after = function()
+    -- TODO: The missing source is tmux.
+    -- I have tried blink.compat with cmp-tmux
+    -- The setup seems succeed (no error popping up), but see no completion items at all.
+
     -- Do not make buffer a fallback source
     -- I want to complete with buffer even LSP source has items.
     -- https://github.com/Saghen/blink.cmp/blob/v0.10.0/lua/blink/cmp/config/sources.lua
