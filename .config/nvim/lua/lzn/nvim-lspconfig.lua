@@ -94,6 +94,10 @@ require("lz.n").load {
             checkThirdParty = false,
             library = {
               vim.env.VIMRUNTIME,
+              -- ${3rd} is going to be removed.
+              -- We use a future-proof way to include the library definition of vim.uv.
+              -- See https://github.com/LuaLS/lua-language-server/discussions/1950#discussioncomment-11399715
+              "__https_github_com_LuaCATS_luv__/library",
             },
           },
         })
