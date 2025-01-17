@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
-  home.packages = [
+  home.packages = with pkgs; [
     # qrencode generates QR code locally.
-    pkgs.qrencode
+    qrencode
     # zbar offers an executable zbarimg to read QR code locally.
-    pkgs.zbar
+    zbar
   ];
 }

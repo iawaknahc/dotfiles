@@ -3,7 +3,7 @@
 { pkgs, ... }:
 {
   programs.bash.enable = true;
-  home.packages = [ pkgs.bash-completion ];
+  home.packages = with pkgs; [ bash-completion ];
   programs.bash.bashrcExtra = ''
     if shopt -q login_shell; then
       echo "login shell: true"

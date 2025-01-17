@@ -10,8 +10,8 @@
   programs.neovim.withPython3 = false;
   programs.neovim.withRuby = false;
 
-  home.packages = [
-    pkgs.stylua
+  home.packages = with pkgs; [
+    stylua
   ];
   home.file.".stylua.toml" = {
     enable = true;

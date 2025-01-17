@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  home.packages = [ pkgs.delta ];
+  home.packages = with pkgs; [ delta ];
   xdg.configFile."delta" = {
     enable = true;
     recursive = true;

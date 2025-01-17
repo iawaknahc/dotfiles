@@ -4,7 +4,7 @@
 { pkgs, ... }:
 {
   programs.fish.enable = true;
-  home.packages = [ pkgs.babelfish ];
+  home.packages = with pkgs; [ babelfish ];
   programs.fish.shellInit = ''
     if status is-login
         echo "login shell: true"

@@ -2,7 +2,7 @@
 {
   programs.git.enable = true;
 
-  home.packages = [ pkgs.blackbox ];
+  home.packages = with pkgs; [ blackbox ];
   programs.git.attributes = [
     "*.gpg diff=blackbox"
     "trustdb.gpg !diff"

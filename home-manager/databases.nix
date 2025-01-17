@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
-  home.packages = [
-    pkgs.duckdb
-    pkgs.sqlite-interactive
+  home.packages = with pkgs; [
+    duckdb
+    sqlite-interactive
   ];
 }

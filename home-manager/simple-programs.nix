@@ -1,26 +1,26 @@
 { pkgs, ... }:
 {
-  home.packages = [
-    pkgs._1password-cli
-    pkgs.bfs
-    pkgs.delve
-    pkgs.exiftool
-    pkgs.eza
-    pkgs.fastmod
-    pkgs.ffmpeg
-    pkgs.fnlfmt
+  home.packages = with pkgs; [
+    _1password-cli
+    bfs
+    delve
+    exiftool
+    eza
+    fastmod
+    ffmpeg
+    fnlfmt
     # It provides gh-md-toc
-    pkgs.github-markdown-toc-go
+    github-markdown-toc-go
     # pprof requires this graph visualization software to generate graphs.
-    pkgs.graphviz
-    pkgs.hadolint
-    pkgs.imagemagick
-    pkgs.jq
-    pkgs.nixfmt-rfc-style
-    pkgs.prettierd
-    pkgs.shellcheck
-    pkgs.shfmt
-    pkgs.tree-sitter
-    pkgs.wget
+    graphviz
+    hadolint
+    imagemagick
+    jq
+    nixfmt-rfc-style
+    prettierd
+    shellcheck
+    shfmt
+    tree-sitter
+    wget
   ];
 }

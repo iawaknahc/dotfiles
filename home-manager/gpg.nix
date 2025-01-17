@@ -3,11 +3,14 @@
   pkgs,
   ...
 }:
+let
+  pinentrymac = with pkgs; pinentry_mac;
+in
 {
   programs.gpg.enable = true;
-  home.packages = [
-    pkgs.pinentry_mac
-    pkgs.pinentry-tty
+  home.packages = with pkgs; [
+    pinentrymac
+    pinentry-tty
   ];
 
   programs.gpg.settings = {
@@ -31,6 +34,6 @@
   home.file."${config.programs.gpg.homedir}/gpg-agent.conf".text = ''
     # pinentry-program accepts only absolute path.
     # See https://dev.gnupg.org/T4588
-    pinentry-program ${pkgs.pinentry_mac}/bin/pinentry-mac
+    pinentry-program ${pinentrymac}/bin/pinentry-mac
   '';
 }

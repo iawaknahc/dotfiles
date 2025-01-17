@@ -49,7 +49,7 @@
     unset term
   '';
 
-  home.packages = [
-    pkgs.ncurses
+  home.packages = with pkgs; [
+    ncurses
   ];
 }

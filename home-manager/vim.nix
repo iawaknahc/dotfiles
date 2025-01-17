@@ -2,6 +2,6 @@
 {
   # The home-manager module programs.vim does not write $HOME/.vimrc.
   # So I did not use it.
-  home.packages = [ pkgs.vim-full ];
+  home.packages = with pkgs; [ vim-full ];
   home.file.".vimrc".source = ../.vimrc;
 }

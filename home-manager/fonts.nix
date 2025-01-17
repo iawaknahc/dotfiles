@@ -1,11 +1,11 @@
 { pkgs, ... }:
 {
-  home.packages = [
+  home.packages = with pkgs; [
     # This one is recognized as fixed-width.
-    pkgs.jetbrains-mono
+    jetbrains-mono
 
     # CJK fonts
-    pkgs.source-han-sans
-    pkgs.source-han-serif
+    source-han-sans
+    source-han-serif
   ];
 }
