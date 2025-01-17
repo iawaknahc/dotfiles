@@ -20,6 +20,7 @@
     pkgs.prettierd
     pkgs.shellcheck
     pkgs.shfmt
+    pkgs.tree-sitter
     pkgs.wget
   ];
 }
