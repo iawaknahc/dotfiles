@@ -6,7 +6,7 @@
 }:
 {
   programs.neovim.enable = true;
-  programs.neovim.withNodeJs = false;
+  programs.neovim.withNodeJs = true;
   programs.neovim.withPython3 = false;
   programs.neovim.withRuby = false;
 
@@ -48,7 +48,22 @@
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/nvim-treesitter.lua;
-      plugin = nvim-treesitter.withAllGrammars;
+      plugin = nvim-treesitter.withPlugins (
+        _:
+        nvim-treesitter.allGrammars
+        ++ [
+          (pkgs.tree-sitter.buildGrammar {
+            language = "colors";
+            version = "0.1.0";
+            src = pkgs.fetchFromGitHub {
+              owner = "iawaknahc";
+              repo = "tree-sitter-colors";
+              rev = "6369cd05b1a16fa4f60b8fe083496eef49cf89cd";
+              hash = "sha256-E6BjVBwJrXtn1A3SgLgELpsXXlCOxy20WtFwnzIWi4k=";
+            };
+          })
+        ]
+      );
     }
     {
       type = "lua";
@@ -59,6 +74,21 @@
       type = "lua";
       optional = true;
       plugin = nvim-treesitter-textobjects;
+    }
+    {
+      type = "lua";
+      plugin = (
+        pkgs.vimUtils.buildVimPlugin {
+          pname = "nvim-colors";
+          version = "2025-01-19";
+          src = pkgs.fetchFromGitHub {
+            owner = "iawaknahc";
+            repo = "nvim-colors";
+            rev = "e8e627645ad9e11a8c522209975b92cd2e95e633";
+            hash = "sha256-SOuA4MqgDhm9KubvHSX8XqEB1Lw4d5BEbH9BHfFBTmo=";
+          };
+        }
+      );
     }
 
     # LSP
