@@ -54,12 +54,12 @@
         ++ [
           (pkgs.tree-sitter.buildGrammar {
             language = "colors";
-            version = "0.1.0";
+            version = "2025-01-19";
             src = pkgs.fetchFromGitHub {
               owner = "iawaknahc";
               repo = "tree-sitter-colors";
-              rev = "6369cd05b1a16fa4f60b8fe083496eef49cf89cd";
-              hash = "sha256-E6BjVBwJrXtn1A3SgLgELpsXXlCOxy20WtFwnzIWi4k=";
+              rev = "78c650f4d30b8756d1958d2586dcc19004753f65";
+              hash = "sha256-2rtorIXRRoIj5MaY5LDlMx235Vs3sf5oMeZ8c8RrUKs=";
             };
           })
         ]
@@ -84,8 +84,8 @@
           src = pkgs.fetchFromGitHub {
             owner = "iawaknahc";
             repo = "nvim-colors";
-            rev = "e8e627645ad9e11a8c522209975b92cd2e95e633";
-            hash = "sha256-SOuA4MqgDhm9KubvHSX8XqEB1Lw4d5BEbH9BHfFBTmo=";
+            rev = "758c15cafa623e0bd0e2f6f5a951d0650d1d654d";
+            hash = "sha256-Yz9b4nzpmJ1toHc3+UjJmpUnFAXEnwA0w3VgCTCbT5I=";
           };
         }
       );
