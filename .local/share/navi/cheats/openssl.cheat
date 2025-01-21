@@ -54,8 +54,17 @@ openssl mac -macopt hexkey:<hmac-key> -digest SHA256 -in - HMAC
 # Unarchive a PKCS#12 file, and do not encrypt the private keys.
 openssl pkcs12 -in - -noenc -legacy
 
-# Display the contents of a x509 certificate
+# Show a x509 certificate.
 openssl x509 -noout -text -in <cert>
+
+# Show a private key.
+openssl pkey -noout -text -in <privatekey>
+
+# Show a public key.
+openssl pkey -noout -text -pubin -in <publickey>
+
+# Get the public key of a private key.
+openssl pkey -pubout -in <privatekey>
 
 # Generate a self-signed CA
 ; pathlen:0 means this CA can only sign end-entity certificates.
