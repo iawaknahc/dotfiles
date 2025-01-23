@@ -89,8 +89,27 @@ require("lz.n").load {
             end,
           },
         },
-        lualine_y = { "%5l:%-3c", "%o/%{getfsize(expand(@%))}" },
-        lualine_z = { "%3p%%" },
+        lualine_y = {
+          "%{'byte:'}%5l:%-3c",
+          "%{'cell:'}%5l:%-3v",
+          function()
+            local getpos_result = vim.fn.getpos(".")
+            local cursor_row_1indexing = getpos_result[2]
+            local cursor_col_1indexing = getpos_result[3]
+
+            local winid = vim.api.nvim_get_current_win()
+            local getwininfo_result = vim.fn.getwininfo(winid)[1]
+
+            local screenpost_result =
+              vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
+
+            local screen_row = screenpost_result.row
+            local screen_col = screenpost_result.col - getwininfo_result.textoff
+
+            return string.format("screen:%5d:%-3d", screen_row, screen_col)
+          end,
+        },
+        lualine_z = { "%o/%{getfsize(expand(@%))}", "%3p%%" },
       },
     }
   end,
