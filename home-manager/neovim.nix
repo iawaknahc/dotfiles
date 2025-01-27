@@ -54,12 +54,12 @@
         ++ [
           (pkgs.tree-sitter.buildGrammar {
             language = "colors";
-            version = "2025-01-22";
+            version = "2025-01-28";
             src = pkgs.fetchFromGitHub {
               owner = "iawaknahc";
               repo = "tree-sitter-colors";
-              rev = "a6a1ad471d5c81400382c27e2b983ba0ea91ef52";
-              hash = "sha256-HcUOC8+0ln2UTZ9qDFXTTJLlIDPTIg3zP3G2HRFirkE=";
+              rev = "598d804783446a908e2e2d3ea5cc4735802ceab6";
+              hash = "sha256-9+rxVREm4BdscarnduRaQ5zYjpMP6ghlk6ekLff0LKE=";
             };
           })
         ]
@@ -80,12 +80,12 @@
       plugin = (
         pkgs.vimUtils.buildVimPlugin {
           pname = "nvim-colors";
-          version = "2025-01-26";
+          version = "2025-01-28";
           src = pkgs.fetchFromGitHub {
             owner = "iawaknahc";
             repo = "nvim-colors";
-            rev = "8ce6a2dfa4ff1842055549de8e78d1b6dd7828e8";
-            hash = "sha256-eD30JwKi662zXyMh78be4L987YIecCyo866N6hEWQCk=";
+            rev = "a7f71d2625b85532b1440acdbc5d2eabcadb1a9f";
+            hash = "sha256-bOk2iKxg09EVTRoj+wmraM9r/2NWdpSAb+IOtnZZtlw=";
           };
         }
       );
