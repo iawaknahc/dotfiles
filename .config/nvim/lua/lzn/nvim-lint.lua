@@ -7,7 +7,7 @@ local linters_by_ft = {
   dockerfile = { "hadolint" },
 }
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-lint",
   event = { "DeferredUIEnter" },
   after = function()
@@ -21,4 +21,4 @@ require("lz.n").load {
       end,
     })
   end,
-}
+})

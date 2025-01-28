@@ -1,4 +1,4 @@
-require("lz.n").load {
+require("lz.n").load({
   "fzf-lua",
   after = function()
     require("fzf-lua").setup({
@@ -126,4 +126,4 @@ require("lz.n").load {
       desc = "Open diagnostics in workspace",
     },
   },
-}
+})

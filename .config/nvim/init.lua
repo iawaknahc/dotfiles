@@ -115,7 +115,7 @@ end, {
 })
 
 -- Diagnostic
-vim.diagnostic.config {
+vim.diagnostic.config({
   virtual_text = {
     source = true,
   },
@@ -123,7 +123,7 @@ vim.diagnostic.config {
     source = true,
   },
   severity_sort = true,
-}
+})
 
 -- Autocmds
 

@@ -1,4 +1,4 @@
-require("lz.n").load {
+require("lz.n").load({
   "indent-blankline.nvim",
   event = { "DeferredUIEnter" },
   after = function()
@@ -9,4 +9,4 @@ require("lz.n").load {
       },
     })
   end,
-}
+})

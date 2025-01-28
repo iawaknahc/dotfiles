@@ -1,4 +1,4 @@
-require("lz.n").load {
+require("lz.n").load({
   "nvim-lspconfig",
   after = function()
     -- TODO: Remove this when nvim >= 0.11
@@ -32,12 +32,12 @@ require("lz.n").load {
       "typos_lsp", -- Spell checking
     }
     for _, v in ipairs(simple) do
-      lspconfig[v].setup {
+      lspconfig[v].setup({
         capabilities = capabilities,
-      }
+      })
     end
 
-    lspconfig["gopls"].setup {
+    lspconfig["gopls"].setup({
       capabilities = capabilities,
       settings = {
         gopls = {
@@ -52,9 +52,9 @@ require("lz.n").load {
           },
         },
       },
-    }
+    })
 
-    lspconfig["ts_ls"].setup {
+    lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       root_dir = lspconfig.util.root_pattern("package.json"),
       init_options = {
@@ -70,14 +70,14 @@ require("lz.n").load {
           includeInlayEnumMemberValueHints = true,
         },
       },
-    }
+    })
 
-    lspconfig["denols"].setup {
+    lspconfig["denols"].setup({
       capabilities = capabilities,
       root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-    }
+    })
 
-    lspconfig["lua_ls"].setup {
+    lspconfig["lua_ls"].setup({
       capabilities = capabilities,
       -- Copied from https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
       on_init = function(client)
@@ -109,11 +109,11 @@ require("lz.n").load {
           hint = { enable = true },
         },
       },
-    }
+    })
 
     -- Known issue: inlay hint works only in `with pkgs; [ ... ]`
     -- See https://github.com/nix-community/nixd/issues/629#issuecomment-2558520043
-    lspconfig["nixd"].setup {
+    lspconfig["nixd"].setup({
       capabilities = capabilities,
       cmd = { "nixd", "--inlay-hints=true", "--semantic-tokens=true" },
       settings = {
@@ -133,7 +133,7 @@ require("lz.n").load {
           },
         },
       },
-    }
+    })
 
     local lspGroup = vim.api.nvim_create_augroup("MyLSPAutoCommands", { clear = true })
 
@@ -230,4 +230,4 @@ require("lz.n").load {
       desc = "Toggle inlay hints",
     },
   },
-}
+})

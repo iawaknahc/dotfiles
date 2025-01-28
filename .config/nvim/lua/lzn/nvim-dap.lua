@@ -23,15 +23,15 @@ local dap_go_options = {
   },
 }
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-dap-go",
   lazy = true,
   after = function()
     require("dap-go").setup(dap_go_options)
   end,
-}
+})
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-dap",
   after = function()
     require("lz.n").trigger_load("nvim-dap-go")
@@ -82,4 +82,4 @@ require("lz.n").load {
       desc = "Debugger hover",
     },
   },
-}
+})

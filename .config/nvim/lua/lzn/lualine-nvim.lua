@@ -1,8 +1,8 @@
-require("lz.n").load {
+require("lz.n").load({
   "lualine.nvim",
   event = { "DeferredUIEnter" },
   after = function()
-    require("lualine").setup {
+    require("lualine").setup({
       options = {
         icons_enabled = false,
         theme = {
@@ -100,8 +100,7 @@ require("lz.n").load {
             local winid = vim.api.nvim_get_current_win()
             local getwininfo_result = vim.fn.getwininfo(winid)[1]
 
-            local screenpost_result =
-              vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
+            local screenpost_result = vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
 
             local screen_row = screenpost_result.row
             local screen_col = screenpost_result.col - getwininfo_result.textoff
@@ -111,6 +110,6 @@ require("lz.n").load {
         },
         lualine_z = { "%o/%{getfsize(expand(@%))}", "%3p%%" },
       },
-    }
+    })
   end,
-}
+})

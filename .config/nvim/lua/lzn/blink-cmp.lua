@@ -1,4 +1,4 @@
-require("lz.n").load {
+require("lz.n").load({
   "blink.cmp",
   event = { "InsertEnter", "CmdlineEnter" },
   after = function()
@@ -60,4 +60,4 @@ require("lz.n").load {
       },
     })
   end,
-}
+})

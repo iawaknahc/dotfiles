@@ -1,4 +1,4 @@
-require("lz.n").load {
+require("lz.n").load({
   "vim-table-mode",
   event = { "DeferredUIEnter" },
-}
+})

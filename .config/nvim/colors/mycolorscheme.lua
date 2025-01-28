@@ -48,11 +48,10 @@ local blue = "#ADADEB"
 -- Keyword
 local magenta = "#EBADEB"
 
-
-vim.cmd[[
+vim.cmd([[
 hi! clear
-]]
-vim.o.background = 'dark'
+]])
+vim.o.background = "dark"
 
 local function hi(opts)
   local name = opts[1]
@@ -60,178 +59,175 @@ local function hi(opts)
   vim.api.nvim_set_hl(0, name, opts)
 end
 
-
 -- :help highlight-groups
-hi { "Normal", bg = background, fg = foreground }
-hi { "Directory" }
+hi({ "Normal", bg = background, fg = foreground })
+hi({ "Directory" })
 
-hi { "ColorColumn", bg = darker_than_background }
+hi({ "ColorColumn", bg = darker_than_background })
 
-hi { "NonText", fg = comment, bold = true }
-hi { "EndOfBuffer", link = "NonText" }
-hi { "Conceal", link = "NonText" }
-hi { "NormalNC", link = "NonText" }
-hi { "Whitespace", link = "NonText" }
-hi { "SpecialKey", link = "NonText" }
+hi({ "NonText", fg = comment, bold = true })
+hi({ "EndOfBuffer", link = "NonText" })
+hi({ "Conceal", link = "NonText" })
+hi({ "NormalNC", link = "NonText" })
+hi({ "Whitespace", link = "NonText" })
+hi({ "SpecialKey", link = "NonText" })
 
-hi { "CurSearch", fg = green, reverse = true }
-hi { "Search", fg = yellow, reverse = true }
-hi { "IncSearch", link = "Search" }
-hi { "Substitute", link = "Search" }
+hi({ "CurSearch", fg = green, reverse = true })
+hi({ "Search", fg = yellow, reverse = true })
+hi({ "IncSearch", link = "Search" })
+hi({ "Substitute", link = "Search" })
 
-hi { "Cursor", reverse = true }
-hi { "lCursor", link = "Cursor" }
-hi { "CursorIM", link = "Cursor" }
-hi { "TermCursor", link = "Cursor" }
-hi { "TermCursorNC" }
+hi({ "Cursor", reverse = true })
+hi({ "lCursor", link = "Cursor" })
+hi({ "CursorIM", link = "Cursor" })
+hi({ "TermCursor", link = "Cursor" })
+hi({ "TermCursorNC" })
 
-hi { "Visual", bg = selection }
-hi { "CursorColumn", link = "Visual" }
-hi { "CursorLine", link = "Visual" }
-hi { "VisualNOS" }
-hi { "SnippetTabstop", link = "Visual" }
+hi({ "Visual", bg = selection })
+hi({ "CursorColumn", link = "Visual" })
+hi({ "CursorLine", link = "Visual" })
+hi({ "VisualNOS" })
+hi({ "SnippetTabstop", link = "Visual" })
 
-hi { "DiffAdd", fg = green }
-hi { "DiffChange", fg = yellow }
-hi { "DiffDelete", fg = red }
-hi { "DiffText", fg = yellow }
+hi({ "DiffAdd", fg = green })
+hi({ "DiffChange", fg = yellow })
+hi({ "DiffDelete", fg = red })
+hi({ "DiffText", fg = yellow })
 
-hi { "ErrorMsg", fg = red, reverse = true }
-hi { "WarningMsg", fg = yellow, reverse = true }
+hi({ "ErrorMsg", fg = red, reverse = true })
+hi({ "WarningMsg", fg = yellow, reverse = true })
 
-hi { "SpellBad", sp = red, undercurl = true }
-hi { "SpellRare", sp = yellow, undercurl = true }
-hi { "SpellCap", link = "SpellBad" }
-hi { "SpellLocal", link = "SpellRare" }
+hi({ "SpellBad", sp = red, undercurl = true })
+hi({ "SpellRare", sp = yellow, undercurl = true })
+hi({ "SpellCap", link = "SpellBad" })
+hi({ "SpellLocal", link = "SpellRare" })
 
-hi { "WinSeparator", bg = darker_than_background, fg = blue }
-hi { "Folded", link = "WinSeparator" }
+hi({ "WinSeparator", bg = darker_than_background, fg = blue })
+hi({ "Folded", link = "WinSeparator" })
 
-hi { "Pmenu", bg = darker_than_background }
-hi { "PmenuKind", link = "Pmenu" }
-hi { "PmenuExtra", link = "Pmenu" }
-hi { "PmenuSbar", link = "Pmenu" }
-hi { "PmenuSel", link = "Visual" }
-hi { "PmenuKindSel", link = "PmenuSel" }
-hi { "PmenuExtraSel", link = "PmenuSel" }
-hi { "PmenuThumb", link = "PmenuSel" }
-hi { "WildMenu", link = "PmenuSel" }
+hi({ "Pmenu", bg = darker_than_background })
+hi({ "PmenuKind", link = "Pmenu" })
+hi({ "PmenuExtra", link = "Pmenu" })
+hi({ "PmenuSbar", link = "Pmenu" })
+hi({ "PmenuSel", link = "Visual" })
+hi({ "PmenuKindSel", link = "PmenuSel" })
+hi({ "PmenuExtraSel", link = "PmenuSel" })
+hi({ "PmenuThumb", link = "PmenuSel" })
+hi({ "WildMenu", link = "PmenuSel" })
 
-hi { "StatusLine", bg = selection, bold = true }
-hi { "StatusLineNC", bg = darker_than_background, fg = comment }
-hi { "WinBar", link = "StatusLine" }
-hi { "WinBarNC", link = "StatusLineNC" }
+hi({ "StatusLine", bg = selection, bold = true })
+hi({ "StatusLineNC", bg = darker_than_background, fg = comment })
+hi({ "WinBar", link = "StatusLine" })
+hi({ "WinBarNC", link = "StatusLineNC" })
 
-hi { "LineNr", fg = comment }
-hi { "LineNrAbove", link = "LineNr" }
-hi { "LineNrBelow", link = "LineNr" }
-hi { "CursorLineNr", bold = true }
+hi({ "LineNr", fg = comment })
+hi({ "LineNrAbove", link = "LineNr" })
+hi({ "LineNrBelow", link = "LineNr" })
+hi({ "CursorLineNr", bold = true })
 
-hi { "SignColumn", link = "LineNr" }
-hi { "CursorLineSign", link = "SignColumn" }
+hi({ "SignColumn", link = "LineNr" })
+hi({ "CursorLineSign", link = "SignColumn" })
 
-hi { "FoldColumn", link = "LineNr" }
-hi { "CursorLineFold", link = "FoldColumn" }
+hi({ "FoldColumn", link = "LineNr" })
+hi({ "CursorLineFold", link = "FoldColumn" })
 
-hi { "ModeMsg", fg = green }
-hi { "MatchParen", fg = green, underline = true }
-hi { "Title", fg = green, bold = true }
-hi { "QuickFixLine", fg = green }
+hi({ "ModeMsg", fg = green })
+hi({ "MatchParen", fg = green, underline = true })
+hi({ "Title", fg = green, bold = true })
+hi({ "QuickFixLine", fg = green })
 
-hi { "MsgArea" }
+hi({ "MsgArea" })
 
-hi { "MsgSeparator", link = "StatusLine" }
+hi({ "MsgSeparator", link = "StatusLine" })
 
-hi { "MoreMsg", bold = true }
+hi({ "MoreMsg", bold = true })
 
-hi { "NormalFloat", link = "Pmenu" }
-hi { "FloatBorder", link = "NormalFloat" }
-hi { "FloatTitle", link = "Title" }
-hi { "FloatFooter", link = "FloatTitle" }
+hi({ "NormalFloat", link = "Pmenu" })
+hi({ "FloatBorder", link = "NormalFloat" })
+hi({ "FloatTitle", link = "Title" })
+hi({ "FloatFooter", link = "FloatTitle" })
 
-hi { "Question", bold = true }
+hi({ "Question", bold = true })
 
-hi { "TabLine", link = "WinSeparator" }
-hi { "TabLineFill", bg = darker_than_background }
-hi { "TabLineSel" }
-
+hi({ "TabLine", link = "WinSeparator" })
+hi({ "TabLineFill", bg = darker_than_background })
+hi({ "TabLineSel" })
 
 -- :help group-name
-hi { "Underlined", underline = true }
-hi { "Tag", link = "Underlined" }
+hi({ "Underlined", underline = true })
+hi({ "Tag", link = "Underlined" })
 
-hi { "Comment", fg = comment }
-hi { "SpecialComment", fg = cyan, italic = true }
-hi { "Todo", fg = yellow, reverse = true }
-hi { "Error", fg = red, reverse = true }
+hi({ "Comment", fg = comment })
+hi({ "SpecialComment", fg = cyan, italic = true })
+hi({ "Todo", fg = yellow, reverse = true })
+hi({ "Error", fg = red, reverse = true })
 
-hi { "Constant", fg = cyan }
-hi { "String", link = "Constant" }
-hi { "Character", link = "Constant" }
-hi { "SpecialChar", link = "Constant" }
-hi { "Delimiter", link = "Constant" }
-hi { "Number", link = "Constant" }
-hi { "Boolean", link = "Constant" }
-hi { "Float", link = "Constant" }
+hi({ "Constant", fg = cyan })
+hi({ "String", link = "Constant" })
+hi({ "Character", link = "Constant" })
+hi({ "SpecialChar", link = "Constant" })
+hi({ "Delimiter", link = "Constant" })
+hi({ "Number", link = "Constant" })
+hi({ "Boolean", link = "Constant" })
+hi({ "Float", link = "Constant" })
 
-hi { "Identifier" }
-hi { "Function", link = "Identifier" }
+hi({ "Identifier" })
+hi({ "Function", link = "Identifier" })
 
-hi { "Keyword", fg = magenta }
-hi { "Statement", link = "Keyword" }
-hi { "Conditional", link = "Keyword" }
-hi { "Repeat", link = "Keyword" }
-hi { "Label", link = "Keyword" }
-hi { "Operator", link = "Keyword" }
-hi { "Exception", link = "Keyword" }
-hi { "PreProc", link = "Keyword" }
-hi { "Include", link = "Keyword" }
-hi { "Define", link = "Keyword" }
-hi { "Macro", link = "Keyword" }
-hi { "PreCondit", link = "Keyword" }
-hi { "StorageClass", link = "Keyword" }
-hi { "Debug", link = "Keyword" }
-hi { "Structure", link = "Keyword" }
-hi { "Typedef", link = "Keyword" }
+hi({ "Keyword", fg = magenta })
+hi({ "Statement", link = "Keyword" })
+hi({ "Conditional", link = "Keyword" })
+hi({ "Repeat", link = "Keyword" })
+hi({ "Label", link = "Keyword" })
+hi({ "Operator", link = "Keyword" })
+hi({ "Exception", link = "Keyword" })
+hi({ "PreProc", link = "Keyword" })
+hi({ "Include", link = "Keyword" })
+hi({ "Define", link = "Keyword" })
+hi({ "Macro", link = "Keyword" })
+hi({ "PreCondit", link = "Keyword" })
+hi({ "StorageClass", link = "Keyword" })
+hi({ "Debug", link = "Keyword" })
+hi({ "Structure", link = "Keyword" })
+hi({ "Typedef", link = "Keyword" })
 
-hi { "Type", fg = cyan }
-hi { "Special", fg = cyan }
+hi({ "Type", fg = cyan })
+hi({ "Special", fg = cyan })
 
-hi { "Added", fg = green }
-hi { "Changed", fg = yellow }
-hi { "Removed", fg = red }
-
+hi({ "Added", fg = green })
+hi({ "Changed", fg = yellow })
+hi({ "Removed", fg = red })
 
 -- :help diagnostic-highlights
-hi { "DiagnosticError", fg = red }
-hi { "DiagnosticWarn", fg = yellow }
-hi { "DiagnosticInfo", fg = cyan }
-hi { "DiagnosticHint", fg = blue }
-hi { "DiagnosticOk", fg = green }
+hi({ "DiagnosticError", fg = red })
+hi({ "DiagnosticWarn", fg = yellow })
+hi({ "DiagnosticInfo", fg = cyan })
+hi({ "DiagnosticHint", fg = blue })
+hi({ "DiagnosticOk", fg = green })
 
-hi { "DiagnosticVirtualTextError", fg = red, italic = true }
-hi { "DiagnosticVirtualTextWarn", fg = yellow, italic = true }
-hi { "DiagnosticVirtualTextInfo", fg = cyan, italic = true }
-hi { "DiagnosticVirtualTextHint", fg = blue, italic = true }
-hi { "DiagnosticVirtualTextOk", fg = green, italic = true }
+hi({ "DiagnosticVirtualTextError", fg = red, italic = true })
+hi({ "DiagnosticVirtualTextWarn", fg = yellow, italic = true })
+hi({ "DiagnosticVirtualTextInfo", fg = cyan, italic = true })
+hi({ "DiagnosticVirtualTextHint", fg = blue, italic = true })
+hi({ "DiagnosticVirtualTextOk", fg = green, italic = true })
 
-hi { "DiagnosticUnderlineError", sp = red, undercurl = true }
-hi { "DiagnosticUnderlineWarn", sp = yellow, undercurl = true }
-hi { "DiagnosticUnderlineInfo", sp = cyan, undercurl = true }
-hi { "DiagnosticUnderlineHint", sp = blue, undercurl = true }
-hi { "DiagnosticUnderlineOk", sp = green, undercurl = true }
+hi({ "DiagnosticUnderlineError", sp = red, undercurl = true })
+hi({ "DiagnosticUnderlineWarn", sp = yellow, undercurl = true })
+hi({ "DiagnosticUnderlineInfo", sp = cyan, undercurl = true })
+hi({ "DiagnosticUnderlineHint", sp = blue, undercurl = true })
+hi({ "DiagnosticUnderlineOk", sp = green, undercurl = true })
 
-hi { "DiagnosticFloatingError", link = "DiagnosticError" }
-hi { "DiagnosticFloatingWarn", link = "DiagnosticWarn" }
-hi { "DiagnosticFloatingInfo", link = "DiagnosticInfo" }
-hi { "DiagnosticFloatingHint", link = "DiagnosticHint" }
-hi { "DiagnosticFloatingOk", link = "DiagnosticOk" }
+hi({ "DiagnosticFloatingError", link = "DiagnosticError" })
+hi({ "DiagnosticFloatingWarn", link = "DiagnosticWarn" })
+hi({ "DiagnosticFloatingInfo", link = "DiagnosticInfo" })
+hi({ "DiagnosticFloatingHint", link = "DiagnosticHint" })
+hi({ "DiagnosticFloatingOk", link = "DiagnosticOk" })
 
-hi { "DiagnosticSignError", link = "DiagnosticError" }
-hi { "DiagnosticSignWarn", link = "DiagnosticWarn" }
-hi { "DiagnosticSignInfo", link = "DiagnosticInfo" }
-hi { "DiagnosticSignHint", link = "DiagnosticHint" }
-hi { "DiagnosticSignOk", link = "DiagnosticOk" }
+hi({ "DiagnosticSignError", link = "DiagnosticError" })
+hi({ "DiagnosticSignWarn", link = "DiagnosticWarn" })
+hi({ "DiagnosticSignInfo", link = "DiagnosticInfo" })
+hi({ "DiagnosticSignHint", link = "DiagnosticHint" })
+hi({ "DiagnosticSignOk", link = "DiagnosticOk" })
 
-hi { "DiagnosticDeprecated", link = "Comment" }
-hi { "DiagnosticUnnecessary", link = "Comment" }
+hi({ "DiagnosticDeprecated", link = "Comment" })
+hi({ "DiagnosticUnnecessary", link = "Comment" })

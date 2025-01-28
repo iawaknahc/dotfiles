@@ -13,10 +13,6 @@
   home.packages = with pkgs; [
     stylua
   ];
-  home.file.".stylua.toml" = {
-    enable = true;
-    source = ../.stylua.toml;
-  };
 
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
     EDITOR = "nvim";

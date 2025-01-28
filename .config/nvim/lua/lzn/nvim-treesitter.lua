@@ -58,28 +58,28 @@ local textobjects = {
   },
 }
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-treesitter-textobjects",
   lazy = true,
-}
+})
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-treesitter-context",
   lazy = true,
-}
+})
 
-require("lz.n").load {
+require("lz.n").load({
   "nvim-treesitter",
   after = function()
     require("lz.n").trigger_load("nvim-treesitter-textobjects")
     require("lz.n").trigger_load("nvim-treesitter-context")
 
     local configs = require("nvim-treesitter.configs")
-    configs.setup {
+    configs.setup({
       highlight = highlight,
       incremental_selection = incremental_selection,
       textobjects = textobjects,
-    }
+    })
   end,
   event = { "DeferredUIEnter" },
   keys = {
@@ -136,4 +136,4 @@ require("lz.n").load {
       desc = ":help T",
     },
   },
-}
+})
