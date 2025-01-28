@@ -8,7 +8,6 @@
       bash-language-server
       fish-lsp
       gopls
-      lua-language-server
       # nil the the language server for Nix.
       # See https://github.com/oxalica/nil
       nil

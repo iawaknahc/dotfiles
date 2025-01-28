@@ -11,6 +11,7 @@
   programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [
+    lua-language-server
     stylua
     (stdenv.mkDerivation {
       name = "luv";
@@ -29,6 +30,15 @@
         runHook postInstall
       '';
     })
+    (luajit.withPackages (
+      packages: with packages; [
+        luarocks
+        # llscheck requires lua-language-server on PATH.
+        llscheck
+        # luap provides a better REPL experience than lua(1).
+        luaprompt
+      ]
+    ))
   ];
 
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
