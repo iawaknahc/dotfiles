@@ -17,6 +17,8 @@ require("lz.n").load({
       "bashls", -- bash or sh
       "fish_lsp", -- fish
 
+      "lua_ls", -- Lua
+
       "nil_ls", -- Nix
 
       "sqls", -- SQL
@@ -75,40 +77,6 @@ require("lz.n").load({
     lspconfig["denols"].setup({
       capabilities = capabilities,
       root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-    })
-
-    lspconfig["lua_ls"].setup({
-      capabilities = capabilities,
-      -- Copied from https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
-      on_init = function(client)
-        local path = client.workspace_folders[1].name
-        if vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc") then
-          return
-        end
-
-        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-          runtime = {
-            version = "LuaJIT",
-          },
-          workspace = {
-            checkThirdParty = false,
-            library = {
-              vim.env.VIMRUNTIME,
-              -- ${3rd} is going to be removed.
-              -- We use a future-proof way to include the library definition of vim.uv.
-              -- See https://github.com/LuaLS/lua-language-server/discussions/1950#discussioncomment-11399715
-              "__https_github_com_LuaCATS_luv__/library",
-            },
-          },
-        })
-      end,
-      settings = {
-        Lua = {
-          -- It is disabled by default.
-          -- https://luals.github.io/wiki/settings/#hintenable
-          hint = { enable = true },
-        },
-      },
     })
 
     -- Known issue: inlay hint works only in `with pkgs; [ ... ]`

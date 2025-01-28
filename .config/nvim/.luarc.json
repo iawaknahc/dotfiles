@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "LuaJIT",
+  "format.enable": false,
+  "hint.enable": true,
+  "diagnostics.groupSeverity": {
+    "ambiguity": "Error",
+    "await": "Error",
+    "duplicate": "Error",
+    "global": "Error",
+    "luadoc": "Error",
+    "redefined": "Error",
+    "strict": "Error",
+    "strong": "Error",
+    "type-check": "Error",
+    "unbalanced": "Error",
+    "unused": "Error"
+  },
+  "workspace.checkThirdParty": false,
+  "workspace.library": ["~/.nix-profile/share/nvim/runtime", "~/.nix-profile/share/LuaCATS/luv"]
+}

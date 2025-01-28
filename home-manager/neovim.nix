@@ -12,6 +12,23 @@
 
   home.packages = with pkgs; [
     stylua
+    (stdenv.mkDerivation {
+      name = "luv";
+      src = fetchFromGitHub {
+        owner = "LuaCATS";
+        repo = "luv";
+        rev = "3615eb12c94a7cfa7184b8488cf908abb5e94c9c";
+        hash = "sha256-NGCJWE5Fl6/ffPhot8yGEuwBv5KedufJCcMXjYEYjbM=";
+      };
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/share/LuaCATS/luv
+        cp -R $src/. $out/share/LuaCATS/luv
+
+        runHook postInstall
+      '';
+    })
   ];
 
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
@@ -91,20 +108,7 @@
     {
       type = "lua";
       optional = true;
-      config =
-        let
-          LuaCATS_luv = pkgs.fetchFromGitHub {
-            owner = "LuaCATS";
-            repo = "luv";
-            rev = "3615eb12c94a7cfa7184b8488cf908abb5e94c9c";
-            hash = "sha256-NGCJWE5Fl6/ffPhot8yGEuwBv5KedufJCcMXjYEYjbM=";
-          };
-        in
-        builtins.readFile (
-          pkgs.runCommand "nvim-lspconfig.lua" { } ''
-            sed -E 's,__https_github_com_LuaCATS_luv__,${LuaCATS_luv},g' ${../.config/nvim/lua/lzn/nvim-lspconfig.lua} >$out
-          ''
-        );
+      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-lspconfig.lua;
       plugin = nvim-lspconfig;
     }
 
