@@ -54,6 +54,12 @@ case "$s" in *"$suffix") true ;; *) false ;; esac
 # repeat string
 awk -v s="$str" -v n=10 'BEGIN{for(i=0;i<n;++i)printf("%s",s)}'
 
+# loop a range
+awk -v start=0 -v end=10 -v step=2 'BEGIN{for(i=start;i<=end;i+=step)print(i)}' | while IFS= read -r i; do echo "$i"; done
+
+# loop through literal items
+for i in item1 item2 item3; do echo "$i"; done
+
 # trim leading spaces
 printf "$s" | sed 's/^[[:space:]]*//g'
 
