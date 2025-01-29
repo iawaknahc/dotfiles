@@ -1,0 +1,9 @@
+% vim
+
+# Make pattern works in a very magic way
+
+\v
+
+# Redirect the output of a command to the current buffer
+
+:put =execute('scriptnames')
