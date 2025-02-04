@@ -37,6 +37,10 @@
         # emulator
         emulator
 
+        # ndk
+        ndk-26-1-10909125 # Used by React Native 0.76.x
+        ndk-27-1-12297006 # Used by React Native 0.77.x
+
         # cmake
         cmake-3-6-4111459
         cmake-3-10-2-4988404
