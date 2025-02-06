@@ -1,0 +1,4 @@
+% nu
+
+# Use nu in any shell
+ls -al | nu --stdin -c 'detect columns --skip 1 --no-headers --combine-columns 5..7'
