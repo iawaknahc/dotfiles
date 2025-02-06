@@ -1,9 +1,10 @@
 % lsof
 
 # List all listening TCP ports
-; -n            Do not resolve hostname
-; -P            Do not resolve port name
-; -iTCP         IPv4 or IPv6
-; -sTCP:LISTEN  Include LISTEN state only
+; -n             Do not resolve hostname
+; -P             Do not resolve port name
 ; +c0           Output the full command
-lsof -nP +c0 -iTCP -sTCP:LISTEN
+; -iTCP         IPv4 or IPv6
+; -s             Rename the SIZE/OFF column to SIZE
+; -sTCP:LISTEN  Include LISTEN state only
+lsof -nP +c0 -iTCP -s -sTCP:LISTEN
