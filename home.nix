@@ -57,6 +57,8 @@
     ./home-manager/simple-programs.nix
     ./home-manager/language-servers.nix
     ./home-manager/languages.nix
+    ./home-manager/databases.nix
+    ./home-manager/qrcode.nix
 
     # Text editors.
     ./home-manager/vim.nix
@@ -76,8 +78,6 @@
     ./home-manager/tldr.nix
     ./home-manager/gcloud.nix
     ./home-manager/gnuinfo.nix
-    ./home-manager/qrcode.nix
-    ./home-manager/databases.nix
 
     ./home-manager/android.nix
     # Flutter is now installed per project with flake.nix
