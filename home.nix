@@ -46,6 +46,13 @@
     ./home-manager/language-servers.nix
     ./home-manager/languages.nix
 
+    ./home-manager/bash.nix
+    ./home-manager/zsh.nix
+    ./home-manager/fish.nix
+    ./home-manager/nushell.nix
+    ./home-manager/starship.nix
+    ./home-manager/carapace.nix
+
     ./home-manager/cronstrue.nix
     ./home-manager/json5.nix
     ./home-manager/mkcert.nix
@@ -57,11 +64,6 @@
     ./home-manager/delta.nix
     ./home-manager/git.nix
     ./home-manager/pip.nix
-    ./home-manager/bash.nix
-    ./home-manager/zsh.nix
-    ./home-manager/fish.nix
-    ./home-manager/nushell.nix
-    ./home-manager/starship.nix
     ./home-manager/direnv.nix
     ./home-manager/fd.nix
     ./home-manager/fzf.nix

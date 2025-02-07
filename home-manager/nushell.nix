@@ -11,9 +11,4 @@
     pkgs.nushellPlugins.gstat
     pkgs.nushellPlugins.query
   ];
-  programs.carapace.enable = true;
-  programs.carapace.enableBashIntegration = false;
-  programs.carapace.enableFishIntegration = false;
-  programs.carapace.enableNushellIntegration = true;
-  programs.carapace.enableZshIntegration = false;
 }
