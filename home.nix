@@ -32,43 +32,49 @@
     #xdg.cacheHome = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Caches";
   };
   imports = [
-    ./home-manager/terminal.nix
-    ./home-manager/my-scripts.nix
     ./home-manager/fonts.nix
 
+    # Terminals.
+    ./home-manager/terminal.nix
+    ./home-manager/tmux.nix
     ./home-manager/kitty.nix
     ./home-manager/alacritty.nix
     ./home-manager/wezterm.nix
     ./home-manager/ghostty.nix
 
-    ./home-manager/replace-macos-stock-programs.nix
-    ./home-manager/simple-programs.nix
-    ./home-manager/language-servers.nix
-    ./home-manager/languages.nix
-
+    # Shells.
     ./home-manager/bash.nix
     ./home-manager/zsh.nix
     ./home-manager/fish.nix
     ./home-manager/nushell.nix
     ./home-manager/starship.nix
     ./home-manager/carapace.nix
+    ./home-manager/direnv.nix
 
+    # Collections of programs.
+    ./home-manager/replace-macos-stock-programs.nix
+    ./home-manager/my-scripts.nix
+    ./home-manager/simple-programs.nix
+    ./home-manager/language-servers.nix
+    ./home-manager/languages.nix
+
+    # Text editors.
+    ./home-manager/vim.nix
+    ./home-manager/neovim.nix
+
+    # Individual programs that require configurations.
     ./home-manager/cronstrue.nix
     ./home-manager/json5.nix
     ./home-manager/mkcert.nix
     ./home-manager/gpg.nix
     ./home-manager/navi.nix
-    ./home-manager/vim.nix
-    ./home-manager/tmux.nix
     ./home-manager/bat.nix
     ./home-manager/delta.nix
     ./home-manager/git.nix
     ./home-manager/pip.nix
-    ./home-manager/direnv.nix
     ./home-manager/fd.nix
     ./home-manager/fzf.nix
     ./home-manager/ripgrep.nix
-    ./home-manager/neovim.nix
     ./home-manager/tldr.nix
     ./home-manager/gcloud.nix
     ./home-manager/gnuinfo.nix
