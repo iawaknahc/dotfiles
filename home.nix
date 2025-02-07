@@ -64,9 +64,11 @@
     ./home-manager/vim.nix
     ./home-manager/neovim.nix
 
-    # Individual programs that require configurations.
+    # Programs that are not available on nixpkgs.
     ./home-manager/cronstrue.nix
     ./home-manager/json5.nix
+
+    # Individual programs that require configurations.
     ./home-manager/mkcert.nix
     ./home-manager/gpg.nix
     ./home-manager/navi.nix
