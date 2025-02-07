@@ -68,7 +68,6 @@
     ./home-manager/mkcert.nix
     ./home-manager/gpg.nix
     ./home-manager/navi.nix
-    ./home-manager/delta.nix
     ./home-manager/git.nix
     ./home-manager/pip.nix
     ./home-manager/fd.nix
