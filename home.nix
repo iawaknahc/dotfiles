@@ -71,7 +71,6 @@
     ./home-manager/gpg.nix
     ./home-manager/navi.nix
     ./home-manager/git.nix
-    ./home-manager/pip.nix
     ./home-manager/fd.nix
     ./home-manager/fzf.nix
     ./home-manager/ripgrep.nix
