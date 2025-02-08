@@ -38,6 +38,15 @@
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.upgrade-nix-store-path-url = "https://install.determinate.systems/nix-upgrade/stable/universal";
 
+  environment.variables = {
+    # The default is "nano".
+    # https://github.com/LnL7/nix-darwin/blob/master/modules/environment/default.nix#L208
+    EDITOR = "vi";
+    # The default is "less -R".
+    # https://github.com/LnL7/nix-darwin/blob/master/modules/environment/default.nix#L209
+    PAGER = "less -R";
+  };
+
   programs.bash.enable = true;
   programs.zsh.enable = true;
   programs.fish.enable = true;
