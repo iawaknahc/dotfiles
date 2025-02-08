@@ -23,10 +23,11 @@ disabled = false
 format = "[\\($context\\)]($style)"
 
 [shell]
-bash_indicator = "bash"
 disabled = false
-fish_indicator = "fish"
 format = "[$indicator]($style)"
+bash_indicator = "bash"
+elvish_indicator = "elvish"
+fish_indicator = "fish"
 nu_indicator = "nu"
 unknown_indicator = "unknown"
 

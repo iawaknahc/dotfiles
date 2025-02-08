@@ -44,9 +44,11 @@
 
     # Shells.
     ./home-manager/bash.nix
-    ./home-manager/zsh.nix
+    ./home-manager/x-elvish.nix
+    ./home-manager/elvish.nix
     ./home-manager/fish.nix
     ./home-manager/nushell.nix
+    ./home-manager/zsh.nix
     ./home-manager/starship.nix
     ./home-manager/shell-completion.nix
     ./home-manager/direnv.nix

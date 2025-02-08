@@ -13,6 +13,10 @@
     eval "$(direnv hook bash)"
   '';
 
+  programs.x-elvish.rcExtra = lib.mkAfter ''
+    eval (direnv hook elvish | slurp)
+  '';
+
   programs.fish.interactiveShellInit = lib.mkAfter ''
     direnv hook fish | source
   '';

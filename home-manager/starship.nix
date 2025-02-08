@@ -11,6 +11,9 @@
   programs.bash.initExtra = ''
     eval "$(starship init bash)"
   '';
+  programs.x-elvish.rcExtra = ''
+    eval (starship init elvish)
+  '';
   programs.fish.interactiveShellInit = ''
     starship init fish | source
   '';

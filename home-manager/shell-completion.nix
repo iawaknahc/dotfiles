@@ -12,6 +12,9 @@
   programs.bash.initExtra = ''
     source <(carapace carapace)
   '';
+  programs.x-elvish.rcExtra = ''
+    eval (carapace _carapace | slurp)
+  '';
 
   programs.fish.interactiveShellInit = ''
     carapace _carapace | source
