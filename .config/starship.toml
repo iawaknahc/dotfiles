@@ -1,0 +1,46 @@
+add_newline = false
+follow_symlinks = false
+format = "$kubernetes$direnv$shell$shlvl$character $status "
+
+[character]
+disabled = false
+error_symbol = "[I](bold green)"
+format = "$symbol"
+success_symbol = "[I](bold green)"
+vimcmd_replace_one_symbol = "[R](bold green)"
+vimcmd_replace_symbol = "[R](bold cyan)"
+vimcmd_symbol = "[N](bold red)"
+vimcmd_visual_symbol = "[V](bold purple)"
+
+[direnv]
+disabled = false
+format = "[$loaded]($style)"
+loaded_msg = "."
+unloaded_msg = ""
+
+[kubernetes]
+disabled = false
+format = "[\\($context\\)]($style)"
+
+[shell]
+bash_indicator = "bash"
+disabled = false
+fish_indicator = "fish"
+format = "[$indicator]($style)"
+nu_indicator = "nu"
+unknown_indicator = "unknown"
+
+[shlvl]
+disabled = false
+format = "[$shlvl](bold yellow)"
+threshold = 0
+
+[status]
+disabled = false
+format = "$symbol"
+not_executable_symbol = "[$status \\$](bold red)"
+not_found_symbol = "[$status \\$](bold red)"
+sigint_symbol = "[$status \\$](bold red)"
+signal_symbol = "[$status \\$](bold red)"
+success_symbol = "\\$"
+symbol = "[$status \\$](bold red)"
