@@ -48,7 +48,7 @@
     ./home-manager/fish.nix
     ./home-manager/nushell.nix
     ./home-manager/starship.nix
-    ./home-manager/carapace.nix
+    ./home-manager/shell-completion.nix
     ./home-manager/direnv.nix
 
     # Collections of programs.
