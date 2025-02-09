@@ -11,7 +11,6 @@ print $"sourcing ($nu.env-path)"
 
 $env.config.show_banner = false
 $env.config.edit_mode = "vi";
-$env.PROMPT_COMMAND_RIGHT = ""
 $env.PROMPT_INDICATOR_VI_NORMAL = {||
   let mode = $"(ansi red_bold)N(ansi reset)"
   let exit_code = $env.LAST_EXIT_CODE
@@ -31,9 +30,6 @@ $env.PROMPT_INDICATOR_VI_INSERT = {||
     $"(ansi red_bold)($exit_code) $(ansi reset)"
   }
   $"($mode) ($prompt) "
-}
-$env.PROMPT_COMMAND = {||
-  $"(ansi white_bold)nu(ansi reset)(ansi yellow_bold)($env.SHLVL)(ansi reset)"
 }
 
 export-env {
