@@ -75,6 +75,11 @@
                   homeDirectory
                   android-nixpkgs
                   ;
+                nixPath_nixpkgs = "${nixpkgs.outPath}";
+                nixPath_home-manager = "${home-manager.outPath}";
+                nixPath_nix-darwin = "${nix-darwin.outPath}";
+                nixPath_darwin-config = "${./darwin.nix}";
+                nixPath_for-nixd = "${./.}";
               };
               modules = [
                 mac-app-util.homeManagerModules.default
@@ -96,9 +101,7 @@
             "${hostname}" = nix-darwin.lib.darwinSystem {
               modules = [ ./darwin.nix ];
               specialArgs = {
-                inherit nixpkgs home-manager nix-darwin;
                 nixpkgsHostPlatform = system;
-                darwin-config = ./darwin.nix;
               };
             };
           }
