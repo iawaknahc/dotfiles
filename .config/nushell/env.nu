@@ -32,25 +32,6 @@ $env.PROMPT_INDICATOR_VI_INSERT = {||
   $"($mode) ($prompt) "
 }
 
-export-env {
-  def --env source_bash [p] {
-    let t = bash -c $"source '($p)' && env" |
-      lines |
-      parse --regex '^(?P<name>[A-Z][a-zA-Z0-9_]*)=(?<value>.*)$' |
-      where { |x| ($x.name not-in $env) or ($env | get $x.name) != $x.value } |
-      where name not-in ['_', 'SHLVL', 'LAST_EXIT_CODE', 'DIRS_POSITION']
-
-    let s = $t | update name {|row| '+' + $row.name} | get name | str join ' '
-    if ($s | is-not-empty) {
-      print $"($s)"
-    }
-
-    $t | transpose --header-row | into record | load-env
-  }
-
-  # I do not use nu as my main shell for now.
-  # So we do not need to source the following script.
-  # The environment variables are inherited from the main shell.
-  #source_bash /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-  #source_bash $"($env.HOME)/.nix-profile/etc/profile.d/hm-session-vars.sh"
-}
+# WARNING: nix-darwin setEnvironment.sh is not sourced.
+# WARNING: home.sessionVariables are not respected.
+# So nu cannot be used as a main shell.
