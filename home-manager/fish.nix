@@ -6,19 +6,19 @@
   programs.fish.enable = true;
   home.packages = with pkgs; [ babelfish ];
   programs.fish.shellInit = ''
-    if status is-login
-        echo "login shell: true"
-    else
-        echo "login shell: false"
-    end
-    echo "sourcing $(status filename)"
-
     # Ensure SHELL is correctly set.
     # Note that this must appear after we have set up the PATH,
     # otherwise, `command -v fish` is an empty string.
     set --global --export SHELL "$(command -v fish)"
   '';
   programs.fish.interactiveShellInit = ''
+    if status is-login
+        echo "login shell: true"
+    else
+        echo "login shell: false"
+    end
+
+    echo "sourcing $(status filename)"
     # Turn on vi mode
     fish_vi_key_bindings
 
