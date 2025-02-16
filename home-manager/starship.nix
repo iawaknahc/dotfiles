@@ -1,27 +1,27 @@
-{ pkgs, ... }:
+{ config, ... }:
 {
   # Do not use programs.starship because we do not want to unset the shell integrations.
-  home.packages = with pkgs; [
-    starship
+  home.packages = [
+    config.programs.starship.package
   ];
   xdg.configFile."starship.toml" = {
     enable = true;
     source = ../.config/starship.toml;
   };
   programs.bash.initExtra = ''
-    eval "$(starship init bash)"
+    eval "$(${config.programs.starship.package}/bin/starship init bash)"
   '';
   programs.x-elvish.rcExtra = ''
-    eval (starship init elvish)
+    eval (${config.programs.starship.package}/bin/starship init elvish)
   '';
   programs.fish.interactiveShellInit = ''
-    starship init fish | source
+    ${config.programs.starship.package}/bin/starship init fish | source
   '';
   programs.nushell.extraConfig = ''
     mkdir ($nu.data-dir | path join "vendor/autoload")
-    starship init nu | save --force ($nu.data-dir | path join "vendor/autoload/starship.nu")
+    ${config.programs.starship.package}/bin/starship init nu | save --force ($nu.data-dir | path join "vendor/autoload/starship.nu")
   '';
   programs.zsh.initExtra = ''
-    eval "$(starship init zsh)"
+    eval "$(${config.programs.starship.package}/bin/starship init zsh)"
   '';
 }
