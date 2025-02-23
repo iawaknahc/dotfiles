@@ -1,3 +1,15 @@
+## Nix and shell initialization
+
+nix-installer installs a shell script that is expected to be sourced:
+
+- [/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh](https://github.com/NixOS/nix/blob/master/scripts/nix-profile-daemon.sh.in) for a multi-user install.
+- [/nix/var/nix/profiles/default/etc/profile.d/nix.sh](https://github.com/NixOS/nix/blob/master/scripts/nix-profile.sh.in) for a single user install.
+
+These two scripts does not prevent being executed more than once. So we need to prevent that ourselves.
+
+Apart from the sh version, a fish version is also available.
+For other shells like nushell and elvish, we need a way to source the sh version.
+
 ## Install nix with nix-installer
 
 Download nix-installer at https://github.com/DeterminateSystems/nix-installer/releases
