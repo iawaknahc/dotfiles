@@ -79,6 +79,7 @@
         platforms-android-35
         sources-android-35
         build-tools-35-0-0
+        build-tools-35-0-1
         system-images-android-35-google-apis-playstore-arm64-v8a
 
         platforms-android-34
