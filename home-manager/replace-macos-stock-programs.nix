@@ -3,7 +3,12 @@
   home.packages = with pkgs; [
     # The following packages replace programs that ship with macOS.
     bzip2
-    coreutils-prefixed
+    (coreutils-prefixed.override {
+      # Set minimal to false so that the man pages are installed.
+      minimal = false;
+      # withOpenssl = !minimal by default. Revert it to false.
+      withOpenssl = false;
+    })
 
     # In case you need to curl a website whose TLS certificate is signed by
     # a locally trusted CA, like the one created by mkcert,
