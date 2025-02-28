@@ -10,6 +10,20 @@
     # Note that this must appear after we have set up the PATH,
     # otherwise, `command -v fish` is an empty string.
     set --global --export SHELL "$(command -v fish)"
+
+    # Prefer wrapped versions instead of fish functions.
+    # For some unknown reason,
+    # after a function is erased, functions still list it.
+    # But functions --query correctly reports it does not exist.
+    if functions --query ls
+      functions --erase ls
+    end
+    if functions --query grep
+      functions --erase grep
+    end
+    if functions --query diff
+      functions --erase diff
+    end
   '';
   programs.fish.interactiveShellInit = ''
     if status is-login
