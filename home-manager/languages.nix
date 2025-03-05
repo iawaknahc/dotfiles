@@ -4,6 +4,7 @@
 }:
 {
   home.packages = with pkgs; [
+    go
     # nodejs is the latest LTS.
     nodejs
     perl
