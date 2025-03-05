@@ -10,6 +10,15 @@ These two scripts does not prevent being executed more than once. So we need to 
 Apart from the sh version, a fish version is also available.
 For other shells like nushell and elvish, we need a way to source the sh version.
 
+## Shell initialization
+
+- [bash](https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html)
+- [zsh](https://zsh.sourceforge.io/Doc/Release/Files.html#Startup_002fShutdown-Files)
+- [fish](https://fishshell.com/docs/current/language.html#configuration)
+  - In particular, fish reads XDG_DATA_DIRS and source the files there.
+  - Some Nix packages is known to install fish snippets, such as fzf.
+  - For these packages, sourcing of the snippets cannot be prevented.
+
 ## Install nix with nix-installer
 
 Download nix-installer at https://github.com/DeterminateSystems/nix-installer/releases
