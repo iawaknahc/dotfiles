@@ -17,6 +17,9 @@
     hadolint
     imagemagick
     jq
+    # Metadata anonymisation toolkit 2
+    # https://0xacab.org/jvoisin/mat2
+    mat2
     nixfmt-rfc-style
     prettierd
     shellcheck
