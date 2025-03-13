@@ -1,40 +1,26 @@
 { pkgs, ... }:
+let
+  version = "2.56.0";
+  pname = "cronstrue";
+  packageLockJSON = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/bradymholt/${pname}/refs/tags/v${version}/package-lock.json";
+    hash = "sha256-arslilvaFS7De77BUqbEeE5mb+snls5bbDQKMaei6SM=";
+  };
+in
 {
   # cronstrue is a simple program to turn a cron expression into something human-readable.
   home.packages = [
     (pkgs.buildNpmPackage {
-      pname = "cronstrue";
-      version = "2.52.0";
-      src = pkgs.fetchFromGitHub {
-        owner = "bradymholt";
-        repo = "cRonstrue";
-        rev = "v2.52.0";
-        hash = "sha256-4jTfgdopM8TEA1eke0p6Dtj9Jz1xvs0oVcXm2JYrRmc=";
+      inherit pname version;
+      src = pkgs.fetchzip {
+        url = "https://registry.npmjs.org/${pname}/-/${pname}-${version}.tgz";
+        hash = "sha256-xOk+BXbbFM7J9z+YddsFzduVGMjtcaKcMKZejCCQjmU=";
       };
-      npmDepsHash = "sha256-3IJaQm54e1zbbh4VHhz2YHfnq5VaVy9iWAelXZKo1/c=";
-      npmBuildScript = "prepublishOnly";
-      patches = [
-        # Even I can set nativeBuildInputs = [ pkgs.git ];
-        # to make git available to this derivation,
-        # src is still not a git repository.
-        # Running git add -A will error-out.
-        # So we need to patch the build script to exclude that git command.
-        (pkgs.writeText "cronstrue-build-patch" ''
-          diff --git i/package.json w/package.json
-          index 0002a89..a2cc19e 100644
-          --- i/package.json
-          +++ w/package.json
-          @@ -67,7 +67,7 @@
-               "start": "npm run build",
-               "build": "npx tsc -p ./src --emitDeclarationOnly",
-               "test": "npx mocha --reporter spec --require ts-node/register \"./test/**/*.ts\"",
-          -    "prepublishOnly": "rm -rf ./dist && ./node_modules/webpack-cli/bin/cli.js && git add -A"
-          +    "prepublishOnly": "rm -rf ./dist && ./node_modules/webpack-cli/bin/cli.js"
-             },
-             "dependencies": {}
-           }
-        '')
-      ];
+      postPatch = ''
+        cp ${packageLockJSON} package-lock.json
+      '';
+      npmDepsHash = "sha256-S7Qj89CuteMTvwU5DN+byY9G5gXTt505D+VVq8CqkoQ=";
+      dontNpmBuild = true;
     })
   ];
 }
