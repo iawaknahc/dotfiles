@@ -87,7 +87,7 @@
 
     # Programs that are not available on nixpkgs.
     ./home-manager/cronstrue.nix
-    ./home-manager/json5.nix
+    ./home-manager/json5
 
     # Individual programs that require configurations.
     ./home-manager/mkcert.nix
