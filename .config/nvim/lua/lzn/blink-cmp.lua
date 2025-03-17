@@ -15,6 +15,9 @@ require("lz.n").load({
     preset_default.providers.path.fallbacks = nil
 
     require("blink.cmp").setup({
+      appearance = {
+        use_nvim_cmp_as_default = true,
+      },
       sources = preset_default,
       completion = {
         list = {
@@ -46,17 +49,6 @@ require("lz.n").load({
         -- C-j and C-k is more convenient than C-n and C-p
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
-        cmdline = {
-          preset = "default",
-          -- Tab is a muscle memory from interactive shell.
-          ["<Tab>"] = { "select_next", "fallback" },
-          -- Shift-tab is the inverse of Tab.
-          ["<S-Tab>"] = { "select_prev", "fallback" },
-
-          -- C-j and C-k is more convenient than C-n and C-p
-          ["<C-j>"] = { "select_next", "fallback" },
-          ["<C-k>"] = { "select_prev", "fallback" },
-        },
       },
     })
   end,
