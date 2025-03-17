@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
-  imports = [ ./tailwindcss-language-server.nix ];
+  imports = [
+    ./tailwindcss-language-server.nix
+    ./graphql-language-service-cli
+  ];
 
   config = {
     home.packages = with pkgs; [
@@ -12,7 +15,6 @@
       # See https://github.com/oxalica/nil
       nil
       nixd
-      nodePackages.graphql-language-service-cli
       pyright
       sqls
       taplo
