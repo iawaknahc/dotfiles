@@ -127,42 +127,7 @@
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/fzf-lua.lua;
-      plugin = (
-        pkgs.vimUtils.buildVimPlugin {
-          pname = "fzf-lua";
-          version = "2025-01-14";
-          src = pkgs.fetchFromGitHub {
-            owner = "ibhagwan";
-            repo = "fzf-lua";
-            rev = "6f7249741168c0751356e3b6c5c1e3bade833b6b";
-            hash = "sha256-rueyL7UJ+QBehsExZEWlN4y2wBEU1UGEyVewNyJh5bI=";
-          };
-          nvimSkipModule = [
-            "fzf-lua.complete"
-            "fzf-lua.providers.ui_select"
-            "fzf-lua.providers.diagnostic"
-            "fzf-lua.providers.buffers"
-            "fzf-lua.providers.git"
-            "fzf-lua.providers.files"
-            "fzf-lua.providers.colorschemes"
-            "fzf-lua.providers.oldfiles"
-            "fzf-lua.providers.nvim"
-            "fzf-lua.providers.lsp"
-            "fzf-lua.providers.grep"
-            "fzf-lua.providers.quickfix"
-            "fzf-lua.providers.manpages"
-            "fzf-lua.providers.module"
-            "fzf-lua.providers.tags"
-            "fzf-lua.providers.helptags"
-            "fzf-lua.providers.dap"
-            "fzf-lua.providers.tmux"
-            "fzf-lua.win"
-            "fzf-lua.config"
-            "fzf-lua.defaults"
-            "fzf-lua.core"
-          ];
-        }
-      );
+      plugin = fzf-lua;
     }
 
     # Completion
