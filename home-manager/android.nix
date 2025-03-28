@@ -39,7 +39,7 @@
 
         # ndk
         ndk-25-1-8937393 # Used by React Native 0.73.x
-        ndk-26-1-10909125 # Used by React Native 0.76.x
+        ndk-26-1-10909125 # Used by React Native 0.74.x, 0.75.x, 0.76.x
         ndk-27-1-12297006 # Used by React Native 0.77.x
 
         # cmake
