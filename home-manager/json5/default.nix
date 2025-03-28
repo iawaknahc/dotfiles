@@ -34,6 +34,8 @@ in
       # npm install does not creat node_modules.
       # The install script of buildNpmPackage expects node_modules to be present.
       # So we create it in preInstall.
+      # buildNpmPackage expects node_modules not to be empty.
+      # Set forceEmptyCache=true to tell buildNpmPackage node_modules is intentionally empty.
       patches = [ ./package.json.patch ];
       postPatch = ''
         cp ${./package-lock.json} package-lock.json
@@ -42,6 +44,7 @@ in
         mkdir node_modules
       '';
       npmDepsHash = "sha256-k39u9wfY5qzwfIGbk2betjHZ2EkGIJuYp02iIY9mRlg=";
+      forceEmptyCache = true;
     })
   ];
 }
