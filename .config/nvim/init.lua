@@ -119,6 +119,9 @@ vim.diagnostic.config({
   virtual_text = {
     source = true,
   },
+  -- Turning on virtual_lines will cause virtual lines to be inserted.
+  -- I do not like this.
+  -- virtual_lines = true,
   float = {
     source = true,
   },

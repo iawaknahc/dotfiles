@@ -68,41 +68,35 @@ require("lz.n").load({
       desc = "Fuzzy search all lines in open buffers",
     },
 
-    -- Helix space mode usually opens pickers.
-    -- Helix also has goto mode i to "go to implementation".
-    -- Since here we are opening a picker, so this should be a space mode keymap.
+    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
-      "<Space>i",
+      "gri",
       "<CMD>FzfLua lsp_implementations<CR>",
       desc = "Open implementations of the interface under the cursor",
     },
-    -- r stands for references.
-    -- When this is used on a function,
-    -- the results are similar to listing incoming calls.
-    -- In a future release of neovim, there is a default mapping gr
-    -- that does the same thing with the quickfix list.
-    -- See https://github.com/neovim/neovim/pull/28500
+    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
-      "<Space>r",
+      "grr",
       "<CMD>FzfLua lsp_references<CR>",
       desc = "Open references to the symbol under the cursor",
     },
-    -- c stands for incoming "c"alls.
+    -- c stands for incoming calls.
     {
       "<Space>c",
       "<CMD>FzfLua lsp_incoming_calls<CR>",
       desc = "Open incoming calls to the function under the cursor",
     },
-    -- C stands for outgoing "c"alls.
+    -- C stands for outgoing calls.
     -- It is C because outgoing calls are less common.
     {
       "<Space>C",
       "<CMD>FzfLua lsp_outgoing_calls<CR>",
       desc = "Open outgoing calls from the function under the cursor",
     },
-    -- s stands for "s"ymbols.
+
+    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
-      "<Space>s",
+      "gO",
       "<CMD>FzfLua lsp_document_symbols<CR>",
       desc = "Open symbols in the current buffer",
     },

@@ -168,20 +168,12 @@ require("lz.n").load({
       desc = "Go to type definition",
     },
 
-    -- Upcoming default mapping
-    -- See https://github.com/neovim/neovim/pull/28500
-    {
-      "crn",
-      vim.lsp.buf.rename,
-      desc = "Rename",
-    },
-    -- Upcoming default mapping
-    -- See https://github.com/neovim/neovim/pull/28500
+    -- grn is vim.lsp.buf.rename()
+    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
+
+    -- grr is vim.lsp.buf.references()
+    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     -- But this opens the quickfix list, the UX is not as good as telescope.
-    -- {
-    --   "gr", vim.lsp.buf.references,
-    --   desc = "List references to the symbol under the cursor",
-    -- },
 
     -- After trying inlay hint for some time,
     -- I found it quite annoying.
