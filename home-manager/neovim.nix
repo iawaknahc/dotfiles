@@ -66,6 +66,15 @@
     # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
     lz-n
 
+    # This plugin is dependency of many other plugins.
+    # Thus it is not lazy-loaded.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/plenary-nvim.lua;
+      plugin = plenary-nvim;
+    }
+
     # treesitter
     {
       type = "lua";
