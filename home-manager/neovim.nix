@@ -123,6 +123,14 @@
       );
     }
 
+    # AI
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/ai.lua;
+      plugin = codecompanion-nvim;
+    }
+
     # LSP
     {
       type = "lua";
