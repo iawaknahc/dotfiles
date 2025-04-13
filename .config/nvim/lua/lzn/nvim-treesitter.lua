@@ -101,6 +101,19 @@ local textobjects = {
       ["[S"] = { query = "@statement.outer", desc = "Previous end of statement" },
     },
   },
+  swap = {
+    enable = true,
+    swap_next = {
+      -- Override :h gs
+      ["gsp"] = { query = "@parameter.inner", desc = "Swap this parameter with the next one" },
+      ["gss"] = { query = "@statement.outer", desc = "Swap this statement with the next one" },
+    },
+    swap_previous = {
+      -- Override :h gs
+      ["gsP"] = { query = "@parameter.inner", desc = "Swap this parameter with the previous one" },
+      ["gsS"] = { query = "@statement.outer", desc = "Swap this statement with the previous one" },
+    },
+  },
 }
 
 require("lz.n").load({
