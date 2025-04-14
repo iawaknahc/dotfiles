@@ -238,6 +238,14 @@
       plugin = lualine-nvim;
     }
 
+    # Hints on keymap
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/which-key-nvim.lua;
+      plugin = which-key-nvim;
+    }
+
     # Edit table.
     {
       type = "lua";

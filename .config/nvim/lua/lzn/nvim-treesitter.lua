@@ -30,28 +30,28 @@ local textobjects = {
     enable = true,
     keymaps = {
       -- a stands for assignment.
-      ["aa"] = { query = "@assignment.outer", desc = "Select around assignment" },
-      ["ia"] = { query = "@assignment.inner", desc = "Select inner assignment" },
+      ["aa"] = { query = "@assignment.outer", desc = "assignment" },
+      ["ia"] = { query = "@assignment.inner", desc = "inner assignment" },
       -- b stands for block.
       -- Override :h ab and :h ib
-      ["ab"] = { query = "@block.outer", desc = "Select around block" },
-      ["ib"] = { query = "@block.inner", desc = "Select inner block" },
+      ["ab"] = { query = "@block.outer", desc = "block" },
+      ["ib"] = { query = "@block.inner", desc = "inner block" },
       -- c stands for class.
-      ["ac"] = { query = "@class.outer", desc = "Select around class" },
-      ["ic"] = { query = "@class.inner", desc = "Select inner class" },
+      ["ac"] = { query = "@class.outer", desc = "class" },
+      ["ic"] = { query = "@class.inner", desc = "inner class" },
       -- l stands for loop.
-      ["al"] = { query = "@loop.outer", desc = "Select around loop" },
-      ["il"] = { query = "@loop.inner", desc = "Select inner loop" },
+      ["al"] = { query = "@loop.outer", desc = "loop" },
+      ["il"] = { query = "@loop.inner", desc = "inner loop" },
       -- m stands for method, resembles the builtin [m
-      ["am"] = { query = "@function.outer", desc = "Select around method or function" },
-      ["im"] = { query = "@function.inner", desc = "Select inner method or function" },
+      ["am"] = { query = "@function.outer", desc = "method or function" },
+      ["im"] = { query = "@function.inner", desc = "inner method or function" },
       -- p stands for parameter.
       -- Override :h ap and :h ip
-      ["ap"] = { query = "@parameter.outer", desc = "Select around parameter" },
-      ["ip"] = { query = "@parameter.inner", desc = "Select inner parameter" },
+      ["ap"] = { query = "@parameter.outer", desc = "parameter" },
+      ["ip"] = { query = "@parameter.inner", desc = "inner parameter" },
       -- s stands for statement.
-      ["as"] = { query = "@statement.outer", desc = "Select around statement" },
-      ["is"] = { query = "@statement.inner", desc = "Select inner statement" },
+      ["as"] = { query = "@statement.outer", desc = "statement" },
+      ["is"] = { query = "@statement.inner", desc = "inner statement" },
     },
   },
   move = {
@@ -105,13 +105,13 @@ local textobjects = {
     enable = true,
     swap_next = {
       -- Override :h gs
-      ["gsp"] = { query = "@parameter.inner", desc = "Swap this parameter with the next one" },
-      ["gss"] = { query = "@statement.outer", desc = "Swap this statement with the next one" },
+      ["gsp"] = { query = "@parameter.inner", desc = "Swap with next parameter" },
+      ["gss"] = { query = "@statement.outer", desc = "Swap with next statement" },
     },
     swap_previous = {
       -- Override :h gs
-      ["gsP"] = { query = "@parameter.inner", desc = "Swap this parameter with the previous one" },
-      ["gsS"] = { query = "@statement.outer", desc = "Swap this statement with the previous one" },
+      ["gsP"] = { query = "@parameter.inner", desc = "Swap with previous parameter" },
+      ["gsS"] = { query = "@statement.outer", desc = "Swap with previous statement" },
     },
   },
 }
@@ -147,7 +147,7 @@ require("lz.n").load({
         require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move()
       end,
       mode = { "n", "x", "o" },
-      desc = ":help ;",
+      desc = "Repeat ftFT",
     },
     {
       ",",
@@ -155,7 +155,7 @@ require("lz.n").load({
         require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_opposite()
       end,
       mode = { "n", "x", "o" },
-      desc = ":help ,",
+      desc = "Repeat ftFT",
     },
     {
       "f",
@@ -164,7 +164,7 @@ require("lz.n").load({
       end,
       mode = { "n", "x", "o" },
       expr = true,
-      desc = ":help f",
+      desc = "Next char",
     },
     {
       "F",
@@ -173,7 +173,7 @@ require("lz.n").load({
       end,
       mode = { "n", "x", "o" },
       expr = true,
-      desc = ":help F",
+      desc = "Prev char",
     },
     {
       "t",
@@ -182,7 +182,7 @@ require("lz.n").load({
       end,
       mode = { "n", "x", "o" },
       expr = true,
-      desc = ":help t",
+      desc = "Til next char",
     },
     {
       "T",
@@ -191,7 +191,7 @@ require("lz.n").load({
       end,
       mode = { "n", "x", "o" },
       expr = true,
-      desc = ":help T",
+      desc = "Til prev char",
     },
   },
 })

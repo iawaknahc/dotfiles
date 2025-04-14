@@ -29,13 +29,13 @@ require("lz.n").load({
     {
       "<Space>f",
       "<CMD>FzfLua git_files<CR>",
-      desc = "Open file in the current project",
+      desc = "Open file",
     },
     -- Inspired by Helix space mode b
     {
       "<Space>b",
       "<CMD>FzfLua buffers<CR>",
-      desc = "Pick from open buffers",
+      desc = "Open buffers",
     },
     {
       "<Space>:",
@@ -50,17 +50,17 @@ require("lz.n").load({
     {
       "<Space>g",
       "<CMD>FzfLua live_grep<CR>",
-      desc = "Live grep in the current project",
+      desc = "Live grep in project",
     },
     {
       "<Space>/",
       "<CMD>FzfLua lgrep_curbuf<CR>",
-      desc = "Live grep in the current buffer",
+      desc = "Live grep in buffer",
     },
     {
       "<Space>l",
       "<CMD>FzfLua blines<CR>",
-      desc = "Fuzzy search the lines in the current buffer",
+      desc = "Fuzzy search lines",
     },
     {
       "<Space>L",
@@ -72,33 +72,33 @@ require("lz.n").load({
     {
       "gri",
       "<CMD>FzfLua lsp_implementations<CR>",
-      desc = "Open implementations of the interface under the cursor",
+      desc = "Open implementations",
     },
     -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
       "grr",
       "<CMD>FzfLua lsp_references<CR>",
-      desc = "Open references to the symbol under the cursor",
+      desc = "Open references",
     },
     -- c stands for incoming calls.
     {
       "<Space>c",
       "<CMD>FzfLua lsp_incoming_calls<CR>",
-      desc = "Open incoming calls to the function under the cursor",
+      desc = "Open incoming calls",
     },
     -- C stands for outgoing calls.
     -- It is C because outgoing calls are less common.
     {
       "<Space>C",
       "<CMD>FzfLua lsp_outgoing_calls<CR>",
-      desc = "Open outgoing calls from the function under the cursor",
+      desc = "Open outgoing calls",
     },
 
     -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
       "gO",
       "<CMD>FzfLua lsp_document_symbols<CR>",
-      desc = "Open symbols in the current buffer",
+      desc = "Open symbols",
     },
     {
       "<Space>S",
@@ -112,7 +112,7 @@ require("lz.n").load({
     {
       "<Space>d",
       "<CMD>FzfLua diagnostics_document<CR>",
-      desc = "Open diagnostics of the current buffer",
+      desc = "Open diagnostics",
     },
     {
       "<Space>D",

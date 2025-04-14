@@ -74,13 +74,13 @@ vim.o.smartcase = true
 vim.o.wrapscan = false
 
 -- Mapping
-vim.keymap.set("n", "<Space>", "<Nop>", { desc = "Disable :h <Space>" })
-vim.keymap.set({ "n", "x" }, "s", "<Nop>", { desc = "Disable :h s" })
-vim.keymap.set("n", "gh", "<Nop>", { desc = "Disable :h gh" })
-vim.keymap.set("n", "gH", "<Nop>", { desc = "Disable :h gH" })
-vim.keymap.set("n", "g<C-h>", "<Nop>", { desc = "Disable :h g_CTRL-H" })
-vim.keymap.set("n", "gs", "<Nop>", { desc = "Disable :h gs" })
-vim.keymap.set("n", "gv", "<Nop>", { desc = "Disable :h gv" })
+vim.keymap.set("n", "<Space>", "<Nop>") -- Disable :h <Space>
+vim.keymap.set({ "n", "x" }, "s", "<Nop>") -- Disable :h s
+vim.keymap.set("n", "gh", "<Nop>") -- Disable :h gh
+vim.keymap.set("n", "gH", "<Nop>") -- Disable :h gH
+vim.keymap.set("n", "g<C-h>", "<Nop>") -- Disable :h g_CTRL-H
+vim.keymap.set("n", "gs", "<Nop>") -- Disable :h gs
+vim.keymap.set("n", "gv", "<Nop>") -- Disable :h gv
 vim.keymap.set("n", "<C-l>", "<Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>", {
   desc = ":h CTRL-L-default with nohlsearch changed to hlsearch!",
 })
