@@ -83,6 +83,14 @@
       plugin = mini-surround;
     }
 
+    # motion
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/flash-nvim.lua;
+      plugin = flash-nvim;
+    }
+
     # treesitter
     {
       type = "lua";

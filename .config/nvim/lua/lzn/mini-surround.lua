@@ -3,14 +3,14 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     require("mini.surround").setup({
-      -- Override :h s
+      -- Override :h gs
       mappings = {
-        add = "sa",
-        delete = "sd",
+        add = "gsa",
+        delete = "gsd",
         find = "",
         find_left = "",
         highlight = "",
-        replace = "sr",
+        replace = "gsr",
         update_n_lines = "",
         suffix_last = "",
         suffix_next = "",
