@@ -75,6 +75,7 @@ vim.o.wrapscan = false
 
 -- Mapping
 vim.keymap.set("n", "<Space>", "<Nop>", { desc = "Disable :h <Space>" })
+vim.keymap.set({ "n", "x" }, "s", "<Nop>", { desc = "Disable :h s" })
 vim.keymap.set("n", "gh", "<Nop>", { desc = "Disable :h gh" })
 vim.keymap.set("n", "gH", "<Nop>", { desc = "Disable :h gH" })
 vim.keymap.set("n", "g<C-h>", "<Nop>", { desc = "Disable :h g_CTRL-H" })

@@ -75,6 +75,14 @@
       plugin = plenary-nvim;
     }
 
+    # surround
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/mini-surround.lua;
+      plugin = mini-surround;
+    }
+
     # treesitter
     {
       type = "lua";
