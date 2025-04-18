@@ -26,6 +26,7 @@
     shellcheck
     shfmt
     tree-sitter
+    uv
     wget
   ];
 }
