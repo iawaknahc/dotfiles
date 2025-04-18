@@ -2,7 +2,6 @@
 {
   imports = [
     ./tailwindcss-language-server.nix
-    ./graphql-language-service-cli
   ];
 
   config = {
@@ -11,6 +10,9 @@
       bash-language-server
       fish-lsp
       gopls
+
+      # graphql-language-service-cli is installed with npx
+
       # nil the the language server for Nix.
       # See https://github.com/oxalica/nil
       nil
