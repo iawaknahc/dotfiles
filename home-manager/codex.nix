@@ -13,4 +13,10 @@
       model: "anthropic/claude-3.7-sonnet"
     '';
   };
+  home.file.".codex/instructions.md" = {
+    enable = true;
+    text = ''
+      - Only use git commands when I explicitly tell you to do so.
+    '';
+  };
 }
