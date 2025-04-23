@@ -96,6 +96,7 @@
     ./home-manager/tldr.nix
     ./home-manager/gcloud.nix
     ./home-manager/gnuinfo.nix
+    ./home-manager/codex.nix
 
     ./home-manager/android.nix
     # Flutter is now installed per project with flake.nix
