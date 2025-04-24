@@ -22,6 +22,8 @@ require("lz.n").load({
         },
       },
     })
+    -- Use fzf-lua for vim.ui.select
+    require("fzf-lua").register_ui_select()
   end,
   cmd = "FzfLua",
   keys = {
