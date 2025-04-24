@@ -10,6 +10,7 @@ require("lz.n").load({
 
     local simple = {
       "jsonls", -- JSON
+      "marksman", -- Markdown
       "yamlls", -- YAML
       "taplo", -- TOML
 

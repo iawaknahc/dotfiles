@@ -13,6 +13,7 @@
 
       # graphql-language-service-cli is installed with npx
 
+      marksman
       # nil the the language server for Nix.
       # See https://github.com/oxalica/nil
       nil
