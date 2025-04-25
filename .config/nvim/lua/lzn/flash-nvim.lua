@@ -3,7 +3,7 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   keys = {
     {
-      "s",
+      "<Enter>",
       function()
         require("flash").jump()
       end,
