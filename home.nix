@@ -53,6 +53,9 @@
   imports = [
     ./home-manager/fonts.nix
 
+    # Karabiner
+    ./home-manager/karabiner.nix
+
     # Terminals.
     ./home-manager/terminal.nix
     ./home-manager/tmux.nix
