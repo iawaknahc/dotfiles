@@ -1,47 +1,25 @@
 require("lz.n").load({
   "nvim-lspconfig",
   after = function()
-    -- TODO: Remove this when nvim >= 0.11
-    -- See https://cmp.saghen.dev/installation.html
-    require("lz.n").trigger_load("blink.cmp")
-    local capabilities = require("blink.cmp").get_lsp_capabilities()
+    vim.lsp.enable("jsonls") -- JSON
+    vim.lsp.enable("marksman") -- Markdown
+    vim.lsp.enable("yamlls") -- YAML
+    vim.lsp.enable("taplo") -- TOML
+    vim.lsp.enable("awk_ls") -- awk
+    vim.lsp.enable("bashls") -- Bash or sh
+    vim.lsp.enable("fish_lsp") -- fish
+    vim.lsp.enable("lua_ls") -- Lua
+    vim.lsp.enable("nil_ls") -- Nix
+    vim.lsp.enable("sqls") -- SQL
+    vim.lsp.enable("graphql") -- GraphQL
+    vim.lsp.enable("html") -- HTML
+    vim.lsp.enable("cssls") -- CSS
+    vim.lsp.enable("tailwindcss") -- Tailwindsss
+    vim.lsp.enable("pyright") -- Python
+    vim.lsp.enable("dartls") -- Dart
+    vim.lsp.enable("typos_lsp") -- Spell checking
 
-    local lspconfig = require("lspconfig")
-
-    local simple = {
-      "jsonls", -- JSON
-      "marksman", -- Markdown
-      "yamlls", -- YAML
-      "taplo", -- TOML
-
-      "awk_ls", -- awk
-      "bashls", -- bash or sh
-      "fish_lsp", -- fish
-
-      "lua_ls", -- Lua
-
-      "nil_ls", -- Nix
-
-      "sqls", -- SQL
-      "graphql", -- GraphQL
-
-      "html", -- HTML
-      "cssls", -- CSS
-      "tailwindcss", -- Tailwindsss
-
-      "pyright", -- Python
-      "dartls", -- Dart
-
-      "typos_lsp", -- Spell checking
-    }
-    for _, v in ipairs(simple) do
-      lspconfig[v].setup({
-        capabilities = capabilities,
-      })
-    end
-
-    lspconfig["gopls"].setup({
-      capabilities = capabilities,
+    vim.lsp.config("gopls", {
       settings = {
         gopls = {
           hints = {
@@ -56,10 +34,9 @@ require("lz.n").load({
         },
       },
     })
+    vim.lsp.enable("gopls")
 
-    lspconfig["ts_ls"].setup({
-      capabilities = capabilities,
-      root_dir = lspconfig.util.root_pattern("package.json"),
+    vim.lsp.config("ts_ls", {
       init_options = {
         -- https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md
         preferences = {
@@ -74,16 +51,16 @@ require("lz.n").load({
         },
       },
     })
+    vim.lsp.enable("ts_ls")
 
-    lspconfig["denols"].setup({
-      capabilities = capabilities,
-      root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+    vim.lsp.config("denols", {
+      root_markers = { "deno.json", "deno.jsonc" },
     })
+    vim.lsp.enable("denols")
 
     -- Known issue: inlay hint works only in `with pkgs; [ ... ]`
     -- See https://github.com/nix-community/nixd/issues/629#issuecomment-2558520043
-    lspconfig["nixd"].setup({
-      capabilities = capabilities,
+    vim.lsp.config("nixd", {
       cmd = { "nixd", "--inlay-hints=true", "--semantic-tokens=true" },
       settings = {
         nixd = {
@@ -103,6 +80,7 @@ require("lz.n").load({
         },
       },
     })
+    vim.lsp.enable("nixd")
 
     local lspGroup = vim.api.nvim_create_augroup("MyLSPAutoCommands", { clear = true })
 
