@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name        webike-helper
+// @version     0.1.0
 // @match       https://www.webike.hk/
 // @match       https://www.webike.hk/ps/*/
 // @grant       GM_openInTab
@@ -8,8 +9,9 @@
 // @grant       GM_setValue
 // @grant       window.close
 // @run-at      document-idle
-// @require https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@2,npm/@violentmonkey/ui@0.7
-// @require https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+// @require     https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@2,npm/@violentmonkey/ui@0.7
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+// @downloadURL https://raw.githubusercontent.com/iawaknahc/dotfiles/refs/heads/master/violentmonkey/webike-helper.user.js
 // ==/UserScript==
 
 function buildInputWidget() {
@@ -124,7 +126,7 @@ async function processLines(lines) {
 async function processPartNumber(partNumber) {
   return new Promise((resolve, reject) => {
     const url = `https://www.webike.hk/ps/${encodeURIComponent(
-      partNumber
+      partNumber,
     )}/#!search&p.k=${encodeURIComponent(partNumber)}`;
     const tabControl = GM_openInTab(url, {
       active: false,
@@ -186,7 +188,7 @@ function* yieldProductItems(productList) {
     const title = product.querySelector(".info-title").textContent;
     const price = cleanPrice(product.querySelector(".price").textContent);
     const partNumber = cleanPartNumber(
-      product.querySelector(".model").textContent
+      product.querySelector(".model").textContent,
     );
     const url = product.querySelector("a[href]").href;
     yield {
