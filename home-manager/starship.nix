@@ -21,7 +21,7 @@
     mkdir ($nu.data-dir | path join "vendor/autoload")
     ${config.programs.starship.package}/bin/starship init nu | save --force ($nu.data-dir | path join "vendor/autoload/starship.nu")
   '';
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     eval "$(${config.programs.starship.package}/bin/starship init zsh)"
   '';
 }

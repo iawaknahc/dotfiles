@@ -43,7 +43,7 @@ in
     mkdir ($nu.data-dir | path join "vendor/autoload")
     ${carapace}/bin/carapace _carapace nushell | save --force ($nu.data-dir | path join "vendor/autoload/carapace.nu")
   '';
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
     source <(${carapace}/bin/carapace _carapace)
   '';

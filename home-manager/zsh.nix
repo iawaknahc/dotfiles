@@ -9,11 +9,11 @@
 # bindkey "^?" backward-delete-char
 # Make CTRL-w able to delete the whole word
 # bindkey "^W" backward-kill-word
-{ ... }:
+{ lib, ... }:
 {
   programs.zsh.enable = true;
   programs.zsh.defaultKeymap = "viins";
-  programs.zsh.initExtraFirst = ''
+  programs.zsh.initContent = lib.mkBefore ''
     case "$-" in
       *l*) echo "login shell: true";;
       *) echo "login shell: false";;

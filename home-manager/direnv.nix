@@ -38,7 +38,7 @@
     })
   '';
 
-  programs.zsh.initExtra = lib.mkAfter ''
+  programs.zsh.initContent = lib.mkAfter ''
     eval "$(${config.programs.direnv.package}/bin/direnv hook zsh)"
   '';
 }
