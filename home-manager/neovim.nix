@@ -59,19 +59,13 @@
     # require("lz.n").load { PLUGIN_NAME }
     # where PLUGIN_NAME is the pname of a Nix vimPlugin.
     # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
+
+    # The plugin manager.
     lz-n
-
-    # colorscheme
+    # Colorscheme
     catppuccin-nvim
-
-    # This plugin is dependency of many other plugins.
-    # Thus it is not lazy-loaded.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/plenary-nvim.lua;
-      plugin = plenary-nvim;
-    }
+    # A dependency of many other plugins.
+    plenary-nvim
 
     # surround
     {
