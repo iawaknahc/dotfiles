@@ -107,35 +107,8 @@
     config.font_size = 13.0
 
     -- color
-    config.force_reverse_video_cursor = true
-    config.colors = {
-      foreground = "#f8f8f2",
-      background = "#282a36",
-
-      selection_fg = "none",
-      selection_bg = "#44475a",
-
-      ansi = {
-        "#44475a",
-        "#ff5555",
-        "#50fa7b",
-        "#f1fa8c",
-        "#8be9fd",
-        "#ff79c6",
-        "#bd93f9",
-        "#f8f8f2",
-      },
-      brights = {
-        "#6272a4",
-        "#ffb86c",
-        "#50fa7b",
-        "#f1fa8c",
-        "#8be9fd",
-        "#ff79c6",
-        "#bd93f9",
-        "#f8f8f2",
-      },
-    }
+    config.color_scheme = "Catppuccin Mocha"
+    --config.force_reverse_video_cursor = true
 
     return config
   '';

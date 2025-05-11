@@ -19,24 +19,29 @@ cursor-style = block
 shell-integration = none
 cursor-style-blink = false
 
-palette = 0=#44475a
-palette = 1=#ff5555
-palette = 2=#50fa7b
-palette = 3=#f1fa8c
-palette = 4=#8be9fd
-palette = 5=#ff79c6
-palette = 6=#bd93f9
-palette = 7=#f8f8f2
-palette = 8=#6272a4
-palette = 9=#ffb86c
-palette = 10=#50fa7b
-palette = 11=#f1fa8c
-palette = 12=#8be9fd
-palette = 13=#ff79c6
-palette = 14=#bd93f9
-palette = 15=#f8f8f2
-background = 282a36
-foreground = f8f8f2
-cursor-invert-fg-bg = true
+# This is Catppuccin Mocha
+# Copied from https://raw.githubusercontent.com/catppuccin/ghostty/9e38fc2b4e76d4ed5ff9edc5ac9e4081c7ce6ba6/themes/catppuccin-mocha.conf
+palette = 0=#45475a
+palette = 1=#f38ba8
+palette = 2=#a6e3a1
+palette = 3=#f9e2af
+palette = 4=#89b4fa
+palette = 5=#f5c2e7
+palette = 6=#94e2d5
+palette = 7=#bac2de
+palette = 8=#585b70
+palette = 9=#f38ba8
+palette = 10=#a6e3a1
+palette = 11=#f9e2af
+palette = 12=#89b4fa
+palette = 13=#f5c2e7
+palette = 14=#94e2d5
+palette = 15=#a6adc8
+background = 1e1e2e
+foreground = cdd6f4
+cursor-color = f5e0dc
+cursor-text = 1e1e2e
+selection-background = 353749
+selection-foreground = cdd6f4
 # selection-foreground does not support cell-foreground
 # See https://github.com/ghostty-org/ghostty/issues/2685

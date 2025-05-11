@@ -37,7 +37,7 @@
     fish_vi_key_bindings
 
     # Set theme
-    fish_config theme choose MyDracula
+    fish_config theme choose "Catppuccin Mocha"
   '';
   xdg.configFile."fish/themes" = {
     enable = true;

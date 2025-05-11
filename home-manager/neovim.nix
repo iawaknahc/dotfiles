@@ -54,17 +54,15 @@
   };
 
   programs.neovim.extraLuaConfig = builtins.readFile ../.config/nvim/init.lua;
-  xdg.configFile."nvim/colors" = {
-    enable = true;
-    recursive = true;
-    source = ../.config/nvim/colors;
-  };
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # require("lz.n").load { PLUGIN_NAME }
     # where PLUGIN_NAME is the pname of a Nix vimPlugin.
     # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
     lz-n
+
+    # colorscheme
+    catppuccin-nvim
 
     # This plugin is dependency of many other plugins.
     # Thus it is not lazy-loaded.
