@@ -35,15 +35,7 @@
     echo "sourcing $(status filename)"
     # Turn on vi mode
     fish_vi_key_bindings
-
-    # Set theme
-    fish_config theme choose "Catppuccin Mocha"
   '';
-  xdg.configFile."fish/themes" = {
-    enable = true;
-    recursive = true;
-    source = ../.config/fish/themes;
-  };
   xdg.configFile."fish/functions" = {
     enable = true;
     recursive = true;

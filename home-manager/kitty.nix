@@ -5,8 +5,6 @@
   programs.kitty.settings = {
     # shell
     shell = "${config.home.profileDirectory}/bin/fish --interactive --login";
-    # color
-    include = "${../.config/kitty/catppuccin-mocha.conf}";
     # Do not check for update.
     update_check_interval = 0;
     # Remote control

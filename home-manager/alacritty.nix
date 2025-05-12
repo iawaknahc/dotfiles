@@ -6,7 +6,6 @@
       # Study .tmux.conf before you change this.
       TERM = "alacritty";
     };
-    general.import = [ ../.config/alacritty/catppuccin-mocha.toml ];
     terminal.shell = {
       program = "${config.home.profileDirectory}/bin/fish";
       args = [

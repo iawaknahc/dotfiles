@@ -53,6 +53,9 @@
   imports = [
     ./home-manager/fonts.nix
 
+    # Theme
+    ./home-manager/catppuccin.nix
+
     # Karabiner
     ./home-manager/karabiner.nix
 

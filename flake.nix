@@ -18,6 +18,7 @@
       url = "github:tadfisher/android-nixpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs =
@@ -28,6 +29,7 @@
       nix-darwin,
       mac-app-util,
       android-nixpkgs,
+      catppuccin,
       ...
     }:
     let
@@ -83,6 +85,7 @@
               };
               modules = [
                 mac-app-util.homeManagerModules.default
+                catppuccin.homeModules.catppuccin
                 ./home.nix
               ];
             };
