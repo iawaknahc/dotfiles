@@ -14,6 +14,8 @@
     programs.home-manager.enable = true;
 
     nixpkgs.config.allowUnfree = true;
+    # Allow ghostty, which is marked as broken on macOS.
+    nixpkgs.config.allowBroken = true;
 
     home.username = username;
     home.homeDirectory = homeDirectory;
