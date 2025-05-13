@@ -1,2 +1,2 @@
-function fish_gretting
+function fish_greeting
 end
