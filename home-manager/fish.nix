@@ -2,6 +2,9 @@
 # to make sure extra files in ~/.config/fish/conf.d/ are removed.
 # That behavior can be replicated with home.activation.
 { pkgs, ... }:
+let
+  wrappers = import ./wrappers.nix { inherit pkgs; };
+in
 {
   programs.fish.enable = true;
   home.packages = with pkgs; [ babelfish ];
@@ -10,20 +13,6 @@
     # Note that this must appear after we have set up the PATH,
     # otherwise, `command -v fish` is an empty string.
     set --global --export SHELL "$(command -v fish)"
-
-    # Prefer wrapped versions instead of fish functions.
-    # For some unknown reason,
-    # after a function is erased, functions still list it.
-    # But functions --query correctly reports it does not exist.
-    if functions --query ls
-      functions --erase ls
-    end
-    if functions --query grep
-      functions --erase grep
-    end
-    if functions --query diff
-      functions --erase diff
-    end
   '';
   programs.fish.interactiveShellInit = ''
     if status is-login
@@ -40,5 +29,35 @@
     enable = true;
     recursive = true;
     source = ../.config/fish/functions;
+  };
+
+  # When direnv-flake is used, very likely coreutils is added to PATH.
+  # coreutils include a copy of ls.
+  # That copy of ls is not smart enough to show color when being called interactively in a terminal.
+  # When we call `ls`, the fish function named `ls` is invoked, instead of invoking
+  # the copy of `ls` that comes with the direnv-flake coreutils.
+  xdg.configFile."fish/functions/ls.fish" = {
+    enable = true;
+    text = ''
+      function ls
+        ${wrappers.ls} $argv
+      end
+    '';
+  };
+  xdg.configFile."fish/functions/grep.fish" = {
+    enable = true;
+    text = ''
+      function grep
+        ${wrappers.grep} $argv
+      end
+    '';
+  };
+  xdg.configFile."fish/functions/diff.fish" = {
+    enable = true;
+    text = ''
+      function diff
+        ${wrappers.diff} $argv
+      end
+    '';
   };
 }
