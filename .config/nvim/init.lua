@@ -136,39 +136,37 @@ vim.diagnostic.config({
 
 -- Autocmds
 
+local myautocmd_group = vim.api.nvim_create_augroup("MyDotEnv", { clear = true })
+
+local function myautocmd_set_filetype(pattern, filetype)
+  vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    group = myautocmd_group,
+    pattern = pattern,
+    callback = function()
+      vim.bo.filetype = filetype
+    end,
+  })
+end
+
 -- By default, filetype.vim treats *.env as sh
 -- We do NOT want to run any before-save fix on *.env
 -- For example, some envvars may have trailing whitespaces we do want to preserve.
-local dotEnvGroup = vim.api.nvim_create_augroup("MyDotEnv", { clear = true })
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  pattern = "*.env",
-  callback = function()
-    vim.bo.filetype = ""
-  end,
-  group = dotEnvGroup,
-})
+myautocmd_set_filetype("*.env", "")
+-- navi
+myautocmd_set_filetype("*.cheat", "sh")
+-- mjml
+myautocmd_set_filetype("*.mjml", "html")
 
-local naviCheatGroup = vim.api.nvim_create_augroup("MyNaviCheat", { clear = true })
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  pattern = "*.cheat",
-  callback = function()
-    vim.bo.filetype = "sh"
-  end,
-  group = naviCheatGroup,
-})
-
-local yankGroup = vim.api.nvim_create_augroup("MyYankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
+  group = myautocmd_group,
   pattern = "*",
   callback = function()
     vim.highlight.on_yank()
   end,
-  group = yankGroup,
 })
 
-local diagnosticGroup = vim.api.nvim_create_augroup("MyDiagnostic", { clear = true })
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
-  group = diagnosticGroup,
+  group = myautocmd_group,
   callback = function()
     vim.diagnostic.setloclist({ open = false })
   end,
