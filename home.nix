@@ -60,6 +60,8 @@
 
     # Karabiner
     ./home-manager/karabiner.nix
+    # Hammerspoon
+    ./home-manager/hammerspoon.nix
 
     # Terminals.
     ./home-manager/terminal.nix

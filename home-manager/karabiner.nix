@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, lib, ... }:
 let
   typeRule =
     {
@@ -19,7 +19,12 @@ let
           };
           to = [
             {
-              shell_command = "${config.home.profileDirectory}/bin/karabiner-type.scpt ${lib.escapeShellArg text}";
+              shell_command =
+                let
+                  encodedText = lib.strings.escapeURL text;
+                  url = lib.escapeShellArg "hammerspoon://type?text=${encodedText}";
+                in
+                "open -g ${url}";
             }
           ];
         }
@@ -76,6 +81,14 @@ in
 {
   xdg.configFile."karabiner/karabiner.json" = {
     enable = true;
-    text = builtins.toJSON karabinerJSON;
+    source =
+      let
+        jsonString = builtins.toJSON karabinerJSON;
+        pathToJSONFile = pkgs.writeText "karabiner.json" jsonString;
+        pathToPrettyJSON = pkgs.runCommand "karabiner.json" { } ''
+          ${pkgs.jq}/bin/jq <${pathToJSONFile} >$out
+        '';
+      in
+      pathToPrettyJSON;
   };
 }
