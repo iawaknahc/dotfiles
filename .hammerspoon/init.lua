@@ -45,7 +45,8 @@ local function make_window_shortcut(fn)
     local screen = win:screen()
     local max_frame = screen:frame()
     fn(f, max_frame)
-    win:setFrame(f)
+    local animation_duration = 0
+    win:setFrame(f, animation_duration)
   end
 end
 
