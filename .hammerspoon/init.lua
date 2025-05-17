@@ -1,10 +1,66 @@
 hs.loadSpoon("EmmyLua")
+hs.loadSpoon("RecursiveBinder")
 
--- This is used karabiner.
+-- This is used by Karabiner.
 hs.urlevent.bind("type", function(_eventName, params)
   local text = params["text"]
   hs.eventtap.keyStrokes(text)
 end)
+
+spoon.RecursiveBinder.helperFormat = {
+  -- Show it at center.
+  atScreenEdge = 0,
+}
+local singleKey = spoon.RecursiveBinder.singleKey
+-- This is used by Karabiner.
+hs.urlevent.bind(
+  "leader",
+  spoon.RecursiveBinder.recursiveBind({
+    [singleKey("r", "reload hs")] = function()
+      hs.reload()
+    end,
+    [singleKey("t", "terminal")] = function()
+      hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+    end,
+    [singleKey("b", "browser")] = function()
+      local bundleIDs = { "com.google.Chrome", "org.mozilla.firefox" }
+      for _, bundleID in ipairs(bundleIDs) do
+        local app = hs.application.find(bundleID)
+        if app ~= nil then
+          hs.application.launchOrFocusByBundleID(bundleID)
+          return
+        end
+      end
+    end,
+    [singleKey("a", "light/dark")] = function()
+      local to = ""
+      local next = ""
+      if hs.host.interfaceStyle() == "Dark" then
+        to = "false"
+        next = "Light"
+      else
+        to = "true"
+        next = "Dark"
+      end
+
+      hs.osascript.applescript(string.format(
+        [[
+      tell application "System Events"
+        tell appearance preferences
+          set dark mode to %s
+        end tell
+      end tell
+      ]],
+        to
+      ))
+
+      -- Avoid the alerts stack on each other.
+      hs.alert.closeAll(0)
+
+      hs.alert.show(string.format("%s mode", next))
+    end,
+  })
+)
 
 -- Window management shortcuts
 --- @param f hs.geometry
@@ -69,3 +125,6 @@ hs.hotkey.bind({ "⌃", "⌥" }, "right", make_window_shortcut(right))
 hs.hotkey.bind({ "⌃", "⌥" }, "return", make_window_shortcut(maximize))
 hs.hotkey.bind({ "⌃", "⌥" }, "e", make_window_shortcut(two_third))
 hs.hotkey.bind({ "⌃", "⌥" }, "c", make_window_shortcut(center))
+
+-- Show an alert when this file is (re)loaded.
+hs.alert.show("Reloaded")
