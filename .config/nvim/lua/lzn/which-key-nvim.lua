@@ -8,7 +8,6 @@ require("lz.n").load({
         return mapping.desc ~= nil and mapping.desc ~= ""
       end,
       spec = {
-        { "gx", desc = "Open file / URI" },
         { "gra", desc = "Code action" },
         { "grn", desc = "Rename" },
         { "]d", desc = "Next diagnostic" },
