@@ -1,3 +1,5 @@
+hs.loadSpoon("EmmyLua")
+
 -- This is used karabiner.
 hs.urlevent.bind("type", function(_eventName, params)
   local text = params["text"]
@@ -5,6 +7,8 @@ hs.urlevent.bind("type", function(_eventName, params)
 end)
 
 -- Window management shortcuts
+--- @param f hs.geometry
+--- @param max_frame hs.geometry
 local function left(f, max_frame)
   f.x = max_frame.x
   f.y = max_frame.y
@@ -12,6 +16,8 @@ local function left(f, max_frame)
   f.h = max_frame.h
 end
 
+--- @param f hs.geometry
+--- @param max_frame hs.geometry
 local function right(f, max_frame)
   f.x = max_frame.x + (max_frame.w / 2)
   f.y = max_frame.y
@@ -19,6 +25,8 @@ local function right(f, max_frame)
   f.h = max_frame.h
 end
 
+--- @param f hs.geometry
+--- @param max_frame hs.geometry
 local function maximize(f, max_frame)
   f.x = max_frame.x
   f.y = max_frame.y
@@ -26,6 +34,8 @@ local function maximize(f, max_frame)
   f.h = max_frame.h
 end
 
+--- @param f hs.geometry
+--- @param max_frame hs.geometry
 local function two_third(f, max_frame)
   f.x = max_frame.x
   f.y = max_frame.y
@@ -33,11 +43,15 @@ local function two_third(f, max_frame)
   f.h = max_frame.h
 end
 
+--- @param f hs.geometry
+--- @param max_frame hs.geometry
 local function center(f, max_frame)
   f.x = max_frame.x + max_frame.w / 2 - (f.w / 2)
   f.y = max_frame.y + max_frame.h / 2 - (f.h / 2)
 end
 
+--- @param fn fun(f: hs.geometry, max_frame: hs.geometry)
+--- @return fun()
 local function make_window_shortcut(fn)
   return function()
     local win = hs.window.focusedWindow()
