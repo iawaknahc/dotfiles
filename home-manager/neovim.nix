@@ -53,6 +53,9 @@
     vimdiff = "nvim -d";
   };
 
+  xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
+  xdg.configFile."nvim/.luarc.json".source = ../.config/nvim/.luarc.json;
+
   programs.neovim.extraLuaConfig = builtins.readFile ../.config/nvim/init.lua;
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
