@@ -1,11 +1,10 @@
 { pkgs, lib, ... }:
 let
-  typeRule =
-    {
-      modifiers,
-      key_code,
-      text,
-    }:
+  typeSymbol =
+    key_code: text:
+    let
+      modifiers = [ "right_option" ];
+    in
     {
       description = "Type ${text} with ${builtins.concatStringsSep " + " modifiers} + ${key_code}";
       manipulators = [
@@ -110,36 +109,24 @@ let
           rules = [
             # The following mappings do not override existing ones.
             # For example, we DO NOT map right_option + 1 to 1️⃣  because right_option + 1 maps to ¡ by default.
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "left_command";
-              text = "⌘";
-            })
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "left_option";
-              text = "⌥";
-            })
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "left_control";
-              text = "⌃";
-            })
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "left_shift";
-              text = "⇧";
-            })
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "escape";
-              text = "␛";
-            })
-            (typeRule {
-              modifiers = [ "right_option" ];
-              key_code = "return_or_enter";
-              text = "⏎";
-            })
+            (typeSymbol "left_command" "⌘")
+            (typeSymbol "right_command" "⌘")
+            (typeSymbol "left_option" "⌥")
+            (typeSymbol "left_control" "⌃")
+            (typeSymbol "right_control" "⌃")
+            (typeSymbol "left_shift" "⇧")
+            (typeSymbol "right_shift" "⇧")
+            (typeSymbol "escape" "␛")
+            (typeSymbol "return_or_enter" "⏎")
+            (typeSymbol "tab" "⇥")
+            (typeSymbol "caps_lock" "⇪")
+            (typeSymbol "spacebar" "␣")
+            (typeSymbol "delete_or_backspace" "⌫")
+            (typeSymbol "up_arrow" "↑")
+            (typeSymbol "right_arrow" "→")
+            (typeSymbol "down_arrow" "↓")
+            (typeSymbol "left_arrow" "←")
+
             (doubleTap {
               key_code = "left_command";
               description = "Double tap left_command to trigger hammerspoon leader";
