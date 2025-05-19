@@ -1,5 +1,15 @@
 { pkgs, lib, ... }:
 let
+  remap = from_key_code: to_key_code: {
+    from = {
+      key_code = from_key_code;
+    };
+    to = [
+      {
+        key_code = to_key_code;
+      }
+    ];
+  };
   typeSymbol =
     key_code: text:
     let
@@ -105,6 +115,24 @@ let
         virtual_hid_keyboard = {
           keyboard_type_v2 = "ansi";
         };
+        devices = [
+          {
+            # My FILCO keyboard.
+            # We need this because the builtin remap offered by macOS no longer works
+            # when Karabiner is running.
+            identifiers = {
+              is_keyboard = true;
+              product_id = 30738;
+              vendor_id = 12029;
+            };
+            simple_modifications = [
+              (remap "left_option" "left_command")
+              (remap "left_command" "left_option")
+              (remap "right_option" "right_command")
+              (remap "right_command" "right_option")
+            ];
+          }
+        ];
         complex_modifications = {
           rules = [
             # The following mappings do not override existing ones.
