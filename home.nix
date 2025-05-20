@@ -81,6 +81,7 @@
     ./home-manager/starship.nix
     ./home-manager/shell-completion.nix
     ./home-manager/direnv.nix
+    ./home-manager/atuin.nix
 
     # Collections of programs.
     ./home-manager/replace-macos-stock-programs.nix
