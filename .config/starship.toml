@@ -1,6 +1,6 @@
 add_newline = false
 follow_symlinks = false
-format = "$kubernetes$direnv$shell$shlvl$character $status "
+format = "$kubernetes$python$direnv$shell$shlvl$character $status "
 
 [character]
 disabled = false
@@ -21,6 +21,10 @@ unloaded_msg = ""
 [kubernetes]
 disabled = false
 format = "[\\($context\\)]($style)"
+
+[python]
+disabled = false
+format = "[\\($virtualenv\\)]($style)"
 
 [shell]
 disabled = false
