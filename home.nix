@@ -107,7 +107,7 @@
     ./home-manager/tldr.nix
     ./home-manager/gcloud.nix
     ./home-manager/gnuinfo.nix
-    ./home-manager/codex.nix
+    ./home-manager/codex
     ./home-manager/fastfetch.nix
 
     ./home-manager/android.nix
