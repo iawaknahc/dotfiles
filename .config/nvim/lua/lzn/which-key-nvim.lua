@@ -4,9 +4,9 @@ require("lz.n").load({
   after = function()
     require("which-key").setup({
       preset = "helix",
-      filter = function(mapping)
-        return mapping.desc ~= nil and mapping.desc ~= ""
-      end,
+      -- Do not specify filter so that mappings of VIM plugin is shown, e.g. vim-table-mode.
+      -- Set expand to 10 to show nested mappings, e.g vim-table-mode.
+      expand = 10,
       spec = {
         { "gra", desc = "Code action" },
         { "grn", desc = "Rename" },
@@ -17,6 +17,7 @@ require("lz.n").load({
 
         { "gr", group = "LSP" },
         { "gs", group = "Surround / Treesitter" },
+        { "<Leader>t", group = "Table mode" },
       },
     })
   end,
