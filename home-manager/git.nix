@@ -2,7 +2,10 @@
 {
   programs.git.enable = true;
 
-  home.packages = with pkgs; [ blackbox ];
+  home.packages = with pkgs; [
+    blackbox
+    difftastic
+  ];
   programs.git.attributes = [
     "*.gpg diff=blackbox"
     "trustdb.gpg !diff"
@@ -13,6 +16,11 @@
     ".envrc"
     ".direnv/"
   ];
+
+  programs.git.aliases = {
+    dlog = "-c diff.external=difft log --ext-diff --patch";
+    dshow = "-c diff.external=difft show --ext-diff";
+  };
 
   programs.git.extraConfig = {
     commit = {
@@ -28,14 +36,23 @@
       # git diff is unchanged.
       # This changes git difftool only.
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-difftool
-      tool = "nvimdiff";
+      tool = "difftastic";
 
+      # This diff driver CANNOT be used together with difftastic!
       blackbox = {
         textconv = "gpg --quiet --batch --decrypt";
       };
     };
+    pager = {
+      difftool = true;
+    };
     difftool = {
+      prompt = false;
       trustExitCode = true;
+
+      difftastic = {
+        cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
+      };
     };
     merge = {
       # Always be explicit.
