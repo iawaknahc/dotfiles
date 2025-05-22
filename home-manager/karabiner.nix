@@ -155,13 +155,15 @@ let
             (typeSymbol "down_arrow" "↓")
             (typeSymbol "left_arrow" "←")
 
-            (doubleTap {
-              key_code = "left_command";
-              description = "Double tap left_command to trigger hammerspoon leader";
-              to = {
-                shell_command = "open -g hammerspoon://leader";
-              };
-            })
+            # I found it too easy to trigger unintentionally.
+            # Let's disable this until I figure out the solution.
+            # (doubleTap {
+            #   key_code = "left_command";
+            #   description = "Double tap left_command to trigger hammerspoon leader";
+            #   to = {
+            #     shell_command = "open -g hammerspoon://leader";
+            #   };
+            # })
           ];
         };
       }
