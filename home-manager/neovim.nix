@@ -201,12 +201,12 @@
       plugin = statuscol-nvim;
     }
 
-    # Show a change sign next to line number.
+    # Git integration.
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/vim-gitgutter.lua;
-      plugin = vim-gitgutter;
+      config = builtins.readFile ../.config/nvim/lua/lzn/gitsigns-nvim.lua;
+      plugin = gitsigns-nvim;
     }
 
     # Show indentation guide.
