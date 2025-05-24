@@ -47,12 +47,12 @@ require("lz.n").load({
     {
       "<Space>f",
       "<CMD>FzfLua git_files<CR>",
-      desc = "Open files from project root",
+      desc = "Open files in workspace",
     },
     {
       "<Space>F",
       "<CMD>FzfLua files<CR>",
-      desc = "Open files from working directory",
+      desc = "Open files in working directory",
     },
     -- Inspired by Helix space mode b
     {
@@ -93,6 +93,42 @@ require("lz.n").load({
       "<Space>D",
       "<CMD>FzfLua diagnostics_workspace<CR>",
       desc = "Open diagnostics in workspace",
+    },
+
+    {
+      "<Space>h",
+      function()
+        local ok, gitsigns = pcall(require, "gitsigns")
+        if ok then
+          local buf = 0
+          gitsigns.setqflist(buf, {
+            use_location_list = true,
+            open = false,
+          }, function()
+            vim.cmd([[
+            :FzfLua loclist
+          ]])
+          end)
+        end
+      end,
+      desc = "Open unstaged hunks in buffer",
+    },
+    {
+      "<Space>H",
+      function()
+        local ok, gitsigns = pcall(require, "gitsigns")
+        if ok then
+          gitsigns.setqflist("all", {
+            use_location_list = false,
+            open = false,
+          }, function()
+            vim.cmd([[
+            :FzfLua quickfix
+          ]])
+          end)
+        end
+      end,
+      desc = "Open unstaged hunks in workspace",
     },
   },
 })
