@@ -3,12 +3,20 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   keys = {
     {
-      "<Enter>",
+      "s",
       function()
         require("flash").jump()
       end,
-      mode = { "n" },
+      mode = { "n", "x", "o" },
       desc = "Flash",
+    },
+    {
+      "S",
+      function()
+        require("flash").treesitter()
+      end,
+      mode = { "n", "x", "o" },
+      desc = "Flash Treesitter",
     },
   },
   after = function()
