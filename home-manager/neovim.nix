@@ -69,6 +69,8 @@
     catppuccin-nvim
     # A dependency of many other plugins.
     plenary-nvim
+    # Another dependency of many other plugins.
+    nvim-web-devicons
 
     # surround
     {
