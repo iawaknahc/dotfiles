@@ -1,8 +1,6 @@
 require("lz.n").load({
   "fzf-lua",
   after = function()
-    local actions = require("fzf-lua").actions
-
     require("fzf-lua").setup({
       fzf_opts = {
         ["--layout"] = "default",
@@ -12,21 +10,6 @@ require("lz.n").load({
           vertical = "up:50%",
           horizontal = "right:50%",
           delay = 10,
-        },
-      },
-      git = {
-        status = {
-          actions = {
-            -- By default left to stage, right to unstage.
-            ["left"] = false,
-            ["right"] = false,
-            -- Remove the keymap to discard changes in a file.
-            ["ctrl-x"] = false,
-            ["ctrl-s"] = {
-              fn = actions.git_stage_unstage,
-              reload = true,
-            },
-          },
         },
       },
     })

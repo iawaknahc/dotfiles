@@ -62,20 +62,6 @@ require("lz.n").load({
       desc = "Discard unstaged hunk",
     },
     {
-      "<Leader>ghb",
-      function()
-        require("gitsigns").stage_buffer()
-      end,
-      desc = "Stage buffer",
-    },
-    {
-      "<Leader>ghB",
-      function()
-        require("gitsigns").reset_buffer_index()
-      end,
-      desc = "Unstage buffer",
-    },
-    {
       "<Leader>ghu",
       function()
         require("gitsigns").undo_stage_hunk()

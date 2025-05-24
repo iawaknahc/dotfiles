@@ -208,6 +208,8 @@
       config = builtins.readFile ../.config/nvim/lua/lzn/gitsigns-nvim.lua;
       plugin = gitsigns-nvim;
     }
+    vim-fugitive
+    vim-rhubarb
 
     # Show indentation guide.
     {
