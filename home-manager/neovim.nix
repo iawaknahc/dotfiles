@@ -202,14 +202,20 @@
     }
 
     # Git integration.
+    vim-fugitive
+    vim-rhubarb
     {
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/gitsigns-nvim.lua;
       plugin = gitsigns-nvim;
     }
-    vim-fugitive
-    vim-rhubarb
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/diffview-nvim.lua;
+      plugin = diffview-nvim;
+    }
 
     # Show indentation guide.
     {
