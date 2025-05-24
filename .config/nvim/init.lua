@@ -86,7 +86,6 @@ vim.keymap.set("n", "gv", "<Nop>") -- Disable :h gv
 vim.keymap.set("n", "<C-l>", "<Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>", {
   desc = ":h CTRL-L-default with nohlsearch changed to hlsearch!",
 })
-vim.keymap.set("v", "/", "<Esc>/<Bslash>%.l", { desc = "/\\%.l" })
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
