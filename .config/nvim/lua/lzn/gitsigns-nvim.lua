@@ -50,25 +50,6 @@ require("lz.n").load({
       desc = "First hunk",
     },
     {
-      "<Leader>ghs",
-      ":Gitsigns stage_hunk<CR>",
-      mode = { "n", "v" },
-      desc = "Stage/unstage hunk",
-    },
-    {
-      "<Leader>ghd",
-      ":Gitsigns reset_hunk<CR>",
-      mode = { "n", "v" },
-      desc = "Discard unstaged hunk",
-    },
-    {
-      "<Leader>ghu",
-      function()
-        require("gitsigns").undo_stage_hunk()
-      end,
-      desc = "Undo last staged hunk",
-    },
-    {
       "ih",
       function()
         require("gitsigns").select_hunk()
