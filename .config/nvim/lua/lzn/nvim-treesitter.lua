@@ -30,16 +30,11 @@ require("lz.n").load({
           return false
         end,
       },
+      -- incremental_selection is deprecated in a future version of nvim-treesitter
+      -- See https://github.com/nvim-treesitter/nvim-treesitter/issues/4767
+      -- And its functionality is superseded by require("flash").treesitter()
       incremental_selection = {
-        enable = true,
-        keymaps = {
-          -- This overrides :h gv
-          init_selection = "gv",
-          -- There is no v_CTRL-K nor v_CTRL-J.
-          node_incremental = "<C-k>",
-          node_decremental = "<C-j>",
-          scope_incremental = false,
-        },
+        enable = false,
       },
       textobjects = {
         select = {
