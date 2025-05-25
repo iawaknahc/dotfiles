@@ -62,11 +62,16 @@ vim.o.swapfile = false
 -- :h updatetime
 vim.o.updatetime = 100
 vim.o.scrolloff = 5
-vim.o.foldenable = false
 vim.opt.clipboard:append({ "unnamed" })
 vim.o.fixendofline = false
 -- Make ~ an operator
 vim.o.tildeop = true
+
+-- Fold
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldcolumn = "auto:9"
+vim.o.foldlevelstart = 99
 
 -- Search
 vim.o.ignorecase = true
