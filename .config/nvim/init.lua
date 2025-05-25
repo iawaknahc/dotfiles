@@ -15,12 +15,16 @@ vim.cmd.filetype("indent", "off")
 -- https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 vim.o.modeline = false
 
--- Look
+-- colorscheme
+vim.cmd.colorscheme("catppuccin-mocha")
+
 -- Always reserve 1 column for vim-gitgutter and 2 columns for vim.diagnostic
 vim.o.signcolumn = "auto:3-9"
 -- The default is 4.
 vim.o.numberwidth = 1
 vim.o.number = true
+
+-- Display of whitespaces.
 vim.o.list = true
 -- lead:. is taken from the help of neovim.
 -- trail:- is the default of neovim.
@@ -33,8 +37,12 @@ vim.opt.listchars = {
   trail = "-",
   nbsp = "+",
 }
+
 vim.o.breakindent = true
-vim.cmd.colorscheme("catppuccin-mocha")
+
+-- cursorline
+vim.o.cursorlineopt = "number"
+vim.o.cursorline = true
 
 -- colorcolumn
 local colorcolumn = {}
@@ -61,9 +69,16 @@ vim.o.swapfile = false
 -- This also controls how often vim-gitgutter updates the signs.
 -- :h updatetime
 vim.o.updatetime = 100
+
+-- Auto scrolling
 vim.o.scrolloff = 5
+
+-- clipboard
 vim.opt.clipboard:append({ "unnamed" })
+
+-- Keep the original endofline convention of the file.
 vim.o.fixendofline = false
+
 -- Make ~ an operator
 vim.o.tildeop = true
 
