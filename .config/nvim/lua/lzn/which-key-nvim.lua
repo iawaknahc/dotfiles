@@ -29,8 +29,9 @@ require("lz.n").load({
         { "[D", desc = "First diagnostic" },
 
         { "gr", group = "LSP" },
-        { "gs", group = "Surround / Treesitter" },
+        { "gs", group = "Surround" },
         { "<Leader>t", group = "Table mode" },
+        { "<Leader>s", group = "Treewalker" },
       },
     })
   end,

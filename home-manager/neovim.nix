@@ -135,6 +135,11 @@
         }
       );
     }
+    {
+      type = "lua";
+      optional = true;
+      plugin = treewalker-nvim;
+    }
 
     # LSP
     {

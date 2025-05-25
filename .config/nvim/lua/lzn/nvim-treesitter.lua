@@ -118,17 +118,7 @@ require("lz.n").load({
           },
         },
         swap = {
-          enable = true,
-          swap_next = {
-            -- Override :h gs
-            ["gsp"] = { query = "@parameter.inner", desc = "Swap with next parameter" },
-            ["gss"] = { query = "@statement.outer", desc = "Swap with next statement" },
-          },
-          swap_previous = {
-            -- Override :h gs
-            ["gsP"] = { query = "@parameter.inner", desc = "Swap with previous parameter" },
-            ["gsS"] = { query = "@statement.outer", desc = "Swap with previous statement" },
-          },
+          enable = false,
         },
       },
     })
@@ -188,4 +178,61 @@ require("lz.n").load({
       desc = "Til prev char",
     },
   },
+})
+
+require("lz.n").load({
+  "treewalker.nvim",
+  event = { "DeferredUIEnter" },
+  keys = {
+    {
+      "<Leader>sk",
+      _G.__dot_repeat_make_function(function()
+        require("treewalker").swap_up()
+      end),
+      desc = ":Treewalker SwapUp",
+      expr = true,
+    },
+    {
+      "<Leader>sl",
+      _G.__dot_repeat_make_function(function()
+        require("treewalker").swap_right()
+      end),
+      desc = ":Treewalker SwapRight",
+      expr = true,
+    },
+    {
+      "<Leader>sj",
+      _G.__dot_repeat_make_function(function()
+        require("treewalker").swap_down()
+      end),
+      desc = ":Treewalker SwapDown",
+      expr = true,
+    },
+    {
+      "<Leader>sh",
+      _G.__dot_repeat_make_function(function()
+        require("treewalker").swap_left()
+      end),
+      desc = ":Treewalker SwapLeft",
+      expr = true,
+    },
+  },
+  after = function()
+    require("lz.n").trigger_load("nvim-treesitter")
+
+    local repeatable_move = require("nvim-treesitter.textobjects.repeatable_move")
+    local treewalker = require("treewalker")
+    local down, up = repeatable_move.make_repeatable_move_pair(treewalker.move_down, treewalker.move_up)
+    local right, left = repeatable_move.make_repeatable_move_pair(treewalker.move_in, treewalker.move_out)
+
+    vim.keymap.set("n", "<Leader>mk", up, { desc = ":Treewalker Up" })
+    vim.keymap.set("n", "<Leader>ml", right, { desc = ":Treewalker Right" })
+    vim.keymap.set("n", "<Leader>mj", down, { desc = ":Treewalker Down" })
+    vim.keymap.set("n", "<Leader>mh", left, { desc = ":Treewalker Left" })
+
+    treewalker.setup({
+      highlight_duration = 250,
+      highlight_group = "IncSearch",
+    })
+  end,
 })
