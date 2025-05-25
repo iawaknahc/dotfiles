@@ -113,11 +113,6 @@
     {
       type = "lua";
       optional = true;
-      plugin = nvim-treesitter-context;
-    }
-    {
-      type = "lua";
-      optional = true;
       plugin = nvim-treesitter-textobjects;
     }
     {
@@ -139,6 +134,14 @@
       type = "lua";
       optional = true;
       plugin = treewalker-nvim;
+    }
+
+    # Show context.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-treesitter-context.lua;
+      plugin = nvim-treesitter-context;
     }
 
     # LSP
