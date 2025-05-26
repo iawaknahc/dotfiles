@@ -26,18 +26,20 @@ require("lz.n").load({
           },
           click = "v:lua.ScSa",
         },
+
+        {
+          text = { "%l", " " },
+          condition = { true, builtin.not_empty },
+          click = "v:lua.ScLa",
+        },
+
+        -- Show gitsigns to the right of the line number, like in vscode.
         {
           sign = {
             namespace = { "gitsigns.*" },
             wrap = true,
           },
           click = "v:lua.ScSa",
-        },
-
-        {
-          text = { "%l", " " },
-          condition = { true, builtin.not_empty },
-          click = "v:lua.ScLa",
         },
       },
     })
