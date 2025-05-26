@@ -19,9 +19,11 @@ vim.o.modeline = false
 vim.cmd.colorscheme("catppuccin-mocha")
 
 -- statuscolumn
-vim.o.foldcolumn = "auto:9"
--- Always reserve 1 column for vim-gitgutter and 2 columns for vim.diagnostic
-vim.o.signcolumn = "auto:3-9"
+vim.o.foldcolumn = "1"
+-- 1 column for gitsigns
+-- 2 columns for vim.diagnostic
+-- 1 column for DAP
+vim.o.signcolumn = "auto:4-9"
 -- The default is 4.
 vim.o.numberwidth = 1
 vim.o.number = true

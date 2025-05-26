@@ -204,6 +204,8 @@
       optional = true;
       plugin = nvim-dap-go;
     }
+
+    # statuscolumn
     {
       type = "lua";
       optional = true;
