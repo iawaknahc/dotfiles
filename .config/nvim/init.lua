@@ -47,13 +47,6 @@ vim.o.breakindent = true
 vim.o.cursorlineopt = "number"
 vim.o.cursorline = true
 
--- colorcolumn
-local colorcolumn = {}
-for i = 1, 100 do
-  table.insert(colorcolumn, "+" .. i)
-end
-vim.opt.colorcolumn = colorcolumn
-
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.pumheight = 10
