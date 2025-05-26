@@ -18,6 +18,8 @@ vim.o.modeline = false
 -- colorscheme
 vim.cmd.colorscheme("catppuccin-mocha")
 
+-- statuscolumn
+vim.o.foldcolumn = "auto:9"
 -- Always reserve 1 column for vim-gitgutter and 2 columns for vim.diagnostic
 vim.o.signcolumn = "auto:3-9"
 -- The default is 4.
@@ -85,7 +87,6 @@ vim.o.tildeop = true
 -- Fold
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.o.foldcolumn = "auto:9"
 vim.o.foldlevelstart = 99
 
 -- Search
