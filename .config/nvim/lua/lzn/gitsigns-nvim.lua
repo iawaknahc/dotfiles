@@ -3,21 +3,8 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     require("gitsigns").setup({
-      signs = {
-        add = { text = "+" },
-        change = { text = "~" },
-        delete = { text = "_", show_count = true },
-        topdelete = { text = "‾", show_count = true },
-        changedelete = { text = "~_" },
-        untracked = { text = "┆" },
-      },
-      signs_staged = {
-        add = { text = "+" },
-        change = { text = "~" },
-        delete = { text = "_", show_count = true },
-        topdelete = { text = "‾", show_count = true },
-        changedelete = { text = "~_" },
-      },
+      -- The default signs configuration is already single-column.
+      -- So it is good enough.
     })
   end,
   keys = {
