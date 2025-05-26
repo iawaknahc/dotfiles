@@ -20,10 +20,9 @@ vim.cmd.colorscheme("catppuccin-mocha")
 
 -- statuscolumn
 vim.o.foldcolumn = "1"
--- 1 column for gitsigns
--- 2 columns for vim.diagnostic
--- 1 column for DAP
-vim.o.signcolumn = "auto:4-9"
+-- We use statuscol.nvim to customize the whole statuscolumn.
+-- The value of 'signcolumn' is unimportant here.
+vim.o.signcolumn = "auto:1-9"
 -- The default is 4.
 vim.o.numberwidth = 1
 vim.o.number = true
