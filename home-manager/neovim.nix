@@ -229,14 +229,6 @@
       plugin = diffview-nvim;
     }
 
-    # Show indentation guide.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/indent-blankline-nvim.lua;
-      plugin = indent-blankline-nvim;
-    }
-
     # Enhance the statusline
     {
       type = "lua";

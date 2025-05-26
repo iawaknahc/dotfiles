@@ -32,11 +32,15 @@ vim.o.list = true
 -- lead:. is taken from the help of neovim.
 -- trail:- is the default of neovim.
 -- nbsp:+ is the default of neovim.
--- tab:>  is the default of neovim. We change it to tab:>_ so that
+-- tab:>  is the default of neovim. We change the space to _ so that
 -- the space is visible and distinguishable from leading spaces.
+--
+-- leadmultispace is powerful enough. I do not need https://github.com/lukas-reineke/indent-blankline.nvim now.
+-- https://www.reddit.com/r/neovim/comments/17aponn/i_feel_like_leadmultispace_deserves_more_attention/
 vim.opt.listchars = {
-  tab = ">_",
+  leadmultispace = "▏.",
   lead = ".",
+  tab = "▏_",
   trail = "-",
   nbsp = "+",
 }
