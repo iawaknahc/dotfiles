@@ -5,6 +5,10 @@ require("lz.n").load({
     require("gitsigns").setup({
       -- The default signs configuration is already single-column.
       -- So it is good enough.
+
+      -- I wanted to set numhl = true,
+      -- But it does not work with cursorlineopt=number.
+      -- See https://www.reddit.com/r/neovim/comments/1dto43b/use_cursorlinenr_highlight_instead_of_gitsigns/
     })
   end,
   keys = {
