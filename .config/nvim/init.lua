@@ -94,7 +94,7 @@ vim.o.wrapscan = false
 
 -- Mapping
 vim.keymap.set("n", "<Space>", "<Nop>") -- Disable :h <Space>
-vim.keymap.set("n", "<Enter>", "<Nop>") -- Disable :h <Enter>
+-- We cannot map <Enter> to <Nop>, otherwise <Enter> will not work in quickfix list.
 vim.keymap.set({ "n", "x" }, "s", "<Nop>") -- Disable :h s
 vim.keymap.set({ "n", "x" }, "S", "<Nop>") -- Disable :h S
 vim.keymap.set("n", "gh", "<Nop>") -- Disable :h gh
