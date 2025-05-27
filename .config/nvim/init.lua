@@ -47,6 +47,19 @@ vim.opt.listchars = {
 
 vim.o.breakindent = true
 
+-- cursor
+vim.opt.guicursor = {
+  -- a has to come first, so that the blinking can be overridden by following lines.
+  "a:blinkwait1000-blinkon100-blinkoff100",
+  -- Do not blink in normal et al. modes.
+  "n-v-c-sm:block-blinkon0",
+  -- The number coming after ver or hor does not seem to have effect in the terminal.
+  "i-ci-ve:ver25",
+  "r-cr:hor20",
+  "o:hor50",
+  "t:ver25-TermCursor",
+}
+
 -- cursorline
 vim.o.cursorlineopt = "number"
 vim.o.cursorline = true
