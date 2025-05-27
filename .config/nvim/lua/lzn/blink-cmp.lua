@@ -46,9 +46,14 @@ require("lz.n").load({
         -- Enter is more convenient than C-y.
         ["<CR>"] = { "accept", "fallback" },
 
-        -- C-j and C-k is more convenient than C-n and C-p
-        ["<C-j>"] = { "select_next", "fallback" },
-        ["<C-k>"] = { "select_prev", "fallback" },
+        -- The default is C-space, which is my tmux prefix.
+        ["<C-h>"] = { "show", "show_documentation", "hide_documentation" },
+      },
+      cmdline = {
+        keymap = {
+          -- The default is C-space, which is my tmux prefix.
+          ["<C-h>"] = { "show", "fallback" },
+        },
       },
     })
   end,
