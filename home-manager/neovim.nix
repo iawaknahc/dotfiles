@@ -253,5 +253,23 @@
       plugin = vim-table-mode;
     }
 
+    # Changing cases.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-caser.lua;
+      plugin = (
+        pkgs.vimUtils.buildVimPlugin {
+          pname = "vim-caser";
+          version = "2025-05-28";
+          src = pkgs.fetchFromGitHub {
+            owner = "arthurxavierx";
+            repo = "vim-caser";
+            rev = "6bc9f41d170711c58e0157d882a5fe8c30f34bf6";
+            hash = "sha256-PXAY01O/cHvAdWx3V/pyWFeiV5qJGvLcAKhl5DQc0Ps=";
+          };
+        }
+      );
+    }
   ];
 }
