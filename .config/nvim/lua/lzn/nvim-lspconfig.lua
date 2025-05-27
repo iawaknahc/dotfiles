@@ -147,13 +147,6 @@ require("lz.n").load({
       desc = "Go to type definition",
     },
 
-    -- grn is vim.lsp.buf.rename()
-    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
-
-    -- grr is vim.lsp.buf.references()
-    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
-    -- But this opens the quickfix list, the UX is not as good as telescope.
-
     -- After trying inlay hint for some time,
     -- I found it quite annoying.
     -- So do not enable it initially.

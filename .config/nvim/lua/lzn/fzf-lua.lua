@@ -44,23 +44,15 @@ require("lz.n").load({
       desc = "Open buffers",
     },
 
-    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
-      "gri",
-      "<CMD>FzfLua lsp_implementations<CR>",
-      desc = "Open implementations",
+      "<Space>l",
+      "<CMD>FzfLua loclist<CR>",
+      desc = "Open location list",
     },
-    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
     {
-      "grr",
-      "<CMD>FzfLua lsp_references<CR>",
-      desc = "Open references",
-    },
-    -- https://gpanders.com/blog/whats-new-in-neovim-0-11/#more-default-mappings
-    {
-      "gO",
-      "<CMD>FzfLua lsp_document_symbols<CR>",
-      desc = "Open symbols",
+      "<Space>q",
+      "<CMD>FzfLua quickfix<CR>",
+      desc = "Open quickfix list",
     },
 
     -- Diagnostics is preferred over loclist because it supports severity.
