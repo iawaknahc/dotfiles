@@ -172,40 +172,6 @@ require("lz.n").load({
 require("lz.n").load({
   "treewalker.nvim",
   event = { "DeferredUIEnter" },
-  keys = {
-    {
-      "<Leader>sk",
-      _G.__dot_repeat_make_function(function()
-        require("treewalker").swap_up()
-      end),
-      desc = ":Treewalker SwapUp",
-      expr = true,
-    },
-    {
-      "<Leader>sl",
-      _G.__dot_repeat_make_function(function()
-        require("treewalker").swap_right()
-      end),
-      desc = ":Treewalker SwapRight",
-      expr = true,
-    },
-    {
-      "<Leader>sj",
-      _G.__dot_repeat_make_function(function()
-        require("treewalker").swap_down()
-      end),
-      desc = ":Treewalker SwapDown",
-      expr = true,
-    },
-    {
-      "<Leader>sh",
-      _G.__dot_repeat_make_function(function()
-        require("treewalker").swap_left()
-      end),
-      desc = ":Treewalker SwapLeft",
-      expr = true,
-    },
-  },
   after = function()
     require("lz.n").trigger_load("nvim-treesitter")
 
@@ -218,6 +184,11 @@ require("lz.n").load({
     vim.keymap.set("n", "<Leader>ml", right, { desc = ":Treewalker Right" })
     vim.keymap.set("n", "<Leader>mj", down, { desc = ":Treewalker Down" })
     vim.keymap.set("n", "<Leader>mh", left, { desc = ":Treewalker Left" })
+
+    vim.api.nvim_create_user_command("TreewalkerSwapUp", "Treewalker SwapUp", {})
+    vim.api.nvim_create_user_command("TreewalkerSwapRight", "Treewalker SwapRight", {})
+    vim.api.nvim_create_user_command("TreewalkerSwapDown", "Treewalker SwapDown", {})
+    vim.api.nvim_create_user_command("TreewalkerSwapLeft", "Treewalker SwapLeft", {})
 
     treewalker.setup({
       highlight_duration = 250,
