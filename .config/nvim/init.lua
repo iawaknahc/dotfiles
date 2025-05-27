@@ -97,11 +97,6 @@ vim.keymap.set("n", "<Space>", "<Nop>") -- Disable :h <Space>
 -- We cannot map <Enter> to <Nop>, otherwise <Enter> will not work in quickfix list.
 vim.keymap.set({ "n", "x" }, "s", "<Nop>") -- Disable :h s
 vim.keymap.set({ "n", "x" }, "S", "<Nop>") -- Disable :h S
-vim.keymap.set("n", "gh", "<Nop>") -- Disable :h gh
-vim.keymap.set("n", "gH", "<Nop>") -- Disable :h gH
-vim.keymap.set("n", "g<C-h>", "<Nop>") -- Disable :h g_CTRL-H
-vim.keymap.set("n", "gs", "<Nop>") -- Disable :h gs
-vim.keymap.set("n", "gv", "<Nop>") -- Disable :h gv
 vim.keymap.set("n", "<C-l>", "<Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>", {
   desc = ":h CTRL-L-default with nohlsearch changed to hlsearch!",
 })
