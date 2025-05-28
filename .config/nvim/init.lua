@@ -92,8 +92,8 @@ vim.opt.clipboard:append({ "unnamed" })
 -- Keep the original endofline convention of the file.
 vim.o.fixendofline = false
 
--- Make ~ an operator
-vim.o.tildeop = true
+-- No need to make ~ an operator.
+-- Its operator version is :h g~
 
 -- Fold
 vim.o.foldmethod = "expr"
