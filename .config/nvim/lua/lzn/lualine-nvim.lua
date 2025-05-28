@@ -11,18 +11,32 @@ require("lz.n").load({
       },
       sections = {
         lualine_a = {
+          "mode",
+        },
+        lualine_b = {
+          -- buffer number
           function()
             local buf = vim.api.nvim_get_current_buf()
             return string.format("b%d", buf)
           end,
+
+          -- window number
           function()
             local win = vim.api.nvim_get_current_win()
             return string.format("w%d", win)
           end,
+
+          -- %f relative path to the file
+          -- %m [+] or [-]
+          -- %r [RO]
+          -- %h [help]
+          -- %w [Preview]
           "%f%m%r%h%w",
         },
-        lualine_b = { "diff" },
-        lualine_c = { "diagnostics" },
+        lualine_c = {
+          "diff",
+          "diagnostics",
+        },
         lualine_x = {
           "bo:filetype",
           {
