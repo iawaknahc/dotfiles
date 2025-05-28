@@ -1,0 +1,4 @@
+% atuin
+
+# Print all possibly sensitive command line history entries. Add --delete to delete them all.
+atuin search --search-mode full-text "key | token | password | secret"
