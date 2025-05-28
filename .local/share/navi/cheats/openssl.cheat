@@ -123,6 +123,12 @@ openssl req \
 # Print the SHA256 fingerprint of a certificate
 openssl x509 -noout -fingerprint -sha256 -in <crt> | awk -F= '{ gsub(/:/, "", $2); print tolower($2) }'
 
+# Print the SHA1 fingerprint of a certificate
+openssl x509 -noout -fingerprint -sha1 -in <crt> | awk -F= '{ gsub(/:/, "", $2); print tolower($2) }'
+
+# Print the MD5 fingerprint of a certificate
+openssl x509 -noout -fingerprint -md5 -in <crt> | awk -F= '{ gsub(/:/, "", $2); print tolower($2) }'
+
 # Add trusted certificate to macOS keychain
 sudo /usr/bin/security add-trusted-cert -d -p ssl -k /Library/Keychains/System.keychain <crt>
 
