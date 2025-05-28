@@ -6,6 +6,12 @@ let
   #
   # Apparently, the TypeScript version is not maintained, and efforts were spent on the Rust version.
   version = "0.1.2505160811";
+
+  provider = "openrouter";
+  # On 2025-05-28, I found that codex-mini-latest is unresponsive.
+  # See https://github.com/openai/codex/issues/1140
+  model = "google/gemini-2.5-flash-preview-05-20"; # https://openrouter.ai/google/gemini-2.5-flash-preview-05-20
+
   tomlFormat = pkgs.formats.toml { };
   yamlFormat = pkgs.formats.yaml_1_1 { };
 in
@@ -18,8 +24,8 @@ in
 
   home.file.".codex/config.yaml".source = (
     yamlFormat.generate "codex-yaml" {
-      provider = "openrouter";
-      model = "openai/codex-mini"; # https://openrouter.ai/openai/codex-mini
+      inherit model;
+      inherit provider;
       approvalMode = "suggest";
       providers = {
         openrouter = {
@@ -33,8 +39,8 @@ in
 
   home.file.".codex/config.toml".source = (
     tomlFormat.generate "codex-toml" {
-      model_provider = "openrouter";
-      model = "openai/codex-mini"; # https://openrouter.ai/openai/codex-mini
+      inherit model;
+      model_provider = provider;
       approval_policy = "unless-allow-listed";
       sandbox_permissions = [ "disk-full-read-access" ];
       file_opener = "none";
