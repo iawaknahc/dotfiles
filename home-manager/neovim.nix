@@ -271,5 +271,13 @@
         }
       );
     }
+
+    # Enhance C-a and C-x
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/dial-nvim.lua;
+      plugin = dial-nvim;
+    }
   ];
 }
