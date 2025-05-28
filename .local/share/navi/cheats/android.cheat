@@ -5,3 +5,6 @@ sudo ifconfig lo0 alias 10.0.2.2 255.255.255.255
 
 # Port forward emulator localhost:3100 to host machine :3100
 adb reverse tcp:3100 tcp:3100
+
+# Export the signing certificate in PEM from a Android signing key store (.jks)
+keytool -exportcert -keystore ABSOLUTE_PATH_STORE_FILE -alias THE_KEY_ALIAS -rfc
