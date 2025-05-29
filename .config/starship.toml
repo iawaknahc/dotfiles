@@ -15,7 +15,7 @@ vimcmd_visual_symbol = "[V](bold purple)"
 [direnv]
 disabled = false
 format = "[$loaded]($style)"
-loaded_msg = "."
+loaded_msg = "(direnv)"
 unloaded_msg = ""
 
 [kubernetes]
