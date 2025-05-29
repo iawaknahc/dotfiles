@@ -1,6 +1,6 @@
-add_newline = false
+add_newline = true
 follow_symlinks = false
-format = "$kubernetes$python$direnv$shell$shlvl$character $status "
+format = "$kubernetes$python$direnv$shell@$shlvl $git_state $git_branch $git_commit $git_status\n$character $status "
 
 [character]
 disabled = false
