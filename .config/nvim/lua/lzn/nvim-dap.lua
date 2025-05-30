@@ -31,10 +31,10 @@ require("lz.n").load({
 
 require("lz.n").load({
   "nvim-dap",
+  event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-dap-go")
   end,
-  event = { "DeferredUIEnter" },
   keys = {
     {
       "<F5>",

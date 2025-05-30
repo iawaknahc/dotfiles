@@ -5,6 +5,7 @@ require("lz.n").load({
 
 require("lz.n").load({
   "nvim-treesitter",
+  event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-treesitter-textobjects")
 
@@ -112,7 +113,6 @@ require("lz.n").load({
       },
     })
   end,
-  event = { "DeferredUIEnter" },
   keys = {
     {
       ";",

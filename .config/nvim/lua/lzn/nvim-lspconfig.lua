@@ -1,5 +1,6 @@
 require("lz.n").load({
   "nvim-lspconfig",
+  lazy = false,
   after = function()
     vim.lsp.enable("jsonls") -- JSON
     vim.lsp.enable("marksman") -- Markdown
@@ -123,7 +124,6 @@ require("lz.n").load({
       end,
     })
   end,
-  event = { "FileType" },
   keys = {
     -- omnifunc and tagfunc are set by default.
     -- tagfunc is set, so CTRL-] works automatically.

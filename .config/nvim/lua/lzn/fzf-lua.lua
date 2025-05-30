@@ -1,5 +1,6 @@
 require("lz.n").load({
   "fzf-lua",
+  event = { "DeferredUIEnter" },
   after = function()
     require("fzf-lua").setup({
       fzf_opts = {
@@ -16,7 +17,6 @@ require("lz.n").load({
     -- Use fzf-lua for vim.ui.select
     require("fzf-lua").register_ui_select()
   end,
-  cmd = "FzfLua",
   -- Keep only the keymaps that I actually use.
   -- For others, Use <Space><Space> to run :FzfLua, and then type the name to invoke the picker fuzzily.
   keys = {

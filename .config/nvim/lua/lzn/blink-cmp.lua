@@ -1,6 +1,6 @@
 require("lz.n").load({
   "blink.cmp",
-  event = { "InsertEnter", "CmdlineEnter" },
+  event = { "DeferredUIEnter" },
   after = function()
     -- TODO: The missing source is tmux.
     -- I have tried blink.compat with cmp-tmux
