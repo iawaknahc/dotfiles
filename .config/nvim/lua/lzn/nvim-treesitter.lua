@@ -45,9 +45,7 @@ require("lz.n").load({
             -- c stands for class.
             ["ac"] = { query = "@class.outer", desc = "class" },
             ["ic"] = { query = "@class.inner", desc = "inner class" },
-            -- l stands for loop.
-            ["al"] = { query = "@loop.outer", desc = "loop" },
-            ["il"] = { query = "@loop.inner", desc = "inner loop" },
+            -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- m stands for method, resembles the builtin [m
             ["am"] = { query = "@function.outer", desc = "method or function" },
             ["im"] = { query = "@function.inner", desc = "inner method or function" },
@@ -66,7 +64,7 @@ require("lz.n").load({
             ["]a"] = { query = "@assignment.outer", desc = "Next start of assignment" },
             ["]b"] = { query = "@block.outer", desc = "Next start of block" },
             ["]c"] = { query = "@class.outer", desc = "Next start of class" },
-            ["]l"] = { query = "@loop.outer", desc = "Next start of loop" },
+            -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h ]m
             ["]m"] = { query = "@function.outer", desc = "Next start of method or function" },
             ["]p"] = { query = "@parameter.outer", desc = "Next start of parameter" },
@@ -77,7 +75,7 @@ require("lz.n").load({
             ["]A"] = { query = "@assignment.outer", desc = "Next end of assignment" },
             ["]B"] = { query = "@block.outer", desc = "Next end of block" },
             ["]C"] = { query = "@class.outer", desc = "Next end of class" },
-            ["]L"] = { query = "@loop.outer", desc = "Next end of loop" },
+            -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h ]M
             ["]M"] = { query = "@function.outer", desc = "Next end of method or function" },
             ["]P"] = { query = "@parameter.outer", desc = "Next end of parameter" },
@@ -88,7 +86,7 @@ require("lz.n").load({
             ["[a"] = { query = "@assignment.outer", desc = "Previous start of assignment" },
             ["[b"] = { query = "@block.outer", desc = "Previous start of block" },
             ["[c"] = { query = "@class.outer", desc = "Previous start of class" },
-            ["[l"] = { query = "@loop.outer", desc = "Previous start of loop" },
+            -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h [m
             ["[m"] = { query = "@function.outer", desc = "Previous start of method or function" },
             ["[p"] = { query = "@parameter.outer", desc = "Previous start of parameter" },
@@ -99,7 +97,7 @@ require("lz.n").load({
             ["[A"] = { query = "@assignment.outer", desc = "Previous end of assignment" },
             ["[B"] = { query = "@block.outer", desc = "Previous end of block" },
             ["[C"] = { query = "@class.outer", desc = "Previous end of class" },
-            ["[L"] = { query = "@loop.outer", desc = "Previous end of loop" },
+            -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h [M
             ["[M"] = { query = "@function.outer", desc = "Previous end of method or function" },
             ["[P"] = { query = "@parameter.outer", desc = "Previous end of parameter" },
