@@ -78,12 +78,8 @@ require("lz.n").load({
           local buf = 0
           gitsigns.setqflist(buf, {
             use_location_list = true,
-            open = false,
-          }, function()
-            vim.cmd([[
-            :FzfLua loclist
-          ]])
-          end)
+            open = true,
+          })
         end
       end,
       desc = "Open unstaged hunks in buffer",
@@ -95,12 +91,8 @@ require("lz.n").load({
         if ok then
           gitsigns.setqflist("all", {
             use_location_list = false,
-            open = false,
-          }, function()
-            vim.cmd([[
-            :FzfLua quickfix
-          ]])
-          end)
+            open = true,
+          })
         end
       end,
       desc = "Open unstaged hunks in workspace",
