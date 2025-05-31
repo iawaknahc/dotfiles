@@ -34,50 +34,29 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-dap-go")
+
+    vim.keymap.set("n", "<F5>", function()
+      require("dap").continue()
+    end, { desc = "Debugger continue" })
+
+    vim.keymap.set("n", "<F10>", function()
+      require("dap").step_over()
+    end, { desc = "Debugger step over" })
+
+    vim.keymap.set("n", "<F11>", function()
+      require("dap").step_into()
+    end, { desc = "Debugger step into" })
+
+    vim.keymap.set("n", "<F12>", function()
+      require("dap").step_out()
+    end, { desc = "Debugger step out" })
+
+    vim.keymap.set("n", "<Space>R", function()
+      require("dap").repl.toggle()
+    end, { desc = "Debugger toggle REPL" })
+
+    vim.keymap.set({ "n", "x" }, "<Space>K", function()
+      require("dap.ui.widgets").hover()
+    end, { desc = "Debugger hover" })
   end,
-  keys = {
-    {
-      "<F5>",
-      function()
-        require("dap").continue()
-      end,
-      desc = "Debugger continue",
-    },
-    {
-      "<F10>",
-      function()
-        require("dap").step_over()
-      end,
-      desc = "Debugger step over",
-    },
-    {
-      "<F11>",
-      function()
-        require("dap").step_into()
-      end,
-      desc = "Debugger step into",
-    },
-    {
-      "<F12>",
-      function()
-        require("dap").step_out()
-      end,
-      desc = "Debugger step out",
-    },
-    {
-      "<Space>R",
-      function()
-        require("dap").repl.toggle()
-      end,
-      desc = "Debugger toggle REPL",
-    },
-    {
-      "<Space>K",
-      function()
-        require("dap.ui.widgets").hover()
-      end,
-      mode = { "n", "v" },
-      desc = "Debugger hover",
-    },
-  },
 })

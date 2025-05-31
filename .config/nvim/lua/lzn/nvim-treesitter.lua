@@ -110,61 +110,31 @@ require("lz.n").load({
         },
       },
     })
+
+    vim.keymap.set({ "n", "x", "o" }, ";", function()
+      require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move()
+    end, { desc = "Repeat ftFT" })
+
+    vim.keymap.set({ "n", "x", "o" }, ",", function()
+      require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_opposite()
+    end, { desc = "Repeat ftFT" })
+
+    vim.keymap.set({ "n", "x", "o" }, "f", function()
+      return require("nvim-treesitter.textobjects.repeatable_move").builtin_f_expr()
+    end, { expr = true, desc = "Next char" })
+
+    vim.keymap.set({ "n", "x", "o" }, "F", function()
+      return require("nvim-treesitter.textobjects.repeatable_move").builtin_F_expr()
+    end, { expr = true, desc = "Prev char" })
+
+    vim.keymap.set({ "n", "x", "o" }, "t", function()
+      return require("nvim-treesitter.textobjects.repeatable_move").builtin_t_expr()
+    end, { expr = true, desc = "Til next char" })
+
+    vim.keymap.set({ "n", "x", "o" }, "T", function()
+      return require("nvim-treesitter.textobjects.repeatable_move").builtin_T_expr()
+    end, { expr = true, desc = "Til prev char" })
   end,
-  keys = {
-    {
-      ";",
-      function()
-        require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move()
-      end,
-      mode = { "n", "x", "o" },
-      desc = "Repeat ftFT",
-    },
-    {
-      ",",
-      function()
-        require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_opposite()
-      end,
-      mode = { "n", "x", "o" },
-      desc = "Repeat ftFT",
-    },
-    {
-      "f",
-      function()
-        return require("nvim-treesitter.textobjects.repeatable_move").builtin_f_expr()
-      end,
-      mode = { "n", "x", "o" },
-      expr = true,
-      desc = "Next char",
-    },
-    {
-      "F",
-      function()
-        return require("nvim-treesitter.textobjects.repeatable_move").builtin_F_expr()
-      end,
-      mode = { "n", "x", "o" },
-      expr = true,
-      desc = "Prev char",
-    },
-    {
-      "t",
-      function()
-        return require("nvim-treesitter.textobjects.repeatable_move").builtin_t_expr()
-      end,
-      mode = { "n", "x", "o" },
-      expr = true,
-      desc = "Til next char",
-    },
-    {
-      "T",
-      function()
-        return require("nvim-treesitter.textobjects.repeatable_move").builtin_T_expr()
-      end,
-      mode = { "n", "x", "o" },
-      expr = true,
-      desc = "Til prev char",
-    },
-  },
 })
 
 require("lz.n").load({

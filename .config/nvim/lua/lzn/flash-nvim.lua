@@ -1,24 +1,6 @@
 require("lz.n").load({
   "flash.nvim",
   event = { "DeferredUIEnter" },
-  keys = {
-    {
-      "s",
-      function()
-        require("flash").jump()
-      end,
-      mode = { "n", "x", "o" },
-      desc = "Flash",
-    },
-    {
-      "S",
-      function()
-        require("flash").treesitter()
-      end,
-      mode = { "n", "x", "o" },
-      desc = "Flash Treesitter",
-    },
-  },
   after = function()
     require("flash").setup({
       search = {
@@ -35,5 +17,12 @@ require("lz.n").load({
         },
       },
     })
+
+    vim.keymap.set({ "n", "x", "o" }, "s", function()
+      require("flash").jump()
+    end, { desc = "Flash" })
+    vim.keymap.set({ "n", "x", "o" }, "S", function()
+      require("flash").treesitter()
+    end, { desc = "Flash Treesitter" })
   end,
 })
