@@ -247,12 +247,12 @@
       plugin = lualine-nvim;
     }
 
-    # Hints on keymap
+    # key clues and submodes
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/which-key-nvim.lua;
-      plugin = which-key-nvim;
+      config = builtins.readFile ../.config/nvim/lua/lzn/mini-clue.lua;
+      plugin = mini-clue;
     }
 
     # Edit table.

@@ -37,72 +37,72 @@ require("lz.n").load({
           keymaps = {
             -- a stands for assignment.
             ["aa"] = { query = "@assignment.outer", desc = "assignment" },
-            ["ia"] = { query = "@assignment.inner", desc = "inner assignment" },
+            ["ia"] = { query = "@assignment.inner", desc = "assignment" },
             -- b stands for block.
             -- Override :h ab and :h ib
             ["ab"] = { query = "@block.outer", desc = "block" },
-            ["ib"] = { query = "@block.inner", desc = "inner block" },
+            ["ib"] = { query = "@block.inner", desc = "block" },
             -- c stands for class.
             ["ac"] = { query = "@class.outer", desc = "class" },
-            ["ic"] = { query = "@class.inner", desc = "inner class" },
+            ["ic"] = { query = "@class.inner", desc = "class" },
             -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- m stands for method, resembles the builtin [m
-            ["am"] = { query = "@function.outer", desc = "method or function" },
-            ["im"] = { query = "@function.inner", desc = "inner method or function" },
+            ["am"] = { query = "@function.outer", desc = "function" },
+            ["im"] = { query = "@function.inner", desc = "function" },
             -- p stands for parameter.
             -- Override :h ap and :h ip
             ["ap"] = { query = "@parameter.outer", desc = "parameter" },
-            ["ip"] = { query = "@parameter.inner", desc = "inner parameter" },
+            ["ip"] = { query = "@parameter.inner", desc = "parameter" },
             -- s stands for statement.
             ["as"] = { query = "@statement.outer", desc = "statement" },
-            ["is"] = { query = "@statement.inner", desc = "inner statement" },
+            ["is"] = { query = "@statement.inner", desc = "statement" },
           },
         },
         move = {
           enable = true,
           goto_next_start = {
-            ["]a"] = { query = "@assignment.outer", desc = "Next start of assignment" },
-            ["]b"] = { query = "@block.outer", desc = "Next start of block" },
-            ["]c"] = { query = "@class.outer", desc = "Next start of class" },
+            ["]a"] = { query = "@assignment.outer", desc = "assignment" },
+            ["]b"] = { query = "@block.outer", desc = "block" },
+            ["]c"] = { query = "@class.outer", desc = "class" },
             -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h ]m
-            ["]m"] = { query = "@function.outer", desc = "Next start of method or function" },
-            ["]p"] = { query = "@parameter.outer", desc = "Next start of parameter" },
+            ["]m"] = { query = "@function.outer", desc = "function" },
+            ["]p"] = { query = "@parameter.outer", desc = "parameter" },
             -- Override :h ]s
-            ["]s"] = { query = "@statement.outer", desc = "Next start of statement" },
+            ["]s"] = { query = "@statement.outer", desc = "statement" },
           },
           goto_next_end = {
-            ["]A"] = { query = "@assignment.outer", desc = "Next end of assignment" },
-            ["]B"] = { query = "@block.outer", desc = "Next end of block" },
-            ["]C"] = { query = "@class.outer", desc = "Next end of class" },
+            ["]A"] = { query = "@assignment.outer", desc = "assignment" },
+            ["]B"] = { query = "@block.outer", desc = "block" },
+            ["]C"] = { query = "@class.outer", desc = "class" },
             -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h ]M
-            ["]M"] = { query = "@function.outer", desc = "Next end of method or function" },
-            ["]P"] = { query = "@parameter.outer", desc = "Next end of parameter" },
+            ["]M"] = { query = "@function.outer", desc = "function" },
+            ["]P"] = { query = "@parameter.outer", desc = "parameter" },
             -- Override :h ]S
-            ["]S"] = { query = "@statement.outer", desc = "Next end of statement" },
+            ["]S"] = { query = "@statement.outer", desc = "statement" },
           },
           goto_previous_start = {
-            ["[a"] = { query = "@assignment.outer", desc = "Previous start of assignment" },
-            ["[b"] = { query = "@block.outer", desc = "Previous start of block" },
-            ["[c"] = { query = "@class.outer", desc = "Previous start of class" },
+            ["[a"] = { query = "@assignment.outer", desc = "assignment" },
+            ["[b"] = { query = "@block.outer", desc = "block" },
+            ["[c"] = { query = "@class.outer", desc = "class" },
             -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h [m
-            ["[m"] = { query = "@function.outer", desc = "Previous start of method or function" },
-            ["[p"] = { query = "@parameter.outer", desc = "Previous start of parameter" },
+            ["[m"] = { query = "@function.outer", desc = "function" },
+            ["[p"] = { query = "@parameter.outer", desc = "parameter" },
             -- Override :h [s
-            ["[s"] = { query = "@statement.outer", desc = "Previous start of statement" },
+            ["[s"] = { query = "@statement.outer", desc = "statement" },
           },
           goto_previous_end = {
-            ["[A"] = { query = "@assignment.outer", desc = "Previous end of assignment" },
-            ["[B"] = { query = "@block.outer", desc = "Previous end of block" },
-            ["[C"] = { query = "@class.outer", desc = "Previous end of class" },
+            ["[A"] = { query = "@assignment.outer", desc = "assignment" },
+            ["[B"] = { query = "@block.outer", desc = "block" },
+            ["[C"] = { query = "@class.outer", desc = "class" },
             -- :h ]l and :h [l are mapped by default to navigate loclist.
             -- Override :h [M
-            ["[M"] = { query = "@function.outer", desc = "Previous end of method or function" },
-            ["[P"] = { query = "@parameter.outer", desc = "Previous end of parameter" },
+            ["[M"] = { query = "@function.outer", desc = "function" },
+            ["[P"] = { query = "@parameter.outer", desc = "parameter" },
             -- Override :h [S
-            ["[S"] = { query = "@statement.outer", desc = "Previous end of statement" },
+            ["[S"] = { query = "@statement.outer", desc = "statement" },
           },
         },
         swap = {

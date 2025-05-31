@@ -212,7 +212,7 @@ vim.keymap.set({ "n" }, "gx", function()
     end
   )
 end, {
-  desc = "Open textDocument/documentLink or fallback to gx",
+  desc = "Open link under cursor",
 })
 
 -- Command
