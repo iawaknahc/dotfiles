@@ -132,11 +132,6 @@
         }
       );
     }
-    {
-      type = "lua";
-      optional = true;
-      plugin = treewalker-nvim;
-    }
 
     # Show context.
     {
@@ -255,6 +250,14 @@
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/mini-clue.lua;
       plugin = mini-clue;
+    }
+
+    # Swap treesitter nodes.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/treewalker-nvim.lua;
+      plugin = treewalker-nvim;
     }
 
     # Edit table.
