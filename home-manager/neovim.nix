@@ -292,5 +292,13 @@
       optional = true;
       plugin = nvim-dap-go;
     }
+
+    ## REPL
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-slime.lua;
+      plugin = vim-slime;
+    }
   ];
 }
