@@ -214,8 +214,18 @@
     }
 
     # Git integration.
-    vim-fugitive
-    vim-rhubarb
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-fugitive.lua;
+      plugin = vim-fugitive;
+    }
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-rhubarb.lua;
+      plugin = vim-rhubarb;
+    }
     {
       type = "lua";
       optional = true;
