@@ -43,5 +43,10 @@
     dotfiles = {
       enabled = false;
     };
+    history_filter = [
+      # Ignore any command that starts with 1 or more spaces.
+      # Basically it is HISTCONTROL=ignorespace
+      "^ +"
+    ];
   };
 }
