@@ -51,6 +51,8 @@
     vim = "nvim";
     view = "nvim -R";
     vimdiff = "nvim -d";
+    # Open fugitive.
+    g = "nvim +G +only";
   };
 
   xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
