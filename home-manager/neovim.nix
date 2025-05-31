@@ -74,23 +74,137 @@
     # Another dependency of many other plugins.
     nvim-web-devicons
 
-    # surround
+    ## Text editing
+    # Edit surroundings.
     {
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/mini-surround.lua;
       plugin = mini-surround;
     }
-
-    # motion
+    # Motion
     {
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/flash-nvim.lua;
       plugin = flash-nvim;
     }
+    # Completion
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/blink-cmp.lua;
+      plugin = blink-cmp;
+    }
+    # Swap treesitter nodes.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/treewalker-nvim.lua;
+      plugin = treewalker-nvim;
+    }
+    # Change cases.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-caser.lua;
+      plugin = (
+        pkgs.vimUtils.buildVimPlugin {
+          pname = "vim-caser";
+          version = "2025-05-28";
+          src = pkgs.fetchFromGitHub {
+            owner = "arthurxavierx";
+            repo = "vim-caser";
+            rev = "6bc9f41d170711c58e0157d882a5fe8c30f34bf6";
+            hash = "sha256-PXAY01O/cHvAdWx3V/pyWFeiV5qJGvLcAKhl5DQc0Ps=";
+          };
+        }
+      );
+    }
+    # Split or join blocks of code.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/treesj.lua;
+      plugin = treesj;
+    }
+    # Enhance C-a and C-x.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/dial-nvim.lua;
+      plugin = dial-nvim;
+    }
+    # Edit table.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-table-mode.lua;
+      plugin = vim-table-mode;
+    }
+    # Make indentation right.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/vim-sleuth.lua;
+      plugin = vim-sleuth;
+    }
 
-    # treesitter
+    ## Pick things.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/fzf-lua.lua;
+      plugin = fzf-lua;
+    }
+
+    ## Visual aids
+    # statusline
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/lualine-nvim.lua;
+      plugin = lualine-nvim;
+    }
+    # statuscolumn
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/statuscol-nvim.lua;
+      plugin = statuscol-nvim;
+    }
+    # Key clues and submodes.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/mini-clue.lua;
+      plugin = mini-clue;
+    }
+    # Show context.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-treesitter-context.lua;
+      plugin = nvim-treesitter-context;
+    }
+    # Show colors.
+    {
+      type = "lua";
+      plugin = (
+        pkgs.vimUtils.buildVimPlugin {
+          pname = "nvim-colors";
+          version = "2025-05-16";
+          src = pkgs.fetchFromGitHub {
+            owner = "iawaknahc";
+            repo = "nvim-colors";
+            rev = "2cdda505a260462c4c91c811e7d8a28ae196c90c";
+            hash = "sha256-IyxwLZvIdn3c3XBGtWmtqC7Fmftlt2Gvvt74GJTfCgY=";
+          };
+        }
+      );
+    }
+
+    ## Treesitter
     {
       type = "lua";
       optional = true;
@@ -117,63 +231,14 @@
       optional = true;
       plugin = nvim-treesitter-textobjects;
     }
-    {
-      type = "lua";
-      plugin = (
-        pkgs.vimUtils.buildVimPlugin {
-          pname = "nvim-colors";
-          version = "2025-05-16";
-          src = pkgs.fetchFromGitHub {
-            owner = "iawaknahc";
-            repo = "nvim-colors";
-            rev = "2cdda505a260462c4c91c811e7d8a28ae196c90c";
-            hash = "sha256-IyxwLZvIdn3c3XBGtWmtqC7Fmftlt2Gvvt74GJTfCgY=";
-          };
-        }
-      );
-    }
 
-    # Show context.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-treesitter-context.lua;
-      plugin = nvim-treesitter-context;
-    }
-
-    # LSP
+    ## LSP and diagnostics
     {
       type = "lua";
       optional = true;
       config = builtins.readFile ../.config/nvim/lua/lzn/nvim-lspconfig.lua;
       plugin = nvim-lspconfig;
     }
-
-    # fzf
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/fzf-lua.lua;
-      plugin = fzf-lua;
-    }
-
-    # Completion
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/blink-cmp.lua;
-      plugin = blink-cmp;
-    }
-
-    # Format on save.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/conform.lua;
-      plugin = conform-nvim;
-    }
-
-    # Run linter and set diagnostics.
     {
       type = "lua";
       optional = true;
@@ -181,36 +246,15 @@
       plugin = nvim-lint;
     }
 
-    # Set spaces or tabs.
+    ## Automation
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/vim-sleuth.lua;
-      plugin = vim-sleuth;
+      config = builtins.readFile ../.config/nvim/lua/lzn/conform.lua;
+      plugin = conform-nvim;
     }
 
-    # DAP
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-dap.lua;
-      plugin = nvim-dap;
-    }
-    {
-      type = "lua";
-      optional = true;
-      plugin = nvim-dap-go;
-    }
-
-    # statuscolumn
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/statuscol-nvim.lua;
-      plugin = statuscol-nvim;
-    }
-
-    # Git integration.
+    ## Git integration
     {
       type = "lua";
       optional = true;
@@ -236,71 +280,17 @@
       plugin = diffview-nvim;
     }
 
-    # Enhance the statusline
+    ## Debugging
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/lualine-nvim.lua;
-      plugin = lualine-nvim;
+      config = builtins.readFile ../.config/nvim/lua/lzn/nvim-dap.lua;
+      plugin = nvim-dap;
     }
-
-    # key clues and submodes
     {
       type = "lua";
       optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/mini-clue.lua;
-      plugin = mini-clue;
-    }
-
-    # Swap treesitter nodes.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/treewalker-nvim.lua;
-      plugin = treewalker-nvim;
-    }
-
-    # Edit table.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/vim-table-mode.lua;
-      plugin = vim-table-mode;
-    }
-
-    # Changing cases.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/vim-caser.lua;
-      plugin = (
-        pkgs.vimUtils.buildVimPlugin {
-          pname = "vim-caser";
-          version = "2025-05-28";
-          src = pkgs.fetchFromGitHub {
-            owner = "arthurxavierx";
-            repo = "vim-caser";
-            rev = "6bc9f41d170711c58e0157d882a5fe8c30f34bf6";
-            hash = "sha256-PXAY01O/cHvAdWx3V/pyWFeiV5qJGvLcAKhl5DQc0Ps=";
-          };
-        }
-      );
-    }
-
-    # Enhance C-a and C-x
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/dial-nvim.lua;
-      plugin = dial-nvim;
-    }
-
-    # Split or join blocks of code.
-    {
-      type = "lua";
-      optional = true;
-      config = builtins.readFile ../.config/nvim/lua/lzn/treesj.lua;
-      plugin = treesj;
+      plugin = nvim-dap-go;
     }
   ];
 }
