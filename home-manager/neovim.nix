@@ -294,5 +294,13 @@
       config = builtins.readFile ../.config/nvim/lua/lzn/dial-nvim.lua;
       plugin = dial-nvim;
     }
+
+    # Split or join blocks of code.
+    {
+      type = "lua";
+      optional = true;
+      config = builtins.readFile ../.config/nvim/lua/lzn/treesj.lua;
+      plugin = treesj;
+    }
   ];
 }
