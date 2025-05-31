@@ -1,5 +1,6 @@
 require("lz.n").load({
   "statuscol.nvim",
+  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local builtin = require("statuscol.builtin")

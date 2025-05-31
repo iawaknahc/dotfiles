@@ -1,5 +1,6 @@
 require("lz.n").load({
   "mini.clue",
+  enabled = true,
   event = { "DeferredUIEnter" },
   after = function()
     local miniclue = require("mini.clue")

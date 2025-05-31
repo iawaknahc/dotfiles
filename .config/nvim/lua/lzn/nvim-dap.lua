@@ -31,6 +31,7 @@ require("lz.n").load({
 
 require("lz.n").load({
   "nvim-dap",
+  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-dap-go")

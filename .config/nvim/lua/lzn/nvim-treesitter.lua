@@ -5,6 +5,7 @@ require("lz.n").load({
 
 require("lz.n").load({
   "nvim-treesitter",
+  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-treesitter-textobjects")
@@ -115,6 +116,7 @@ require("lz.n").load({
 
 require("lz.n").load({
   "treewalker.nvim",
+  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local treewalker = require("treewalker")

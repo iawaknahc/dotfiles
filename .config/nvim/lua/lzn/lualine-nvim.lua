@@ -1,5 +1,6 @@
 require("lz.n").load({
   "lualine.nvim",
+  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("lualine").setup({

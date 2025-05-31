@@ -1,5 +1,6 @@
 require("lz.n").load({
   "vim-sleuth",
+  enabled = vim.g.pager_enabled ~= 1,
   -- :help sleuth says it does its job on the following events:
   -- BufNewFile
   -- BufReadPost

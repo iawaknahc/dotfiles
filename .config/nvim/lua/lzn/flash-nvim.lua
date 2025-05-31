@@ -1,5 +1,6 @@
 require("lz.n").load({
   "flash.nvim",
+  enabled = true,
   event = { "DeferredUIEnter" },
   after = function()
     require("flash").setup({

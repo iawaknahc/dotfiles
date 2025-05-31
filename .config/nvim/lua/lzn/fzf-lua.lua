@@ -1,5 +1,6 @@
 require("lz.n").load({
   "fzf-lua",
+  enabled = true,
   event = { "DeferredUIEnter" },
   after = function()
     require("fzf-lua").setup({
