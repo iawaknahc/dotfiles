@@ -110,30 +110,6 @@ require("lz.n").load({
         },
       },
     })
-
-    vim.keymap.set({ "n", "x", "o" }, ";", function()
-      require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move()
-    end, { desc = "Repeat ftFT" })
-
-    vim.keymap.set({ "n", "x", "o" }, ",", function()
-      require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_opposite()
-    end, { desc = "Repeat ftFT" })
-
-    vim.keymap.set({ "n", "x", "o" }, "f", function()
-      return require("nvim-treesitter.textobjects.repeatable_move").builtin_f_expr()
-    end, { expr = true, desc = "Next char" })
-
-    vim.keymap.set({ "n", "x", "o" }, "F", function()
-      return require("nvim-treesitter.textobjects.repeatable_move").builtin_F_expr()
-    end, { expr = true, desc = "Prev char" })
-
-    vim.keymap.set({ "n", "x", "o" }, "t", function()
-      return require("nvim-treesitter.textobjects.repeatable_move").builtin_t_expr()
-    end, { expr = true, desc = "Til next char" })
-
-    vim.keymap.set({ "n", "x", "o" }, "T", function()
-      return require("nvim-treesitter.textobjects.repeatable_move").builtin_T_expr()
-    end, { expr = true, desc = "Til prev char" })
   end,
 })
 
@@ -141,23 +117,7 @@ require("lz.n").load({
   "treewalker.nvim",
   event = { "DeferredUIEnter" },
   after = function()
-    require("lz.n").trigger_load("nvim-treesitter")
-
-    local repeatable_move = require("nvim-treesitter.textobjects.repeatable_move")
     local treewalker = require("treewalker")
-    local down, up = repeatable_move.make_repeatable_move_pair(treewalker.move_down, treewalker.move_up)
-    local right, left = repeatable_move.make_repeatable_move_pair(treewalker.move_in, treewalker.move_out)
-
-    vim.keymap.set("n", "<Leader>mk", up, { desc = ":Treewalker Up" })
-    vim.keymap.set("n", "<Leader>ml", right, { desc = ":Treewalker Right" })
-    vim.keymap.set("n", "<Leader>mj", down, { desc = ":Treewalker Down" })
-    vim.keymap.set("n", "<Leader>mh", left, { desc = ":Treewalker Left" })
-
-    vim.api.nvim_create_user_command("TreewalkerSwapUp", "Treewalker SwapUp", {})
-    vim.api.nvim_create_user_command("TreewalkerSwapRight", "Treewalker SwapRight", {})
-    vim.api.nvim_create_user_command("TreewalkerSwapDown", "Treewalker SwapDown", {})
-    vim.api.nvim_create_user_command("TreewalkerSwapLeft", "Treewalker SwapLeft", {})
-
     treewalker.setup({
       highlight_duration = 250,
       highlight_group = "IncSearch",
