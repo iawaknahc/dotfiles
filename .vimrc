@@ -12,6 +12,7 @@ filetype indent off
 set nomodeline
 
 " Look
+set foldcolumn=1
 set signcolumn=yes
 " The default is 4.
 set numberwidth=1
@@ -33,11 +34,12 @@ set statusline+=%=%5l:%-5c\ %3p%%
 " nbsp:+ is the default of neovim.
 " tab:>  is the default of neovim. We change it to tab:>_ so that
 " the space is visible and distinguishable from leading spaces.
-set list listchars=tab:>_,lead:.,trail:-,nbsp:+
-" We color more columns in init.lua
-set colorcolumn=+1
+set list listchars=leadmultispace:▏.,lead:.,tab:▏_,trail:-,nbsp:+
 set breakindent
+
 set termguicolors
+colorscheme slate
+syntax on
 
 " Completion
 set completeopt=menu,menuone,noselect
@@ -66,7 +68,6 @@ set noswapfile
 " :h updatetime
 set updatetime=100
 set scrolloff=5
-set nofoldenable
 set clipboard+=unnamed
 set mouse=a
 " Make escape sequence timeout faster
@@ -82,8 +83,10 @@ set timeout ttimeout timeoutlen=3000 ttimeoutlen=100
 " Therefore, this option should be set on buffer with lsp.
 " See https://github.com/neovim/neovim/blob/e41e8b3fda42308b4c77fb0e52a9719ef4d543d8/runtime/lua/vim/lsp/util.lua#L478
 set nofixendofline
-" Make ~ an operator.
-set tildeop
+
+" Fold
+set foldmethod=indent
+set foldlevelstart=99
 
 " Search
 " Turn on hlsearch initially so that the results are highlighted by default.
@@ -95,16 +98,8 @@ set nowrapscan
 " Mapping
 " Y is the same as yy by default. But Y being y$ is more useful.
 nnoremap Y y$
-" Disable Ex mode
-nnoremap Q <Nop>
 " Disable :h <Space>
 nnoremap <Space> <Nop>
-" Disable :h gh
-nnoremap gh <Nop>
-" Disable :h gH
-nnoremap gH <Nop>
-" Disable :h g_CTRL-H
-nnoremap g<C-h> <Nop>
 " neovim :h CTRL-L-default with nohlsearch changed to hlsearch!
 nnoremap <C-l> <Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>
 
