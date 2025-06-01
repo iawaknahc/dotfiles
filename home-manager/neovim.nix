@@ -194,6 +194,13 @@
         config = builtins.readFile ../.config/nvim/lua/lzn/statuscol-nvim.lua;
         plugin = statuscol-nvim;
       }
+      # vim.notify
+      {
+        type = "lua";
+        optional = true;
+        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-notify.lua;
+        plugin = nvim-notify;
+      }
       # Key clues and submodes.
       {
         type = "lua";
