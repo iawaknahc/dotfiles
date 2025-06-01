@@ -319,6 +319,31 @@ vim.diagnostic.config({
 
 local myautocmd_group = vim.api.nvim_create_augroup("MyAutocmd", { clear = true })
 
+-- Copied from the example given in :h vim.treesitter.start()
+-- We actually do not need the API of nvim-treesitter to do highlight.
+-- We DO need the data (RUNTIME/queries) installed by nvim-treesitter though.
+vim.api.nvim_create_autocmd("FileType", {
+  group = myautocmd_group,
+  pattern = "*",
+  callback = function(ev)
+    local buf = ev.buf
+    local filetype = ev.match
+
+    local max_filesize = 100 * 1024 -- 100KiB
+    local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+    if ok and stats ~= nil and stats.size > max_filesize then
+      return
+    end
+
+    -- Try twice.
+    -- Some special buffer like :h checkhealth only work with vim.treesitter.start(buf)
+    local ok_with_ft, _err_with_ft = pcall(vim.treesitter.start, buf, filetype)
+    if not ok_with_ft then
+      local _ok_without_ft, _err_without_ft = pcall(vim.treesitter.start, buf)
+    end
+  end,
+})
+
 local function myautocmd_set_filetype(pattern, filetype)
   vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     group = myautocmd_group,
