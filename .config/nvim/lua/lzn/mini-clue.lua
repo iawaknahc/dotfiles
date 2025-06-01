@@ -15,6 +15,9 @@ require("lz.n").load({
         },
       },
       triggers = {
+        -- IMPORTANT: <C-x> must be written as <C-x>, not <CTRL-x>
+        -- Otherwise MiniClue is confused.
+
         -- <Leader>
         { mode = "n", keys = "<Leader>" },
         { mode = "x", keys = "<Leader>" },
@@ -34,7 +37,7 @@ require("lz.n").load({
         { mode = "n", keys = "<Space>" },
 
         -- Insert mode completion
-        { mode = "i", keys = "<CTRL-X>" },
+        { mode = "i", keys = "<C-x>" },
 
         -- Marks
         { mode = "n", keys = "'" },
@@ -45,11 +48,11 @@ require("lz.n").load({
         -- Registers
         { mode = "n", keys = '"' },
         { mode = "x", keys = '"' },
-        { mode = "i", keys = "<CTRL-R>" },
-        { mode = "c", keys = "<CTRL-R>" },
+        { mode = "i", keys = "<C-r>" },
+        { mode = "c", keys = "<C-r>" },
 
         -- Window commands
-        { mode = "n", keys = "<CTRL-W>" },
+        { mode = "n", keys = "<C-w>" },
       },
       clues = {
         miniclue.gen_clues.builtin_completion(),
