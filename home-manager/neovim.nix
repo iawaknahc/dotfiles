@@ -100,6 +100,13 @@
       nvim-treesitter-textobjects
 
       ## Text editing
+      # Text objects.
+      {
+        type = "lua";
+        optional = true;
+        config = builtins.readFile ../.config/nvim/lua/lzn/mini-ai.lua;
+        plugin = mini-ai;
+      }
       # Edit surroundings.
       {
         type = "lua";
