@@ -105,6 +105,17 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.wrapscan = false
 
+-- diff
+vim.opt.diffopt = {
+  "internal",
+  "indent-heuristic",
+  "algorithm:histogram",
+  "closeoff",
+  "filler",
+  "foldcolumn:1",
+  "linematch:60",
+}
+
 -- Mapping
 vim.keymap.set("n", "<Space>", "<Nop>") -- Disable :h <Space>
 -- We cannot map <Enter> to <Nop>, otherwise <Enter> will not work in quickfix list.
