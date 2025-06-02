@@ -31,6 +31,10 @@
     mat2
 
     nixfmt-rfc-style
+
+    # https://www.passwordstore.org/
+    pass
+
     prettierd
     shellcheck
     shfmt
