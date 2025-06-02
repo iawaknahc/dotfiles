@@ -1,7 +1,8 @@
 require("lz.n").load({
   "fzf-lua",
   enabled = true,
-  event = { "DeferredUIEnter" },
+  -- I find it starts too late if we load it at DeferredUIEnter.
+  lazy = false,
   after = function()
     require("fzf-lua").setup({
       fzf_opts = {
