@@ -18,6 +18,9 @@ require("lz.n").load({
         -- IMPORTANT: <C-x> must be written as <C-x>, not <CTRL-x>
         -- Otherwise MiniClue is confused.
 
+        -- IMPORTANT: You cannot create a trigger with @.
+        -- See https://github.com/echasnovski/mini.nvim/issues/1603
+
         -- <Leader>
         { mode = "n", keys = "<Leader>" },
         { mode = "x", keys = "<Leader>" },
@@ -68,6 +71,18 @@ require("lz.n").load({
 
         { mode = "n", keys = "gs", desc = "+Surround" },
         { mode = "x", keys = "gs", desc = "+Surround" },
+
+        { mode = "n", keys = "<Leader><Leader>", desc = "+Treewalker" },
+        { mode = "n", keys = "<Leader><Leader>k", postkeys = "<Leader><Leader>" },
+        { mode = "n", keys = "<Leader><Leader>l", postkeys = "<Leader><Leader>" },
+        { mode = "n", keys = "<Leader><Leader>j", postkeys = "<Leader><Leader>" },
+        { mode = "n", keys = "<Leader><Leader>h", postkeys = "<Leader><Leader>" },
+
+        { mode = "x", keys = "<Leader><Leader>", desc = "+Treewalker" },
+        { mode = "x", keys = "<Leader><Leader>k", postkeys = "<Leader><Leader>" },
+        { mode = "x", keys = "<Leader><Leader>l", postkeys = "<Leader><Leader>" },
+        { mode = "x", keys = "<Leader><Leader>j", postkeys = "<Leader><Leader>" },
+        { mode = "x", keys = "<Leader><Leader>h", postkeys = "<Leader><Leader>" },
       },
     })
 
