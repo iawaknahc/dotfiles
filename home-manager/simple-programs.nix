@@ -19,6 +19,14 @@
     graphviz
 
     hadolint
+
+    # xxd with color
+    # https://github.com/sweetbbak/hexxy
+    hexxy
+    # A handy hex viewer, not compatible with xxd.
+    # https://github.com/sharkdp/hexyl
+    hexyl
+
     imagemagick
 
     # https://github.com/jpmens/jo
