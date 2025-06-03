@@ -14,6 +14,11 @@
   programs.ghostty.installBatSyntax = false;
   programs.ghostty.installVimSyntax = false;
   programs.ghostty.settings = {
+    # Treat the left option key as ALT, keeping the right option key unchanged.
+    # In Karabiner, I have configured the right option key to type more symbols.
+    # So it follows logically that the left option key should be remapped to something more useful.
+    macos-option-as-alt = "left";
+
     # ghostty embeds JetBrains Mono by default.
     # So it is unnecessary to configure font.
     # But I am not a fan of ligatures.
