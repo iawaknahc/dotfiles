@@ -5,6 +5,19 @@ require("lz.n").load({
   lazy = false,
   after = function()
     require("diffview").setup({
+      view = {
+        merge_tool = {
+          -- :h diffview-layouts
+          -- ┌──────┬───────┐
+          -- │  A   │   C   │
+          -- │      │       │
+          -- ├──────┴───────┤
+          -- │      B       │
+          -- │              │
+          -- └──────────────┘
+          layout = "diff3_mixed",
+        },
+      },
       hooks = {
         diff_buf_read = function()
           -- For some reason, wrap is not set to nowrap.
