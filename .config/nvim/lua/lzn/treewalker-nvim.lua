@@ -9,17 +9,16 @@ require("lz.n").load({
       highlight_group = "IncSearch",
     })
 
-    -- These mappings are supposed to be used with mini.clue submode.
-    vim.keymap.set({ "n", "x" }, "<Leader><Leader>k", function()
+    vim.keymap.set({ "n", "x" }, "<M-k>", function()
       treewalker.move_up()
     end, { desc = "Treewalker: Move up" })
-    vim.keymap.set({ "n", "x" }, "<Leader><Leader>l", function()
+    vim.keymap.set({ "n", "x" }, "<M-l>", function()
       treewalker.move_in()
     end, { desc = "Treewalker: Move in" })
-    vim.keymap.set({ "n", "x" }, "<Leader><Leader>j", function()
+    vim.keymap.set({ "n", "x" }, "<M-j>", function()
       treewalker.move_down()
     end, { desc = "Treewalker: Move down" })
-    vim.keymap.set({ "n", "x" }, "<Leader><Leader>h", function()
+    vim.keymap.set({ "n", "x" }, "<M-h>", function()
       treewalker.move_out()
     end, { desc = "Treewalker: Move out" })
 
@@ -45,29 +44,9 @@ require("lz.n").load({
       return _G[global_fn_name]
     end
 
-    vim.keymap.set(
-      "n",
-      "<Leader><Leader><C-k>",
-      make_repeatable("swap_up"),
-      { expr = true, desc = "Treewalker: Swap up" }
-    )
-    vim.keymap.set(
-      "n",
-      "<Leader><Leader><C-l>",
-      make_repeatable("swap_right"),
-      { expr = true, desc = "Treewalker: Swap right" }
-    )
-    vim.keymap.set(
-      "n",
-      "<Leader><Leader><C-j>",
-      make_repeatable("swap_down"),
-      { expr = true, desc = "Treewalker: Swap down" }
-    )
-    vim.keymap.set(
-      "n",
-      "<Leader><Leader><C-h>",
-      make_repeatable("swap_left"),
-      { expr = true, desc = "Treewalker: Swap left" }
-    )
+    vim.keymap.set("n", "<M-S-k>", make_repeatable("swap_up"), { expr = true, desc = "Treewalker: Swap up" })
+    vim.keymap.set("n", "<M-S-l>", make_repeatable("swap_right"), { expr = true, desc = "Treewalker: Swap right" })
+    vim.keymap.set("n", "<M-S-j>", make_repeatable("swap_down"), { expr = true, desc = "Treewalker: Swap down" })
+    vim.keymap.set("n", "<M-S-h>", make_repeatable("swap_left"), { expr = true, desc = "Treewalker: Swap left" })
   end,
 })

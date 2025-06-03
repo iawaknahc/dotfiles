@@ -10,16 +10,14 @@ require("lz.n").load({
       max_join_length = 9999,
     })
 
-    vim.keymap.set("n", "<Leader>s", function()
+    -- This is no builtin CTRL-S keymap in normal mode, so we can take it.
+    vim.keymap.set("n", "<C-s>", function()
       treesj.split()
-    end, {
-      desc = "TreeSJ: Split node",
-    })
+    end, { desc = "TreeSJ: Split node" })
 
-    vim.keymap.set("n", "<Leader>j", function()
+    -- :h CTRL-J is an alias of j, which can be taken by us.
+    vim.keymap.set("n", "<C-j>", function()
       treesj.join()
-    end, {
-      desc = "TreeSJ: Join node",
-    })
+    end, { desc = "TreeSJ: Join node" })
   end,
 })
