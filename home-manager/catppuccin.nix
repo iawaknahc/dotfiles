@@ -12,6 +12,7 @@
   catppuccin.tmux.extraConfig = ''
     set -g @catppuccin_status_background "default"
     set -g @catppuccin_window_status_style "rounded"
+    set -g @catppuccin_window_current_number_color "#{@thm_yellow}"
   '';
   catppuccin.fish.enable = true;
   catppuccin.atuin.enable = true;
