@@ -1,0 +1,4 @@
+% claude
+
+# Sync Claude Desktop MCP server settings to Claude Code.
+claude mcp add-from-claude-desktop -s user
