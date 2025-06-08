@@ -1,10 +1,16 @@
 { pkgs, config, ... }:
 {
   home.packages = with pkgs; [
-    (writeScriptBin "mcp-server-time" ''
-      #!/bin/sh
-      ${config.home.profileDirectory}/bin/uvx mcp-server-time "$@"
-    '')
+    # From the overlay of natsukium/mcp-servers-nix
+    mcp-server-time
+
+    # From the overlay of natsukium/mcp-servers-nix
+    #
+    # As of 2025-06-08, Playwright supports full page screenshot out-of-the-box.
+    # https://playwright.dev/docs/screenshots#full-page-screenshots
+    # But @playwright/mcp does not expose that
+    # https://github.com/microsoft/playwright-mcp/blob/v0.0.28/src/tools/screenshot.ts
+    playwright-mcp
   ];
 
   # https://modelcontextprotocol.io/quickstart/user#2-add-the-filesystem-mcp-server
@@ -21,6 +27,10 @@
             "Asia/Hong_Kong"
           ];
         };
+        playwright = {
+          command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
+        };
+
         # No need to install mcp-server-fetch because Claude Desktop and Claude Code has it built in.
       };
     };

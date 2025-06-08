@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin.url = "github:catppuccin/nix";
+    mcp-servers-nix = {
+      url = "github:natsukium/mcp-servers-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -30,6 +34,7 @@
       mac-app-util,
       android-nixpkgs,
       catppuccin,
+      mcp-servers-nix,
       ...
     }:
     let
@@ -76,6 +81,7 @@
                   username
                   homeDirectory
                   android-nixpkgs
+                  mcp-servers-nix
                   ;
                 nixPath_nixpkgs = "${nixpkgs.outPath}";
                 nixPath_home-manager = "${home-manager.outPath}";

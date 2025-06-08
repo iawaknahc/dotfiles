@@ -6,12 +6,17 @@
   nixPath_nix-darwin,
   nixPath_darwin-config,
   nixPath_for-nixd,
+  mcp-servers-nix,
   ...
 }:
 {
   config = {
     home.stateVersion = "24.05";
     programs.home-manager.enable = true;
+
+    nixpkgs.overlays = [
+      mcp-servers-nix.overlays.default
+    ];
 
     nixpkgs.config.allowUnfree = true;
     # Allow ghostty, which is marked as broken on macOS.
