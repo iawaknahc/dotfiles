@@ -98,6 +98,9 @@
     ./home-manager/databases.nix
     ./home-manager/qrcode.nix
 
+    # Python and programs distributed as Python packages.
+    ./home-manager/python.nix
+
     # Text editors.
     ./home-manager/vim.nix
     ./home-manager/neovim.nix
