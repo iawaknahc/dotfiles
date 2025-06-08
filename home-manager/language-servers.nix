@@ -6,7 +6,7 @@
     fish-lsp
     gopls
 
-    # graphql-language-service-cli is installed with npx
+    graphql-language-service-cli
 
     marksman
     # nil the the language server for Nix.

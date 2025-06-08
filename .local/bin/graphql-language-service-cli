@@ -1,3 +1,0 @@
-#!/bin/sh
-
-npx -y graphql-language-service-cli "$@"
