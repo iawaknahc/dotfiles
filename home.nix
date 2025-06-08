@@ -89,6 +89,7 @@
     ./home-manager/simple-programs.nix
     ./home-manager/language-servers.nix
     ./home-manager/languages.nix
+    ./home-manager/nodejs.nix
     ./home-manager/databases.nix
     ./home-manager/qrcode.nix
 
