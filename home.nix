@@ -119,6 +119,7 @@
     # ./home-manager/codex
     ./home-manager/fastfetch.nix
     ./home-manager/claude.nix
+    ./home-manager/tailscale.nix
 
     ./home-manager/android.nix
     # Flutter is now installed per project with flake.nix
