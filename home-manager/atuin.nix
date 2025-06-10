@@ -23,11 +23,8 @@
   # https://fishshell.com/docs/current/interactive.html#searchable-command-history
   # https://fishshell.com/docs/current/interactive.html#private-mode
   # Atuin respects fish_private_mode, when fish_private_mode is on, Atuin does not save history.
-  # Other than fish_private_mode, fish shell does not provide a way to disable history.
-  # Therefore, we forcibly make the history a symlink to /dev/null.
-  # fish shell will occashionally complain that it cannot write to, or change the permission of that file.
-  # Other than that, fish shell seems running fine.
-  xdg.dataFile."fish/fish_history".source = config.lib.file.mkOutOfStoreSymlink "/dev/null";
+  # Other than fish_private_mode, fish shell does not record a command if it is prefixed with a space,
+  # similar to HISTCONTROL=ignorespace.
 
   # nushell does not seem to have a way to disable history at all.
   programs.atuin.enableNushellIntegration = true;
