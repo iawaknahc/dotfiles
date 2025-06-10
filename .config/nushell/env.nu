@@ -1,5 +1,3 @@
-print $"sourcing ($nu.env-path)"
-
 # NOTE: Variables or custom commands declared in the top-level in this file
 # are still in scope of the shell.
 # See https://github.com/nushell/nushell/issues/11818

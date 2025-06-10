@@ -28,9 +28,6 @@
     elif [ -n "$TERM" ]; then
       term="$TERM"
     fi
-    if [ -n "$TERM" ]; then
-      echo "$term sets \$TERM to $TERM"
-    fi
 
     if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
       if [ -d "/Applications/iTerm.app/Contents/Resources/terminfo" ]; then
@@ -39,9 +36,6 @@
     fi
 
     if [ -n "$TERMINFO" ]; then
-      echo "$term sets \$TERMINFO to $TERMINFO"
-      echo "unset TERMINFO and set TERMINFO_DIRS instead"
-
       export TERMINFO_DIRS="$TERMINFO:$TERMINFO_DIRS"
       unset TERMINFO
     fi

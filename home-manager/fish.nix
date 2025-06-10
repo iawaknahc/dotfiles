@@ -15,13 +15,6 @@ in
     set --global --export SHELL "$(command -v fish)"
   '';
   programs.fish.interactiveShellInit = ''
-    if status is-login
-        echo "login shell: true"
-    else
-        echo "login shell: false"
-    end
-
-    echo "sourcing $(status filename)"
     # Turn on vi mode
     fish_vi_key_bindings
   '';

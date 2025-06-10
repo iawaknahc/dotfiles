@@ -14,15 +14,6 @@
   programs.zsh.enable = true;
   programs.zsh.defaultKeymap = "viins";
   programs.zsh.initContent = lib.mkBefore ''
-    case "$-" in
-      *l*) echo "login shell: true";;
-      *) echo "login shell: false";;
-    esac
-
-    # man zshmisc and search for %N
-    # This is from https://stackoverflow.com/a/75564098
-    echo "sourcing ''${(%):-%N}"
-
     # Ensure SHELL is correctly set.
     # Note that this must appear after we have set up the PATH,
     # otherwise, `command -v zsh` points to a zsh that is not installed by Nix.
