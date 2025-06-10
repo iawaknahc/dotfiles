@@ -8,6 +8,36 @@
     # But @playwright/mcp does not expose that
     # https://github.com/microsoft/playwright-mcp/blob/v0.0.28/src/tools/screenshot.ts
     playwright-mcp
+
+    # The steps to update this package.
+    # 1. git-clone the source code.
+    # 2. git-checkout the version.
+    # 3. See if rg.patch is still needed.
+    # 4. Reference ./rg.patch and replicate it in the version.
+    # 5. Update ./rg.patch
+    # 6. Update the hashes.
+    (buildNpmPackage rec {
+      pname = "desktop-commander";
+      version = "0.2.3";
+
+      src = fetchFromGitHub {
+        owner = "wonderwhy-er";
+        repo = "DesktopCommanderMCP";
+        rev = "v${version}";
+        hash = "sha256-6HuKpWfwwWb4kSsr1vuR7NcIMQpUTqdzXBkqazGJEVc=";
+      };
+
+      npmDepsHash = "sha256-b9apk3NdAQiZc5kbtpVbkKBbx8n+QlewrvXBbpfJaQw=";
+
+      # We need to remove the dependency on @vscode/ripgrep because
+      # it contains a postinstall script that is not compatible with Nix.
+      # In the postinstall script, it downloads a prebuilt binary of ripgrep.
+      # In Nix, we can replicate the behavior easily.
+      patches = [ ./rg.patch ];
+      postPatch = ''
+        sed -i 's|@rgPath@|${ripgrep}/bin/rg|g' src/tools/search.ts
+      '';
+    })
   ];
 
   home.file.".claude/CLAUDE.md".text = ''
@@ -40,9 +70,13 @@
           command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
         };
 
+        desktop-commander = {
+          command = "${config.home.profileDirectory}/bin/desktop-commander";
+        };
+
         # mcp-server-time is very limited.
         # On Claude Code, it is better ask to the Bash tool to do time related manipulation.
-        # On Claude Desktop, it has no Bash tool, so it cannot do similar thing.
+        # On Claude Desktop, it can use desktop-commander to run shell commands.
 
         # No need to install mcp-server-fetch because Claude Desktop and Claude Code has it built in.
       };

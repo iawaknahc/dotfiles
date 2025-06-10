@@ -118,7 +118,7 @@
     ./home-manager/gnuinfo.nix
     # ./home-manager/codex
     ./home-manager/fastfetch.nix
-    ./home-manager/claude.nix
+    ./home-manager/claude
     ./home-manager/tailscale.nix
 
     ./home-manager/android.nix
