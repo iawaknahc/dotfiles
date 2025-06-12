@@ -63,15 +63,10 @@
     # Theme
     ./home-manager/catppuccin.nix
 
-    # chezmoi
-    ./home-manager/chezmoi.nix
-
     # Karabiner
     ./home-manager/karabiner.nix
     # Hammerspoon
     ./home-manager/hammerspoon.nix
-    # Alfred
-    ./home-manager/alfred.nix
 
     # Terminals.
     ./home-manager/terminal.nix
