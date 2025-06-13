@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   ...
 }:
@@ -34,4 +35,25 @@
     ../alfred/Alfred.alfredpreferences/preferences/features/terminal/prefs.plist;
   alfred.sourceFile."preferences/features/websearch/prefs.plist".source =
     ../alfred/Alfred.alfredpreferences/preferences/features/websearch/prefs.plist;
+
+  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000-00000000000000001/prefs.plist".source =
+    ../alfred/Alfred.alfredpreferences/workflows/user.workflow.00000000-0000-0000-00000000000000001/prefs.plist;
+  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000001".source =
+    pkgs.stdenv.mkDerivation
+      rec {
+        pname = "alfred-workflow-conv";
+        version = "2025.1";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "alfredapp";
+          repo = "unit-converter-workflow";
+          rev = "${version}";
+          hash = "sha256-93o4xis86Z06yMREIwU3uhoYWaeWle9Lv7zVFb6QiyY=";
+        };
+
+        installPhase = ''
+          mkdir $out
+          cp -R ./Workflow/. $out/
+        '';
+      };
 }

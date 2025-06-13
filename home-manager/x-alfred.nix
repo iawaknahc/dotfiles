@@ -1,6 +1,12 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   alfredSourceFile = lib.filterAttrs (key: value: value.enable) config.alfred.sourceFile;
+  alfredStoreFile = lib.filterAttrs (key: value: value.enable) config.alfred.storeFile;
 in
 {
   options = {
@@ -42,6 +48,31 @@ in
         )
       );
     };
+
+    alfred.storeFile = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { ... }:
+          {
+            options = {
+              enable = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether the file should be generated.
+                '';
+              };
+              source = lib.mkOption {
+                type = lib.types.path;
+                description = ''
+                  The source path to the file.
+                '';
+              };
+            };
+          }
+        )
+      );
+    };
   };
 
   config = {
@@ -53,14 +84,16 @@ in
 
           mkdir -p "$(dirname "$target")"
           if [ -d "$source" ]; then
-            mkdir "$target"
-            cp -R "$source"/. "$target"/.
+            mkdir -p "$target"
+            # Files from Nix store are usually read-only.
+            # But we want to make them writable.
+            ${pkgs.rsync}/bin/rsync --perms --chmod=Du+w,Fu+w --recursive "$source"/ "$target"
           else
-            cp "$source" "$target"
+            ${pkgs.rsync}/bin/rsync --perms --chmod=Du+w,Fu+w "$source" "$target"
           fi
         }
       ''
-      + lib.concatStrings (
+      + (lib.concatStrings (
         lib.mapAttrsToList (
           key: value:
           let
@@ -98,7 +131,27 @@ in
             }
           ''
         ) alfredSourceFile
-      )
+      ))
+      + (lib.concatStrings (
+        lib.mapAttrsToList (
+          key: value:
+          let
+            targetAbsolutePath = lib.strings.concatStringsSep "/" [
+              config.alfred.configDir
+              "Alfred.alfredpreferences"
+              key
+            ];
+          in
+          ''
+            copyFile ${
+              lib.escapeShellArgs [
+                (toString value.source)
+                targetAbsolutePath
+              ]
+            }
+          ''
+        ) alfredStoreFile
+      ))
     );
   };
 }
