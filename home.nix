@@ -68,6 +68,10 @@
     # Hammerspoon
     ./home-manager/hammerspoon.nix
 
+    # Alfred
+    ./home-manager/x-alfred.nix
+    ./home-manager/alfred.nix
+
     # Terminals.
     ./home-manager/terminal.nix
     ./home-manager/tmux.nix
