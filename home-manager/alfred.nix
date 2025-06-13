@@ -56,4 +56,25 @@
           cp -R ./Workflow/. $out/
         '';
       };
+
+  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000000000000000000002/prefs.plist".source =
+    ../alfred/Alfred.alfredpreferences/workflows/user.workflow.00000000-0000-0000-00000000000000002/prefs.plist;
+  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000002".source =
+    pkgs.stdenv.mkDerivation
+      rec {
+        pname = "alfred-workflow-cur";
+        version = "2025.2";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "alfredapp";
+          repo = "currency-converter-workflow";
+          rev = "${version}";
+          hash = "sha256-142e1KZ58+cEBxJGq/W8JElemGgXTHEP0PTbsOV11F0=";
+        };
+
+        installPhase = ''
+          mkdir $out
+          cp -R ./Workflow/. $out/
+        '';
+      };
 }
