@@ -19,6 +19,7 @@ require("lz.n").load({
         dart = { "dart_format" },
         fish = { "fish_indent" },
         nix = { "nixfmt" },
+        swift = { "swiftformat" },
       },
     })
   end,
