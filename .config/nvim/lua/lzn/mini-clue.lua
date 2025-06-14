@@ -39,8 +39,14 @@ require("lz.n").load({
         -- <Space>
         { mode = "n", keys = "<Space>" },
 
-        -- Insert mode completion
+        -- CTRL-X is a native submode of Insert mode.
         { mode = "i", keys = "<C-x>" },
+
+        -- CTRL-\ is a native submode of citv
+        { mode = "c", keys = [[<C-\>]] },
+        { mode = "i", keys = [[<C-\>]] },
+        { mode = "t", keys = [[<C-\>]] },
+        { mode = "v", keys = [[<C-\>]] },
 
         -- Marks
         { mode = "n", keys = "'" },
@@ -64,6 +70,17 @@ require("lz.n").load({
         miniclue.gen_clues.marks(),
         miniclue.gen_clues.registers(),
         miniclue.gen_clues.windows(),
+
+        -- CTRL-\
+        { mode = "c", keys = [[<C-\><C-n>]], desc = "Back to normal mode" },
+        { mode = "c", keys = [[<C-\><C-g>]], desc = "Back to normal mode" },
+        { mode = "c", keys = [[<C-\>e]], desc = [[:h c_CTRL-\_e]] },
+        { mode = "i", keys = [[<C-\><C-n>]], desc = "Back to normal mode" },
+        { mode = "i", keys = [[<C-\><C-g>]], desc = "Back to normal mode" },
+        { mode = "i", keys = [[<C-\><C-o>]], desc = "Like i_CTRL-O" },
+        { mode = "t", keys = [[<C-\><C-n>]], desc = "Back to normal mode" },
+        { mode = "t", keys = [[<C-\><C-o>]], desc = "Like i_CTRL-O" },
+        { mode = "v", keys = [[<C-\><C-g>]], desc = "Back to normal mode" },
 
         { mode = "n", keys = "<Leader>t", desc = "+Table mode" },
 
