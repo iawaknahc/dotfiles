@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 let
@@ -8,15 +9,29 @@ in
 rec {
   scriptFilter = args: libplist.toPlist (makeScriptFilter args);
 
+  _uid =
+    s:
+    builtins.readFile (
+      pkgs.runCommand "uuid5" { } ''
+        ${pkgs.python3}/bin/python3 - ${lib.escapeShellArgs [ s ]} >$out <<EOF
+        import uuid
+        import sys
+        print(str(uuid.uuid5(uuid.NAMESPACE_DNS, sys.argv[1])).upper(), end="")
+        EOF
+      ''
+    );
+
   makeScriptFilter =
     {
       bundleid,
       keyword,
       scriptfile,
-      universalaction_uid,
-      scriptfilter_uid,
-      clipboard_uid,
     }:
+    let
+      universalaction_uid = _uid "${keyword}-universalaction";
+      scriptfilter_uid = _uid "${keyword}-scriptfilter";
+      clipboard_uid = _uid "${keyword}-clipboard";
+    in
     libplist.dict [
       {
         key = "bundleid";

@@ -1,10 +1,11 @@
 {
   pkgs,
+  lib,
   config,
   ...
 }:
 let
-  libalfred = (import ../lib/alfred.nix) { inherit pkgs; };
+  libalfred = (import ../lib/alfred.nix) { inherit pkgs lib; };
 in
 {
   alfred.configDir = "${config.home.homeDirectory}/alfred";
@@ -90,9 +91,6 @@ in
           #!/bin/sh
           ${pkgs.python3}/bin/python3 ${./uuid.py} "$@"
         '';
-        universalaction_uid = "2B1A7F61-7082-4D46-9787-A4A95F56D698";
-        scriptfilter_uid = "EB607327-7572-4C33-B268-1C5DA9E810C5";
-        clipboard_uid = "EF972F30-10F4-4635-89FD-0EB2D2C537E6";
       }
     );
 }
