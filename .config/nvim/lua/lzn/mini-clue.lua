@@ -86,8 +86,8 @@ require("lz.n").load({
 
         { mode = "n", keys = "gr", desc = "+LSP" },
 
-        { mode = "n", keys = "gs", desc = "+Surround" },
-        { mode = "x", keys = "gs", desc = "+Surround" },
+        { mode = "n", keys = "<Leader>s", desc = "+Surround" },
+        { mode = "x", keys = "<Leader>s", desc = "+Surround" },
       },
     })
 

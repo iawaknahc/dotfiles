@@ -291,6 +291,14 @@
         plugin = diffview-nvim;
       }
 
+      ## Filesystem integration
+      {
+        type = "lua";
+        optional = true;
+        config = builtins.readFile ../.config/nvim/lua/lzn/oil-nvim.lua;
+        plugin = oil-nvim;
+      }
+
       ## Debugging
       {
         type = "lua";
