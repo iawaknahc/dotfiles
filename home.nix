@@ -102,6 +102,9 @@
     ./home-manager/databases.nix
     ./home-manager/qrcode.nix
 
+    # man
+    ./home-manager/man.nix
+
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix
 
