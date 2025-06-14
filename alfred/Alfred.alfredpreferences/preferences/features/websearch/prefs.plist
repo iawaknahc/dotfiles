@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>customSites</key>
+	<dict>
+		<key>47128BFE-E716-42AE-9368-B05795884886</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>jwt</string>
+			<key>text</key>
+			<string>Inspect JWT</string>
+			<key>url</key>
+			<string>https://jwt.io/#id_token={query}</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
