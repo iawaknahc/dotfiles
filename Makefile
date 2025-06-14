@@ -9,7 +9,7 @@ format:
 # Copy the current config of Alfred to here for git-diff.
 .PHONY: alfred-rsync
 alfred-rsync:
-	rsync --recursive ~/alfred/ ./alfred
+	rsync --recursive --delete ~/alfred/ ./alfred
 
 # Undo the effect of alfred-rsync.
 .PHONY: alfred-clean
