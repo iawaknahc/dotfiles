@@ -65,6 +65,8 @@
   # https://modelcontextprotocol.io/quickstart/user#2-add-the-filesystem-mcp-server
   home.file."Library/Application Support/Claude/claude_desktop_config.json" = {
     text = builtins.toJSON {
+      # Avoid conflict with Alfred.
+      globalShortcut = "Shift+Alt+Space";
       mcpServers = {
         playwright = {
           command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
