@@ -1,8 +1,8 @@
 % cp
 
-# Copy the contents of src to target recursively.
+# Copy the contents of src to target recursively. DO NOT preserve metadata though!
 ; This works on all UNIX-like systems, including macOS, Linux and BSD.
 ; This is the only synopsis that behave consistently in all UNIX-like systems.
 ; Whether or not target ends with slash does not make a difference.
 ; src/./a -> target/./a => src/a -> target/a
-cp -R <src>/. <target>/
+cp -R src/. target_that_must_exist_already/

@@ -1,0 +1,16 @@
+% pax
+
+# List the contents of .tar archive
+pax -v -f archive.tar
+
+# Extract a .tar archive
+pax -r -v -f archive.tar
+
+# Create a .tar archive
+COPYFILE_DISABLE=1 pax -w -v -f archive.tar dir1 dir2 dir3
+
+# Copy file hierarchy
+pax -rw -v the/hierarchy/is/preserved/ target_that_must_exist_already/
+
+# Copy Java packages
+pax -rw -v com/thiscompany -s ',com/thiscompany,org/thatorganization,p' ./
