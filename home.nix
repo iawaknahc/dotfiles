@@ -70,7 +70,7 @@
 
     # Alfred
     ./home-manager/x-alfred.nix
-    ./home-manager/alfred.nix
+    ./home-manager/alfred
 
     # Terminals.
     ./home-manager/terminal.nix
