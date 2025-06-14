@@ -144,6 +144,12 @@ vim.keymap.set({ "n" }, "grh", function()
 end, {
   desc = "Toggle inlay hints",
 })
+vim.keymap.set({ "i", "c" }, [[<C-\><C-p>]], "<C-r>=getcwd()<CR>", {
+  desc = "Insert getcwd()",
+})
+vim.keymap.set({ "i", "c" }, [[<C-\><C-a>]], [[<C-r>=expand("%:p")<CR>]], {
+  desc = "Insert absolute path to current file",
+})
 vim.keymap.set({ "n" }, "gx", function()
   local function gx()
     local word = vim.fn.expand("<cfile>")
