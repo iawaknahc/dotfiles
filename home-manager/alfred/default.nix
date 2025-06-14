@@ -61,7 +61,7 @@ in
         '';
       };
 
-  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000000000000000000002/prefs.plist".source =
+  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000-00000000000000002/prefs.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.00000000-0000-0000-00000000000000002/prefs.plist;
   alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000002".source =
     pkgs.stdenv.mkDerivation
