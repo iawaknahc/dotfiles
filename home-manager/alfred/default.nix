@@ -90,6 +90,8 @@ in
       ${python3}/bin/python3 ${./uuid.py} "$@"
     '')
     (writeShellScriptBin "alfred-workflow-godoc.py" ''
+      export HS=${pkgs.hs}/bin/hs
+      export HS_SCRIPT=${../../.hammerspoon/get_browser_url.lua}
       ${python3}/bin/python3 ${./godoc.py} "$@"
     '')
   ];
