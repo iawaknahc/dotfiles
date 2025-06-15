@@ -89,7 +89,14 @@ in
     (writeShellScriptBin "alfred-workflow-uuid.py" ''
       ${python3}/bin/python3 ${./uuid.py} "$@"
     '')
+    (writeShellScriptBin "alfred-workflow-godoc.py" ''
+      ${python3}/bin/python3 ${./godoc.py} "$@"
+    '')
   ];
+  # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist;
+  # godoc
+  alfred.sourceFile."workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist;
 }
