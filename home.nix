@@ -65,8 +65,9 @@
 
     # Karabiner
     ./home-manager/karabiner.nix
+
     # Hammerspoon
-    ./home-manager/hammerspoon.nix
+    ./home-manager/hammerspoon
 
     # Alfred
     ./home-manager/x-alfred.nix
