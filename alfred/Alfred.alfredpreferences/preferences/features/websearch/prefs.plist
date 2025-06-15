@@ -15,6 +15,17 @@
 			<key>url</key>
 			<string>https://jwt.io/#id_token={query}</string>
 		</dict>
+		<key>D2AAEF8E-CA3D-42D2-B45C-FDF56AF20380</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>hm</string>
+			<key>text</key>
+			<string>Search home-manager options</string>
+			<key>url</key>
+			<string>https://home-manager-options.extranix.com/?query={query}</string>
+		</dict>
 		<key>DAEE7EDB-7F76-4AA3-AF9C-0DC1A37C69E3</key>
 		<dict>
 			<key>enabled</key>
