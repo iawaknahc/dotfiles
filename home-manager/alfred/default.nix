@@ -1,11 +1,14 @@
 {
   pkgs,
-  lib,
   config,
   ...
 }:
 let
-  libalfred = (import ../lib/alfred.nix) { inherit pkgs lib; };
+  python3 = pkgs.python3.withPackages (
+    python3-pkgs: with python3-pkgs; [
+      pyperclip
+    ]
+  );
 in
 {
   alfred.configDir = "${config.home.homeDirectory}/alfred";
@@ -82,15 +85,11 @@ in
         '';
       };
 
-  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000003/info.plist".source =
-    (
-      libalfred.scriptFilter {
-        bundleid = "testing";
-        keyword = "uuid";
-        scriptfile = pkgs.writeScript "uuid.sh" ''
-          #!/bin/sh
-          ${pkgs.python3}/bin/python3 ${./uuid.py} "$@"
-        '';
-      }
-    );
+  home.packages = with pkgs; [
+    (writeShellScriptBin "alfred-workflow-uuid.py" ''
+      ${python3}/bin/python3 ${./uuid.py} "$@"
+    '')
+  ];
+  alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist;
 }
