@@ -28,12 +28,7 @@ let
           };
           to = [
             {
-              shell_command =
-                let
-                  encodedText = lib.strings.escapeURL text;
-                  url = lib.escapeShellArg "hammerspoon://type?text=${encodedText}";
-                in
-                "open -g ${url}";
+              shell_command = "${pkgs.hs}/bin/hs -c 'hs.eventtap.keyStrokes(_cli.args[2])' -- ${lib.escapeShellArg text}";
             }
           ];
         }

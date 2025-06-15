@@ -10,12 +10,6 @@ require("hs.ipc")
 hs.loadSpoon("EmmyLua")
 hs.loadSpoon("RecursiveBinder")
 
--- This is used by Karabiner.
-hs.urlevent.bind("type", function(_eventName, params)
-  local text = params["text"]
-  hs.eventtap.keyStrokes(text)
-end)
-
 spoon.RecursiveBinder.helperFormat = {
   -- Show it at center.
   atScreenEdge = 0,
