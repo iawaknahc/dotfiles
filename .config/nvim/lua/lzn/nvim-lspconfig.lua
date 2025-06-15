@@ -18,7 +18,10 @@ require("lz.n").load({
     vim.lsp.enable("tailwindcss") -- Tailwindsss
     vim.lsp.enable("pyright") -- Python
     vim.lsp.enable("dartls") -- Dart
-    vim.lsp.enable("typos_lsp") -- Spell checking
+
+    -- Grammar and spell checking
+    vim.lsp.enable("harper_ls") -- https://writewithharper.com
+    vim.lsp.enable("typos_lsp") -- https://github.com/crate-ci/typos
 
     vim.lsp.config("gopls", {
       settings = {
