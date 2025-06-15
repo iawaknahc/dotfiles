@@ -11,9 +11,20 @@
 			<key>keyword</key>
 			<string>jwt</string>
 			<key>text</key>
-			<string>Inspect JWT</string>
+			<string>jwt.io/#id_token={query}</string>
 			<key>url</key>
 			<string>https://jwt.io/#id_token={query}</string>
+		</dict>
+		<key>DAEE7EDB-7F76-4AA3-AF9C-0DC1A37C69E3</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>npm</string>
+			<key>text</key>
+			<string>npmjs.com/package/{query}</string>
+			<key>url</key>
+			<string>https://www.npmjs.com/package/{query}</string>
 		</dict>
 	</dict>
 </dict>
