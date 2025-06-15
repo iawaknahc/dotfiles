@@ -8,7 +8,7 @@
     graphql-language-service-cli
     marksman
 
-    # nil the the language server for Nix.
+    # nil is the language server for Nix.
     # See https://github.com/oxalica/nil
     nil
 
@@ -20,9 +20,5 @@
     typescript-language-server
     vscode-langservers-extracted
     yaml-language-server
-
-    # Grammar and spell checking
-    typos-lsp
-    harper
   ];
 }
