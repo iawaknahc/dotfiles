@@ -31,43 +31,47 @@ def to_item(url_str: str, subtitle: str):
 
 
 def main():
+    items = []
+
     arg = ""
     if len(sys.argv) > 1:
         arg = sys.argv[1].strip()
 
-    clipboard = pyperclip.paste()
-    if clipboard is None:
-        clipboard = ""
+    # When argument is provided, we skip reading the clipboard, or
+    # inspecting the browsers.
+    # Inspecting the browsers may block sometimes.
+    if arg != "":
+        arg_item = to_item(arg, "From argument")
+        if arg_item is not None:
+            items.append(arg_item)
     else:
-        clipboard = clipboard.strip()
+        clipboard = pyperclip.paste()
+        if clipboard is None:
+            clipboard = ""
+        else:
+            clipboard = clipboard.strip()
 
-    try:
-        process = subprocess.run([
-            os.environ["HS"],
-            os.environ["HS_SCRIPT"],
-        ], capture_output=True, text=True, check=True)
-        browsers_output = json.loads(process.stdout)
-    except:
-        browsers_output = { "browsers": [] }
+        clipboard_item = to_item(clipboard, "From clipboard")
+        if clipboard_item is not None:
+            items.append(clipboard_item)
 
-    items = []
+        try:
+            process = subprocess.run([
+                os.environ["HS"],
+                os.environ["HS_SCRIPT"],
+            ], capture_output=True, text=True, check=True)
+            browsers_output = json.loads(process.stdout)
+        except:
+            browsers_output = { "browsers": [] }
 
-    arg_item = to_item(arg, "From argument")
-    if arg_item is not None:
-        items.append(arg_item)
-
-    for b in browsers_output["browsers"]:
-        name = b["name"]
-        url = b.get("url")
-        if url is None or url == "":
-            continue
-        item = to_item(url, f"From {name}")
-        if item is not None:
-            items.append(item)
-
-    clipboard_item = to_item(clipboard, "From clipboard")
-    if clipboard_item is not None:
-        items.append(clipboard_item)
+        for b in browsers_output["browsers"]:
+            name = b["name"]
+            url = b.get("url")
+            if url is None or url == "":
+                continue
+            item = to_item(url, f"From {name}")
+            if item is not None:
+                items.append(item)
 
     if len(items) == 0:
         print(json.dumps({
