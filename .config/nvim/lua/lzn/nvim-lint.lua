@@ -4,10 +4,6 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     require("lint").linters_by_ft = {
-      javascript = { "eslint" },
-      javascriptreact = { "eslint" },
-      typescript = { "eslint" },
-      typescriptreact = { "eslint" },
       sh = { "shellcheck" },
       dockerfile = { "hadolint" },
     }

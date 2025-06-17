@@ -18,6 +18,7 @@ require("lz.n").load({
     vim.lsp.enable("tailwindcss") -- Tailwindsss
     vim.lsp.enable("pyright") -- Python
     vim.lsp.enable("dartls") -- Dart
+    vim.lsp.enable("eslint") -- ESLint
 
     -- Grammar and spell checking
     vim.lsp.enable("harper_ls") -- https://writewithharper.com
