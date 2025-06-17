@@ -30,11 +30,20 @@ require("lz.n").load({
 })
 
 require("lz.n").load({
+  "nvim-dap-python",
+  lazy = true,
+  after = function()
+    require("dap-python").setup("debugpy-adapter")
+  end,
+})
+
+require("lz.n").load({
   "nvim-dap",
   enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("lz.n").trigger_load("nvim-dap-go")
+    require("lz.n").trigger_load("nvim-dap-python")
 
     vim.keymap.set("n", "<F5>", function()
       require("dap").continue()

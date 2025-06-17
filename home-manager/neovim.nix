@@ -306,6 +306,11 @@
         optional = true;
         plugin = nvim-dap-go;
       }
+      {
+        type = "lua";
+        optional = true;
+        plugin = nvim-dap-python;
+      }
 
       ## REPL
       {
