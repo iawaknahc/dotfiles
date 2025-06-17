@@ -405,6 +405,8 @@ myautocmd_set_filetype("*.env", "")
 myautocmd_set_filetype("*.cheat", "sh")
 -- mjml
 myautocmd_set_filetype("*.mjml", "html")
+myautocmd_set_filetype("docker-compose.yaml", "yaml.docker-compose")
+myautocmd_set_filetype("docker-compose.yml", "yaml.docker-compose")
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = myautocmd_group,

@@ -19,10 +19,31 @@ require("lz.n").load({
     vim.lsp.enable("pyright") -- Python
     vim.lsp.enable("dartls") -- Dart
     vim.lsp.enable("eslint") -- ESLint
+    vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
 
     -- Grammar and spell checking
     vim.lsp.enable("harper_ls") -- https://writewithharper.com
     vim.lsp.enable("typos_lsp") -- https://github.com/crate-ci/typos
+
+    vim.lsp.config("dockerls", {
+      settings = {
+        docker = {
+          languageserver = {
+            diagnostics = {
+              deprecatedMaintainer = "error",
+              directiveCasing = "error",
+              emptyContinuationLine = "error",
+              instructionCasing = "error",
+              instructionCmdMultiple = "error",
+              instructionEntrypointMultiple = "error",
+              instructionHealthcheckMultiple = "error",
+              instructionJSONInSingleQuotes = "error",
+            },
+          },
+        },
+      },
+    })
+    vim.lsp.enable("dockerls")
 
     vim.lsp.config("gopls", {
       settings = {

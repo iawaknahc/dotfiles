@@ -3,6 +3,8 @@
   home.packages = with pkgs; [
     awk-language-server
     bash-language-server
+    dockerfile-language-server-nodejs
+    docker-compose-language-service
     fish-lsp
     gopls
     graphql-language-service-cli
