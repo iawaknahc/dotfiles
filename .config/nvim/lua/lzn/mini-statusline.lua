@@ -94,20 +94,19 @@ require("lz.n").load({
         return {}
       end
 
-      local d = vim.b.gitsigns_status_dict
-      if d == nil then
+      if vim.b.gitsigns_status_dict == nil then
         return {}
       end
 
       local out = {}
-      if d.added > 0 then
-        table.insert(out, "%#diffAdded#" .. string.format("+%d", d.added))
+      if vim.b.gitsigns_status_dict.added ~= nil and vim.b.gitsigns_status_dict.added > 0 then
+        table.insert(out, "%#diffAdded#" .. string.format("+%d", vim.b.gitsigns_status_dict.added))
       end
-      if d.removed > 0 then
-        table.insert(out, "%#diffRemoved#" .. string.format("-%d", d.removed))
+      if vim.b.gitsigns_status_dict.removed ~= nil and vim.b.gitsigns_status_dict.removed > 0 then
+        table.insert(out, "%#diffRemoved#" .. string.format("-%d", vim.b.gitsigns_status_dict.removed))
       end
-      if d.changed > 0 then
-        table.insert(out, "%#diffChanged#" .. string.format("~%d", d.changed))
+      if vim.b.gitsigns_status_dict.changed ~= nil and vim.b.gitsigns_status_dict.changed > 0 then
+        table.insert(out, "%#diffChanged#" .. string.format("~%d", vim.b.gitsigns_status_dict.changed))
       end
       if #out > 0 then
         table.insert(out, 1, "%#MiniStatuslineFilename# ")
