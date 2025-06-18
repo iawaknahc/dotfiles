@@ -70,35 +70,35 @@ require("lz.n").load({
 
     local function get_fileencoding(args)
       local fileencoding = vim.bo.fileencoding
-      if fileencoding ~= "utf-8" then
-        return "%#ErrorMsg#" .. fileencoding
-      end
       if MiniStatusline.is_truncated(args.trunc_width) then
-        return ""
+        return nil
       end
-      return fileencoding
+      if fileencoding ~= "utf-8" then
+        return { hl = "ErrorMsg", strings = { fileencoding } }
+      end
+      return nil
     end
 
     local function get_fileformat(args)
       local fileformat = vim.bo.fileformat
-      if fileformat ~= "unix" then
-        return "%#ErrorMsg#" .. fileformat
-      end
       if MiniStatusline.is_truncated(args.trunc_width) then
-        return ""
+        return nil
       end
-      return fileformat
+      if fileformat ~= "unix" then
+        return { hl = "ErrorMsg", strings = { fileformat } }
+      end
+      return nil
     end
 
     local function get_endofline(args)
       local endofline = vim.bo.endofline
-      if not endofline then
-        return "%#ErrorMsg#" .. "NOEOL"
-      end
       if MiniStatusline.is_truncated(args.trunc_width) then
-        return ""
+        return nil
       end
-      return "eol"
+      if not endofline then
+        return { hl = "ErrorMsg", strings = { "NOEOL" } }
+      end
+      return nil
     end
 
     local function get_filesize(args)
@@ -226,9 +226,9 @@ require("lz.n").load({
       local winnr = get_winnr({ trunc_width = 80 })
       local filename = get_filename({ trunc_width = 180 })
       local filetype = get_filetype({ trunc_width = 120 })
-      local fileencoding = get_fileencoding({ trunc_width = 120 })
-      local fileformat = get_fileformat({ trunc_width = 120 })
-      local endofline = get_endofline({ trunc_width = 120 })
+      local fileencoding = get_fileencoding({ trunc_width = 80 })
+      local fileformat = get_fileformat({ trunc_width = 80 })
+      local endofline = get_endofline({ trunc_width = 80 })
       local filesize = get_filesize({ trunc_width = 120 })
 
       local byte_location = get_byte_location({ trunc_width = 120 })
@@ -250,10 +250,16 @@ require("lz.n").load({
       table.insert(groups, { strings = devinfo_strings })
       table.insert(groups, "%=")
       table.insert(groups, { hl = "MiniStatuslineFileinfo", strings = { filetype } })
-      table.insert(groups, { hl = "MiniStatuslineFileinfo", strings = { fileencoding } })
-      table.insert(groups, { hl = "MiniStatuslineFileinfo", strings = { fileformat } })
-      table.insert(groups, { hl = "MiniStatuslineFileinfo", strings = { endofline } })
       table.insert(groups, { hl = "MiniStatuslineFileinfo", strings = { filesize } })
+      if fileencoding ~= nil then
+        table.insert(groups, fileencoding)
+      end
+      if fileformat ~= nil then
+        table.insert(groups, fileformat)
+      end
+      if endofline ~= nil then
+        table.insert(groups, endofline)
+      end
       table.insert(groups, {
         hl = mode_hl,
         strings = {
