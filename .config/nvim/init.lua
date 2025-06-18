@@ -448,3 +448,29 @@ vim.api.nvim_create_autocmd("InsertLeave", {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
+  group = myautocmd_group,
+  pattern = "*",
+  desc = "Track diagnostic count",
+  callback = vim.schedule_wrap(function(args)
+    if not vim.api.nvim_buf_is_valid(args.buf) then
+      vim.b.diagnostic_count = nil
+      return
+    end
+
+    local out = {
+      [vim.diagnostic.severity.ERROR] = 0,
+      [vim.diagnostic.severity.WARN] = 0,
+      [vim.diagnostic.severity.INFO] = 0,
+      [vim.diagnostic.severity.HINT] = 0,
+    }
+    for _, d in ipairs(vim.diagnostic.get(args.buf)) do
+      out[d.severity] = out[d.severity] + 1
+    end
+
+    vim.b.diagnostic_count = out
+
+    vim.cmd([[redrawstatus]])
+  end),
+})

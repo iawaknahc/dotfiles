@@ -195,8 +195,8 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/lualine-nvim.lua;
-        plugin = lualine-nvim;
+        config = builtins.readFile ../.config/nvim/lua/lzn/mini-statusline.lua;
+        plugin = mini-statusline;
       }
       # statuscolumn
       {
