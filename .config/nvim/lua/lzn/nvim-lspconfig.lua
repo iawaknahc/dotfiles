@@ -22,6 +22,41 @@ require("lz.n").load({
     vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
 
     -- Grammar and spell checking
+    vim.lsp.config("harper_ls", {
+      -- The default list from nvim-lspconfig is incomplete.
+      -- This list is up-to-date as of 2025-06-18.
+      -- https://writewithharper.com/docs/integrations/language-server#Supported-Languages
+      filetypes = {
+        "c",
+        "cmake",
+        "cpp",
+        "cs",
+        "dart",
+        "gitcommit",
+        "go",
+        "haskell",
+        "html",
+        "java",
+        "javascript",
+        "javascriptreact",
+        "kotlin",
+        "lua",
+        "markdown",
+        "nix",
+        "php",
+        "python",
+        "ruby",
+        "rust",
+        "scala",
+        "sh",
+        "swift",
+        "text",
+        "toml",
+        "typescript",
+        "typescriptreact",
+        "typst",
+      },
+    })
     vim.lsp.enable("harper_ls") -- https://writewithharper.com
     vim.lsp.enable("typos_lsp") -- https://github.com/crate-ci/typos
 
