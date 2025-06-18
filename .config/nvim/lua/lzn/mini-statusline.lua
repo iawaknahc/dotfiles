@@ -65,7 +65,18 @@ require("lz.n").load({
       if MiniStatusline.is_truncated(args.trunc_width) then
         return ""
       end
-      return filetype
+
+      local has_devicons, devicons = pcall(require, "nvim-web-devicons")
+      if not has_devicons then
+        return filetype
+      end
+
+      if filetype == "" then
+        return filetype
+      end
+
+      local icon = devicons.get_icon(vim.fn.expand("%:t"), nil, { default = true })
+      return string.format("%s  %s", icon, filetype)
     end
 
     local function get_fileencoding(args)
