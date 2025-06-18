@@ -23,36 +23,38 @@ require("lz.n").load({
     -- Keep only the keymaps that I actually use.
     -- For others, Use <Space><Space> to run :FzfLua, and then type the name to invoke the picker fuzzily.
     vim.keymap.set("n", "<Space><Space>", "<CMD>FzfLua<CR>", {
-      desc = "Open FzfLua",
+      desc = ":FzfLua",
     })
 
     -- Inspired by Helix space mode f
     vim.keymap.set("n", "<Space>f", "<CMD>FzfLua git_files<CR>", {
-      desc = "Open files in workspace",
+      desc = ":FzfLua git_files",
     })
     vim.keymap.set("n", "<Space>F", "<CMD>FzfLua files<CR>", {
-      desc = "Open files in working directory",
+      desc = ":FzfLua files",
     })
 
     -- Inspired by Helix space mode b
     vim.keymap.set("n", "<Space>b", "<CMD>FzfLua buffers<CR>", {
-      desc = "Open buffers",
+      desc = ":FzfLua buffers",
     })
 
     vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist<CR>", {
-      desc = "Open location list",
+      desc = ":FzfLua loclist",
     })
     vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix<CR>", {
-      desc = "Open quickfix list",
+      desc = ":FzfLua quickfix",
     })
 
     -- Inspired by Helix space mode d
-    vim.keymap.set("n", "<Space>d", "<CMD>FzfLua diagnostics_document<CR>", {
-      desc = "Open diagnostics",
+    vim.keymap.set("n", "<Space>d", function()
+      vim.diagnostic.setloclist()
+    end, {
+      desc = ":lua vim.diagnostic.setloclist()",
     })
     -- Inspired by Helix space mode D
     vim.keymap.set("n", "<Space>D", "<CMD>FzfLua diagnostics_workspace<CR>", {
-      desc = "Open diagnostics in workspace",
+      desc = ":FzfLua diagnostics_workspace",
     })
 
     vim.keymap.set("n", "<Space>h", function()
@@ -64,7 +66,7 @@ require("lz.n").load({
           open = true,
         })
       end
-    end, { desc = "Open unstaged hunks in buffer" })
+    end, { desc = "Gitsigns: unstaged hunks to loclist" })
 
     vim.keymap.set("n", "<Space>H", function()
       local ok, gitsigns = pcall(require, "gitsigns")
@@ -74,6 +76,6 @@ require("lz.n").load({
           open = true,
         })
       end
-    end, { desc = "Open unstaged hunks in workspace" })
+    end, { desc = "Gitsigns: unstaged hunks to qflist" })
   end,
 })
