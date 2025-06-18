@@ -5,6 +5,33 @@ require("lz.n").load({
   after = function()
     local MiniStatusline = require("mini.statusline")
 
+    local modes = {
+      ["n"] = { long = "NORMAL", short = "N", hl = "MiniStatuslineModeNormal" },
+
+      ["v"] = { long = "VISUAL", short = "V", hl = "MiniStatuslineModeVisual" },
+      ["V"] = { long = "V-LINE", short = "V-L", hl = "MiniStatuslineModeVisual" },
+      ["\x16"] = { long = "V-BLOCK", short = "V-B", hl = "MiniStatuslineModeVisual" },
+
+      ["s"] = { long = "SELECT", short = "S", hl = "MiniStatuslineModeVisual" },
+      ["S"] = { long = "S-LINE", short = "S-L", hl = "MiniStatuslineModeVisual" },
+      ["\x13"] = { long = "S-BLOCK", short = "S-B", hl = "MiniStatuslineModeVisual" },
+
+      ["i"] = { long = "INSERT", short = "I", hl = "MiniStatuslineModeInsert" },
+      ["R"] = { long = "REPLACE", short = "R", hl = "MiniStatuslineModeReplace" },
+
+      ["c"] = { long = "COMMAND", short = "C", hl = "MiniStatuslineModeCommand" },
+      ["t"] = { long = "TERMINAL", short = "T", hl = "MiniStatuslineModeOther" },
+
+      ["r"] = { long = "PROMPT", short = "P", hl = "MiniStatuslineModeOther" },
+      ["!"] = { long = "SHELL", short = "!", hl = "MiniStatuslineModeOther" },
+    }
+
+    local function get_mode(args)
+      local mode_info = modes[vim.fn.mode()]
+      local mode = MiniStatusline.is_truncated(args.trunc_width) and mode_info.short or mode_info.long
+      return mode, mode_info.hl
+    end
+
     local function get_bufnr(args)
       if MiniStatusline.is_truncated(args.trunc_width) then
         return ""
@@ -191,7 +218,7 @@ require("lz.n").load({
     local function active()
       local groups = {}
 
-      local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+      local mode, mode_hl = get_mode({ trunc_width = 120 })
       local gitsigns_strings = get_gitsigns_strings({ trunc_width = 80 })
       local diagnostic_strings = get_diagnostic_strings({ trunc_width = 80 })
 
