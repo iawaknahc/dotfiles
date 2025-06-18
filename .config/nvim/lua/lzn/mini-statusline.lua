@@ -174,7 +174,7 @@ require("lz.n").load({
 
     local function get_cell_location(args)
       if MiniStatusline.is_truncated(args.trunc_width) then
-        return ""
+        return "%5l:%-3v"
       end
 
       return "%{'cell:'}%5l:%-3v"
@@ -204,9 +204,9 @@ require("lz.n").load({
       local endofline = get_endofline({ trunc_width = 120 })
       local filesize = get_filesize({ trunc_width = 120 })
 
-      local byte_location = get_byte_location({ trunc_width = 180 })
-      local screen_location = get_screen_location({ trunc_width = 180 })
-      local cell_location = get_cell_location({ trunc_width = 40 })
+      local byte_location = get_byte_location({ trunc_width = 120 })
+      local screen_location = get_screen_location({ trunc_width = 120 })
+      local cell_location = get_cell_location({ trunc_width = 120 })
       local percentage = get_percentage({ trunc_width = 40 })
 
       local devinfo_strings = {}
