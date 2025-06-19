@@ -94,6 +94,9 @@ in
       export HS_SCRIPT=${../../.hammerspoon/get_browser_url.lua}
       ${python3}/bin/python3 ${./godoc.py} "$@"
     '')
+    (writeShellScriptBin "alfred-workflow-t.py" ''
+      ${python3}/bin/python3 ${./t.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -101,4 +104,7 @@ in
   # godoc
   alfred.sourceFile."workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist;
+  # t
+  alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
 }
