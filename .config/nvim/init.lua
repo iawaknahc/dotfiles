@@ -265,7 +265,7 @@ vim.keymap.set({ "n" }, "gx", function()
 end, {
   desc = "Open link under cursor",
 })
-vim.keymap.set({ "i", "s" }, "<C-s>", function()
+vim.keymap.set("i", "<C-s>", function()
   vim.lsp.buf.signature_help({
     focusable = false,
     anchor_bias = "above",
@@ -274,6 +274,10 @@ vim.keymap.set({ "i", "s" }, "<C-s>", function()
   })
 end, {
   desc = "vim.lsp.buf.signature_help()",
+})
+-- Override :h i_CTRL-Q
+vim.keymap.set("i", "<C-q>", "<Cmd>CloseFloatingWindows<CR>", {
+  desc = ":CloseFloatingWindows",
 })
 
 -- Command
@@ -358,6 +362,19 @@ vim.api.nvim_create_user_command("Scrollback", function()
       vim.cmd("normal! " .. vim.fn.prevnonblank("$") .. "g$")
     end,
   })
+end, {
+  nargs = 0,
+})
+
+vim.api.nvim_create_user_command("CloseFloatingWindows", function()
+  local wins = vim.api.nvim_list_wins()
+  for _, win in ipairs(wins) do
+    local config = vim.api.nvim_win_get_config(win)
+    if config.relative ~= "" then -- is floating window
+      local force = false
+      vim.api.nvim_win_close(win, force)
+    end
+  end
 end, {
   nargs = 0,
 })
