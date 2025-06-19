@@ -64,6 +64,9 @@ vim.opt.guicursor = {
 vim.o.cursorlineopt = "number"
 vim.o.cursorline = true
 
+-- floating window
+vim.o.winborder = "rounded"
+
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.pumheight = 10
