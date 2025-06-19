@@ -11,7 +11,9 @@
 
     # The following tools are not very practical.
     # They consume 1GB, even without the n-gram data.
-    # languagetool
-    # ltex-ls-plus
+    # Even if I start a languagetool HTTP server, and ask ltex-ls-plus to connect to it.
+    # ltex-ls-plus still consumes 1GB memory.
+    #languagetool
+    #ltex-ls-plus
   ];
 }
