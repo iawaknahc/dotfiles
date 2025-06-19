@@ -265,6 +265,16 @@ vim.keymap.set({ "n" }, "gx", function()
 end, {
   desc = "Open link under cursor",
 })
+vim.keymap.set({ "i", "s" }, "<C-s>", function()
+  vim.lsp.buf.signature_help({
+    focusable = false,
+    anchor_bias = "above",
+    max_height = 30,
+    max_width = 80,
+  })
+end, {
+  desc = "vim.lsp.buf.signature_help()",
+})
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
