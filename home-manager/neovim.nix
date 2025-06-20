@@ -71,8 +71,8 @@
 
     augroup quickfix
       autocmd!
-      autocmd QuickFixCmdPost cgetexpr cwindow
-      autocmd QuickFixCmdPost lgetexpr lwindow
+      autocmd QuickFixCmdPost cgetexpr,helpgrep cwindow
+      autocmd QuickFixCmdPost lgetexpr,lhelpgrep lwindow
     augroup END
   '';
 
