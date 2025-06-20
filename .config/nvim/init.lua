@@ -113,6 +113,9 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.wrapscan = false
 
+-- grep
+vim.o.grepprg = "rg --vimgrep"
+
 -- diff
 vim.opt.diffopt = {
   "internal",
