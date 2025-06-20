@@ -39,13 +39,6 @@ require("lz.n").load({
       desc = ":FzfLua buffers",
     })
 
-    vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist<CR>", {
-      desc = ":FzfLua loclist",
-    })
-    vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix<CR>", {
-      desc = ":FzfLua quickfix",
-    })
-
     -- Inspired by Helix space mode d
     vim.keymap.set("n", "<Space>d", function()
       vim.diagnostic.setloclist()
