@@ -39,36 +39,9 @@ require("lz.n").load({
       desc = ":FzfLua buffers",
     })
 
-    -- Inspired by Helix space mode d
-    vim.keymap.set("n", "<Space>d", function()
-      vim.diagnostic.setloclist()
-    end, {
-      desc = ":lua vim.diagnostic.setloclist()",
-    })
     -- Inspired by Helix space mode D
     vim.keymap.set("n", "<Space>D", "<CMD>FzfLua diagnostics_workspace<CR>", {
       desc = ":FzfLua diagnostics_workspace",
     })
-
-    vim.keymap.set("n", "<Space>h", function()
-      local ok, gitsigns = pcall(require, "gitsigns")
-      if ok then
-        local buf = 0
-        gitsigns.setqflist(buf, {
-          use_location_list = true,
-          open = true,
-        })
-      end
-    end, { desc = "Gitsigns: unstaged hunks to loclist" })
-
-    vim.keymap.set("n", "<Space>H", function()
-      local ok, gitsigns = pcall(require, "gitsigns")
-      if ok then
-        gitsigns.setqflist("all", {
-          use_location_list = false,
-          open = true,
-        })
-      end
-    end, { desc = "Gitsigns: unstaged hunks to qflist" })
   end,
 })

@@ -27,6 +27,21 @@ require("lz.n").load({
       vim.keymap.set({ "x", "o" }, "ih", function()
         require("gitsigns").select_hunk()
       end, { desc = "inner hunk" }),
+
+      vim.keymap.set("n", "<Space>h", function()
+        local buf = 0
+        require("gitsigns").setqflist(buf, {
+          use_location_list = true,
+          open = true,
+        })
+      end, { desc = "Gitsigns: unstaged hunks to loclist" }),
+
+      vim.keymap.set("n", "<Space>H", function()
+        require("gitsigns").setqflist("all", {
+          use_location_list = false,
+          open = true,
+        })
+      end, { desc = "Gitsigns: unstaged hunks to qflist" }),
     })
   end,
 })
