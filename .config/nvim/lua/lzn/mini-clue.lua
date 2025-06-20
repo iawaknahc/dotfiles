@@ -4,6 +4,115 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     local miniclue = require("mini.clue")
+
+    local function make_register_desc(register, fallback)
+      return function()
+        local ok, unsafe = pcall(vim.fn.getreg, register)
+        if not ok or type(unsafe) ~= "string" or unsafe == "" then
+          return fallback
+        end
+
+        -- It seems that if we do not use vim.inspect on the register content,
+        -- MiniClue will simply do not show anything if one of the register contains unusual characters.
+        local lua_string_literal = vim.inspect(unsafe)
+
+        if string.len(lua_string_literal) <= 20 then
+          return lua_string_literal
+        end
+
+        return string.sub(lua_string_literal, 1, 20) .. "@@@"
+      end
+    end
+
+    local function describe_registers(mode, prefix)
+      local all_registers = {
+        ["0"] = "Last yank",
+        ["1"] = "Last delete",
+        ["2"] = nil,
+        ["3"] = nil,
+        ["4"] = nil,
+        ["5"] = nil,
+        ["6"] = nil,
+        ["7"] = nil,
+        ["8"] = nil,
+        ["9"] = nil,
+        ["a"] = nil,
+        ["b"] = nil,
+        ["c"] = nil,
+        ["d"] = nil,
+        ["e"] = nil,
+        ["f"] = nil,
+        ["g"] = nil,
+        ["h"] = nil,
+        ["i"] = nil,
+        ["j"] = nil,
+        ["k"] = nil,
+        ["l"] = nil,
+        ["m"] = nil,
+        ["n"] = nil,
+        ["o"] = nil,
+        ["p"] = nil,
+        ["q"] = nil,
+        ["r"] = nil,
+        ["s"] = nil,
+        ["t"] = nil,
+        ["u"] = nil,
+        ["v"] = nil,
+        ["w"] = nil,
+        ["x"] = nil,
+        ["y"] = nil,
+        ["z"] = nil,
+        ['"'] = "Unnamed",
+        ["%"] = "Current buffer",
+        ["#"] = "Alternate buffer",
+        ["*"] = "Selection clipboard",
+        ["+"] = "System clipboard",
+        ["-"] = "Small delete",
+        ["."] = "Last insert",
+        ["/"] = "Last search",
+        [":"] = "Last command",
+        ["="] = "Expression",
+        ["_"] = "Black hole",
+      }
+
+      local out = {}
+      for register, fallback in pairs(all_registers) do
+        table.insert(out, {
+          mode = mode,
+          keys = prefix .. register,
+          desc = make_register_desc(register, fallback),
+        })
+      end
+      return out
+    end
+
+    local function gen_clues_registers()
+      return {
+        -- Normal mode
+        describe_registers("n", '"'),
+
+        -- Visual mode
+        describe_registers("x", '"'),
+
+        -- Insert mode
+        describe_registers("i", "<C-r>"),
+        { mode = "i", keys = "<C-r><C-r>", desc = "+Insert literally" },
+        describe_registers("i", "<C-r><C-r>"),
+        { mode = "i", keys = "<C-r><C-o>", desc = "+Insert literally + not auto-indent" },
+        describe_registers("i", "<C-r><C-o>"),
+        { mode = "i", keys = "<C-r><C-p>", desc = "+Insert + fix indent" },
+        describe_registers("i", "<C-r><C-p>"),
+
+        -- Command-line mode
+        describe_registers("c", "<C-r>"),
+        { mode = "c", keys = "<C-r><C-r>", desc = "+Insert literally" },
+        describe_registers("c", "<C-r><C-r>"),
+        { mode = "c", keys = "<C-r><C-o>", desc = "+Insert literally" },
+        describe_registers("c", "<C-r><C-o>"),
+      }
+    end
+    _G.gen_clues_registers = gen_clues_registers
+
     miniclue.setup({
       window = {
         delay = 0,
@@ -68,7 +177,7 @@ require("lz.n").load({
         miniclue.gen_clues.g(),
         miniclue.gen_clues.z(),
         miniclue.gen_clues.marks(),
-        miniclue.gen_clues.registers(),
+        gen_clues_registers(),
         miniclue.gen_clues.windows(),
 
         -- CTRL-\
