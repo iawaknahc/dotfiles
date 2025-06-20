@@ -109,6 +109,11 @@ require("lz.n").load({
         describe_registers("c", "<C-r><C-r>"),
         { mode = "c", keys = "<C-r><C-o>", desc = "+Insert literally" },
         describe_registers("c", "<C-r><C-o>"),
+        { mode = "c", keys = "<C-r><C-f>", desc = "Insert <cfile>" },
+        { mode = "c", keys = "<C-r><C-p>", desc = "Insert <cfile> in 'path'" },
+        { mode = "c", keys = "<C-r><C-w>", desc = "Insert <cword>" },
+        { mode = "c", keys = "<C-r><C-a>", desc = "Insert <cWORD>" },
+        { mode = "c", keys = "<C-r><C-l>", desc = "Insert line under cursor" },
       }
     end
     _G.gen_clues_registers = gen_clues_registers
