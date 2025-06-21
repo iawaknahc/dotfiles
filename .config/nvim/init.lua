@@ -550,3 +550,43 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
     vim.cmd([[redrawstatus]])
   end),
 })
+
+-- Helper functions
+
+---@param rfc3339 string
+---@return integer?
+_G.rfc3339_to_unix = function(rfc3339)
+  local bak = vim.fn.getreg("a", false)
+  vim.fn.setreg("a", rfc3339)
+  vim.cmd([[python << EOF
+import math
+import vim
+from datetime import datetime
+rfc3339 = vim.eval("@a")
+dt = datetime.fromisoformat(rfc3339)
+unix = str(math.floor(dt.timestamp()))
+vim.command("let @a=" + unix)
+EOF
+]])
+  local result = vim.fn.getreg("a", false)
+  vim.fn.setreg("a", bak)
+  return tonumber(result)
+end
+
+---@param unix integer
+---@return string
+_G.unix_to_rfc3339 = function(unix)
+  local bak = vim.fn.getreg("a", false)
+  vim.fn.setreg("a", tostring(unix))
+  vim.cmd([[python << EOF
+from datetime import datetime, timezone
+unix = int(vim.eval("@a"))
+dt = datetime.fromtimestamp(unix, timezone.utc)
+formatted = dt.isoformat().replace("+00:00", "Z")
+vim.command("let @a=" + repr(formatted))
+EOF
+]])
+  local result = vim.fn.getreg("a", false)
+  vim.fn.setreg("a", bak)
+  return result
+end

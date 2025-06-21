@@ -7,7 +7,8 @@
 {
   programs.neovim.enable = true;
   programs.neovim.withNodeJs = true;
-  programs.neovim.withPython3 = false;
+  # We need Python3's strptime.
+  programs.neovim.withPython3 = true;
   programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [

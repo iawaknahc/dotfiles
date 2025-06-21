@@ -4,13 +4,14 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     local augend = require("dial.augend")
+    local augendcommon = require("dial.augend.common")
 
     local c_bool_operators = augend.constant.new({
       elements = {
         "&&",
         "||",
       },
-      word = false,
+      word = true,
       cyclic = true,
     })
 
@@ -107,6 +108,47 @@ require("lz.n").load({
       cyclic = true,
     })
 
+    local regex_rfc3339 = [[%(["']\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}%(\.\d+)?%(Z|[-+]\d{2}:\d{2})?["'])]]
+    local regex_unix = [[%(\d+)]]
+
+    local timestamps = augend.user.new({
+      find = augendcommon.find_pattern_regex(table.concat({
+        [[\v]], -- Very magic
+        regex_rfc3339,
+        [[|]], -- Or
+        regex_unix,
+      })),
+      ---@param text string
+      ---@param addend integer
+      ---@param cursor? integer
+      ---@return { text?: string, cursor?: integer }
+      add = function(text, addend, cursor)
+        if vim.regex([[\v]] .. regex_rfc3339):match_str(text) then
+          -- Remove the quotes.
+          text = string.sub(text, 2, -2)
+
+          local unix = _G.rfc3339_to_unix(text)
+          if unix ~= nil then
+            text = tostring(unix)
+            cursor = #text
+            return { text = text, cursor = cursor }
+          end
+        end
+
+        if vim.regex([[\v]] .. regex_unix):match_str(text) then
+          local unix = tonumber(text)
+          if unix ~= nil then
+            local rfc3339 = _G.unix_to_rfc3339(unix)
+            text = [["]] .. tostring(rfc3339) .. [["]]
+            cursor = #text
+            return { text = text, cursor = cursor }
+          end
+        end
+
+        return {}
+      end,
+    })
+
     require("dial.config").augends:register_group({
       default = {
         augend.integer.alias.decimal, -- 0, 1, 2, ...
@@ -140,6 +182,9 @@ require("lz.n").load({
 
         markdown_checkbox,
       },
+      ctrlshift = {
+        timestamps,
+      },
     })
 
     vim.cmd([[
@@ -151,6 +196,15 @@ require("lz.n").load({
       vmap  <C-x>  <Plug>(dial-decrement)
       vmap g<C-a> g<Plug>(dial-increment)
       vmap g<C-x> g<Plug>(dial-decrement)
+
+      nmap  <C-S-a> "=ctrlshift<CR><Plug>(dial-increment)
+      nmap  <C-S-x> "=ctrlshift<CR><Plug>(dial-decrement)
+      nmap g<C-S-a> "=ctrlshift<CR>g<Plug>(dial-increment)
+      nmap g<C-S-x> "=ctrlshift<CR>g<Plug>(dial-decrement)
+      vmap  <C-S-a> "=ctrlshift<CR><Plug>(dial-increment)
+      vmap  <C-S-x> "=ctrlshift<CR><Plug>(dial-decrement)
+      vmap g<C-S-a> "=ctrlshift<CR>g<Plug>(dial-increment)
+      vmap g<C-S-x> "=ctrlshift<CR>g<Plug>(dial-decrement)
     ]])
   end,
 })
