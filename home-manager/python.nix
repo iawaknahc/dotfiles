@@ -15,6 +15,7 @@ in
           pytz
           pyperclip
           tzlocal
+          parsy
         ]
       );
     })

@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import logging
 import json
 import os
-import re
 import subprocess
 import sys
 from typing import Dict
@@ -13,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 import pytz
 import tzlocal
+from parsy import string, regex, generate, ParseError
 
 
 FZF = os.environ.get("FZF", "fzf")
@@ -55,7 +55,7 @@ class Timezone:
 
     def as_fzf_line_for_filtering_source_timezone(self, ref: datetime) -> str:
         ref = ref.astimezone(self.tzinfo)
-        z_ = ref.strftime("%z")
+        z_ = ref.strftime("UTC%z")
         Z_ = ref.strftime("%Z")
         return f"{self.name} {z_} {Z_}"
 
@@ -70,7 +70,7 @@ class Timezone:
         relative_offset = target_utcoffset - source_utcoffset
         formatted_offset = format_timedelta(relative_offset)
 
-        z_ = target_dt.strftime("%z")
+        z_ = target_dt.strftime("UTC%z")
         Z_ = target_dt.strftime("%Z")
 
         return f"{self.name} {z_} {Z_} {formatted_offset}"
@@ -105,7 +105,7 @@ class Timezone:
             subtitle_parts.append("Today")
 
         item = {
-            "title": f"{that_dt.strftime("%H:%M [%z, %Z,")} {self.name}] [{format_timedelta(relative_offset)} from Source]",
+            "title": f"{that_dt.strftime("%H:%M [UTC%z, %Z,")} {self.name}] [{format_timedelta(relative_offset)} from Source]",
             "subtitle": ", ".join(subtitle_parts),
             "type": "default",
             "arg": that_dt.strftime("%H:%M"),
@@ -134,59 +134,70 @@ def find_timezone_for_source_z(dt: datetime, source_z: str) -> Timezone|None:
         return None
 
 
-def parse_arg(arg: str):
-    hour = None
-    minute = None
-    ampm = None
-    source_z = None
-    target_z = None
+hour = (regex(r"[0-1]\d") | regex(r"2[0-3]") | regex(r"\d")).map(int)
+minute = (regex(r"[0-5]\d") | regex(r"\d")).map(int)
+colon = string(":")
+zero_or_more_whitespace = regex(r"\s*")
+am = string("am", transform=lambda s: s.lower())
+pm = string("pm", transform=lambda s: s.lower())
+timezone_hint = regex(r"[-+a-zA-Z][-+a-zA-Z0-9_/]*")
 
-    parts = re.split("[ :.]+", arg)
-    parts = [p for p in parts if p != ""]
 
-    for part in parts:
-        try:
-            int_ = int(part)
-            if hour is None:
-                hour = min(23, max(0, int_))
-                continue
-            elif minute is None:
-                minute = min(59, max(0, int_))
-                continue
-        except ValueError:
-            pass
-        part = part.lower()
-        if ampm is None and part in ["am", "pm"]:
-            ampm = part
-        elif source_z is None:
-            source_z = part
-        elif target_z is None:
-            target_z = part
+@dataclass
+class Input:
+    hour: int|None
+    minute: int|None
+    source: str|None
+    target: str|None
 
-    # Special case
-    if hour is None and minute is None and source_z is not None and target_z is None:
-        target_z = source_z
-        source_z = None
+    def apply(self, dt: datetime) -> datetime:
+        if self.hour is not None:
+            dt = dt.replace(hour=self.hour)
+        if self.minute is not None:
+            dt = dt.replace(minute=self.minute)
+        if self.source is not None:
+            timezone = find_timezone_for_source_z(dt, self.source)
+            if timezone is not None:
+                logger.info("source_z %r -> %r", self.source, timezone.name)
+                dt = dt.replace(tzinfo=timezone.tzinfo)
+        return dt
 
-    # Handle ampm
-    if ampm is not None and hour is not None:
-        if ampm == "pm" and hour >= 1 and hour <= 11:
-            hour += 12
 
-    return {
-        "hour": hour,
-        "minute": minute,
-        "ampm": ampm,
-        "source_z": source_z,
-        "target_z": target_z,
-    }
+@generate
+def parser():
+    yield zero_or_more_whitespace
+    h = yield hour.optional()
+
+    yield zero_or_more_whitespace
+    yield colon.optional()
+
+    yield zero_or_more_whitespace
+    m = yield minute.optional()
+
+    yield zero_or_more_whitespace
+    ampm = yield (am | pm).optional()
+
+    yield zero_or_more_whitespace
+    source = yield timezone_hint.optional()
+
+    yield zero_or_more_whitespace
+    target = yield timezone_hint.optional()
+
+    # Consume trailing whitespaces.
+    yield zero_or_more_whitespace
+
+    if ampm is not None and h is not None:
+        if ampm == "pm" and h >= 1 and h <= 11:
+            h += 12
+
+    return Input(hour=h, minute=m, source=source, target=target)
 
 
 def format_timedelta_without_sign(td: timedelta) -> str:
     hour = int(td.seconds / 3600)
     minute = int((td.seconds % 3600) / 60)
     if td.days >= 0:
-        return f"{hour:0>2}:{minute:0>2}"
+        return f"{hour:0>2}{minute:0>2}"
     return f"{format_timedelta_without_sign(-td)}"
 
 
@@ -225,34 +236,30 @@ def datetime_to_items(dt: datetime, target_z: str|None):
     return out
 
 
-def apply_parsed(parsed, dt: datetime):
-    if parsed["hour"] is not None:
-        dt = dt.replace(hour=parsed["hour"])
-
-    if parsed["minute"] is not None:
-        dt = dt.replace(minute=parsed["minute"])
-
-    if parsed["source_z"] is not None:
-        timezone = find_timezone_for_source_z(dt, parsed["source_z"])
-        if timezone is not None:
-            logger.info("source_z %r -> %r", parsed["source_z"], timezone.name)
-            dt = dt.replace(tzinfo=timezone.tzinfo)
-    return dt
-
-
 def main():
     arg = ""
     if len(sys.argv) > 1:
-        arg = sys.argv[1].strip()
+        arg = sys.argv[1]
 
     logger.info("arg %r", arg)
-    parsed = parse_arg(arg)
-    logger.info("parsed %r", parsed)
+    try:
+        input: Input = parser.parse(arg)
+        logger.info("parsed %r", input)
+    except ParseError:
+        print(json.dumps({
+            "items": [{
+                "title": "Invalid syntax",
+                "type": "default",
+                "valid": False,
+            }]
+        }, ensure_ascii=False))
+        sys.exit(1)
 
-    dt = apply_parsed(parsed, now_local)
+    dt = input.apply(now_local)
 
     print(json.dumps({
-        "items": datetime_to_items(dt, parsed["target_z"]),
+        # Alfred show ⌘1 to ⌘9 only, so first 9 items are enough.
+        "items": datetime_to_items(dt, input.target)[:9],
     }, ensure_ascii=False))
 
 
