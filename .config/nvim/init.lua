@@ -416,7 +416,7 @@ end, {
   desc = "/ to loclist",
   nargs = "*",
 })
-vim.keymap.set("n", "<Leader>/", ":Lvimgrep<Space>", {
+vim.keymap.set("n", "<M-/>", ":Lvimgrep<Space>", {
   desc = "/ to loclist",
 })
 
