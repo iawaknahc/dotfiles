@@ -71,8 +71,8 @@
 
     augroup quickfix
       autocmd!
-      autocmd QuickFixCmdPost cgetexpr,helpgrep cwindow | set nowinfixheight
-      autocmd QuickFixCmdPost lgetexpr,lhelpgrep lwindow | set nowinfixheight
+      autocmd QuickFixCmdPost cgetexpr,helpgrep,vimgrep cwindow | set nowinfixheight
+      autocmd QuickFixCmdPost lgetexpr,lhelpgrep,lvimgrep lwindow | set nowinfixheight
     augroup END
   '';
 

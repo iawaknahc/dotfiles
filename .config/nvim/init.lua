@@ -284,10 +284,6 @@ vim.keymap.set("i", "<C-s>", function()
 end, {
   desc = "vim.lsp.buf.signature_help()",
 })
--- Override :h i_CTRL-Q
-vim.keymap.set("i", "<C-q>", "<Cmd>CloseFloatingWindows<CR>", {
-  desc = ":CloseFloatingWindows",
-})
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
@@ -386,6 +382,36 @@ vim.api.nvim_create_user_command("CloseFloatingWindows", function()
   end
 end, {
   nargs = 0,
+})
+-- Override :h i_CTRL-Q
+vim.keymap.set("i", "<C-q>", "<Cmd>CloseFloatingWindows<CR>", {
+  desc = ":CloseFloatingWindows",
+})
+
+vim.api.nvim_create_user_command("Lvimgrep", function(args)
+  local pattern = args.args
+  local win = vim.fn.winnr()
+
+  vim.o.hlsearch = true
+  vim.fn.setreg("/", pattern)
+
+  local ok = pcall(function()
+    vim.cmd([[lvimgrep //gj %]])
+  end)
+  if not ok then
+    vim.notify("No matches")
+  else
+    -- TODO: select the selected entry to the closest cursor position.
+    vim.schedule(function()
+      vim.cmd(win .. [[wincmd w]])
+    end)
+  end
+end, {
+  desc = "/ to loclist",
+  nargs = "+",
+})
+vim.keymap.set("n", "<Leader>/", ":Lvimgrep<Space>", {
+  desc = "/ to loclist",
 })
 
 -- Diagnostic
