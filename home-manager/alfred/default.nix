@@ -3,13 +3,6 @@
   config,
   ...
 }:
-let
-  python3 = pkgs.python3.withPackages (
-    python3-pkgs: with python3-pkgs; [
-      pyperclip
-    ]
-  );
-in
 {
   alfred.configDir = "${config.home.homeDirectory}/alfred";
   alfred.sourceDir = "${config.home.homeDirectory}/dotfiles";
@@ -85,17 +78,17 @@ in
         '';
       };
 
-  home.packages = with pkgs; [
-    (writeShellScriptBin "alfred-workflow-uuid.py" ''
-      ${python3}/bin/python3 ${./uuid.py} "$@"
+  home.packages = [
+    (pkgs.writeShellScriptBin "alfred-workflow-uuid.py" ''
+      ${pkgs.mypython}/bin/python3 ${./uuid.py} "$@"
     '')
-    (writeShellScriptBin "alfred-workflow-godoc.py" ''
+    (pkgs.writeShellScriptBin "alfred-workflow-godoc.py" ''
       export HS=${pkgs.hs}/bin/hs
       export HS_SCRIPT=${../../.hammerspoon/get_browser_url.lua}
-      ${python3}/bin/python3 ${./godoc.py} "$@"
+      ${pkgs.mypython}/bin/python3 ${./godoc.py} "$@"
     '')
-    (writeShellScriptBin "alfred-workflow-t.py" ''
-      ${python3}/bin/python3 ${./t.py} "$@"
+    (pkgs.writeShellScriptBin "alfred-workflow-t.py" ''
+      ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
     '')
   ];
   # uuid

@@ -7,8 +7,20 @@ let
   version = "313";
 in
 {
+  nixpkgs.overlays = [
+    (final: prev: {
+      mypython = prev."python${version}".withPackages (
+        python-pkgs: with python-pkgs; [
+          tzdata
+          pytz
+          pyperclip
+        ]
+      );
+    })
+  ];
+
   home.packages = [
-    pkgs."python${version}"
+    pkgs.mypython
     pkgs."python${version}Packages".json5
     pkgs."python${version}Packages".debugpy
   ];
