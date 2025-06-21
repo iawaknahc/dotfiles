@@ -4,35 +4,19 @@ import re
 from datetime import datetime, tzinfo, timedelta
 from zoneinfo import ZoneInfo
 
-
-# We cannot use astimezone() because the resulting tzinfo is datetime.timezone instance, not ZoneInfo.
-# Fow now, let's assume our timezone is Asia/Hong_Kong.
-now_local = datetime.now().astimezone(ZoneInfo("Asia/Hong_Kong"))
+import pytz
+import tzlocal
 
 
-timezone_names = [
-    "Asia/Tokyo", # +9
-    "Asia/Hong_Kong", # +8
-    "Asia/Bangkok",# +7
-    "Asia/Tehran", # +0330
-    "Africa/Nairobi", # EAT
-    "Asia/Jerusalem", # IST and IDT
+local_timezone = tzlocal.get_localzone()
+if not isinstance(local_timezone, ZoneInfo):
+    raise ValueError("This script can only work with ZoneInfo")
 
-    "Europe/London", # GMT and BST
 
-    "Etc/UTC", # UTC
+now_local = datetime.now().astimezone(local_timezone)
 
-    "America/New_York", # EST and EDT
-    "America/Toronto", # EST and EDT
 
-    "America/Chicago", # CST and CDT
-
-    "America/Denver", # MST and MDT
-    "America/Phoenix", # MST
-
-    "America/Los_Angeles", # PST and PDT
-    "America/Vancouver", # PST and PDT
-]
+timezone_names = list(pytz.common_timezones)
 
 
 timezones = []
@@ -45,7 +29,6 @@ for name in timezone_names:
         "%Z": that_dt.strftime("%Z"),
         "tzinfo": zoneinfo,
     })
-
 
 
 def parse_arg(arg: str):
@@ -132,7 +115,6 @@ def find_timezone_by_tzinfo(tzinfo_: tzinfo):
             return timezone
 
     raise TypeError("unreacable")
-
 
 
 def format_timedelta_without_sign(td: timedelta) -> str:

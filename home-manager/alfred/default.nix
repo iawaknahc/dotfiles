@@ -88,6 +88,9 @@
       ${pkgs.mypython}/bin/python3 ${./godoc.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-t.py" ''
+      # Force zoneinfo to use tzdata
+      # https://docs.python.org/3/library/zoneinfo.html#envvar-PYTHONTZPATH
+      export PYTHONTZPATH=""
       ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
     '')
   ];

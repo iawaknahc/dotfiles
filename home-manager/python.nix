@@ -14,6 +14,7 @@ in
           tzdata
           pytz
           pyperclip
+          tzlocal
         ]
       );
     })
