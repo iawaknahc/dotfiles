@@ -17,6 +17,12 @@ require("lz.n").load({
           enabled = false,
         },
       },
+      prompt = {
+        win_config = {
+          -- Since we set winborder="rounded", we need to make it appear like Cmd again.
+          border = "none",
+        },
+      },
     })
 
     vim.keymap.set({ "n", "x", "o" }, "s", function()
