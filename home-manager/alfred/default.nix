@@ -91,6 +91,7 @@
       # Force zoneinfo to use tzdata
       # https://docs.python.org/3/library/zoneinfo.html#envvar-PYTHONTZPATH
       export PYTHONTZPATH=""
+      export FZF=${pkgs.fzf}/bin/fzf
       ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
     '')
   ];
