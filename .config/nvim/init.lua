@@ -83,7 +83,9 @@ vim.o.scrolloff = 15
 -- shell by default is $SHELL.
 -- But I do not want neovim to run command with fish.
 vim.o.shell = "sh"
-vim.opt.wildmode = { "longest:full", "full" }
+-- On the first use of c_<Tab>, complete til the longest common string AND show the completion menu WITHOUT selecting the first item.
+-- On subsequent use of c_<Tab>, select the next item in the completion menu.
+vim.opt.wildmode = { "longest:noselect", "full" }
 
 -- Editing
 vim.o.backup = false

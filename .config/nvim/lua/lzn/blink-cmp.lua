@@ -56,6 +56,8 @@ require("lz.n").load({
         -- So we just follow it.
       },
       cmdline = {
+        -- Actually :h cmdline-completion is better than blink.cmp.
+        enabled = false,
         keymap = {
           -- The default is C-space, which is my tmux prefix.
           ["<C-space>"] = {},
