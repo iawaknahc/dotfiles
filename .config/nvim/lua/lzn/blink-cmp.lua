@@ -43,12 +43,17 @@ require("lz.n").load({
       },
       keymap = {
         preset = "default",
-        -- In insert mode, Tab should insert a horizontal tab.
-        -- Enter is more convenient than C-y.
-        ["<CR>"] = { "accept", "fallback" },
 
         -- The default is C-space, which is my tmux prefix.
-        ["<C-h>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-space>"] = {},
+
+        -- There is no i_CTRL-Z.
+        -- :h c_CTRL-Z is used to trigger :h 'wildmode'
+        -- So we borrow that concept to Insert mode.
+        ["<C-z>"] = { "show", "show_documentation", "hide_documentation" },
+
+        -- :h complete_CTRL-Y is used to accept the selected entry.
+        -- So we just follow it.
       },
       cmdline = {
         keymap = {
