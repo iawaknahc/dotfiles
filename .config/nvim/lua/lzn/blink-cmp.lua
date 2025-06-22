@@ -53,7 +53,14 @@ require("lz.n").load({
       cmdline = {
         keymap = {
           -- The default is C-space, which is my tmux prefix.
-          ["<C-h>"] = { "show", "fallback" },
+          ["<C-space>"] = {},
+
+          -- :h c_CTRL-E is to move the cursor to the end of line.
+          -- We cannot lose that.
+          ["<C-e>"] = { "cancel", "fallback" },
+
+          -- Override :h c_CTRL-Z
+          ["<C-z>"] = { "show" },
         },
       },
     })
