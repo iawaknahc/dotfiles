@@ -390,7 +390,10 @@ vim.keymap.set("i", "<C-q>", "<Cmd>CloseFloatingWindows<CR>", {
 
 vim.api.nvim_create_user_command("Lvimgrep", function(args)
   local pattern = args.args
-  local original_pattern = vim.fn.getreg("/", false)
+
+  -- https://github.com/neovim/neovim/pull/34215
+  ---@diagnostic disable-next-line: redundant-parameter
+  local original_pattern = vim.fn.getreg("/", 1, false)
   local win = vim.fn.winnr()
 
   if pattern ~= "" then
@@ -556,7 +559,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 ---@param rfc3339 string
 ---@return integer?
 _G.rfc3339_to_unix = function(rfc3339)
-  local bak = vim.fn.getreg("a", false)
+  local bak = vim.fn.getreginfo("a")
   vim.fn.setreg("a", rfc3339)
   vim.cmd([[python << EOF
 import math
@@ -568,7 +571,10 @@ unix = str(math.floor(dt.timestamp()))
 vim.command("let @a=" + unix)
 EOF
 ]])
-  local result = vim.fn.getreg("a", false)
+
+  -- https://github.com/neovim/neovim/pull/34215
+  ---@diagnostic disable-next-line: redundant-parameter
+  local result = vim.fn.getreg("a", 1, false)
   vim.fn.setreg("a", bak)
   return tonumber(result)
 end
@@ -576,7 +582,7 @@ end
 ---@param unix integer
 ---@return string
 _G.unix_to_rfc3339 = function(unix)
-  local bak = vim.fn.getreg("a", false)
+  local bak = vim.fn.getreginfo("a")
   vim.fn.setreg("a", tostring(unix))
   vim.cmd([[python << EOF
 from datetime import datetime, timezone
@@ -586,7 +592,10 @@ formatted = dt.isoformat().replace("+00:00", "Z")
 vim.command("let @a=" + repr(formatted))
 EOF
 ]])
-  local result = vim.fn.getreg("a", false)
+
+  -- https://github.com/neovim/neovim/pull/34215
+  ---@diagnostic disable-next-line: redundant-parameter
+  local result = vim.fn.getreg("a", 1, false) --[[@as string]]
   vim.fn.setreg("a", bak)
   return result
 end
