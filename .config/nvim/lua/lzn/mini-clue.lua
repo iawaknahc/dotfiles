@@ -7,7 +7,8 @@ require("lz.n").load({
 
     local function make_register_desc(register, fallback)
       return function()
-        local ok, unsafe = pcall(vim.fn.getreg, register)
+        -- Use getreg({register}, 1, false) so that = is not evaluated.
+        local ok, unsafe = pcall(vim.fn.getreg, register, 1, false)
         if not ok or type(unsafe) ~= "string" or unsafe == "" then
           return fallback
         end
