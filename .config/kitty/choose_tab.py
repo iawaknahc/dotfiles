@@ -34,7 +34,7 @@ def fzf(os_windows: Any) -> Optional[int]:
                 # So we show the content of the first window as the preview of the tab.
                 first_window_id = tab["windows"][0]["id"]
                 # The window ID is solely for fzf to display preview.
-                line = f"{tab_index+1}:{first_window_id}:{tab_title}\n"
+                line = f"{tab_index + 1}:{first_window_id}:{tab_title}\n"
                 lines.append(line)
     fzf_input = "".join(lines)
     fzf_output_bytes, _ = p.communicate(input=fzf_input.encode())

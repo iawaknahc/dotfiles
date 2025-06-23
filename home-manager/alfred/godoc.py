@@ -6,6 +6,7 @@ from urllib.parse import urlsplit, urljoin, quote
 
 import pyperclip
 
+
 def to_item(url_str: str, subtitle: str):
     if url_str == "":
         return None
@@ -56,13 +57,18 @@ def main():
             items.append(clipboard_item)
 
         try:
-            process = subprocess.run([
-                os.environ["HS"],
-                os.environ["HS_SCRIPT"],
-            ], capture_output=True, text=True, check=True)
+            process = subprocess.run(
+                [
+                    os.environ["HS"],
+                    os.environ["HS_SCRIPT"],
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
             browsers_output = json.loads(process.stdout)
         except:
-            browsers_output = { "browsers": [] }
+            browsers_output = {"browsers": []}
 
         for b in browsers_output["browsers"]:
             name = b["name"]
@@ -74,18 +80,23 @@ def main():
                 items.append(item)
 
     if len(items) == 0:
-        print(json.dumps({
-            "items": [
+        print(
+            json.dumps(
                 {
-                    "title": "No URL provided in argument or in clipboard",
-                    "type": "default",
-                    "valid": False,
-                }
-            ]
-        }, ensure_ascii=False))
+                    "items": [
+                        {
+                            "title": "No URL provided in argument or in clipboard",
+                            "type": "default",
+                            "valid": False,
+                        }
+                    ]
+                },
+                ensure_ascii=False,
+            )
+        )
         return
 
-    print(json.dumps({ "items": items }, ensure_ascii=False))
+    print(json.dumps({"items": items}, ensure_ascii=False))
 
 
 main()

@@ -105,7 +105,7 @@ class Timezone:
             subtitle_parts.append("Today")
 
         item = {
-            "title": f"{that_dt.strftime("%H:%M [UTC%z, %Z,")} {self.name}] [{format_timedelta(relative_offset)} from Source]",
+            "title": f"{that_dt.strftime('%H:%M [UTC%z, %Z,')} {self.name}] [{format_timedelta(relative_offset)} from Source]",
             "subtitle": ", ".join(subtitle_parts),
             "type": "default",
             "arg": that_dt.strftime("%H:%M"),
@@ -117,15 +117,14 @@ class Timezone:
 timezones = [Timezone(name) for name in timezone_names]
 
 
-def find_timezone_for_source_z(dt: datetime, source_z: str) -> Timezone|None:
-    stdin = "".join([tz.as_fzf_line_for_filtering_source_timezone(dt) + "\n" for tz in timezones])
+def find_timezone_for_source_z(dt: datetime, source_z: str) -> Timezone | None:
+    stdin = "".join(
+        [tz.as_fzf_line_for_filtering_source_timezone(dt) + "\n" for tz in timezones]
+    )
 
     try:
         proc = subprocess.run(
-            [FZF, "--filter", source_z],
-            input=stdin,
-            text=True,
-            capture_output=True
+            [FZF, "--filter", source_z], input=stdin, text=True, capture_output=True
         )
         lines = [line.strip() for line in proc.stdout.split("\n") if line != ""]
         if len(lines) > 0:
@@ -145,10 +144,10 @@ timezone_hint = regex(r"[-+a-zA-Z][-+a-zA-Z0-9_/]*")
 
 @dataclass
 class Input:
-    hour: int|None
-    minute: int|None
-    source: str|None
-    target: str|None
+    hour: int | None
+    minute: int | None
+    source: str | None
+    target: str | None
 
     def apply(self, dt: datetime) -> datetime:
         if self.hour is not None:
@@ -207,7 +206,7 @@ def format_timedelta(td: timedelta) -> str:
     return f"-{format_timedelta_without_sign(td)}"
 
 
-def datetime_to_items(dt: datetime, target_z: str|None):
+def datetime_to_items(dt: datetime, target_z: str | None):
     out = []
 
     assert dt.tzinfo is not None
@@ -216,15 +215,18 @@ def datetime_to_items(dt: datetime, target_z: str|None):
     # Always show the source first to give context.
     out.append(dt_timezone.as_alfred_item(dt))
 
-    stdin = "".join([tz.as_fzf_line_for_filtering_target_timezone(dt) + "\n" for tz in timezones if tz.tzinfo != dt_timezone.tzinfo])
+    stdin = "".join(
+        [
+            tz.as_fzf_line_for_filtering_target_timezone(dt) + "\n"
+            for tz in timezones
+            if tz.tzinfo != dt_timezone.tzinfo
+        ]
+    )
 
     query = "" if target_z is None else target_z
     try:
         proc = subprocess.run(
-            [FZF, "--filter", query],
-            input=stdin,
-            text=True,
-            capture_output=True
+            [FZF, "--filter", query], input=stdin, text=True, capture_output=True
         )
         lines = [line.strip() for line in proc.stdout.split("\n") if line != ""]
         for line in lines:
@@ -246,21 +248,33 @@ def main():
         input: Input = parser.parse(arg)
         logger.info("parsed %r", input)
     except ParseError:
-        print(json.dumps({
-            "items": [{
-                "title": "Invalid syntax",
-                "type": "default",
-                "valid": False,
-            }]
-        }, ensure_ascii=False))
+        print(
+            json.dumps(
+                {
+                    "items": [
+                        {
+                            "title": "Invalid syntax",
+                            "type": "default",
+                            "valid": False,
+                        }
+                    ]
+                },
+                ensure_ascii=False,
+            )
+        )
         sys.exit(1)
 
     dt = input.apply(now_local)
 
-    print(json.dumps({
-        # Alfred show ⌘1 to ⌘9 only, so first 9 items are enough.
-        "items": datetime_to_items(dt, input.target)[:9],
-    }, ensure_ascii=False))
+    print(
+        json.dumps(
+            {
+                # Alfred show ⌘1 to ⌘9 only, so first 9 items are enough.
+                "items": datetime_to_items(dt, input.target)[:9],
+            },
+            ensure_ascii=False,
+        )
+    )
 
 
 main()
