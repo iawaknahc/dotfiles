@@ -6,6 +6,7 @@ require("lz.n").load({
     require("lint").linters_by_ft = {
       sh = { "shellcheck" },
       dockerfile = { "hadolint" },
+      python = { "ruff" },
     }
 
     local lintGroup = vim.api.nvim_create_augroup("MyLintAutoCommands", { clear = true })

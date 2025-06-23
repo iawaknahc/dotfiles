@@ -9,6 +9,7 @@ require("lz.n").load({
       format_on_save = {},
       formatters_by_ft = {
         go = { "gofmt" },
+        python = { "ruff_organize_imports", "ruff_format" },
         lua = { "stylua" },
         fennel = { "fnlfmt" },
         javascript = prettier,
