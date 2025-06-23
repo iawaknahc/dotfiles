@@ -179,7 +179,24 @@
         config = builtins.readFile ../.config/nvim/lua/lzn/treesj.lua;
         plugin = treesj;
       }
-      # Enhance C-a and C-x.
+      # Enhanced version of :h J.
+      {
+        type = "lua";
+        optional = false;
+        plugin = (
+          pkgs.vimUtils.buildVimPlugin {
+            pname = "join";
+            version = "2025-06-24";
+            src = pkgs.fetchFromGitHub {
+              owner = "sk1418";
+              repo = "Join";
+              rev = "f48e7a785321ef7ecda6e401ccea8f44dde891d3";
+              hash = "sha256-anZGUFkEM+YV8r+R0GCkf8xfEpUOZLct8PlOtTqmAwI=";
+            };
+          }
+        );
+      }
+      # Enhanced version of :h CTRL-A and :h CTRL-X.
       {
         type = "lua";
         optional = true;
