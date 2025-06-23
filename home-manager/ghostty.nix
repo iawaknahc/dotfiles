@@ -19,18 +19,22 @@
     # So it follows logically that the left option key should be remapped to something more useful.
     macos-option-as-alt = "left";
 
-    # ghostty embeds JetBrains Mono by default.
-    # So it is unnecessary to configure font.
-    # But I am not a fan of ligatures.
+    font-family = [
+      "JetBrainsMonoNL Nerd Font Mono"
+      # Japanese sans preinstalled on macOS Sequoia.
+      # https://support.apple.com/en-hk/120414#:~:text=biz%20udgothic%2018.0d1e2
+      "BIZ UDGothic"
+      # Chinese sans preinstalled on macOS Sequoia.
+      # https://support.apple.com/en-hk/120414#:~:text=lantinghei%20tc%20demibold%2013.0d2e1
+      "Lantinghei TC"
+      # Korean serif preinstalled on macOS Sequoia.
+      # https://support.apple.com/en-hk/120414#:~:text=pcmyungjo%20regular%2013.0d2e1
+      "PCMyungjo"
+    ];
     font-style = "Light";
     font-style-bold = "Bold";
     font-style-italic = "Light Italic";
     font-style-bold-italic = "Bold Italic";
-    font-feature = [
-      "-calt"
-      "-liga"
-      "-dlig"
-    ];
     font-size = 13;
 
     command = "${config.home.profileDirectory}/bin/fish --login --interactive";
