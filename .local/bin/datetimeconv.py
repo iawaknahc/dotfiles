@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# vim: set filetype=python
-
 # Here are the reasons to write this Python program.
 # 1. The date command that comes with macOS is based on strptime and strftime, which does not handle RFC3339 natively.
 # 2. The datetime class of Python is also based on strptime and strftime, so it does not handle RFC3339 natively neither.
@@ -11,14 +9,15 @@
 # 5. I know how to program in Python.
 
 import argparse
-import sys
 import re
+import sys
 from datetime import datetime, timedelta, timezone, tzinfo
-from zoneinfo import ZoneInfo
 from typing import Optional
+from zoneinfo import ZoneInfo
 
-
-RE_RFC3339 = re.compile(r'^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)(Z|[+-]\d{2}:\d{2})$')
+RE_RFC3339 = re.compile(
+    r"^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?)(Z|[+-]\d{2}:\d{2})$"
+)
 
 
 class Formatter(argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
@@ -31,6 +30,7 @@ FORMATS = [
     "rfc3339",
     "http",
 ]
+
 
 def abs_delta(d: timedelta) -> timedelta:
     if d < timedelta():
@@ -71,7 +71,9 @@ def parse_input(format: str, input: str) -> datetime:
         return datetime.fromtimestamp(int(input), local)
     elif format == "unix_ms":
         ms = int(input)
-        return datetime.fromtimestamp(ms // 1000, local) + timedelta(milliseconds=ms % 1000)
+        return datetime.fromtimestamp(ms // 1000, local) + timedelta(
+            milliseconds=ms % 1000
+        )
     elif format == "rfc3339":
         match = RE_RFC3339.match(input)
         if match is None:
@@ -155,18 +157,22 @@ def main():
         formatter_class=Formatter,
     )
 
-    parser.add_argument("--tz",
+    parser.add_argument(
+        "--tz",
         help="Output timezone, for example, Asia/Hong_Kong. If not given, the system timezone is used.",
     )
-    parser.add_argument("--from",
+    parser.add_argument(
+        "--from",
         help="From format. If not given, it is guessed from input.",
         choices=FORMATS,
     )
-    parser.add_argument("--to",
+    parser.add_argument(
+        "--to",
         help="To format. If not given, it is equal to --from.",
         choices=FORMATS,
     )
-    parser.add_argument("input",
+    parser.add_argument(
+        "input",
         help="Input",
         nargs=1,
     )

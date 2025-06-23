@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-# vim: set filetype=python
-
 import argparse
-from urllib.parse import quote, unquote, quote_plus, unquote_plus
+from urllib.parse import quote, quote_plus, unquote, unquote_plus
 
 
 # ArgumentDefaultsHelpFormatter prints default=None even I did not specify it.
@@ -22,40 +20,53 @@ def main():
     )
 
     g1 = parser.add_mutually_exclusive_group()
-    g1.add_argument("-e", "--encode",
+    g1.add_argument(
+        "-e",
+        "--encode",
         help="Encode",
         action="store_true",
         default=True,
     )
-    g1.add_argument("-d", "--decode",
+    g1.add_argument(
+        "-d",
+        "--decode",
         help="Decode",
         action="store_true",
         default=argparse.SUPPRESS,
     )
 
     g2 = parser.add_mutually_exclusive_group()
-    g2.add_argument("-u", "--unspecified",
+    g2.add_argument(
+        "-u",
+        "--unspecified",
         help="Encode non-unreserved characters\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-2.3",
         action="store_true",
         default=True,
     )
-    g2.add_argument("-p", "--path",
+    g2.add_argument(
+        "-p",
+        "--path",
         help="Encode path component\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-3.3",
         action="store_true",
         default=argparse.SUPPRESS,
     )
-    g2.add_argument("-q", "--query",
+    g2.add_argument(
+        "-q",
+        "--query",
         help="Encode x-www-form-urlencoded\nhttps://url.spec.whatwg.org/#application/x-www-form-urlencoded",
         action="store_true",
         default=argparse.SUPPRESS,
     )
-    g2.add_argument("-f", "--fragment",
+    g2.add_argument(
+        "-f",
+        "--fragment",
         help="Encode fragment\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-3.5",
         action="store_true",
         default=argparse.SUPPRESS,
     )
 
-    parser.add_argument("input",
+    parser.add_argument(
+        "input",
         help="The string to be encoded or decoded",
         nargs="+",
     )
@@ -78,7 +89,7 @@ def main():
     if position == "path":
         # RFC3986 3.3
         # pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
-        safe = "!$&\'()*+,;=" + ":@"
+        safe = "!$&'()*+,;=" + ":@"
     elif position == "query":
         # RFC3986 3.4
         # query       = *( pchar / "/" / "?" )

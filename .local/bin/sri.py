@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-# vim: set filetype=python
-
 import argparse
 import base64
 import hashlib
 import sys
+
 
 class Formatter(argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
     pass
@@ -33,7 +32,7 @@ def main():
     args = parser.parse_args()
     alg: str = args.alg
 
-    buf = bytearray(2 ** 18)
+    buf = bytearray(2**18)
     view = memoryview(buf)
     hash = hashlib.new(alg)
     while True:
