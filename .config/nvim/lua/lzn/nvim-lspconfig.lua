@@ -56,6 +56,9 @@ require("lz.n").load({
     vim.lsp.enable("eslint") -- ESLint
     vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
 
+    -- sourcekit is bundled with Xcode.
+    vim.lsp.enable("sourcekit") -- Swift, Objective-C, C, and C++
+
     -- Grammar and spell checking
     vim.lsp.config("harper_ls", {
       -- The default list from nvim-lspconfig is incomplete.
