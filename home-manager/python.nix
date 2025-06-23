@@ -23,6 +23,7 @@ in
 
   home.packages = [
     pkgs.mypython
+    pkgs.pyright
     pkgs."python${version}Packages".json5
     pkgs."python${version}Packages".debugpy
   ];

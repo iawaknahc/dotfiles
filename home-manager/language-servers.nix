@@ -15,7 +15,6 @@
     nil
 
     nixd
-    pyright
     sqls
     tailwindcss-language-server
     taplo
