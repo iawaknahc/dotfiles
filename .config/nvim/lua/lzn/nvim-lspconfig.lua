@@ -2,6 +2,41 @@ require("lz.n").load({
   "nvim-lspconfig",
   lazy = false,
   after = function()
+    -- On 2025-06-24, I tried neovim 0.11 :h lsp-completion
+    -- The auto-complete without configuration depends on the language server's triggerCharacters.
+    -- It is very common that you hit backspace to delete some characters, and expect the completion to continues.
+    -- This is not possible out-of-the-box.
+    -- Thus an auto-completion plugin is still needed to fill this gap.
+    --
+    -- ---@type table<integer, string>
+    -- local kind_int_to_string = {}
+    -- for string_, int_ in pairs(vim.lsp.protocol.CompletionItemKind) do
+    --   kind_int_to_string[int_] = string_
+    -- end
+    --
+    -- vim.lsp.config("*", {
+    --   on_attach = function(client, bufnr)
+    --     if client:supports_method("textDocument/completion") then
+    --       vim.lsp.completion.enable(true, client.id, bufnr, {
+    --         autotrigger = true,
+    --
+    --         -- https://github.com/neovim/neovim/blob/v0.11.2/runtime/lua/vim/lsp/completion.lua#L328
+    --         ---@param item lsp.CompletionItem
+    --         ---@return table :h complete-items
+    --         convert = function(item)
+    --           return {
+    --             abbr = item.label:gsub("%b()", ""),
+    --             -- Use catppuccin's integration with blink.cmp to do highlight.
+    --             -- https://github.com/catppuccin/nvim/blob/v1.10.0/lua/catppuccin/groups/integrations/blink_cmp.lua
+    --             abbr_hlgroup = "BlinkCmpLabel",
+    --             kind_hlgroup = "BlinkCmpKind" .. (kind_int_to_string[item.kind] or "Unknown"),
+    --           }
+    --         end,
+    --       })
+    --     end
+    --   end,
+    -- })
+
     vim.lsp.enable("jsonls") -- JSON
     vim.lsp.enable("marksman") -- Markdown
     vim.lsp.enable("yamlls") -- YAML
