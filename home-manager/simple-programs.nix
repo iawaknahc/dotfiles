@@ -38,6 +38,10 @@
     # https://0xacab.org/jvoisin/mat2
     mat2
 
+    # Interactive du.
+    # https://dev.yorhel.nl/ncdu
+    ncdu
+
     nixfmt-rfc-style
 
     # https://www.passwordstore.org/
