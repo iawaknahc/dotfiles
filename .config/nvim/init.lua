@@ -47,16 +47,26 @@ vim.opt.listchars = {
 
 vim.o.breakindent = true
 
--- cursor
+-- guicursor
+-- The logic is as follows:
+--
+-- 1. For mode that is not typing, the cursor should be a block.
+-- 2. Otherwise, the cursor should either be vertical or horizontal.
+-- 3. When the cursor is a block, it does not blink.
+-- 4. When the cursor is not a block, it should blink.
+-- 5. When the mode is plain insert, the cursor should be vertical, otherwise, it should be horizontal.
 vim.opt.guicursor = {
+  -- Rule 4
   -- a has to come first, so that the blinking can be overridden by following lines.
   "a:blinkwait1000-blinkon100-blinkoff100",
-  -- Do not blink in normal et al. modes.
-  "n-v-c-sm:block-blinkon0",
+
+  -- Rule 1 and Rule 3
+  "n-v-sm:block-blinkon0",
+
+  -- Rule 2 and Rule 5
   -- The number coming after ver or hor does not seem to have effect in the terminal.
-  "i-ci-ve:ver25",
-  "r-cr:hor20",
-  "o:hor50",
+  "i-c-ci-ve:ver25",
+  "r-cr-o:hor20",
   "t:ver25-TermCursor",
 }
 
