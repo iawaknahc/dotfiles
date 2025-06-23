@@ -112,7 +112,22 @@ require("lz.n").load({
         },
       },
     })
-    vim.lsp.enable("ts_ls")
+    -- vim.lsp.enable("ts_ls")
+    vim.lsp.config("vtsls", {
+      settings = {
+        typescript = {
+          inlayHints = {
+            parameterNames = { enabled = "all" },
+            parameterTypes = { enabled = true },
+            variableTypes = { enabled = true },
+            propertyDeclarationTypes = { enabled = true },
+            functionLikeReturnTypes = { enabled = true },
+            enumMemberValues = { enabled = true },
+          },
+        },
+      },
+    })
+    vim.lsp.enable("vtsls")
 
     vim.lsp.config("denols", {
       root_markers = { "deno.json", "deno.jsonc" },

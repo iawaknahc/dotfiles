@@ -21,6 +21,7 @@
     taplo
     typescript-language-server
     vscode-langservers-extracted
+    vtsls
     yaml-language-server
   ];
 }
