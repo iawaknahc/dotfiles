@@ -200,6 +200,13 @@
         config = builtins.readFile ../.config/nvim/lua/lzn/vim-sleuth.lua;
         plugin = vim-sleuth;
       }
+      # Improve :h quickfix and :h location-list
+      {
+        type = "lua";
+        optional = true;
+        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-pqf.lua;
+        plugin = nvim-pqf;
+      }
 
       ## Pick things.
       {
