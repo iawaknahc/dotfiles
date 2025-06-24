@@ -3,23 +3,38 @@ require("lz.n").load({
   enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
-    -- TODO: The missing source is tmux.
-    -- I have tried blink.compat with cmp-tmux
-    -- The setup seems succeed (no error popping up), but see no completion items at all.
-
-    -- Do not make buffer a fallback source
-    -- I want to complete with buffer even LSP source has items.
-    -- https://github.com/Saghen/blink.cmp/blob/v0.10.0/lua/blink/cmp/config/sources.lua
-    local presets = require("blink.cmp.config.sources")
-    local preset_default = presets.default
-    preset_default.providers.lsp.fallbacks = nil
-    preset_default.providers.path.fallbacks = nil
-
     require("blink.cmp").setup({
-      appearance = {
-        use_nvim_cmp_as_default = true,
+      sources = {
+        default = { "lsp", "snippets", "path", "buffer" },
+        per_filetype = {},
+        transform_items = function(_, items)
+          return items
+        end,
+        min_keyword_length = 0,
+        providers = {
+          lsp = {
+            name = "LSP",
+            module = "blink.cmp.sources.lsp",
+          },
+          path = {
+            name = "Path",
+            module = "blink.cmp.sources.path",
+            opts = {
+              get_cwd = function(_)
+                return vim.fn.getcwd()
+              end,
+            },
+          },
+          snippets = {
+            name = "Snippets",
+            module = "blink.cmp.sources.snippets",
+          },
+          buffer = {
+            name = "Buffer",
+            module = "blink.cmp.sources.buffer",
+          },
+        },
       },
-      sources = preset_default,
       completion = {
         list = {
           selection = {
@@ -58,17 +73,6 @@ require("lz.n").load({
       cmdline = {
         -- Actually :h cmdline-completion is better than blink.cmp.
         enabled = false,
-        keymap = {
-          -- The default is C-space, which is my tmux prefix.
-          ["<C-space>"] = {},
-
-          -- :h c_CTRL-E is to move the cursor to the end of line.
-          -- We cannot lose that.
-          ["<C-e>"] = { "cancel", "fallback" },
-
-          -- Override :h c_CTRL-Z
-          ["<C-z>"] = { "show" },
-        },
       },
     })
   end,
