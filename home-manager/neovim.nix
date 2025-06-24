@@ -48,10 +48,6 @@
     MANPAGER = "nvim +Man!";
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
-    vi = "nvim";
-    vim = "nvim";
-    view = "nvim -R";
-    vimdiff = "nvim -d";
     # Open fugitive.
     g = "nvim +G +only";
   };
