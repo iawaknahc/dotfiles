@@ -55,6 +55,7 @@ require("lz.n").load({
     vim.lsp.enable("dartls") -- Dart
     vim.lsp.enable("eslint") -- ESLint
     vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
+    vim.lsp.enable("jdtls") -- Java
 
     -- sourcekit is bundled with Xcode.
     vim.lsp.enable("sourcekit") -- Swift, Objective-C, C, and C++
