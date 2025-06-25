@@ -102,6 +102,14 @@ nnoremap Y y$
 nnoremap <Space> <Nop>
 " neovim :h CTRL-L-default with nohlsearch changed to hlsearch!
 nnoremap <C-l> <Cmd>set hlsearch!<Bar>diffupdate<Bar>normal! <C-L><CR>
+" Make n always search forward
+nnoremap <expr> n 'Nn'[v:searchforward]
+xnoremap <expr> n 'Nn'[v:searchforward]
+onoremap <expr> n 'Nn'[v:searchforward]
+" Make N always search backward
+nnoremap <expr> N 'nN'[v:searchforward]
+xnoremap <expr> N 'nN'[v:searchforward]
+onoremap <expr> N 'nN'[v:searchforward]
 
 " Command
 command! -nargs=1 Space execute "setlocal tabstop=" . <args> . " shiftwidth=" . <args> . " softtabstop=" . <args> . " expandtab"
