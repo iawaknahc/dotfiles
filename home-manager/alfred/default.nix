@@ -94,6 +94,9 @@
       export FZF=${pkgs.fzf}/bin/fzf
       ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-base.py" ''
+      ${pkgs.mypython}/bin/python3 ${./base.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -104,4 +107,7 @@
   # t
   alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
+  # base
+  alfred.sourceFile."workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist;
 }
