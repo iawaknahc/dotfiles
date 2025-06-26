@@ -609,7 +609,7 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 
 ---@param rfc3339 string
 ---@return integer?
-_G.rfc3339_to_unix = function(rfc3339)
+function _G.rfc3339_to_unix(rfc3339)
   local bak = vim.fn.getreginfo("a")
   vim.fn.setreg("a", rfc3339)
   vim.cmd([[python << EOF
@@ -632,7 +632,7 @@ end
 
 ---@param unix integer
 ---@return string
-_G.unix_to_rfc3339 = function(unix)
+function _G.unix_to_rfc3339(unix)
   local bak = vim.fn.getreginfo("a")
   vim.fn.setreg("a", tostring(unix))
   vim.cmd([[python << EOF
@@ -649,4 +649,20 @@ EOF
   local result = vim.fn.getreg("a", 1, false) --[[@as string]]
   vim.fn.setreg("a", bak)
   return result
+end
+
+-- Some treesitter plugins assume that parser:parse() has been called once.
+-- This may not be true if I do not have another plugin doing that.
+-- So we make this wrapper function to wrap any problematic plugin function.
+--
+---@param fn function
+---@return function
+function _G.fix_treesitter_function(fn)
+  return function(...)
+    local ok, parser = pcall(vim.treesitter.get_parser)
+    if ok and parser ~= nil then
+      parser:parse(true)
+    end
+    fn(...)
+  end
 end

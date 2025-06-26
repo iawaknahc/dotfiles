@@ -3,7 +3,9 @@ require("lz.n").load({
   enabled = true,
   event = { "DeferredUIEnter" },
   after = function()
-    require("flash").setup({
+    local flash = require("flash")
+
+    flash.setup({
       search = {
         multi_window = false,
       },
@@ -25,11 +27,13 @@ require("lz.n").load({
       },
     })
 
+    local flash_treesitter = _G.fix_treesitter_function(flash.treesitter)
+
     vim.keymap.set({ "n", "x", "o" }, "s", function()
-      require("flash").jump()
+      flash.jump()
     end, { desc = "Flash" })
     vim.keymap.set({ "n", "x", "o" }, "S", function()
-      require("flash").treesitter()
+      flash_treesitter()
     end, { desc = "Flash Treesitter" })
   end,
 })

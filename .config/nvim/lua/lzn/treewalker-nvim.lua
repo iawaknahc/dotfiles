@@ -9,29 +9,15 @@ require("lz.n").load({
       highlight_group = "IncSearch",
     })
 
-    -- As of 2025-06-21, https://github.com/aaronik/treewalker.nvim/commits/cfae49dedd041dbe867c2b3d0b081fc381a735e9/
-    -- This plugin assumes that parser:parse() has been called once.
-    -- This may not be true if I do not have other plugin doing that.
-    -- So we have quick workaround by calling parser:parse(true) before letting treewalker to do the actual work.
-    local function fix(fn)
-      return function(...)
-        local ok, parser = pcall(vim.treesitter.get_parser)
-        if ok and parser ~= nil then
-          parser:parse(true)
-        end
-        fn(...)
-      end
-    end
-
     local fixed_treewalker = {
-      move_up = fix(treewalker.move_up),
-      move_in = fix(treewalker.move_in),
-      move_down = fix(treewalker.move_down),
-      move_out = fix(treewalker.move_out),
-      swap_up = fix(treewalker.swap_up),
-      swap_right = fix(treewalker.swap_right),
-      swap_down = fix(treewalker.swap_down),
-      swap_left = fix(treewalker.swap_left),
+      move_up = _G.fix_treesitter_function(treewalker.move_up),
+      move_in = _G.fix_treesitter_function(treewalker.move_in),
+      move_down = _G.fix_treesitter_function(treewalker.move_down),
+      move_out = _G.fix_treesitter_function(treewalker.move_out),
+      swap_up = _G.fix_treesitter_function(treewalker.swap_up),
+      swap_right = _G.fix_treesitter_function(treewalker.swap_right),
+      swap_down = _G.fix_treesitter_function(treewalker.swap_down),
+      swap_left = _G.fix_treesitter_function(treewalker.swap_left),
     }
 
     vim.keymap.set({ "n", "x" }, "<M-k>", function()
