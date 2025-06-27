@@ -11,11 +11,16 @@ in
     (final: prev: {
       mypython = prev."python${version}".withPackages (
         python-pkgs: with python-pkgs; [
+          # Timezone handling
           tzdata
           pytz
-          pyperclip
           tzlocal
+          # Clipboard
+          pyperclip
+          # Parse tiny language
           parsy
+          # Terminal output
+          rich
         ]
       );
     })
