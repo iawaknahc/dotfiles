@@ -21,6 +21,8 @@ in
           parsy
           # Terminal output
           rich
+          # Manipulating fonts
+          fonttools
         ]
       );
     })
