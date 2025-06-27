@@ -20,16 +20,22 @@
     macos-option-as-alt = "left";
 
     font-family = [
+      "" # Reset instead of appending to the default.
       "JetBrainsMonoNL Nerd Font Mono"
-      # Japanese sans preinstalled on macOS Sequoia.
-      # https://support.apple.com/en-hk/120414#:~:text=biz%20udgothic%2018.0d1e2
-      "BIZ UDGothic"
-      # Chinese sans preinstalled on macOS Sequoia.
-      # https://support.apple.com/en-hk/120414#:~:text=lantinghei%20tc%20demibold%2013.0d2e1
-      "Lantinghei TC"
-      # Korean serif preinstalled on macOS Sequoia.
-      # https://support.apple.com/en-hk/120414#:~:text=pcmyungjo%20regular%2013.0d2e1
-      "PCMyungjo"
+      # It has these variants:
+      # - Source Han Mono (Japanese)
+      # - Source Han Mono HC (Hong Kong)
+      # - Source Han Mono K (Korean)
+      # - Source Han Mono SC (Simplified Chinese)
+      # - Source Han Mono TC (Traditional Chinese)
+      #
+      # The details can be found at https://raw.githubusercontent.com/adobe-fonts/source-han-mono/master/SourceHanMonoReadMe.pdf
+      # In context like an HTML document, we can rely on `<html lang=>` to determine the language,
+      # and select a suitable variant.
+      # The strokes of a character then can conform to the convention of the language.
+      # In a terminal environment, we have no such information available.
+      # So we just use the Hong Kong version here.
+      "Source Han Mono HC"
     ];
     font-style = "Light";
     font-style-bold = "Bold";
