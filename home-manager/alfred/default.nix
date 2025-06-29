@@ -78,6 +78,25 @@
         '';
       };
 
+  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000003".source =
+    pkgs.stdenv.mkDerivation
+      rec {
+        pname = "alfred-workflow-switch-appearance";
+        version = "2024.1";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "alfredapp";
+          repo = "switch-appearance-workflow";
+          rev = "${version}";
+          hash = "sha256-OBoZrJCHnLaZ0cTHGBfh6RPySwcSDLQUlp/2eexzi14=";
+        };
+
+        installPhase = ''
+          mkdir $out
+          cp -R ./Workflow/. $out/
+        '';
+      };
+
   home.packages = [
     (pkgs.writeShellScriptBin "alfred-workflow-uuid.py" ''
       ${pkgs.mypython}/bin/python3 ${./uuid.py} "$@"
