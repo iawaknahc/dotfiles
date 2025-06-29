@@ -57,18 +57,21 @@ require("lz.n").load({
         },
       },
       keymap = {
-        preset = "default",
-
-        -- The default is C-space, which is my tmux prefix.
-        ["<C-space>"] = {},
-
+        preset = "none",
         -- There is no i_CTRL-Z.
         -- :h c_CTRL-Z is used to trigger :h 'wildmode'
         -- So we borrow that concept to Insert mode.
         ["<C-z>"] = { "show", "show_documentation", "hide_documentation" },
-
-        -- :h complete_CTRL-Y is used to accept the selected entry.
-        -- So we just follow it.
+        ["<C-e>"] = { "hide", "fallback" },
+        ["<C-y>"] = { "select_and_accept", "fallback" },
+        -- :h i_CTRL-P triggers the builtin completion.
+        ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
+        -- :h i_CTRL-N triggers the builtin completion.
+        ["<C-n>"] = { "select_next", "fallback_to_mappings" },
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+        ["<Tab>"] = { "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "fallback" },
       },
       cmdline = {
         -- Actually :h cmdline-completion is better than blink.cmp.
