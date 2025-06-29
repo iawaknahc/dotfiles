@@ -10,6 +10,9 @@ let
       playwright = {
         command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
       };
+      context7 = {
+        command = "${config.home.profileDirectory}/bin/context7-mcp";
+      };
       desktop-commander = {
         command = "${config.home.profileDirectory}/bin/desktop-commander";
       };
@@ -38,6 +41,9 @@ in
     # But @playwright/mcp does not expose that
     # https://github.com/microsoft/playwright-mcp/blob/v0.0.28/src/tools/screenshot.ts
     playwright-mcp
+
+    # From the overlay of natsukium/mcp-servers-nix
+    context7-mcp
 
     # The steps to update this package.
     # 1. git-clone the source code.
