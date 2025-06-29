@@ -34,74 +34,6 @@ let
         }
       ];
     };
-  doubleTap =
-    {
-      key_code,
-      description,
-      to,
-    }:
-    {
-      inherit description;
-      manipulators = [
-        # The order is important.
-        # The action must come before the setup.
-        {
-          type = "basic";
-          conditions = [
-            {
-              type = "variable_if";
-              name = key_code;
-              value = 1;
-            }
-          ];
-          from = {
-            inherit key_code;
-            modifiers = {
-              optional = [ "any" ];
-            };
-          };
-          to = [ to ];
-        }
-        {
-          type = "basic";
-          from = {
-            inherit key_code;
-            modifiers = {
-              optional = [ "any" ];
-            };
-          };
-          to = [
-            {
-              set_variable = {
-                name = key_code;
-                value = 1;
-              };
-            }
-            {
-              inherit key_code;
-            }
-          ];
-          to_delayed_action = {
-            to_if_invoked = [
-              {
-                set_variable = {
-                  name = key_code;
-                  value = 0;
-                };
-              }
-            ];
-            to_if_canceled = [
-              {
-                set_variable = {
-                  name = key_code;
-                  value = 0;
-                };
-              }
-            ];
-          };
-        }
-      ];
-    };
   karabinerJSON = {
     profiles = [
       {
@@ -149,16 +81,6 @@ let
             (typeSymbol "right_arrow" "→")
             (typeSymbol "down_arrow" "↓")
             (typeSymbol "left_arrow" "←")
-
-            # I found it too easy to trigger unintentionally.
-            # Let's disable this until I figure out the solution.
-            # (doubleTap {
-            #   key_code = "left_command";
-            #   description = "Double tap left_command to trigger hammerspoon leader";
-            #   to = {
-            #     shell_command = "open -g hammerspoon://leader";
-            #   };
-            # })
           ];
         };
       }
