@@ -60,6 +60,10 @@
     - `2006-01-02`
     - `2006-01-02T15:04:05Z`
     - `2006-01-02T15:04:05.999+07:00`
+
+    ## Reading PDF files
+
+    In case you cannot read PDF files, you should use the markitdown tool to do so.
   '';
 
   # https://modelcontextprotocol.io/quickstart/user#2-add-the-filesystem-mcp-server
@@ -74,6 +78,14 @@
 
         desktop-commander = {
           command = "${config.home.profileDirectory}/bin/desktop-commander";
+        };
+
+        # For unknown reason, Claude Code does not know how to read PDF.
+        # See https://github.com/anthropics/claude-code/issues/1510
+        # But Claude API and Claude Desktop can read it.
+        # See https://docs.anthropic.com/en/docs/build-with-claude/pdf-support
+        markitdown-mcp = {
+          command = "${config.home.profileDirectory}/bin/markitdown-mcp";
         };
 
         # mcp-server-time is very limited.
