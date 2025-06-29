@@ -38,6 +38,10 @@
     # https://0xacab.org/jvoisin/mat2
     mat2
 
+    # I want the `sponge` program from it.
+    # `sponge` is handy when you need to read and write to the same file with programs like `jq` and `sed`.
+    moreutils
+
     # Interactive du.
     # https://dev.yorhel.nl/ncdu
     ncdu
