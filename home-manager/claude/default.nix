@@ -1,4 +1,34 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  mcpServerJSON = {
+    mcpServers = {
+      playwright = {
+        command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
+      };
+      desktop-commander = {
+        command = "${config.home.profileDirectory}/bin/desktop-commander";
+      };
+      # For unknown reason, Claude Code does not know how to read PDF.
+      # See https://github.com/anthropics/claude-code/issues/1510
+      # But Claude API and Claude Desktop can read it.
+      # See https://docs.anthropic.com/en/docs/build-with-claude/pdf-support
+      markitdown-mcp = {
+        command = "${config.home.profileDirectory}/bin/markitdown-mcp";
+      };
+      # mcp-server-time is very limited.
+      # On Claude Code, it is better ask to the Bash tool to do time related manipulation.
+      # On Claude Desktop, it can use desktop-commander to run shell commands.
+
+      # No need to install mcp-server-fetch because Claude Desktop and Claude Code has it built in.
+    };
+  };
+  mcpServerJSONFile = pkgs.writeText "mcpServers.json" (builtins.toJSON mcpServerJSON);
+in
 {
   home.packages = with pkgs; [
     # From the overlay of natsukium/mcp-servers-nix
@@ -71,33 +101,15 @@
     text = builtins.toJSON {
       # Avoid conflict with Alfred.
       globalShortcut = "Shift+Alt+Space";
-      mcpServers = {
-        playwright = {
-          command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
-        };
-
-        desktop-commander = {
-          command = "${config.home.profileDirectory}/bin/desktop-commander";
-        };
-
-        # For unknown reason, Claude Code does not know how to read PDF.
-        # See https://github.com/anthropics/claude-code/issues/1510
-        # But Claude API and Claude Desktop can read it.
-        # See https://docs.anthropic.com/en/docs/build-with-claude/pdf-support
-        markitdown-mcp = {
-          command = "${config.home.profileDirectory}/bin/markitdown-mcp";
-        };
-
-        # mcp-server-time is very limited.
-        # On Claude Code, it is better ask to the Bash tool to do time related manipulation.
-        # On Claude Desktop, it can use desktop-commander to run shell commands.
-
-        # No need to install mcp-server-fetch because Claude Desktop and Claude Code has it built in.
-      };
+      mcpServers = mcpServerJSON.mcpServers;
     };
   };
 
-  # It is impossible to do the same for Claude Code because
-  # Claude Code stores all of its config and state in ~/.claude.json
-  # We cannot manage ~/.claude.json with home-manager as Claude Code will write it from time to time.
+  # Since Claude Code uses a giant ~/.claude.json to store all of its configuration AND state,
+  # we have to use a custom activation script to keep the mcpServers configuration in-sync.
+  home.activation.claude-code = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ -r ${config.home.homeDirectory}/.claude.json ]; then
+      ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${config.home.homeDirectory}/.claude.json ${mcpServerJSONFile} | ${pkgs.moreutils}/bin/sponge ${config.home.homeDirectory}/.claude.json
+    fi
+  '';
 }
