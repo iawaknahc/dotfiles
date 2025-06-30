@@ -5,6 +5,9 @@ require("lz.n").load({
   after = function()
     local builtin = require("statuscol.builtin")
     require("statuscol").setup({
+      -- By ignoring buftype=nofile, buffer used by :Man are ignored.
+      -- The statuscolumn is not rendered, the layout will not be affected by the width of the statuscolumn.
+      bt_ignore = { "nofile", "terminal" },
       segments = {
         -- builtin.foldfunc is different from %C that it never show the fold level.
         {
