@@ -110,6 +110,7 @@ in
 
   home.packages = [
     pkgs.mypython
+    pkgs.uv
     pkgs.ruff
     pkgs.pyright
     pkgs."python${pythonVersion}Packages".json5

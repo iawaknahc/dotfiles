@@ -1,25 +1,16 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    # Secret management
     _1password-cli
+    pass # https://www.passwordstore.org/
+
+    # Text processing
     ast-grep
-    bfs
-    cloudflared
-    delve
-    exiftool
-    eza
     fastmod
-    ffmpeg
-    fnlfmt
+    github-markdown-toc-go # It provides gh-md-toc
 
-    # It provides gh-md-toc
-    github-markdown-toc-go
-
-    # pprof requires this graph visualization software to generate graphs.
-    graphviz
-
-    hadolint
-
+    # Text processing on binary files.
     # xxd with color
     # https://github.com/sweetbbak/hexxy
     hexxy
@@ -27,39 +18,46 @@
     # https://github.com/sharkdp/hexyl
     hexyl
 
-    imagemagick
-
-    # https://github.com/jpmens/jo
-    jo
-
+    # JSON
+    jo # https://github.com/jpmens/jo
     jq
 
+    # Filesystem
+    bfs
+    eza
+    # Interactive du.
+    # https://dev.yorhel.nl/ncdu
+    ncdu
+
+    # Linter
+    hadolint
+    shellcheck
+
+    # Source code formatter
+    fnlfmt
+    nixfmt-rfc-style
+    prettierd
+    shfmt
+
+    # Downloader
+    wget
+
+    # Image processing
+    exiftool
+    imagemagick
     # Metadata anonymisation toolkit 2
     # https://0xacab.org/jvoisin/mat2
     mat2
+    tesseract # OCR
+
+    # Multimedia processing
+    ffmpeg
 
     # I want the `sponge` program from it.
     # `sponge` is handy when you need to read and write to the same file with programs like `jq` and `sed`.
     moreutils
 
-    # Interactive du.
-    # https://dev.yorhel.nl/ncdu
-    ncdu
-
-    nixfmt-rfc-style
-
-    # https://www.passwordstore.org/
-    pass
-
-    prettierd
-    shellcheck
-    shfmt
-
-    # OCR
-    tesseract
-
-    tree-sitter
-    uv
-    wget
+    # Misc
+    cloudflared
   ];
 }

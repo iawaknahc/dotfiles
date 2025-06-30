@@ -112,6 +112,9 @@
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix
 
+    # Go and its support packages.
+    ./home-manager/go.nix
+
     # Text editors.
     ./home-manager/vim.nix
     ./home-manager/neovim.nix

@@ -12,6 +12,7 @@
   programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [
+    tree-sitter
     lua-language-server
     stylua
     (stdenv.mkDerivation {
