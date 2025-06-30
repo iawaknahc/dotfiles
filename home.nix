@@ -99,19 +99,13 @@
     ./home-manager/simple-programs.nix
     ./home-manager/language-servers.nix
     ./home-manager/languages.nix
-    ./home-manager/nodejs.nix
-    ./home-manager/databases.nix
-    ./home-manager/qrcode.nix
-
-    # man
-    ./home-manager/man.nix
 
     # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix
 
+    ./home-manager/nodejs.nix
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix
-
     # Go and its support packages.
     ./home-manager/go.nix
 
@@ -120,6 +114,7 @@
     ./home-manager/neovim.nix
 
     # Individual programs that require configurations.
+    ./home-manager/man.nix
     ./home-manager/mkcert.nix
     ./home-manager/gpg.nix
     ./home-manager/navi.nix

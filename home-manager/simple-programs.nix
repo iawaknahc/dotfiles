@@ -18,6 +18,10 @@
     # https://github.com/sharkdp/hexyl
     hexyl
 
+    # Database
+    duckdb
+    sqlite-interactive
+
     # JSON
     jo # https://github.com/jpmens/jo
     jq
@@ -52,6 +56,8 @@
     # https://0xacab.org/jvoisin/mat2
     mat2
     tesseract # OCR
+    qrencode # Write QR code
+    zbar # Read QR code
 
     # Multimedia processing
     ffmpeg
