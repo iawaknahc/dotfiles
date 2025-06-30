@@ -100,6 +100,10 @@ in
     ## Reading PDF files
 
     In case you cannot read PDF files, you should use the markitdown tool to do so.
+
+    ## Manipulate PDF files
+
+    Use poppler-utils instead of pdftk to manipulate PDF files.
   '';
 
   # https://modelcontextprotocol.io/quickstart/user#2-add-the-filesystem-mcp-server

@@ -22,6 +22,9 @@
     jo # https://github.com/jpmens/jo
     jq
 
+    # PDF
+    poppler-utils
+
     # Filesystem
     bfs
     eza
