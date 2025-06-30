@@ -54,6 +54,10 @@
     prettierd
     shellcheck
     shfmt
+
+    # OCR
+    tesseract
+
     tree-sitter
     uv
     wget
