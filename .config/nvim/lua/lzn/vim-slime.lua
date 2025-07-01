@@ -30,5 +30,10 @@ require("lz.n").load({
       silent = false,
       desc = "Slime: Send {motion}",
     })
+    vim.keymap.set("n", "<Leader>rr", "<Plug>SlimeLineSend", {
+      remap = true,
+      silent = false,
+      desc = "Slime: Send line",
+    })
   end,
 })
