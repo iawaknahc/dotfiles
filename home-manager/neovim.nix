@@ -73,6 +73,10 @@
       autocmd QuickFixCmdPost lgetexpr,lhelpgrep,lvimgrep lwindow | set nowinfixheight
     augroup END
   '';
+  xdg.configFile."nvim/snippets" = {
+    source = ../.config/nvim/snippets;
+    recursive = true;
+  };
 
   programs.neovim.extraLuaConfig = builtins.readFile ../.config/nvim/init.lua;
 

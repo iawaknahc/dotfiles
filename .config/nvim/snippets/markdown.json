@@ -1,0 +1,22 @@
+{
+  "> [!NOTE]": {
+    "prefix": [">note"],
+    "body": ["> [!NOTE]", "> $0"],
+    "description": "> [!NOTE]"
+  },
+  "> [!TIP]": {
+    "prefix": [">tip"],
+    "body": ["> [!TIP]", "> $0"],
+    "description": "> [!TIP]"
+  },
+  "> [!WARNING]": {
+    "prefix": [">warning"],
+    "body": ["> [!WARNING]", "> $0"],
+    "description": "> [!WARNING]"
+  },
+  "> [!IMPORTANT]": {
+    "prefix": [">important"],
+    "body": ["> [!IMPORTANT]", "> $0"],
+    "description": "> [!IMPORTANT]"
+  }
+}
