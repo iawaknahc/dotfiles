@@ -75,8 +75,13 @@ in
       {
         mypython = prevPython.withPackages (
           python-pkgs: with python-pkgs; [
-            # Interactive
+            # Colorscheme
+            catppuccin
+
+            # Jupyter
             ipython
+            jupyter-core
+            jupyter-console
 
             # Timezone handling
             tzdata
@@ -115,6 +120,41 @@ in
       }
     )
   ];
+
+  # Revert the hard-coded style of jupyter_console.
+  # https://github.com/jupyter/jupyter_console/blob/v6.6.3/jupyter_console/ptshell.py#L512-L533
+  home.file.".jupyter/jupyter_console_config.py".text = ''
+    from pygments.styles import get_style_by_name
+    from pygments.token import Token
+
+    style_name = "catppuccin-mocha"
+    style_cls = get_style_by_name(style_name)
+    style = style_cls()
+
+    styles_dict = style.styles
+
+    c.ZMQTerminalInteractiveShell.true_color = True
+    c.ZMQTerminalInteractiveShell.highlighting_style = style_name
+    c.ZMQTerminalInteractiveShell.highlighting_style_overrides = {
+        Token.Prompt: "ansigreen",
+        Token.PromptNum: "ansigreen bold",
+        Token.OutPrompt: "ansired",
+        Token.OutPromptNum: "ansired bold",
+        Token.RemotePrompt: "",
+        Token.Number: styles_dict[Token.Literal.Number],
+        Token.Operator: styles_dict[Token.Operator],
+        Token.String: styles_dict[Token.Literal.String],
+        Token.Name.Function: styles_dict[Token.Name.Function],
+        Token.Name.Class: styles_dict[Token.Name.Class],
+        Token.Name.Namespace: styles_dict[Token.Name.Namespace],
+    }
+  '';
+  # From IPython 9, highlighting_style is deprecated.
+  # See https://github.com/catppuccin/python/issues/111
+  home.file.".ipython/profile_default/ipython_config.py".text = ''
+    c.TerminalInteractiveShell.true_color = True
+    c.TerminalInteractiveShell.highlighting_style = "catppuccin-mocha"
+  '';
 
   home.packages = [
     pkgs.mypython
