@@ -28,6 +28,21 @@ require("lz.n").load({
           snippets = {
             name = "Snippets",
             module = "blink.cmp.sources.snippets",
+            override = {
+              -- As of 2025-07-01, blink.cmp has an issue of not triggering when
+              -- the snippet prefix is a non-alphabetical character.
+              -- https://github.com/Saghen/blink.cmp/issues/1688
+              --
+              -- We work around this by completely override get_trigger_characters().
+              -- The trigger_characters is just all ASCII characters that are printable.
+              get_trigger_characters = function()
+                local trigger_characters = {}
+                for i = 32, 126, 1 do
+                  table.insert(trigger_characters, vim.fn.nr2char(i))
+                end
+                return trigger_characters
+              end,
+            },
           },
           buffer = {
             name = "Buffer",
