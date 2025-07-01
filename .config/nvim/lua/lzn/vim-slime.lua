@@ -15,7 +15,7 @@ require("lz.n").load({
     -- However, even in paste mode, code is not executed until you exit paste mode.
     -- This really breaks the workflow of vim-slime.
     --
-    -- The best solution at the moment is to use the traditional interpreter with `PYTHON_BASIC_REPL=1 python3`.
+    -- The best solution is just use IPython.
   end,
   after = function()
     vim.g.slime_suggest_default = 1

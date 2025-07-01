@@ -75,16 +75,23 @@ in
       {
         mypython = prevPython.withPackages (
           python-pkgs: with python-pkgs; [
+            # Interactive
+            ipython
+
             # Timezone handling
             tzdata
             pytz
             tzlocal
+
             # Clipboard
             pyperclip
+
             # Parse tiny language
             parsy
+
             # Terminal output
             rich
+
             # Manipulating colors
             (prevPythonPackages.buildPythonPackage rec {
               pname = "coloraide";
@@ -96,6 +103,7 @@ in
                 hash = "sha256-fomOKtF3hzgJvR9f2x2QYYrYdASf6tlS/0Rw0VdmbUs=";
               };
             })
+
             # Manipulating fonts
             fonttools
 
