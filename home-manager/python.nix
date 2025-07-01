@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 let
@@ -83,6 +84,12 @@ in
             jupyter-core
             jupyter-console
 
+            # Jupyter kernels
+            # string.<Tab> will NOT show the functions under string.
+            # Instead, it show functions in the global namespace.
+            # So it is not very useful.
+            ilua
+
             # Timezone handling
             tzdata
             pytz
@@ -163,5 +170,38 @@ in
     pkgs.pyright
     pkgs."python${pythonVersion}Packages".json5
     pkgs."python${pythonVersion}Packages".debugpy
+
+    # Jupyter kernels
+    # Invoking iruby will immediately exit with 2.
+    # jupyter console --kernel=ruby is fine though.
+    pkgs.iruby
+
+    # import "fmt"
+    # fmt.<Tab> and it will crash.
+    # So it is not usable at all.
+    # Consider using https://github.com/janpfeifer/gonb
+    # pkgs.gophernotes
   ];
+
+  home.file."Library/Jupyter/kernels/ruby/kernel.json".text = builtins.toJSON {
+    language = "ruby";
+    display_name = "Ruby";
+    argv = [
+      "${config.home.profileDirectory}/bin/iruby"
+      "kernel"
+      "{connection_file}"
+    ];
+  };
+
+  home.file."Library/Jupyter/kernels/lua/kernel.json".text = builtins.toJSON {
+    language = "lua";
+    display_name = "Lua";
+    argv = [
+      "${config.home.profileDirectory}/bin/python3"
+      "-m"
+      "ilua.app"
+      "-c"
+      "{connection_file}"
+    ];
+  };
 }
