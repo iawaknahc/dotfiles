@@ -79,10 +79,17 @@ in
             # Colorscheme
             catppuccin
 
+            # JSON5
+            json5
+
             # Jupyter
             ipython
             jupyter-core
             jupyter-console
+            # notebook somehow depends on json5
+            # Thus, json5 has to be installed here, not in home.packages.
+            # Otherwise, there would be symlink clash in ~/.nix-profile/bin
+            notebook
 
             # Jupyter kernels
             # string.<Tab> will NOT show the functions under string.
@@ -168,7 +175,6 @@ in
     pkgs.uv
     pkgs.ruff
     pkgs.pyright
-    pkgs."python${pythonVersion}Packages".json5
     pkgs."python${pythonVersion}Packages".debugpy
 
     # Jupyter kernels
