@@ -103,6 +103,7 @@
     # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix
 
+    ./home-manager/lua.nix
     ./home-manager/nodejs.nix
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix

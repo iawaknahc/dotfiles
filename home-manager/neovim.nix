@@ -13,8 +13,6 @@
 
   home.packages = with pkgs; [
     tree-sitter
-    lua-language-server
-    stylua
     (stdenv.mkDerivation {
       name = "luv";
       src = fetchFromGitHub {
@@ -32,15 +30,6 @@
         runHook postInstall
       '';
     })
-    (luajit.withPackages (
-      packages: with packages; [
-        luarocks
-        # llscheck requires lua-language-server on PATH.
-        llscheck
-        # luap provides a better REPL experience than lua(1).
-        luaprompt
-      ]
-    ))
   ];
 
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
