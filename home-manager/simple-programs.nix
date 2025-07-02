@@ -27,6 +27,7 @@
     jq
 
     # PDF
+    qpdf
     poppler-utils
 
     # Filesystem
