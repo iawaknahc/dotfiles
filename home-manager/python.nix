@@ -68,6 +68,11 @@ in
             dontCheckRuntimeDeps = true;
             dependencies = [
               prevPythonPackages.mcp
+              # typer is a dependency of mcp
+              # https://github.com/modelcontextprotocol/python-sdk/issues/409
+              # If we do not install typer, running `python3 -m pydoc -k anythingquery` will result in
+              #   Error: typer is required. Install with 'pip install mcp[cli]'
+              prevPythonPackages.typer
               markitdown
             ];
           }
