@@ -6,7 +6,7 @@ require("lz.n").load({
     -- The rationale is to supply description.
     vim.g.Unicode_no_default_mappings = true
     -- Use the UnicodeData.txt installed by unicode-character-database
-    vim.g.Unicode_data_directory = vim.fn.expand("~/.nix-profile/share/unicode")
+    vim.g.Unicode_data_directory = vim.fn.expand("~/.unicode")
     -- By default, it is true.
     -- If it is set to false, then <Plug>(UnicodeFuzzy) will be broken.
     vim.g.Unicode_use_cache = true

@@ -12,7 +12,6 @@
   programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [
-    unicode-character-database
     tree-sitter
     (stdenv.mkDerivation {
       name = "luv";

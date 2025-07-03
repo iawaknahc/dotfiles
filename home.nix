@@ -60,6 +60,9 @@
   imports = [
     ./home-manager/fonts.nix
 
+    # Unicode
+    ./home-manager/unicode.nix
+
     # Theme
     ./home-manager/catppuccin.nix
 
