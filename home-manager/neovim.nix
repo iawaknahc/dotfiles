@@ -12,6 +12,7 @@
   programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [
+    unicode-character-database
     tree-sitter
     (stdenv.mkDerivation {
       name = "luv";
@@ -109,6 +110,13 @@
       nvim-treesitter-textobjects
 
       ## Text editing
+      # Unicode
+      {
+        type = "lua";
+        optional = true;
+        config = builtins.readFile ../.config/nvim/lua/lzn/unicode-vim.lua;
+        plugin = unicode-vim;
+      }
       # Text objects.
       {
         type = "lua";
