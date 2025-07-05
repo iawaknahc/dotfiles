@@ -183,11 +183,15 @@ require("lz.n").load({
       return out
     end
 
-    local function get_byte_location(args)
+    -- This is called utf8 location because the location reports
+    -- the location in 'encoding', which is utf-8 most of the time.
+    --
+    -- Note that even 'filecoding' is something else, 'encoding' is still utf-8.
+    local function get_utf8_location(args)
       if MiniStatusline.is_truncated(args.trunc_width) then
         return ""
       end
-      return "%{'byte:'}%5l:%-3c"
+      return "utf8:%5l:%-3c"
     end
 
     local function get_screen_location(args)
@@ -215,7 +219,7 @@ require("lz.n").load({
         return "%5l:%-3v"
       end
 
-      return "%{'cell:'}%5l:%-3v"
+      return "cell:%5l:%-3v"
     end
 
     local function get_percentage(args)
@@ -242,7 +246,7 @@ require("lz.n").load({
       local endofline = get_endofline({ trunc_width = 80 })
       local filesize = get_filesize({ trunc_width = 120 })
 
-      local byte_location = get_byte_location({ trunc_width = 120 })
+      local utf8_location = get_utf8_location({ trunc_width = 120 })
       local screen_location = get_screen_location({ trunc_width = 120 })
       local cell_location = get_cell_location({ trunc_width = 120 })
       local percentage = get_percentage({ trunc_width = 40 })
@@ -274,7 +278,7 @@ require("lz.n").load({
       table.insert(groups, {
         hl = mode_hl,
         strings = {
-          byte_location,
+          utf8_location,
           screen_location,
           cell_location,
           percentage,
