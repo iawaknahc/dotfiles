@@ -145,6 +145,7 @@ require("lz.n").load({
         { mode = "x", keys = "g" },
         -- z
         { mode = "n", keys = "z" },
+        { mode = "n", keys = "Z" },
         { mode = "x", keys = "z" },
         -- ]
         { mode = "n", keys = "]" },
@@ -183,6 +184,9 @@ require("lz.n").load({
         miniclue.gen_clues.builtin_completion(),
         miniclue.gen_clues.g(),
         miniclue.gen_clues.z(),
+        { mode = "n", keys = "ZZ", desc = "Save and close window, :exit" },
+        { mode = "n", keys = "ZQ", desc = "Quit without saving, :quit!" },
+
         miniclue.gen_clues.marks(),
         gen_clues_registers(),
         miniclue.gen_clues.windows(),
