@@ -304,6 +304,11 @@ vim.keymap.set("i", "<C-s>", function()
 end, {
   desc = "vim.lsp.buf.signature_help()",
 })
+vim.keymap.set("n", "g8", function()
+  require("g8").g8()
+end, {
+  desc = "Unicode: Print byte sequence in 'fileencoding'",
+})
 
 -- Command
 vim.api.nvim_create_user_command("Space", function(t)
