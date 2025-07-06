@@ -3,6 +3,23 @@ require("lz.n").load({
   enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
+    local trigger_characters = {}
+    for i = 32, 126, 1 do
+      table.insert(trigger_characters, vim.fn.nr2char(i))
+    end
+
+    local override = {
+      -- As of 2025-07-01, blink.cmp has an issue of not triggering when
+      -- the snippet prefix is a non-alphabetical character.
+      -- https://github.com/Saghen/blink.cmp/issues/1688
+      --
+      -- We work around this by completely override get_trigger_characters().
+      -- The trigger_characters is just all ASCII characters that are printable.
+      get_trigger_characters = function()
+        return trigger_characters
+      end,
+    }
+
     require("blink.cmp").setup({
       sources = {
         default = { "lsp", "snippets", "path", "buffer" },
@@ -15,6 +32,7 @@ require("lz.n").load({
           lsp = {
             name = "LSP",
             module = "blink.cmp.sources.lsp",
+            override = override,
           },
           path = {
             name = "Path",
@@ -28,25 +46,12 @@ require("lz.n").load({
           snippets = {
             name = "Snippets",
             module = "blink.cmp.sources.snippets",
-            override = {
-              -- As of 2025-07-01, blink.cmp has an issue of not triggering when
-              -- the snippet prefix is a non-alphabetical character.
-              -- https://github.com/Saghen/blink.cmp/issues/1688
-              --
-              -- We work around this by completely override get_trigger_characters().
-              -- The trigger_characters is just all ASCII characters that are printable.
-              get_trigger_characters = function()
-                local trigger_characters = {}
-                for i = 32, 126, 1 do
-                  table.insert(trigger_characters, vim.fn.nr2char(i))
-                end
-                return trigger_characters
-              end,
-            },
+            override = override,
           },
           buffer = {
             name = "Buffer",
             module = "blink.cmp.sources.buffer",
+            override = override,
           },
         },
       },
