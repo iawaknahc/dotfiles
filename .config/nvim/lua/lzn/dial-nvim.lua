@@ -149,6 +149,51 @@ require("lz.n").load({
       end,
     })
 
+    local regex_iso_3166_1_alpha_2 = [[%(<[A-Z]{2}>)]]
+    -- For unknown reason, if {2} is used, the regex matches nothing, so + is used instead.
+    local regex_unicode_tag_block = [[%(<[\U1F1E6-\U1F1FF]+>)]]
+
+    local unicode_iso_3166_1_alpha_2 = augend.user.new({
+      find = augendcommon.find_pattern_regex(table.concat({
+        [[\v]], -- Very magic
+        regex_iso_3166_1_alpha_2,
+        [[|]], -- Or
+        regex_unicode_tag_block,
+      })),
+      ---@param text string
+      ---@param addend integer
+      ---@param cursor? integer
+      ---@return { text?: string, cursor?: integer }
+      add = function(text, addend, cursor)
+        local utf8 = require("utf8")
+        if vim.regex([[\v]] .. regex_iso_3166_1_alpha_2):match_str(text) then
+          local codepoints = {}
+          for _, codepoint_str in utf8.codes(text) do
+            local codepoint = utf8.codepoint(codepoint_str)
+            -- 65 is ASCII A
+            -- 0x1F1E6 is U+1F1E6
+            table.insert(codepoints, codepoint - 65 + 0x1F1E6)
+          end
+          text = utf8.char(unpack(codepoints))
+          cursor = #text
+          return { text = text, cursor = cursor }
+        end
+        if vim.regex([[\v]] .. regex_unicode_tag_block):match_str(text) then
+          local codepoints = {}
+          for _, codepoint_str in utf8.codes(text) do
+            local codepoint = utf8.codepoint(codepoint_str)
+            -- 65 is ASCII A
+            -- 0x1F1E6 is U+1F1E6
+            table.insert(codepoints, codepoint - 0x1F1E6 + 65)
+          end
+          text = utf8.char(unpack(codepoints))
+          cursor = #text
+          return { text = text, cursor = cursor }
+        end
+        return {}
+      end,
+    })
+
     require("dial.config").augends:register_group({
       default = {
         augend.integer.alias.decimal, -- 0, 1, 2, ...
@@ -184,6 +229,7 @@ require("lz.n").load({
       },
       ctrlshift = {
         timestamps,
+        unicode_iso_3166_1_alpha_2,
       },
     })
 
