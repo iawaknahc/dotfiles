@@ -91,6 +91,20 @@
       # This is essentially treating nvim-treesitter-textobjects as a data-only plugin,
       # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter-textobjects/tree/main
       nvim-treesitter-textobjects
+      # The missing utf8 package.
+      # See https://www.lua.org/manual/5.4/manual.html#6.5
+      (pkgs.vimUtils.buildVimPlugin {
+        pname = "utf8.nvim";
+        version = "2025-07-10";
+        # The test is not intended for running during installation, skip it.
+        doCheck = false;
+        src = pkgs.fetchFromGitHub {
+          owner = "uga-rosa";
+          repo = "utf8.nvim";
+          rev = "954cbbadabe5cd19f202e918fec191d64eea7766";
+          hash = "sha256-pIQ3od4xb8Zn4aPtQPaYoVyb4pZ8S+6rEkGGv+kmdZM=";
+        };
+      })
 
       ## Text editing
       # Unicode
