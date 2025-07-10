@@ -15,7 +15,13 @@
       '';
     })
 
+    # https://www.unicode.org/Public/UCD/
     unicode-character-database
+    # https://www.unicode.org/Public/idna/
+    unicode-idna
+    # https://www.unicode.org/Public/emoji/
+    unicode-emoji
+
     # This program is known to be broken on nixpkgs
     # See https://github.com/NixOS/nixpkgs/pull/420887
     unicode-paracode
