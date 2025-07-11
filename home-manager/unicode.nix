@@ -10,8 +10,8 @@
         hash = "sha256-+xELEHy3hq2botBV6buouPuKMk8qWnokTsnV2h57jbQ=";
       };
       installPhase = ''
-        mkdir -p $out/share/cldr-json
-        mv cldr-* $out/share/cldr-json/
+        mkdir -p $out/share/unicode/cldr-json
+        mv cldr-* $out/share/unicode/cldr-json/
       '';
     })
 
