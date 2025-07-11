@@ -15,6 +15,20 @@
       '';
     })
 
+    (stdenvNoCC.mkDerivation rec {
+      pname = "ucdxml-nounihan";
+      version = "16.0.0";
+      src = fetchzip {
+        url = "https://www.unicode.org/Public/${version}/ucdxml/ucd.nounihan.flat.zip";
+        stripRoot = false;
+        hash = "sha256-Gg3YGaFFeoAu4YTUr8oJpxOvm13N3aKG+Vzf56Htxe0=";
+      };
+      installPhase = ''
+        mkdir -p $out/share/unicode
+        mv ucd.nounihan.flat.xml $out/share/unicode/
+      '';
+    })
+
     # https://www.unicode.org/Public/UCD/
     unicode-character-database
     # https://www.unicode.org/Public/idna/
