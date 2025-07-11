@@ -16,6 +16,20 @@
     })
 
     (stdenvNoCC.mkDerivation rec {
+      pname = "cldr-common";
+      version = "47";
+      src = fetchzip {
+        url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
+        stripRoot = false;
+        hash = "sha256-ZMXdLuFXDqu/c9sYug6bWkuQWcS3eQ+EUDKtOP5Htu8=";
+      };
+      installPhase = ''
+        mkdir -p $out/share/unicode/cldr
+        mv common $out/share/unicode/cldr/
+      '';
+    })
+
+    (stdenvNoCC.mkDerivation rec {
       pname = "ucdxml-nounihan";
       version = "16.0.0";
       src = fetchzip {
