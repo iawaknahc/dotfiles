@@ -312,7 +312,7 @@ def insert_codepoint_sequences(
                 cps,
                 name,
                 tts,
-                tokenize = "porter unicode61"
+                tokenize = "trigram"
             );
         """)
         conn.executemany(
