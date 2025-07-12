@@ -61,7 +61,7 @@
     ./home-manager/fonts.nix
 
     # Unicode
-    ./home-manager/unicode.nix
+    ./home-manager/unicode
 
     # Theme
     ./home-manager/catppuccin.nix
