@@ -116,6 +116,9 @@
     (pkgs.writeShellScriptBin "alfred-workflow-base.py" ''
       ${pkgs.mypython}/bin/python3 ${./base.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-u.py" ''
+      ${pkgs.mypython}/bin/python3 ${./u.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -129,4 +132,7 @@
   # base
   alfred.sourceFile."workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist;
+  # u
+  alfred.sourceFile."workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist;
 }
