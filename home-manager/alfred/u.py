@@ -18,13 +18,26 @@ def preprocess_query(argv: list[str]) -> str:
     parts = [part for part in parts if part != ""]
     normalized = []
     for part in parts:
-        try:
-            codepoint = int(part, base=16)
-            notation = codepoint_to_notation(codepoint)
-            normalized.append(notation)
-        except ValueError:
+        # We do not want `latin letter a` to be rewritten into `latin letter 000A`.
+        # Thus we only rewrite when the part is at least 2 characters.
+        if len(part) >= 2:
+            try:
+                codepoint = int(part, base=16)
+                notation = codepoint_to_notation(codepoint)
+                normalized.append(notation)
+            except ValueError:
+                normalized.append(part)
+        else:
             normalized.append(part)
     return " ".join(normalized)
+
+
+def use_trigram(query: str) -> bool:
+    parts = query.split(" ")
+    for part in parts:
+        if len(part) < 3:
+            return False
+    return True
 
 
 def codepoints_to_cps(codepoints: list[int]) -> str:
@@ -119,16 +132,29 @@ def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]
         cs = CodepointSequence.from_sqlite3(exact_match)
         matches[cs] = cs
 
-    res = conn.execute(
-        """
-        SELECT cps, name, tts FROM codepoint_sequence_fts5
-        WHERE codepoint_sequence_fts5 MATCH ?
-        ORDER BY rank
-        LIMIT 10
-        """,
-        (query,),
-    )
-    rows = res.fetchall()
+    trigram = use_trigram(query)
+    rows = []
+    if trigram:
+        rows = conn.execute(
+            """
+            SELECT cps, name, tts FROM codepoint_sequence_trigram
+            WHERE codepoint_sequence_trigram MATCH ?
+            ORDER BY rank
+            LIMIT 10
+            """,
+            (query,),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """
+            SELECT cps, name, tts FROM codepoint_sequence_porter
+            WHERE codepoint_sequence_porter MATCH ?
+            ORDER BY rank
+            LIMIT 10
+            """,
+            (query,),
+        ).fetchall()
+
     for row in rows:
         cs = CodepointSequence.from_sqlite3(row)
         if cs not in matches:

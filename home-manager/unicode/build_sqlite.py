@@ -295,9 +295,6 @@ def insert_codepoint_sequences(
     codepoint_sequence_values = [
         (cp.cps, cp.name, cp.tts) for cp in codepoint_sequences
     ]
-    codepoint_sequence_fts5_values = [
-        (cp.cps, cp.name, cp.tts) for cp in codepoint_sequences
-    ]
 
     with conn:
         conn.execute("""
@@ -308,11 +305,19 @@ def insert_codepoint_sequences(
             );
         """)
         conn.execute("""
-            CREATE VIRTUAL TABLE codepoint_sequence_fts5 USING fts5(
+            CREATE VIRTUAL TABLE codepoint_sequence_trigram USING fts5(
                 cps,
                 name,
                 tts,
                 tokenize = "trigram"
+            );
+        """)
+        conn.execute("""
+            CREATE VIRTUAL TABLE codepoint_sequence_porter USING fts5(
+                cps,
+                name,
+                tts,
+                tokenize = "porter unicode61"
             );
         """)
         conn.executemany(
@@ -323,9 +328,15 @@ def insert_codepoint_sequences(
         )
         conn.executemany(
             """
-            INSERT INTO codepoint_sequence_fts5 (cps, name, tts) VALUES (?, ?, ?);
+            INSERT INTO codepoint_sequence_trigram (cps, name, tts) VALUES (?, ?, ?);
             """,
-            codepoint_sequence_fts5_values,
+            codepoint_sequence_values,
+        )
+        conn.executemany(
+            """
+            INSERT INTO codepoint_sequence_porter (cps, name, tts) VALUES (?, ?, ?);
+            """,
+            codepoint_sequence_values,
         )
 
 
