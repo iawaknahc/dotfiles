@@ -88,7 +88,7 @@ class CodepointSequence:
         return self.cps == other.cps
 
     def to_item(self):
-        notations = "".join([codepoint_to_notation(cp) for cp in self.codepoints])
+        notations = " ".join([codepoint_to_notation(cp) for cp in self.codepoints])
 
         # No idea how to encode surrogate with json.
         # It seems that there is no way pass "surrogatepass".
