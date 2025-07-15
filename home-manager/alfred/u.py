@@ -120,7 +120,9 @@ def error():
 
 
 def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]:
+    # We assume the iteration order of dict is insertion order.
     matches = {}
+
     exact_match = conn.execute(
         """
         SELECT cps, name, tts FROM codepoint_sequence
@@ -159,7 +161,11 @@ def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]
         cs = CodepointSequence.from_sqlite3(row)
         if cs not in matches:
             matches[cs] = cs
-    return [m for m in matches.keys()]
+
+    ordered_matches = [m for m in matches.keys()]
+
+    # Return at most 9 matches so that the result list in Alfred does not have a scrollbar.
+    return ordered_matches[:9]
 
 
 def main():
