@@ -12,7 +12,7 @@ def codepoint_to_notation(codepoint: int) -> str:
     return f"{codepoint:04X}"
 
 
-def preprocess_query(argv: list[str]) -> str:
+def preprocess_query(argv: list[str]) -> list[str]:
     query = " ".join(argv).upper()
     parts = [part.strip() for part in query.split(" ")]
     parts = [part for part in parts if part != ""]
@@ -29,13 +29,28 @@ def preprocess_query(argv: list[str]) -> str:
                 normalized.append(part)
         else:
             normalized.append(part)
-    return " ".join(normalized)
+    return normalized
 
 
-def use_trigram(query: str) -> bool:
-    parts = query.split(" ")
-    for part in parts:
-        if len(part) < 3:
+def prepare_plain_query(query: list[str]) -> str:
+    return " ".join(query)
+
+
+def prepare_fts5_query(query: list[str]) -> str:
+    escaped = []
+    for term in query:
+        # Escape " by doubling it
+        # See https://www.sqlite.org/fts5.html#fts5_strings
+        term = term.replace('"', '""')
+        # Enclose the entire query in " to make a FTS5 string.
+        term = f'"{term}"'
+        escaped.append(term)
+    return " ".join(escaped)
+
+
+def use_trigram(query: list[str]) -> bool:
+    for term in query:
+        if len(term) < 3:
             return False
     return True
 
@@ -119,16 +134,18 @@ def error():
     )
 
 
-def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]:
+def get_matches(conn: sqlite3.Connection, query: list[str]) -> list[CodepointSequence]:
     # We assume the iteration order of dict is insertion order.
     matches = {}
+
+    query_plain = prepare_plain_query(query)
 
     exact_match = conn.execute(
         """
         SELECT cps, name, tts FROM codepoint_sequence
         WHERE cps = ?
         """,
-        (query,),
+        (query_plain,),
     ).fetchone()
     if exact_match is not None:
         cs = CodepointSequence.from_sqlite3(exact_match)
@@ -136,6 +153,7 @@ def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]
 
     trigram = use_trigram(query)
     rows = []
+    query_fts5 = prepare_fts5_query(query)
     if trigram:
         rows = conn.execute(
             """
@@ -144,7 +162,7 @@ def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]
             ORDER BY rank
             LIMIT 10
             """,
-            (query,),
+            (query_fts5,),
         ).fetchall()
     else:
         rows = conn.execute(
@@ -154,7 +172,7 @@ def get_matches(conn: sqlite3.Connection, query: str) -> list[CodepointSequence]
             ORDER BY rank
             LIMIT 10
             """,
-            (query,),
+            (query_fts5,),
         ).fetchall()
 
     for row in rows:
