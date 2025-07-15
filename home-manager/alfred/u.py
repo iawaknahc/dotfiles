@@ -90,11 +90,11 @@ class CodepointSequence:
     def to_item(self):
         notations = " ".join([codepoint_to_notation(cp) for cp in self.codepoints])
 
-        # No idea how to encode surrogate with json.
-        # It seems that there is no way pass "surrogatepass".
         s = ""
         for cp in self.codepoints:
             if cp >= 0xD800 and cp <= 0xDFFF:
+                # Alfred does not handle UTF-8 encoded surrogate very well.
+                # So we do not feed that to Alfred.
                 s = notations
                 break
             s += chr(cp)
@@ -205,7 +205,16 @@ def main():
             return
 
         items = [m.to_item() for m in matches]
-        print(json.dumps({"items": items}, ensure_ascii=False))
+        # print() raise UnicodeEncodeError when it encounter a surrogate.
+        # So we do not use print() and write the bytes to stdout directly.
+        #
+        # However, even though we can write a UTF-8 encoded surrogate,
+        # Alfred does not handle it very well.
+        # We no longer do that.
+        bytes_ = json.dumps({"items": items}, ensure_ascii=False).encode(
+            "utf-8", errors="surrogatepass"
+        )
+        sys.stdout.buffer.write(bytes_)
 
 
 main()
