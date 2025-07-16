@@ -1,6 +1,8 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    # After using Harper for a month,
+    # the most annoying problem is https://github.com/Automattic/harper/discussions/938
     harper
     typos-lsp
 
