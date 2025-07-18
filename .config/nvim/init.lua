@@ -160,6 +160,10 @@ vim.keymap.set({ "n", "x", "o" }, "N", "'nN'[v:searchforward]", {
   desc = "Make N always search backward",
   expr = true,
 })
+-- This keymap assumes the shells ARE NOT in vi mode.
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {
+  desc = "<Esc> in terminal mode",
+})
 
 -- Inspired by gd
 vim.keymap.set({ "n" }, "gD", vim.lsp.buf.declaration, {
