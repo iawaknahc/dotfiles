@@ -45,10 +45,10 @@
 
     command = "${config.home.profileDirectory}/bin/fish --login --interactive";
 
-    # I use fish vi mode.
-    # When the mode is normal, the cursor does not become block.
-    # As a workaround, let's always use a block.
-    cursor-style = "block";
+    # In preparation for using neovim as default terminal program,
+    # we disable vi mode in shell.
+    # Thus the cursor should look like a bar.
+    cursor-style = "bar";
     shell-integration = "none";
     cursor-style-blink = false;
 
