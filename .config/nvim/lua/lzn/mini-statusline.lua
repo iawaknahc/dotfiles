@@ -50,9 +50,15 @@ require("lz.n").load({
       return string.format("w%d", win)
     end
 
+    local function get_terminal_job_pid()
+      local channel = vim.bo.channel
+      local pid = vim.fn.jobpid(channel)
+      return string.format("%d", pid)
+    end
+
     local function get_filename(args)
       if vim.bo.buftype == "terminal" then
-        return "%t"
+        return get_terminal_job_pid() .. " %{b:term_title}"
       elseif MiniStatusline.is_truncated(args.trunc_width) then
         return "%t%m%r"
       else
@@ -288,9 +294,29 @@ require("lz.n").load({
       return MiniStatusline.combine_groups(groups)
     end
 
+    local function inactive()
+      local groups = {}
+
+      local function get_title()
+        if vim.bo.buftype == "terminal" then
+          return get_terminal_job_pid() .. " %{b:term_title}"
+        end
+        return "%F"
+      end
+
+      local title = get_title()
+
+      table.insert(groups, "%#MiniStatuslineInactive#")
+      table.insert(groups, title)
+      table.insert(groups, "%=")
+
+      return MiniStatusline.combine_groups(groups)
+    end
+
     MiniStatusline.setup({
       content = {
         active = active,
+        inactive = inactive,
       },
     })
   end,
