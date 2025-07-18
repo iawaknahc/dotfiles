@@ -15,8 +15,9 @@ in
     set --global --export SHELL "$(command -v fish)"
   '';
   programs.fish.interactiveShellInit = ''
-    # Turn on vi mode
-    fish_vi_key_bindings
+    # In preparation for using neovim as default terminal program,
+    # we disable vi mode in shell.
+    # fish_vi_key_bindings
   '';
   xdg.configFile."fish/functions" = {
     enable = true;

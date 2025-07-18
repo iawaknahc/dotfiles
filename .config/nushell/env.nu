@@ -8,7 +8,9 @@
 # The correct way to do this is to use export-env.
 
 $env.config.show_banner = false
-$env.config.edit_mode = "vi";
+# In preparation for using neovim as default terminal program,
+# we disable vi mode in shell.
+# $env.config.edit_mode = "vi";
 $env.PROMPT_INDICATOR_VI_NORMAL = {||
   let mode = $"(ansi red_bold)N(ansi reset)"
   let exit_code = $env.LAST_EXIT_CODE

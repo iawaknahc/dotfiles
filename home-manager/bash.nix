@@ -21,7 +21,8 @@
     # otherwise, `command -v bash` points to a bash that is not installed by Nix.
     export SHELL="$(command -v bash)"
 
-    # Turn on vi mode
-    set -o vi
+    # In preparation for using neovim as default terminal program,
+    # we disable vi mode in shell.
+    # set -o vi
   '';
 }

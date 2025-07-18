@@ -12,7 +12,9 @@
 { lib, ... }:
 {
   programs.zsh.enable = true;
-  programs.zsh.defaultKeymap = "viins";
+  # In preparation for using neovim as default terminal program,
+  # we disable vi mode in shell.
+  # programs.zsh.defaultKeymap = "viins";
   programs.zsh.initContent = lib.mkBefore ''
     # Ensure SHELL is correctly set.
     # Note that this must appear after we have set up the PATH,
