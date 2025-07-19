@@ -114,49 +114,42 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/unicode-vim.lua;
         plugin = unicode-vim;
       }
       # Text objects.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/mini-ai.lua;
         plugin = mini-ai;
       }
       # Edit surroundings.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/mini-surround.lua;
         plugin = mini-surround;
       }
       # Motion
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/flash-nvim.lua;
         plugin = flash-nvim;
       }
       # Completion
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/blink-cmp.lua;
         plugin = blink-cmp;
       }
       # Swap treesitter nodes.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/treewalker-nvim.lua;
         plugin = treewalker-nvim;
       }
       # Change cases.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-caser.lua;
         plugin = (
           pkgs.vimUtils.buildVimPlugin {
             pname = "vim-caser";
@@ -174,7 +167,6 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/treesj.lua;
         plugin = treesj;
       }
       # Enhanced version of :h J.
@@ -198,28 +190,24 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/dial-nvim.lua;
         plugin = dial-nvim;
       }
       # Edit table.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-table-mode.lua;
         plugin = vim-table-mode;
       }
       # Make indentation right.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-sleuth.lua;
         plugin = vim-sleuth;
       }
       # Improve :h quickfix and :h location-list
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-pqf.lua;
         plugin = nvim-pqf;
       }
 
@@ -227,7 +215,6 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/fzf-lua.lua;
         plugin = fzf-lua;
       }
 
@@ -236,35 +223,30 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/mini-statusline.lua;
         plugin = mini-statusline;
       }
       # statuscolumn
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/statuscol-nvim.lua;
         plugin = statuscol-nvim;
       }
       # vim.notify
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-notify.lua;
         plugin = nvim-notify;
       }
       # Key clues and submodes.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/mini-clue.lua;
         plugin = mini-clue;
       }
       # Show context.
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-treesitter-context.lua;
         plugin = nvim-treesitter-context;
       }
       # Show colors.
@@ -288,13 +270,11 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-lspconfig.lua;
         plugin = nvim-lspconfig;
       }
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-lint.lua;
         plugin = nvim-lint;
       }
 
@@ -302,7 +282,6 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/conform.lua;
         plugin = conform-nvim;
       }
 
@@ -310,25 +289,21 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-fugitive.lua;
         plugin = vim-fugitive;
       }
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-rhubarb.lua;
         plugin = vim-rhubarb;
       }
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/gitsigns-nvim.lua;
         plugin = gitsigns-nvim;
       }
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/diffview-nvim.lua;
         plugin = diffview-nvim;
       }
 
@@ -339,7 +314,6 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/nvim-dap.lua;
         plugin = nvim-dap;
       }
       {
@@ -357,7 +331,6 @@
       {
         type = "lua";
         optional = true;
-        config = builtins.readFile ../.config/nvim/lua/lzn/vim-slime.lua;
         plugin = vim-slime;
       }
     ]);
