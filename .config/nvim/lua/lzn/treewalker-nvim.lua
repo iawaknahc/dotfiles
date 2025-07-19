@@ -4,20 +4,22 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     local treewalker = require("treewalker")
+    local fix_treesitter_function = require("fix_treesitter_function")
+
     treewalker.setup({
       highlight_duration = 250,
       highlight_group = "IncSearch",
     })
 
     local fixed_treewalker = {
-      move_up = _G.fix_treesitter_function(treewalker.move_up),
-      move_in = _G.fix_treesitter_function(treewalker.move_in),
-      move_down = _G.fix_treesitter_function(treewalker.move_down),
-      move_out = _G.fix_treesitter_function(treewalker.move_out),
-      swap_up = _G.fix_treesitter_function(treewalker.swap_up),
-      swap_right = _G.fix_treesitter_function(treewalker.swap_right),
-      swap_down = _G.fix_treesitter_function(treewalker.swap_down),
-      swap_left = _G.fix_treesitter_function(treewalker.swap_left),
+      move_up = fix_treesitter_function(treewalker.move_up),
+      move_in = fix_treesitter_function(treewalker.move_in),
+      move_down = fix_treesitter_function(treewalker.move_down),
+      move_out = fix_treesitter_function(treewalker.move_out),
+      swap_up = fix_treesitter_function(treewalker.swap_up),
+      swap_right = fix_treesitter_function(treewalker.swap_right),
+      swap_down = fix_treesitter_function(treewalker.swap_down),
+      swap_left = fix_treesitter_function(treewalker.swap_left),
     }
 
     vim.keymap.set({ "n", "x" }, "<M-k>", function()

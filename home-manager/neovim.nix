@@ -49,7 +49,10 @@
     source = ../.config/nvim/snippets;
     recursive = true;
   };
-  xdg.configFile."nvim/lua/g8.lua".source = ../.config/nvim/lua/g8.lua;
+  xdg.configFile."nvim/lua" = {
+    source = ../.config/nvim/lua;
+    recursive = true;
+  };
 
   programs.neovim.extraLuaConfig = builtins.readFile ../.config/nvim/init.lua;
 

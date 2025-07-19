@@ -4,6 +4,7 @@ require("lz.n").load({
   event = { "DeferredUIEnter" },
   after = function()
     local flash = require("flash")
+    local fix_treesitter_function = require("fix_treesitter_function")
 
     flash.setup({
       search = {
@@ -27,7 +28,7 @@ require("lz.n").load({
       },
     })
 
-    local flash_treesitter = _G.fix_treesitter_function(flash.treesitter)
+    local flash_treesitter = fix_treesitter_function(flash.treesitter)
 
     vim.keymap.set({ "n", "x", "o" }, "s", function()
       flash.jump()

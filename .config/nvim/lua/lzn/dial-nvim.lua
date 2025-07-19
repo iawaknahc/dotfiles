@@ -123,11 +123,13 @@ require("lz.n").load({
       ---@param cursor? integer
       ---@return { text?: string, cursor?: integer }
       add = function(text, addend, cursor)
+        local python_datetime = require("python_datetime")
+
         if vim.regex([[\v]] .. regex_rfc3339):match_str(text) then
           -- Remove the quotes.
           text = string.sub(text, 2, -2)
 
-          local unix = _G.rfc3339_to_unix(text)
+          local unix = python_datetime.rfc3339_to_unix(text)
           if unix ~= nil then
             text = tostring(unix)
             cursor = #text
@@ -138,7 +140,7 @@ require("lz.n").load({
         if vim.regex([[\v]] .. regex_unix):match_str(text) then
           local unix = tonumber(text)
           if unix ~= nil then
-            local rfc3339 = _G.unix_to_rfc3339(unix)
+            local rfc3339 = python_datetime.unix_to_rfc3339(unix)
             text = [["]] .. tostring(rfc3339) .. [["]]
             cursor = #text
             return { text = text, cursor = cursor }
