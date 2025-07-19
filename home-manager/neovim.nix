@@ -44,7 +44,10 @@
 
   xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
   xdg.configFile."nvim/.luarc.json".source = ../.config/nvim/.luarc.json;
-  xdg.configFile."nvim/plugin/grep.vim".source = ../.config/nvim/plugin/grep.vim;
+  xdg.configFile."nvim/plugin" = {
+    source = ../.config/nvim/plugin;
+    recursive = true;
+  };
   xdg.configFile."nvim/snippets" = {
     source = ../.config/nvim/snippets;
     recursive = true;
