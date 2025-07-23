@@ -87,6 +87,9 @@ in
             # JSON5
             json5
 
+            # Lisp
+            hy
+
             # Jupyter
             ipython
             jupyter-core
