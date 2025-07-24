@@ -1,0 +1,38 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    characteristics (1.7.1)
+      unicode-categories (~> 1.10)
+    paint (2.3.0)
+    rationalist (2.0.1)
+    symbolify (1.4.1)
+      characteristics (>= 0.8, < 2.0)
+    unicode-categories (1.10.0)
+    unicode-display_width (3.1.4)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
+    unicode-name (1.13.5)
+      unicode-types (~> 1.10)
+    unicode-sequence_name (1.15.3)
+    unicode-types (1.10.0)
+    unicode-version (1.5.0)
+    uniscribe (1.11.1)
+      characteristics (~> 1.7)
+      paint (>= 0.9, < 3.0)
+      rationalist (~> 2.0, >= 2.0.1)
+      symbolify (~> 1.4)
+      unicode-display_width (>= 2.6, < 4.0)
+      unicode-emoji (>= 3.5, < 5.0)
+      unicode-name (~> 1.13, >= 1.13.1)
+      unicode-sequence_name (~> 1.15)
+      unicode-version (~> 1.4)
+
+PLATFORMS
+  arm64-darwin-24
+  ruby
+
+DEPENDENCIES
+  uniscribe
+
+BUNDLED WITH
+   2.6.6
