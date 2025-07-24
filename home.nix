@@ -110,6 +110,8 @@
     ./home-manager/nodejs.nix
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix
+    # Ruby and its support packages.
+    ./home-manager/ruby.nix
     # Go and its support packages.
     ./home-manager/go.nix
 
