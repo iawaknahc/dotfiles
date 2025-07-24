@@ -26,9 +26,10 @@
     jo # https://github.com/jpmens/jo
     jq
 
-    # PDF
+    # PostScript and PDF
     qpdf
     poppler-utils
+    ghostscript
 
     # Filesystem
     bfs
