@@ -67,6 +67,9 @@
     # `sponge` is handy when you need to read and write to the same file with programs like `jq` and `sed`.
     moreutils
 
+    # JOSE
+    step-cli # https://github.com/smallstep/cli
+
     # Misc
     cloudflared
   ];
