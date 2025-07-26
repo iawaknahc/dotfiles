@@ -106,6 +106,23 @@ in
       ];
     })
 
+    # This program is known to be broken on nixpkgs
+    # See https://github.com/NixOS/nixpkgs/pull/420887
+    (pkgs.python3Packages.buildPythonApplication {
+      pname = "unicode";
+      version = "3.2";
+
+      pyproject = true;
+      build-system = [ pkgs.python3Packages.setuptools ];
+
+      src = pkgs.fetchFromGitHub {
+        owner = "garabik";
+        repo = "unicode";
+        rev = "fa4fa6118d68c693ee14b97df6bf12d2fdbb37df";
+        sha256 = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
+      };
+    })
+
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
       nativeBuildInputs = [
@@ -124,10 +141,6 @@ in
         python3 ./build_sqlite.py "$ucdxml_nounihan"/share/unicode/ucd.nounihan.flat.xml "$ucd"/share/unicode "$cldr_common"/share/unicode/cldr $out/share/unicode/unicode.sqlite3
       '';
     })
-
-    # This program is known to be broken on nixpkgs
-    # See https://github.com/NixOS/nixpkgs/pull/420887
-    unicode-paracode
   ];
   home.file.".unicode" = {
     source = "${ucd}/share/unicode";
