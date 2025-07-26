@@ -34,6 +34,8 @@ let
 in
 {
   home.packages = with pkgs; [
+    claude-code
+
     # From the overlay of natsukium/mcp-servers-nix
     #
     # As of 2025-06-08, Playwright supports full page screenshot out-of-the-box.
