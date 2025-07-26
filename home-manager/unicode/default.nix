@@ -1,9 +1,13 @@
 { pkgs, ... }:
 let
+  unicode_version = "16.0.0";
+  cldr_version = "47";
+  cldr_json_version = "47.0.0";
+
   ucdxml-nounihan = (
     pkgs.stdenvNoCC.mkDerivation rec {
       pname = "ucdxml-nounihan";
-      version = "16.0.0";
+      version = unicode_version;
       src = pkgs.fetchzip {
         url = "https://www.unicode.org/Public/${version}/ucdxml/ucd.nounihan.flat.zip";
         stripRoot = false;
@@ -18,7 +22,7 @@ let
   cldr-common = (
     pkgs.stdenvNoCC.mkDerivation rec {
       pname = "cldr-common";
-      version = "47";
+      version = cldr_version;
       src = pkgs.fetchzip {
         url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
         stripRoot = false;
@@ -27,6 +31,21 @@ let
       installPhase = ''
         mkdir -p $out/share/unicode/cldr
         mv common $out/share/unicode/cldr/
+      '';
+    }
+  );
+  cldr-json = (
+    pkgs.stdenvNoCC.mkDerivation rec {
+      pname = "cldr-json";
+      version = cldr_json_version;
+      src = pkgs.fetchzip {
+        url = "https://github.com/unicode-org/cldr-json/releases/download/${version}/cldr-${version}-json-full.zip";
+        stripRoot = false;
+        hash = "sha256-+xELEHy3hq2botBV6buouPuKMk8qWnokTsnV2h57jbQ=";
+      };
+      installPhase = ''
+        mkdir -p $out/share/unicode/cldr-json
+        mv cldr-* $out/share/unicode/cldr-json/
       '';
     }
   );
@@ -51,21 +70,8 @@ let
 in
 {
   home.packages = with pkgs; [
-    (stdenvNoCC.mkDerivation rec {
-      pname = "cldr-json";
-      version = "47.0.0";
-      src = fetchzip {
-        url = "https://github.com/unicode-org/cldr-json/releases/download/${version}/cldr-${version}-json-full.zip";
-        stripRoot = false;
-        hash = "sha256-+xELEHy3hq2botBV6buouPuKMk8qWnokTsnV2h57jbQ=";
-      };
-      installPhase = ''
-        mkdir -p $out/share/unicode/cldr-json
-        mv cldr-* $out/share/unicode/cldr-json/
-      '';
-    })
-
     cldr-common
+    cldr-json
     ucdxml-nounihan
     ucd
 
