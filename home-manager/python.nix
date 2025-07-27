@@ -89,6 +89,18 @@ in
 
             # Lisp
             hy
+            hyrule
+            (prevPythonPackages.buildPythonPackage rec {
+              pname = "py2hy";
+              version = "0.2.0";
+              pyproject = true;
+              build-system = [ prevPythonPackages.setuptools ];
+              dontCheckRuntimeDeps = true;
+              src = prev.fetchPypi {
+                inherit pname version;
+                hash = "sha256-sWn6oN8nVykqg3M9Aorh/xUP16MYHGp0YyvBAZN5zbs=";
+              };
+            })
 
             # Jupyter
             ipython
