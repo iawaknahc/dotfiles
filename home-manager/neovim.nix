@@ -112,6 +112,18 @@
         };
       })
 
+      # Language Plugins
+      (pkgs.vimUtils.buildVimPlugin {
+        pname = "vim-hy";
+        version = "2025-08-02";
+        src = pkgs.fetchFromGitHub {
+          owner = "hylang";
+          repo = "vim-hy";
+          rev = "ab1699bfa636e7355ac0030189331251c49c7d61";
+          hash = "sha256-KZf+qPwni/8wWaaQf8XD2hRd9LWiXqYGAePI5Y0aaCc=";
+        };
+      })
+
       ## Text editing
       # Unicode
       {
