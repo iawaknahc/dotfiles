@@ -71,6 +71,9 @@
     # JOSE
     step-cli # https://github.com/smallstep/cli
 
+    # REPL
+    rlwrap
+
     # Misc
     cloudflared
   ];
