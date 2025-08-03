@@ -10,7 +10,6 @@
 
 import argparse
 import re
-import sys
 from datetime import datetime, timedelta, timezone, tzinfo
 from typing import Optional
 from zoneinfo import ZoneInfo
@@ -202,11 +201,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        # The internet says 130 is a common exit code when the program
-        # was terminated with CTRL-C.
-        sys.exit(130)
-    except BrokenPipeError as exc:
-        sys.exit(exc.errno)
+    main()
