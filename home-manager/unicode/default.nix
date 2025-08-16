@@ -119,7 +119,7 @@ in
         owner = "garabik";
         repo = "unicode";
         rev = "fa4fa6118d68c693ee14b97df6bf12d2fdbb37df";
-        sha256 = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
+        hash = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
       };
     })
 
