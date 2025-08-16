@@ -109,6 +109,7 @@
     ./home-manager/lua.nix
     ./home-manager/nodejs.nix
     ./home-manager/clojure.nix
+    ./home-manager/janet.nix
     # Python and programs distributed as Python packages.
     ./home-manager/python.nix
     # Ruby and its support packages.
