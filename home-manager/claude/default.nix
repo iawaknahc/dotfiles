@@ -13,13 +13,11 @@ let
       context7 = {
         command = "${config.home.profileDirectory}/bin/context7-mcp";
       };
-      # For unknown reason, Claude Code does not know how to read PDF.
-      # See https://github.com/anthropics/claude-code/issues/1510
-      # But Claude API and Claude Desktop can read it.
-      # See https://docs.anthropic.com/en/docs/build-with-claude/pdf-support
-      markitdown-mcp = {
-        command = "${config.home.profileDirectory}/bin/markitdown-mcp";
-      };
+
+      # Since Claude Code 1.0.58, it can read PDF.
+      # So we no longer need markitdown-mcp.
+      # See https://github.com/anthropics/claude-code/issues/1510#issuecomment-3115208638
+
       # mcp-server-time is very limited.
       # On Claude Code, it is better ask to the Bash tool to do time related manipulation.
       # We do not use Claude Desktop for tasks that require access to the host system.
