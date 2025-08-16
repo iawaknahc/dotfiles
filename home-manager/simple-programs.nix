@@ -43,7 +43,6 @@
     shellcheck
 
     # Source code formatter
-    fnlfmt
     nixfmt-rfc-style
     prettierd
     shfmt
