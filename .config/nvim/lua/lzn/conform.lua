@@ -20,6 +20,7 @@ require("lz.n").load({
         css = prettier,
         dart = { "dart_format" },
         fish = { "fish_indent" },
+        -- One caveat of using cljfmt to format Hy is that f-string `f""` will be formatted to `f ""`, thus broken.
         hy = { "cljfmt" },
         nix = { "nixfmt" },
         swift = { "swiftformat" },
