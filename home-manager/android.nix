@@ -41,6 +41,7 @@
         ndk-25-1-8937393 # Used by React Native 0.73.x
         ndk-26-1-10909125 # Used by React Native 0.74.x, 0.75.x, 0.76.x
         ndk-27-1-12297006 # Used by React Native 0.77.x
+        ndk-27-3-13750724 # GitHub macos-15 runner
 
         # cmake
         cmake-3-6-4111459
