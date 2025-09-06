@@ -2,3 +2,6 @@
 
 # Convert PostScript to PDF
 ps2pdf input.ps output.pdf
+
+# Make a PDF file smaller
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
