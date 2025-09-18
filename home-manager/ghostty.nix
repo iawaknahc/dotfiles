@@ -49,10 +49,30 @@
     # we disable vi mode in shell.
     # Thus the cursor should look like a bar.
     cursor-style = "bar";
-    shell-integration = "none";
     cursor-style-blink = false;
+    # It is better not to set cursor-color and cursor-text.
+    #
+    # We want to be able to locate the cursor very easily.
+    # Thus, the cursor should always have the same color.
+    # If we set it to "cell-background", it will be indistinguishable from the cell background.
+    # If we set it to "cell-foreground", it will not always be the same easy-to-locate color.
+    #
+    # The theme we are using is Catppuccin, which defines cursor color and cursor text color.
+    # See https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md#terminals
 
-    # selection-foreground does not support cell-foreground
+    shell-integration = "none";
+
+    # selection-foreground supports cell-foreground since 1.2.0
     # See https://github.com/ghostty-org/ghostty/issues/2685
+    selection-foreground = "cell-foreground";
+
+    # selection background is Overlay 2 with 20% to 30% opacity.
+    # But ghostty does not support selection opacity as of 1.2.0
+    # See https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md#general-usage
+    # selection-background = "#9399b2";
+
+    # The cursor-text color is incorrect in dark flavors
+    # See https://github.com/catppuccin/ghostty/pull/16
+    cursor-text = "#11111b";
   };
 }
