@@ -1,5 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    catppuccin-whiskers
+  ];
   catppuccin.flavor = "mocha";
   catppuccin.accent = "blue";
   # Do not enable all supported programs.
