@@ -1,5 +1,12 @@
 { pkgs, ... }:
 {
+  # vivid set LS_COLORS
+  # https://github.com/sharkdp/vivid
+  programs.vivid.enable = true;
+  programs.vivid.enableBashIntegration = true;
+  programs.vivid.enableFishIntegration = true;
+  programs.vivid.enableZshIntegration = true;
+
   home.packages = with pkgs; [
     catppuccin-whiskers
   ];
@@ -19,5 +26,6 @@
   '';
   catppuccin.fish.enable = true;
   catppuccin.atuin.enable = true;
+  catppuccin.vivid.enable = true;
   # wezterm has catppuccin bundled so we need not enable it here.
 }
