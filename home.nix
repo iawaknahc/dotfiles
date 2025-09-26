@@ -96,6 +96,7 @@
     ./home-manager/direnv.nix
     ./home-manager/atuin.nix
     ./home-manager/zoxide.nix
+    ./home-manager/eza.nix
 
     # Collections of programs.
     ./home-manager/replace-macos-stock-programs.nix

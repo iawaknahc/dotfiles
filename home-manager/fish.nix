@@ -30,14 +30,19 @@ in
   # That copy of ls is not smart enough to show color when being called interactively in a terminal.
   # When we call `ls`, the fish function named `ls` is invoked, instead of invoking
   # the copy of `ls` that comes with the direnv-flake coreutils.
-  xdg.configFile."fish/functions/ls.fish" = {
-    enable = true;
-    text = ''
-      function ls
-        ${wrappers.ls} $argv
-      end
-    '';
-  };
+  #
+  # Since we now use eza, whose shell integration defines the `ls` function,
+  # we do not need this now.
+  #
+  # xdg.configFile."fish/functions/ls.fish" = {
+  #   enable = true;
+  #   text = ''
+  #     function ls
+  #       ${wrappers.ls} $argv
+  #     end
+  #   '';
+  # };
+
   xdg.configFile."fish/functions/grep.fish" = {
     enable = true;
     text = ''
