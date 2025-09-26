@@ -95,6 +95,7 @@
     ./home-manager/shell-completion.nix
     ./home-manager/direnv.nix
     ./home-manager/atuin.nix
+    ./home-manager/zoxide.nix
 
     # Collections of programs.
     ./home-manager/replace-macos-stock-programs.nix
