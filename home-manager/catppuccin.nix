@@ -16,6 +16,7 @@
   # Instead we explicitly enable the programs we want.
   catppuccin.enable = false;
   catppuccin.alacritty.enable = true;
+  catppuccin.btop.enable = true;
   catppuccin.ghostty.enable = true;
   catppuccin.kitty.enable = true;
   catppuccin.tmux.enable = true;

@@ -136,6 +136,7 @@
     ./home-manager/gcloud.nix
     ./home-manager/gnuinfo.nix
     # ./home-manager/codex
+    ./home-manager/btop.nix
     ./home-manager/fastfetch.nix
     ./home-manager/claude
     ./home-manager/tailscale.nix
