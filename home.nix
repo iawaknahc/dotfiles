@@ -66,6 +66,9 @@
     # Theme
     ./home-manager/catppuccin.nix
 
+    # AeroSpace
+    ./home-manager/aerospace.nix
+
     # Karabiner
     ./home-manager/karabiner.nix
 
