@@ -22,6 +22,19 @@
       }
     ];
 
+    gaps = {
+      inner = {
+        horizontal = 16;
+        vertical = 16;
+      };
+      outer = {
+        top = 16;
+        right = 16;
+        bottom = 16;
+        left = 16;
+      };
+    };
+
     mode.main.binding = {
       alt-h = "focus left";
       alt-j = "focus down";
@@ -29,6 +42,7 @@
       alt-l = "focus right";
 
       alt-r = "layout floating tiling";
+      alt-enter = "fullscreen";
 
       alt-shift-h = "move left";
       alt-shift-j = "move down";
@@ -86,7 +100,7 @@
         "workspace 9"
       ];
 
-      alt-shift-tab = "move-workspace-to-monitor --wrap-around next";
+      alt-tab = "move-workspace-to-monitor --wrap-around next";
     };
   };
 }
