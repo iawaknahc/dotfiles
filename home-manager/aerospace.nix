@@ -2,6 +2,8 @@
   ...
 }:
 {
+  services.jankyborders.enable = true;
+
   programs.aerospace.enable = true;
   programs.aerospace.userSettings = {
     enable-normalization-flatten-containers = true;
@@ -19,14 +21,14 @@
 
     gaps = {
       inner = {
-        horizontal = 16;
-        vertical = 16;
+        horizontal = 24;
+        vertical = 24;
       };
       outer = {
-        top = 16;
-        right = 16;
-        bottom = 16;
-        left = 16;
+        top = 24;
+        right = 24;
+        bottom = 24;
+        left = 24;
       };
     };
 
