@@ -102,5 +102,17 @@
 
       alt-tab = "move-workspace-to-monitor --wrap-around next";
     };
+
+    workspace-to-monitor-force-assignment = {
+      "1" = "main";
+      "2" = "main";
+      "3" = "main";
+      "4" = "main";
+      "5" = "main";
+      "6" = "main";
+      "7" = "main";
+      "8" = "main";
+      "9" = "secondary";
+    };
   };
 }
