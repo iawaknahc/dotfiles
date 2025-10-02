@@ -14,13 +14,8 @@
 
     key-mapping.preset = "qwerty";
 
-    on-window-detected = [
-      {
-        run = [
-          "layout floating"
-        ];
-      }
-    ];
+    # Make all windows tiled by default.
+    on-window-detected = [ ];
 
     gaps = {
       inner = {
