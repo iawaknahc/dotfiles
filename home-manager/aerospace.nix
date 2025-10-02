@@ -5,6 +5,7 @@
   services.jankyborders.enable = true;
 
   programs.aerospace.enable = true;
+  programs.aerospace.launchd.enable = true;
   programs.aerospace.userSettings = {
     enable-normalization-flatten-containers = true;
     enable-normalization-opposite-orientation-for-nested-containers = true;
