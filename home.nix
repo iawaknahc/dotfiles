@@ -66,8 +66,8 @@
     # Theme
     ./home-manager/catppuccin.nix
 
-    # AeroSpace
-    ./home-manager/aerospace.nix
+    # Tiling Window Manager
+    ./home-manager/tiling-window-manager.nix
 
     # Karabiner
     ./home-manager/karabiner.nix
