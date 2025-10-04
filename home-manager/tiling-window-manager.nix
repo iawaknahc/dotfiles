@@ -1,8 +1,32 @@
 {
+  pkgs,
+  config,
   ...
 }:
 {
   services.jankyborders.enable = true;
+
+  home.packages = with pkgs; [ sketchybar ];
+  xdg.configFile."sketchybar/sketchybarrc" = {
+    executable = true;
+    text = ''
+      #!${config.home.profileDirectory}/bin/lua
+
+      local aerospace = "${config.home.profileDirectory}/bin/aerospace";
+
+      ${builtins.readFile ../.config/sketchybar/sketchybarrc.lua}
+    '';
+  };
+  launchd.agents.sketchybar = {
+    enable = true;
+    config = {
+      Program = "${config.home.profileDirectory}/bin/sketchybar";
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/sketchybar.log";
+      StandardErrorPath = "/tmp/sketchybar.err.log";
+    };
+  };
 
   programs.aerospace.enable = true;
   programs.aerospace.launchd.enable = true;
@@ -14,6 +38,11 @@
     default-root-container-orientation = "auto";
 
     on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
+    exec-on-workspace-change = [
+      "/bin/sh"
+      "-c"
+      "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change AEROSPACE_FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE AEROSPACE_PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
+    ];
 
     key-mapping.preset = "qwerty";
 
@@ -28,7 +57,7 @@
       outer = {
         top = 24;
         right = 24;
-        bottom = 24;
+        bottom = 24 + 60 + 8;
         left = 24;
       };
     };
