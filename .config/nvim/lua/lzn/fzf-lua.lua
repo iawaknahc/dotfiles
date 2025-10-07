@@ -43,5 +43,15 @@ require("lz.n").load({
     vim.keymap.set("n", "<Space>D", "<CMD>FzfLua diagnostics_workspace<CR>", {
       desc = ":FzfLua diagnostics_workspace",
     })
+
+    -- The picker version of :chistory
+    vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix_stack<CR>", {
+      desc = ":FzfLua quickfix_stack",
+    })
+
+    -- The picker version of :lhistory
+    vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist_stack<CR>", {
+      desc = ":FzfLua loclist_stack",
+    })
   end,
 })
