@@ -18,6 +18,10 @@
     # https://github.com/sharkdp/hexyl
     hexyl
 
+    # IP and CIDR
+    ipcalc
+    subnetcalc
+
     # Database
     duckdb
     sqlite-interactive
