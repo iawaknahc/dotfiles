@@ -280,6 +280,12 @@
           }
         );
       }
+      # Rainbow delimiters for Lisp
+      {
+        type = "lua";
+        optional = true;
+        plugin = rainbow-delimiters-nvim;
+      }
 
       ## LSP and diagnostics
       {
