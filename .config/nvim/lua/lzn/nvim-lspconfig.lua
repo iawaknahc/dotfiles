@@ -45,6 +45,7 @@ require("lz.n").load({
     vim.lsp.enable("bashls") -- Bash or sh
     vim.lsp.enable("fish_lsp") -- fish
     vim.lsp.enable("lua_ls") -- Lua
+    vim.lsp.enable("fennel_ls") -- Fennel
     vim.lsp.enable("nil_ls") -- Nix
     vim.lsp.enable("sqls") -- SQL
     vim.lsp.enable("graphql") -- GraphQL
