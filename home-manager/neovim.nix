@@ -123,6 +123,7 @@
           hash = "sha256-KZf+qPwni/8wWaaQf8XD2hRd9LWiXqYGAePI5Y0aaCc=";
         };
       })
+      fennel-vim
 
       ## Text editing
       # Unicode
