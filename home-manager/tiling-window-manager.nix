@@ -68,13 +68,15 @@
       alt-k = "focus up";
       alt-l = "focus right";
 
-      alt-r = "layout floating tiling";
-      alt-enter = "fullscreen";
-
       alt-shift-h = "move left";
       alt-shift-j = "move down";
       alt-shift-k = "move up";
       alt-shift-l = "move right";
+
+      # This used to be alt-enter, but alt-enter sometimes conflict with Alfred Workflows.
+      alt-f = "fullscreen";
+
+      alt-shift-f = "layout floating tiling";
 
       alt-minus = "resize smart -50";
       alt-equal = "resize smart +50";
