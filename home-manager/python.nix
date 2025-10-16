@@ -82,6 +82,16 @@ in
 
             # Manipulating fonts
             fonttools
+
+            (pycangjie.overrideAttrs (prev: {
+              src = pkgs.fetchFromGitLab {
+                domain = "gitlab.freedesktop.org";
+                owner = "cangjie";
+                repo = "pycangjie";
+                rev = "de1fbcac194502b2fb03bc5df052e8bd7b3c3f20";
+                hash = "sha256-y1uJ4h/tTD6cTxLo8NWTuH277tvDaXfMX7adE/7kheA=";
+              };
+            }))
           ]
         );
       }
