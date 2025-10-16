@@ -49,12 +49,32 @@ def error():
     )
 
 
-def format_to_different_bases(i: int) -> List[str]:
+def format_to_different_bases(i: int) -> List[dict]:
     return [
-        f"{i:d}",
-        f"0x{i:x}",
-        f"0o{i:o}",
-        f"0b{i:b}",
+        {
+            "title": f"{i:d}",
+            "subtitle": "Decimal (Base 10)",
+            "type": "default",
+            "arg": f"{i:d}",
+        },
+        {
+            "title": f"0x{i:x}",
+            "subtitle": "Hexadecimal (Base 16)",
+            "type": "default",
+            "arg": f"0x{i:x}",
+        },
+        {
+            "title": f"0o{i:o}",
+            "subtitle": "Octal (Base 8)",
+            "type": "default",
+            "arg": f"0o{i:o}",
+        },
+        {
+            "title": f"0b{i:b}",
+            "subtitle": "Binary (Base 2)",
+            "type": "default",
+            "arg": f"0b{i:b}",
+        },
     ]
 
 
@@ -68,14 +88,7 @@ def main():
         return
 
     try:
-        items = [
-            {
-                "title": i,
-                "type": "default",
-                "arg": i,
-            }
-            for i in format_to_different_bases(string_to_int(arg))
-        ]
+        items = format_to_different_bases(string_to_int(arg))
         print(json.dumps({"items": items}, ensure_ascii=False))
     except ValueError:
         error()
