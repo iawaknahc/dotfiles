@@ -353,7 +353,7 @@
       {
         type = "lua";
         optional = true;
-        plugin = vim-slime;
+        plugin = conjure;
       }
     ]);
 }

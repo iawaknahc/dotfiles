@@ -211,6 +211,10 @@ require("lz.n").load({
 
         -- unicode.vim
         { mode = "n", keys = "<Leader>u", desc = "+Unicode" },
+
+        { mode = "n", keys = "<localleader>l", desc = "+Conjure: log" },
+        { mode = "n", keys = "<localleader>e", desc = "+Conjure: eval" },
+        { mode = "n", keys = "<localleader>em", desc = "+Conjure: eval mark" },
       },
     })
 
