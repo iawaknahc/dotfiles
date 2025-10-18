@@ -11,9 +11,12 @@ vim.cmd.filetype("indent", "off")
 -- https://github.com/neovim/neovim/blob/v0.10.1/runtime/lua/vim/treesitter/highlighter.lua#L138
 -- vim.cmd.syntax("off")
 
--- Security
--- https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+-- Hardening
+-- VIM / Neovim has a track record of vulnerable modeline.
+-- See https://www.cve.org/CVERecord?id=CVE-2016-1248
+-- See https://www.cve.org/CVERecord?id=CVE-2019-12735
 vim.o.modeline = false
+vim.o.modelines = 0
 
 -- colorscheme
 vim.cmd.colorscheme("catppuccin-mocha")
