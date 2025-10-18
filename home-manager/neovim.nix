@@ -329,8 +329,13 @@
         plugin = diffview-nvim;
       }
 
-      # Netrw
-      vim-vinegar
+      # Replace netrw.
+      # Treating directories as buffers is more intuitive for me.
+      {
+        type = "lua";
+        optional = true;
+        plugin = oil-nvim;
+      }
 
       ## Debugging
       {
