@@ -4,7 +4,7 @@ vim.g.loaded_netrwPlugin = 1
 require("lz.n").load({
   "oil.nvim",
   enabled = vim.g.pager_enabled ~= 1,
-  lazy = false,
+  lazy = false, -- The doc says lazy-loading is not recommended. See https://github.com/stevearc/oil.nvim?tab=readme-ov-file#installation
   after = function()
     vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Oil: open directory" })
 
