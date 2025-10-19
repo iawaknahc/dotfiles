@@ -40,6 +40,8 @@
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
     # Open fugitive.
     g = "nvim --cmd 'let g:fugitive_eager_load = 1' +G +only";
+    # Open diffview.
+    diffview = "nvim --cmd 'let g:diffview_eager_load = 1' +DiffviewFileHistory";
   };
 
   xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;

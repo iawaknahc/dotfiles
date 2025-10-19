@@ -1,8 +1,14 @@
+local lazy = vim.g.diffview_eager_load ~= 1
+local event = nil
+if lazy then
+  event = { "DeferredUIEnter" }
+end
+
 require("lz.n").load({
   "diffview.nvim",
   enabled = vim.g.pager_enabled ~= 1,
-  -- Eagerly load it so that `nvim +DiffviewFileHistory` works as expected.
-  lazy = false,
+  lazy = lazy,
+  event = event,
   after = function()
     require("diffview").setup({
       view = {
