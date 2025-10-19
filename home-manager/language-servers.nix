@@ -4,7 +4,7 @@
     awk-language-server # .awk
     bash-language-server # .sh
     docker-compose-language-service # docker-compose.yaml
-    dockerfile-language-server-nodejs # Dockerfile
+    dockerfile-language-server # Dockerfile
     fish-lsp # .fish
     gopls # .go
     graphql-language-service-cli # .graphql
