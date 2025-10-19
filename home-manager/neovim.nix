@@ -39,7 +39,7 @@
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
     # Open fugitive.
-    g = "nvim +G +only";
+    g = "nvim --cmd 'let g:fugitive_eager_load = 1' +G +only";
   };
 
   xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
