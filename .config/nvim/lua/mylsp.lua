@@ -8,13 +8,6 @@ vim.keymap.set({ "n" }, "gy", vim.lsp.buf.type_definition, {
   desc = "Go to type definition",
 })
 
--- Inspired by Helix space mode d
-vim.keymap.set("n", "<Space>d", function()
-  vim.diagnostic.setloclist()
-end, {
-  desc = ":lua vim.diagnostic.setloclist()",
-})
-
 -- After trying inlay hint for some time,
 -- I found it quite annoying.
 -- So do not enable it initially.
