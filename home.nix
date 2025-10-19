@@ -121,6 +121,7 @@
     ./home-manager/ruby.nix
     # Go and its support packages.
     ./home-manager/go.nix
+    ./home-manager/java.nix
 
     # Text editors.
     ./home-manager/vim.nix
@@ -144,7 +145,13 @@
     ./home-manager/claude
     ./home-manager/tailscale.nix
 
-    ./home-manager/android.nix
+    # Android SDK is now installed with a shell script.
+    # Managing Android SDK with Nix incurs an overhead when
+    # we update flake.lock.
+    # Every time we update flake.lock,
+    # the 40GB+ Android SDK has to be downloaded again.
+    # That is a waste in both bandwidth and time.
+
     # Flutter is now installed per project with flake.nix
   ];
 }

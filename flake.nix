@@ -7,10 +7,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    android-nixpkgs = {
-      url = "github:tadfisher/android-nixpkgs/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,7 +37,6 @@
       home-manager,
       nix-darwin,
       mac-app-util,
-      android-nixpkgs,
       catppuccin,
       mcp-servers-nix,
       ...
@@ -89,7 +84,6 @@
                 inherit
                   username
                   homeDirectory
-                  android-nixpkgs
                   mcp-servers-nix
                   ;
                 nixPath_nixpkgs = "${nixpkgs.outPath}";
