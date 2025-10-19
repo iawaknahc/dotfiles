@@ -7,7 +7,7 @@ require("lz.n").load({
   -- BufFilePost
   --
   -- We need to make sure it loads before these events fire.
-  lazy = false,
+  event = { "BufNewFile", "BufReadPost", "BufFilePost" },
   before = function()
     -- Prevent this plugin to turn on filetype indentation.
     -- https://github.com/tpope/vim-sleuth/blob/v1.2/plugin/sleuth.vim#L181

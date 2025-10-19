@@ -1,6 +1,6 @@
 require("lz.n").load({
   "unicode.vim",
-  lazy = false,
+  event = { "DeferredUIEnter" },
   before = function()
     -- Disable the default mappings and re-create them in after()
     -- The rationale is to supply description.

@@ -1,9 +1,9 @@
 require("lz.n").load({
   "rainbow-delimiters.nvim",
   enabled = vim.g.pager_enabled ~= 1,
-  -- This plugin listen FileType so it cannot be lazily-loaded.
+  -- This plugin listens FileType.
   -- See https://github.com/HiPhish/rainbow-delimiters.nvim/blob/v0.10.0/plugin/rainbow-delimiters.lua#L51
-  lazy = false,
+  event = { "FileType" },
   after = function()
     require("rainbow-delimiters.setup").setup({
       strategy = {

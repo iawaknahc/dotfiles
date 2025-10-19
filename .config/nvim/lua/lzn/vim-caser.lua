@@ -1,7 +1,7 @@
 require("lz.n").load({
   "vim-caser",
   enabled = vim.g.pager_enabled ~= 1,
-  lazy = false,
+  event = { "DeferredUIEnter" },
   before = function()
     vim.g.caser_no_mappings = 1
   end,
