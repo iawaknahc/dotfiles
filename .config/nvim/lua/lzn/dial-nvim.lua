@@ -167,11 +167,10 @@ require("lz.n").load({
       ---@param cursor? integer
       ---@return { text?: string, cursor?: integer }
       add = function(text, addend, cursor)
-        local utf8 = require("utf8")
+        local utf8 = require("lua-utf8")
         if vim.regex([[\v]] .. regex_iso_3166_1_alpha_2):match_str(text) then
           local codepoints = {}
-          for _, codepoint_str in utf8.codes(text) do
-            local codepoint = utf8.codepoint(codepoint_str)
+          for _, codepoint in utf8.codes(text) do
             -- 65 is ASCII A
             -- 0x1F1E6 is U+1F1E6
             table.insert(codepoints, codepoint - 65 + 0x1F1E6)
@@ -182,8 +181,7 @@ require("lz.n").load({
         end
         if vim.regex([[\v]] .. regex_unicode_tag_block):match_str(text) then
           local codepoints = {}
-          for _, codepoint_str in utf8.codes(text) do
-            local codepoint = utf8.codepoint(codepoint_str)
+          for _, codepoint in utf8.codes(text) do
             -- 65 is ASCII A
             -- 0x1F1E6 is U+1F1E6
             table.insert(codepoints, codepoint - 0x1F1E6 + 65)

@@ -18,6 +18,7 @@ in
     # https://github.com/luarocks/luarocks/issues/1797
     (lua.withPackages (
       packages: with packages; [
+        luautf8
         fennel
         luarocks
         # llscheck requires lua-language-server on PATH.
