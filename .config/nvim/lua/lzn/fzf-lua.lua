@@ -1,8 +1,10 @@
 require("lz.n").load({
   "fzf-lua",
-  enabled = true,
-  -- I find it starts too late if we load it at DeferredUIEnter.
-  lazy = false,
+  enabled = vim.g.pager_enabled ~= 1,
+  -- It used to be eager-loaded.
+  -- But on 2025-10-19, it seems that lazy-loading it does not introduce a problem.
+  -- Let's try keeping it lazy-loaded then.
+  event = { "DeferredUIEnter" },
   after = function()
     require("fzf-lua").setup({
       fzf_opts = {
