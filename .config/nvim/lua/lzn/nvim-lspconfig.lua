@@ -1,6 +1,6 @@
 require("lz.n").load({
   "nvim-lspconfig",
-  lazy = false,
+  event = { "DeferredUIEnter" },
   after = function()
     -- On 2025-06-24, I tried neovim 0.11 :h lsp-completion
     -- The auto-complete without configuration depends on the language server's triggerCharacters.
