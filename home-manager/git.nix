@@ -20,12 +20,11 @@
     ".direnv/"
   ];
 
-  programs.git.aliases = {
-    dlog = "-c diff.external=difft log --ext-diff --patch";
-    dshow = "-c diff.external=difft show --ext-diff";
-  };
-
-  programs.git.extraConfig = {
+  programs.git.settings = {
+    alias = {
+      dlog = "-c diff.external=difft log --ext-diff --patch";
+      dshow = "-c diff.external=difft show --ext-diff";
+    };
     commit = {
       # Show git diff --cached and git diff at the end of the commit message template.
       # https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---verbose
