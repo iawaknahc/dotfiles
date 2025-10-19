@@ -1,10 +1,14 @@
 -- Inspired by gd
-vim.keymap.set({ "n" }, "gD", vim.lsp.buf.declaration, {
+vim.keymap.set({ "n" }, "gD", function()
+  vim.lsp.buf.declaration()
+end, {
   desc = "Go to declaration",
 })
 
 -- Inspired by Helix goto mode y
-vim.keymap.set({ "n" }, "gy", vim.lsp.buf.type_definition, {
+vim.keymap.set({ "n" }, "gy", function()
+  vim.lsp.buf.type_definition()
+end, {
   desc = "Go to type definition",
 })
 
