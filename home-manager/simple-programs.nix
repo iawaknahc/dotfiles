@@ -19,8 +19,11 @@
     hexyl
 
     # IP and CIDR
-    ipcalc
     subnetcalc
+    # FIXME: https://github.com/NixOS/nixpkgs/issues/449970
+    # ipcalc has this dependency chain:
+    # ipcalc -> ronn -> nokogiri
+    # ipcalc
 
     # Database
     duckdb
@@ -62,7 +65,11 @@
     mat2
     tesseract # OCR
     qrencode # Write QR code
-    zbar # Read QR code
+
+    # FIXME: https://github.com/NixOS/nixpkgs/issues/338863
+    #
+    # The test of zbar failed to run on my machine.
+    # zbar # Read QR code
 
     # Multimedia processing
     ffmpeg

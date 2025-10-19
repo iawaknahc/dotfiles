@@ -9,7 +9,10 @@
     "--disable-up-arrow"
   ];
 
-  programs.atuin.enableBashIntegration = true;
+  # FIXME: https://github.com/NixOS/nixpkgs/issues/449970
+  # The bash shell integration of atuin has this dependency chain:
+  # atuin -> bash-preexec -> bats -> flock -> ronn -> nokogiri
+  programs.atuin.enableBashIntegration = false;
   programs.bash.bashrcExtra = ''
     unset HISTFILE
   '';
