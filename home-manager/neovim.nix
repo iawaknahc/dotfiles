@@ -156,23 +156,6 @@
         optional = true;
         plugin = treewalker-nvim;
       }
-      # Change cases.
-      {
-        type = "lua";
-        optional = true;
-        plugin = (
-          pkgs.vimUtils.buildVimPlugin {
-            pname = "vim-caser";
-            version = "2025-05-28";
-            src = pkgs.fetchFromGitHub {
-              owner = "arthurxavierx";
-              repo = "vim-caser";
-              rev = "6bc9f41d170711c58e0157d882a5fe8c30f34bf6";
-              hash = "sha256-PXAY01O/cHvAdWx3V/pyWFeiV5qJGvLcAKhl5DQc0Ps=";
-            };
-          }
-        );
-      }
       # Split or join blocks of code.
       {
         type = "lua";
