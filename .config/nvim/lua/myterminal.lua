@@ -1,9 +1,10 @@
 local myterminal_autocmdgroup = vim.api.nvim_create_augroup("MyTerminal", { clear = true })
 
--- Press <Esc> to exit terminal-mode
-vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {
-  desc = "<Esc> in terminal mode",
-})
+-- There is no additional keymap to go to normal mode.
+-- Just hit <C-\><C-N>
+--
+-- If we map <Esc> to <C-\><C-N>, then we need to introduce a keymap to feed <Esc> to the terminal.
+-- If we map <C-\><C-\> to <C-\><C-n>, then we need to introduce a keymap to feed <C-\> to the terminal.
 
 -- :lcd with OSC 7
 vim.api.nvim_create_autocmd({ "TermRequest" }, {
