@@ -151,6 +151,7 @@
     # Every time we update flake.lock,
     # the 40GB+ Android SDK has to be downloaded again.
     # That is a waste in both bandwidth and time.
+    ./home-manager/android.nix
 
     # Flutter is now installed per project with flake.nix
   ];
