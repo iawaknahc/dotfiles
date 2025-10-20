@@ -12,6 +12,8 @@ rm -r "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest"
 unzip "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest.zip" -d "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest"
 
 yes | "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest/cmdline-tools/bin/sdkmanager" --sdk_root="$ANDROID_HOME" --licenses
+# The judgement of how many Android versions to keep is by referencing which versions are installed in GitHub Actions images.
+# See https://github.com/actions/runner-images/tree/main/images/macos
 xargs "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest/cmdline-tools/bin/sdkmanager" --sdk_root="$ANDROID_HOME" --install <<EOF
 cmdline-tools;latest
 platform-tools
@@ -42,40 +44,6 @@ extras;google;market_apk_expansion
 extras;google;market_licensing
 extras;google;simulators
 extras;google;webdriver
-
-platforms;android-28
-sources;android-28
-build-tools;28.0.0
-build-tools;28.0.1
-build-tools;28.0.2
-build-tools;28.0.3
-system-images;android-28;google_apis_playstore;arm64-v8a
-
-platforms;android-29
-sources;android-29
-build-tools;29.0.0
-build-tools;29.0.1
-build-tools;29.0.2
-build-tools;29.0.3
-system-images;android-29;google_apis_playstore;arm64-v8a
-
-platforms;android-30
-sources;android-30
-build-tools;30.0.0
-build-tools;30.0.1
-build-tools;30.0.2
-build-tools;30.0.3
-system-images;android-30;google_apis_playstore;arm64-v8a
-
-platforms;android-31
-sources;android-31
-build-tools;31.0.0
-system-images;android-31;google_apis_playstore;arm64-v8a
-
-platforms;android-32
-sources;android-32
-build-tools;32.0.0
-system-images;android-32;google_apis_playstore;arm64-v8a
 
 platforms;android-33
 sources;android-33
