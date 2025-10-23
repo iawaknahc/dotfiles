@@ -1,2 +1,2 @@
 source "https://rubygems.org"
-gem "uniscribe"
+gem "uniscribe", "1.12.0"
