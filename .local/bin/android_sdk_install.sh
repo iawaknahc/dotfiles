@@ -8,7 +8,7 @@ VERSION="13114758"
 ANDROID_HOME="$HOME/.local/share/android"
 
 wget "https://dl.google.com/android/repository/commandlinetools-${PLATFORM}-${VERSION}_latest.zip" -O "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest.zip"
-rm -r "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest"
+rm -rf "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest"
 unzip "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest.zip" -d "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest"
 
 yes | "/tmp/commandlinetools-${PLATFORM}-${VERSION}_latest/cmdline-tools/bin/sdkmanager" --sdk_root="$ANDROID_HOME" --licenses
