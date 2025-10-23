@@ -69,16 +69,7 @@ in
             rich
 
             # Manipulating colors
-            (prevPythonPackages.buildPythonPackage rec {
-              pname = "coloraide";
-              version = "4.7.2";
-              pyproject = true;
-              build-system = [ prevPythonPackages.hatchling ];
-              src = prev.fetchPypi {
-                inherit pname version;
-                hash = "sha256-fomOKtF3hzgJvR9f2x2QYYrYdASf6tlS/0Rw0VdmbUs=";
-              };
-            })
+            coloraide
 
             # Manipulating fonts
             fonttools
