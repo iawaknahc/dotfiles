@@ -30,13 +30,10 @@ in
     patch
     perl
 
-    # FIXME: https://github.com/NixOS/nixpkgs/issues/452394
-    # As of 2025-10-19 of nixpkgs-unstable, the fix of the above does not land yet.
-    #
     # Install GNU Time
     # This program does not come with a manpage.
     # Instead, it uses GNU Texinfo.
-    # time
+    time
 
     unzip
     xz
