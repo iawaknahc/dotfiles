@@ -204,6 +204,8 @@ require("lz.n").load({
 
         { mode = "n", keys = "<Leader>t", desc = "+Table mode" },
 
+        { mode = "n", keys = "<Leader>w", desc = "+Treewalker" },
+
         { mode = "n", keys = "gr", desc = "+LSP" },
 
         { mode = "n", keys = "<Leader>s", desc = "+Surround" },

@@ -2,8 +2,9 @@
 -- This may not be true if I do not have another plugin doing that.
 -- So we make this wrapper function to wrap any problematic plugin function.
 --
----@param fn function
----@return function
+---@generic F: function
+---@param fn F
+---@return F
 local function fix_treesitter_function(fn)
   return function(...)
     local ok, parser = pcall(vim.treesitter.get_parser)
