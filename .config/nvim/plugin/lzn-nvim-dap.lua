@@ -45,28 +45,60 @@ require("lz.n").load({
     require("lz.n").trigger_load("nvim-dap-go")
     require("lz.n").trigger_load("nvim-dap-python")
 
-    vim.keymap.set("n", "<Leader>dc", function()
-      require("dap").continue()
-    end, { desc = "Debugger: Continue" })
+    local make_repeatable = require("dot-repeat").make_repeatable
 
-    vim.keymap.set("n", "<Leader>db", function()
-      require("dap").step_over()
-    end, { desc = "Debugger: Step over (beyond)" })
+    vim.keymap.set(
+      "n",
+      "<Leader>dc",
+      make_repeatable("dap_continue", function()
+        require("dap").continue()
+      end),
+      { expr = true, desc = "Debugger: Continue" }
+    )
 
-    vim.keymap.set("n", "<Leader>di", function()
-      require("dap").step_into()
-    end, { desc = "Debugger: Step into" })
+    vim.keymap.set(
+      "n",
+      "<Leader>db",
+      make_repeatable("dap_step_over", function()
+        require("dap").step_over()
+      end),
+      { expr = true, desc = "Debugger: Step over (beyond)" }
+    )
 
-    vim.keymap.set("n", "<Leader>do", function()
-      require("dap").step_out()
-    end, { desc = "Debugger: Step out" })
+    vim.keymap.set(
+      "n",
+      "<Leader>di",
+      make_repeatable("dap_step_into", function()
+        require("dap").step_into()
+      end),
+      { expr = true, desc = "Debugger: Step into" }
+    )
 
-    vim.keymap.set("n", "<Leader>dr", function()
-      require("dap").repl.toggle()
-    end, { desc = "Debugger: Toggle REPL" })
+    vim.keymap.set(
+      "n",
+      "<Leader>do",
+      make_repeatable("dap_step_out", function()
+        require("dap").step_out()
+      end),
+      { expr = true, desc = "Debugger: Step out" }
+    )
 
-    vim.keymap.set({ "n", "x" }, "<Leader>dK", function()
-      require("dap.ui.widgets").hover()
-    end, { desc = "Debugger: Hover" })
+    vim.keymap.set(
+      "n",
+      "<Leader>dr",
+      make_repeatable("dap_toggle", function()
+        require("dap").repl.toggle()
+      end),
+      { expr = true, desc = "Debugger: Toggle REPL" }
+    )
+
+    vim.keymap.set(
+      { "n", "x" },
+      "<Leader>dK",
+      make_repeatable("dap_hover", function()
+        require("dap.ui.widgets").hover()
+      end),
+      { expr = true, desc = "Debugger: Hover" }
+    )
   end,
 })
