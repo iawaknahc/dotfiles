@@ -146,6 +146,9 @@ vim.opt.diffopt = {
   "linematch:60",
 }
 
+-- session
+vim.o.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"
+
 require("mycommand")
 require("mydiagnostic")
 require("myfiletype")
