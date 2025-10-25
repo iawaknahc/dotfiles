@@ -122,74 +122,62 @@
       ## Text editing
       # Unicode
       {
-        type = "lua";
         optional = true;
         plugin = unicode-vim;
       }
       # Text objects.
       {
-        type = "lua";
         optional = true;
         plugin = mini-ai;
       }
       # Edit surroundings.
       {
-        type = "lua";
         optional = true;
         plugin = mini-surround;
       }
       # Motion
       {
-        type = "lua";
         optional = true;
         plugin = flash-nvim;
       }
       # Completion
       {
-        type = "lua";
         optional = true;
         plugin = blink-cmp;
       }
       # Swap treesitter nodes.
       {
-        type = "lua";
         optional = true;
         plugin = treewalker-nvim;
       }
       # Split or join blocks of code.
       {
-        type = "lua";
         optional = true;
         plugin = treesj;
       }
       # Enhanced version of :h CTRL-A and :h CTRL-X.
       {
-        type = "lua";
         optional = true;
         plugin = dial-nvim;
       }
       # Edit table.
       {
-        type = "lua";
         optional = true;
         plugin = vim-table-mode;
       }
       # Make indentation right.
       {
-        type = "lua";
         optional = true;
         plugin = vim-sleuth;
       }
       # Improve :h quickfix and :h location-list
       {
-        type = "lua";
         optional = true;
         plugin = nvim-pqf;
       }
 
       ## Pick things.
       {
-        type = "lua";
         optional = true;
         plugin = fzf-lua;
       }
@@ -197,37 +185,31 @@
       ## Visual aids
       # statusline
       {
-        type = "lua";
         optional = true;
         plugin = mini-statusline;
       }
       # statuscolumn
       {
-        type = "lua";
         optional = true;
         plugin = statuscol-nvim;
       }
       # vim.notify
       {
-        type = "lua";
         optional = true;
         plugin = nvim-notify;
       }
       # Key clues and submodes.
       {
-        type = "lua";
         optional = true;
         plugin = mini-clue;
       }
       # Show context.
       {
-        type = "lua";
         optional = true;
         plugin = nvim-treesitter-context;
       }
       # Show colors.
       {
-        type = "lua";
         plugin = (
           pkgs.vimUtils.buildVimPlugin {
             pname = "nvim-colors";
@@ -243,48 +225,40 @@
       }
       # Rainbow delimiters for Lisp
       {
-        type = "lua";
         optional = true;
         plugin = rainbow-delimiters-nvim;
       }
 
       ## LSP and diagnostics
       {
-        type = "lua";
         optional = true;
         plugin = nvim-lspconfig;
       }
       {
-        type = "lua";
         optional = true;
         plugin = nvim-lint;
       }
 
       ## Automation
       {
-        type = "lua";
         optional = true;
         plugin = conform-nvim;
       }
 
       ## Git integration
       {
-        type = "lua";
         optional = true;
         plugin = vim-fugitive;
       }
       {
-        type = "lua";
         optional = true;
         plugin = vim-rhubarb;
       }
       {
-        type = "lua";
         optional = true;
         plugin = gitsigns-nvim;
       }
       {
-        type = "lua";
         optional = true;
         plugin = diffview-nvim;
       }
@@ -292,31 +266,26 @@
       # Replace netrw.
       # Treating directories as buffers is more intuitive for me.
       {
-        type = "lua";
         optional = true;
         plugin = oil-nvim;
       }
 
       ## Debugging
       {
-        type = "lua";
         optional = true;
         plugin = nvim-dap;
       }
       {
-        type = "lua";
         optional = true;
         plugin = nvim-dap-go;
       }
       {
-        type = "lua";
         optional = true;
         plugin = nvim-dap-python;
       }
 
       ## REPL
       {
-        type = "lua";
         optional = true;
         plugin = conjure;
       }
