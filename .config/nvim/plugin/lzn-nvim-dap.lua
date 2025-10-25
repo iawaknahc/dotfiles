@@ -45,28 +45,28 @@ require("lz.n").load({
     require("lz.n").trigger_load("nvim-dap-go")
     require("lz.n").trigger_load("nvim-dap-python")
 
-    vim.keymap.set("n", "<F5>", function()
+    vim.keymap.set("n", "<Leader>dc", function()
       require("dap").continue()
-    end, { desc = "Debugger continue" })
+    end, { desc = "Debugger: Continue" })
 
-    vim.keymap.set("n", "<F10>", function()
+    vim.keymap.set("n", "<Leader>db", function()
       require("dap").step_over()
-    end, { desc = "Debugger step over" })
+    end, { desc = "Debugger: Step over (beyond)" })
 
-    vim.keymap.set("n", "<F11>", function()
+    vim.keymap.set("n", "<Leader>di", function()
       require("dap").step_into()
-    end, { desc = "Debugger step into" })
+    end, { desc = "Debugger: Step into" })
 
-    vim.keymap.set("n", "<F12>", function()
+    vim.keymap.set("n", "<Leader>do", function()
       require("dap").step_out()
-    end, { desc = "Debugger step out" })
+    end, { desc = "Debugger: Step out" })
 
-    vim.keymap.set("n", "<Space>R", function()
+    vim.keymap.set("n", "<Leader>dr", function()
       require("dap").repl.toggle()
-    end, { desc = "Debugger toggle REPL" })
+    end, { desc = "Debugger: Toggle REPL" })
 
-    vim.keymap.set({ "n", "x" }, "<Space>K", function()
+    vim.keymap.set({ "n", "x" }, "<Leader>dK", function()
       require("dap.ui.widgets").hover()
-    end, { desc = "Debugger hover" })
+    end, { desc = "Debugger: Hover" })
   end,
 })

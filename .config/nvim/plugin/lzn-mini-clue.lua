@@ -209,6 +209,9 @@ require("lz.n").load({
         { mode = "n", keys = "<Leader>s", desc = "+Surround" },
         { mode = "x", keys = "<Leader>s", desc = "+Surround" },
 
+        { mode = "n", keys = "<Leader>d", desc = "+Debugger" },
+        { mode = "x", keys = "<Leader>d", desc = "+Debugger" },
+
         -- unicode.vim
         { mode = "n", keys = "<Leader>u", desc = "+Unicode" },
 
