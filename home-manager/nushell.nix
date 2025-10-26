@@ -2,7 +2,6 @@
 {
   programs.nushell.enable = true;
   programs.nushell.shellAliases = config.home.shellAliases;
-  programs.nushell.envFile.source = ../.config/nushell/env.nu;
   programs.nushell.configFile.source = ../.config/nushell/config.nu;
   # Install official plugins.
   programs.nushell.plugins = [
