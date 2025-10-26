@@ -26,6 +26,7 @@
     set -g @catppuccin_window_current_number_color "#{@thm_yellow}"
   '';
   catppuccin.fish.enable = true;
+  catppuccin.nushell.enable = true;
   catppuccin.atuin.enable = true;
   catppuccin.vivid.enable = true;
   services.jankyborders.settings = {
