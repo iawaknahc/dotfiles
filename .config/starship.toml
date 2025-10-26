@@ -22,6 +22,9 @@ unloaded_msg = ""
 
 # When I press <C-z> to background nvim,
 # I would like to remind myself about this.
+#
+# FIXME: starship jobs does not work on nushell
+# Seehttps://starship.rs/config/#jobs
 [jobs]
 symbol_threshold = 1
 number_threshold = 1
