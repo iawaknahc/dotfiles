@@ -22,6 +22,9 @@
 alias nu-open = open
 alias open = ^open
 
+# https://www.nushell.sh/book/background_jobs.html#job-suspension
+alias fg = job unfreeze
+
 # https://www.nushell.sh/book/configuration.html#remove-welcome-message
 $env.config.show_banner = false
 
