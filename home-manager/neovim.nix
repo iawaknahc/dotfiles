@@ -59,8 +59,6 @@
     recursive = true;
   };
 
-  programs.neovim.extraLuaConfig = builtins.readFile ../.config/nvim/init.lua;
-
   programs.neovim.extraLuaPackages = (
     luaPkgs: with luaPkgs; [
       luautf8
