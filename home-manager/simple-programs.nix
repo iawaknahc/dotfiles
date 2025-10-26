@@ -20,10 +20,7 @@
 
     # IP and CIDR
     subnetcalc
-    # FIXME: https://github.com/NixOS/nixpkgs/issues/449970
-    # ipcalc has this dependency chain:
-    # ipcalc -> ronn -> nokogiri
-    # ipcalc
+    ipcalc
 
     # Database
     duckdb
