@@ -11,26 +11,6 @@ $env.config.show_banner = false
 # In preparation for using neovim as default terminal program,
 # we disable vi mode in shell.
 # $env.config.edit_mode = "vi";
-$env.PROMPT_INDICATOR_VI_NORMAL = {||
-  let mode = $"(ansi red_bold)N(ansi reset)"
-  let exit_code = $env.LAST_EXIT_CODE
-  let prompt = if $exit_code == 0 {
-    $"$"
-  } else {
-    $"(ansi red_bold)($exit_code) $(ansi reset)"
-  }
-  $"($mode) ($prompt) "
-}
-$env.PROMPT_INDICATOR_VI_INSERT = {||
-  let mode = $"(ansi green_bold)I(ansi reset)"
-  let exit_code = $env.LAST_EXIT_CODE
-  let prompt = if $exit_code == 0 {
-    $"$"
-  } else {
-    $"(ansi red_bold)($exit_code) $(ansi reset)"
-  }
-  $"($mode) ($prompt) "
-}
 
 # WARNING: nix-darwin setEnvironment.sh is not sourced.
 # WARNING: home.sessionVariables are not respected.
