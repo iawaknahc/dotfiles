@@ -56,6 +56,9 @@
         cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
     };
+    init = {
+      defaultBranch = "main";
+    };
     merge = {
       # Always be explicit.
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-mergedefaultToUpstream
