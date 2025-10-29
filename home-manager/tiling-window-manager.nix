@@ -68,6 +68,9 @@
       alt-k = "focus up";
       alt-l = "focus right";
 
+      alt-n = "focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next";
+      alt-p = "focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-prev";
+
       alt-shift-h = "move left";
       alt-shift-j = "move down";
       alt-shift-k = "move up";
