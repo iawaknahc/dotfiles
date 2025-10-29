@@ -63,6 +63,9 @@
       # Make git merge --no-ff by default.
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-mergeff
       ff = false;
+      # Show the original text indicated by ||||||| before =======
+      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-mergeconflictStyle
+      conflictStyle = "zdiff3";
     };
     push = {
       # Always be explicit.
