@@ -3,12 +3,15 @@ local M = {}
 ---@param s string
 ---@return { scheme: string, netloc: string, path: string, query: string, fragment: string }
 function M.urlsplit(s)
-  local bak = vim.fn.getreginfo("a")
-  vim.fn.setreg("a", s)
+  vim.g.python_string = s
+
   vim.cmd([[python << EOF
 import json
 import urllib.parse
-s = vim.eval("@a")
+
+import vim
+
+s = vim.vars["python_string"]
 split_result = urllib.parse.urlsplit(s)
 serialized = json.dumps({
   "scheme": split_result.scheme,
@@ -17,14 +20,13 @@ serialized = json.dumps({
   "query": split_result.query,
   "fragment": split_result.fragment,
 })
-vim.command("let @a=" + repr(serialized))
+vim.vars["python_string"] = serialized
 EOF
 ]])
-  -- https://github.com/neovim/neovim/pull/34215
-  ---@diagnostic disable-next-line: redundant-parameter
-  local result = vim.fn.getreg("a", 1, false) --[[@as string]]
-  vim.fn.setreg("a", bak)
-  return vim.json.decode(result)
+
+  local ret = vim.json.decode(vim.g.python_string)
+  vim.g.python_string = nil
+  return ret
 end
 
 return M

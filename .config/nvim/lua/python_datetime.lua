@@ -3,45 +3,47 @@ local M = {}
 ---@param rfc3339 string
 ---@return integer?
 function M.rfc3339_to_unix(rfc3339)
-  local bak = vim.fn.getreginfo("a")
-  vim.fn.setreg("a", rfc3339)
+  vim.g.python_string = rfc3339
+
   vim.cmd([[python << EOF
 import math
-import vim
 from datetime import datetime
-rfc3339 = vim.eval("@a")
+
+import vim
+
+rfc3339 = vim.vars["python_string"]
 dt = datetime.fromisoformat(rfc3339)
 unix = str(math.floor(dt.timestamp()))
-vim.command("let @a=" + unix)
+vim.vars["python_string"] = unix
 EOF
 ]])
 
-  -- https://github.com/neovim/neovim/pull/34215
-  ---@diagnostic disable-next-line: redundant-parameter
-  local result = vim.fn.getreg("a", 1, false)
-  vim.fn.setreg("a", bak)
-  return tonumber(result)
+  local ret = tonumber(vim.g.python_string)
+  vim.g.python_string = nil
+
+  return ret
 end
 
 ---@param unix integer
 ---@return string
 function M.unix_to_rfc3339(unix)
-  local bak = vim.fn.getreginfo("a")
-  vim.fn.setreg("a", tostring(unix))
+  vim.g.python_string = tostring(unix)
+
   vim.cmd([[python << EOF
 from datetime import datetime, timezone
-unix = int(vim.eval("@a"))
+
+import vim
+
+unix = int(vim.vars["python_string"])
 dt = datetime.fromtimestamp(unix, timezone.utc)
 formatted = dt.isoformat().replace("+00:00", "Z")
-vim.command("let @a=" + repr(formatted))
+vim.vars["python_string"] = formatted
 EOF
 ]])
 
-  -- https://github.com/neovim/neovim/pull/34215
-  ---@diagnostic disable-next-line: redundant-parameter
-  local result = vim.fn.getreg("a", 1, false) --[[@as string]]
-  vim.fn.setreg("a", bak)
-  return result
+  local ret = vim.g.python_string
+  vim.g.python_string = nil
+  return ret
 end
 
 return M
