@@ -63,10 +63,9 @@
     tesseract # OCR
     qrencode # Write QR code
 
-    # FIXME: https://github.com/NixOS/nixpkgs/issues/338863
-    #
+    # https://github.com/NixOS/nixpkgs/pull/459044
     # The test of zbar failed to run on my machine.
-    # zbar # Read QR code
+    zbar # Read QR code
 
     # Multimedia processing
     ffmpeg
