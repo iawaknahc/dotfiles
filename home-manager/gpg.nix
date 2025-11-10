@@ -28,6 +28,10 @@ in
     # Change some defaults implied by programs.gpg.settings.
     cert-digest-algo = "SHA256";
     s2k-digest-algo = "SHA256";
+
+    # Show expired uids and subkeys, otherwise it is hard to tell they were there.
+    list-options = "show-unusable-uids,show-unusable-subkeys";
+    verify-options = "show-unusable-uids";
   };
 
   home.file."${config.programs.gpg.homedir}/dirmngr.conf".source = ../.gnupg/dirmngr.conf;
