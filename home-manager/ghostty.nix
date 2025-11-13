@@ -1,13 +1,7 @@
 { config, pkgs, ... }:
 {
   programs.ghostty.enable = true;
-  programs.ghostty.package = (
-    pkgs.writeShellScriptBin "ghostty" ''
-      # ghostty on macOS is broken.
-      # So this is a wrapper script that invokes the actual ghostty installed with .dmg.
-      /Applications/Ghostty.app/Contents/MacOS/ghostty "$@"
-    ''
-  );
+  programs.ghostty.package = pkgs.ghostty-bin;
   programs.ghostty.enableBashIntegration = false;
   programs.ghostty.enableFishIntegration = false;
   programs.ghostty.enableZshIntegration = false;
