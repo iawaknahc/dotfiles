@@ -19,14 +19,6 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mac-app-util = {
-      url = "github:hraban/mac-app-util";
-      # mac-app-util depends on sbcl,
-      # and sbcl sometimes does not build on my machine.
-      # Let's use the version that is known to be working.
-      # inputs.nixpkgs.follows = "nixpkgs";
-      inputs.treefmt-nix.follows = "treefmt-nix";
-    };
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,7 +35,6 @@
       flake-utils,
       home-manager,
       nix-darwin,
-      mac-app-util,
       catppuccin,
       mcp-servers-nix,
       nur,
@@ -102,7 +93,6 @@
                 nixPath_for-nixd = "${./.}";
               };
               modules = [
-                mac-app-util.homeManagerModules.default
                 catppuccin.homeModules.catppuccin
                 ./home.nix
               ];
