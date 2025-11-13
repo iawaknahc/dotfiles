@@ -15,3 +15,8 @@ alfred-rsync:
 .PHONY: alfred-clean
 alfred-clean:
 	git clean -fx ./alfred
+
+.PHONY: test
+test:
+	nix-unit ./lib/md5toUUID.test.nix
+	nix-unit ./lib/userscript_metadata_block/default.test.nix

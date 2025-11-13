@@ -3,6 +3,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,6 +46,7 @@
       mac-app-util,
       catppuccin,
       mcp-servers-nix,
+      nur,
       ...
     }:
     let
@@ -88,6 +93,7 @@
                   username
                   homeDirectory
                   mcp-servers-nix
+                  nur
                   ;
                 nixPath_nixpkgs = "${nixpkgs.outPath}";
                 nixPath_home-manager = "${home-manager.outPath}";

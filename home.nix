@@ -7,6 +7,7 @@
   nixPath_darwin-config,
   nixPath_for-nixd,
   mcp-servers-nix,
+  nur,
   ...
 }:
 {
@@ -16,6 +17,7 @@
 
     nixpkgs.overlays = [
       mcp-servers-nix.overlays.default
+      nur.overlays.default
     ];
 
     nixpkgs.config.allowUnfree = true;
@@ -86,6 +88,9 @@
     ./home-manager/alacritty.nix
     ./home-manager/wezterm.nix
     ./home-manager/ghostty.nix
+
+    # Browsers
+    ./home-manager/firefox
 
     # Shells.
     ./home-manager/bash.nix

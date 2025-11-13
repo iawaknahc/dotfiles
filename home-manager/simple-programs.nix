@@ -1,6 +1,8 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    nix-unit
+
     # Secret management
     _1password-cli
     pass # https://www.passwordstore.org/

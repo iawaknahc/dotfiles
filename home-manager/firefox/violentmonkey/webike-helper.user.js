@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name        webike-helper
-// @version     0.1.0
 // @match       https://www.webike.hk/
 // @match       https://www.webike.hk/ps/*/
 // @grant       GM_openInTab
@@ -11,7 +10,6 @@
 // @run-at      document-idle
 // @require     https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@2,npm/@violentmonkey/ui@0.7
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
-// @downloadURL https://raw.githubusercontent.com/iawaknahc/dotfiles/refs/heads/master/violentmonkey/webike-helper.user.js
 // ==/UserScript==
 
 function buildInputWidget() {
