@@ -1,7 +1,6 @@
 // ==UserScript==
 // @name        Restore copy on annoying websites
-// @match       https://www.hk01.com/*
-// @match       https://hk.on.cc/*
+// @match       https://*/*
 // @run-at      document-start
 // ==/UserScript==
 
