@@ -11,6 +11,7 @@ in
   home.packages = with pkgs; [
     pinentrymac
     pinentry-tty
+    yubikey-manager
   ];
 
   programs.gpg.settings = {
