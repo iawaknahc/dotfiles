@@ -1,8 +1,0 @@
-% kubectl
-
-# View allocated resources of nodes
-; Borrowed from https://github.com/kubernetes/kubernetes/issues/17512#issuecomment-1175793126
-; It uses -n to suppress auto-print because we are controlling what to print.
-; It uses the 1addr pattern space to print the name of the node.
-; It uses the 2addr pattern space to select the region of allocated resources information, and print the allocated resources information only with another pattern space.
-kubectl describe nodes | sed -n '/^Allocated /,/^Events:/ { /^  [^(]/ p; }; /^Name: / p'

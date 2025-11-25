@@ -141,7 +141,6 @@
     ./home-manager/man.nix
     ./home-manager/mkcert.nix
     ./home-manager/gpg.nix
-    ./home-manager/navi.nix
     ./home-manager/git.nix
     ./home-manager/fd.nix
     ./home-manager/fzf.nix

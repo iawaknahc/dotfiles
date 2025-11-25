@@ -1,26 +1,15 @@
-{ pkgs, ... }:
-let
-  wrapProgramForPackage = (
-    package: postInstall:
-    package.overrideAttrs (prev: {
-      nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
-      postInstall = (prev.postInstall or "") + postInstall;
-    })
-  );
-in
+{ config, ... }:
 {
-  # TLRC_CONFIG was implemented but not released yet.
-  # So we need to wrap it and prepend --config
-  # https://github.com/tldr-pages/tlrc/issues/89
-  home.packages = with pkgs; [
-    (wrapProgramForPackage tlrc ''
-      wrapProgram $out/bin/tldr \
-        --add-flags "--config ~/.config/tlrc/config.toml"
-    '')
-  ];
-  xdg.configFile."tlrc" = {
-    enable = true;
+  programs.tealdeer.enable = true;
+  programs.tealdeer.settings.display.compact = false;
+  programs.tealdeer.settings.display.show_title = true;
+  programs.tealdeer.settings.search.languages = [ "en" ];
+  programs.tealdeer.settings.updates.auto_update = true;
+  programs.tealdeer.settings.updates.auto_update_interval_hours = 24;
+  programs.tealdeer.settings.directories.custom_pages_dir = "${config.xdg.configHome}/tealdeer/pages";
+
+  xdg.configFile."tealdeer/pages" = {
     recursive = true;
-    source = ../.config/tlrc;
+    source = ../.config/tealdeer/pages;
   };
 }

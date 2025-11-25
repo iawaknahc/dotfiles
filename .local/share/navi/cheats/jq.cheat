@@ -1,7 +1,0 @@
-% jq
-
-# Pretty-print JSON
-jq .
-
-# Print the entire contents of a file as a JSON string
-jq --raw-input --slurp ''

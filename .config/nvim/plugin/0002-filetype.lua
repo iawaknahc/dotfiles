@@ -14,8 +14,6 @@ end
 -- We do NOT want to run any before-save fix on *.env
 -- For example, some envvars may have trailing whitespaces we do want to preserve.
 myautocmd_set_filetype("*.env", "")
--- navi
-myautocmd_set_filetype("*.cheat", "sh")
 -- mjml
 myautocmd_set_filetype("*.mjml", "html")
 myautocmd_set_filetype("docker-compose.yaml", "yaml.docker-compose")

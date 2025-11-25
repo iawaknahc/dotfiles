@@ -1,4 +1,0 @@
-% exiftool
-
-# Remove all safely removable metadata from some.jpg
-exiftool -all= some.jpg

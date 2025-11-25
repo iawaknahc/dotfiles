@@ -84,5 +84,8 @@
 
     # Misc
     cloudflared
+
+    # Kubernetes
+    kube-capacity
   ];
 }

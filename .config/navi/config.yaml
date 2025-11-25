@@ -1,8 +1,0 @@
-finder:
-  command: fzf
-  overrides: --height 100%
-  overrides_var: --height 100%
-
-shell:
-  command: sh
-  finder_command: sh
