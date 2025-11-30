@@ -43,6 +43,7 @@
     # Interactive du.
     # https://dev.yorhel.nl/ncdu
     ncdu
+    rsync
 
     # Linter
     hadolint
