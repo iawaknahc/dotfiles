@@ -54,6 +54,9 @@ in
             # So it is not very useful.
             ilua
 
+            # timedelta does not support calendrical calculation.
+            python-dateutil
+
             # Timezone handling
             tzdata
             pytz
