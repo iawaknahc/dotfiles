@@ -50,7 +50,7 @@
     shellcheck
 
     # Source code formatter
-    nixfmt-rfc-style
+    nixfmt
     prettierd
     shfmt
 

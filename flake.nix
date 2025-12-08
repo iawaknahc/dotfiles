@@ -65,7 +65,7 @@
     in
     {
       formatter = flake-utils.lib.eachDefaultSystemPassThrough (system: {
-        "${system}" = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+        "${system}" = nixpkgs.legacyPackages.${system}.nixfmt-tree;
       });
       # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
       homeConfigurations = nixpkgs.lib.pipe machines [
