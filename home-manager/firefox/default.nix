@@ -10,6 +10,11 @@ let
 in
 {
   programs.firefox.enable = true;
+  # It takes so long to compile pkgs.firefox from scratch.
+  # So we use pkgs.firefox-bin instead.
+  #
+  # See the below comment on pkgs.firefox and pkgs.firefox-bin.
+  programs.firefox.package = pkgs.firefox-bin;
 
   programs.firefox.profiles.default.extensions.packages = [
     # 1Password requires signed browser apps.
