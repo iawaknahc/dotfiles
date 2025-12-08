@@ -30,7 +30,7 @@
 
   programs.aerospace.enable = true;
   programs.aerospace.launchd.enable = true;
-  programs.aerospace.userSettings = {
+  programs.aerospace.settings = {
     enable-normalization-flatten-containers = true;
     enable-normalization-opposite-orientation-for-nested-containers = true;
 
