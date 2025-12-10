@@ -122,6 +122,9 @@
     (pkgs.writeShellScriptBin "alfred-workflow-cj.py" ''
       ${pkgs.mypython}/bin/python3 ${./cj.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-date.py" ''
+      ${pkgs.mypython}/bin/python3 ${./date.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -141,4 +144,7 @@
   # cj
   alfred.sourceFile."workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist;
+  # date
+  alfred.sourceFile."workflows/user.workflow.0F156A81-F62C-4D79-B2F4-C66564EA9582/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.0F156A81-F62C-4D79-B2F4-C66564EA9582/info.plist;
 }
