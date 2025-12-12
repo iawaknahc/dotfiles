@@ -11,6 +11,9 @@
     ast-grep
     fastmod
     github-markdown-toc-go # It provides gh-md-toc
+    jo # https://github.com/jpmens/jo
+    jq
+    yq-go
 
     # Text processing on binary files.
     # xxd with color
@@ -27,10 +30,6 @@
     # Database
     duckdb
     sqlite-interactive
-
-    # JSON
-    jo # https://github.com/jpmens/jo
-    jq
 
     # PostScript and PDF
     qpdf
