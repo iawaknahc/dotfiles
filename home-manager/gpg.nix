@@ -15,6 +15,8 @@ in
   ];
 
   programs.gpg.settings = {
+    # Make it verbose by default. Use --no-verbose to revert.
+    verbose = true;
     # Change the default output format to ASCII armored
     armor = true;
     # DO NOT specify with-fingerprint as that will cause gpg to
@@ -27,12 +29,17 @@ in
     with-keygrip = true;
 
     # Change some defaults implied by programs.gpg.settings.
+    personal-cipher-preferences = "AES256";
+    personal-digest-preferences = "SHA256";
+    personal-compress-preferences = "ZIP Uncompressed";
+    default-preference-list = "SHA256 AES256 ZIP Uncompressed";
     cert-digest-algo = "SHA256";
     s2k-digest-algo = "SHA256";
+    s2k-cipher-algo = "AES256";
 
     # Show expired uids and subkeys, otherwise it is hard to tell they were there.
-    list-options = "show-unusable-uids,show-unusable-subkeys";
-    verify-options = "show-unusable-uids";
+    list-options = "show-uid-validity,show-unusable-uids,show-unusable-subkeys";
+    verify-options = "show-uid-validity,show-unusable-uids";
   };
 
   home.file."${config.programs.gpg.homedir}/dirmngr.conf".source = ../.gnupg/dirmngr.conf;
