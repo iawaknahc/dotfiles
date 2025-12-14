@@ -140,7 +140,6 @@
     # Individual programs that require configurations.
     ./home-manager/man.nix
     ./home-manager/mkcert.nix
-    ./home-manager/gpg.nix
     ./home-manager/git.nix
     ./home-manager/fd.nix
     ./home-manager/fzf.nix
@@ -153,6 +152,11 @@
     ./home-manager/fastfetch.nix
     ./home-manager/claude
     ./home-manager/tailscale.nix
+
+    # SOPS and PGP
+    ./home-manager/gpg.nix
+    ./home-manager/sops.nix
+    ./home-manager/rclone.nix
 
     # Android SDK is now installed with a shell script.
     # Managing Android SDK with Nix incurs an overhead when

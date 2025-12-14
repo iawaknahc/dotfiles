@@ -3,6 +3,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +37,7 @@
     {
       nixpkgs,
       flake-utils,
+      sops-nix,
       home-manager,
       nix-darwin,
       catppuccin,
@@ -94,6 +99,8 @@
               };
               modules = [
                 catppuccin.homeModules.catppuccin
+                # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
+                sops-nix.homeManagerModules.sops
                 ./home.nix
               ];
             };

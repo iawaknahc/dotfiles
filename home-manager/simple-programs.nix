@@ -43,12 +43,6 @@
     # https://dev.yorhel.nl/ncdu
     ncdu
     rsync
-    # I am aware that there is a home-manager module programs.rclone.*
-    # But using it implies we manage the configuration with home-manager.
-    # The configuration file mainly contains secrets, which I haven't figured out how to
-    # do that properly with a public GitHub repository.
-    # Thus, programs.rclone.* is unused at the moment.
-    rclone
 
     # Linter
     hadolint

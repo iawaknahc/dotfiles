@@ -1,0 +1,7 @@
+stores:
+  yaml:
+    indent: 2
+creation_rules:
+- path_regex: ^secrets/secrets.yaml$
+  pgp:
+  - AB4C56851D80D6BE643006FAA92766577D2A3259!
