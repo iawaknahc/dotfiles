@@ -79,6 +79,9 @@
     # Karabiner
     ./home-manager/karabiner.nix
 
+    # For showing a customized date pattern in the menu bar on macOS.
+    ./home-manager/itsycal.nix
+
     # Hammerspoon
     ./home-manager/hammerspoon
 
