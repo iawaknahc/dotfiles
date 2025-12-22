@@ -15,6 +15,8 @@ in
   ];
 
   programs.gpg.settings = {
+    # Make GnuPG strictly follow RFC4880
+    compliance = "rfc4880";
     # Make it verbose by default. Use --no-verbose to revert.
     verbose = true;
     # Change the default output format to ASCII armored
