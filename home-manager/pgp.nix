@@ -12,6 +12,12 @@ in
     pinentrymac
     pinentry-tty
     yubikey-manager
+
+    # As of 2025-12-23, sq@1.3.1 does not support ML-KEM.
+    sequoia-sq
+    sequoia-sqv
+    sequoia-sqop
+    sequoia-chameleon-gnupg
   ];
 
   programs.gpg.settings = {

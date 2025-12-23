@@ -157,7 +157,7 @@
     ./home-manager/tailscale.nix
 
     # SOPS and PGP
-    ./home-manager/gpg.nix
+    ./home-manager/pgp.nix
     ./home-manager/sops.nix
     ./home-manager/rclone.nix
 
