@@ -82,8 +82,8 @@ in
                 domain = "gitlab.freedesktop.org";
                 owner = "cangjie";
                 repo = "pycangjie";
-                rev = "de1fbcac194502b2fb03bc5df052e8bd7b3c3f20";
-                hash = "sha256-y1uJ4h/tTD6cTxLo8NWTuH277tvDaXfMX7adE/7kheA=";
+                rev = "b31a959123d34d2a22348194b5760b6dc0428528";
+                hash = "sha256-/5a++Epr9gBsT6pVTRDc8PbAE8Z4hmhqcQxpam4S1qM=";
               };
             }))
           ]
