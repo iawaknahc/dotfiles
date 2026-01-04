@@ -1,15 +1,17 @@
 { pkgs, ... }:
 let
   carapace = pkgs.carapace;
-  inshellisense = pkgs.inshellisense;
+  # FIXME: inshellisense is builtin with NPM, it is broken as of 2026-01-04
+  # inshellisense = pkgs.inshellisense;
 in
 {
   # Do not use programs.carapace because we do not want to unset the shell integrations.
   home.sessionVariables = {
-    "CARAPACE_BRIDGES" = "zsh,fish,bash,inshellisense";
+    "CARAPACE_BRIDGES" = "zsh,fish,bash";
+    # "CARAPACE_BRIDGES" = "zsh,fish,bash,inshellisense";
   };
   home.packages = [
-    inshellisense
+    # inshellisense
     carapace
   ];
 
