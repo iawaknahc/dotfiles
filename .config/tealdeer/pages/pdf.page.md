@@ -9,3 +9,7 @@
 - Remove the password from a password-protected PDF file:
 
 `python3 -c "import getpass; print(getpass.getpass())" | qpdf --password-file=- --decrypt {{input.pdf}} {{output.pdf}}`
+
+- Rotate all pages 90 degrees clockwise in a PDF file:
+
+`qpdf {{input.pdf}} --rotate=+90 {{output.pdf}}`
