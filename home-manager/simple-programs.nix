@@ -87,5 +87,8 @@
 
     # Kubernetes
     kube-capacity
+
+    # DICOM viewer
+    weasis
   ];
 }
