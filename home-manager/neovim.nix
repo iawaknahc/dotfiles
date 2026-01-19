@@ -95,15 +95,14 @@
       plenary-nvim
       # Another dependency of many other plugins.
       nvim-web-devicons
-      # Install the data files (RUNTIME/queries/*/{folds,highlights,injections,locals}.scm)
-      # This is essentially treating nvim-treesitter as a data-only plugin,
-      # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter/tree/main
+      # As of 2025-01-06, nvim-treesitter (main branch) is a data-only plugin.
       nvim-treesitter
       # Install the data files (RUNTIME/queries/*/textobjects.scm)
       # This is essentially treating nvim-treesitter-textobjects as a data-only plugin,
       # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter-textobjects/tree/main
       # FIXME: The PR https://github.com/NixOS/nixpkgs/pull/470883 does not address the upgrade of nvim-treesitter-textobjects,
       # so this is broken as of 2026-01-04
+      # The PR to fix this is https://github.com/NixOS/nixpkgs/pull/475611
       # nvim-treesitter-textobjects
 
       # Language Plugins
