@@ -161,6 +161,9 @@
     ./home-manager/sops.nix
     ./home-manager/rclone.nix
 
+    # Sync between devices
+    ./home-manager/syncthing.nix
+
     # Android SDK is now installed with a shell script.
     # Managing Android SDK with Nix incurs an overhead when
     # we update flake.lock.
