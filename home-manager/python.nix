@@ -62,6 +62,9 @@ in
             pytz
             tzlocal
 
+            # Dialects of Chinese
+            opencc
+
             # Clipboard
             pyperclip
 

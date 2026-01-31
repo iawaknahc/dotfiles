@@ -23,6 +23,9 @@
     # https://github.com/sharkdp/hexyl
     hexyl
 
+    # Dialects of Chinese
+    opencc
+
     # IP and CIDR
     subnetcalc
     ipcalc
