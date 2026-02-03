@@ -6,12 +6,14 @@
   programs.gh.settings.git_protocol = "ssh";
 
   home.packages = with pkgs; [
-    blackbox
+    # blackbox was removed from nixpkgs after nixos-25.11
+    # blackbox
     difftastic
   ];
   programs.git.attributes = [
-    "*.gpg diff=blackbox"
-    "trustdb.gpg !diff"
+    # blackbox was removed from nixpkgs after nixos-25.11
+    # "*.gpg diff=blackbox"
+    # "trustdb.gpg !diff"
   ];
 
   programs.git.ignores = [
