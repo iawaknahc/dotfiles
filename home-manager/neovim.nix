@@ -65,9 +65,25 @@
     ]
   );
 
-  programs.neovim.plugins =
-    let
-      allGrammars = pkgs.vimPlugins.nvim-treesitter.allGrammars ++ [
+  programs.neovim.plugins = with pkgs.vimPlugins; [
+    # require("lz.n").load { PLUGIN_NAME }
+    # where PLUGIN_NAME is the pname of a Nix vimPlugin.
+    # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
+
+    # The plugin manager.
+    lz-n
+    # Colorscheme
+    catppuccin-nvim
+    # A dependency of many other plugins.
+    plenary-nvim
+    # Another dependency of many other plugins.
+    nvim-web-devicons
+
+    # As of 2026-01-06, nvim-treesitter (main branch) is a data-only plugin.
+    (nvim-treesitter.withPlugins (
+      _:
+      nvim-treesitter.allGrammars
+      ++ [
         (pkgs.tree-sitter.buildGrammar {
           language = "colors";
           version = "2025-01-28";
@@ -78,215 +94,199 @@
             hash = "sha256-9+rxVREm4BdscarnduRaQ5zYjpMP6ghlk6ekLff0LKE=";
           };
         })
-      ];
-      allGrammarPlugins = builtins.map pkgs.neovimUtils.grammarToPlugin allGrammars;
-    in
-    allGrammarPlugins
-    ++ (with pkgs.vimPlugins; [
-      # require("lz.n").load { PLUGIN_NAME }
-      # where PLUGIN_NAME is the pname of a Nix vimPlugin.
-      # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
+      ]
+    ))
 
-      # The plugin manager.
-      lz-n
-      # Colorscheme
-      catppuccin-nvim
-      # A dependency of many other plugins.
-      plenary-nvim
-      # Another dependency of many other plugins.
-      nvim-web-devicons
-      # As of 2025-01-06, nvim-treesitter (main branch) is a data-only plugin.
-      nvim-treesitter
-      # Install the data files (RUNTIME/queries/*/textobjects.scm)
-      # This is essentially treating nvim-treesitter-textobjects as a data-only plugin,
-      # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter-textobjects/tree/main
-      # FIXME: The PR https://github.com/NixOS/nixpkgs/pull/470883 does not address the upgrade of nvim-treesitter-textobjects,
-      # so this is broken as of 2026-01-04
-      # The PR to fix this is https://github.com/NixOS/nixpkgs/pull/475611
-      # nvim-treesitter-textobjects
+    # Install the data files (RUNTIME/queries/*/textobjects.scm)
+    # This is essentially treating nvim-treesitter-textobjects as a data-only plugin,
+    # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter-textobjects/tree/main
+    # FIXME: The PR https://github.com/NixOS/nixpkgs/pull/470883 does not address the upgrade of nvim-treesitter-textobjects,
+    # so this is broken as of 2026-01-04
+    # The PR to fix this is https://github.com/NixOS/nixpkgs/pull/475611
+    # nvim-treesitter-textobjects
 
-      # Language Plugins
-      (pkgs.vimUtils.buildVimPlugin {
-        pname = "vim-hy";
-        version = "2025-08-02";
-        src = pkgs.fetchFromGitHub {
-          owner = "hylang";
-          repo = "vim-hy";
-          rev = "ab1699bfa636e7355ac0030189331251c49c7d61";
-          hash = "sha256-KZf+qPwni/8wWaaQf8XD2hRd9LWiXqYGAePI5Y0aaCc=";
-        };
-      })
-      fennel-vim
+    # Language Plugins
+    (pkgs.vimUtils.buildVimPlugin {
+      pname = "vim-hy";
+      version = "2025-08-02";
+      src = pkgs.fetchFromGitHub {
+        owner = "hylang";
+        repo = "vim-hy";
+        rev = "ab1699bfa636e7355ac0030189331251c49c7d61";
+        hash = "sha256-KZf+qPwni/8wWaaQf8XD2hRd9LWiXqYGAePI5Y0aaCc=";
+      };
+    })
+    fennel-vim
 
-      ## Text editing
-      # Unicode
-      {
-        optional = true;
-        plugin = unicode-vim;
-      }
-      # Text objects.
-      {
-        optional = true;
-        plugin = mini-ai;
-      }
-      # Edit surroundings.
-      {
-        optional = true;
-        plugin = mini-surround;
-      }
-      # Motion
-      {
-        optional = true;
-        plugin = flash-nvim;
-      }
-      # Completion
-      {
-        optional = true;
-        plugin = blink-cmp;
-      }
-      # Swap treesitter nodes.
-      {
-        optional = true;
-        plugin = treewalker-nvim;
-      }
-      # Split or join blocks of code.
-      {
-        optional = true;
-        plugin = treesj;
-      }
-      # Enhanced version of :h CTRL-A and :h CTRL-X.
-      {
-        optional = true;
-        plugin = dial-nvim;
-      }
-      # Edit table.
-      {
-        optional = true;
-        plugin = vim-table-mode;
-      }
-      # Make indentation right.
-      {
-        optional = true;
-        plugin = vim-sleuth;
-      }
-      # Improve :h quickfix and :h location-list
-      {
-        optional = true;
-        plugin = nvim-pqf;
-      }
+    ## Text editing
+    # Unicode
+    {
+      optional = true;
+      plugin = unicode-vim;
+    }
+    # Text objects.
+    {
+      optional = true;
+      plugin = mini-ai;
+    }
+    # Edit surroundings.
+    {
+      optional = true;
+      plugin = mini-surround;
+    }
+    # Motion
+    {
+      optional = true;
+      plugin = flash-nvim;
+    }
+    # Completion
+    {
+      optional = true;
+      plugin = blink-cmp;
+    }
+    # Swap treesitter nodes.
+    {
+      optional = true;
+      plugin = treewalker-nvim;
+    }
+    # Split or join blocks of code.
+    {
+      optional = true;
+      plugin = treesj;
+    }
+    # Enhanced version of :h CTRL-A and :h CTRL-X.
+    {
+      optional = true;
+      plugin = dial-nvim;
+    }
+    # Edit table.
+    {
+      optional = true;
+      plugin = vim-table-mode;
+    }
+    # Make indentation right.
+    {
+      optional = true;
+      plugin = vim-sleuth;
+    }
+    # Improve :h quickfix and :h location-list
+    {
+      optional = true;
+      plugin = nvim-pqf;
+    }
 
-      ## Pick things.
-      {
-        optional = true;
-        plugin = fzf-lua;
-      }
+    ## Pick things.
+    {
+      optional = true;
+      plugin = fzf-lua;
+    }
 
-      ## Visual aids
-      # statusline
-      {
-        optional = true;
-        plugin = mini-statusline;
-      }
-      # statuscolumn
-      {
-        optional = true;
-        plugin = statuscol-nvim;
-      }
-      # vim.notify
-      {
-        optional = true;
-        plugin = nvim-notify;
-      }
-      # Key clues and submodes.
-      {
-        optional = true;
-        plugin = mini-clue;
-      }
-      # Show context.
-      {
-        optional = true;
-        plugin = nvim-treesitter-context;
-      }
-      # Show colors.
-      {
-        plugin = (
-          pkgs.vimUtils.buildVimPlugin {
-            pname = "nvim-colors";
-            version = "2025-10-25";
-            src = pkgs.fetchFromGitHub {
-              owner = "iawaknahc";
-              repo = "nvim-colors";
-              rev = "48820737dde5ccdd86f307cc7116946ee0d2fd09";
-              hash = "sha256-/JnPr7x3XbQVHVYZujOTPKM1BsDcWKZjEHvf0B8ae8E=";
-            };
-          }
-        );
-      }
-      # Rainbow delimiters for Lisp
-      {
-        optional = true;
-        plugin = rainbow-delimiters-nvim;
-      }
+    ## Visual aids
+    # statusline
+    {
+      optional = true;
+      plugin = mini-statusline;
+    }
+    # statuscolumn
+    {
+      optional = true;
+      plugin = statuscol-nvim;
+    }
+    # vim.notify
+    {
+      optional = true;
+      plugin = nvim-notify;
+    }
+    # Key clues and submodes.
+    {
+      optional = true;
+      plugin = mini-clue;
+    }
+    # Show context.
+    {
+      optional = true;
+      plugin = nvim-treesitter-context;
+    }
+    # Show colors.
+    {
+      plugin = (
+        pkgs.vimUtils.buildVimPlugin {
+          pname = "nvim-colors";
+          version = "2025-10-25";
+          src = pkgs.fetchFromGitHub {
+            owner = "iawaknahc";
+            repo = "nvim-colors";
+            rev = "48820737dde5ccdd86f307cc7116946ee0d2fd09";
+            hash = "sha256-/JnPr7x3XbQVHVYZujOTPKM1BsDcWKZjEHvf0B8ae8E=";
+          };
+        }
+      );
+    }
+    # Rainbow delimiters for Lisp
+    {
+      optional = true;
+      plugin = rainbow-delimiters-nvim;
+    }
 
-      ## LSP and diagnostics
-      {
-        optional = true;
-        plugin = nvim-lspconfig;
-      }
-      {
-        optional = true;
-        plugin = nvim-lint;
-      }
+    ## LSP and diagnostics
+    {
+      optional = true;
+      plugin = nvim-lspconfig;
+    }
+    {
+      optional = true;
+      plugin = nvim-lint;
+    }
 
-      ## Automation
-      {
-        optional = true;
-        plugin = conform-nvim;
-      }
+    ## Automation
+    {
+      optional = true;
+      plugin = conform-nvim;
+    }
 
-      ## Git integration
-      {
-        optional = true;
-        plugin = vim-fugitive;
-      }
-      {
-        optional = true;
-        plugin = vim-rhubarb;
-      }
-      {
-        optional = true;
-        plugin = gitsigns-nvim;
-      }
-      {
-        optional = true;
-        plugin = diffview-nvim;
-      }
+    ## Git integration
+    {
+      optional = true;
+      plugin = vim-fugitive;
+    }
+    {
+      optional = true;
+      plugin = vim-rhubarb;
+    }
+    {
+      optional = true;
+      plugin = gitsigns-nvim;
+    }
+    {
+      optional = true;
+      plugin = diffview-nvim;
+    }
 
-      # Replace netrw.
-      # Treating directories as buffers is more intuitive for me.
-      {
-        optional = true;
-        plugin = oil-nvim;
-      }
+    # Replace netrw.
+    # Treating directories as buffers is more intuitive for me.
+    {
+      optional = true;
+      plugin = oil-nvim;
+    }
 
-      ## Debugging
-      {
-        optional = true;
-        plugin = nvim-dap;
-      }
-      {
-        optional = true;
-        plugin = nvim-dap-go;
-      }
-      {
-        optional = true;
-        plugin = nvim-dap-python;
-      }
+    ## Debugging
+    {
+      optional = true;
+      plugin = nvim-dap;
+    }
+    {
+      optional = true;
+      plugin = nvim-dap-go;
+    }
+    {
+      optional = true;
+      plugin = nvim-dap-python;
+    }
 
-      ## REPL
-      {
-        optional = true;
-        plugin = conjure;
-      }
-    ]);
+    ## REPL
+    {
+      optional = true;
+      plugin = conjure;
+    }
+  ];
 }
