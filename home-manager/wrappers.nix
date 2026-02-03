@@ -1,17 +1,5 @@
 { pkgs, ... }:
-let
-  coreutils_ =
-    with pkgs;
-    (coreutils-prefixed.override {
-      # Set minimal to false so that the man pages are installed.
-      minimal = false;
-      # withOpenssl = !minimal by default. Revert it to false.
-      withOpenssl = false;
-    });
-in
 {
-  inherit coreutils_;
-
   # Wrap ls.
   # This idea is borrowed from fish shell.
   # See https://github.com/fish-shell/fish-shell/blob/4.0.0/share/functions/ls.fish
@@ -21,9 +9,9 @@ in
     (writeShellScript "ls" ''
       # Is connected to the terminal
       if test -t 0 && test -t 1 && test -t 2; then
-        ${coreutils_}/bin/gls -F --color "$@"
+        ${coreutils-prefixed}/bin/gls -F --color "$@"
       else
-        ${coreutils_}/bin/gls "$@"
+        ${coreutils-prefixed}/bin/gls "$@"
       fi
     '');
 

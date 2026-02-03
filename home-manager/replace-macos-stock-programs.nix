@@ -1,12 +1,19 @@
 { pkgs, ... }:
-let
-  wrappers = import ./wrappers.nix { inherit pkgs; };
-in
 {
   home.packages = with pkgs; [
     # The following packages replace programs that ship with macOS.
     bzip2
-    wrappers.coreutils_
+    coreutils-prefixed
+    (stdenv.mkDerivation {
+      name = "coreutils-prefixed-manpages";
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/share/man/man1/
+        cp -R ${coreutils-full}/share/man/man1/. $out/share/man/man1/
+        cd $out/share/man/man1
+        for f in *.gz; do mv "$f" g"$f"; done
+      '';
+    })
 
     # In case you need to curl a website whose TLS certificate is signed by
     # a locally trusted CA, like the one created by mkcert,
