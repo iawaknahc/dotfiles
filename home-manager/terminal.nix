@@ -43,7 +43,8 @@
     unset term
   '';
 
-  home.packages = with pkgs; [
-    ncurses
-  ];
+  # As of 2026-02-03, both nurses and ghostty include the terminfo for ghostty, clushing with each other.
+  # home.packages = with pkgs; [
+  #   ncurses
+  # ];
 }
