@@ -38,7 +38,10 @@ require("lz.n").load({
     -- })
 
     vim.lsp.enable("jsonls") -- JSON
-    vim.lsp.enable("marksman") -- Markdown
+
+    -- vim.lsp.enable("marksman") -- Markdown
+    vim.lsp.enable("markdown_oxide") -- Markdown
+
     vim.lsp.enable("yamlls") -- YAML
     vim.lsp.enable("taplo") -- TOML
     vim.lsp.enable("awk_ls") -- awk

@@ -9,7 +9,13 @@
     gopls # .go
     graphql-language-service-cli # .graphql
     jdt-language-server # .java
-    marksman # .md
+
+    # marksman is written in F# and it is not prebuilt on nixpkgs as of 2026-02-03.
+    # It takes an unpractical time to build the whole dotnet package.
+    # marksman # .md
+
+    markdown-oxide
+
     nil # .nix
     nixd # .nix
     sqls # .sql
