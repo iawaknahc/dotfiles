@@ -155,6 +155,7 @@
     ./home-manager/fastfetch.nix
     ./home-manager/claude
     ./home-manager/tailscale.nix
+    ./home-manager/plain-text-accounting.nix
 
     # SOPS and PGP
     ./home-manager/pgp.nix
