@@ -12,9 +12,12 @@
     id = "DZH4SZM-YXPC5JN-3KCTXKQ-MRCJ5QM-STPPXNN-ZY55RQG-YRIUWHV-NBXKNQ5";
   };
 
+  # This folder is assumed to contain a file ".stignore" at the root.
+  # The content of .stignore should be
+  # .obsidian
   services.syncthing.settings.folders."~/personal/" = {
     id = "obsidian-personal";
-    type = "sendonly";
+    type = "sendreceive";
     devices = [ "LouisChan16" ];
   };
 
