@@ -174,5 +174,7 @@
     ./home-manager/android.nix
 
     # Flutter is now installed per project with flake.nix
+
+    ./home-manager/smb.nix
   ];
 }
