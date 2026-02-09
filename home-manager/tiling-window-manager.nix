@@ -3,8 +3,23 @@
   config,
   ...
 }:
+let
+  item_height = 44;
+  border_width = 2;
+  sketchybar_spacing = 8;
+  bar_height = item_height + sketchybar_spacing * 2;
+  # When 2 windows are placed adjacent, the visual spacing should be
+  # border width of window A + spacing + border width of window B.
+  window_spacing = sketchybar_spacing + border_width * 2;
+  bar_y_offset = 4;
+in
 {
   services.jankyborders.enable = true;
+  services.jankyborders.settings = {
+    style = "round";
+    # Apparently, this width is the sum of all 4 borders.
+    width = border_width * 4.0;
+  };
 
   home.packages = with pkgs; [ sketchybar ];
   xdg.configFile."sketchybar/sketchybarrc" = {
@@ -51,14 +66,14 @@
 
     gaps = {
       inner = {
-        horizontal = 24;
-        vertical = 24;
+        horizontal = window_spacing;
+        vertical = window_spacing;
       };
       outer = {
-        top = 24;
-        right = 24;
-        bottom = 24 + 60 + 8;
-        left = 24;
+        top = window_spacing;
+        right = window_spacing;
+        bottom = window_spacing + bar_height + bar_y_offset;
+        left = window_spacing;
       };
     };
 

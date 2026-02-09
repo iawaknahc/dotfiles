@@ -30,10 +30,8 @@
   catppuccin.atuin.enable = true;
   catppuccin.vivid.enable = true;
   services.jankyborders.settings = {
-    style = "round";
     active_color = "0xff89b4fa";
     inactive_color = "0xff1e1e2e";
-    width = 8.0;
   };
 
   # wezterm has catppuccin bundled so we need not enable it here.

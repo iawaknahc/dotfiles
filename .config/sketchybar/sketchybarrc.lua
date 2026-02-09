@@ -6,6 +6,12 @@ local Surface_0 = 0xff313244
 local Overlay_1 = 0xff7f849c
 local Text = 0xffcdd6f4
 
+local item_height = 44
+local sketchybar_spacing = 8
+local bar_height = item_height + sketchybar_spacing * 2
+local bar_y_offset = 4
+local font_size = 16
+
 local function exec_json(command)
   local handle = io.popen(command)
   if handle == nil then
@@ -28,12 +34,12 @@ end
 
 sbar.bar({
   position = "bottom",
-  height = 60,
-  margin = 16,
-  y_offset = 8,
-  corner_radius = 12,
-  padding_left = 12,
-  padding_right = 12,
+  height = bar_height,
+  margin = sketchybar_spacing,
+  y_offset = bar_y_offset,
+  corner_radius = sketchybar_spacing,
+  padding_left = sketchybar_spacing,
+  padding_right = sketchybar_spacing,
   display = "main",
   color = Base,
 })
@@ -99,16 +105,16 @@ for _, workspace in ipairs(workspaces) do
   item:set({
     background = {
       color = Surface_0,
-      height = 44,
-      corner_radius = 12,
-      padding_right = 12,
+      height = item_height,
+      corner_radius = sketchybar_spacing,
+      padding_right = sketchybar_spacing,
     },
     label = {
-      padding_left = 16,
-      padding_right = 16,
+      padding_left = sketchybar_spacing,
+      padding_right = sketchybar_spacing,
       font = {
         family = "JetBrainsMonoNL Nerd Font Mono",
-        size = 16,
+        size = font_size,
       },
       align = "center",
     },
