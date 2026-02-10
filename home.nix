@@ -65,6 +65,8 @@
     #xdg.cacheHome = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Caches";
   };
   imports = [
+    ./home-manager/nix.nix
+
     ./home-manager/fonts.nix
 
     # Unicode
