@@ -126,5 +126,9 @@
         ))
         nixpkgs.lib.attrsets.mergeAttrsList
       ];
+
+      nixosConfigurations.nas = nixpkgs.lib.nixosSystem {
+        modules = [ ./nas.nix ];
+      };
     };
 }
