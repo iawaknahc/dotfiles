@@ -24,6 +24,7 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
   services.openssh.enable = true;
+  services.tailscale.enable = true;
 
   users.users.nixos = {
     isNormalUser = true;
