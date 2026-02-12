@@ -20,7 +20,7 @@
   time.timeZone = "Asia/Hong_Kong";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  networking.hostName = "nixos";
+  networking.hostName = "nas";
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
   services.openssh.enable = true;
