@@ -43,4 +43,9 @@
     vim
     git
   ];
+
+  # Usage:
+  #   nh os switch
+  programs.nh.enable = true;
+  programs.nh.flake = "/home/nixos/dotfiles";
 }
