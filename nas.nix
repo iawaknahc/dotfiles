@@ -26,15 +26,15 @@
 
   swapDevices = [
     {
-      label = "/dev/disk/by-label/swap";
+      device = "/dev/disk/by-label/swap";
     }
   ];
   fileSystems."/" = {
-    label = "/dev/disk/by-label/nixos";
+    device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
   };
   fileSystems."/boot" = {
-    label = "dev/disk/by-label/boot";
+    device = "dev/disk/by-label/boot";
     fsType = "vfat";
     options = [
       "fmask=0077"
