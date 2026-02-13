@@ -1,12 +1,9 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
-  imports = [
-    ./nas-hardware-configuration.nix
-  ];
-
   system.stateVersion = "25.11";
 
   nix.settings.experimental-features = [
@@ -14,9 +11,39 @@
     "flakes"
   ];
 
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  boot.initrd.availableKernelModules = [
+    "xhci_pci" # USB 3.0 controller driver
+    "nvme" # NVMe SSD driver
+    "ahci" # AHCI driver
+    "usb_storage" # USB storage driver
+    "usbhid" # USB Human Interface Devices driver for keyboard
+    "sd_mod" # SCSI driver
+  ];
+  boot.kernelModules = [ "kvm-intel" ];
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.intel.updateMicrocode = true;
+
+  swapDevices = [
+    {
+      label = "/dev/disk/by-label/swap";
+    }
+  ];
+  fileSystems."/" = {
+    label = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+  };
+  fileSystems."/boot" = {
+    label = "dev/disk/by-label/boot";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   time.timeZone = "Asia/Hong_Kong";
   i18n.defaultLocale = "en_US.UTF-8";
 
