@@ -24,24 +24,21 @@
   launchd.agents.mount-smb = {
     enable = true;
     config = {
-      KeepAlive = {
-        # This means KeepAlive as long as the exit code is non-zero (i.e. crashed for whatever reason).
-        SuccessfulExit = false;
-        PathState = {
-          # This means KeepAlive as long as this path does not exist (i.e. the drive is not mounted).
-          "${config.home.homeDirectory}/Volumes/ssd/louischan" = false;
-        };
-      };
-      ThrottleInterval = 10;
+      # Run as well as possible.
       RunAtLoad = true;
+      # Run every minute.
+      # We used to use PathState but it turned out that it does not work in the way we expected.
+      StartCalendarInterval = { };
+      # Since we run every minute, we want to suppress the logs to avoid housekeeping.
+      StandardOutPath = "/dev/null";
+      StandardErrorPath = "/dev/null";
+
       ProgramArguments = [
         # This service could fail for the following reasons:
         # - The service sops-nix has not yet finished, so this script does not even exist yet.
         # - Tailscale is not connected yet, so the host cannot be resolved.
         "${config.sops.templates."mount-smb.sh".path}"
       ];
-      StandardOutPath = "/tmp/mount-smb.stdout";
-      StandardErrorPath = "/tmp/mount-smb.stderr";
     };
   };
 }
