@@ -39,6 +39,8 @@
   # https://search.nixos.org/options?channel=25.11&query=ZFS&show=networking.hostId
   # This was generated with `head -c 8 /etc/machine-id`
   networking.hostId = "0c1b9b5d";
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoScrub.interval = "weekly";
 
   swapDevices = [
     {
