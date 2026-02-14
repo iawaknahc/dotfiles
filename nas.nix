@@ -58,7 +58,8 @@
     ];
   };
   fileSystems."/data" = {
-    device = "/dev/disk/by-label/data";
+    # This has to be a pool name, not an absolute path.
+    device = "data";
     fsType = "zfs";
   };
 
