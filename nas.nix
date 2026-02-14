@@ -50,12 +50,16 @@
     fsType = "ext4";
   };
   fileSystems."/boot" = {
-    device = "dev/disk/by-label/boot";
+    device = "/dev/disk/by-label/boot";
     fsType = "vfat";
     options = [
       "fmask=0077"
       "dmask=0077"
     ];
+  };
+  fileSystems."/data" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "zfs";
   };
 
   boot.loader.systemd-boot.enable = true;
