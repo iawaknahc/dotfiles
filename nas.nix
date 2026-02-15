@@ -132,6 +132,19 @@
     fsType = "zfs";
   };
 
+  services.samba.enable = true;
+  services.samba.openFirewall = true;
+  services.samba.settings.global.security = "user";
+  services.samba.settings.louischan = {
+    path = "/data/louischan";
+    browsable = "yes";
+    public = "no";
+    writeable = "yes";
+    "valid users" = "nixos";
+    "create mask" = "0666";
+    "directory mask" = "0777";
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Asia/Hong_Kong";
