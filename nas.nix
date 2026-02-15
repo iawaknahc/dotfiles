@@ -72,23 +72,26 @@
   # This service is taken from https://github.com/miskcoo/ugreen_leds_controller/blob/v0.3/scripts/systemd/ugreen-probe-leds.service
   # and the script https://github.com/miskcoo/ugreen_leds_controller/blob/v0.3/scripts/ugreen-probe-leds
   # and then simplified into a oneliner.
-  systemd.services.ugreen-probe-leds = {
-    wantedBy = [ "multi-user.target" ];
-    # For some unknown reason, after systemd-modules-load.service does not work.
-    after = [ "multi-user.target" ];
-    requires = [ "systemd-modules-load.service" ];
-    preStart = ''
-      sleep 5
-    '';
-    script = ''
-      echo "led-ugreen 0x3a" > /sys/bus/i2c/devices/i2c-0/new_device
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      StandardOutput = "journal";
-    };
-  };
+  # I have tried different approaches but it is very stable on every reboot.
+  # Sometimes, after reboot /sys/class/leds do not contain the expected files.
+  #
+  # systemd.services.ugreen-probe-leds = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   # For some unknown reason, after systemd-modules-load.service does not work.
+  #   after = [ "multi-user.target" ];
+  #   requires = [ "systemd-modules-load.service" ];
+  #   preStart = ''
+  #     sleep 5
+  #   '';
+  #   script = ''
+  #     echo "led-ugreen 0x3a" > /sys/bus/i2c/devices/i2c-0/new_device
+  #   '';
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     RemainAfterExit = true;
+  #     StandardOutput = "journal";
+  #   };
+  # };
 
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
