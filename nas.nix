@@ -147,9 +147,6 @@
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  sops.age.sshKeyPaths = [ ];
-  sops.gnupg.home = "/root/.gnupg";
-  sops.gnupg.sshKeyPaths = [ ];
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
   environment.systemPackages = with pkgs; [
