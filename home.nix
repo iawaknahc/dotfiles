@@ -162,7 +162,6 @@
     # SOPS and PGP
     ./home-manager/pgp.nix
     ./home-manager/sops.nix
-    ./home-manager/rclone.nix
 
     # Sync between devices
     ./home-manager/syncthing.nix
