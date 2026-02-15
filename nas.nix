@@ -145,10 +145,10 @@
     "directory mask" = "0777";
   };
 
+  # sops by default use SSH key to decrypt if services.openssh.enable = true.
+  # So we only need to run `sops updatekeys path/to/secret` on a machine that can decrypt the file.
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
   environment.systemPackages = with pkgs; [
     sops
     restic
