@@ -85,7 +85,7 @@ in
     "browser.toolbars.bookmarks.visibility" = "never";
 
     # Never translate the languages I speak.
-    "browser.translations.neverTranslateLanguages" = "en,ja,zh-Hans";
+    "browser.translations.neverTranslateLanguages" = "en,ja,zh-Hans,zh-Hant";
 
     # Customize the UI.
     "browser.uiCustomization.state" = {
