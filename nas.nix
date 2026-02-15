@@ -145,6 +145,17 @@
     "directory mask" = "0777";
   };
 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.sshKeyPaths = [ ];
+  sops.gnupg.home = "/root/.gnupg";
+  sops.gnupg.sshKeyPaths = [ ];
+  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
+  environment.systemPackages = with pkgs; [
+    sops
+  ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Asia/Hong_Kong";
@@ -169,10 +180,8 @@
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-  ];
+  programs.git.enable = true;
+  programs.vim.enable = true;
 
   # Usage:
   #   nh os switch
