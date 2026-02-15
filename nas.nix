@@ -77,6 +77,9 @@
     # For some unknown reason, after systemd-modules-load.service does not work.
     after = [ "multi-user.target" ];
     requires = [ "systemd-modules-load.service" ];
+    preStart = ''
+      sleep 5
+    '';
     script = ''
       echo "led-ugreen 0x3a" > /sys/bus/i2c/devices/i2c-0/new_device
     '';
