@@ -135,8 +135,8 @@
   services.samba.enable = true;
   services.samba.openFirewall = true;
   services.samba.settings.global.security = "user";
-  services.samba.settings.louischan = {
-    path = "/data/louischan";
+  services.samba.settings.nas_samba = {
+    path = "/data";
     browsable = "yes";
     public = "no";
     writeable = "yes";
