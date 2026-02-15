@@ -74,7 +74,8 @@
   # and then simplified into a oneliner.
   systemd.services.ugreen-probe-leds = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "systemd-modules-load.service" ];
+    # For some unknown reason, after systemd-modules-load.service does not work.
+    after = [ "multi-user.target" ];
     requires = [ "systemd-modules-load.service" ];
     script = ''
       echo "led-ugreen 0x3a" > /sys/bus/i2c/devices/i2c-0/new_device
