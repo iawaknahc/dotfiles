@@ -241,7 +241,13 @@
   networking.hostName = "nas";
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
+
   services.openssh.enable = true;
+  services.openssh.settings = {
+    # Integration with vivid on the connecting client.
+    AcceptEnv = "LS_COLORS";
+  };
+
   services.tailscale.enable = true;
 
   security.sudo.wheelNeedsPassword = false;
