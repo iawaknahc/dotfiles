@@ -32,7 +32,6 @@
     gnutar
     gzip
     less
-    openssh
     openssl
     patch
     perl

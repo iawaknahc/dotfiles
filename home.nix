@@ -159,9 +159,10 @@
     ./home-manager/tailscale.nix
     ./home-manager/plain-text-accounting.nix
 
-    # SOPS and PGP
+    # PGP and friends
     ./home-manager/pgp.nix
     ./home-manager/sops.nix
+    ./home-manager/ssh.nix
 
     # Sync between devices
     ./home-manager/syncthing.nix
