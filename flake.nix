@@ -129,7 +129,7 @@
 
       nixosConfigurations.nas = nixpkgs.lib.nixosSystem {
         modules = [
-          ./nas.nix
+          ./nas
           sops-nix.nixosModules.sops
         ];
       };
