@@ -245,7 +245,7 @@
   services.openssh.enable = true;
   services.openssh.settings = {
     # Integration with vivid on the connecting client.
-    AcceptEnv = "LS_COLORS";
+    AcceptEnv = [ "LS_COLORS" ];
   };
 
   services.tailscale.enable = true;
