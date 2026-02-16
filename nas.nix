@@ -149,11 +149,6 @@
   # So we only need to run `sops updatekeys path/to/secret` on a machine that can decrypt the file.
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  environment.systemPackages = with pkgs; [
-    sops
-    restic
-  ];
-
   sops.secrets."rclone/remotes/googledrive/client_id" = { };
   sops.secrets."rclone/remotes/googledrive/client_secret" = { };
   sops.secrets."rclone/remotes/googledrive/token" = { };
@@ -190,6 +185,45 @@
     };
   };
 
+  services.syncthing.enable = true;
+  services.syncthing.overrideDevices = true;
+  services.syncthing.overrideFolders = true;
+  services.syncthing.openDefaultPorts = true;
+  services.syncthing.settings.devices."LouisChan16" = {
+    id = "DZH4SZM-YXPC5JN-3KCTXKQ-MRCJ5QM-STPPXNN-ZY55RQG-YRIUWHV-NBXKNQ5";
+  };
+  services.syncthing.settings.devices."louischan-m4" = {
+    id = "BA72RDZ-AWAG46I-KWWRSPX-XHQC5OH-J2ZMHBU-LDUMBQU-TWUDZ6M-4XGGUQJ";
+  };
+  services.syncthing.settings.folders."/data/louischan/obsidian/vaults/personal/" = {
+    id = "obsidian-personal";
+    type = "sendreceive";
+    devices = [
+      "LouisChan16"
+      "louischan-m4"
+    ];
+  };
+  services.syncthing.settings.options = {
+    listenAddresses = [ "tcp://0.0.0.0:22000" ];
+
+    globalAnnounceServers = [ ];
+    stunServers = [ ];
+    urURL = "https://0.0.0.0";
+    releasesURL = "https://0.0.0.0";
+    crURL = "https://0.0.0.0";
+
+    globalAnnounceEnabled = false;
+    localAnnounceEnabled = false;
+    crashReportingEnabled = false;
+    relaysEnabled = false;
+    natEnabled = false;
+    announceLANAddresses = false;
+    startBrowser = false;
+    urAccepted = -1;
+
+    autoUpgradeIntervalH = 0;
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   time.timeZone = "Asia/Hong_Kong";
@@ -216,6 +250,11 @@
 
   programs.git.enable = true;
   programs.vim.enable = true;
+  environment.systemPackages = with pkgs; [
+    sops
+    restic
+    syncthing
+  ];
 
   # Usage:
   #   nh os switch
