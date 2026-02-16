@@ -244,8 +244,7 @@
 
   services.openssh.enable = true;
   services.openssh.settings = {
-    # LS_COLORS is too long and will be truncated by the SSH client on the connecting machine.
-    # AcceptEnv = [ "LS_COLORS" ];
+    AcceptEnv = [ "LS_COLORS" ];
   };
   # By default, these are true, causing LS_COLORS set by SSH client to be overridden.
   programs.bash.enableLsColors = false;
