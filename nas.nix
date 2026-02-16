@@ -244,9 +244,12 @@
 
   services.openssh.enable = true;
   services.openssh.settings = {
-    # Integration with vivid on the connecting client.
-    AcceptEnv = [ "LS_COLORS" ];
+    # LS_COLORS is too long and will be truncated by the SSH client on the connecting machine.
+    # AcceptEnv = [ "LS_COLORS" ];
   };
+  # By default, these are true, causing LS_COLORS set by SSH client to be overridden.
+  programs.bash.enableLsColors = false;
+  programs.zsh.enableLsColors = false;
 
   services.tailscale.enable = true;
 
