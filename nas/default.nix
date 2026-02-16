@@ -147,7 +147,7 @@
 
   # sops by default use SSH key to decrypt if services.openssh.enable = true.
   # So we only need to run `sops updatekeys path/to/secret` on a machine that can decrypt the file.
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.secrets."rclone/remotes/googledrive/client_id" = { };
   sops.secrets."rclone/remotes/googledrive/client_secret" = { };
