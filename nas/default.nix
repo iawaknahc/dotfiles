@@ -5,6 +5,7 @@
   imports = [
     ./nix.nix
     ./system.nix
+    ./mod-led-ugreen.nix
     ./users.nix
     ./networking.nix
     ./git.nix
