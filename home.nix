@@ -158,6 +158,7 @@
     ./home-manager/claude
     ./home-manager/tailscale.nix
     ./home-manager/plain-text-accounting.nix
+    ./home-manager/timg.nix
 
     # PGP and friends
     ./home-manager/pgp.nix
