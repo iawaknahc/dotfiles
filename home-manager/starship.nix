@@ -1,27 +1,16 @@
 { config, ... }:
 {
-  # Do not use programs.starship because we do not want to unset the shell integrations.
-  home.packages = [
-    config.programs.starship.package
-  ];
+  programs.starship.enable = true;
+  programs.starship.enableBashIntegration = true;
+  programs.starship.enableFishIntegration = true;
+  programs.starship.enableIonIntegration = false;
+  programs.starship.enableNushellIntegration = true;
+  programs.starship.enableZshIntegration = true;
+  programs.x-elvish.rcExtra = ''
+    eval (${config.programs.starship.package}/bin/starship init elvish)
+  '';
   xdg.configFile."starship.toml" = {
     enable = true;
     source = ../.config/starship.toml;
   };
-  programs.bash.initExtra = ''
-    eval "$(${config.programs.starship.package}/bin/starship init bash)"
-  '';
-  programs.x-elvish.rcExtra = ''
-    eval (${config.programs.starship.package}/bin/starship init elvish)
-  '';
-  programs.fish.interactiveShellInit = ''
-    ${config.programs.starship.package}/bin/starship init fish | source
-  '';
-  programs.nushell.extraConfig = ''
-    mkdir ($nu.data-dir | path join "vendor/autoload")
-    ${config.programs.starship.package}/bin/starship init nu | save --force ($nu.data-dir | path join "vendor/autoload/starship.nu")
-  '';
-  programs.zsh.initContent = ''
-    eval "$(${config.programs.starship.package}/bin/starship init zsh)"
-  '';
 }
