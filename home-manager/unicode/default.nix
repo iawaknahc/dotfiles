@@ -106,22 +106,7 @@ in
       ];
     })
 
-    # This program is known to be broken on nixpkgs
-    # See https://github.com/NixOS/nixpkgs/pull/420887
-    (pkgs.python3Packages.buildPythonApplication {
-      pname = "unicode";
-      version = "3.2";
-
-      pyproject = true;
-      build-system = [ pkgs.python3Packages.setuptools ];
-
-      src = pkgs.fetchFromGitHub {
-        owner = "garabik";
-        repo = "unicode";
-        rev = "fa4fa6118d68c693ee14b97df6bf12d2fdbb37df";
-        hash = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
-      };
-    })
+    unicode-paracode
 
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
