@@ -5,7 +5,8 @@
   imports = [
     ./nix.nix
     ./system.nix
-    ./mod-led-ugreen.nix
+    # For unknown reason, I can no longer make /sys/class/leds/power appear
+    # ./mod-led-ugreen.nix
     ./users.nix
     ./networking.nix
     ./git.nix
