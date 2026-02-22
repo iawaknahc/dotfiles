@@ -1,36 +1,10 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }:
-let
-  mcpServerJSON = {
-    mcpServers = {
-      playwright = {
-        command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
-      };
-      context7 = {
-        command = "${config.home.profileDirectory}/bin/context7-mcp";
-      };
-
-      # Since Claude Code 1.0.58, it can read PDF.
-      # So we no longer need markitdown-mcp.
-      # See https://github.com/anthropics/claude-code/issues/1510#issuecomment-3115208638
-
-      # mcp-server-time is very limited.
-      # On Claude Code, it is better ask to the Bash tool to do time related manipulation.
-      # We do not use Claude Desktop for tasks that require access to the host system.
-
-      # No need to install mcp-server-fetch because Claude Desktop and Claude Code has it built in.
-    };
-  };
-  mcpServerJSONFile = pkgs.writeText "mcpServers.json" (builtins.toJSON mcpServerJSON);
-in
 {
   home.packages = with pkgs; [
-    claude-code
-
     # From the overlay of natsukium/mcp-servers-nix
     #
     # As of 2025-06-08, Playwright supports full page screenshot out-of-the-box.
@@ -42,8 +16,19 @@ in
     # From the overlay of natsukium/mcp-servers-nix
     context7-mcp
   ];
+  programs.mcp.enable = true;
+  programs.mcp.servers = {
+    playwright = {
+      command = "${config.home.profileDirectory}/bin/mcp-server-playwright";
+    };
+    context7 = {
+      command = "${config.home.profileDirectory}/bin/context7-mcp";
+    };
+  };
 
-  home.file.".claude/CLAUDE.md".text = ''
+  programs.claude-code.enable = true;
+  programs.claude-code.enableMcpIntegration = true;
+  programs.claude-code.memory.text = ''
     # CLAUDE.md
 
     ## Use Bash tool
@@ -73,20 +58,11 @@ in
     Use poppler-utils instead of pdftk to manipulate PDF files.
   '';
 
-  # https://modelcontextprotocol.io/quickstart/user#2-add-the-filesystem-mcp-server
   home.file."Library/Application Support/Claude/claude_desktop_config.json" = {
     text = builtins.toJSON {
-      # Avoid conflict with Alfred.
-      globalShortcut = "Shift+Alt+Space";
-      mcpServers = mcpServerJSON.mcpServers;
+      preferences = {
+        quickEntryShortcut = "off";
+      };
     };
   };
-
-  # Since Claude Code uses a giant ~/.claude.json to store all of its configuration AND state,
-  # we have to use a custom activation script to keep the mcpServers configuration in-sync.
-  home.activation.claude-code = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ -r ${config.home.homeDirectory}/.claude.json ]; then
-      ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${config.home.homeDirectory}/.claude.json ${mcpServerJSONFile} | ${pkgs.moreutils}/bin/sponge ${config.home.homeDirectory}/.claude.json
-    fi
-  '';
 }
