@@ -29,11 +29,11 @@ require("lz.n").load({
     })
 
     -- Inspired by Helix space mode f
-    vim.keymap.set("n", "<Space>f", "<CMD>FzfLua git_files<CR>", {
-      desc = ":FzfLua git_files",
+    vim.keymap.set("n", "<Space>f", "<CMD>FzfLua global<CR>", {
+      desc = ":FzfLua global",
     })
-    vim.keymap.set("n", "<Space>F", "<CMD>FzfLua files<CR>", {
-      desc = ":FzfLua files",
+    vim.keymap.set("n", "<Space>F", "<CMD>FzfLua git_files<CR>", {
+      desc = ":FzfLua git_files",
     })
 
     -- Inspired by Helix space mode b
