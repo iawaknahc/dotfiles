@@ -106,6 +106,9 @@
     vim-hy
     fennel-vim
 
+    # Find and replace
+    grug-far-nvim
+
     ## Text editing
     # Unicode
     {
