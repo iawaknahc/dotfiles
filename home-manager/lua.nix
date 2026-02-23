@@ -7,6 +7,7 @@ let
 in
 {
   home.packages = with pkgs; [
+    emmylua-ls
     lua-language-server
     stylua
 
