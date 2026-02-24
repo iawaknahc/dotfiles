@@ -160,11 +160,6 @@
       optional = true;
       plugin = vim-sleuth;
     }
-    # Improve :h quickfix and :h location-list
-    {
-      optional = true;
-      plugin = nvim-pqf;
-    }
 
     ## Pick things.
     {
