@@ -22,7 +22,6 @@
       "/data"
     ];
     pruneOpts = [
-      "--keep-within 2y"
       "--keep-within-hourly 24h"
       "--keep-within-daily 7d"
       "--keep-within-weekly 28d"
