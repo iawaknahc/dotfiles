@@ -80,12 +80,15 @@ in
             # Manipulating fonts
             fonttools
 
+            # The merge request was merged.
+            # https://gitlab.freedesktop.org/cangjie/pycangjie/-/merge_requests/60
+            # FIXME: Switch back to a released version of pycangjie
             (pycangjie.overrideAttrs (prev: {
               src = pkgs.fetchFromGitLab {
                 domain = "gitlab.freedesktop.org";
                 owner = "cangjie";
                 repo = "pycangjie";
-                rev = "b31a959123d34d2a22348194b5760b6dc0428528";
+                rev = "2e743c1339dc3cb1230ae3244e120a2b32b0224a";
                 hash = "sha256-/5a++Epr9gBsT6pVTRDc8PbAE8Z4hmhqcQxpam4S1qM=";
               };
             }))
