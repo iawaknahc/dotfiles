@@ -4,6 +4,7 @@
   ...
 }:
 {
+  alfred.enable = true;
   alfred.configDir = "${config.home.homeDirectory}/alfred";
   alfred.sourceDir = "${config.home.homeDirectory}/dotfiles";
 

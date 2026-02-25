@@ -32,6 +32,17 @@
     })
   ];
 
+  launchd.agents.hammerspoon = {
+    enable = true;
+    config = {
+      Program = "/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon";
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/hammerspoon.stdout";
+      StandardErrorPath = "/tmp/hammerspoon.stderr";
+    };
+  };
+
   home.packages = with pkgs; [
     hs
   ];
