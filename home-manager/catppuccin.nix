@@ -17,6 +17,7 @@
   catppuccin.enable = false;
   catppuccin.alacritty.enable = true;
   catppuccin.btop.enable = true;
+  catppuccin.fzf.enable = true;
   catppuccin.ghostty.enable = true;
   catppuccin.kitty.enable = true;
   catppuccin.tmux.enable = true;
