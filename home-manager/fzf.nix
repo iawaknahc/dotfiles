@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   programs.fzf.enable = true;
   programs.fzf.defaultCommand = ''
@@ -12,4 +12,19 @@
     "--layout=reverse"
     "--border"
   ];
+
+  programs.fzf.enableBashIntegration = true;
+  programs.fzf.enableFishIntegration = true;
+  programs.fzf.enableZshIntegration = true;
+  home.sessionVariables = {
+    # We use atuin to manage shell history.
+    # programs.fzf does not offer an option to set this.
+    # According to the readme, setting this to empty disable the particular key binding.
+    # See https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
+    FZF_CTRL_R_COMMAND = "";
+  };
+  # FZF_CTRL_T_COMMAND
+  programs.fzf.fileWidgetCommand = config.programs.fzf.defaultCommand;
+  # FZF_ALT_C_COMMAND
+  programs.fzf.changeDirWidgetCommand = "fd --type d";
 }
