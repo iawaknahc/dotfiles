@@ -130,11 +130,8 @@
     ./home-manager/nodejs.nix
     ./home-manager/clojure.nix
     ./home-manager/janet.nix
-    # Python and programs distributed as Python packages.
     ./home-manager/python.nix
-    # Ruby and its support packages.
     ./home-manager/ruby.nix
-    # Go and its support packages.
     ./home-manager/go.nix
     ./home-manager/java.nix
 
