@@ -1,8 +1,6 @@
 { config, ... }:
 {
   programs.wezterm.enable = true;
-  programs.wezterm.enableBashIntegration = false;
-  programs.wezterm.enableZshIntegration = false;
   programs.wezterm.extraConfig = ''
     local wezterm = require("wezterm")
     local config = wezterm.config_builder()

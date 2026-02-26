@@ -103,6 +103,7 @@
     ./home-manager/firefox
 
     # Shells.
+    ./home-manager/shell-integration.nix
     ./home-manager/bash.nix
     ./home-manager/x-elvish.nix
     ./home-manager/elvish.nix

@@ -2,9 +2,6 @@
 {
   programs.ghostty.enable = true;
   programs.ghostty.package = pkgs.ghostty-bin;
-  programs.ghostty.enableBashIntegration = false;
-  programs.ghostty.enableFishIntegration = false;
-  programs.ghostty.enableZshIntegration = false;
   programs.ghostty.installBatSyntax = false;
   programs.ghostty.installVimSyntax = false;
   programs.ghostty.settings = {

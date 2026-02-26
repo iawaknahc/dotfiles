@@ -5,8 +5,6 @@
   programs.eza.enable = true;
   programs.eza.enableBashIntegration = true;
   programs.eza.enableFishIntegration = true;
-  # Do not override nushell builtin ls
-  programs.eza.enableNushellIntegration = false;
   programs.eza.enableZshIntegration = true;
   programs.eza.extraOptions = [
     # Though the manpage says --classify=automatic by default,
