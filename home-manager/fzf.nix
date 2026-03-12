@@ -2,7 +2,7 @@
 {
   programs.fzf.enable = true;
   programs.fzf.defaultCommand = ''
-    fd --type f
+    fd --type f --hidden
   '';
   programs.fzf.defaultOptions = [
     # Setting --with-shell breaks the CTRL-R key binding introduced by
@@ -26,5 +26,5 @@
   # FZF_CTRL_T_COMMAND
   programs.fzf.fileWidgetCommand = config.programs.fzf.defaultCommand;
   # FZF_ALT_C_COMMAND
-  programs.fzf.changeDirWidgetCommand = "fd --type d";
+  programs.fzf.changeDirWidgetCommand = "fd --type d --hidden";
 }
