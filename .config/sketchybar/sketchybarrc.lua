@@ -12,6 +12,17 @@ local bar_height = item_height + sketchybar_spacing * 2
 local bar_y_offset = 4
 local font_size = 16
 
+local styles = {
+  label_color = {
+    focused = Text,
+    not_focused = Overlay_1,
+  },
+  font_style = {
+    focused = "Bold",
+    not_focused = "Regular",
+  },
+}
+
 local function exec_json(command)
   local handle = io.popen(command)
   if handle == nil then
@@ -45,62 +56,64 @@ sbar.bar({
 })
 
 sbar.add("event", "aerospace_workspace_change")
+sbar.add("event", "aerospace_on_window_detected")
+sbar.add("event", "aerospace_on_focus_changed")
+sbar.add("event", "aerospace_on_focused_monitor_changed")
 
-local initial_focused_workspace_id =
-  tostring(exec_json(aerospace .. [[ list-workspaces --json --focused]])[1].workspace)
+local function get_focused_workspace_id()
+  return tostring(exec_json(aerospace .. [[ list-workspaces --json --focused]])[1].workspace)
+end
+
+---@param args { workspace_id: string, focused_workspace_id: string, item: unknown }
+local function render_focus(args)
+  local workspace_id = args.workspace_id
+  local focused_workspace_id = args.focused_workspace_id
+  local item = args.item
+
+  local label_color = styles.label_color.not_focused
+  local font_style = styles.font_style.not_focused
+  if focused_workspace_id == workspace_id then
+    label_color = styles.label_color.focused
+    font_style = styles.font_style.focused
+  end
+
+  item:set({
+    label = {
+      color = label_color,
+      font = {
+        style = font_style,
+      },
+    },
+  })
+end
+
+---@param args { workspace_id: string, item: unknown }
+local function render_label(args)
+  local workspace_id = args.workspace_id
+  local item = args.item
+
+  local windows = exec_json(aerospace .. [[ list-windows --json --workspace ]] .. workspace_id)
+  local app_names = {}
+  for _, window in ipairs(windows) do
+    table.insert(app_names, window["app-name"])
+  end
+
+  local drawing = #app_names > 0
+  local label = workspace_id .. ": " .. table.concat(app_names, ", ")
+  item:set({
+    drawing = drawing,
+    label = {
+      string = label,
+    },
+  })
+end
 
 local workspaces = exec_json(aerospace .. [[ list-workspaces --json --monitor focused]])
 
 for _, workspace in ipairs(workspaces) do
   local workspace_id = tostring(workspace.workspace)
 
-  local styles = {
-    label_color = {
-      focused = Text,
-      not_focused = Overlay_1,
-    },
-    font_style = {
-      focused = "Bold",
-      not_focused = "Regular",
-    },
-  }
-
   local item = sbar.add("item", "workspace:" .. workspace_id, "left")
-
-  local function render_focus(focused_workspace_id)
-    local label_color = styles.label_color.not_focused
-    local font_style = styles.font_style.not_focused
-    if focused_workspace_id == workspace_id then
-      label_color = styles.label_color.focused
-      font_style = styles.font_style.focused
-    end
-
-    item:set({
-      label = {
-        color = label_color,
-        font = {
-          style = font_style,
-        },
-      },
-    })
-  end
-
-  local function render_label()
-    local windows = exec_json(aerospace .. [[ list-windows --json --workspace ]] .. workspace_id)
-    local app_names = {}
-    for _, window in ipairs(windows) do
-      table.insert(app_names, window["app-name"])
-    end
-
-    local drawing = #app_names > 0
-    local label = workspace_id .. ": " .. table.concat(app_names, ", ")
-    item:set({
-      drawing = drawing,
-      label = {
-        string = label,
-      },
-    })
-  end
 
   item:set({
     background = {
@@ -120,8 +133,15 @@ for _, workspace in ipairs(workspaces) do
     },
   })
 
-  render_focus(initial_focused_workspace_id)
-  render_label()
+  render_focus({
+    workspace_id = workspace_id,
+    focused_workspace_id = get_focused_workspace_id(),
+    item = item,
+  })
+  render_label({
+    workspace_id = workspace_id,
+    item = item,
+  })
 
   item:subscribe("aerospace_workspace_change", function(env)
     -- {
@@ -131,10 +151,34 @@ for _, workspace in ipairs(workspaces) do
     --   SENDER = "aerospace_workspace_change"
     -- }
     if workspace_id == env.AEROSPACE_FOCUSED_WORKSPACE or workspace_id == env.AEROSPACE_PREV_WORKSPACE then
-      render_focus(env.AEROSPACE_FOCUSED_WORKSPACE)
-      render_label()
+      render_focus({
+        workspace_id = workspace_id,
+        focused_workspace_id = env.AEROSPACE_FOCUSED_WORKSPACE,
+        item = item,
+      })
+      render_label({
+        workspace_id = workspace_id,
+        item = item,
+      })
     end
   end)
+  item:subscribe("aerospace_on_window_detected", function(env)
+    -- For unknown reason, we need some delay otherwise focused_workspace_id is incorrect.
+    sbar.delay(0, function()
+      local focused_workspace_id = get_focused_workspace_id()
+      render_focus({
+        workspace_id = workspace_id,
+        focused_workspace_id = focused_workspace_id,
+        item = item,
+      })
+      render_label({
+        workspace_id = workspace_id,
+        item = item,
+      })
+    end)
+  end)
+  item:subscribe("aerospace_on_focus_changed", function(env) end)
+  item:subscribe("aerospace_on_focused_monitor_changed", function(env) end)
 
   item:subscribe("mouse.clicked", function(env)
     -- {

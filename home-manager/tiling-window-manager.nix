@@ -62,7 +62,11 @@ in
     key-mapping.preset = "qwerty";
 
     # Make all windows tiled by default.
-    on-window-detected = [ ];
+    on-window-detected = [
+      {
+        run = "exec-and-forget ${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_on_window_detected";
+      }
+    ];
 
     gaps = {
       inner = {
