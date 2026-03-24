@@ -93,5 +93,8 @@
 
     # DICOM viewer
     weasis
+
+    # Speech recognition
+    openai-whisper
   ];
 }
