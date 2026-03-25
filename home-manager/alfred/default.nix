@@ -132,6 +132,9 @@
     (pkgs.writeShellScriptBin "alfred-workflow-t2s.py" ''
       ${pkgs.mypython}/bin/python3 ${./t2s.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-yue.py" ''
+      ${pkgs.mypython}/bin/python3 ${./yue.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -160,4 +163,7 @@
   # t2s
   alfred.sourceFile."workflows/user.workflow.39E79EC6-CF91-44B6-91C1-75DD2E52C5ED/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.39E79EC6-CF91-44B6-91C1-75DD2E52C5ED/info.plist;
+  # yue
+  alfred.sourceFile."workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist;
 }
