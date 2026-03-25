@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-from urllib.parse import quote, quote_plus, unquote, unquote_plus
+import os
+import sys
+from urllib.parse import quote_from_bytes, unquote_to_bytes
 
 
 # ArgumentDefaultsHelpFormatter prints default=None even I did not specify it.
@@ -67,7 +69,7 @@ def main():
 
     parser.add_argument(
         "input",
-        help="The string to be encoded or decoded",
+        help="The string or byte sequence to be encoded or decoded",
         nargs="+",
     )
 
@@ -101,17 +103,34 @@ def main():
         # fragment    = *( pchar / '/' / '?' )
         safe = "!$&'()*+,;=" + ":@" + "/?"
 
-    for input in args.input:
+    for string_or_byte_sequence_as_str in args.input:
+        # According to https://docs.python.org/3/library/sys.html#sys.argv
+        # os.fsencode(arg) is the official way to access the original bytes of the arguments.
+        byte_sequence = os.fsencode(string_or_byte_sequence_as_str)
         if operation == "encode":
             if position == "query":
-                print(quote_plus(input, safe=safe))
+                # quote_from_bytes returns str, so we can just print() it.
+                print(
+                    quote_from_bytes(byte_sequence, safe=safe.encode() + b" ").replace(
+                        " ", "+"
+                    )
+                )
             else:
-                print(quote(input, safe=safe))
+                # quote_from_bytes returns str, so we can just print() it.
+                print(quote_from_bytes(byte_sequence, safe=safe))
         elif operation == "decode":
             if position == "query":
-                print(unquote_plus(input))
+                # unquote_to_bytes returns bytes, so we need a binary stream to write it.
+                sys.stdout.buffer.write(
+                    unquote_to_bytes(byte_sequence.replace(b"+", b" "))
+                )
+                # write() is low-level so we need to print the newline ourselves.
+                sys.stdout.buffer.write(b"\n")
             else:
-                print(unquote(input))
+                # unquote_to_bytes returns bytes, so we need a binary stream to write it.
+                sys.stdout.buffer.write(unquote_to_bytes(byte_sequence))
+                # write() is low-level so we need to print the newline ourselves.
+                sys.stdout.buffer.write(b"\n")
         else:
             raise Exception("unreachable")
 
