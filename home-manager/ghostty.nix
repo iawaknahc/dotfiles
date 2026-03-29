@@ -5,6 +5,9 @@
   programs.ghostty.installBatSyntax = false;
   programs.ghostty.installVimSyntax = false;
   programs.ghostty.settings = {
+    # Disable the confirm closing dialog, so that it never block macOS update restart.
+    confirm-close-surface = false;
+
     # Treat the left option key as ALT, keeping the right option key unchanged.
     # In Karabiner, I have configured the right option key to type more symbols.
     # So it follows logically that the left option key should be remapped to something more useful.
