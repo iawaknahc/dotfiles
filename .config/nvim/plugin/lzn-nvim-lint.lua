@@ -1,6 +1,5 @@
 require("lz.n").load({
   "nvim-lint",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("lint").linters_by_ft = {

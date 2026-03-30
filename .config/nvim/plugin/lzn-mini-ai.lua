@@ -1,6 +1,5 @@
 require("lz.n").load({
   "mini.ai",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local ai = require("mini.ai")

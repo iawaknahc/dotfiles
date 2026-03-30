@@ -1,6 +1,5 @@
 require("lz.n").load({
   "mini.statusline",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local MiniStatusline = require("mini.statusline")

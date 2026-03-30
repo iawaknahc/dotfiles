@@ -1,6 +1,5 @@
 require("lz.n").load({
   "rainbow-delimiters.nvim",
-  enabled = vim.g.pager_enabled ~= 1,
   -- This plugin listens FileType.
   -- See https://github.com/HiPhish/rainbow-delimiters.nvim/blob/v0.10.0/plugin/rainbow-delimiters.lua#L51
   event = { "FileType" },

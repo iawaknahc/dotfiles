@@ -6,7 +6,6 @@ end
 
 require("lz.n").load({
   "diffview.nvim",
-  enabled = vim.g.pager_enabled ~= 1,
   lazy = lazy,
   event = event,
   after = function()

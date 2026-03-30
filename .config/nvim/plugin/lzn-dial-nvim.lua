@@ -1,6 +1,5 @@
 require("lz.n").load({
   "dial.nvim",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local augend = require("dial.augend")

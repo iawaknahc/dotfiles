@@ -1,6 +1,5 @@
 require("lz.n").load({
   "conjure",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   before = function()
     vim.g["conjure#mapping#def_word"] = false

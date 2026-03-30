@@ -1,6 +1,5 @@
 require("lz.n").load({
   "fzf-lua",
-  enabled = vim.g.pager_enabled ~= 1,
   -- It used to be eager-loaded.
   -- But on 2025-10-19, it seems that lazy-loading it does not introduce a problem.
   -- Let's try keeping it lazy-loaded then.

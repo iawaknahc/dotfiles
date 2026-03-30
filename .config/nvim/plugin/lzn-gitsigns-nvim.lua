@@ -1,6 +1,5 @@
 require("lz.n").load({
   "gitsigns.nvim",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     require("gitsigns").setup({

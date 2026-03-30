@@ -1,6 +1,5 @@
 require("lz.n").load({
   "treesj",
-  enabled = vim.g.pager_enabled ~= 1,
   event = { "DeferredUIEnter" },
   after = function()
     local treesj = require("treesj")
