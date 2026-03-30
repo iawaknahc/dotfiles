@@ -19,7 +19,7 @@ local progress_by_client_id = {}
 
 local stdout = vim.uv.new_tty(1, false)
 
--- FIXME: neovim 0.12 nvim_echo seems to support OSC 9;4
+-- FIXME: neovim@0.12 Use nvim_echo() to report progress https://neovim.io/doc/user/message/#progress-message
 local function osc_9_4()
   if stdout == nil then
     return

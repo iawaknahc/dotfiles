@@ -13,6 +13,7 @@
 
   home.packages = with pkgs; [
     tree-sitter
+    # FIXME: neovim@0.12 bundles vim.uv type definitions.
     (stdenv.mkDerivation {
       name = "luv";
       src = fetchFromGitHub {
@@ -54,6 +55,7 @@
     source = ../.config/nvim/snippets;
     recursive = true;
   };
+  # FIXME: neovim@0.12 enable ui2 https://neovim.io/doc/user/news/#_ui
   xdg.configFile."nvim/lua" = {
     source = ../.config/nvim/lua;
     recursive = true;
@@ -245,6 +247,7 @@
     }
     {
       optional = true;
+      # FIXME: neovim@0.12 includes a builtin plugin :DiffTool https://neovim.io/doc/user/plugins/#%3ADiffTool
       plugin = diffview-nvim;
     }
 

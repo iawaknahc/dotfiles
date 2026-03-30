@@ -40,6 +40,7 @@ vim.o.list = true
 --
 -- leadmultispace is powerful enough. I do not need https://github.com/lukas-reineke/indent-blankline.nvim now.
 -- https://www.reddit.com/r/neovim/comments/17aponn/i_feel_like_leadmultispace_deserves_more_attention/
+-- FIXME: neovim@0.12 introduces leadtab https://neovim.io/doc/user/options/#lcs-leadtab
 vim.opt.listchars = {
   leadmultispace = "▏.",
   lead = ".",

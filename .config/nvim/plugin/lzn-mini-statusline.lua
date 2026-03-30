@@ -412,6 +412,7 @@ require("lz.n").load({
       return MiniStatusline.combine_groups(groups)
     end
 
+    -- FIXME: neovim@0.12 has the default statusline changed. https://neovim.io/doc/user/news/#_defaults
     MiniStatusline.setup({
       content = {
         active = active,
