@@ -136,6 +136,7 @@ vim.o.wrapscan = false
 -- grep
 vim.o.grepprg = "rg --vimgrep"
 
+-- FIXME: neovim@0.12 add inline:char
 -- diff
 vim.opt.diffopt = {
   "internal",

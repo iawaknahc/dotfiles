@@ -5,6 +5,7 @@ end, {
   desc = "Go to declaration",
 })
 
+-- FIXME: neovim@0.12 maps grt to vim.lsp.buf.type_definition() by default
 -- Inspired by Helix goto mode y
 vim.keymap.set({ "n" }, "gy", function()
   vim.lsp.buf.type_definition()
@@ -25,6 +26,7 @@ end, {
   desc = "Toggle inlay hints",
 })
 
+-- FIXME: neovim@0.12 gx can open documentLink. Review whether this manual handling is still needed or not.
 -- Enhanced gx
 vim.keymap.set({ "n" }, "gx", function()
   local function gx()

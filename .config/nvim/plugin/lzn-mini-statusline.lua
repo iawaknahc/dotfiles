@@ -249,6 +249,7 @@ require("lz.n").load({
       return out
     end
 
+    -- FIXME: neovim@0.12 has vim.diagnostic.status()
     local function get_diagnostic_strings(args)
       if MiniStatusline.is_truncated(args.trunc_width) then
         return {}
