@@ -1,22 +1,23 @@
-require("lz.n").load({
-  "treesj",
-  event = { "DeferredUIEnter" },
-  after = function()
-    local treesj = require("treesj")
+local once = require("once")
 
-    treesj.setup({
-      use_default_keymaps = false,
-      max_join_length = 9999,
-    })
+local setup = once(function()
+  vim.cmd([[packadd treesj]])
 
-    -- This is no builtin CTRL-S keymap in normal mode, so we can take it.
-    vim.keymap.set("n", "<C-s>", function()
-      treesj.split()
-    end, { desc = "TreeSJ: Split node" })
+  require("treesj").setup({
+    use_default_keymaps = false,
+    max_join_length = 9999,
+  })
+  return nil
+end)
 
-    -- :h CTRL-J is an alias of j, which can be taken by us.
-    vim.keymap.set("n", "<C-j>", function()
-      treesj.join()
-    end, { desc = "TreeSJ: Join node" })
-  end,
-})
+-- This is no builtin CTRL-S keymap in normal mode, so we can take it.
+vim.keymap.set("n", "<C-s>", function()
+  setup()
+  require("treesj").split()
+end, { desc = "TreeSJ: Split node" })
+
+-- :h CTRL-J is an alias of j, which can be taken by us.
+vim.keymap.set("n", "<C-j>", function()
+  setup()
+  require("treesj").join()
+end, { desc = "TreeSJ: Join node" })
