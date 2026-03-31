@@ -123,6 +123,10 @@
     ./home-manager/simple-programs.nix
     ./home-manager/language-servers.nix
     ./home-manager/languages.nix
+    ./home-manager/archive-and-compression.nix
+    ./home-manager/diff-and-patch.nix
+    ./home-manager/grep-and-sed.nix
+    ./home-manager/pager.nix
 
     # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix

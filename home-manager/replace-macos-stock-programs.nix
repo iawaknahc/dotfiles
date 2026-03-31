@@ -1,8 +1,6 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # The following packages replace programs that ship with macOS.
-    bzip2
     coreutils-prefixed
     (stdenv.mkDerivation {
       name = "coreutils-prefixed-manpages";
@@ -27,21 +25,12 @@
     file
     findutils
     gnumake
-    gnused
-    gnutar
-    gzip
-    less
     openssl
-    patch
     perl
 
     # Install GNU Time
     # This program does not come with a manpage.
     # Instead, it uses GNU Texinfo.
     time
-
-    unzip
-    xz
-    zip
   ];
 }
