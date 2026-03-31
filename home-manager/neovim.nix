@@ -230,10 +230,7 @@
     ## Git integration
     vim-fugitive
     vim-rhubarb
-    {
-      optional = true;
-      plugin = gitsigns-nvim;
-    }
+    gitsigns-nvim
     {
       optional = true;
       # FIXME: neovim@0.12 includes a builtin plugin :DiffTool https://neovim.io/doc/user/plugins/#%3ADiffTool
