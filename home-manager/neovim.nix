@@ -203,10 +203,7 @@
     }
 
     ## LSP and diagnostics
-    {
-      optional = true;
-      plugin = nvim-lspconfig;
-    }
+    nvim-lspconfig
     {
       optional = true;
       plugin = nvim-lint;
