@@ -118,10 +118,7 @@
       plugin = unicode-vim;
     }
     # Edit surroundings.
-    {
-      optional = true;
-      plugin = mini-surround;
-    }
+    nvim-surround
     # Motion
     flash-nvim
     # Completion

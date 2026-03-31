@@ -31,12 +31,13 @@ local setup = once(
   end
 )
 
-vim.keymap.set({ "n", "x", "o" }, "s", function()
+vim.keymap.set({ "n" }, "s", function()
   setup()
   require("flash").jump()
 end, { desc = "Flash" })
 
-vim.keymap.set({ "n", "x", "o" }, "S", function()
+-- nvim-surround has a S keymap in visual mode.
+vim.keymap.set({ "n" }, "S", function()
   local flash_treesitter = setup()
   flash_treesitter()
 end, { desc = "Flash Treesitter" })
