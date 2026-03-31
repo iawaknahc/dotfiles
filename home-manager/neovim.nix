@@ -40,7 +40,7 @@
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
     # Open fugitive.
-    g = "nvim --cmd 'let g:fugitive_eager_load = 1' +G +only";
+    g = "nvim +G +only";
     # Open diffview.
     diffview = "nvim --cmd 'let g:diffview_eager_load = 1' +DiffviewFileHistory";
   };
@@ -228,14 +228,8 @@
     }
 
     ## Git integration
-    {
-      optional = true;
-      plugin = vim-fugitive;
-    }
-    {
-      optional = true;
-      plugin = vim-rhubarb;
-    }
+    vim-fugitive
+    vim-rhubarb
     {
       optional = true;
       plugin = gitsigns-nvim;
