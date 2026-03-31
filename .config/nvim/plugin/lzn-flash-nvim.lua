@@ -1,11 +1,9 @@
-require("lz.n").load({
-  "flash.nvim",
-  enabled = true,
-  event = { "DeferredUIEnter" },
-  after = function()
-    local flash = require("flash")
-    local fix_treesitter_function = require("fix_treesitter_function")
+local once = require("once")
 
+local setup = once(
+  ---@return fun()
+  function()
+    local flash = require("flash")
     flash.setup({
       search = {
         multi_window = false,
@@ -27,14 +25,18 @@ require("lz.n").load({
         },
       },
     })
-
+    local fix_treesitter_function = require("fix_treesitter_function")
     local flash_treesitter = fix_treesitter_function(flash.treesitter)
+    return flash_treesitter
+  end
+)
 
-    vim.keymap.set({ "n", "x", "o" }, "s", function()
-      flash.jump()
-    end, { desc = "Flash" })
-    vim.keymap.set({ "n", "x", "o" }, "S", function()
-      flash_treesitter()
-    end, { desc = "Flash Treesitter" })
-  end,
-})
+vim.keymap.set({ "n", "x", "o" }, "s", function()
+  setup()
+  require("flash").jump()
+end, { desc = "Flash" })
+
+vim.keymap.set({ "n", "x", "o" }, "S", function()
+  local flash_treesitter = setup()
+  flash_treesitter()
+end, { desc = "Flash Treesitter" })

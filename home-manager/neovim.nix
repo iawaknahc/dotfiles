@@ -123,10 +123,7 @@
       plugin = mini-surround;
     }
     # Motion
-    {
-      optional = true;
-      plugin = flash-nvim;
-    }
+    flash-nvim
     # Completion
     {
       optional = true;
