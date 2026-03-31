@@ -210,10 +210,7 @@
     }
 
     ## Automation
-    {
-      optional = true;
-      plugin = conform-nvim;
-    }
+    conform-nvim
 
     ## Git integration
     vim-fugitive
