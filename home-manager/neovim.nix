@@ -117,11 +117,6 @@
       optional = true;
       plugin = unicode-vim;
     }
-    # Text objects.
-    {
-      optional = true;
-      plugin = mini-ai;
-    }
     # Edit surroundings.
     {
       optional = true;
