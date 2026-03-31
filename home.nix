@@ -127,6 +127,7 @@
     # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix
 
+    ./home-manager/awk.nix
     ./home-manager/lua.nix
     ./home-manager/nodejs.nix
     ./home-manager/clojure.nix

@@ -26,7 +26,6 @@
     dig
     file
     findutils
-    gawk
     gnumake
     gnused
     gnutar
