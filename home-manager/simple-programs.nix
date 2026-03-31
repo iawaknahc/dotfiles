@@ -1,8 +1,6 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    nix-unit
-
     # Secret management
     _1password-cli
     pass # https://www.passwordstore.org/
@@ -11,9 +9,6 @@
     ast-grep
     fastmod
     github-markdown-toc-go # It provides gh-md-toc
-    jo # https://github.com/jpmens/jo
-    jq
-    yq-go
 
     # Text processing on binary files.
     # xxd with color
@@ -26,10 +21,6 @@
     # Dialects of Chinese
     opencc
 
-    # IP and CIDR
-    subnetcalc
-    ipcalc
-
     # Database
     duckdb
     sqlite-interactive
@@ -41,7 +32,6 @@
 
     # Filesystem
     bfs
-    eza
     # Interactive du.
     # https://dev.yorhel.nl/ncdu
     ncdu
@@ -52,7 +42,6 @@
     shellcheck
 
     # Source code formatter
-    nixfmt
     prettierd
     shfmt
 

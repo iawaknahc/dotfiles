@@ -21,6 +21,8 @@
     nurl
     nix-melt
     nix-tree
+    nix-unit
+    nixfmt
   ];
   programs.nix-init.enable = true;
   programs.nh.enable = true;

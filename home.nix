@@ -122,11 +122,11 @@
     ./home-manager/my-scripts.nix
     ./home-manager/simple-programs.nix
     ./home-manager/language-servers.nix
-    ./home-manager/languages.nix
     ./home-manager/archive-and-compression.nix
     ./home-manager/diff-and-patch.nix
     ./home-manager/grep-and-sed.nix
     ./home-manager/pager.nix
+    ./home-manager/networking-tools.nix
 
     # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix
@@ -140,6 +140,7 @@
     ./home-manager/ruby.nix
     ./home-manager/go.nix
     ./home-manager/java.nix
+    ./home-manager/perl.nix
 
     # Text editors.
     ./home-manager/vim.nix
@@ -162,6 +163,7 @@
     ./home-manager/tailscale.nix
     ./home-manager/plain-text-accounting.nix
     ./home-manager/timg.nix
+    ./home-manager/jq.nix
 
     # PGP and friends
     ./home-manager/pgp.nix

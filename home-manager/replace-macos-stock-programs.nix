@@ -21,12 +21,10 @@
     # https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/top-level/all-packages.nix#L3030
     curlFull
 
-    dig
     file
     findutils
     gnumake
     openssl
-    perl
 
     # Install GNU Time
     # This program does not come with a manpage.
