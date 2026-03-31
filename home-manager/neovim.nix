@@ -130,10 +130,7 @@
       plugin = blink-cmp;
     }
     # Swap treesitter nodes.
-    {
-      optional = true;
-      plugin = treewalker-nvim;
-    }
+    treewalker-nvim
     # Split or join blocks of code.
     {
       optional = true;
