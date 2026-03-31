@@ -150,10 +150,7 @@
     }
 
     ## Pick things.
-    {
-      optional = true;
-      plugin = fzf-lua;
-    }
+    fzf-lua
 
     ## Visual aids
     # statusline
