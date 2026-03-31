@@ -197,10 +197,7 @@
       );
     }
     # Rainbow delimiters for Lisp
-    {
-      optional = true;
-      plugin = rainbow-delimiters-nvim;
-    }
+    rainbow-delimiters-nvim
 
     ## LSP and diagnostics
     nvim-lspconfig
