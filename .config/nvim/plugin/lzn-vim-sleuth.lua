@@ -9,7 +9,7 @@ require("lz.n").load({
   event = { "BufNewFile", "BufReadPost", "BufFilePost" },
   before = function()
     -- Prevent this plugin to turn on filetype indentation.
-    -- https://github.com/tpope/vim-sleuth/blob/v1.2/plugin/sleuth.vim#L181
-    vim.g.did_indent_on = true
+    -- https://github.com/tpope/vim-sleuth/commit/e362d3552ba2fcf0bc1830a1c59e869b1c6f2067
+    vim.g.sleuth_no_filetype_indent_on = 1
   end,
 })
