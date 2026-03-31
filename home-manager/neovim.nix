@@ -236,10 +236,7 @@
 
     # Replace netrw.
     # Treating directories as buffers is more intuitive for me.
-    {
-      optional = true;
-      plugin = oil-nvim;
-    }
+    oil-nvim
 
     ## Debugging
     {
