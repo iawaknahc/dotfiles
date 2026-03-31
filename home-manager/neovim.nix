@@ -183,10 +183,7 @@
       plugin = mini-clue;
     }
     # Show context.
-    {
-      optional = true;
-      plugin = nvim-treesitter-context;
-    }
+    nvim-treesitter-context
     # Show colors.
     {
       plugin = (
