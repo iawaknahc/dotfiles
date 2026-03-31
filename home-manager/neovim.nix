@@ -204,10 +204,7 @@
 
     ## LSP and diagnostics
     nvim-lspconfig
-    {
-      optional = true;
-      plugin = nvim-lint;
-    }
+    nvim-lint
 
     ## Automation
     conform-nvim
