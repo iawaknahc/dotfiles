@@ -18,6 +18,9 @@ end, {
   desc = "Toggle inlay hints",
 })
 
+-- I am aware that this keymap is builtin, but
+-- we want to set anchor_bias to above because
+-- it clashes with the dropdown of blink.cmp very often.
 vim.keymap.set("i", "<C-s>", function()
   vim.lsp.buf.signature_help({
     focusable = false,
