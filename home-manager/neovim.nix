@@ -164,10 +164,7 @@
       plugin = nvim-notify;
     }
     # Key clues and submodes.
-    {
-      optional = true;
-      plugin = mini-clue;
-    }
+    mini-clue
     # Show context.
     nvim-treesitter-context
     # Show colors.
