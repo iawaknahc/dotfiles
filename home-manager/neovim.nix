@@ -205,18 +205,9 @@
     oil-nvim
 
     ## Debugging
-    {
-      optional = true;
-      plugin = nvim-dap;
-    }
-    {
-      optional = true;
-      plugin = nvim-dap-go;
-    }
-    {
-      optional = true;
-      plugin = nvim-dap-python;
-    }
+    nvim-dap
+    nvim-dap-go
+    nvim-dap-python
 
     ## REPL
     {
