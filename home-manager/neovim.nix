@@ -148,10 +148,7 @@
     # statusline
     mini-statusline
     # statuscolumn
-    {
-      optional = true;
-      plugin = statuscol-nvim;
-    }
+    statuscol-nvim
     # vim.notify
     {
       optional = true;

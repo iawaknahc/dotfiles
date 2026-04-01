@@ -1,50 +1,45 @@
-require("lz.n").load({
-  "statuscol.nvim",
-  event = { "DeferredUIEnter" },
-  after = function()
-    local builtin = require("statuscol.builtin")
-    require("statuscol").setup({
-      -- By ignoring buftype=nofile, buffer used by :Man are ignored.
-      -- The statuscolumn is not rendered, the layout will not be affected by the width of the statuscolumn.
-      bt_ignore = { "nofile", "terminal" },
-      segments = {
-        -- builtin.foldfunc is different from %C that it never show the fold level.
-        {
-          text = { builtin.foldfunc, " " },
-          condition = { true, builtin.not_empty },
-          click = "v:lua.ScFa",
-        },
+local builtin = require("statuscol.builtin")
 
-        -- We use the capability of statuscol.nvim to place the signs.
-        -- This override the builtin behavior of nvim that uses priority to place the signs from left to right.
-        {
-          sign = {
-            name = { "Dap.*" },
-          },
-          click = "v:lua.ScSa",
-        },
-        {
-          sign = {
-            namespace = { "diagnostic.*" },
-          },
-          click = "v:lua.ScSa",
-        },
+require("statuscol").setup({
+  -- By ignoring buftype=nofile, buffer used by :Man are ignored.
+  -- The statuscolumn is not rendered, the layout will not be affected by the width of the statuscolumn.
+  bt_ignore = { "nofile", "terminal" },
+  segments = {
+    -- builtin.foldfunc is different from %C that it never show the fold level.
+    {
+      text = { builtin.foldfunc, " " },
+      condition = { true, builtin.not_empty },
+      click = "v:lua.ScFa",
+    },
 
-        {
-          text = { "%l", " " },
-          condition = { true, builtin.not_empty },
-          click = "v:lua.ScLa",
-        },
-
-        -- Show gitsigns to the right of the line number, like in vscode.
-        {
-          sign = {
-            namespace = { "gitsigns.*" },
-            wrap = true,
-          },
-          click = "v:lua.ScSa",
-        },
+    -- We use the capability of statuscol.nvim to place the signs.
+    -- This override the builtin behavior of nvim that uses priority to place the signs from left to right.
+    {
+      sign = {
+        name = { "Dap.*" },
       },
-    })
-  end,
+      click = "v:lua.ScSa",
+    },
+    {
+      sign = {
+        namespace = { "diagnostic.*" },
+      },
+      click = "v:lua.ScSa",
+    },
+
+    {
+      text = { "%l", " " },
+      condition = { true, builtin.not_empty },
+      click = "v:lua.ScLa",
+    },
+
+    -- Show gitsigns to the right of the line number, like in vscode.
+    {
+      sign = {
+        namespace = { "gitsigns.*" },
+        wrap = true,
+      },
+      click = "v:lua.ScSa",
+    },
+  },
 })
