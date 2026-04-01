@@ -146,10 +146,7 @@
 
     ## Visual aids
     # statusline
-    {
-      optional = true;
-      plugin = mini-statusline;
-    }
+    mini-statusline
     # statuscolumn
     {
       optional = true;
