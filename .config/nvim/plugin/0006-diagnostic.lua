@@ -4,6 +4,19 @@ local mydiagnostic_autocmdgroup = vim.api.nvim_create_augroup("MyDiagnostic", { 
 vim.api.nvim_create_autocmd("VimEnter", {
   group = mydiagnostic_autocmdgroup,
   callback = function()
+    local signs = {
+      [vim.diagnostic.severity.ERROR] = "E",
+      [vim.diagnostic.severity.WARN] = "W",
+      [vim.diagnostic.severity.INFO] = "I",
+      [vim.diagnostic.severity.HINT] = "H",
+    }
+    local hl_map = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticHint",
+    }
+
     vim.diagnostic.config({
       virtual_text = {
         source = true,
@@ -15,6 +28,23 @@ vim.api.nvim_create_autocmd("VimEnter", {
         source = true,
       },
       severity_sort = true,
+      status = {
+        format = function(counts)
+          local items = {}
+          for level, _ in ipairs(vim.diagnostic.severity) do
+            local count = counts[level] or 0
+            -- Do not include 0
+            if count > 0 then
+              table.insert(items, ("%%#%s#%s %s"):format(hl_map[level], signs[level], count))
+            end
+          end
+          -- Return empty string if there are no diagnostic items.
+          if #items == 0 then
+            return ""
+          end
+          return table.concat(items, " ")
+        end,
+      },
     })
   end,
 })
@@ -22,25 +52,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
   group = mydiagnostic_autocmdgroup,
   pattern = "*",
-  desc = "Track diagnostic count",
-  callback = vim.schedule_wrap(function(args)
-    if not vim.api.nvim_buf_is_valid(args.buf) then
-      vim.b.diagnostic_count = nil
-      return
-    end
-
-    local out = {
-      [vim.diagnostic.severity.ERROR] = 0,
-      [vim.diagnostic.severity.WARN] = 0,
-      [vim.diagnostic.severity.INFO] = 0,
-      [vim.diagnostic.severity.HINT] = 0,
-    }
-    for _, d in ipairs(vim.diagnostic.get(args.buf)) do
-      out[d.severity] = out[d.severity] + 1
-    end
-
-    vim.b.diagnostic_count = out
-
+  desc = "Redraw statusline",
+  callback = vim.schedule_wrap(function()
     vim.cmd([[redrawstatus]])
   end),
 })

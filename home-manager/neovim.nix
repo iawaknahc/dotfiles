@@ -13,24 +13,6 @@
 
   home.packages = with pkgs; [
     tree-sitter
-    # FIXME: neovim@0.12 bundles vim.uv type definitions.
-    (stdenv.mkDerivation {
-      name = "luv";
-      src = fetchFromGitHub {
-        owner = "LuaCATS";
-        repo = "luv";
-        rev = "3615eb12c94a7cfa7184b8488cf908abb5e94c9c";
-        hash = "sha256-NGCJWE5Fl6/ffPhot8yGEuwBv5KedufJCcMXjYEYjbM=";
-      };
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out/share/LuaCATS/luv
-        cp -R $src/. $out/share/LuaCATS/luv
-
-        runHook postInstall
-      '';
-    })
   ];
 
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
@@ -53,7 +35,6 @@
     source = ../.config/nvim/snippets;
     recursive = true;
   };
-  # FIXME: neovim@0.12 enable ui2 https://neovim.io/doc/user/news/#_ui
   xdg.configFile."nvim/lua" = {
     source = ../.config/nvim/lua;
     recursive = true;
@@ -66,12 +47,6 @@
   );
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
-    # require("lz.n").load { PLUGIN_NAME }
-    # where PLUGIN_NAME is the pname of a Nix vimPlugin.
-    # To find the pname, see https://github.com/NixOS/nixpkgs/blob/nixpkgs-unstable/pkgs/applications/editors/vim/plugins/generated.nix
-
-    # The plugin manager.
-    lz-n
     # Colorscheme
     catppuccin-nvim
     # A dependency of many other plugins.
@@ -149,11 +124,6 @@
     mini-statusline
     # statuscolumn
     statuscol-nvim
-    # vim.notify
-    {
-      optional = true;
-      plugin = nvim-notify;
-    }
     # Key clues and submodes.
     mini-clue
     # Show context.

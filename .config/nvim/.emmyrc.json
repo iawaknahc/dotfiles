@@ -20,6 +20,6 @@
         "docBaseConstMatchBaseType": true
     },
     "workspace": {
-        "library": ["/Users/louischan/.nix-profile/share/nvim/runtime", "/Users/louischan/.nix-profile/share/LuaCATS/luv"]
+        "library": ["/Users/louischan/.nix-profile/share/nvim/runtime"]
     }
 }

@@ -57,6 +57,11 @@
       difftastic = {
         cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
+
+      # In my test on 2026-04-01, it does not work for `git difftool --cached` inside tmux with an index of several files.
+      nvim_difftool = {
+        cmd = ''nvim -d "$LOCAL" "$REMOTE"'';
+      };
     };
     init = {
       defaultBranch = "main";

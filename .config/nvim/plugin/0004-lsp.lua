@@ -5,14 +5,6 @@ end, {
   desc = "Go to declaration",
 })
 
--- FIXME: neovim@0.12 maps grt to vim.lsp.buf.type_definition() by default
--- Inspired by Helix goto mode y
-vim.keymap.set({ "n" }, "gy", function()
-  vim.lsp.buf.type_definition()
-end, {
-  desc = "Go to type definition",
-})
-
 -- After trying inlay hint for some time,
 -- I found it quite annoying.
 -- So do not enable it initially.
@@ -24,90 +16,6 @@ vim.keymap.set({ "n" }, "grh", function()
   })
 end, {
   desc = "Toggle inlay hints",
-})
-
--- FIXME: neovim@0.12 gx can open documentLink. Review whether this manual handling is still needed or not.
--- Enhanced gx
-vim.keymap.set({ "n" }, "gx", function()
-  local function gx()
-    local word = vim.fn.expand("<cfile>")
-    vim.ui.open(word)
-  end
-
-  --- @return vim.lsp.Client|nil
-  local function get_gopls()
-    local clients = vim.lsp.get_clients({
-      name = "gopls",
-      method = "textDocument/documentLink",
-    })
-    if #clients == 0 then
-      return nil
-    end
-    return clients[1]
-  end
-
-  --- @param document_link lsp.DocumentLink
-  --- @return boolean
-  local function is_package_documentation_link(document_link)
-    local target = document_link.target
-    if target == nil then
-      return false
-    end
-    if vim.startswith(target, "https://pkg.go.dev/") then
-      return true
-    end
-    return false
-  end
-
-  ---@param pos lsp.Position
-  ---@param range lsp.Range
-  ---@return boolean
-  local function is_in_range(pos, range)
-    if pos.line > range.start.line and pos.line < range["end"].line then
-      return true
-    elseif pos.line == range.start.line and pos.line == range["end"].line then
-      return pos.character >= range.start.character and pos.character <= range["end"].character
-    elseif pos.line == range.start.line then
-      return pos.character >= range.start.character
-    elseif pos.line == range["end"].line then
-      return pos.character <= range["end"].character
-    else
-      return false
-    end
-  end
-
-  local gopls = get_gopls()
-  if gopls == nil then
-    gx()
-    return
-  end
-
-  gopls:request(
-    "textDocument/documentLink",
-    vim.lsp.util.make_position_params(0, "utf-8"),
-    function(err, result, context, _config)
-      if err == nil then
-        --- @type lsp.Position
-        local cursor_position = context.params.position
-
-        for _, item in ipairs(result) do
-          --- @type lsp.DocumentLink
-          local document_link = item
-          local range = document_link.range
-          if is_package_documentation_link(document_link) then
-            if is_in_range(cursor_position, range) then
-              vim.ui.open(document_link.target)
-              return
-            end
-          end
-        end
-      end
-
-      gx()
-    end
-  )
-end, {
-  desc = "Open link under cursor",
 })
 
 vim.keymap.set("i", "<C-s>", function()

@@ -18,5 +18,5 @@
   },
   "diagnostics.unusedLocalExclude": ["_*"],
   "workspace.checkThirdParty": false,
-  "workspace.library": ["~/.nix-profile/share/nvim/runtime", "~/.nix-profile/share/LuaCATS/luv"]
+  "workspace.library": ["~/.nix-profile/share/nvim/runtime"]
 }

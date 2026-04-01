@@ -244,30 +244,16 @@ local function get_gitsigns_strings(args)
   return out
 end
 
--- FIXME: neovim@0.12 has vim.diagnostic.status()
 local function get_diagnostic_strings(args)
   if MiniStatusline.is_truncated(args.trunc_width) then
     return {}
   end
 
-  if vim.b.diagnostic_count == nil then
-    return {}
-  end
-
-  local keys = {
-    [vim.diagnostic.severity.ERROR] = { "DiagnosticError", "E" },
-    [vim.diagnostic.severity.WARN] = { "DiagnosticWarn", "W" },
-    [vim.diagnostic.severity.INFO] = { "DiagnosticInfo", "I" },
-    [vim.diagnostic.severity.HINT] = { "DiagnosticHint", "H" },
-  }
-
   local out = {}
-  for key, val in pairs(keys) do
-    local hl, symbol = unpack(val)
-    local count = vim.b.diagnostic_count[key] or 0
-    if count > 0 then
-      table.insert(out, "%#" .. hl .. "#" .. string.format("%s%d", symbol, count))
-    end
+
+  local status = vim.diagnostic.status()
+  if status ~= "" then
+    table.insert(out, status)
   end
 
   if #out > 0 then
@@ -408,7 +394,6 @@ local function inactive()
   return MiniStatusline.combine_groups(groups)
 end
 
--- FIXME: neovim@0.12 has the default statusline changed. https://neovim.io/doc/user/news/#_defaults
 MiniStatusline.setup({
   content = {
     active = active,
