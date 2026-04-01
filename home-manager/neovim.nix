@@ -41,8 +41,6 @@
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
     # Open fugitive.
     g = "nvim +G +only";
-    # Open diffview.
-    diffview = "nvim --cmd 'let g:diffview_eager_load = 1' +DiffviewFileHistory";
   };
 
   xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
@@ -201,11 +199,6 @@
     vim-fugitive
     vim-rhubarb
     gitsigns-nvim
-    {
-      optional = true;
-      # FIXME: neovim@0.12 includes a builtin plugin :DiffTool https://neovim.io/doc/user/plugins/#%3ADiffTool
-      plugin = diffview-nvim;
-    }
 
     # Replace netrw.
     # Treating directories as buffers is more intuitive for me.
