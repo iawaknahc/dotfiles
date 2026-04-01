@@ -120,10 +120,7 @@
     # Motion
     flash-nvim
     # Completion
-    {
-      optional = true;
-      plugin = blink-cmp;
-    }
+    blink-cmp
     # Swap treesitter nodes.
     treewalker-nvim
     # Split or join blocks of code.
