@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("FileType", {
     local filetype = ev.match
 
     -- Handle large number of lines
-    local max_filesize = 100 * 1024 -- 100KiB
+    local max_filesize = 1 * 1024 * 1024 -- 1MiB
     local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
     if ok and stats ~= nil and stats.size > max_filesize then
       vim.bo[ev.buf].syntax = "OFF"
