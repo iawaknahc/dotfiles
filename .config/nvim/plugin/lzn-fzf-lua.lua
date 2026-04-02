@@ -3,6 +3,8 @@ require("fzf-lua").setup({
     ["--layout"] = "default",
   },
   winopts = {
+    -- Disallow fzf-lua to enable treesitter highlighting because it does not handle large files or long lines.
+    treesitter = false,
     preview = {
       vertical = "up:50%",
       horizontal = "right:50%",

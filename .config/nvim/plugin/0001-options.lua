@@ -2,15 +2,6 @@
 -- We want to turn off indent.
 vim.cmd.filetype("indent", "off")
 
--- Legacy syntax is turned on by default (:h nvim-defaults).
--- additional_vim_regex_highlighting=false will turn it off when treesitter highlight is available.
--- Legacy syntax is still useful when I do not install a treesitter parser for a given filetype, like man.
---
--- If we run :scriptnames, we see synload.vim is still sourced.
--- This is probably due to this trick.
--- https://github.com/neovim/neovim/blob/v0.10.1/runtime/lua/vim/treesitter/highlighter.lua#L138
--- vim.cmd.syntax("off")
-
 -- Hardening
 -- VIM / Neovim has a track record of vulnerable modeline.
 -- See https://www.cve.org/CVERecord?id=CVE-2016-1248
