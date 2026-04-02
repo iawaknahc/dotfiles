@@ -10,9 +10,11 @@ vim.api.nvim_create_autocmd("LspProgress", {
     local params = ev.data.params
     local value = params.value or {}
 
+    -- Progress messages are not worth writing to :messages
+    local history = false
     -- nvim_echo() does not support tmux passthrough sequence out-of-the-box, so the progress bar DOES NOT show when
     -- tmux is being used in Ghostty.
-    vim.api.nvim_echo({ { value.message or "done" } }, false, {
+    vim.api.nvim_echo({ { value.message or "done" } }, history, {
       id = "lsp." .. tostring(client_id),
       kind = "progress",
       source = "vim.lsp",
