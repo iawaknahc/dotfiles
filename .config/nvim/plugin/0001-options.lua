@@ -1,3 +1,9 @@
+-- On 2026-04-05, I tried to migrate all vim.o to vim.go
+-- The buffer I provide in argument does not seem to read from vim.go
+-- For example, nvim main.go, then main.go has no number.
+-- But nvim followed by :e main.go has number.
+-- So stick with vim.o in this file.
+
 -- The default is :filetype detection:ON plugin:ON indent:ON
 -- We want to turn off indent.
 vim.cmd([[filetype indent off]])
@@ -6,23 +12,23 @@ vim.cmd([[filetype indent off]])
 -- VIM / Neovim has a track record of vulnerable modeline.
 -- See https://www.cve.org/CVERecord?id=CVE-2016-1248
 -- See https://www.cve.org/CVERecord?id=CVE-2019-12735
-vim.go.modeline = false
-vim.go.modelines = 0
+vim.o.modeline = false
+vim.o.modelines = 0
 
 -- colorscheme
 vim.cmd([[colorscheme catppuccin-mocha]])
 
 -- statuscolumn
-vim.go.foldcolumn = "1"
+vim.o.foldcolumn = "1"
 -- We use statuscol.nvim to customize the whole statuscolumn.
 -- The value of 'signcolumn' is unimportant here.
-vim.go.signcolumn = "auto:1-9"
+vim.o.signcolumn = "auto:1-9"
 -- The default is 4.
-vim.go.numberwidth = 1
-vim.go.number = true
+vim.o.numberwidth = 1
+vim.o.number = true
 
 -- Display of whitespaces.
-vim.go.list = true
+vim.o.list = true
 -- leadmultispace is powerful enough. I do not need https://github.com/lukas-reineke/indent-blankline.nvim now.
 -- https://www.reddit.com/r/neovim/comments/17aponn/i_feel_like_leadmultispace_deserves_more_attention/
 -- leadtab was added in 0.12.
@@ -43,7 +49,7 @@ vim.opt.listchars = {
   nbsp = "+",
 }
 
-vim.go.breakindent = true
+vim.o.breakindent = true
 
 -- guicursor
 --
@@ -73,15 +79,15 @@ vim.opt.guicursor = {
 }
 
 -- cursorline
-vim.go.cursorlineopt = "number"
-vim.go.cursorline = true
+vim.o.cursorlineopt = "number"
+vim.o.cursorline = true
 
 -- floating window
-vim.go.winborder = "rounded"
+vim.o.winborder = "rounded"
 
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.go.pumheight = 10
+vim.o.pumheight = 10
 -- The completion menu of common completion plugins (e.g. blink.cmp) has a default height of 10.
 -- We set scrolloff to 15 so that we can see the completion menu plus a context of 5 lines.
 -- Note that scrolloff does not work at the end of the buffer.
@@ -89,46 +95,46 @@ vim.go.pumheight = 10
 -- There is a plugin https://github.com/Aasim-A/scrollEOF.nvim
 -- I tried that plugin but that plugin will interfere other plugins that create it own filetype, such as fzf-lua.
 -- It is just too cumbersome to exclude those plugin-private filetypes.
-vim.go.scrolloff = 15
+vim.o.scrolloff = 15
 
 -- Command mode
 -- shell by default is $SHELL.
 -- But I do not want neovim to run command with fish.
-vim.go.shell = "sh"
+vim.o.shell = "sh"
 -- On the first use of c_<Tab>, complete til the longest common string AND show the completion menu WITHOUT selecting the first item.
 -- On subsequent use of c_<Tab>, select the next item in the completion menu.
 vim.opt.wildmode = { "longest:noselect", "full" }
 
 -- Editing
-vim.go.backup = false
-vim.go.writebackup = false
-vim.go.swapfile = false
+vim.o.backup = false
+vim.o.writebackup = false
+vim.o.swapfile = false
 -- This controls how often the swapfile is written.
 -- This also controls how often vim-gitgutter updates the signs.
 -- :h updatetime
-vim.go.updatetime = 100
+vim.o.updatetime = 100
 
 -- clipboard
 vim.opt.clipboard:append({ "unnamed" })
 
 -- Keep the original endofline convention of the file.
-vim.go.fixendofline = false
+vim.o.fixendofline = false
 
 -- No need to make ~ an operator.
 -- Its operator version is :h g~
 
 -- Fold
 -- foldmethod is not set here because it depends on filetype.
-vim.go.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.go.foldlevelstart = 99
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldlevelstart = 99
 
 -- Search
-vim.go.ignorecase = true
-vim.go.smartcase = true
-vim.go.wrapscan = false
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.wrapscan = false
 
 -- grep
-vim.go.grepprg = "rg --vimgrep"
+vim.o.grepprg = "rg --vimgrep"
 
 -- diff
 vim.opt.diffopt = {
@@ -143,4 +149,4 @@ vim.opt.diffopt = {
 }
 
 -- session
-vim.go.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"
+vim.o.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"
