@@ -49,54 +49,55 @@ local function match_motion(motion_spec, input_buffer)
   return input_buffer == motion_spec.forward or input_buffer == motion_spec.backward
 end
 
-local INPUT_BUFFER = ""
-local PENDING_CHAR_ARGUMENT = false
-
--- Store the last motion to be repeated with ; and ,
----@type CapturedMotion|nil
-local captured_motion = nil
-
 vim.on_key(
   ---@param _ string
   ---@param typed string
   function(_, typed)
+    if vim.w.semicoloncomma_input_buffer == nil then
+      vim.w.semicoloncomma_input_buffer = ""
+    end
+
+    if vim.w.semicoloncomma_pending_char_argument == nil then
+      vim.w.semicoloncomma_pending_char_argument = false
+    end
+
     typed = vim.fn.keytrans(typed)
     local mode = vim.api.nvim_get_mode().mode
 
     -- If we are not pending char argument, we have to consider the typed key now.
     -- Otherwise, we look at the buffered keys to find out what the motion was.
-    if not PENDING_CHAR_ARGUMENT then
-      INPUT_BUFFER = INPUT_BUFFER .. typed
+    if not vim.w.semicoloncomma_pending_char_argument then
+      vim.w.semicoloncomma_input_buffer = vim.w.semicoloncomma_input_buffer .. typed
     end
 
     for _, motion_spec in ipairs(MOTION_SPECS) do
-      if match_mode(motion_spec, mode) and match_motion(motion_spec, INPUT_BUFFER) then
+      if match_mode(motion_spec, mode) and match_motion(motion_spec, vim.w.semicoloncomma_input_buffer) then
         -- The motion does not require a char argument, we can capture it immediately.
         if motion_spec.has_char_argument == nil or motion_spec.has_char_argument == false then
-          captured_motion = {
+          vim.w.semicoloncomma_captured_motion = {
             motion = motion_spec,
           }
           if vim.v.count ~= 0 then
-            captured_motion.count = vim.v.count
+            vim.w.semicoloncomma_captured_motion.count = vim.v.count
           end
           goto cleanup
         end
 
         -- Otherwise, the motion require a char argument.
         -- We were waiting already.
-        if PENDING_CHAR_ARGUMENT then
-          captured_motion = {
+        if vim.w.semicoloncomma_pending_char_argument then
+          vim.w.semicoloncomma_captured_motion = {
             motion = motion_spec,
             char = typed,
           }
           if vim.v.count ~= 0 then
-            captured_motion.count = vim.v.count
+            vim.w.semicoloncomma_captured_motion.count = vim.v.count
           end
           goto cleanup
         end
 
         -- Otherwise, wait for the next char.
-        PENDING_CHAR_ARGUMENT = true
+        vim.w.semicoloncomma_pending_char_argument = true
         goto wait_for_next_key
       end
     end
@@ -105,8 +106,8 @@ vim.on_key(
     -- This means the input keys match nothing.
     -- We forget everything and start from scratch.
     ::cleanup::
-    INPUT_BUFFER = ""
-    PENDING_CHAR_ARGUMENT = false
+    vim.w.semicoloncomma_input_buffer = ""
+    vim.w.semicoloncomma_pending_char_argument = false
 
     ::wait_for_next_key::
   end
@@ -114,16 +115,16 @@ vim.on_key(
 
 ---@param direction "forward"|"backward"
 local function repeat_last_motion(direction)
-  if captured_motion == nil then
+  if vim.w.semicoloncomma_captured_motion == nil then
     return
   end
 
-  local command = captured_motion.motion[direction]
-  if captured_motion.count ~= nil then
-    command = captured_motion.count .. command
+  local command = vim.w.semicoloncomma_captured_motion.motion[direction]
+  if vim.w.semicoloncomma_captured_motion.count ~= nil then
+    command = vim.w.semicoloncomma_captured_motion.count .. command
   end
-  if captured_motion.char ~= nil then
-    command = command .. captured_motion.char
+  if vim.w.semicoloncomma_captured_motion.char ~= nil then
+    command = command .. vim.w.semicoloncomma_captured_motion.char
   end
 
   -- m: remap keys so that mappings like [h (from gitsigns) work
