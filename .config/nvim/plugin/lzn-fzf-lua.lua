@@ -41,11 +41,19 @@ vim.keymap.set("n", "<Space>D", "<CMD>FzfLua diagnostics_workspace<CR>", {
 })
 
 -- The picker version of :chistory
-vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix_stack<CR>", {
+vim.keymap.set("n", "<Space>Q", "<CMD>FzfLua quickfix_stack<CR>", {
   desc = ":FzfLua quickfix_stack",
 })
 
 -- The picker version of :lhistory
-vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist_stack<CR>", {
+vim.keymap.set("n", "<Space>L", "<CMD>FzfLua loclist_stack<CR>", {
   desc = ":FzfLua loclist_stack",
+})
+
+vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix<CR>", {
+  desc = ":FzfLua quickfix",
+})
+
+vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist<CR>", {
+  desc = ":FzfLua loclist",
 })
