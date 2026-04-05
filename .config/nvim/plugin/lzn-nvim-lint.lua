@@ -7,9 +7,11 @@ require("lint").linters_by_ft = {
 local lintGroup = vim.api.nvim_create_augroup("MyLintAutoCommands", { clear = true })
 vim.api.nvim_create_autocmd("InsertLeave", {
   group = lintGroup,
-  callback = function()
-    -- Run these always.
-    require("lint").try_lint({ "codespell" }, { ignore_errors = true })
+  callback = function(ev)
+    -- Run if the file is not big.
+    if vim.bo[ev.buf].filetype ~= "bigfile" then
+      require("lint").try_lint({ "codespell" }, { ignore_errors = true })
+    end
   end,
 })
 

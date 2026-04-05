@@ -24,19 +24,8 @@
     # Open fugitive.
     g = "nvim +G +only";
   };
-
-  xdg.configFile."nvim/stylua.toml".source = ../.config/nvim/stylua.toml;
-  xdg.configFile."nvim/.luarc.json".source = ../.config/nvim/.luarc.json;
-  xdg.configFile."nvim/plugin" = {
-    source = ../.config/nvim/plugin;
-    recursive = true;
-  };
-  xdg.configFile."nvim/snippets" = {
-    source = ../.config/nvim/snippets;
-    recursive = true;
-  };
-  xdg.configFile."nvim/lua" = {
-    source = ../.config/nvim/lua;
+  xdg.configFile."nvim" = {
+    source = ../.config/nvim;
     recursive = true;
   };
 
