@@ -7,7 +7,7 @@ vim.api.nvim_create_user_command("ClearAllRegisters", function()
 
   ---@type string|nil
   local shada_setting_register = nil
-  local shada_settings = vim.split(vim.o.shada, ",")
+  local shada_settings = vim.split(vim.go.shada, ",")
   for _, shada_setting in ipairs(shada_settings) do
     if string.sub(shada_setting, 1, 1) == "<" then
       shada_setting_register = shada_setting

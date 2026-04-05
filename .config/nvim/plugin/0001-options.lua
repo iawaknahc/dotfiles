@@ -1,28 +1,28 @@
 -- The default is :filetype detection:ON plugin:ON indent:ON
 -- We want to turn off indent.
-vim.cmd.filetype("indent", "off")
+vim.cmd([[filetype indent off]])
 
 -- Hardening
 -- VIM / Neovim has a track record of vulnerable modeline.
 -- See https://www.cve.org/CVERecord?id=CVE-2016-1248
 -- See https://www.cve.org/CVERecord?id=CVE-2019-12735
-vim.o.modeline = false
-vim.o.modelines = 0
+vim.go.modeline = false
+vim.go.modelines = 0
 
 -- colorscheme
-vim.cmd.colorscheme("catppuccin-mocha")
+vim.cmd([[colorscheme catppuccin-mocha]])
 
 -- statuscolumn
-vim.o.foldcolumn = "1"
+vim.go.foldcolumn = "1"
 -- We use statuscol.nvim to customize the whole statuscolumn.
 -- The value of 'signcolumn' is unimportant here.
-vim.o.signcolumn = "auto:1-9"
+vim.go.signcolumn = "auto:1-9"
 -- The default is 4.
-vim.o.numberwidth = 1
-vim.o.number = true
+vim.go.numberwidth = 1
+vim.go.number = true
 
 -- Display of whitespaces.
-vim.o.list = true
+vim.go.list = true
 -- leadmultispace is powerful enough. I do not need https://github.com/lukas-reineke/indent-blankline.nvim now.
 -- https://www.reddit.com/r/neovim/comments/17aponn/i_feel_like_leadmultispace_deserves_more_attention/
 -- leadtab was added in 0.12.
@@ -43,7 +43,7 @@ vim.opt.listchars = {
   nbsp = "+",
 }
 
-vim.o.breakindent = true
+vim.go.breakindent = true
 
 -- guicursor
 --
@@ -73,15 +73,15 @@ vim.opt.guicursor = {
 }
 
 -- cursorline
-vim.o.cursorlineopt = "number"
-vim.o.cursorline = true
+vim.go.cursorlineopt = "number"
+vim.go.cursorline = true
 
 -- floating window
-vim.o.winborder = "rounded"
+vim.go.winborder = "rounded"
 
 -- Completion
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.o.pumheight = 10
+vim.go.pumheight = 10
 -- The completion menu of common completion plugins (e.g. blink.cmp) has a default height of 10.
 -- We set scrolloff to 15 so that we can see the completion menu plus a context of 5 lines.
 -- Note that scrolloff does not work at the end of the buffer.
@@ -89,46 +89,46 @@ vim.o.pumheight = 10
 -- There is a plugin https://github.com/Aasim-A/scrollEOF.nvim
 -- I tried that plugin but that plugin will interfere other plugins that create it own filetype, such as fzf-lua.
 -- It is just too cumbersome to exclude those plugin-private filetypes.
-vim.o.scrolloff = 15
+vim.go.scrolloff = 15
 
 -- Command mode
 -- shell by default is $SHELL.
 -- But I do not want neovim to run command with fish.
-vim.o.shell = "sh"
+vim.go.shell = "sh"
 -- On the first use of c_<Tab>, complete til the longest common string AND show the completion menu WITHOUT selecting the first item.
 -- On subsequent use of c_<Tab>, select the next item in the completion menu.
 vim.opt.wildmode = { "longest:noselect", "full" }
 
 -- Editing
-vim.o.backup = false
-vim.o.writebackup = false
-vim.o.swapfile = false
+vim.go.backup = false
+vim.go.writebackup = false
+vim.go.swapfile = false
 -- This controls how often the swapfile is written.
 -- This also controls how often vim-gitgutter updates the signs.
 -- :h updatetime
-vim.o.updatetime = 100
+vim.go.updatetime = 100
 
 -- clipboard
 vim.opt.clipboard:append({ "unnamed" })
 
 -- Keep the original endofline convention of the file.
-vim.o.fixendofline = false
+vim.go.fixendofline = false
 
 -- No need to make ~ an operator.
 -- Its operator version is :h g~
 
 -- Fold
 -- foldmethod is not set here because it depends on filetype.
-vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.o.foldlevelstart = 99
+vim.go.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.go.foldlevelstart = 99
 
 -- Search
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.wrapscan = false
+vim.go.ignorecase = true
+vim.go.smartcase = true
+vim.go.wrapscan = false
 
 -- grep
-vim.o.grepprg = "rg --vimgrep"
+vim.go.grepprg = "rg --vimgrep"
 
 -- diff
 vim.opt.diffopt = {
@@ -143,4 +143,4 @@ vim.opt.diffopt = {
 }
 
 -- session
-vim.o.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"
+vim.go.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"

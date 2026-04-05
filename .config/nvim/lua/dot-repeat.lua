@@ -15,7 +15,7 @@ function M.make_repeatable(fn_name, fn)
   local global_fn_name = "operatorfunc_" .. fn_name
   _G[global_fn_name] = function(type_)
     if type_ == nil then
-      vim.o.operatorfunc = "v:lua." .. global_fn_name
+      vim.go.operatorfunc = "v:lua." .. global_fn_name
       -- l is just a placeholder motion to trigger g@ to execute once.
       return "g@l"
     end

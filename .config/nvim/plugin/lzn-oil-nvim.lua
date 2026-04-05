@@ -16,7 +16,7 @@ require("oil").setup({
   buf_options = {
     -- Make Oil buffers listed, like normal buffers.
     buflisted = true,
-    -- Make Oil buffers follow vim.o.hidden
+    -- Make Oil buffers follow vim.go.hidden
     bufhidden = "",
   },
   -- Never delete Oil buffers automatically.

@@ -124,7 +124,7 @@ local function byte_sequence_to_g8_repr(byte_sequence)
 end
 
 function M.g8()
-  local encoding = vim.o.encoding
+  local encoding = vim.go.encoding
   if encoding == nil or encoding == "" then
     encoding = "utf-8"
   end

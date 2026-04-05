@@ -17,7 +17,7 @@ vim.api.nvim_create_user_command("Lvimgrep", function(args)
     return
   end
 
-  vim.o.hlsearch = true
+  vim.go.hlsearch = true
   local ok = pcall(function()
     vim.cmd([[lvimgrep //gj %]])
   end)
