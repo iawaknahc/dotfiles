@@ -5,7 +5,7 @@ end, {
   desc = "Go to declaration",
 })
 
--- After trying inlay hint for some time,
+-- After trying to inlay hint for some time,
 -- I found it quite annoying.
 -- So do not enable it initially.
 vim.keymap.set({ "n" }, "grh", function()
@@ -16,6 +16,16 @@ vim.keymap.set({ "n" }, "grh", function()
   })
 end, {
   desc = "Toggle inlay hints",
+})
+
+vim.keymap.set({ "n" }, "grl", function()
+  vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled({
+    bufnr = 0,
+  }), {
+    bufnr = 0,
+  })
+end, {
+  desc = "Toggle codelens",
 })
 
 -- I am aware that this keymap is builtin, but
