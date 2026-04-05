@@ -6,18 +6,15 @@
 }:
 {
   programs.neovim.enable = true;
-  programs.neovim.withNodeJs = true;
   # We need Python3's strptime.
   programs.neovim.withPython3 = true;
-  programs.neovim.withRuby = false;
 
   home.packages = with pkgs; [
     tree-sitter
   ];
 
+  programs.neovim.defaultEditor = true;
   home.sessionVariables = lib.mkIf config.programs.neovim.enable {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
     MANPAGER = "nvim +Man!";
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
