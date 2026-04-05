@@ -26,8 +26,7 @@
     };
   };
 
-  # FIXME: claude-code 2.1.88 was taken down.
-  programs.claude-code.enable = false;
+  programs.claude-code.enable = true;
   programs.claude-code.enableMcpIntegration = true;
   programs.claude-code.memory.text = ''
     # CLAUDE.md
