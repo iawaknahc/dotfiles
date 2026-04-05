@@ -5,8 +5,9 @@
 -- For example, when reading a large XML file, we want filetype=bigfile, so that
 -- 1. treesitter highlighting is disabled because vim.treesitter.start() uses filetype to get the parser.
 -- 2. regex-based highlighting is disabled because there is no regex-based highlight for bigfile.
--- 3. LSP is disabled because there is no LSP server for bigfile.
--- 4. Other plugins that assume correct filetype no longer function.
+-- 3. treesitter fold is disabled.
+-- 4. LSP is disabled because there is no LSP server for bigfile.
+-- 5. Other plugins that assume correct filetype no longer function.
 
 local BIGFILE_FILESIZE = 1 * 1024 * 1024 -- 1MiB
 local BIGFILE_LONG_LINE = 1000

@@ -118,7 +118,7 @@ vim.o.fixendofline = false
 -- Its operator version is :h g~
 
 -- Fold
-vim.o.foldmethod = "expr"
+-- foldmethod is not set here because it depends on filetype.
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldlevelstart = 99
 
