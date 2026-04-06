@@ -158,17 +158,7 @@ local function get_filetype(args)
     return ""
   end
 
-  local has_devicons, devicons = pcall(require, "nvim-web-devicons")
-  if not has_devicons then
-    return filetype
-  end
-
-  if filetype == "" then
-    return filetype
-  end
-
-  local icon = devicons.get_icon(vim.fn.expand("%:t"), nil, { default = true })
-  return string.format("%s  %s", icon, filetype)
+  return filetype
 end
 
 local function get_fileencoding(args)
@@ -238,9 +228,6 @@ local function get_gitsigns_strings(args)
   if vim.b.gitsigns_status_dict.changed ~= nil and vim.b.gitsigns_status_dict.changed > 0 then
     table.insert(out, "%#diffChanged#" .. string.format("~%d", vim.b.gitsigns_status_dict.changed))
   end
-  if #out > 0 then
-    table.insert(out, 1, "%#MiniStatuslineFilename# ")
-  end
   return out
 end
 
@@ -256,23 +243,24 @@ local function get_diagnostic_strings(args)
     table.insert(out, status)
   end
 
-  if #out > 0 then
-    table.insert(out, 1, "%#MiniStatuslineFilename# ")
-  end
   return out
 end
 
--- This is called utf8 location because the location reports
--- the location in 'encoding', which is utf-8 most of the time.
---
--- Note that even 'filecoding' is something else, 'encoding' is still utf-8.
+-- This reports the cursor position relative to the buffer 'encoding'.
+-- The number shown in parenthesis is the virtual column.
+-- See :help virtualedit
 local function get_utf8_location(args)
   if MiniStatusline.is_truncated(args.trunc_width) then
     return ""
   end
-  return "utf8:%5l:%-3c"
+  -- Typical source code files has less than 100000 lines, thus 5 is enough.
+  -- Typical screen has less than 1000 columns, thus 3 is enough.
+  return "utf8:%5l:%-3c(%3v)"
 end
 
+-- This reports the cursor position relative to the screen.
+-- The line number is within the range [1, screen height].
+-- The column number is within the range [1, screen width].
 local function get_screen_location(args)
   if MiniStatusline.is_truncated(args.trunc_width) then
     return ""
@@ -290,15 +278,8 @@ local function get_screen_location(args)
   local screen_row = screenpost_result.row
   local screen_col = screenpost_result.col - getwininfo_result.textoff
 
-  return string.format("screen:%5d:%-3d", screen_row, screen_col)
-end
-
-local function get_cell_location(args)
-  if MiniStatusline.is_truncated(args.trunc_width) then
-    return "%5l:%-3v"
-  end
-
-  return "cell:%5l:%-3v"
+  -- 3 is enough because typical screen has less than 1000 rows and 1000 columns.
+  return string.format("screen:%3d:%-3d", screen_row, screen_col)
 end
 
 local function get_percentage(args)
@@ -325,9 +306,8 @@ local function active()
   local endofline = get_endofline({ trunc_width = 80 })
   local filesize = get_filesize({ trunc_width = 120 })
 
-  local utf8_location = get_utf8_location({ trunc_width = 120 })
-  local screen_location = get_screen_location({ trunc_width = 120 })
-  local cell_location = get_cell_location({ trunc_width = 120 })
+  local utf8_location = get_utf8_location({ trunc_width = 40 })
+  local screen_location = get_screen_location({ trunc_width = 40 })
   local percentage = get_percentage({ trunc_width = 40 })
 
   local devinfo_strings = {}
@@ -359,7 +339,6 @@ local function active()
     strings = {
       utf8_location,
       screen_location,
-      cell_location,
       percentage,
     },
   })
