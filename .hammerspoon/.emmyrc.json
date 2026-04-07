@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
+  "runtime": {
+    "version": "Lua5.4"
+  },
+  "strict": {
+    "typeCall": true
+  },
+  "workspace": {
+    "library": [
+      "~/.hammerspoon/Spoons/EmmyLua.spoon/annotations"
+    ]
+  }
+}
