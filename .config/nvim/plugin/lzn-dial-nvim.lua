@@ -138,6 +138,7 @@ local setup = once(function()
       if vim.regex([[\v]] .. regex_unix):match_str(text) then
         local unix = tonumber(text)
         if unix ~= nil then
+          unix = math.floor(unix)
           local rfc3339 = python_datetime.unix_to_rfc3339(unix)
           text = [["]] .. tostring(rfc3339) .. [["]]
           cursor = #text

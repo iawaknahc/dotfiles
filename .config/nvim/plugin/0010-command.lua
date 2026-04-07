@@ -1,6 +1,7 @@
 vim.api.nvim_create_user_command("Space", function(t)
   local n = tonumber(t.fargs[1])
   if n ~= nil then
+    n = math.floor(n)
     vim.bo.tabstop = n
     vim.bo.shiftwidth = n
     vim.bo.softtabstop = n
@@ -14,6 +15,7 @@ end, {
 vim.api.nvim_create_user_command("Tab", function(t)
   local n = tonumber(t.fargs[1])
   if n ~= nil then
+    n = math.floor(n)
     vim.bo.tabstop = n
     vim.bo.shiftwidth = n
     vim.bo.softtabstop = n

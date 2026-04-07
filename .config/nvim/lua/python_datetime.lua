@@ -19,6 +19,9 @@ EOF
 ]])
 
   local ret = tonumber(vim.g.python_string)
+  if ret ~= nil then
+    ret = math.floor(ret)
+  end
   vim.g.python_string = nil
 
   return ret

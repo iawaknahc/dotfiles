@@ -139,14 +139,16 @@ local function get_filename(args)
   local win = vim.api.nvim_get_current_win()
   local wininfo = vim.fn.getwininfo(win)[1]
 
-  if wininfo.terminal == 1 then
-    return get_terminal_job_pid() .. " %{b:term_title}"
-  elseif wininfo.loclist == 1 then
-    return get_loclist_filename(win)
-  elseif wininfo.quickfix == 1 then
-    return get_qflist_filename()
-  elseif MiniStatusline.is_truncated(args.trunc_width) then
-    return "%t%m%r"
+  if wininfo ~= nil then
+    if wininfo.terminal == 1 then
+      return get_terminal_job_pid() .. " %{b:term_title}"
+    elseif wininfo.loclist == 1 then
+      return get_loclist_filename(win)
+    elseif wininfo.quickfix == 1 then
+      return get_qflist_filename()
+    elseif MiniStatusline.is_truncated(args.trunc_width) then
+      return "%t%m%r"
+    end
   end
 
   return "%f%m%r"
@@ -276,7 +278,10 @@ local function get_screen_location(args)
   local screenpost_result = vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
 
   local screen_row = screenpost_result.row
-  local screen_col = screenpost_result.col - getwininfo_result.textoff
+  local screen_col = 0
+  if getwininfo_result ~= nil then
+    screen_col = screenpost_result.col - getwininfo_result.textoff
+  end
 
   -- 3 is enough because typical screen has less than 1000 rows and 1000 columns.
   return string.format("screen:%3d:%-3d", screen_row, screen_col)
@@ -353,12 +358,14 @@ local function inactive()
     local win = vim.api.nvim_get_current_win()
     local wininfo = vim.fn.getwininfo(win)[1]
 
-    if wininfo.terminal == 1 then
-      return get_terminal_job_pid() .. " %{b:term_title}"
-    elseif wininfo.loclist == 1 then
-      return get_loclist_filename(win)
-    elseif wininfo.quickfix == 1 then
-      return get_qflist_filename()
+    if wininfo ~= nil then
+      if wininfo.terminal == 1 then
+        return get_terminal_job_pid() .. " %{b:term_title}"
+      elseif wininfo.loclist == 1 then
+        return get_loclist_filename(win)
+      elseif wininfo.quickfix == 1 then
+        return get_qflist_filename()
+      end
     end
 
     return "%F"
