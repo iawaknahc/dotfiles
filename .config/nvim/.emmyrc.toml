@@ -1,0 +1,26 @@
+# As of 2026-04-07, there are 2 points to note when configuring emmylua_ls to work with neovim:
+# 1. requirePath must be false, as mentioned in https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/29#issuecomment-2647718119
+# 2. No symlinks because emmylua_ls does not support symlinks https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/650
+#
+# Point 2 has an implication on Nix users because we have to use the actual store path to reference neovim runtime directory.
+#
+# emmylua_ls 0.20 introduces .emmyrc.lua, however, in my testing,
+# it is not loaded like .emmyrc.json.
+# For example, if I run `nvim` at the root of this git repository,
+# .config/nvim/.emmyrc.json is loaded correctly, but .config/nvim/.emmyrc.lua is never loaded.
+# So it is impossible to leverage .emmyrc.lua to dynamically resolve symlinks.
+#
+# Thus, the current approach is to treat this file as a template, and use a script to generate the actual .emmyrc.json
+"$schema" = "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json"
+runtime = { version = "LuaJIT", requirePattern = ["?.lua", "?/init.lua"] }
+strict = { typeCall = true }
+workspace.library = [
+  # The choice of ftplugin.vim is random.
+  # It is a file that is known to live in the runtime directory.
+  # In the script, we resolve the symlink, and then get the parent to retrieve the resolved absolute path to the runtime directory.
+  "~/.nix-profile/share/nvim/runtime/ftplugin.vim",
+
+  # The trailing slash means the script has to include the children directories.
+  "~/.local/share/nvim/site/pack/hm/opt/",
+  "~/.local/share/nvim/site/pack/hm/start/",
+]

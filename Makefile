@@ -1,3 +1,6 @@
+.PHONY: setup
+setup: .config/nvim/.emmyrc.json
+
 .PHONY: check
 check:
 	llscheck --configpath .config/nvim/.luarc.json .config/nvim
@@ -20,3 +23,6 @@ alfred-clean:
 test:
 	nix-unit ./lib/md5toUUID.test.nix
 	nix-unit ./lib/userscript_metadata_block/default.test.nix
+
+.config/nvim/.emmyrc.json:
+	.config/nvim/.emmyrc.py

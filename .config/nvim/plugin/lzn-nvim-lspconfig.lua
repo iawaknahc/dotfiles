@@ -43,12 +43,8 @@ vim.lsp.enable("taplo") -- TOML
 vim.lsp.enable("awk_ls") -- awk
 vim.lsp.enable("bashls") -- Bash or sh
 vim.lsp.enable("fish_lsp") -- fish
-vim.lsp.enable("lua_ls") -- Lua
--- On 2026-02-23, I tried emmylua_ls but even when a properly written .emmyrc.json,
--- vim is still considered as undefined.
--- There is a closed issue on this https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/29
--- I have used absolute in workspace.library but it did not work.
--- vim.lsp.enable("emmylua_ls") -- Lua
+-- vim.lsp.enable("lua_ls") -- Lua
+vim.lsp.enable("emmylua_ls") -- Lua
 vim.lsp.enable("fennel_ls") -- Fennel
 vim.lsp.enable("nil_ls") -- Nix
 vim.lsp.enable("sqls") -- SQL
