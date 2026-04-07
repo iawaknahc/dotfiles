@@ -8,6 +8,8 @@ in
 {
   home.packages = with pkgs; [
     emmylua-ls
+    emmylua-check
+
     lua-language-server
     stylua
 
