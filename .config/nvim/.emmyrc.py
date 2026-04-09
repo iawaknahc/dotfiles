@@ -13,12 +13,12 @@ def main():
 
         p_str: str
         for p_str in library:
-            is_ftplugin_vim = p_str.endswith("/ftplugin.vim")
+            is_env_var = p_str.startswith("$")
             is_ended_with_slash = p_str.endswith("/")
-            a = pathlib.Path(p_str).expanduser().resolve()
-            if is_ftplugin_vim:
-                out.append(str(a.parent))
-            if is_ended_with_slash:
+            if is_env_var:
+                out.append(p_str)
+            elif is_ended_with_slash:
+                a = pathlib.Path(p_str).expanduser().resolve()
                 for p_child in a.iterdir():
                     a_child = p_child.resolve()
                     out.append(str(a_child))

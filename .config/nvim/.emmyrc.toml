@@ -15,10 +15,9 @@
 runtime = { version = "LuaJIT", requirePattern = ["?.lua", "?/init.lua"] }
 strict = { typeCall = true }
 workspace.library = [
-  # The choice of ftplugin.vim is random.
-  # It is a file that is known to live in the runtime directory.
-  # In the script, we resolve the symlink, and then get the parent to retrieve the resolved absolute path to the runtime directory.
-  "~/.nix-profile/share/nvim/runtime/ftplugin.vim",
+  # :help VIMRUNTIME
+  # This environment variable is set by Neovim, and expose to child process, like LSP servers.
+  "$VIMRUNTIME",
 
   # The trailing slash means the script has to include the children directories.
   "~/.local/share/nvim/site/pack/hm/opt/",
