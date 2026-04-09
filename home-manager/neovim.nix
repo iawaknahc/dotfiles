@@ -125,12 +125,12 @@
       plugin = (
         pkgs.vimUtils.buildVimPlugin {
           pname = "nvim-colors";
-          version = "2026-04-08";
+          version = "2026-04-09";
           src = pkgs.fetchFromGitHub {
             owner = "iawaknahc";
             repo = "nvim-colors";
-            rev = "0a8a248e68de7cdac420287a2e5598cc20985387";
-            hash = "sha256-YOqbBfqW2MJ0y88/FGr3wBNDh41DR3ZihmbgYx4BNZo=";
+            rev = "430b49c3a773073beab27684d0c76bfe791af198";
+            hash = "sha256-WFKc+2H6jSl5Ood9ZIMJ3COjTrmpNxdythokO8DDKRs=";
           };
         }
       );
