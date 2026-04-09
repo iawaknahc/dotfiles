@@ -33,6 +33,8 @@
 --   end,
 -- })
 
+local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
+
 vim.lsp.enable("jsonls") -- JSON
 
 -- vim.lsp.enable("marksman") -- Markdown
@@ -42,9 +44,36 @@ vim.lsp.enable("yamlls") -- YAML
 vim.lsp.enable("taplo") -- TOML
 vim.lsp.enable("awk_ls") -- awk
 vim.lsp.enable("bashls") -- Bash or sh
+
 vim.lsp.enable("fish_lsp") -- fish
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.fish",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "fish_lsp", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
+
 -- vim.lsp.enable("lua_ls") -- Lua
 vim.lsp.enable("emmylua_ls") -- Lua
+
+vim.lsp.enable("stylua") -- Lua formatter
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.lua",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "stylua", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
+
 vim.lsp.enable("fennel_ls") -- Fennel
 vim.lsp.enable("nil_ls") -- Nix
 vim.lsp.enable("sqls") -- SQL
@@ -53,11 +82,36 @@ vim.lsp.enable("html") -- HTML
 vim.lsp.enable("cssls") -- CSS
 vim.lsp.enable("tailwindcss") -- Tailwindsss
 vim.lsp.enable("pyright") -- Python
+
 vim.lsp.enable("dartls") -- Dart
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.dart",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "dartls", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
+
 vim.lsp.enable("eslint") -- ESLint
 vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
 vim.lsp.enable("jdtls") -- Java
+
 vim.lsp.enable("clojure_lsp") -- Clojure
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.clj",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "clojure_lsp", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
 
 -- sourcekit is bundled with Xcode.
 vim.lsp.enable("sourcekit") -- Swift, Objective-C, C, and C++
@@ -137,6 +191,17 @@ vim.lsp.config("gopls", {
   },
 })
 vim.lsp.enable("gopls")
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.go,go.mod,go.sum,go.work,go.work.sum",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "gopls", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
 
 vim.lsp.config("ts_ls", {
   init_options = {
@@ -181,6 +246,9 @@ vim.lsp.config("nixd", {
   cmd = { "nixd", "--inlay-hints=true", "--semantic-tokens=true" },
   settings = {
     nixd = {
+      formatting = {
+        command = { "nixfmt" },
+      },
       nixpkgs = {
         expr = "import <nixpkgs> { }",
       },
@@ -198,3 +266,14 @@ vim.lsp.config("nixd", {
   },
 })
 vim.lsp.enable("nixd")
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.nix",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "nixd", bufnr = ev.buf })
+    if #clients == 1 then
+      local stylua = clients[1]
+      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+    end
+  end,
+})
