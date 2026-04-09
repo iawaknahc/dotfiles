@@ -62,6 +62,12 @@
     text = builtins.toJSON {
       preferences = {
         quickEntryShortcut = "off";
+        # The following settings were added by Claude Desktop.
+        # I just copied them here.
+        sidebarMode = "chat";
+        coworkWebSearchEnabled = false;
+        coworkScheduledTasksEnabled = false;
+        ccdScheduledTasksEnabled = false;
       };
     };
   };
