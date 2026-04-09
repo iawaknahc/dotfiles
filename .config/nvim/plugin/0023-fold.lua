@@ -1,22 +1,27 @@
--- It is observed that there is a noticable delay if a large file is opened and treesitter is used to create fold.
+-- When treesitter is used to create fold, the following were observed:
+-- 1. There is a noticeable delay if a large file is opened.
+-- 2. There is a great delay in a 60000 lines CSS file when 30000 lines are deleted and undo-ed immediately.
+--
+-- I didn't have time to look into this issue.
+-- So let's not use fold at all.
 
-local myfold_autocmdgroup = vim.api.nvim_create_augroup("MyFold", { clear = true })
-
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  group = myfold_autocmdgroup,
-  callback = function(ev)
-    local winids = vim.api.nvim_list_wins()
-    for _, winid in ipairs(winids) do
-      local bufnr = vim.api.nvim_win_get_buf(winid)
-      local filetype = vim.bo[bufnr].filetype
-
-      if bufnr == ev.buf then
-        if filetype ~= "bigfile" then
-          vim.wo[winid].foldmethod = "expr"
-        else
-          vim.wo[winid].foldmethod = "manual"
-        end
-      end
-    end
-  end,
-})
+--local myfold_autocmdgroup = vim.api.nvim_create_augroup("MyFold", { clear = true })
+--
+--vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+--  group = myfold_autocmdgroup,
+--  callback = function(ev)
+--    local winids = vim.api.nvim_list_wins()
+--    for _, winid in ipairs(winids) do
+--      local bufnr = vim.api.nvim_win_get_buf(winid)
+--      local filetype = vim.bo[bufnr].filetype
+--
+--      if bufnr == ev.buf then
+--        if filetype ~= "bigfile" then
+--          vim.wo[winid].foldmethod = "expr"
+--        else
+--          vim.wo[winid].foldmethod = "manual"
+--        end
+--      end
+--    end
+--  end,
+--})
