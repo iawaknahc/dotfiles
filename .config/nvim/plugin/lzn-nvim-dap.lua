@@ -1,6 +1,19 @@
 local once = require("once")
 
 local setup = once(function()
+  require("dap-view").setup({
+    winbar = {
+      sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
+      controls = {
+        enabled = true,
+      },
+    },
+    -- FIXME: enable this when nvim-dap-view >= 1.1.0
+    -- virtual_text = {
+    --   enabled = true,
+    -- },
+  })
+
   require("dap-python").setup("debugpy-adapter")
 
   require("dap-go").setup({
@@ -57,11 +70,6 @@ end, { expr = true, desc = "Debugger: Step into" })
 vim.keymap.set("n", "<Leader>do", function()
   return setup().step_out()
 end, { expr = true, desc = "Debugger: Step out" })
-
-vim.keymap.set("n", "<Leader>dr", function()
-  return setup().toggle()
-end, { expr = true, desc = "Debugger: Toggle REPL" })
-
 vim.keymap.set({ "n", "x" }, "<Leader>dK", function()
   return setup().hover()
 end, { expr = true, desc = "Debugger: Hover" })

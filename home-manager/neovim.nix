@@ -156,6 +156,7 @@
 
     ## Debugging
     nvim-dap
+    nvim-dap-view
     nvim-dap-go
     nvim-dap-python
 
