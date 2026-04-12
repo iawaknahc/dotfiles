@@ -25,8 +25,16 @@
 
   programs.git.settings = {
     alias = {
-      dlog = "-c diff.external=difft log --ext-diff --patch";
-      dshow = "-c diff.external=difft show --ext-diff";
+      alias-difft-log = "-c diff.external=difft log --ext-diff --patch";
+      alias-difft-show = "-c diff.external=difft show --ext-diff";
+      alias-ls-files-only-ignored = "ls-files --others --ignored --exclude-standard";
+      alias-ls-files-only-untracked = "ls-files --others --exclude-standard";
+      # The following aliases are expected to be run with -n or -f.
+      alias-clean-only-ignored = "clean -dX";
+      alias-clean-both-untracked-and-ignored = "clean -dx";
+    };
+    clean = {
+      requireForce = true;
     };
     commit = {
       # Show git diff --cached and git diff at the end of the commit message template.
