@@ -20,6 +20,7 @@
     ".DS_Store"
     ".envrc"
     ".direnv/"
+    ".claude/settings.local.json" # https://code.claude.com/docs/en/settings#available-scopes
   ];
 
   programs.git.settings = {
