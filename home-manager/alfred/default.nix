@@ -90,6 +90,10 @@
     (pkgs.writeShellScriptBin "alfred-workflow-cur.py" ''
       ${pkgs.mypython}/bin/python3 ${./cur.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-nbt.py" ''
+      export NUMBAT=${pkgs.numbat}/bin/numbat
+      ${pkgs.mypython}/bin/python3 ${./nbt.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -118,4 +122,7 @@
   # cur
   alfred.sourceFile."workflows/user.workflow.E83534A4-975A-49E0-9482-F498EE56F0F8/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.E83534A4-975A-49E0-9482-F498EE56F0F8/info.plist;
+  # nbt
+  alfred.sourceFile."workflows/user.workflow.892C4836-4E6A-4EEE-999D-8E162CF7ED62/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.892C4836-4E6A-4EEE-999D-8E162CF7ED62/info.plist;
 }
