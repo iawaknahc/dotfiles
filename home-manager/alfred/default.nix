@@ -58,27 +58,6 @@
         '';
       };
 
-  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000-00000000000000002/prefs.plist".source =
-    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.00000000-0000-0000-00000000000000002/prefs.plist;
-  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000002".source =
-    pkgs.stdenv.mkDerivation
-      rec {
-        pname = "alfred-workflow-cur";
-        version = "2025.2";
-
-        src = pkgs.fetchFromGitHub {
-          owner = "alfredapp";
-          repo = "currency-converter-workflow";
-          rev = "${version}";
-          hash = "sha256-142e1KZ58+cEBxJGq/W8JElemGgXTHEP0PTbsOV11F0=";
-        };
-
-        installPhase = ''
-          mkdir $out
-          cp -R ./Workflow/. $out/
-        '';
-      };
-
   alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000003".source =
     pkgs.stdenv.mkDerivation
       rec {
@@ -135,6 +114,9 @@
     (pkgs.writeShellScriptBin "alfred-workflow-yue.py" ''
       ${pkgs.mypython}/bin/python3 ${./yue.py} "$@"
     '')
+    (pkgs.writeShellScriptBin "alfred-workflow-cur.py" ''
+      ${pkgs.mypython}/bin/python3 ${./cur.py} "$@"
+    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -166,4 +148,7 @@
   # yue
   alfred.sourceFile."workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist;
+  # cur
+  alfred.sourceFile."workflows/user.workflow.E83534A4-975A-49E0-9482-F498EE56F0F8/info.plist".source =
+    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.E83534A4-975A-49E0-9482-F498EE56F0F8/info.plist;
 }
