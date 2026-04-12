@@ -37,27 +37,6 @@
   alfred.sourceFile."preferences/features/websearch/prefs.plist".source =
     ../../alfred/Alfred.alfredpreferences/preferences/features/websearch/prefs.plist;
 
-  alfred.sourceFile."workflows/user.workflow.00000000-0000-0000-00000000000000001/prefs.plist".source =
-    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.00000000-0000-0000-00000000000000001/prefs.plist;
-  alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000001".source =
-    pkgs.stdenv.mkDerivation
-      rec {
-        pname = "alfred-workflow-conv";
-        version = "2025.1";
-
-        src = pkgs.fetchFromGitHub {
-          owner = "alfredapp";
-          repo = "unit-converter-workflow";
-          rev = "${version}";
-          hash = "sha256-93o4xis86Z06yMREIwU3uhoYWaeWle9Lv7zVFb6QiyY=";
-        };
-
-        installPhase = ''
-          mkdir $out
-          cp -R ./Workflow/. $out/
-        '';
-      };
-
   alfred.storeFile."workflows/user.workflow.00000000-0000-0000-00000000000000003".source =
     pkgs.stdenv.mkDerivation
       rec {
@@ -93,17 +72,11 @@
       export FZF=${pkgs.fzf}/bin/fzf
       ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
     '')
-    (pkgs.writeShellScriptBin "alfred-workflow-base.py" ''
-      ${pkgs.mypython}/bin/python3 ${./base.py} "$@"
-    '')
     (pkgs.writeShellScriptBin "alfred-workflow-u.py" ''
       ${pkgs.mypython}/bin/python3 ${./u.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-cj.py" ''
       ${pkgs.mypython}/bin/python3 ${./cj.py} "$@"
-    '')
-    (pkgs.writeShellScriptBin "alfred-workflow-date.py" ''
-      ${pkgs.mypython}/bin/python3 ${./date.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-s2t.py" ''
       ${pkgs.mypython}/bin/python3 ${./s2t.py} "$@"
@@ -127,18 +100,12 @@
   # t
   alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
-  # base
-  alfred.sourceFile."workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist".source =
-    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.16F987FA-790B-4CCD-9142-0D2878E4FD0D/info.plist;
   # u
   alfred.sourceFile."workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist;
   # cj
   alfred.sourceFile."workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist;
-  # date
-  alfred.sourceFile."workflows/user.workflow.0F156A81-F62C-4D79-B2F4-C66564EA9582/info.plist".source =
-    ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.0F156A81-F62C-4D79-B2F4-C66564EA9582/info.plist;
   # s2t
   alfred.sourceFile."workflows/user.workflow.56CC1B97-98F6-40DA-AF3E-6FDFFE7F9EE6/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.56CC1B97-98F6-40DA-AF3E-6FDFFE7F9EE6/info.plist;
