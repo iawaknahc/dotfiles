@@ -1,0 +1,8 @@
+# Numbat uses jiff under the hood.
+# https://docs.rs/jiff/latest/jiff/fmt/strtime/index.html#conversion-specifications
+fn iso_week(dt: DateTime) -> String = format_datetime("W%V", dt)
+fn iso_week_date(dt: DateTime) -> String = format_datetime("%G-W%V-%u", dt)
+fn iso_date(dt: DateTime) -> String = format_datetime("%Y-%m-%d", dt)
+
+# https://datatracker.ietf.org/doc/html/rfc9110#http.date
+fn http_date(dt: DateTime) -> String = format_datetime("%a, %d %b %Y %H:%M:%S %Z", tz("GMT")(dt))

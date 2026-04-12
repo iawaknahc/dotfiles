@@ -165,6 +165,7 @@
     ./home-manager/plain-text-accounting.nix
     ./home-manager/timg.nix
     ./home-manager/jq.nix
+    ./home-manager/numbat
 
     # PGP and friends
     ./home-manager/pgp.nix
