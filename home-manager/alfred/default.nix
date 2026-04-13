@@ -65,12 +65,12 @@
       export HS_SCRIPT=${../../.hammerspoon/get_browser_url.lua}
       ${pkgs.mypython}/bin/python3 ${./godoc.py} "$@"
     '')
-    (pkgs.writeShellScriptBin "alfred-workflow-t.py" ''
+    (pkgs.writeShellScriptBin "alfred-workflow-tz.py" ''
       # Force zoneinfo to use tzdata
       # https://docs.python.org/3/library/zoneinfo.html#envvar-PYTHONTZPATH
       export PYTHONTZPATH=""
       export FZF=${pkgs.fzf}/bin/fzf
-      ${pkgs.mypython}/bin/python3 ${./t.py} "$@"
+      ${pkgs.mypython}/bin/python3 ${./tz.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-u.py" ''
       ${pkgs.mypython}/bin/python3 ${./u.py} "$@"
@@ -101,7 +101,7 @@
   # godoc
   alfred.sourceFile."workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist;
-  # t
+  # tz
   alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
     ../../alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
   # u

@@ -27,7 +27,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>t</string>
+	<string>tz</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -65,7 +65,7 @@
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>keyword</key>
-				<string>t</string>
+				<string>tz</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -81,11 +81,11 @@
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
-				<string>/Users/louischan/.nix-profile/bin/alfred-workflow-t.py</string>
+				<string>/Users/louischan/.nix-profile/bin/alfred-workflow-tz.py</string>
 				<key>subtext</key>
 				<string></string>
 				<key>title</key>
-				<string>Convert localtime</string>
+				<string>Look up timezone</string>
 				<key>type</key>
 				<integer>8</integer>
 				<key>withspace</key>
