@@ -78,3 +78,7 @@ nix --extra-experimental-features "nix-command flakes" run home-manager -- unins
 ```
 nix --extra-experimental-features "nix-command flakes" run nix-darwin#darwin-uninstaller
 ```
+
+## Credits
+
+This repository contains code that use <a href="https://www.exchangerate-api.com">Rates By Exchange Rate API</a>

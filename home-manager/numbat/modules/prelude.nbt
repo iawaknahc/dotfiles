@@ -72,3 +72,5 @@ use extra::vector3
 use numerics::diff
 use numerics::solve
 use numerics::fixed_point
+
+use custom::currency
