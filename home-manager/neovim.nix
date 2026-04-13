@@ -55,6 +55,16 @@
             hash = "sha256-6Tf3gUPmsegzwhCmWoBKu6TIVwsS7+fBRmdvSc7rtYE=";
           };
         })
+        (pkgs.tree-sitter.buildGrammar {
+          language = "numbat";
+          version = "2026-04-13";
+          src = pkgs.fetchFromGitHub {
+            owner = "irevoire";
+            repo = "tree-sitter-numbat";
+            rev = "4d9ce55767f7cc2a0ef97dd070de7e4519920607";
+            hash = "sha256-eNr46I8YexE5rFIDoqmlivec9H6RB3tt5/8R6age5i4=";
+          };
+        })
       ]
     ))
 
