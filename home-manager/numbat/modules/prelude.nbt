@@ -1,0 +1,74 @@
+# Taken from https://github.com/sharkdp/numbat/blob/v1.23.0/numbat/modules/prelude.nbt
+# and https://github.com/sharkdp/numbat/blob/v1.23.0/numbat/modules/all.nbt
+# The following modules are commented
+# - units::currency
+# - units::currencies
+use core::scalar
+use core::quantities
+use core::dimensions
+use core::functions
+use core::lists
+use core::strings
+use core::error
+use core::debug
+use core::random
+use core::numbers
+use core::mixed_units
+
+use math::constants
+use math::transcendental
+use math::trigonometry
+use math::trigonometry_extra
+use math::statistics
+use math::number_theory
+use math::distributions
+use math::geometry
+use math::percentage_calculations
+use math::combinatorics
+
+use units::si
+use units::time
+use units::astronomical
+use units::imperial
+use units::us_customary
+use units::nautical
+use units::cgs
+use units::planck
+use units::fff
+use units::misc
+use units::humorous
+use units::partsperx
+use units::mixed
+
+# use units::currency
+use units::bit
+use units::placeholder
+
+use physics::constants
+use physics::temperature_conversion
+use physics::speed_of_sound
+
+use chemistry::elements
+
+use datetime::functions
+use datetime::unixtime
+use datetime::human
+use datetime::julian_date
+
+use plot::line_plot
+use plot::bar_chart
+
+# use units::currencies
+use units::stoney
+use units::hartree
+
+use extra::algebra
+use extra::color
+use extra::astronomy
+use extra::celestial
+use extra::cooking
+use extra::vector3
+
+use numerics::diff
+use numerics::solve
+use numerics::fixed_point
