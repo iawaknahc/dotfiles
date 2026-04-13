@@ -35,8 +35,13 @@
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Colorscheme
     catppuccin-nvim
-    # A dependency of many other plugins.
-    plenary-nvim
+
+    # plenary.nvim is going to be archived in 2026 Q2
+    # See https://github.com/nvim-lua/plenary.nvim/pull/677
+    # I checked that no plugins are using it at runtime.
+    # Some plugins use it in their tests.
+    #plenary-nvim
+
     # Another dependency of many other plugins.
     nvim-web-devicons
 
@@ -173,7 +178,11 @@
     ## REPL
     {
       optional = true;
-      plugin = conjure;
+      plugin = conjure.overrideAttrs {
+        # conjure depends on plenary.nvim for tests.
+        dependencies = [ ];
+        doCheck = false;
+      };
     }
   ];
 }
