@@ -1,0 +1,14 @@
+unit 十 = 10
+unit 百 = 十 * 十
+unit 千 = 十 * 百
+unit 萬 = 十 * 千
+unit 十萬 = 十 * 萬
+unit 百萬 = 百 * 萬
+unit 千萬 = 千 * 萬
+unit 億 = 萬 * 萬
+unit 十億 = 十 * 億
+unit 百億 = 百 * 億
+unit 千億 = 千 * 億
+unit 萬億 = 萬 * 億
+# 兆 could mean 10^6, 10^12, 10^16
+# Other higher counting units have the same ambiguity.
