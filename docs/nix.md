@@ -1,31 +1,31 @@
 ## Hello, World
 
-```
+```sh
 $ nix eval --raw --expr '"Hello, World\n"'
 Hello, World
 ```
 
 ## Explore Nix in a REPL
 
-```
+```sh
 $ nix repl
 ```
 
 ## Inspect the contents of NIX_PATH
 
-```
+```sh
 $ echo $NIX_PATH
 ```
 
 ## Inspect nixpkgs
 
-```
+```sh
 $ nix repl --file '<nixpkgs>'
 ```
 
 ## Build a derivation
 
-```
+```sh
 $ mkdir mydrv
 $ cd mydrv
 $ nix flake init -t templates#utils-generic
@@ -83,14 +83,14 @@ $ result/bin/json5 --help
 
 ## Prepare a shell that would be used to build a derivation
 
-```
+```sh
 # Assume ./flake.nix has outputs.package.<system>.default
 $ nix develop
 ```
 
 ## Prepare a shell that has some packages available
 
-```
+```sh
 $ mkdir myenv
 $ cd myenv
 $ nix flake init -t templates#utils-generic

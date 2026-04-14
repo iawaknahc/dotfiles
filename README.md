@@ -49,7 +49,7 @@ nix run home-manager -- switch
 
 ## Making changes
 
-```
+```sh
 cd ~/dotfiles
 
 # Make your changes.
@@ -66,7 +66,7 @@ git commit
 
 ## Uninstall home-manager
 
-```
+```sh
 # Open Terminal.app and make sure the shell is /bin/zsh
 # This is to ensure we are not running something that we are going to uninstall.
 
@@ -75,7 +75,7 @@ nix --extra-experimental-features "nix-command flakes" run home-manager -- unins
 
 ## Uninstall nix-darwin
 
-```
+```sh
 nix --extra-experimental-features "nix-command flakes" run nix-darwin#darwin-uninstaller
 ```
 
