@@ -36,16 +36,3 @@ end, {
   desc = "Reverse line order as in :help 12.4",
   range = "%",
 })
-
--- :HighlightGroupAtCursor prints out the highlight groups at cursor.
--- Useful for debugging colorscheme.
--- The motivation was to debug why @diff.plus has a different green color from the colorscheme.
-vim.api.nvim_create_user_command("HighlightGroupAtCursor", function()
-  local win = 0
-  local buf = vim.api.nvim_win_get_buf(win)
-  local row1, col0 = unpack(vim.api.nvim_win_get_cursor(win))
-  local captures = vim.treesitter.get_captures_at_pos(buf, row1 - 1, col0)
-  print(vim.inspect(captures))
-end, {
-  nargs = 0,
-})
