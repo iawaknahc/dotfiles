@@ -150,3 +150,20 @@ vim.opt.diffopt = {
 
 -- session
 vim.o.sessionoptions = "blank,buffers,curdir,help,tabpages,terminal,winsize"
+
+-- We override vim.hl.priorities.semantic_tokens because we want to solve the following problem.
+--
+-- In a Nix file, `# TODO` is recognized as @lsp.type.comment.nix (which links to @comment) and @comment.todo.
+-- The fg color of @comment.todo should have a higher priority than that of @lsp.type.comment.nix,
+-- but since semantic tokens has higher priority, the normal fg color of comment is used instead.
+-- This results in a very pale text color on a colored background, making the text very difficult to read.
+--
+-- Another approach of solving this is to override the priorities in queries/comment/highlights.scm
+-- But that approach requires us to duplicate the whole file, effectively giving up upstream updates.
+-- So we settle with a simpler approach of overriding vim.hl.priorities.semantic_tokens.
+-- Most of the time, highlights come from treesitter, not LSP semantic tokens.
+--
+-- semantic_tokens is 125 originally.
+-- We want to make it lower than treesitter (which is 100), and still higher than regex-based highlighting (which is 50).
+-- (50 + 100) / 2 = 75
+vim.hl.priorities.semantic_tokens = math.floor((vim.hl.priorities.syntax + vim.hl.priorities.treesitter) / 2)
