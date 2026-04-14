@@ -178,6 +178,12 @@ vim.lsp.enable("dockerls")
 vim.lsp.config("gopls", {
   settings = {
     gopls = {
+      semanticTokens = true,
+      -- No need to turn off @lsp.type.string and @lsp.type.number because we handled them in the LSP client side.
+      -- semanticTokenTypes = {
+      --   string = false,
+      --   number = false,
+      -- },
       hints = {
         assignVariableTypes = true,
         compositeLiteralFields = true,
