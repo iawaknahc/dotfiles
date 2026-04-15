@@ -57,3 +57,46 @@ vim.keymap.set("n", "<Space>q", "<CMD>FzfLua quickfix<CR>", {
 vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist<CR>", {
   desc = ":FzfLua loclist",
 })
+
+-- OPTION-c to open directory, just like the FZF shell integration.
+-- We use the same keymap.
+vim.keymap.set("n", "<M-c>", function()
+  require("fzf-lua").files({
+    fd_opts = "--type d",
+    hidden = true,
+    actions = {
+      ["enter"] = function(selected_lines)
+        local line = selected_lines[1]
+        if line ~= nil then
+          -- Use the recommended function to strip preceding icon.
+          -- https://github.com/ibhagwan/fzf-lua/discussions/2608
+          local entry = require("fzf-lua").path.entry_to_file(line)
+          require("oil").open(entry.path)
+        end
+      end,
+    },
+  })
+end, {
+  desc = "Open directories",
+})
+
+vim.keymap.set("n", "<M-C>", function()
+  local cwd = require("get_buffer_directory")(0)
+  require("fzf-lua").files({
+    cmd = "parents.sh",
+    cwd = cwd,
+    actions = {
+      ["enter"] = function(selected_lines)
+        local line = selected_lines[1]
+        if line ~= nil then
+          -- Use the recommended function to strip preceding icon.
+          -- https://github.com/ibhagwan/fzf-lua/discussions/2608
+          local entry = require("fzf-lua").path.entry_to_file(line)
+          require("oil").open(entry.path)
+        end
+      end,
+    },
+  })
+end, {
+  desc = "Open parent directories",
+})

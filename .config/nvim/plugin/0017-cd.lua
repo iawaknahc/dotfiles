@@ -8,32 +8,9 @@ vim.api.nvim_create_user_command("Lcd", function(opts)
     return
   end
 
-  -- This could be a URI, for example, "oil:///a/b"
-  local bufname = vim.api.nvim_buf_get_name(0)
-  if bufname == "" then
-    vim.notify("This buffer is not associated with a file.", vim.log.levels.WARN)
+  local target_dir = require("get_buffer_directory")(0)
+  if target_dir == nil then
     return
-  end
-
-  local bufpath = ""
-  local split_result = require("python_urllib_parse").urlsplit(bufname)
-  if split_result.netloc ~= "" and split_result.path == "" then
-    bufpath = split_result.netloc
-  elseif split_result.path ~= "" then
-    bufpath = split_result.path
-  end
-  if bufpath == "" then
-    vim.notify("No idea what this is: " .. bufname, vim.log.levels.WARN)
-    return
-  end
-
-  local stat = vim.uv.fs_stat(bufpath)
-
-  local target_dir
-  if stat and stat.type == "directory" then
-    target_dir = bufpath
-  else
-    target_dir = vim.fn.fnamemodify(bufpath, ":h")
   end
 
   vim.cmd.lcd(target_dir)
