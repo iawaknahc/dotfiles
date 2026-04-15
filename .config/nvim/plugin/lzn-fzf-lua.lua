@@ -11,6 +11,19 @@ require("fzf-lua").setup({
       delay = 10,
     },
   },
+  files = {
+    hidden = true,
+    actions = {
+      -- OPTION-h is taken by Aerospace.
+      -- So we change this family of actions to use CTRL instead.
+      ["alt-h"] = nil,
+      ["ctrl-h"] = require("fzf-lua").actions.toggle_hidden,
+      ["alt-i"] = nil,
+      ["ctrl-i"] = require("fzf-lua").actions.toggle_ignore,
+      ["alt-f"] = nil,
+      ["ctrl-f"] = require("fzf-lua").actions.toggle_follow,
+    },
+  },
 })
 
 -- Use fzf-lua for vim.ui.select
@@ -63,7 +76,6 @@ vim.keymap.set("n", "<Space>l", "<CMD>FzfLua loclist<CR>", {
 vim.keymap.set("n", "<M-c>", function()
   require("fzf-lua").files({
     fd_opts = "--type d",
-    hidden = true,
     actions = {
       ["enter"] = function(selected_lines)
         local line = selected_lines[1]
