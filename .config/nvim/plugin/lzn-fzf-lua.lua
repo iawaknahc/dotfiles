@@ -1,3 +1,25 @@
+---@param selected_lines string[]
+local function picker_files_open_directory(selected_lines)
+  local line = selected_lines[1]
+  if line ~= nil then
+    -- Use the recommended function to strip preceding icon.
+    -- https://github.com/ibhagwan/fzf-lua/discussions/2608
+    local entry = require("fzf-lua").path.entry_to_file(line)
+    require("oil").open(entry.path)
+  end
+end
+
+---@param selected_lines string[]
+local function picker_zoxide_open_directory(selected_lines)
+  local line = selected_lines[1]
+  if line ~= nil then
+    local abs_path = line:match("[^\t]+$")
+    if abs_path ~= nil then
+      require("oil").open(abs_path)
+    end
+  end
+end
+
 require("fzf-lua").setup({
   fzf_opts = {
     ["--layout"] = "default",
@@ -24,6 +46,11 @@ require("fzf-lua").setup({
       ["ctrl-f"] = require("fzf-lua").actions.toggle_follow,
     },
   },
+  zoxide = {
+    actions = {
+      ["enter"] = picker_zoxide_open_directory,
+    },
+  },
 })
 
 -- Use fzf-lua for vim.ui.select
@@ -41,6 +68,9 @@ vim.keymap.set("n", "<Space>f", "<CMD>FzfLua global<CR>", {
 })
 vim.keymap.set("n", "<Space>F", "<CMD>FzfLua git_files<CR>", {
   desc = ":FzfLua git_files",
+})
+vim.keymap.set("n", "<Space>z", "<CMD>FzfLua zoxide<CR>", {
+  desc = ":FzfLua zoxide",
 })
 
 -- Inspired by Helix space mode b
@@ -77,15 +107,7 @@ vim.keymap.set("n", "<M-c>", function()
   require("fzf-lua").files({
     fd_opts = "--type d",
     actions = {
-      ["enter"] = function(selected_lines)
-        local line = selected_lines[1]
-        if line ~= nil then
-          -- Use the recommended function to strip preceding icon.
-          -- https://github.com/ibhagwan/fzf-lua/discussions/2608
-          local entry = require("fzf-lua").path.entry_to_file(line)
-          require("oil").open(entry.path)
-        end
-      end,
+      ["enter"] = picker_files_open_directory,
     },
   })
 end, {
@@ -98,15 +120,7 @@ vim.keymap.set("n", "<M-C>", function()
     cmd = "parents.sh",
     cwd = cwd,
     actions = {
-      ["enter"] = function(selected_lines)
-        local line = selected_lines[1]
-        if line ~= nil then
-          -- Use the recommended function to strip preceding icon.
-          -- https://github.com/ibhagwan/fzf-lua/discussions/2608
-          local entry = require("fzf-lua").path.entry_to_file(line)
-          require("oil").open(entry.path)
-        end
-      end,
+      ["enter"] = picker_files_open_directory,
     },
   })
 end, {
