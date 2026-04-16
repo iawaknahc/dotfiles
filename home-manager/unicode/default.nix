@@ -1,8 +1,7 @@
 { pkgs, ... }:
 let
-  unicode_version = "16.0.0";
-  cldr_version = "47";
-  cldr_json_version = "47.0.0";
+  unicode_version = "17.0.0";
+  cldr_version = "48.2";
 
   ucdxml-nounihan = (
     pkgs.stdenvNoCC.mkDerivation rec {
@@ -11,7 +10,7 @@ let
       src = pkgs.fetchzip {
         url = "https://www.unicode.org/Public/${version}/ucdxml/ucd.nounihan.flat.zip";
         stripRoot = false;
-        hash = "sha256-Gg3YGaFFeoAu4YTUr8oJpxOvm13N3aKG+Vzf56Htxe0=";
+        hash = "sha256-9rHBJYX9ZcfAunc9couv25Rs1GzGUBmNPpII4SRStEE=";
       };
       installPhase = ''
         mkdir -p $out/share/unicode
@@ -26,26 +25,11 @@ let
       src = pkgs.fetchzip {
         url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
         stripRoot = false;
-        hash = "sha256-ZMXdLuFXDqu/c9sYug6bWkuQWcS3eQ+EUDKtOP5Htu8=";
+        hash = "sha256-fFSLvhND8lg9gQFsrP3XScpSsGwCWWjuLhN22gQSVNs=";
       };
       installPhase = ''
         mkdir -p $out/share/unicode/cldr
         mv common $out/share/unicode/cldr/
-      '';
-    }
-  );
-  cldr-json = (
-    pkgs.stdenvNoCC.mkDerivation rec {
-      pname = "cldr-json";
-      version = cldr_json_version;
-      src = pkgs.fetchzip {
-        url = "https://github.com/unicode-org/cldr-json/releases/download/${version}/cldr-${version}-json-full.zip";
-        stripRoot = false;
-        hash = "sha256-+xELEHy3hq2botBV6buouPuKMk8qWnokTsnV2h57jbQ=";
-      };
-      installPhase = ''
-        mkdir -p $out/share/unicode/cldr-json
-        mv cldr-* $out/share/unicode/cldr-json/
       '';
     }
   );
@@ -56,9 +40,20 @@ let
       # We need to set sourceRoot because we now have multiple directories.
       sourceRoot = ".";
       srcs = [
-        "${pkgs.unicode-character-database}"
-        "${pkgs.unicode-idna}"
-        "${pkgs.unicode-emoji}"
+        "${
+          assert pkgs.unicode-character-database.version == unicode_version;
+          pkgs.unicode-character-database
+        }"
+        "${
+          assert pkgs.unicode-idna.version == unicode_version;
+          pkgs.unicode-idna
+        }"
+        "${
+          assert pkgs.unicode-emoji.version == unicode_version;
+          pkgs.unicode-emoji
+        }"
+        "${ucdxml-nounihan}"
+        "${cldr-common}"
       ];
 
       installPhase = ''
@@ -70,9 +65,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    cldr-common
-    cldr-json
-    ucdxml-nounihan
     ucd
 
     (bundlerApp {
@@ -111,19 +103,16 @@ in
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
       nativeBuildInputs = [
-        cldr-common
-        ucdxml-nounihan
+        ucd
         python3
       ];
       src = ./.;
 
-      ucdxml_nounihan = "${ucdxml-nounihan}";
       ucd = "${ucd}";
-      cldr_common = "${cldr-common}";
 
       installPhase = ''
         mkdir -p $out/share/unicode
-        python3 ./build_sqlite.py "$ucdxml_nounihan"/share/unicode/ucd.nounihan.flat.xml "$ucd"/share/unicode "$cldr_common"/share/unicode/cldr $out/share/unicode/unicode.sqlite3
+        python3 ./build_sqlite.py "$ucd"/share/unicode/ucd.nounihan.flat.xml "$ucd"/share/unicode "$ucd"/share/unicode/cldr $out/share/unicode/unicode.sqlite3
       '';
     })
   ];
