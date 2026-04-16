@@ -12,6 +12,7 @@
     cloudflared
     dig
     ipcalc
+    rsync
     subnetcalc
     wget
   ];

@@ -65,25 +65,19 @@
 
     ./home-manager/fonts.nix
 
-    # Unicode
     ./home-manager/unicode
 
-    # Theme
     ./home-manager/catppuccin.nix
 
-    # Tiling Window Manager
     ./home-manager/tiling-window-manager.nix
 
-    # Karabiner
     ./home-manager/karabiner.nix
 
     # For showing a customized date pattern in the menu bar on macOS.
     ./home-manager/itsycal.nix
 
-    # Hammerspoon
     ./home-manager/hammerspoon
 
-    # Alfred
     ./home-manager/x-alfred.nix
     ./home-manager/alfred
 
@@ -125,7 +119,6 @@
     ./home-manager/pager.nix
     ./home-manager/networking-tools.nix
 
-    # Grammar and spell checking
     ./home-manager/grammar-and-spell-checking.nix
 
     ./home-manager/awk.nix
@@ -164,14 +157,13 @@
     ./home-manager/timg.nix
     ./home-manager/jq.nix
     ./home-manager/numbat
+    ./home-manager/syncthing.nix
+    ./home-manager/smb.nix
 
     # PGP and friends
     ./home-manager/pgp.nix
     ./home-manager/sops.nix
     ./home-manager/ssh.nix
-
-    # Sync between devices
-    ./home-manager/syncthing.nix
 
     # Android SDK is now installed with a shell script.
     # Managing Android SDK with Nix incurs an overhead when
@@ -182,7 +174,5 @@
     ./home-manager/android.nix
 
     # Flutter is now installed per project with flake.nix
-
-    ./home-manager/smb.nix
   ];
 }

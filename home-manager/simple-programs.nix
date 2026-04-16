@@ -6,8 +6,6 @@
     pass # https://www.passwordstore.org/
 
     # Text processing
-    ast-grep
-    fastmod
     github-markdown-toc-go # It provides gh-md-toc
 
     # Text processing on binary files.
@@ -35,7 +33,6 @@
     # Interactive du.
     # https://dev.yorhel.nl/ncdu
     ncdu
-    rsync
 
     # Linter
     hadolint
