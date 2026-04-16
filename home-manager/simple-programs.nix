@@ -39,14 +39,9 @@
 
     # Linter
     hadolint
-    shellcheck
 
     # Source code formatter
     prettierd
-    shfmt
-
-    # Downloader
-    wget
 
     # Image processing
     exiftool
@@ -73,9 +68,6 @@
 
     # REPL
     rlwrap
-
-    # Misc
-    cloudflared
 
     # Kubernetes
     kube-capacity

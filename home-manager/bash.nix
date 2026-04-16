@@ -14,6 +14,9 @@
     #    but the poor documentation did not allow me to do so.
     # 2. The highlight used colors other than my terminal colors. I did not like this behavior.
     blesh
+    bash-language-server
+    shellcheck
+    shfmt
   ];
   programs.bash.bashrcExtra = ''
     # Ensure SHELL is correctly set.

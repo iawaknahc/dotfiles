@@ -7,7 +7,10 @@ let
 in
 {
   programs.fish.enable = true;
-  home.packages = with pkgs; [ babelfish ];
+  home.packages = with pkgs; [
+    babelfish
+    fish-lsp
+  ];
   programs.fish.shellInit = ''
     # Ensure SHELL is correctly set.
     # Note that this must appear after we have set up the PATH,
