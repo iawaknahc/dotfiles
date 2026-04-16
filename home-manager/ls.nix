@@ -1,7 +1,4 @@
 { ... }:
-let
-  dateFormat = "+%Y-%m-%d %H:%M:%S %z";
-in
 {
   # eza is a tool bundled in Omarchy
   # https://learn.omacom.io/2/the-omarchy-manual/57/shell-tools#eza
@@ -29,7 +26,6 @@ in
     "--group"
 
     "--git"
-    "--time-style=${dateFormat}"
   ];
 
   # Just configure lsd as a comparison to eza.
@@ -39,7 +35,6 @@ in
     icons = {
       when = "never";
     };
-    date = dateFormat;
     indicators = true;
     blocks = [
       "permission"

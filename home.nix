@@ -32,10 +32,6 @@
     home.username = username;
     home.homeDirectory = homeDirectory;
 
-    # Set LANG.
-    # LANG=C.UTF-8 causes zsh not to display Unicode characters such as Japanese.
-    home.language.base = "en_US.UTF-8";
-
     # Set NIX_PATH
     # nix-darwin also offers a similar option but we do this in home-manager because
     # nix-darwin only supports a limited number of shells.
@@ -104,6 +100,7 @@
 
     # Shells.
     ./home-manager/shell-integration.nix
+    ./home-manager/environment-variables.nix
     ./home-manager/bash.nix
     ./home-manager/x-elvish.nix
     ./home-manager/elvish.nix
