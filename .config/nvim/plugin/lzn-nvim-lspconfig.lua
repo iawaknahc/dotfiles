@@ -119,16 +119,19 @@ vim.lsp.enable("sourcekit") -- Swift, Objective-C, C, and C++
 -- Grammar and spell checking
 vim.lsp.config("harper_ls", {
   -- The default list from nvim-lspconfig is incomplete.
-  -- This list is up-to-date as of 2025-06-18.
+  -- This list is up-to-date as of 2026-04-17.
   -- https://writewithharper.com/docs/integrations/language-server#Supported-Languages
   filetypes = {
+    "asciidoc",
     "c",
+    "clojure",
     "cmake",
     "cpp",
     "cs",
     "dart",
     "gitcommit",
     "go",
+    "groovy",
     "haskell",
     "html",
     "java",
@@ -150,6 +153,7 @@ vim.lsp.config("harper_ls", {
     "typescript",
     "typescriptreact",
     "typst",
+    "zig",
   },
 })
 vim.lsp.enable("harper_ls") -- https://writewithharper.com
@@ -283,3 +287,5 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end
   end,
 })
+
+vim.lsp.enable("zls")

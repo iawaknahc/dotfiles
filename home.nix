@@ -139,6 +139,7 @@
     ./home-manager/java.nix
     ./home-manager/perl.nix
     ./home-manager/dart.nix
+    ./home-manager/zig.nix
 
     # Text editors.
     ./home-manager/vim.nix
