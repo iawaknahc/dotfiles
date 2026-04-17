@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   # Nix install all terminfo (not limited to ncurses, but also any package that come with a terminfo, like alacritty) to ~/.nix-profile/share/terminfo
   # But this is not a standard location.
@@ -18,33 +18,12 @@
   # For problem 1, we help those terminal emulators to set TERMINFO. Then problem 1 becomes problem 2.
   # For problem 2, we unset TERMINFO, and set TERMINFO_DIRS correctly.
   #
-  # Note that this is written in sh.
-  # Fish shell sources hm-session-vars.sh with babelfish.
-  home.sessionVariablesExtra = ''
-    term="unknown-terminal"
+  # Since we no longer use iTerm2, we can ignore problem 1.
+  # Given that we almost never use tic(1), we can ignore problem 2.
+  # Ignoring both problems allow us to avoid using home.sessionVariablesExtra which is not supported by Nushell.
 
-    if [ -n "$TERM_PROGRAM" ]; then
-      term="$TERM_PROGRAM@$TERM_PROGRAM_VERSION"
-    elif [ -n "$TERM" ]; then
-      term="$TERM"
-    fi
-
-    if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
-      if [ -d "/Applications/iTerm.app/Contents/Resources/terminfo" ]; then
-        export TERMINFO="/Applications/iTerm.app/Contents/Resources/terminfo"
-      fi
-    fi
-
-    if [ -n "$TERMINFO" ]; then
-      export TERMINFO_DIRS="$TERMINFO:$TERMINFO_DIRS"
-      unset TERMINFO
-    fi
-
-    unset term
-  '';
-
-  # As of 2026-02-03, both nurses and ghostty include the terminfo for ghostty, clushing with each other.
-  # home.packages = with pkgs; [
-  #   ncurses
-  # ];
+  # As of 2026-02-03, both ncurses and ghostty install ~/.nix-profile/share/terminfo/67/ghostty, clashing with each other.
+  #home.packages = with pkgs; [
+  #  ncurses
+  #];
 }
