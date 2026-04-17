@@ -1,34 +1,41 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    android-nixpkgs = {
+      # platform-tools 37.0.0 was first availabe on 2026-03-03
+      # However, the hash of https://dl.google.com/android/repository/platform-tools_r37.0.0-darwin.zip changed on 2026-04-15
+      url = "github:tadfisher/android-nixpkgs/2026-04-15-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    catppuccin = {
+      url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mcp-servers-nix = {
+      url = "github:natsukium/mcp-servers-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin = {
-      url = "github:catppuccin/nix";
+    nur = {
+      url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mcp-servers-nix = {
-      url = "github:natsukium/mcp-servers-nix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -36,13 +43,14 @@
   outputs =
     {
       nixpkgs,
-      flake-utils,
-      sops-nix,
-      home-manager,
-      nix-darwin,
+      android-nixpkgs,
       catppuccin,
+      flake-utils,
+      home-manager,
       mcp-servers-nix,
+      nix-darwin,
       nur,
+      sops-nix,
       ...
     }:
     let
@@ -90,6 +98,7 @@
                   homeDirectory
                   mcp-servers-nix
                   nur
+                  android-nixpkgs
                   ;
                 nixPath_nixpkgs = "${nixpkgs.outPath}";
                 nixPath_home-manager = "${home-manager.outPath}";
@@ -98,6 +107,7 @@
                 nixPath_for-nixd = "${./.}";
               };
               modules = [
+                android-nixpkgs.hmModule
                 catppuccin.homeModules.catppuccin
                 # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
                 sops-nix.homeManagerModules.sops

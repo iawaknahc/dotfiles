@@ -8,6 +8,7 @@
   nixPath_for-nixd,
   mcp-servers-nix,
   nur,
+  android-nixpkgs,
   ...
 }:
 {
@@ -23,6 +24,7 @@
     nixpkgs.overlays = [
       mcp-servers-nix.overlays.default
       nur.overlays.default
+      android-nixpkgs.overlays.default
     ];
 
     nixpkgs.config.allowUnfree = true;
@@ -164,12 +166,6 @@
     ./home-manager/sops.nix
     ./home-manager/ssh.nix
 
-    # Android SDK is now installed with a shell script.
-    # Managing Android SDK with Nix incurs an overhead when
-    # we update flake.lock.
-    # Every time we update flake.lock,
-    # the 40GB+ Android SDK has to be downloaded again.
-    # That is a waste in both bandwidth and time.
     ./home-manager/android.nix
 
     # Flutter is now installed per project with flake.nix
