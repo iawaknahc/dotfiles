@@ -2,9 +2,6 @@
 # to make sure extra files in ~/.config/fish/conf.d/ are removed.
 # That behavior can be replicated with home.activation.
 { pkgs, ... }:
-let
-  wrappers = import ./wrappers.nix { inherit pkgs; };
-in
 {
   programs.fish.enable = true;
   home.packages = with pkgs; [
@@ -22,44 +19,22 @@ in
     # we disable vi mode in shell.
     # fish_vi_key_bindings
   '';
+
+  # fish is known for creating fish functions to shadow some common utilties:
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/cd.fish
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/diff.fish
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/grep.fish
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/la.fish
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/ll.fish
+  # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/ls.fish
+  #
+  # Since we now use eza, ls, ll, la from fish are overridden by the aliases defined by eza shell integration.
+  # Since we now use zoxide, cd is overridden by the aliases defined by zoxide shell integration.
+  # The remaining diff and grep are not harmful, so just leave them.
+
   xdg.configFile."fish/functions" = {
     enable = true;
     recursive = true;
     source = ../.config/fish/functions;
-  };
-
-  # When direnv-flake is used, very likely coreutils is added to PATH.
-  # coreutils include a copy of ls.
-  # That copy of ls is not smart enough to show color when being called interactively in a terminal.
-  # When we call `ls`, the fish function named `ls` is invoked, instead of invoking
-  # the copy of `ls` that comes with the direnv-flake coreutils.
-  #
-  # Since we now use eza, whose shell integration defines the `ls` function,
-  # we do not need this now.
-  #
-  # xdg.configFile."fish/functions/ls.fish" = {
-  #   enable = true;
-  #   text = ''
-  #     function ls
-  #       ${wrappers.ls} $argv
-  #     end
-  #   '';
-  # };
-
-  xdg.configFile."fish/functions/grep.fish" = {
-    enable = true;
-    text = ''
-      function grep
-        ${wrappers.grep} $argv
-      end
-    '';
-  };
-  xdg.configFile."fish/functions/diff.fish" = {
-    enable = true;
-    text = ''
-      function diff
-        ${wrappers.diff} $argv
-      end
-    '';
   };
 }
