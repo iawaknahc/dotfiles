@@ -120,6 +120,7 @@
     ./home-manager/grep-and-sed.nix
     ./home-manager/pager.nix
     ./home-manager/networking-tools.nix
+    ./home-manager/browser-automation.nix
 
     ./home-manager/grammar-and-spell-checking.nix
 
