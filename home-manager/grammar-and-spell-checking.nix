@@ -3,11 +3,12 @@
   home.packages = with pkgs; [
     # After using Harper for a month,
     # the most annoying problem is https://github.com/Automattic/harper/discussions/938
-    harper
-    typos-lsp
+    harper # general spellchecking
+    codebook # source code spellchecking
+    typos-lsp # source code spellchecking
 
     # Without dictionary, cspell produces many false positives.
-    # nodePackages.cspell
+    #nodePackages.cspell
 
     codespell
 

@@ -158,6 +158,7 @@ vim.lsp.config("harper_ls", {
 })
 vim.lsp.enable("harper_ls") -- https://writewithharper.com
 vim.lsp.enable("typos_lsp") -- https://github.com/crate-ci/typos
+vim.lsp.enable("codebook") -- https://github.com/blopker/codebook
 
 vim.lsp.config("dockerls", {
   settings = {
