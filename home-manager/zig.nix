@@ -8,4 +8,8 @@
     zig
     zls
   ];
+  programs.git.ignores = [
+    ".zig-cache/"
+    "zig-out/"
+  ];
 }

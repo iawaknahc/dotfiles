@@ -13,4 +13,8 @@
   programs.x-elvish.rcExtra = lib.mkAfter ''
     eval (${config.programs.direnv.package}/bin/direnv hook elvish | slurp)
   '';
+  programs.git.ignores = [
+    ".envrc"
+    ".direnv/"
+  ];
 }

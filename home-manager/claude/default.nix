@@ -5,6 +5,10 @@
   ...
 }:
 {
+  programs.git.ignores = [
+    ".claude/settings.local.json" # https://code.claude.com/docs/en/settings#available-scopes
+  ];
+
   home.packages = with pkgs; [
     # From the overlay of natsukium/mcp-servers-nix
     #
