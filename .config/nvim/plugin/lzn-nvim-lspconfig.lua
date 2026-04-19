@@ -52,8 +52,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "fish_lsp", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
@@ -68,8 +67,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "stylua", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
@@ -90,8 +88,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "dartls", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
@@ -107,8 +104,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "clojure_lsp", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
@@ -208,8 +204,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "gopls", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
@@ -283,10 +278,19 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(ev)
     local clients = vim.lsp.get_clients({ name = "nixd", bufnr = ev.buf })
     if #clients == 1 then
-      local stylua = clients[1]
-      vim.lsp.buf.format({ bufnr = ev.buf, client = stylua.id, timeout_ms = 1000 })
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
     end
   end,
 })
 
 vim.lsp.enable("zls")
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = group,
+  pattern = "*.zig",
+  callback = function(ev)
+    local clients = vim.lsp.get_clients({ name = "zls", bufnr = ev.buf })
+    if #clients == 1 then
+      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
+    end
+  end,
+})
