@@ -51,16 +51,6 @@
       nvim-treesitter.allGrammars
       ++ [
         (pkgs.tree-sitter.buildGrammar {
-          language = "nvimcolors";
-          version = "2026-04-10";
-          src = pkgs.fetchFromGitHub {
-            owner = "iawaknahc";
-            repo = "tree-sitter-colors";
-            rev = "f387075b79c983a11e0eca13450781a89c6d185d";
-            hash = "sha256-6Tf3gUPmsegzwhCmWoBKu6TIVwsS7+fBRmdvSc7rtYE=";
-          };
-        })
-        (pkgs.tree-sitter.buildGrammar {
           language = "numbat";
           version = "2026-04-13";
           src = pkgs.fetchFromGitHub {
@@ -140,12 +130,12 @@
       plugin = (
         pkgs.vimUtils.buildVimPlugin {
           pname = "nvim-colors";
-          version = "2026-04-10";
+          version = "2026-04-20";
           src = pkgs.fetchFromGitHub {
             owner = "iawaknahc";
             repo = "nvim-colors";
-            rev = "7297f4702cc277a8cd41ae7b34740fc34ca7d1d0";
-            hash = "sha256-RSe+/qu+0rIizaCPwOmk2RALs/WgqEZ2Upv5adAvTI4=";
+            rev = "ac20424368602b6b34c3bbcf2031e599cce774ff";
+            hash = "sha256-XWnuxlq316JlMHkR1KZcNx331jPTQ3qwBRQg76tmPyI=";
           };
         }
       );
