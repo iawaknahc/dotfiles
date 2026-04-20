@@ -40,22 +40,6 @@
     # Source code formatter
     prettierd
 
-    # Image processing
-    exiftool
-    imagemagick
-    # Metadata anonymisation toolkit 2
-    # https://0xacab.org/jvoisin/mat2
-    mat2
-    tesseract # OCR
-    qrencode # Write QR code
-
-    # https://github.com/NixOS/nixpkgs/pull/459044
-    # The test of zbar failed to run on my machine.
-    zbar # Read QR code
-
-    # Multimedia processing
-    ffmpeg
-
     # I want the `sponge` program from it.
     # `sponge` is handy when you need to read and write to the same file with programs like `jq` and `sed`.
     moreutils
