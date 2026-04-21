@@ -27,6 +27,7 @@
       alias-ls-files-only-ignored = "ls-files --others --ignored --exclude-standard";
       alias-ls-files-only-untracked = "ls-files --others --exclude-standard";
       # The following aliases are expected to be run with -n or -f.
+      alias-clean-only-untracked = "clean -d";
       alias-clean-only-ignored = "clean -dX";
       alias-clean-both-untracked-and-ignored = "clean -dx";
     };
