@@ -134,8 +134,8 @@
           src = pkgs.fetchFromGitHub {
             owner = "iawaknahc";
             repo = "nvim-colors";
-            rev = "ac20424368602b6b34c3bbcf2031e599cce774ff";
-            hash = "sha256-XWnuxlq316JlMHkR1KZcNx331jPTQ3qwBRQg76tmPyI=";
+            rev = "5d58b7ff7a53634a10a65c3bdd2f84b9a3447dbf";
+            hash = "sha256-9Zm2PJOrJgvjyaVzs7wfnISJ02lky9RSMrlmtlJUSac=";
           };
         }
       );
