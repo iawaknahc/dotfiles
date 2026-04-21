@@ -130,6 +130,8 @@ operatorfunc
 osc
 packadd
 pkgs
+preselect
+preselects
 prettierd
 pumheight
 pyright

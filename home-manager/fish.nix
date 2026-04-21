@@ -20,7 +20,7 @@
     # fish_vi_key_bindings
   '';
 
-  # fish is known for creating fish functions to shadow some common utilties:
+  # fish is known for creating fish functions to shadow some common utilities:
   # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/cd.fish
   # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/diff.fish
   # - https://github.com/fish-shell/fish-shell/blob/4.6.0/share/functions/grep.fish

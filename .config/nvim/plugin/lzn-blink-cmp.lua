@@ -53,7 +53,7 @@ require("blink.cmp").setup({
     list = {
       selection = {
         -- preselect has to be false, otherwise typing in Ex command
-        -- pre-selects the first item, hitting enter will not run what I just typed.
+        -- preselects the first item, hitting enter will not run what I just typed.
         preselect = false,
         auto_insert = true,
       },
