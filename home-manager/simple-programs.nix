@@ -58,5 +58,8 @@
 
     # Speech recognition
     openai-whisper
+
+    # Lossless conversion between representations
+    remarshal
   ];
 }
