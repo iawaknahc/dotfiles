@@ -2,7 +2,7 @@ local once = require("once")
 
 local setup = once(function()
   local augend = require("dial.augend")
-  local augendcommon = require("dial.augend.common")
+  local augend_common = require("dial.augend.common")
 
   local c_bool_operators = augend.constant.new({
     elements = {
@@ -110,7 +110,7 @@ local setup = once(function()
   local regex_unix = [[%(\d+)]]
 
   local timestamps = augend.user.new({
-    find = augendcommon.find_pattern_regex(table.concat({
+    find = augend_common.find_pattern_regex(table.concat({
       [[\v]], -- Very magic
       regex_rfc3339,
       [[|]], -- Or
@@ -155,7 +155,7 @@ local setup = once(function()
   local regex_unicode_tag_block = [[%(<[\U1F1E6-\U1F1FF]+>)]]
 
   local unicode_iso_3166_1_alpha_2 = augend.user.new({
-    find = augendcommon.find_pattern_regex(table.concat({
+    find = augend_common.find_pattern_regex(table.concat({
       [[\v]], -- Very magic
       regex_iso_3166_1_alpha_2,
       [[|]], -- Or
@@ -226,7 +226,7 @@ local setup = once(function()
 
       markdown_checkbox,
     },
-    ctrlshift = {
+    ctrl_shift = {
       timestamps,
       unicode_iso_3166_1_alpha_2,
     },
@@ -269,33 +269,33 @@ end)
 
 vim.keymap.set("n", "<C-S-a>", function()
   setup()
-  require("dial.map").manipulate("increment", "normal", "ctrlshift")
+  require("dial.map").manipulate("increment", "normal", "ctrl_shift")
 end)
 vim.keymap.set("n", "<C-S-x>", function()
   setup()
-  require("dial.map").manipulate("decrement", "normal", "ctrlshift")
+  require("dial.map").manipulate("decrement", "normal", "ctrl_shift")
 end)
 vim.keymap.set("n", "g<C-S-a>", function()
   setup()
-  require("dial.map").manipulate("increment", "gnormal", "ctrlshift")
+  require("dial.map").manipulate("increment", "gnormal", "ctrl_shift")
 end)
 vim.keymap.set("n", "g<C-S-x>", function()
   setup()
-  require("dial.map").manipulate("decrement", "gnormal", "ctrlshift")
+  require("dial.map").manipulate("decrement", "gnormal", "ctrl_shift")
 end)
 vim.keymap.set("x", "<C-S-a>", function()
   setup()
-  require("dial.map").manipulate("increment", "visual", "ctrlshift")
+  require("dial.map").manipulate("increment", "visual", "ctrl_shift")
 end)
 vim.keymap.set("x", "<C-S-x>", function()
   setup()
-  require("dial.map").manipulate("decrement", "visual", "ctrlshift")
+  require("dial.map").manipulate("decrement", "visual", "ctrl_shift")
 end)
 vim.keymap.set("x", "g<C-S-a>", function()
   setup()
-  require("dial.map").manipulate("increment", "gvisual", "ctrlshift")
+  require("dial.map").manipulate("increment", "gvisual", "ctrl_shift")
 end)
 vim.keymap.set("x", "g<C-S-x>", function()
   setup()
-  require("dial.map").manipulate("decrement", "gvisual", "ctrlshift")
+  require("dial.map").manipulate("decrement", "gvisual", "ctrl_shift")
 end)

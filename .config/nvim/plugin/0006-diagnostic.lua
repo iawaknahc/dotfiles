@@ -1,8 +1,8 @@
-local mydiagnostic_autocmdgroup = vim.api.nvim_create_augroup("MyDiagnostic", { clear = true })
+local my_diagnostic_autocmd_group = vim.api.nvim_create_augroup("MyDiagnostic", { clear = true })
 
 -- Avoid require("vim.diagnostic") in startup.
 vim.api.nvim_create_autocmd("VimEnter", {
-  group = mydiagnostic_autocmdgroup,
+  group = my_diagnostic_autocmd_group,
   callback = function()
     local signs = {
       [vim.diagnostic.severity.ERROR] = "E",
@@ -50,7 +50,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 })
 
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
-  group = mydiagnostic_autocmdgroup,
+  group = my_diagnostic_autocmd_group,
   pattern = "*",
   desc = "Redraw statusline",
   callback = vim.schedule_wrap(function()

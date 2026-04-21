@@ -22,7 +22,7 @@
 --         convert = function(item)
 --           return {
 --             abbr = item.label:gsub("%b()", ""),
---             -- Use catppuccin's integration with blink.cmp to do highlight.
+--             -- Use catppuccin integration with blink.cmp to do highlight.
 --             -- https://github.com/catppuccin/nvim/blob/v1.10.0/lua/catppuccin/groups/integrations/blink_cmp.lua
 --             abbr_hlgroup = "BlinkCmpLabel",
 --             kind_hlgroup = "BlinkCmpKind" .. (kind_int_to_string[item.kind] or "Unknown"),
@@ -78,7 +78,7 @@ vim.lsp.enable("sqls") -- SQL
 vim.lsp.enable("graphql") -- GraphQL
 vim.lsp.enable("html") -- HTML
 vim.lsp.enable("cssls") -- CSS
-vim.lsp.enable("tailwindcss") -- Tailwindsss
+vim.lsp.enable("tailwindcss") -- Tailwindcss
 vim.lsp.enable("pyright") -- Python
 
 vim.lsp.enable("dartls") -- Dart

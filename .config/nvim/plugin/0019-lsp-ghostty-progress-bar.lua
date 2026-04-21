@@ -1,8 +1,8 @@
-local mylsp_ghostty_progress_bar = vim.api.nvim_create_augroup("MyLSPGhosttyProgressBar", { clear = true })
+local my_lsp_ghostty_progress_bar = vim.api.nvim_create_augroup("MyLSPGhosttyProgressBar", { clear = true })
 
 -- Taken from the example in :help LspProgress
 vim.api.nvim_create_autocmd("LspProgress", {
-  group = mylsp_ghostty_progress_bar,
+  group = my_lsp_ghostty_progress_bar,
   callback = function(ev)
     ---@type integer
     local client_id = ev.data.client_id

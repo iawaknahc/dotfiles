@@ -1,4 +1,4 @@
-local myterminal_autocmdgroup = vim.api.nvim_create_augroup("MyTerminal", { clear = true })
+local my_terminal_autocmd_group = vim.api.nvim_create_augroup("MyTerminal", { clear = true })
 
 -- There is no additional keymap to go to normal mode.
 -- Just hit <C-\><C-N>
@@ -8,7 +8,7 @@ local myterminal_autocmdgroup = vim.api.nvim_create_augroup("MyTerminal", { clea
 
 -- :lcd with OSC 7
 vim.api.nvim_create_autocmd({ "TermRequest" }, {
-  group = myterminal_autocmdgroup,
+  group = my_terminal_autocmd_group,
   desc = ":lcd with OSC 7",
   callback = function(ev)
     if string.sub(ev.data.sequence, 1, 4) == "\x1b]7;" then
@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd({ "TermRequest" }, {
   end,
 })
 vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "DirChanged" }, {
-  group = myterminal_autocmdgroup,
+  group = my_terminal_autocmd_group,
   callback = function()
     if vim.b.osc7_dir and vim.fn.isdirectory(vim.b.osc7_dir) == 1 then
       vim.cmd.lcd(vim.b.osc7_dir)
@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter", "DirChanged" }, {
 
 -- Enter insert mode when a terminal is opened.
 vim.api.nvim_create_autocmd("TermOpen", {
-  group = myterminal_autocmdgroup,
+  group = my_terminal_autocmd_group,
   pattern = "*",
   command = "startinsert",
 })

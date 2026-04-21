@@ -1,4 +1,4 @@
-local miniclue = require("mini.clue")
+local mini_clue = require("mini.clue")
 
 local function make_register_desc(register, fallback)
   return function()
@@ -115,7 +115,7 @@ local function gen_clues_registers()
 end
 _G.gen_clues_registers = gen_clues_registers
 
-miniclue.setup({
+mini_clue.setup({
   window = {
     delay = 0,
     config = {
@@ -151,10 +151,10 @@ miniclue.setup({
     -- <Space>
     { mode = "n", keys = "<Space>" },
 
-    -- CTRL-X is a native submode of Insert mode.
+    -- CTRL-X is a native sub-mode of Insert mode.
     { mode = "i", keys = "<C-x>" },
 
-    -- CTRL-\ is a native submode of citv
+    -- CTRL-\ is a native sub-mode of Command mode, Insert mode, Terminal mode, and Visual mode.
     { mode = "c", keys = [[<C-\>]] },
     { mode = "i", keys = [[<C-\>]] },
     { mode = "t", keys = [[<C-\>]] },
@@ -176,15 +176,15 @@ miniclue.setup({
     { mode = "n", keys = "<C-w>" },
   },
   clues = {
-    miniclue.gen_clues.builtin_completion(),
-    miniclue.gen_clues.g(),
-    miniclue.gen_clues.z(),
+    mini_clue.gen_clues.builtin_completion(),
+    mini_clue.gen_clues.g(),
+    mini_clue.gen_clues.z(),
     { mode = "n", keys = "ZZ", desc = "Save and close window, :exit" },
     { mode = "n", keys = "ZQ", desc = "Quit without saving, :quit!" },
 
-    miniclue.gen_clues.marks(),
+    mini_clue.gen_clues.marks(),
     gen_clues_registers(),
-    miniclue.gen_clues.windows(),
+    mini_clue.gen_clues.windows(),
 
     -- CTRL-\
     { mode = "c", keys = [[<C-\><C-n>]], desc = "Back to normal mode" },
@@ -218,7 +218,7 @@ miniclue.setup({
   },
 })
 
-miniclue.set_mapping_desc("n", "]d", "diagnostic")
-miniclue.set_mapping_desc("n", "]D", "Last diagnostic")
-miniclue.set_mapping_desc("n", "[d", "diagnostic")
-miniclue.set_mapping_desc("n", "[D", "First diagnostic")
+mini_clue.set_mapping_desc("n", "]d", "diagnostic")
+mini_clue.set_mapping_desc("n", "]D", "Last diagnostic")
+mini_clue.set_mapping_desc("n", "[d", "diagnostic")
+mini_clue.set_mapping_desc("n", "[D", "First diagnostic")

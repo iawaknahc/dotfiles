@@ -137,7 +137,7 @@ function M.g8()
   if fileencoding == nil or fileencoding == "" then
     fileencoding = "utf-8"
   end
-  local fns = {
+  local functions = {
     ["utf-8"] = codepoint_to_utf8,
     ["ucs-2"] = codepoint_to_utf16be,
     ["ucs-2le"] = codepoint_to_utf16le,
@@ -146,7 +146,7 @@ function M.g8()
     ["ucs-4"] = codepoint_to_utf32be,
     ["ucs-4le"] = codepoint_to_utf32le,
   }
-  local fn = fns[fileencoding]
+  local fn = functions[fileencoding]
   if fn == nil then
     vim.notify("unsupported fileencoding: " .. fileencoding, vim.log.levels.WARN)
     return

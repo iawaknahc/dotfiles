@@ -1,7 +1,7 @@
-local mytreesitter_autocmdgroup = vim.api.nvim_create_augroup("MyTreesitter", { clear = true })
+local my_treesitter_autocmd_group = vim.api.nvim_create_augroup("MyTreesitter", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = mytreesitter_autocmdgroup,
+  group = my_treesitter_autocmd_group,
   pattern = "*",
   callback = function(ev)
     -- Try twice.

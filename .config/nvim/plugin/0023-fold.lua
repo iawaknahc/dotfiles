@@ -5,10 +5,10 @@
 -- I didn't have time to look into this issue.
 -- So let's not use fold at all.
 
---local myfold_autocmdgroup = vim.api.nvim_create_augroup("MyFold", { clear = true })
+--local my_fold_autocmd_group = vim.api.nvim_create_augroup("MyFold", { clear = true })
 --
 --vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
---  group = myfold_autocmdgroup,
+--  group = my_fold_autocmd_group,
 --  callback = function(ev)
 --    local winids = vim.api.nvim_list_wins()
 --    for _, winid in ipairs(winids) do

@@ -1,7 +1,7 @@
-local myman_autocmdgroup = vim.api.nvim_create_augroup("MyMan", { clear = true })
+local my_man_autocmd_group = vim.api.nvim_create_augroup("MyMan", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
-  group = myman_autocmdgroup,
+  group = my_man_autocmd_group,
   pattern = "man",
   desc = "Automatically execute gO and then close the loclist",
   callback = function()

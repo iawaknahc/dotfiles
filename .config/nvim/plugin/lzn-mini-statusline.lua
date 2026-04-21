@@ -36,7 +36,7 @@ local function get_bufnr(args)
   return string.format("b%d", buf)
 end
 
-local function get_winnr(args)
+local function get_winid(args)
   if MiniStatusline.is_truncated(args.trunc_width) then
     return ""
   end
@@ -275,12 +275,12 @@ local function get_screen_location(args)
   local winid = vim.api.nvim_get_current_win()
   local getwininfo_result = vim.fn.getwininfo(winid)[1]
 
-  local screenpost_result = vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
+  local screenpos_result = vim.fn.screenpos(0, cursor_row_1indexing, cursor_col_1indexing)
 
-  local screen_row = screenpost_result.row
+  local screen_row = screenpos_result.row
   local screen_col = 0
   if getwininfo_result ~= nil then
-    screen_col = screenpost_result.col - getwininfo_result.textoff
+    screen_col = screenpos_result.col - getwininfo_result.textoff
   end
 
   -- 3 is enough because typical screen has less than 1000 rows and 1000 columns.
@@ -303,7 +303,7 @@ local function active()
   local diagnostic_strings = get_diagnostic_strings({ trunc_width = 80 })
 
   local bufnr = get_bufnr({ trunc_width = 80 })
-  local winnr = get_winnr({ trunc_width = 80 })
+  local winid = get_winid({ trunc_width = 80 })
   local filename = get_filename({ trunc_width = 180 })
   local filetype = get_filetype({ trunc_width = 120 })
   local fileencoding = get_fileencoding({ trunc_width = 80 })
@@ -324,7 +324,7 @@ local function active()
   end
 
   table.insert(groups, { hl = mode_hl, strings = { mode } })
-  table.insert(groups, { hl = "MiniStatuslineDevinfo", strings = { bufnr, winnr } })
+  table.insert(groups, { hl = "MiniStatuslineDevinfo", strings = { bufnr, winid } })
   table.insert(groups, { hl = "MiniStatuslineFilename", strings = { filename } })
   table.insert(groups, { strings = devinfo_strings })
   table.insert(groups, "%=")
