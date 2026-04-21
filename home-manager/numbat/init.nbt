@@ -6,3 +6,5 @@ fn iso_date(dt: DateTime) -> String = format_datetime("%Y-%m-%d", dt)
 
 # https://datatracker.ietf.org/doc/html/rfc9110#http.date
 fn http_date(dt: DateTime) -> String = format_datetime("%a, %d %b %Y %H:%M:%S %Z", tz("GMT")(dt))
+
+fn rfc3339(dt: DateTime) -> String = format_datetime("%Y-%m-%dT%H:%M:%S.%f%:z", dt)
