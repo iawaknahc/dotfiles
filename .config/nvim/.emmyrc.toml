@@ -1,4 +1,4 @@
-# As of 2026-04-07, there are 2 points to note when configuring emmylua_ls to work with neovim:
+# As of 2026-04-07, there are 2 points to note when configuring emmylua_ls to work with Neovim:
 # 1. requirePath must be false, as mentioned in https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/29#issuecomment-2647718119
 # 2. No symlinks because emmylua_ls does not support symlinks https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/650
 #

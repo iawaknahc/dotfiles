@@ -41,6 +41,8 @@ diffupdate
 dlv
 dockerls
 emmylua
+emmyrc
+env
 esc
 expandtab
 fallthrough
@@ -87,6 +89,7 @@ ipairs
 isoformat
 jdtls
 jit
+json
 jsonls
 keymaps
 keyset
@@ -103,6 +106,7 @@ listchars
 localleader
 loclist
 lspconfig
+lua
 lvimgrep
 lwindow
 menuone
@@ -135,6 +139,7 @@ preselects
 prettierd
 pumheight
 pyright
+python3
 qflist
 redrawstatus
 screenpos
@@ -170,7 +175,9 @@ treewalker
 ucs
 updatetime
 urlsplit
+usr
 vimgrep
+vimruntime
 vimscript
 virtualedit
 vscode

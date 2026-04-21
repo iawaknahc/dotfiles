@@ -1,9 +1,9 @@
-.PHONY: setup
-setup: .config/nvim/.emmyrc.json
+.PHONY: clean
+clean:
+	rm -f .config/nvim/.emmyrc.json
 
-.PHONY: check
-check:
-	llscheck --configpath .config/nvim/.luarc.json .config/nvim
+.PHONY: setup
+setup: clean .config/nvim/.emmyrc.json
 
 .PHONY: format
 format:
