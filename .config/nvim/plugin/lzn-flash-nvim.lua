@@ -36,7 +36,7 @@ vim.keymap.set({ "n" }, "s", function()
   require("flash").jump()
 end, { desc = "Flash" })
 
--- nvim-surround has a S keymap in visual mode.
+-- nvim-surround has an S keymap in visual mode.
 vim.keymap.set({ "n" }, "S", function()
   local flash_treesitter = setup()
   flash_treesitter()

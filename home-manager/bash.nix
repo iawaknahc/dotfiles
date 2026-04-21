@@ -1,5 +1,5 @@
-# bash -il reads the FIRST file in this order: .bash_profile .bash_login .profile
-# bash -i reads .bashrc
+# `bash -il` reads the FIRST file in this order: .bash_profile .bash_login .profile
+# `bash -i` reads .bashrc
 { pkgs, ... }:
 {
   programs.bash.enable = true;

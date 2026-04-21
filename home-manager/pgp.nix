@@ -45,7 +45,7 @@ in
     s2k-digest-algo = "SHA256";
     s2k-cipher-algo = "AES256";
 
-    # Show expired uids and subkeys, otherwise it is hard to tell they were there.
+    # Show expired uids and subkeys, otherwise it is hard to tell that they were there.
     list-options = "show-uid-validity,show-unusable-uids,show-unusable-subkeys";
     verify-options = "show-uid-validity,show-unusable-uids";
   };

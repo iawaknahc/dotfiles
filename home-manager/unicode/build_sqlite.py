@@ -135,7 +135,7 @@ def parse_emoji_sequences_txt(
             if typ_ == "Basic_Emoji":
                 continue
             # Emoji_Keycap_Sequence is included in named-sequence.
-            # Thus we skip it.
+            # Thus, we skip it.
             if typ_ == "Emoji_Keycap_Sequence":
                 continue
             name = fields[2]

@@ -6,7 +6,7 @@ local M = {}
 --
 -- We could have use nvim_feedkeys(, "nt") and use @: to repeat too,
 -- but hitting @: to repeat is not as ergonomic as hitting .
--- We are aware that a operatorfunc should support both normal mode and visual mode, v:count, [ ] < >, etc.
+-- We are aware that an operatorfunc should support both normal mode and visual mode, v:count, [ ] < >, etc.
 -- But ergonomics is what matters here.
 --- @param fn_name string
 --- @param fn fun(): nil

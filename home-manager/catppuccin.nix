@@ -13,7 +13,7 @@
   catppuccin.flavor = "mocha";
   catppuccin.accent = "blue";
   # Do not enable all supported programs.
-  # Instead we explicitly enable the programs we want.
+  # Instead, we explicitly enable the programs we want.
   catppuccin.enable = false;
   catppuccin.alacritty.enable = true;
   catppuccin.btop.enable = true;

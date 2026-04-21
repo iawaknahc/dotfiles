@@ -13,6 +13,7 @@ bufname
 bufnr
 bufpath
 buftype
+builtin
 catppuccin
 cfile
 checkhealth
@@ -45,6 +46,7 @@ emmyrc
 env
 esc
 expandtab
+exportcert
 fallthrough
 feedkeys
 fileencoding
@@ -62,6 +64,7 @@ fromisoformat
 fromtimestamp
 ftdetect
 ftplugin
+fts
 fzf
 getcmdline
 getcmdtype
@@ -89,10 +92,12 @@ ipairs
 isoformat
 jdtls
 jit
+jks
 json
 jsonls
 keymaps
 keyset
+keytool
 lcd
 lclose
 leadmultispace
@@ -105,6 +110,7 @@ linters
 listchars
 localleader
 loclist
+lsp
 lspconfig
 lua
 lvimgrep

@@ -1,7 +1,7 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- As of 2026-04-15, Oil has a unreleased feature of paste from / copy to system clipboard
+-- As of 2026-04-15, Oil has an unreleased feature of paste from / copy to system clipboard
 -- See https://github.com/stevearc/oil.nvim/pull/559
 require("oil").setup({
   -- Let Oil to take over the job of netrw.

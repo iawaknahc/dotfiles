@@ -32,7 +32,7 @@
   # See https://github.com/LnL7/nix-darwin/issues/985#issuecomment-2198113056
   #
   # Since macOS Sonoma, /etc/pam.d/sudo has a line to include /etc/pam.d/sudo_local
-  # /etc/pam.d/sudo_local does not exist by default, so including a non-existent file is NOT an error.
+  # /etc/pam.d/sudo_local does not exist by default, so including a nonexistent file is NOT an error.
   #
   # However, if /etc/pam.d/sudo_local is readable, then the contents of it must be valid, otherwise,
   # sudo will crash, and we cannot run sudo anymore.

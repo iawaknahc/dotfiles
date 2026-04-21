@@ -9,7 +9,7 @@ local function make_register_desc(register, fallback)
     end
 
     -- It seems that if we do not use vim.inspect on the register content,
-    -- MiniClue will simply do not show anything if one of the register contains unusual characters.
+    -- MiniClue will simply do not show anything if one of the registers contains unusual characters.
     local lua_string_literal = vim.inspect(unsafe)
 
     if string.len(lua_string_literal) <= 20 then

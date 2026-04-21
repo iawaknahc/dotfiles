@@ -15,7 +15,7 @@ vim.keymap.set("n", "gf", function()
     return
   end
 
-  -- Otherwise we construct a path relative to the current file.
+  -- Otherwise, we construct a path relative to the current file.
   local parent_directory = vim.fn.expand("%:h")
   local path = vim.fs.joinpath(parent_directory, file_under_cursor)
   local normalized = vim.fs.normalize(path)

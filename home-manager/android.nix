@@ -3,7 +3,7 @@
   # We switched back to use android-nixpkgs to manage Android SDK installation.
   # To avoid massive re-download, we pin android-nixpkgs to a specific version.
   # `nix flake update --flake .` will not bump the version of android-nixpkgs.
-  # To update, first visit the the release notes of platform-tools https://developer.android.com/tools/releases/platform-tools to get the month and year.
+  # To update, first visit the release notes of platform-tools https://developer.android.com/tools/releases/platform-tools to get the month and year.
   # Then visit https://github.com/tadfisher/android-nixpkgs/blame/main/channels/stable/default.nix to see which commit is the first commit that includes the release.
   android-sdk.enable = true;
   # Use `nix flake show github:tadfisher/android-nixpkgs/2026-04-15-stable` to list available packages.

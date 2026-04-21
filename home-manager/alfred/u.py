@@ -19,7 +19,7 @@ def preprocess_query(argv: list[str]) -> list[str]:
     normalized = []
     for part in parts:
         # We do not want `latin letter a` to be rewritten into `latin letter 000A`.
-        # Thus we only rewrite when the part is at least 2 characters.
+        # Thus, we only rewrite when the part is at least 2 characters.
         if len(part) >= 2:
             try:
                 codepoint = int(part, base=16)
@@ -42,7 +42,7 @@ def prepare_fts5_query(query: list[str]) -> str:
         # Escape " by doubling it
         # See https://www.sqlite.org/fts5.html#fts5_strings
         term = term.replace('"', '""')
-        # Enclose the entire query in " to make a FTS5 string.
+        # Enclose the entire query in " to make an FTS5 string.
         term = f'"{term}"'
         escaped.append(term)
     return " ".join(escaped)

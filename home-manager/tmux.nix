@@ -47,7 +47,7 @@
   # 1. I am currently in a fish login shell.
   # 2. Since I am already in a fish shell, config.fish has been sourced and the environment is assumed to be set up correctly.
   # 3. I want to start tmux.
-  # 4. Thus I start tmux without any options nor arguments.
+  # 4. Thus, I start tmux without any options nor arguments.
   # 5. When tmux is invoked in this way, it has the following behavior.
   #
   # a. tmux uses the value of default-shell (which must be an absolute path) to invoke default-command.
@@ -81,7 +81,7 @@
   # However, setting TERMINFO has the effect of only looking at that directory.
   # If $TERMINFO is left set inside tmux, the terminal-based program cannot see the capability of tmux, since that directory does not contain the terminfo of tmux-256color.
   #
-  # Thus setting $TERMINFO is actually a problem.
+  # Thus, setting $TERMINFO is actually a problem.
   # A more correct approach is to set $TERMINFO_DIRS instead.
   # Those terminal emulators set $TERMINFO before launching the shell,
   # we can set $TERMINFO_DIRS and unset $TERMINFO in shell initialization script.
@@ -101,7 +101,7 @@
   # tmux, being a terminal multiplexer, is also a terminal.
   # tmux sets $TERM to the value of the option default-terminal.
   # The default value of default-terminal is screen.
-  # To let terminal-based programs to utilizes all capabilities of tmux,
+  # To let terminal-based programs to utilize all capabilities of tmux,
   # we use the preferred value, tmux-256color.
   #
   #

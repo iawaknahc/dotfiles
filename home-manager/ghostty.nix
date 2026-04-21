@@ -41,7 +41,7 @@
 
     # In preparation for using neovim as default terminal program,
     # we disable vi mode in shell.
-    # Thus the cursor should look like a bar.
+    # Thus, the cursor should look like a bar.
     cursor-style = "bar";
     cursor-style-blink = false;
     # It is better not to set cursor-color and cursor-text.

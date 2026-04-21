@@ -1,5 +1,5 @@
-# zsh -i --login reads ALL files in this order: .zprofile .zshrc .zlogin
-# zsh -i reads .zshrc
+# `zsh -i --login` reads ALL files in this order: .zprofile .zshrc .zlogin
+# `zsh -i` reads .zshrc
 
 # No idea whether I need these things.
 # Let's put them here first.
