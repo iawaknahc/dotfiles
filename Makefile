@@ -9,6 +9,18 @@ setup: clean .config/nvim/.emmyrc.json
 format:
 	stylua -v .config/nvim
 
+.PHONY: harper
+harper:
+	fd --type f --ignore-file harperignore | xargs harper-cli-lint --format compact
+
+.PHONY: codebook
+codebook:
+	fd --type f --ignore-file codebookignore | xargs codebook-lsp lint
+
+.PHONY: codespell
+codespell:
+	fd --type f --ignore-file codespellignore | xargs codespell
+
 # Copy the current config of Alfred to here for git-diff.
 .PHONY: alfred-rsync
 alfred-rsync:

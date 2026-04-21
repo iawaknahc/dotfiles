@@ -1,0 +1,7 @@
+.hammerspoon/Spoons/
+*.plist
+gemset.nix
+home-manager/firefox/*.json
+hs
+hs.1
+secrets/secrets.yaml
