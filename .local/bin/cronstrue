@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# This is deprecated.
-# Use Claude Code to do this instead.
-npx -y cronstrue "$@"
