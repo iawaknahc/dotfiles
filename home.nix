@@ -122,7 +122,7 @@
     ./home-manager/networking-tools.nix
     ./home-manager/browser-automation.nix
     ./home-manager/multimedia.nix
-    ./home-manager/grammar-and-spell-checking.nix
+    ./home-manager/grammar-and-spell-checking
 
     ./home-manager/awk.nix
     ./home-manager/lua.nix
