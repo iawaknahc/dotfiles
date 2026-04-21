@@ -17,6 +17,16 @@ in
     # After using Harper for a month,
     # the most annoying problem is https://github.com/Automattic/harper/discussions/938
     harper # general spellchecking
+    # FIXME: The harper package on nixpkgs does not include harper-cli.
+    # So we need to build it ourselves.
+    (harper.overrideAttrs {
+      pname = "harper-cli";
+      buildAndTestSubdir = "harper-cli";
+      nativeInstallCheckInputs = [ ]; # harper-cli reports itself as 0.1.0, which does not match the version of harper-ls.
+      meta = {
+        mainProgram = "harper-cli";
+      };
+    })
     codebook # source code spellchecking
     typos-lsp # source code spellchecking
 
