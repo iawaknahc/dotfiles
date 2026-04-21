@@ -33,288 +33,57 @@
 --   end,
 -- })
 
-local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
-
-vim.lsp.enable("jsonls") -- JSON
-
--- vim.lsp.enable("marksman") -- Markdown
-vim.lsp.enable("markdown_oxide") -- Markdown
-
-vim.lsp.enable("yamlls") -- YAML
-vim.lsp.enable("taplo") -- TOML
-vim.lsp.enable("awk_ls") -- awk
-vim.lsp.enable("bashls") -- Bash or sh
-
-vim.lsp.enable("fish_lsp") -- fish
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.fish",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "fish_lsp", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
--- vim.lsp.enable("lua_ls") -- Lua
-vim.lsp.enable("emmylua_ls") -- Lua
-
-vim.lsp.enable("stylua") -- Lua formatter
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.lua",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "stylua", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
-vim.lsp.enable("fennel_ls") -- Fennel
-vim.lsp.enable("nil_ls") -- Nix
-vim.lsp.enable("sqls") -- SQL
-vim.lsp.enable("graphql") -- GraphQL
-vim.lsp.enable("html") -- HTML
-vim.lsp.enable("cssls") -- CSS
-vim.lsp.enable("tailwindcss") -- Tailwindcss
-vim.lsp.enable("pyright") -- Python
-
-vim.lsp.enable("dartls") -- Dart
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.dart",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "dartls", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
-vim.lsp.enable("eslint") -- ESLint
-vim.lsp.enable("docker_compose_language_service") -- docker-compose.yaml
-vim.lsp.enable("jdtls") -- Java
-
-vim.lsp.enable("clojure_lsp") -- Clojure
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.clj",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "clojure_lsp", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
--- sourcekit is bundled with Xcode.
-vim.lsp.enable("sourcekit") -- Swift, Objective-C, C, and C++
-
--- Grammar and spell checking
-vim.lsp.config("harper_ls", {
-  settings = {
-    ["harper-ls"] = {
-      linters = {
-        CapitalizePersonalPronouns = false, -- It is common to have a lone 'i' character.
-        Dashes = false, -- Comments in Lua starts with two dashes.
-        EllipsisLength = false, -- `..` in Lua is an operator.
-        ExpandArgument = false, -- It is perfectly fine use arg and args in programming settings.
-        ExpandControl = false, -- The word "CTRL" is very common in programming settings.
-        ExpandMemoryShorthands = false, -- The shorthands are much more common.
-        ExpandPrevious = false, -- The word "prev" is very common in programming settings.
-        ExpandStandardInputAndOutput = false, -- It is perfectly fine use stdin, stdout, and stderr in programming settings.
-        ExpandTimeShorthands = false, -- The shorthands are fine.
-        LongSentences = false, -- A text file with a word on each line is considered long sentences, which is nonsense.
-        MoreAdjective = false, -- See https://github.com/Automattic/harper/issues/2705
-        OrthographicConsistency = false, -- Allow us to spell a word in lowercase.
-        SentenceCapitalization = false, -- Allow us to start a sentence with a lowercase character.
-        Spaces = false, -- Allow us to write something like "Read ./this/file.". The dot before the slash confuses Harper.
-        SpellCheck = false, -- Harper does not even know common words like "docker". Its spellchecking gives too many false positives.
-        SplitWords = false, -- Stop Harper from complaining "textDocument" should be spelled as "text document".
-        UnclosedQuotes = false, -- It is common to have a lone '"' character.
-        UseTitleCase = false, -- See https://github.com/Automattic/harper/issues/2640
-      },
-    },
-  },
-  -- The default list from nvim-lspconfig is incomplete.
-  -- This list is up-to-date as of 2026-04-17.
-  -- https://writewithharper.com/docs/integrations/language-server#Supported-Languages
-  filetypes = {
-    "asciidoc",
-    "c",
-    "clojure",
-    "cmake",
-    "cpp",
-    "cs",
-    "dart",
-    "gitcommit",
-    "go",
-    "groovy",
-    "haskell",
-    "html",
-    "java",
-    "javascript",
-    "javascriptreact",
-    "kotlin",
-    "lua",
-    "markdown",
-    "nix",
-    "php",
-    "python",
-    "ruby",
-    "rust",
-    "scala",
-    "sh",
-    "swift",
-    "text",
-    "toml",
-    "typescript",
-    "typescriptreact",
-    "typst",
-    "zig",
-  },
-})
-vim.lsp.enable("harper_ls") -- https://writewithharper.com
-vim.lsp.enable("typos_lsp") -- https://github.com/crate-ci/typos
-vim.lsp.enable("codebook") -- https://github.com/blopker/codebook
-
-vim.lsp.config("dockerls", {
-  settings = {
-    docker = {
-      languageserver = {
-        diagnostics = {
-          deprecatedMaintainer = "error",
-          directiveCasing = "error",
-          emptyContinuationLine = "error",
-          instructionCasing = "error",
-          instructionCmdMultiple = "error",
-          instructionEntrypointMultiple = "error",
-          instructionHealthcheckMultiple = "error",
-          instructionJSONInSingleQuotes = "error",
-        },
-      },
-    },
-  },
-})
-vim.lsp.enable("dockerls")
-
-vim.lsp.config("gopls", {
-  settings = {
-    gopls = {
-      semanticTokens = true,
-      -- No need to turn off @lsp.type.string and @lsp.type.number because we handled them in the LSP client side.
-      -- semanticTokenTypes = {
-      --   string = false,
-      --   number = false,
-      -- },
-      hints = {
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        constantValues = true,
-        functionTypeParameters = true,
-        parameterNames = true,
-        rangeVariableTypes = true,
-      },
-    },
-  },
-})
-vim.lsp.enable("gopls")
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.go,go.mod,go.sum,go.work,go.work.sum",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "gopls", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
-vim.lsp.config("ts_ls", {
-  init_options = {
-    -- https://github.com/typescript-language-server/typescript-language-server/blob/master/docs/configuration.md
-    preferences = {
-      includeInlayParameterNameHints = "all",
-      includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-      includeInlayFunctionParameterTypeHints = true,
-      includeInlayVariableTypeHints = true,
-      includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-      includeInlayPropertyDeclarationTypeHints = true,
-      includeInlayFunctionLikeReturnTypeHints = true,
-      includeInlayEnumMemberValueHints = true,
-    },
-  },
-})
--- vim.lsp.enable("ts_ls")
-vim.lsp.config("vtsls", {
-  settings = {
-    typescript = {
-      inlayHints = {
-        parameterNames = { enabled = "all" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-      },
-    },
-  },
-})
-vim.lsp.enable("vtsls")
-
-vim.lsp.config("denols", {
-  root_markers = { "deno.json", "deno.jsonc" },
-})
+vim.lsp.enable("awk_ls")
+vim.lsp.enable("bashls")
+vim.lsp.enable("clojure_lsp")
+vim.lsp.enable("codebook")
+vim.lsp.enable("cssls")
+vim.lsp.enable("dartls")
 vim.lsp.enable("denols")
-
--- Known issue: inlay hint works only in `with pkgs; [ ... ]`
--- See https://github.com/nix-community/nixd/issues/629#issuecomment-2558520043
-vim.lsp.config("nixd", {
-  cmd = { "nixd", "--inlay-hints=true", "--semantic-tokens=true" },
-  settings = {
-    nixd = {
-      formatting = {
-        command = { "nixfmt" },
-      },
-      nixpkgs = {
-        expr = "import <nixpkgs> { }",
-      },
-      -- nixd requires us to provide an expression that will be evaluated the options set.
-      -- To do this, we add for-nixd to NIX_PATH, and use a dummy machine nixd@nixd.
-      options = {
-        ["nix-darwin"] = {
-          expr = "(builtins.getFlake (builtins.toString <for-nixd>)).darwinConfigurations.nixd.options",
-        },
-        ["home-manager"] = {
-          expr = '(builtins.getFlake (builtins.toString <for-nixd>)).homeConfigurations."nixd@nixd".options',
-        },
-      },
-    },
-  },
-})
+vim.lsp.enable("docker_compose_language_service")
+vim.lsp.enable("dockerls")
+vim.lsp.enable("emmylua_ls")
+vim.lsp.enable("eslint")
+vim.lsp.enable("fennel_ls")
+vim.lsp.enable("fish_lsp")
+vim.lsp.enable("gopls")
+vim.lsp.enable("graphql")
+vim.lsp.enable("harper_ls")
+vim.lsp.enable("html")
+vim.lsp.enable("jdtls")
+vim.lsp.enable("jsonls")
+vim.lsp.enable("markdown_oxide")
+vim.lsp.enable("nil_ls")
 vim.lsp.enable("nixd")
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.nix",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "nixd", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
-
+vim.lsp.enable("pyright")
+vim.lsp.enable("sourcekit")
+vim.lsp.enable("sqls")
+vim.lsp.enable("stylua")
+vim.lsp.enable("tailwindcss")
+vim.lsp.enable("taplo")
+vim.lsp.enable("typos_lsp")
+vim.lsp.enable("vtsls")
+vim.lsp.enable("yamlls")
 vim.lsp.enable("zls")
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = group,
-  pattern = "*.zig",
-  callback = function(ev)
-    local clients = vim.lsp.get_clients({ name = "zls", bufnr = ev.buf })
-    if #clients == 1 then
-      vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
-    end
-  end,
-})
+
+local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
+local function format_on_save(lsp_name, pattern)
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = group,
+    pattern = pattern,
+    callback = function(ev)
+      local clients = vim.lsp.get_clients({ name = lsp_name, bufnr = ev.buf })
+      if #clients == 1 then
+        vim.lsp.buf.format({ bufnr = ev.buf, client = clients[1].id, timeout_ms = 1000 })
+      end
+    end,
+  })
+end
+
+format_on_save("fish_lsp", "*.fish")
+format_on_save("stylua", "*.lua")
+format_on_save("dartls", "*.dart")
+format_on_save("clojure_lsp", "*.clj")
+format_on_save("gopls", "*.go,go.mod,go.sum,go.work,go.work.sum")
+format_on_save("nixd", "*.nix")
+format_on_save("zls", "*.zig")
