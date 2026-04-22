@@ -1,9 +1,13 @@
+STYLUA_FLAGS := --verbose
+STYLUA_ARGS := .config/nvim .hammerspoon
+
 .PHONY: check
 check:
 #$(MAKE) harper
 	$(MAKE) codebook
 	$(MAKE) codespell
 	$(MAKE) test
+	stylua --check $(STYLUA_FLAGS) $(STYLUA_ARGS)
 
 .PHONY: clean
 clean:
@@ -14,7 +18,7 @@ setup: clean .config/nvim/.emmyrc.json
 
 .PHONY: format
 format:
-	stylua -v .config/nvim
+	stylua $(STYLUA_FLAGS) $(STYLUA_ARGS)
 
 # FIXME: harper-cli lint when harper < 2.0.0 always exit with 1 even there are no lint errors.
 # https://github.com/Automattic/harper/issues/2832
