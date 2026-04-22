@@ -1,9 +1,9 @@
 const KEY_CARD_OR_PASS = "Card or Pass";
 
-const fixture_PnS = {
-  Name: "Park'n Shop Lt/455 Ss",
+const fixture_PNS = {
+  Name: "PNS Lt/455 Ss",
   [KEY_CARD_OR_PASS]: "HSBC Red Credit Card滙豐Red信用卡",
-  Merchant: "Park'n Shop Lt/455 Ss",
+  Merchant: "PNS Lt/455 Ss",
   Amount: "HK$34.90",
 };
 
@@ -55,7 +55,7 @@ function isPreview(shortcutParameter) {
 }
 
 const input = isPreview(args.shortcutParameter)
-  ? fixture_PnS
+  ? fixture_PNS
   : args.shortcutParameter;
 const output = main(input);
 if (output != null) {

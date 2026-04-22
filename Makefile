@@ -1,3 +1,10 @@
+.PHONY: check
+check:
+#$(MAKE) harper
+	$(MAKE) codebook
+	$(MAKE) codespell
+	$(MAKE) test
+
 .PHONY: clean
 clean:
 	rm -f .config/nvim/.emmyrc.json
@@ -9,6 +16,8 @@ setup: clean .config/nvim/.emmyrc.json
 format:
 	stylua -v .config/nvim
 
+# FIXME: harper-cli lint when harper < 2.0.0 always exit with 1 even there are no lint errors.
+# https://github.com/Automattic/harper/issues/2832
 .PHONY: harper
 harper:
 	fd --type f --ignore-file harperignore | xargs harper-cli-lint --format compact

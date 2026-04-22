@@ -41,28 +41,32 @@ def main():
     g2.add_argument(
         "-u",
         "--unspecified",
-        help="Encode non-unreserved characters\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-2.3",
+        help="Encode non-unreserved characters\n"
+        "https://datatracker.ietf.org/doc/html/rfc3986#section-2.3",
         action="store_true",
         default=True,
     )
     g2.add_argument(
         "-p",
         "--path",
-        help="Encode path component\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-3.3",
+        help="Encode path component\n"
+        "https://datatracker.ietf.org/doc/html/rfc3986#section-3.3",
         action="store_true",
         default=argparse.SUPPRESS,
     )
     g2.add_argument(
         "-q",
         "--query",
-        help="Encode x-www-form-urlencoded\nhttps://url.spec.whatwg.org/#application/x-www-form-urlencoded",
+        help="Encode x-www-form-urlencoded\n"
+        "https://url.spec.whatwg.org/#application/x-www-form-urlencoded",
         action="store_true",
         default=argparse.SUPPRESS,
     )
     g2.add_argument(
         "-f",
         "--fragment",
-        help="Encode fragment\nhttps://datatracker.ietf.org/doc/html/rfc3986#section-3.5",
+        help="Encode fragment\n"
+        "https://datatracker.ietf.org/doc/html/rfc3986#section-3.5",
         action="store_true",
         default=argparse.SUPPRESS,
     )

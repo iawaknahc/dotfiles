@@ -9,12 +9,12 @@ local function get_firefox()
     return nil
   end
 
-  local axwin = hs.axuielement.windowElement(focusedWindow)
-  if axwin == nil then
+  local ax_win = hs.axuielement.windowElement(focusedWindow)
+  if ax_win == nil then
     return nil
   end
 
-  local urlbar = axwin:elementSearch(
+  local urlbar = ax_win:elementSearch(
     nil,
     hs.axuielement.searchCriteriaFunction({
       attribute = "AXDOMIdentifier",
@@ -65,12 +65,12 @@ local function get_chrome()
     return nil
   end
 
-  local axwin = hs.axuielement.windowElement(focusedWindow)
-  if axwin == nil then
+  local ax_win = hs.axuielement.windowElement(focusedWindow)
+  if ax_win == nil then
     return nil
   end
 
-  local url = axwin.AXDocument
+  local url = ax_win.AXDocument
   if type(url) == "string" then
     return url
   end
@@ -89,12 +89,12 @@ local function get_safari()
     return nil
   end
 
-  local axwin = hs.axuielement.windowElement(focusedWindow)
-  if axwin == nil then
+  local ax_win = hs.axuielement.windowElement(focusedWindow)
+  if ax_win == nil then
     return nil
   end
 
-  local urlTextField = axwin:elementSearch(
+  local urlTextField = ax_win:elementSearch(
     nil,
     hs.axuielement.searchCriteriaFunction({
       attribute = "AXIdentifier",

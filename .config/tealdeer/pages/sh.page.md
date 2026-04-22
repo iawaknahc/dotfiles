@@ -56,11 +56,11 @@
 
 - Check if sub is a substring of full:
 
-`printf {{superstring}} | grep >/dev/null -F {{sub}}`
+`printf {{string}} | grep >/dev/null -F {{sub}}`
 
 - Count the number of non-overlapping substrings:
 
-`printf {{superstring}} | grep -F -o {{sub}} | wc -l`
+`printf {{string}} | grep -F -o {{sub}} | wc -l`
 
 - Check if string has a specific prefix:
 

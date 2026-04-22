@@ -1,5 +1,5 @@
 local cjson = require("cjson")
-local sbar = require("sketchybar")
+local sketchybar = require("sketchybar")
 
 local Base = 0xff1e1e2e
 local Surface_0 = 0xff313244
@@ -43,7 +43,7 @@ local function exec(command)
   return stdout
 end
 
-sbar.bar({
+sketchybar.bar({
   position = "bottom",
   height = bar_height,
   margin = sketchybar_spacing,
@@ -55,10 +55,10 @@ sbar.bar({
   color = Base,
 })
 
-sbar.add("event", "aerospace_workspace_change")
-sbar.add("event", "aerospace_on_window_detected")
-sbar.add("event", "aerospace_on_focus_changed")
-sbar.add("event", "aerospace_on_focused_monitor_changed")
+sketchybar.add("event", "aerospace_workspace_change")
+sketchybar.add("event", "aerospace_on_window_detected")
+sketchybar.add("event", "aerospace_on_focus_changed")
+sketchybar.add("event", "aerospace_on_focused_monitor_changed")
 
 local function get_focused_workspace_id()
   return tostring(exec_json(aerospace .. [[ list-workspaces --json --focused]])[1].workspace)
@@ -113,7 +113,7 @@ local workspaces = exec_json(aerospace .. [[ list-workspaces --json --monitor fo
 for _, workspace in ipairs(workspaces) do
   local workspace_id = tostring(workspace.workspace)
 
-  local item = sbar.add("item", "workspace:" .. workspace_id, "left")
+  local item = sketchybar.add("item", "workspace:" .. workspace_id, "left")
 
   item:set({
     background = {
@@ -164,7 +164,7 @@ for _, workspace in ipairs(workspaces) do
   end)
   item:subscribe("aerospace_on_window_detected", function(env)
     -- For unknown reason, we need some delay otherwise focused_workspace_id is incorrect.
-    sbar.delay(0, function()
+    sketchybar.delay(0, function()
       local focused_workspace_id = get_focused_workspace_id()
       render_focus({
         workspace_id = workspace_id,
@@ -181,20 +181,8 @@ for _, workspace in ipairs(workspaces) do
   item:subscribe("aerospace_on_focused_monitor_changed", function(env) end)
 
   item:subscribe("mouse.clicked", function(env)
-    -- {
-    --   BUTTON = "left",
-    --   INFO = {
-    --     button = "left",
-    --     button_code = 0,
-    --     modfier_code = 0,
-    --     modifier = "none"
-    --   },
-    --   MODIFIER = "none",
-    --   NAME = "workspace:2",
-    --   SENDER = "mouse.clicked"
-    -- }
     exec(aerospace .. [[ workspace ]] .. workspace_id)
   end)
 end
 
-sbar.event_loop()
+sketchybar.event_loop()
