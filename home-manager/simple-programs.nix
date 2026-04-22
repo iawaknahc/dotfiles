@@ -61,5 +61,8 @@
 
     # Lossless conversion between representations
     remarshal
+
+    # Make without build system
+    just
   ];
 }
