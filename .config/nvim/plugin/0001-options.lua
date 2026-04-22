@@ -17,8 +17,8 @@ vim.o.modelines = 0
 
 -- colorscheme
 vim.cmd([[colorscheme catppuccin-mocha]])
--- In a Nix file, `# TODO` is recognized as @lsp.type.comment.nix (which links to @comment) and @comment.todo.
--- The fg color of @comment.todo SHOULD have a higher priority than that of @lsp.type.comment.nix,
+-- In a Nix file, `# TODO` is recognized as @lsp.type.comment.nix (which links to @comment) and `@comment.todo`.
+-- The fg color of `@comment.todo` SHOULD have a higher priority than that of @lsp.type.comment.nix,
 -- but since semantic tokens has higher priority, the normal fg color of comment is used instead.
 -- This results in a very pale text color on a colored background, making the text very difficult to read.
 --

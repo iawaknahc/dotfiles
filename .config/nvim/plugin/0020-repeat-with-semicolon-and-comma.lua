@@ -128,7 +128,7 @@ local function repeat_last_motion(direction)
   end
 
   -- m: remap keys so that mappings like [h (from gitsigns) work
-  -- t: treat the keys as if typed by the user. We want ; and , work like typing the command again.
+  -- t: treat the keys as if typed by the user. We want `;` and `,` work like typing the command again.
   -- x: execute all commands.
   vim.api.nvim_feedkeys(command, "mtx", true)
 end

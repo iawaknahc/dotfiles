@@ -100,7 +100,7 @@
       optional = true;
       plugin = treesj;
     }
-    # Enhanced version of :h CTRL-A and :h CTRL-X.
+    # Enhanced version of `:h CTRL-A` and :h CTRL-X.
     dial-nvim
     # Edit table.
     {

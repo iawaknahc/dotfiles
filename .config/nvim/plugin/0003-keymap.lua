@@ -1,7 +1,7 @@
 -- Disable :h <Space>
 vim.keymap.set("n", "<Space>", "<Nop>")
 
--- Disable :h s
+-- Disable `:help s`
 vim.keymap.set({ "n", "x" }, "s", "<Nop>")
 
 -- Disable :h S

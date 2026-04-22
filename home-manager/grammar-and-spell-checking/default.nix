@@ -12,9 +12,23 @@ let
     else
       "${config.home.homeDirectory}/.config/harper-ls";
 
+  # FIXME: The harper package on nixpkgs does not include harper-cli.
+  # So we need to build it ourselves.
+  harper-cli-base = (
+    pkgs.harper.overrideAttrs (prevAttrs: {
+      pname = "harper-cli";
+      buildAndTestSubdir = "harper-cli";
+      nativeInstallCheckInputs = [ ]; # harper-cli reports itself as 0.1.0, which does not match the version of harper-ls.
+      meta = {
+        mainProgram = "harper-cli";
+      };
+    })
+  );
+
   harperLintersToBeDisabled = [
     "CapitalizePersonalPronouns" # It is common to have a lone 'i' character.
     "Dashes" # Comments in Lua starts with two dashes.
+    "DisjointPrefixes" # It suggests to join "multi-user" to become "multiuser", which seems incorrect.
     "EllipsisLength" # `..` in Lua is an operator.
     "ExpandArgument" # It is perfectly fine use arg and args in programming settings.
     "ExpandControl" # The word "CTRL" is very common in programming settings.
@@ -85,36 +99,37 @@ let
     printf "return " > $out
     "${pkgs.lua55Packages.cjson}"/bin/json2lua "${harper-ls_lspconfig_json}" >> $out
   '';
-  # FIXME: The harper package on nixpkgs does not include harper-cli.
-  # So we need to build it ourselves.
-  harper-cli-wrapper = (
-    pkgs.harper.overrideAttrs (prevAttrs: {
-      pname = "harper-cli";
-      buildAndTestSubdir = "harper-cli";
-      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [ ]) ++ [
-        pkgs.makeWrapper
-      ];
-      nativeInstallCheckInputs = [ ]; # harper-cli reports itself as 0.1.0, which does not match the version of harper-ls.
-      postInstall = (prevAttrs.postInstall or "") + ''
+
+  # This wrapper is separated from harper-cli because we do not want to rebuild
+  # harper-cli every time linters configuration is changed.
+  harper-cli-wrapper =
+    pkgs.runCommand "harper-cli-lint"
+      {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
         makeWrapper \
-          $out/bin/harper-cli \
+          ${harper-cli-base}/bin/harper-cli \
           $out/bin/harper-cli-lint \
           --add-flag 'lint' \
           --add-flag '--ignore' \
           --add-flag '${builtins.concatStringsSep "," harperLintersToBeDisabled}'
       '';
-      meta = {
-        mainProgram = "harper-cli";
-      };
-    })
-  );
 in
 {
   home.packages = with pkgs; [
     # After using Harper for a month,
     # the most annoying problem is https://github.com/Automattic/harper/discussions/938
     harper
-    harper-cli-wrapper
+    # We want harper-cli and harper-cli-lint stay together.
+    (pkgs.symlinkJoin {
+      name = "harper-cli";
+      paths = [
+        harper-cli-base
+        harper-cli-wrapper
+      ];
+    })
 
     codebook
     typos-lsp

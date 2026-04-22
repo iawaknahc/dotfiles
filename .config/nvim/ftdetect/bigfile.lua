@@ -2,7 +2,7 @@
 -- When a buffer is read, set filetype=bigfile if the file is considered as big.
 --
 -- This would make features that rely on correct filetype to break, and this is what we want.
--- For example, when reading a large XML file, we want filetype=bigfile, so that
+-- For example, when reading a large XML file, we want `filetype=bigfile`, so that
 -- 1. treesitter highlighting is disabled because vim.treesitter.start() uses filetype to get the parser.
 -- 2. regex-based highlighting is disabled because there is no regex-based highlight for bigfile.
 -- 3. treesitter fold is disabled.

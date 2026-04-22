@@ -5,7 +5,7 @@ end, {
   desc = "Go to declaration",
 })
 
--- I am aware that this keymap is builtin, but
+-- I am aware that this keymap is a builtin, but
 -- we want to set anchor_bias to above because
 -- it clashes with the dropdown of blink.cmp very often.
 vim.keymap.set("i", "<C-s>", function()
