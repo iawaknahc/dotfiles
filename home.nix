@@ -16,7 +16,7 @@
     # Since stateVersion 25.11, home-manager can now
     # copy macOS apps and make them Spotlight friendly.
     # See https://nix-community.github.io/home-manager/options.xhtml#opt-targets.darwin.copyApps.enable
-    # You will likely encounter wierd error in the switch that involves stateVersion change.
+    # You will likely encounter weird error in the switch that involves stateVersion change.
     # In that case, you delete $HOME/Applications/Home Manager*
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;

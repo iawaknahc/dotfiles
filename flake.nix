@@ -3,7 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     android-nixpkgs = {
-      # platform-tools 37.0.0 was first availabe on 2026-03-03
+      # platform-tools 37.0.0 was first available on 2026-03-03
       # However, the hash of https://dl.google.com/android/repository/platform-tools_r37.0.0-darwin.zip changed on 2026-04-15
       url = "github:tadfisher/android-nixpkgs/2026-04-15-stable";
       inputs.nixpkgs.follows = "nixpkgs";
