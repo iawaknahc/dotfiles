@@ -46,8 +46,7 @@ alfred-clean:
 
 .PHONY: test
 test:
-	nix-unit ./lib/md5toUUID.test.nix
-	nix-unit ./lib/userscript_metadata_block/default.test.nix
+	nix-unit --flake '.#tests'
 
 .config/nvim/.emmyrc.json:
 	.config/nvim/.emmyrc.py

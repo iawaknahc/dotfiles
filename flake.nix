@@ -77,6 +77,10 @@
       ];
     in
     {
+      tests = {
+        md5toUUID = import ./lib/md5toUUID.test.nix;
+        userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
+      };
       formatter = flake-utils.lib.eachDefaultSystemPassThrough (system: {
         "${system}" = nixpkgs.legacyPackages.${system}.nixfmt-tree;
       });
