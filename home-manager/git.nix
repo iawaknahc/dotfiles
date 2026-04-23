@@ -134,7 +134,7 @@ in
       # Difftastic does not support --color-moved.
       # See https://github.com/Wilfred/difftastic/issues/520
       difft = {
-        cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
+        cmd = ''difft --syntax-highlight=off "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
 
       # Never use a pager with nvim.
