@@ -34,6 +34,7 @@ in
       alias-clean-only-untracked = "clean -d";
       alias-clean-only-ignored = "clean -dX";
       alias-clean-both-untracked-and-ignored = "clean -dx";
+      diffd = "-c pager.difftool= difftool -t nvim --dir-diff"; # The "d" in "diffd" means directory.
     };
     blame = {
       # Use the same date format as git-log(1)
@@ -139,6 +140,20 @@ in
 
       # Never use a pager with nvim.
       # It will break.
+      #
+      # Even though we managed to get it work by disabling the pager,
+      # the experience of `git difftool -t nvim` is still suboptimal.
+      # nvim is invoked once for each file.
+      # After we quit, git will open a new instance of nvim to view the diff of the next file, until there are no more files to view.
+      # This can be worked around by using --dir-diff
+      # With --dir-diff, nvim is invoked once on two directories, and
+      # this is exactly what :DiffTool is designed to handle.
+      #
+      # This concludes that the correct invocation is `git difftool -t nvim --dir-diff`,
+      # which is not something we want to type in the command-line.
+      # It should be an alias instead.
+      # This implies `diff.tool` should never be set to `nvim`, and
+      # `pager.difftool` should be set to value that works best for `diff.tool`.
       nvim = {
         cmd = ''nvim -d "$LOCAL" "$REMOTE"'';
       };
@@ -171,8 +186,8 @@ in
     pager = {
       # Some difftool like difftastic requires a pager,
       # while some like nvim does not.
-      # To avoid breaking things, do not use pager for difftool.
-      difftool = false;
+      # Set it a value that works best for `diff.tool`.
+      difftool = "less -R";
     };
     push = {
       # Always be explicit.
