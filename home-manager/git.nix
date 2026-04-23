@@ -14,6 +14,11 @@ in
     difftastic
     delta
   ];
+  home.sessionVariables = {
+    # Turn off the syntax highlighting of difftastic.
+    DFT_SYNTAX_HIGHLIGHT = "off";
+  };
+
   programs.git.attributes = [
     # blackbox was removed from nixpkgs after nixos-25.11
     # "*.gpg diff=blackbox"
@@ -26,15 +31,16 @@ in
 
   programs.git.settings = {
     alias = {
-      alias-difft-log = "-c diff.external=difft log --ext-diff --patch";
-      alias-difft-show = "-c diff.external=difft show --ext-diff";
       alias-ls-files-only-ignored = "ls-files --others --ignored --exclude-standard";
       alias-ls-files-only-untracked = "ls-files --others --exclude-standard";
       # The following aliases are expected to be run with -n or -f.
       alias-clean-only-untracked = "clean -d";
       alias-clean-only-ignored = "clean -dX";
       alias-clean-both-untracked-and-ignored = "clean -dx";
+
       diffd = "-c pager.difftool= difftool -t nvim --dir-diff"; # The "d" in "diffd" means directory.
+      logs = "-c diff.external=difft log --ext-diff --patch"; # The "s" in "logs" means structural.
+      shows = "-c diff.external=difft show --ext-diff"; # The "s" in "shows" means structural.
     };
     blame = {
       # Use the same date format as git-log(1)
@@ -135,7 +141,7 @@ in
       # Difftastic does not support --color-moved.
       # See https://github.com/Wilfred/difftastic/issues/520
       difft = {
-        cmd = ''difft --syntax-highlight=off "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
+        cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
 
       # Never use a pager with nvim.
