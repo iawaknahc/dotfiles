@@ -118,10 +118,9 @@ in
       mnemonicPrefix = true;
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffrenames
       renames = "copy";
-      # git diff is unchanged.
-      # This changes git difftool only.
-      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-difftool
-      tool = "difftastic";
+
+      # We need to specify a default tool, otherwise, git will use vimdiff.
+      tool = "difft";
 
       # This diff driver CANNOT be used together with difftastic!
       blackbox = {
@@ -134,12 +133,13 @@ in
 
       # Difftastic does not support --color-moved.
       # See https://github.com/Wilfred/difftastic/issues/520
-      difftastic = {
+      difft = {
         cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
 
-      # In my test on 2026-04-01, it does not work for `git difftool --cached` inside tmux with an index of several files.
-      nvim_difftool = {
+      # Never use a pager with nvim.
+      # It will break.
+      nvim = {
         cmd = ''nvim -d "$LOCAL" "$REMOTE"'';
       };
     };
@@ -169,8 +169,10 @@ in
       conflictStyle = "zdiff3";
     };
     pager = {
-      # Obviously we do not want difftastic to use delta as pager.
-      difftool = "less -R";
+      # Some difftool like difftastic requires a pager,
+      # while some like nvim does not.
+      # To avoid breaking things, do not use pager for difftool.
+      difftool = false;
     };
     push = {
       # Always be explicit.
