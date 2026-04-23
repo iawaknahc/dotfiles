@@ -87,6 +87,7 @@ in
       plus-style = "green";
       plus-emph-style = "bold green";
       plus-empty-line-marker-style = "green";
+      whitespace-error-style = "reverse red";
     };
     diff = {
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffalgorithm
