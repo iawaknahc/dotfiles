@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  date = "iso8601-strict-local";
+in
 {
   programs.git.enable = true;
 
@@ -31,7 +34,12 @@
       alias-clean-only-ignored = "clean -dX";
       alias-clean-both-untracked-and-ignored = "clean -dx";
     };
+    blame = {
+      # Use the same date format as git-log(1)
+      date = date;
+    };
     clean = {
+      # This is the default.
       requireForce = true;
     };
     commit = {
@@ -42,8 +50,32 @@
     diff = {
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffalgorithm
       algorithm = "histogram";
+
+      # The interesting values are `plain`, `zebra`, and `dimmed-zebra`.
+      #
+      # `dimmed-zebra` cause moved lines to grey out, which I do not think is good for reading.
+      #
+      # `zebra` uses a change in color to indicate a new block is detected.
+      # So there are in total 4 new colors.
+      # That is a little bit overwhelming to me.
+      #
+      # `plain` uses 2 new colors.
+      # It is cognitively easier to understand.
+      # https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---color-movedmode
+      colorMoved = "plain";
+
+      # This config accepts comma separated values.
+      # But `allow-indentation-change` is incompatible with other modes so it has to be on its own.
+      # It, nevertheless, should be the most useful mode.
+      # Its effect is that when a block of code is moved AND the indentation has changed,
+      # it is still considered as a move.
+      # https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---color-moved-wsmode
+      colorMovedWS = "allow-indentation-change";
+
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffmnemonicPrefix
       mnemonicPrefix = true;
+      # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffrenames
+      renames = "copy";
       # git diff is unchanged.
       # This changes git difftool only.
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-difftool
@@ -54,13 +86,12 @@
         textconv = "gpg --quiet --batch --decrypt";
       };
     };
-    pager = {
-      difftool = true;
-    };
     difftool = {
       prompt = false;
       trustExitCode = true;
 
+      # Difftastic does not support --color-moved.
+      # See https://github.com/Wilfred/difftastic/issues/520
       difftastic = {
         cmd = ''difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"'';
       };
@@ -70,8 +101,19 @@
         cmd = ''nvim -d "$LOCAL" "$REMOTE"'';
       };
     };
+    format = {
+      # This is the default.
+      # I have tried `fuller` https://git-scm.com/docs/git-log#Documentation/git-log.txt-fuller
+      # Most of the time the author is the same as the committer, so the additional information is quite redundant.
+      pretty = "medium";
+    };
     init = {
       defaultBranch = "main";
+    };
+    log = {
+      # Print `refs/head/`, `refs/remotes/`, and `refs/tags/`.
+      decorate = "full";
+      date = date;
     };
     merge = {
       # Always be explicit.
@@ -83,6 +125,9 @@
       # Show the original text indicated by ||||||| before =======
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-mergeconflictStyle
       conflictStyle = "zdiff3";
+    };
+    pager = {
+      difftool = true;
     };
     push = {
       # Always be explicit.
