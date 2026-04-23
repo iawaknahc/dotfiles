@@ -12,6 +12,7 @@ in
     # blackbox was removed from nixpkgs after nixos-25.11
     # blackbox
     difftastic
+    delta
   ];
   programs.git.attributes = [
     # blackbox was removed from nixpkgs after nixos-25.11
@@ -46,6 +47,46 @@ in
       # Show git diff --cached and git diff at the end of the commit message template.
       # https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---verbose
       verbose = 2;
+    };
+    core = {
+      pager = "delta";
+    };
+    delta = {
+      # Suppress all structural modification by delta.
+      color-only = true;
+      # Suppress syntax highlighting.
+      syntax-theme = "none";
+
+      # The default color of git is not documented,
+      # but it can be found in the source code.
+      # See https://github.com/git/git/blob/v2.54.0/diff.c#L83-L104
+      #
+      # delta supports --color-moved,
+      # but it does not introduce new styles for it.
+      # Instead, it detects the extra colors emitted by --color-moved,
+      # and display them verbatim.
+      # This implies when there is a changed line in a block of moved lines,
+      # there is no word-diff highlighting.
+      # See https://dandavison.github.io/delta/color-moved-support.html
+      #
+      # If our goal is to make delta displays as close as possible to the original, we just need to customize the available styles.
+      # Run `delta --show-config` to see the list of available styles.
+      # It may be tempting to use `raw` to keep the original color, but it does not work as expected.
+      # For example, you may want to set `minus-style` to `raw`, and `minus-emph-style` to `reverse red`.
+      # The result is that the lines have no word-diff highlighting.
+      # I haven't looked at the source code of delta but I guess this is due to `raw` causing delta not to parse the line at all, skipping the word-diff highlighting.
+      # So we have to restore the original color and change only the `*-emph-style`.
+      # Thanks to the link above we can look at the source code of git to know the original colors.
+      #
+      # There are 2 ways to set `*-emph-style`: `reverse` and `bold`.
+      # I noticed that difftastic uses `bold` so I followed it.
+      zero-style = "raw";
+      minus-style = "red";
+      minus-emph-style = "bold red";
+      minus-empty-line-marker-style = "red";
+      plus-style = "green";
+      plus-emph-style = "bold green";
+      plus-empty-line-marker-style = "green";
     };
     diff = {
       # https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffalgorithm
@@ -127,7 +168,8 @@ in
       conflictStyle = "zdiff3";
     };
     pager = {
-      difftool = true;
+      # Obviously we do not want difftastic to use delta as pager.
+      difftool = "less -R";
     };
     push = {
       # Always be explicit.
