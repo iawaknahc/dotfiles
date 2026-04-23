@@ -1,8 +1,17 @@
 add_newline = true
 follow_symlinks = false
+
 # I used to add git information to the prompt,
 # but it turns out it slows down the prompt in very large repository like nixpkgs.
-format = "${custom.osc133start}$jobs$kubernetes$python$direnv$shell@$shlvl\n$status ${custom.osc7}"
+#
+# I used to emit OSC 7 in the prompt, but it should be the job of the shell to do so.
+# For example, fish shell does that since 4.0.
+# See https://fishshell.com/docs/current/relnotes.html#fish-4-0-0-released-february-27-2025
+#
+# Fish shell claims that it writes OSC 133 to indicate the start of a prompt and the end of a prompt.
+# However, in my testing with fish@4.6.0, it does not write OSC 133 that tmux can understand.
+# So we do it here.
+format = "${custom.osc_133_prompt_start}$jobs$kubernetes$python$direnv$shell@$shlvl\n$status ${custom.osc_133_prompt_end}"
 
 [character]
 disabled = false
@@ -62,21 +71,16 @@ signal_symbol = "[$status \\$](bold red)"
 success_symbol = "\\$"
 symbol = "[$status \\$](bold red)"
 
-[custom.osc7]
-disabled = false
-when = 'true'
-unsafe_no_escape = true
-format = "$output"
-command = ''' printf "\033]7;file://$PWD\033\\" '''
-
-# Taking "$GHOSTTY_RESOURCES_DIR"/shell-integration/fish/vendor_conf.d/ghostty-shell-integration.fish as reference
-# It only emits `Escape 133 ; A ST`.
-# And in my testing with Neovim terminal-mode [[ and ]]
-# omitting that seems enough.
-# No need to emit `Escape 133 ; B ST`.
-[custom.osc133start]
+[custom.osc_133_prompt_start]
 disabled = false
 when = 'true'
 unsafe_no_escape = true
 format = "$output"
 command = ''' printf "\033]133;A\007" '''
+
+[custom.osc_133_prompt_end]
+disabled = false
+when = 'true'
+unsafe_no_escape = true
+format = "$output"
+command = ''' printf "\033]133;B\007" '''
