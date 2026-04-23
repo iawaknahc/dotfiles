@@ -1,6 +1,9 @@
 { pkgs, ... }:
 let
   date = "iso8601-strict-local";
+  # We do not pass any flags to less because we assume LESS is defined in the shell.
+  # See ./pager.nix
+  pager = "less";
 in
 {
   programs.git.enable = true;
@@ -39,8 +42,8 @@ in
       alias-clean-both-untracked-and-ignored = "clean -dx";
 
       diffd = "-c pager.difftool= difftool -t nvim --dir-diff"; # The "d" in "diffd" means directory.
-      logs = "-c diff.external=difft log --ext-diff --patch"; # The "s" in "logs" means structural.
-      shows = "-c diff.external=difft show --ext-diff"; # The "s" in "shows" means structural.
+      logs = "-c pager.log='${pager}' -c diff.external=difft log --ext-diff --patch"; # The "s" in "logs" means structural.
+      shows = "-c pager.show='${pager}' -c diff.external=difft show --ext-diff"; # The "s" in "shows" means structural.
     };
     blame = {
       # Use the same date format as git-log(1)
@@ -193,7 +196,7 @@ in
       # Some difftool like difftastic requires a pager,
       # while some like nvim does not.
       # Set it a value that works best for `diff.tool`.
-      difftool = "less -R";
+      difftool = pager;
     };
     push = {
       # Always be explicit.
