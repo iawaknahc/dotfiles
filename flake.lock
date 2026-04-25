@@ -6,9 +6,7 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
         "lastModified": 1776286015,
@@ -28,7 +26,7 @@
     "catppuccin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -108,7 +106,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -128,7 +126,7 @@
     "mcp-servers-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -148,7 +146,7 @@
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -181,11 +179,27 @@
         "type": "github"
       }
     },
+    "nixpkgs-mine": {
+      "locked": {
+        "lastModified": 1775126147,
+        "narHash": "sha256-J0dZU4atgcfo4QvM9D92uQ0Oe1eLTxBVXjJzdEMQpD0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8d8c1fa5b412c223ffa47410867813290cdedfef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts",
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -210,7 +224,7 @@
         "home-manager": "home-manager",
         "mcp-servers-nix": "mcp-servers-nix",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs-mine": "nixpkgs-mine",
         "nur": "nur",
         "sops-nix": "sops-nix",
         "treefmt-nix": "treefmt-nix"
@@ -219,7 +233,7 @@
     "sops-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {
@@ -254,7 +268,7 @@
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-mine"
         ]
       },
       "locked": {

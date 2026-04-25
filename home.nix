@@ -8,7 +8,7 @@
   nixPath_for-nixd,
   mcp-servers-nix,
   nur,
-  android-nixpkgs,
+  androidSdk,
   ...
 }:
 {
@@ -24,7 +24,24 @@
     nixpkgs.overlays = [
       mcp-servers-nix.overlays.default
       nur.overlays.default
-      android-nixpkgs.overlays.default
+
+      # The home-manager module of android-nixpkgs expects `pkgs.androidSdk` to be present.
+      # One way of making it present is to use `android-nixpkgs.overlays.default`.
+      # But `android-nixpkgs.overlays.default` uses `final`[1], which means the Android SDK
+      # depends on OUR nixpkgs.
+      # So even, if we do not override the input `nixpkgs` of `android-nixpkgs`,
+      # at evaluation time, the Android SDK still depends on OUR nixpkgs.
+      #
+      # To make the Android SDK solely depends on its own `nixpkgs`, we need:
+      # 1. Do not override the input `nixpkgs` of `android-nixpkgs`. This is trivial.
+      # 2. Use an overlay to populate `pkgs.androidSdk`, AND it MUST depend on the input `nixpkgs` of `android-nixpkgs`.
+      #    Fortunately, `android-nixpkgs` exposes an output `sdk`[2], which is an attrset of system names to `androidSdk`.
+      #
+      # [1]: https://github.com/tadfisher/android-nixpkgs/blob/2026-04-15-stable/flake.nix#L28
+      # [2]: https://github.com/tadfisher/android-nixpkgs/blob/2026-04-15-stable/flake.nix#L58
+      (final: prev: {
+        inherit androidSdk;
+      })
     ];
 
     nixpkgs.config.allowUnfree = true;
