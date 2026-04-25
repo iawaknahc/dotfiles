@@ -11,7 +11,6 @@
 
     # Audio and video
     ffmpeg
-    # FIXME: mpv depends on yt-dlp which depends on deno, which was not cached at the particular commit I am using.
-    mpv-unwrapped
+    mpv
   ];
 }
