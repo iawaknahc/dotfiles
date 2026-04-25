@@ -57,7 +57,10 @@
     weasis
 
     # Speech recognition
-    openai-whisper
+    (openai-whisper.overrideAttrs (prev: {
+      # FIXME: The test involving invoking ffmpeg, but it was killed with signal 9. Maybe related to https://github.com/NixOS/nixpkgs/issues/507531
+      disabledTests = prev.disabledTests ++ [ "test_audio" ];
+    }))
 
     # Lossless conversion between representations
     remarshal

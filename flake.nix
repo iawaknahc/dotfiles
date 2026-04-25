@@ -1,6 +1,7 @@
 {
   inputs = {
-    nixpkgs-mine.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # Using channel has a higher possibility that the packages are available at https://cache.nixos.org
+    nixpkgs-mine.url = "https://nixos.org/channels/nixpkgs-unstable/nixexprs.tar.xz";
 
     android-nixpkgs = {
       # platform-tools 37.0.0 was first available on 2026-03-03

@@ -17,7 +17,9 @@ in
     sequoia-sq
     sequoia-sqv
     sequoia-sqop
-    sequoia-chameleon-gnupg
+
+    # FIXME: sequoia-chameleon-gnupg@0.13.1 makes gpgv available in PATH, which clashes with that of gnupg.
+    #sequoia-chameleon-gnupg
   ];
 
   programs.gpg.settings = {
