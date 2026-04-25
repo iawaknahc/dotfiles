@@ -33,7 +33,7 @@
 
   programs.claude-code.enable = true;
   programs.claude-code.enableMcpIntegration = true;
-  programs.claude-code.memory.text = ''
+  programs.claude-code.context = ''
     # CLAUDE.md
 
     ## Use Bash tool
