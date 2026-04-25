@@ -48,3 +48,6 @@ test:
 # Generate ./.config/nvim/.emmyrc.json
 generate-emmyrc-json:
     .config/nvim/.emmyrc.py
+
+flake-update:
+    nix flake metadata --json | jq -r '.locks.nodes.root.inputs | keys | map(select(. != "android-nixpkgs")) | .[]' | xargs nix flake update
