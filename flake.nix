@@ -40,6 +40,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs-mine";
     };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs-mine";
+    };
   };
 
   outputs =
@@ -53,6 +57,7 @@
       nix-darwin,
       nur,
       sops-nix,
+      nix-index-database,
       ...
     }:
     let
@@ -119,6 +124,7 @@
                 catppuccin.homeModules.catppuccin
                 # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
                 sops-nix.homeManagerModules.sops
+                nix-index-database.homeModules.default
                 ./home.nix
               ];
             };
