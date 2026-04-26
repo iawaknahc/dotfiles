@@ -8,6 +8,9 @@ let
 in
 {
   programs.gpg.enable = true;
+  # Since https://github.com/NixOS/nixpkgs/pull/507547 sequoia-chameleon-gnupg could be used as a replacement of gnupg.
+  # programs.gpg.package = pkgs.sequoia-chameleon-gnupg;
+
   home.packages = with pkgs; [
     pinentrymac
     pinentry-tty
@@ -17,9 +20,6 @@ in
     sequoia-sq
     sequoia-sqv
     sequoia-sqop
-
-    # FIXME: sequoia-chameleon-gnupg@0.13.1 makes gpgv available in PATH, which clashes with that of gnupg.
-    #sequoia-chameleon-gnupg
   ];
 
   programs.gpg.settings = {
