@@ -17,7 +17,9 @@ local override = {
 require("blink.cmp").setup({
   sources = {
     default = { "lsp", "snippets", "path", "buffer" },
-    per_filetype = {},
+    per_filetype = {
+      sql = { "dadbod", "lsp", "snippets", "path", "buffer" },
+    },
     transform_items = function(_, items)
       return items
     end,
@@ -46,6 +48,11 @@ require("blink.cmp").setup({
         name = "Buffer",
         module = "blink.cmp.sources.buffer",
         override = override,
+      },
+      -- Overriding the trigger characters will break this provider, so we do not do that.
+      dadbod = {
+        name = "Dadbod",
+        module = "vim_dadbod_completion.blink",
       },
     },
   },

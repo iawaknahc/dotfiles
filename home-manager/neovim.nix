@@ -175,5 +175,13 @@
         doCheck = false;
       };
     }
+
+    ## Databases
+    vim-dadbod
+    {
+      optional = true;
+      plugin = vim-dadbod-ui;
+    }
+    vim-dadbod-completion
   ];
 }
