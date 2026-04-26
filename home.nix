@@ -74,7 +74,7 @@
     # https://github.com/lunacookies/etcetera
     # and use XDG convention, it would behave in a way most people expect.
     # However, when the shell is launched by a terminal, XDG_*_HOME is not set yet.
-    # Thus the shell still reads from the default location.
+    # Thus, the shell still reads from the default location.
     # So let's just accept this.
     #xdg.enable = true;
     #xdg.cacheHome = lib.mkIf pkgs.stdenv.isDarwin "${config.home.homeDirectory}/Library/Caches";

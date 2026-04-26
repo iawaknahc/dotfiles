@@ -6,7 +6,7 @@ default:
     just --list --unsorted
 
 # Do all checking
-check: codebook codespell test
+check: harper codebook codespell test
     stylua --check {{STYLUA_FLAGS}} {{STYLUA_ARGS}}
 
 # Clean up any generated files
@@ -20,8 +20,6 @@ setup: clean generate-emmyrc-json
 format:
     stylua {{STYLUA_FLAGS}} {{STYLUA_ARGS}}
 
-# https://github.com/Automattic/harper/issues/2832
-# FIXME: harper-cli lint when harper < 2.0.0 always exit with 1 even there are no lint errors.
 harper *FLAGS:
     fd --type f --ignore-file harperignore | xargs harper-cli-lint --format compact {{FLAGS}}
 
