@@ -8,10 +8,9 @@ local setup = once(function()
         enabled = true,
       },
     },
-    -- FIXME: enable this when nvim-dap-view >= 1.1.0
-    -- virtual_text = {
-    --   enabled = true,
-    -- },
+    virtual_text = {
+      enabled = true,
+    },
   })
 
   require("dap-python").setup("debugpy-adapter")

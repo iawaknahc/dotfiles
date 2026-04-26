@@ -67,12 +67,13 @@
     # This is essentially treating nvim-treesitter-textobjects as a data-only plugin,
     # which should be compatible with the unreleased https://github.com/nvim-treesitter/nvim-treesitter-textobjects/tree/main
     # nvim-treesitter-textobjects is a plugin that serves the following purposes:
-    # 1. Provide data files RUNTIME/queries/*/textobjects.scm. As far as I know, no other plugins rely on these data.
+    # 1. Provide data files RUNTIME/queries/*/textobjects.scm.
+    #    As far as I know, nvim-dap-view depends on locals.scm.
+    #    See https://github.com/igorlfs/nvim-dap-view/blob/v1.1.1/lua/dap-view/virtual-text.lua#L95
     # 2. Select. This purpose can be served by flash.nvim in a more intuitive way.
     # 3. Swap. This purpose can be served by treewalker.nvim in a more intuitive way.
     # 4. Move. From Neovim 0.12, there is :help v_]n and :help v_[n or just use flash.nvim
-    # Thus, we no longer need it.
-    #nvim-treesitter-textobjects
+    nvim-treesitter-textobjects
 
     # Language Plugins
     vim-hy
