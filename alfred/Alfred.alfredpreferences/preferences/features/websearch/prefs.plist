@@ -11,7 +11,7 @@
 			<key>keyword</key>
 			<string>jwt</string>
 			<key>text</key>
-			<string>jwt.io/#id_token={query}</string>
+			<string>Open jwt.io</string>
 			<key>url</key>
 			<string>https://jwt.io/#id_token={query}</string>
 		</dict>
@@ -22,7 +22,7 @@
 			<key>keyword</key>
 			<string>pypi</string>
 			<key>text</key>
-			<string>pypi.org/search/?q={query}</string>
+			<string>Search PyPI for {query}</string>
 			<key>url</key>
 			<string>https://pypi.org/search/?q={query}</string>
 		</dict>
@@ -33,7 +33,7 @@
 			<key>keyword</key>
 			<string>python</string>
 			<key>text</key>
-			<string>docs.python.org/3/search.html?q={query}</string>
+			<string>Search Python docs for {query}</string>
 			<key>url</key>
 			<string>https://docs.python.org/3/search.html?q={query}</string>
 		</dict>
@@ -44,7 +44,7 @@
 			<key>keyword</key>
 			<string>hm</string>
 			<key>text</key>
-			<string>Search home-manager options</string>
+			<string>Search home-manager options for {query}</string>
 			<key>url</key>
 			<string>https://home-manager-options.extranix.com/?query={query}</string>
 		</dict>
@@ -55,7 +55,7 @@
 			<key>keyword</key>
 			<string>npm</string>
 			<key>text</key>
-			<string>npmjs.com/package/{query}</string>
+			<string>Search npmjs for {query}</string>
 			<key>url</key>
 			<string>https://www.npmjs.com/package/{query}</string>
 		</dict>
@@ -64,11 +64,33 @@
 			<key>enabled</key>
 			<true/>
 			<key>keyword</key>
-			<string>nix</string>
+			<string>pkgs</string>
 			<key>text</key>
-			<string>search.nixos.org/packages?query={query}</string>
+			<string>Search nixpkgs for {query}</string>
 			<key>url</key>
-			<string>https://search.nixos.org/packages?channel=unstable&amp;type=packages&amp;query={query}</string>
+			<string>https://search.nixos.org/packages?channel=unstable&amp;query={query}</string>
+		</dict>
+		<key>63ED18F4-8B23-4A24-A878-889923E3DB48</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>nixos</string>
+			<key>text</key>
+			<string>Search NixOS options for {query}</string>
+			<key>url</key>
+			<string>https://search.nixos.org/options?channel=unstable&amp;query={query}</string>
+		</dict>
+		<key>06C9BA30-6B24-42F5-A522-E9BA69DCF17C</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>noogle</string>
+			<key>text</key>
+			<string>Search Nix functions for {query}</string>
+			<key>url</key>
+			<string>https://noogle.dev/q/?limit=100&amp;term={query}</string>
 		</dict>
 	</dict>
 </dict>
