@@ -8,6 +8,13 @@ let
   pythonVersion = "313";
 in
 {
+  assertions = [
+    {
+      assertion = pkgs."python${pythonVersion}Packages".pycangjie.version == "1.5.0";
+      message = "A version newer than 1.5.0 of pycangjie was released. Consider switching to it.";
+    }
+  ];
+
   nixpkgs.overlays = [
     (
       final: prev:
@@ -82,7 +89,6 @@ in
 
             # The merge request was merged.
             # https://gitlab.freedesktop.org/cangjie/pycangjie/-/merge_requests/60
-            # FIXME: Switch back to a released version of pycangjie
             (pycangjie.overrideAttrs (prev: {
               src = pkgs.fetchFromGitLab {
                 domain = "gitlab.freedesktop.org";

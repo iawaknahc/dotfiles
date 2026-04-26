@@ -6,6 +6,17 @@ let
   lua55 = with pkgs; lua5_5;
 in
 {
+  assertions = [
+    {
+      assertion = pkgs.lua55Packages.argparse.version == "0.7.1-1";
+      message = ''
+        The Lua package argparse may have a new release that supports Lua 5.5.
+        Consider re-installing `llscheck` and `luaprompt`.
+        See https://github.com/luarocks/argparse/issues/35
+      '';
+    }
+  ];
+
   home.packages = with pkgs; [
     emmylua-ls
     emmylua-check
@@ -25,21 +36,12 @@ in
         fennel
         luarocks
 
-        # llscheck requires lua-language-server on PATH.
-        # FIXME: llscheck depends on argparse which does not have a release supporting Lua 5.5 yet
-        # See https://github.com/luarocks/argparse/issues/35
-        #llscheck
-        # luap provides a better REPL experience than lua(1).
-        # FIXME: luap depends on argparse which does not have a release supporting Lua 5.5 yet
-        # See https://github.com/luarocks/argparse/issues/35
-        #luaprompt
+        #llscheck # llscheck requires lua-language-server on PATH.
+        #luaprompt # luap provides a better REPL experience than lua(1).
 
-        # JSON
         lua-cjson
-        # inspect
         inspect
-        # sbarlua is the Lua API to SketchyBar
-        sbarlua
+        sbarlua # sbarlua is the Lua API to SketchyBar
       ]
     ))
   ];

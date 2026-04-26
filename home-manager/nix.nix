@@ -1,6 +1,11 @@
 { pkgs, ... }:
 {
-  # FIXME: Remove the overlay of nix-output-monitor when a newer release than 2.1.8 is out.
+  assertions = [
+    {
+      assertion = pkgs.nix-output-monitor.version == "2.1.8";
+      message = "The workaround for nix-output-monitor@2.1.8 may no longer needed. Consider removing it.";
+    }
+  ];
   # As of 2026-03-30, the latest release 2.1.8 (released on 2025-11-09) of nix-output-monitor does not show download progress.
   # The commit https://github.com/maralorn/nix-output-monitor/commit/0cb46615fb8187e4598feac4ccf8f27a06aae0b7 made on 2025-11-20 does that.
   nixpkgs.overlays = [
