@@ -30,6 +30,7 @@ in
     pkgs.nur.repos.rycee.firefox-addons.web-clipper-obsidian
     pkgs.nur.repos.rycee.firefox-addons.violentmonkey
     pkgs.nur.repos.rycee.firefox-addons.stylus
+    pkgs.nur.repos.rycee.firefox-addons.brandon1024-find # Hit CTRL+SHIFT+F to open the search box
     pkgs.nur.repos.natsukium.my-firefox-addons.adguard-adblocker
   ];
 
