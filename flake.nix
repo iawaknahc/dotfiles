@@ -126,7 +126,7 @@
                   system.primaryUser = username;
                 }
                 ((import ./nix-darwin/karabiner.nix) nix-darwin)
-                ./darwin.nix
+                ./nix-darwin
               ];
             };
           }
