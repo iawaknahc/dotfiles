@@ -91,7 +91,6 @@
                   home.homeDirectory = homeDirectory;
                 }
                 ((import ./home-manager/nixPath.nix) {
-                  inherit home-manager nix-darwin;
                   nixpkgs = nixpkgs-mine;
                 })
                 ((import ./home-manager/catppuccin.nix) catppuccin)

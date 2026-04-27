@@ -8,7 +8,8 @@ return {
         command = { "nixfmt" },
       },
       nixpkgs = {
-        expr = "import <nixpkgs> { }",
+        -- This evaluates to the actual pkgs with all overlays applied.
+        expr = '(builtins.getFlake (builtins.toString <for-nixd>)).homeConfigurations."nixd@nixd".pkgs',
       },
       -- nixd requires us to provide an expression that will be evaluated the options set.
       -- To do this, we add for-nixd to NIX_PATH, and use a dummy machine nixd@nixd.
