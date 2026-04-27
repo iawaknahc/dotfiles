@@ -107,24 +107,20 @@
                 inherit
                   username
                   homeDirectory
-                  mcp-servers-nix
-                  nur
                   ;
                 nixPath_nixpkgs = "${nixpkgs-mine.outPath}";
                 nixPath_home-manager = "${home-manager.outPath}";
                 nixPath_nix-darwin = "${nix-darwin.outPath}";
                 nixPath_darwin-config = "${./darwin.nix}";
                 nixPath_for-nixd = "${./.}";
-                # See ./home.nix for details.
-                androidSdk = android-nixpkgs.sdk.${system};
               };
               modules = [
-                # See ./home.nix for details.
-                android-nixpkgs.hmModule
-                catppuccin.homeModules.catppuccin
-                # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
-                sops-nix.homeManagerModules.sops
-                nix-index-database.homeModules.default
+                ((import ./home-manager/catppuccin.nix) catppuccin)
+                ((import ./home-manager/nix-index-database.nix) nix-index-database)
+                ((import ./home-manager/sops-nix.nix) sops-nix)
+                ((import ./home-manager/mcp-servers-nix.nix) mcp-servers-nix)
+                ((import ./home-manager/nur.nix) nur)
+                ((import ./home-manager/android-nixpkgs.nix) android-nixpkgs)
                 ./home.nix
               ];
             };
