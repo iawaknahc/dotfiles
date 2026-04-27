@@ -8,8 +8,6 @@ _: {
     home.stateVersion = "26.05";
     programs.home-manager.enable = true;
 
-    nixpkgs.config.allowUnfree = true;
-
     # It may be tempting to set XDG_*_HOME, in order to "correct"
     # the behavior of some CLI programs written in Rust, using the library
     # https://github.com/dirs-dev/directories-rs
@@ -102,6 +100,7 @@ _: {
     ./home-manager/neovim.nix
 
     # Individual programs that require configurations.
+    ./home-manager/_1password.nix
     ./home-manager/man.nix
     ./home-manager/mkcert.nix
     ./home-manager/git.nix

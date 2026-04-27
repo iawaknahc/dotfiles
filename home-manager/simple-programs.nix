@@ -2,7 +2,6 @@
 {
   home.packages = with pkgs; [
     # Secret management
-    _1password-cli
     pass # https://www.passwordstore.org/
 
     # Text processing
