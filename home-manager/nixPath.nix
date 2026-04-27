@@ -1,7 +1,11 @@
 {
   nixpkgs,
 }:
-_: {
+_:
+let
+  flake = "${../.}";
+in
+{
   # Set NIX_PATH
   # nix-darwin also offers a similar option but we do this in home-manager because
   # nix-darwin only supports a limited number of shells.
@@ -12,13 +16,38 @@ _: {
     # Keep nixpkgs in NIX_PATH for compatibility with any other things depending on it.
     # We do not use it though.
     "nixpkgs=${nixpkgs.outPath}"
-    # The store path to our flake.
-    # It is used to configure nixd, as well as the following fish shell abbreviation to launch `nix repl`.
-    "for-nixd=${../.}"
   ];
 
   programs.fish.shellAbbrs = {
     # Launch `nix repl` having `pkgs` with all overlays applied.
-    nixrepl = ''nix repl --expr '(builtins.getFlake (builtins.toString <for-nixd>)).homeConfigurations."nixd@nixd".pkgs' '';
+    # We use environment variable here so that the repl is never stale.
+    nixrepl = ''nix repl --expr '(builtins.getFlake ((builtins.getEnv "HOME") + "/dotfiles")).homeConfigurations."nixd@nixd".pkgs' '';
   };
+
+  xdg.configFile."nvim/lsp/nixd.lua".text = ''
+    return {
+      -- Known issue: inlay hint works only in `with pkgs; [ ... ]`
+      -- See https://github.com/nix-community/nixd/issues/629#issuecomment-2558520043
+      cmd = { "nixd", "--inlay-hints=true", "--semantic-tokens=true" },
+      settings = {
+        nixd = {
+          formatting = {
+            command = { "nixfmt" },
+          },
+          nixpkgs = {
+            -- This evaluates to the actual pkgs with all overlays applied.
+            expr = [[(builtins.getFlake (builtins.toString "${flake}")).homeConfigurations."nixd@nixd".pkgs]],
+          },
+          options = {
+            ["nix-darwin"] = {
+              expr = [[(builtins.getFlake (builtins.toString "${flake}")).darwinConfigurations.nixd.options]],
+            },
+            ["home-manager"] = {
+              expr = [[(builtins.getFlake (builtins.toString "${flake}")).homeConfigurations."nixd@nixd".options]],
+            },
+          },
+        },
+      },
+    }
+  '';
 }
