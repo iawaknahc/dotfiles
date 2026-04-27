@@ -28,7 +28,7 @@ let
           };
           to = [
             {
-              shell_command = "${pkgs.hs}/bin/hs -c 'hs.eventtap.keyStrokes(_cli.args[2])' -- ${lib.escapeShellArg text}";
+              shell_command = "${pkgs.hammerspoon}/bin/hs -c 'hs.eventtap.keyStrokes(_cli.args[2])' -- ${lib.escapeShellArg text}";
             }
           ];
         }

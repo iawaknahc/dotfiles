@@ -61,7 +61,7 @@
       ${pkgs.mypython}/bin/python3 ${./uuid.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-godoc.py" ''
-      export HS=${pkgs.hs}/bin/hs
+      export HS=${pkgs.hammerspoon}/bin/hs
       export HS_SCRIPT=${../../.hammerspoon/get_browser_url.lua}
       ${pkgs.mypython}/bin/python3 ${./godoc.py} "$@"
     '')

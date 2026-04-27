@@ -1,41 +1,37 @@
 { pkgs, ... }:
 {
   nixpkgs.overlays = [
-    (final: prev: {
-      hs = prev.stdenv.mkDerivation {
-        name = "hs";
-        pname = "hs";
-
-        # We have made a compromise here.
-        #
-        # We cannot references /Applications/Hammerspoon.app because
-        # - It is considered as impure by Nix.
-        # - In case /Applications/Hammerspoon.app is not installed, the build will fail.
-        #
-        # So we write a shell wrapper at ./hs
-        #
-        # For the manpage, it is less harmful to have an outdated one.
-        # So I copied the one I found inside /Applications/Hammerspoon.app as of the time of writing.
-        src = ./.;
-
-        installPhase = ''
-          find .
-          mkdir -p $out
-
-          mkdir -p $out/bin
-          cp ./hs $out/bin/
-
-          mkdir -p $out/share/man/man1
-          cp ./hs.1 $out/share/man/man1/
-        '';
-      };
-    })
+    (
+      final: prev:
+      let
+        hammerspoon-cli = prev.stdenv.mkDerivation {
+          name = "hammerspoon-cli";
+          pname = "hammerspoon-cli";
+          src = builtins.toPath "${final.nur.repos.natsukium.hammerspoon}";
+          installPhase = ''
+            mkdir -p $out/bin
+            mkdir -p $out/share/man/man1
+            cp ./Applications/Hammerspoon.app/Contents/Frameworks/hs/hs $out/bin/
+            cp ./Applications/Hammerspoon.app/Contents/Resources/man/hs.man $out/share/man/man1/hs.1
+          '';
+        };
+      in
+      {
+        hammerspoon = prev.symlinkJoin {
+          name = final.nur.repos.natsukium.hammerspoon.name;
+          paths = [
+            hammerspoon-cli
+            final.nur.repos.natsukium.hammerspoon
+          ];
+        };
+      }
+    )
   ];
 
   launchd.agents.hammerspoon = {
     enable = true;
     config = {
-      Program = "/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon";
+      Program = "${pkgs.hammerspoon}/Applications/Hammerspoon.app/Contents/MacOS/Hammerspoon";
       KeepAlive = true;
       RunAtLoad = true;
       StandardOutPath = "/tmp/hammerspoon.stdout";
@@ -44,7 +40,7 @@
   };
 
   home.packages = with pkgs; [
-    hs
+    hammerspoon
   ];
   home.file.".hammerspoon" = {
     source = ../../.hammerspoon;
