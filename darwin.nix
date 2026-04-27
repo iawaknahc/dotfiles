@@ -1,10 +1,8 @@
 {
-  nixpkgsHostPlatform,
   pkgs,
   ...
 }:
 {
-  nixpkgs.hostPlatform = nixpkgsHostPlatform;
   system.stateVersion = 5;
 
   nix.channel.enable = false;

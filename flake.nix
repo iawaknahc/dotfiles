@@ -137,10 +137,12 @@
           }:
           {
             "${hostname}" = nix-darwin.lib.darwinSystem {
-              modules = [ ./darwin.nix ];
-              specialArgs = {
-                nixpkgsHostPlatform = system;
-              };
+              modules = [
+                {
+                  nixpkgs.hostPlatform = system;
+                }
+                ./darwin.nix
+              ];
             };
           }
         ))
