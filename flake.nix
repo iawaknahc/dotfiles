@@ -100,7 +100,7 @@
                 ((import ./home-manager/mcp-servers-nix.nix) mcp-servers-nix)
                 ((import ./home-manager/nur.nix) nur)
                 ((import ./home-manager/android-nixpkgs.nix) android-nixpkgs)
-                ./home.nix
+                ./home-manager
               ];
             };
           }
