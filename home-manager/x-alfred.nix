@@ -84,17 +84,6 @@ in
   };
 
   config = {
-    launchd.agents.alfred = {
-      enable = config.alfred.enable;
-      config = {
-        Program = "/Applications/Alfred 5.app/Contents/MacOS/Alfred";
-        KeepAlive = true;
-        RunAtLoad = true;
-        StandardOutPath = "/tmp/alfred.stdout";
-        StandardErrorPath = "/tmp/alfred.stderr";
-      };
-    };
-
     home.activation.alfred = lib.hm.dag.entryAfter [ "writeBoundary" ] (
       ''
         copyFile() {

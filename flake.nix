@@ -44,6 +44,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs-mine";
     };
+
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
   outputs =
@@ -58,6 +68,9 @@
       nur,
       sops-nix,
       nix-index-database,
+      nix-homebrew,
+      homebrew-core,
+      homebrew-cask,
       ...
     }:
     let
@@ -125,6 +138,9 @@
                   nixpkgs.hostPlatform = system;
                   system.primaryUser = username;
                 }
+                ((import ./nix-darwin/homebrew.nix) {
+                  inherit nix-homebrew homebrew-core homebrew-cask;
+                })
                 ((import ./nix-darwin/karabiner.nix) nix-darwin)
                 ./nix-darwin
               ];
