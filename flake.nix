@@ -93,6 +93,9 @@
                 ((import ./home-manager/nixPath.nix) {
                   nixpkgs = nixpkgs-mine;
                 })
+                ((import ./home-manager/nixd.nix) {
+                  hostname = hostname;
+                })
                 ((import ./home-manager/catppuccin.nix) catppuccin)
                 ((import ./home-manager/nix-index-database.nix) nix-index-database)
                 ((import ./home-manager/sops-nix.nix) sops-nix)

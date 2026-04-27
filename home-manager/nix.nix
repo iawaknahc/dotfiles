@@ -28,10 +28,7 @@
     nix-tree
     nix-unit
     nixfmt
-
-    # LSP servers
     nil
-    nixd
   ];
   programs.nix-init.enable = true;
   programs.nh.enable = true;
