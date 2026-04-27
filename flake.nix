@@ -88,10 +88,11 @@
         md5toUUID = import ./lib/md5toUUID.test.nix;
         userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
       };
+
       formatter = flake-utils.lib.eachDefaultSystemPassThrough (system: {
         "${system}" = nixpkgs-mine.legacyPackages.${system}.nixfmt-tree;
       });
-      # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
+
       homeConfigurations = nixpkgs-mine.lib.pipe machines [
         (builtins.map (
           {
@@ -101,15 +102,14 @@
             homeDirectory,
           }:
           {
+            # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
             "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs-mine.legacyPackages.${system};
-              extraSpecialArgs = {
-                inherit
-                  username
-                  homeDirectory
-                  ;
-              };
               modules = [
+                {
+                  home.username = username;
+                  home.homeDirectory = homeDirectory;
+                }
                 ((import ./home-manager/nixPath.nix) {
                   inherit home-manager nix-darwin;
                   nixpkgs = nixpkgs-mine;
@@ -127,6 +127,7 @@
         ))
         nixpkgs-mine.lib.attrsets.mergeAttrsList
       ];
+
       darwinConfigurations = nixpkgs-mine.lib.pipe machines [
         (builtins.map (
           {

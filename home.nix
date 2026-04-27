@@ -1,9 +1,4 @@
-{
-  username,
-  homeDirectory,
-  ...
-}:
-{
+_: {
   config = {
     # Since stateVersion 25.11, home-manager can now
     # copy macOS apps and make them Spotlight friendly.
@@ -16,9 +11,6 @@
     nixpkgs.config.allowUnfree = true;
     # Allow ghostty, which is marked as broken on macOS.
     nixpkgs.config.allowBroken = true;
-
-    home.username = username;
-    home.homeDirectory = homeDirectory;
 
     # It may be tempting to set XDG_*_HOME, in order to "correct"
     # the behavior of some CLI programs written in Rust, using the library
