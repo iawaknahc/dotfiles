@@ -108,13 +108,12 @@
                   username
                   homeDirectory
                   ;
-                nixPath_nixpkgs = "${nixpkgs-mine.outPath}";
-                nixPath_home-manager = "${home-manager.outPath}";
-                nixPath_nix-darwin = "${nix-darwin.outPath}";
-                nixPath_darwin-config = "${./darwin.nix}";
-                nixPath_for-nixd = "${./.}";
               };
               modules = [
+                ((import ./home-manager/nixPath.nix) {
+                  inherit home-manager nix-darwin;
+                  nixpkgs = nixpkgs-mine;
+                })
                 ((import ./home-manager/catppuccin.nix) catppuccin)
                 ((import ./home-manager/nix-index-database.nix) nix-index-database)
                 ((import ./home-manager/sops-nix.nix) sops-nix)

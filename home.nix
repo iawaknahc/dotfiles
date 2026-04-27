@@ -1,11 +1,6 @@
 {
   username,
   homeDirectory,
-  nixPath_nixpkgs,
-  nixPath_home-manager,
-  nixPath_nix-darwin,
-  nixPath_darwin-config,
-  nixPath_for-nixd,
   ...
 }:
 {
@@ -24,20 +19,6 @@
 
     home.username = username;
     home.homeDirectory = homeDirectory;
-
-    # Set NIX_PATH
-    # nix-darwin also offers a similar option but we do this in home-manager because
-    # nix-darwin only supports a limited number of shells.
-    # nix.nixPath in home-manager is implemented by home.sessionVariables, and
-    # we expect the shell module supports home.sessionVariables, like ./home-manager/x-elvish.nix
-    nix.keepOldNixPath = false;
-    nix.nixPath = [
-      "nixpkgs=${nixPath_nixpkgs}"
-      "home-manager=${nixPath_home-manager}"
-      "nix-darwin=${nixPath_nix-darwin}"
-      "darwin-config=${nixPath_darwin-config}"
-      "for-nixd=${nixPath_for-nixd}"
-    ];
 
     # It may be tempting to set XDG_*_HOME, in order to "correct"
     # the behavior of some CLI programs written in Rust, using the library
