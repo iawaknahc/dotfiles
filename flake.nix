@@ -113,6 +113,7 @@
           {
             hostname,
             system,
+            username,
             ...
           }:
           {
@@ -120,7 +121,9 @@
               modules = [
                 {
                   nixpkgs.hostPlatform = system;
+                  system.primaryUser = username;
                 }
+                ((import ./nix-darwin/karabiner.nix) nix-darwin)
                 ./darwin.nix
               ];
             };
