@@ -20,6 +20,7 @@ class Location:
     url: str
     location: str
     coordinates: str
+    google_place_id: str
     tags: list[str]
 
     def json(self):
@@ -90,6 +91,7 @@ def https_www_google_com_maps_place(url_str: str) -> Location:
         url=u.geturl(),
         location=body["formattedAddress"],
         coordinates=f"{lat},{lng}",
+        google_place_id=place_id,
         tags=body["types"],
     )
 
