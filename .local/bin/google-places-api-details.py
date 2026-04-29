@@ -77,7 +77,7 @@ def https_www_google_com_maps_place(url_str: str) -> Location:
 
     place_id = body["places"][0]["id"]
     response = requests.get(
-        f"https://places.googleapis.com/v1/places/{place_id}",
+        f"https://places.googleapis.com/v1/places/{place_id}?languageCode=zh-HK",
         headers={
             "X-Goog-Api-Key": os.environ["GOOGLE_API_KEY"],
             "X-Goog-FieldMask": "id,formattedAddress,types",
