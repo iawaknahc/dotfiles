@@ -37,7 +37,10 @@
     font-style-bold-italic = "Bold Italic";
     font-size = 13;
 
-    command = "${config.home.profileDirectory}/bin/fish --login --interactive";
+    # We have to use `exec nu` because Nushell is not supported by nix-darwin.
+    # We need a supported shell to be initialized first (e.g. setting PATH).
+    # And then we use `exec nu` to switch to Nushell WITHOUT adding SHLVL.
+    command = "${config.home.profileDirectory}/bin/bash -c 'exec nu --login --interactive'";
 
     # In preparation for using neovim as default terminal program,
     # we disable vi mode in shell.
