@@ -18,10 +18,6 @@
 # we disable vi mode in shell.
 # $env.config.edit_mode = "vi";
 
-# https://www.nushell.sh/book/configuration.html#macos-keeping-usr-bin-open-as-open
-alias nu-open = open
-alias open = ^open
-
 # https://www.nushell.sh/book/background_jobs.html#job-suspension
 alias fg = job unfreeze
 
