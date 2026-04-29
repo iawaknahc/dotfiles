@@ -75,6 +75,10 @@ in
             # Clipboard
             pyperclip
 
+            # The HTTP client recommended on the documentation page of urllib.request since Python 3.4
+            # See https://docs.python.org/3.4/library/urllib.request.html#module-urllib.request
+            requests
+
             # Parse tiny language
             parsy
 
