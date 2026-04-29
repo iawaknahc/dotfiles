@@ -1,4 +1,3 @@
-add_newline = true
 follow_symlinks = false
 
 # I used to add git information to the prompt,
@@ -11,7 +10,13 @@ follow_symlinks = false
 # Fish shell claims that it writes OSC 133 to indicate the start of a prompt and the end of a prompt.
 # However, in my testing with fish@4.6.0, it does not write OSC 133 that tmux can understand.
 # So we do it here.
+#
+# In my testing with nu@0.112.2, it emits OSC 133 natively.
+# It seems that it is not harmful to emit OSC 133 in starship though.
 format = "${custom.osc_133_prompt_start}$jobs$kubernetes$python$direnv$shell@$shlvl\n$status ${custom.osc_133_prompt_end}"
+# In my testing with nu@0.112.2, if add_newline is true, the position of OSC 133 prompt start omitted by nushell is before the newline, which is incorrect.
+# Therefore, it is better to turn this off.
+add_newline = false
 
 [character]
 disabled = false
