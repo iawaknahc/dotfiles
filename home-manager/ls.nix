@@ -6,6 +6,7 @@
   programs.eza.enableBashIntegration = true;
   programs.eza.enableFishIntegration = true;
   programs.eza.enableZshIntegration = true;
+  programs.eza.enableNushellIntegration = false; # We are not going to override `ls` in Nushell.
   # What eza is missing is order of columns.
   # The order of the original `ls -l` is
   # - permission

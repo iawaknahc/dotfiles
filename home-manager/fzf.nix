@@ -16,6 +16,8 @@
   programs.fzf.enableBashIntegration = true;
   programs.fzf.enableFishIntegration = true;
   programs.fzf.enableZshIntegration = true;
+  # FIXME: programs.fzf.enableNushellIntegration does not exist
+
   home.sessionVariables = {
     # We use atuin to manage shell history.
     # programs.fzf does not offer an option to set this.
