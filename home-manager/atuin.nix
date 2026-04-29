@@ -1,4 +1,4 @@
-{ config, ... }:
+{ ... }:
 {
   programs.atuin.enable = true;
   programs.atuin.daemon.enable = false;
@@ -26,8 +26,18 @@
   # Other than fish_private_mode, fish shell does not record a command if it is prefixed with a space,
   # similar to HISTCONTROL=ignorespace.
 
-  # nushell does not seem to have a way to disable history at all.
+  # When Nushell has two kinds of history.
+  # 1. The one we access with CTRL-R. This one can be disabled by starting Nushell with `--no-history`.
+  # 2. Hitting the up arrow key. This one cannot be disabled. See https://github.com/nushell/nushell/issues/15258
+  #
+  # Since 0.112.1, $env.config.history.path was introduced.
+  # It can be set to `null` to disable saving history to a file.
+  # Atuin is NOT affected, and it can still record history.
+  # https://www.nushell.sh/blog/2026-04-11-nushell_v0_112_1.html#history-file-path-can-now-be-configured
   programs.atuin.enableNushellIntegration = true;
+  programs.nushell.extraConfig = ''
+    $env.config.history.path = null
+  '';
 
   programs.atuin.settings = {
     auto_sync = false;
