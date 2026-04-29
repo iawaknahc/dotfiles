@@ -120,6 +120,7 @@ _: {
     ./numbat
     ./syncthing.nix
     ./smb.nix
+    ./obsidian.nix
 
     # PGP and friends
     ./pgp.nix

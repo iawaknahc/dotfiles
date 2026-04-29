@@ -3,8 +3,8 @@
   home.packages =
     if pkgs.stdenv.hostPlatform.isDarwin then
       [
-        (pkgs.writeShellScriptBin "tailscale" ''
-          /Applications/Tailscale.app/Contents/MacOS/Tailscale "$@"
+        (pkgs.writeShellScriptBin "obsidian" ''
+          /Applications/Obsidian.app/Contents/MacOS/obsidian-cli "$@"
         '')
       ]
     else
