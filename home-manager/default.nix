@@ -81,6 +81,7 @@ _: {
     ./browser-automation.nix
     ./multimedia.nix
     ./grammar-and-spell-checking
+    ./yaml.nix
 
     ./awk.nix
     ./lua.nix

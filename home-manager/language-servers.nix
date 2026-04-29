@@ -17,6 +17,5 @@
     typescript-language-server # TypeScript
     vtsls # TypeScript
     vscode-langservers-extracted # HTML and CSS
-    yaml-language-server # YAML
   ];
 }
