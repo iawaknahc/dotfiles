@@ -10,3 +10,23 @@ vim.filetype.add({
     ["docker-compose.yml"] = "yaml.docker-compose",
   },
 })
+
+local SHEBANGS = {
+  [ [[^#!/usr/bin/env deno$]] ] = "typescript",
+}
+
+vim.filetype.add({
+  pattern = {
+    [".*"] = {
+      function(_path, bufnr)
+        local content = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ""
+        for pattern, filetype in pairs(SHEBANGS) do
+          if vim.regex(pattern):match_str(content) ~= nil then
+            return filetype
+          end
+        end
+      end,
+      { priority = -math.huge },
+    },
+  },
+})
