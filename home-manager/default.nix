@@ -85,7 +85,7 @@ _: {
 
     ./awk.nix
     ./lua.nix
-    ./nodejs.nix
+    ./javascript.nix
     ./clojure.nix
     ./janet.nix
     ./python.nix
