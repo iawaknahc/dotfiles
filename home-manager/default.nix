@@ -84,16 +84,17 @@ _: {
     ./yaml.nix
 
     ./awk.nix
-    ./lua.nix
-    ./javascript.nix
     ./clojure.nix
+    ./dart.nix
+    ./go.nix
     ./janet.nix
+    ./java.nix
+    ./javascript.nix
+    ./lua.nix
+    ./perl.nix
     ./python.nix
     ./ruby.nix
-    ./go.nix
-    ./java.nix
-    ./perl.nix
-    ./dart.nix
+    ./rust.nix
     ./zig.nix
 
     # Text editors.
