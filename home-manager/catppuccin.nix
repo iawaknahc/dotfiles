@@ -9,7 +9,7 @@ catppuccin:
     programs.vivid.enableBashIntegration = true;
     programs.vivid.enableFishIntegration = true;
     programs.vivid.enableZshIntegration = true;
-    # FIXME: programs.vivid.enableNushellIntegration does not exist
+    programs.vivid.enableNushellIntegration = true;
 
     home.packages = with pkgs; [
       catppuccin-whiskers
