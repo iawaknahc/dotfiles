@@ -22,6 +22,7 @@ bufnr
 bufpath
 buftype
 builtin
+caml
 cangjie
 catppuccin
 cfile
@@ -36,6 +37,7 @@ cmdline
 cnoreabbrev
 codespell
 completeopt
+comptime
 copyfile
 csplit
 cssls
@@ -174,6 +176,7 @@ numtide
 nushell
 nvim
 nvimcolors
+ocaml
 omnifunc
 openssl
 operatorfunc
@@ -189,6 +192,7 @@ pns
 preselect
 preselects
 prettierd
+prolog
 pubin
 pubout
 pumheight
