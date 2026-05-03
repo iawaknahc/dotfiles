@@ -6,17 +6,6 @@ let
   lua55 = with pkgs; lua5_5;
 in
 {
-  assertions = [
-    {
-      assertion = pkgs.lua55Packages.argparse.version == "0.7.1-1";
-      message = ''
-        The Lua package argparse may have a new release that supports Lua 5.5.
-        Consider re-installing `llscheck` and `luaprompt`.
-        See https://github.com/luarocks/argparse/issues/35
-      '';
-    }
-  ];
-
   home.packages = with pkgs; [
     emmylua-ls
     emmylua-check
@@ -36,8 +25,8 @@ in
         fennel
         luarocks
 
-        #llscheck # llscheck requires lua-language-server on PATH.
-        #luaprompt # luap provides a better REPL experience than lua(1).
+        llscheck # llscheck requires lua-language-server on PATH.
+        luaprompt # luap provides a better REPL experience than lua(1).
 
         lua-cjson
         inspect

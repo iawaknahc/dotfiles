@@ -12,19 +12,6 @@ let
     else
       "${config.home.homeDirectory}/.config/harper-ls";
 
-  # FIXME: The harper package on nixpkgs does not include harper-cli.
-  # So we need to build it ourselves.
-  harper-cli-base = (
-    pkgs.harper.overrideAttrs (prevAttrs: {
-      pname = "harper-cli";
-      buildAndTestSubdir = "harper-cli";
-      nativeInstallCheckInputs = [ ]; # harper-cli reports itself as 0.1.0, which does not match the version of harper-ls.
-      meta = {
-        mainProgram = "harper-cli";
-      };
-    })
-  );
-
   harperLintersToBeDisabled = [
     "CapitalizePersonalPronouns" # It is common to have a lone 'i' character.
     "Dashes" # Comments in Lua starts with two dashes.
@@ -102,7 +89,7 @@ let
 
   # This wrapper is separated from harper-cli because we do not want to rebuild
   # harper-cli every time linters configuration is changed.
-  harper-cli-wrapper =
+  harper-cli-lint =
     pkgs.runCommand "harper-cli-lint"
       {
         nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -110,7 +97,7 @@ let
       ''
         mkdir -p $out/bin
         makeWrapper \
-          ${harper-cli-base}/bin/harper-cli \
+          ${pkgs.harper}/bin/harper-cli \
           $out/bin/harper-cli-lint \
           --add-flag 'lint' \
           --add-flag '--ignore' \
@@ -133,14 +120,7 @@ in
     # After using Harper for a month,
     # the most annoying problem is https://github.com/Automattic/harper/discussions/938
     harper
-    # We want harper-cli and harper-cli-lint stay together.
-    (pkgs.symlinkJoin {
-      name = "harper-cli";
-      paths = [
-        harper-cli-base
-        harper-cli-wrapper
-      ];
-    })
+    harper-cli-lint
 
     codebook
     typos-lsp
