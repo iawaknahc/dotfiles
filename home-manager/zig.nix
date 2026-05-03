@@ -11,5 +11,6 @@
   programs.git.ignores = [
     ".zig-cache/"
     "zig-out/"
+    "zig-pkg/"
   ];
 }
