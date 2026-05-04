@@ -111,6 +111,9 @@ let
       "\\p{Hiragana}"
       "\\p{Hangul}"
       "\\p{Katakana}"
+
+      # Ignore Neovim abbreviations.
+      "^cnoreabbrev.*"
     ];
   };
   codebook_config_json = pkgs.writeText "codebook.json" (builtins.toJSON codebook_config);

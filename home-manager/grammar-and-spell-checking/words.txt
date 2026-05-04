@@ -47,7 +47,9 @@ cursorlineopt
 cwindow
 cword
 cxx
+dadbod
 dartls
+dbui
 debugpy
 deno
 denols
@@ -171,6 +173,7 @@ nop
 noselect
 nounihan
 nowinfixheight
+nufmt
 numberwidth
 numtide
 nushell
@@ -180,6 +183,7 @@ ocaml
 omnifunc
 openssl
 operatorfunc
+osascript
 osc
 outpubkey
 packadd
@@ -202,6 +206,7 @@ qflist
 qpdf
 redrawstatus
 rgi
+rustfmt
 screenpos
 scrolloff
 searchforward

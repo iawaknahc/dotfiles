@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# This script works only when the shell writes OSC 133 A and OSC 133 C.
+# This script works only when the shell writes `OSC 133 A` and `OSC 133 C`.
 # As far as I know, Fish >= 4.0 is a shell doing that.
 #
-# tmux comes with a copy-mode command `{previous,next}-prompt [-o]` to move the cursor to the position of OSC 133 A and OSC 133 C.
+# tmux comes with a copy-mode command `{previous,next}-prompt [-o]` to move the cursor to the position of `OSC 133 A` and `OSC 133 C`.
 # This script enters copy-mode and run these commands to gather the value of 2 variables, namely `copy_cursor_y` and `scroll_position`.
 #
 # tmux offers a single way to capture the scrollback of a pane, that is `capture-pane`.
