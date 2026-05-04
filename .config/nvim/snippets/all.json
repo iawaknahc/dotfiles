@@ -1,0 +1,26 @@
+{
+  "Shebang for Python 3": {
+    "prefix": "#!py",
+    "body": [
+      "#!/usr/bin/env python3"
+    ]
+  },
+  "Shebang for Nushell": {
+    "prefix": "#!nu",
+    "body": [
+      "#!/usr/bin/env nu"
+    ]
+  },
+  "Shebang for Neovim": {
+    "prefix": "#!nvim",
+    "body": [
+      "#!/usr/bin/env -S nvim -l"
+    ]
+  },
+  "Shebang for sh": {
+    "prefix": "#!sh",
+    "body": [
+      "#!/bin/sh"
+    ]
+  }
+}

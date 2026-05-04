@@ -16,6 +16,8 @@ local override = {
 
 require("blink.cmp").setup({
   sources = {
+    -- `blink.cmp` by default loads LSP snippets in defined in `~/.config/nvim/snippets/package.json`, and it uses `vim.snippets` as the engine.
+    -- This means no third party snippet plugin is needed.
     default = { "lsp", "snippets", "path", "buffer" },
     per_filetype = {
       sql = { "dadbod", "lsp", "snippets", "path", "buffer" },
