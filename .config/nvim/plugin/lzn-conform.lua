@@ -15,5 +15,7 @@ require("conform").setup({
     -- One caveat of using cljfmt to format Hy is that f-string `f""` will be formatted to `f ""`, thus broken.
     hy = { "cljfmt" },
     swift = { "swiftformat" },
+    -- FIXME: Enable `nufmt` after https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169 are released.
+    -- nu = { "nufmt" },
   },
 })
