@@ -23,6 +23,10 @@
     '';
   };
 
+  home.shellAliases = {
+    "oil" = "nvim +'Oil ~/Volumes/nas_samba/${config.home.username}' +'vs' +'Oil ~'";
+  };
+
   launchd.agents.mount-nas_samba = {
     enable = true;
     config = {
