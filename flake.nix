@@ -78,11 +78,12 @@
       {
         systems = [ "aarch64-darwin" ];
 
+        imports = [ ./modules/flake-parts/formatter.nix ];
+
         perSystem =
-          { system, pkgs, ... }:
+          { system, ... }:
           {
             _module.args.pkgs = nixpkgs-mine.legacyPackages.${system};
-            formatter = pkgs.nixfmt-tree;
           };
 
         flake = {
