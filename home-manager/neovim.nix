@@ -118,8 +118,6 @@
     fzf-lua
 
     ## Visual aids
-    # statusline
-    mini-statusline
     # statuscolumn
     statuscol-nvim
     # Key clues and submodes.
