@@ -56,15 +56,10 @@
   outputs =
     inputs@{
       flake-parts,
-      nixpkgs-mine,
-      android-nixpkgs,
-      catppuccin,
       home-manager,
-      mcp-servers-nix,
+      nixpkgs-mine,
       nix-darwin,
-      nur,
       sops-nix,
-      nix-index-database,
       nix-homebrew,
       homebrew-core,
       homebrew-cask,
@@ -78,12 +73,16 @@
       {
         systems = [ "aarch64-darwin" ];
 
-        imports = [ ./modules/flake-parts/formatter.nix ];
+        imports = [
+          home-manager.flakeModules.home-manager
+          ./modules/flake-parts/formatter.nix
+          ./modules/flake-parts/homeConfigurations.nix
+        ];
 
         perSystem =
           { system, ... }:
           {
-            _module.args.pkgs = nixpkgs-mine.legacyPackages.${system};
+            _module.args.pkgs = nixpkgs-mine.legacyPackages.${system}; # FIXME: This can be out-of-sync with `homeManagerConfiguration { pkgs }`.
           };
 
         flake = {
@@ -91,44 +90,6 @@
             md5toUUID = import ./lib/md5toUUID.test.nix;
             userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
           };
-
-          homeConfigurations = nixpkgs-mine.lib.pipe machines [
-            (builtins.map (
-              {
-                hostname,
-                username,
-                homeDirectory,
-                system,
-                ...
-              }:
-              {
-                # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
-                "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
-                  pkgs = nixpkgs-mine.legacyPackages.${system};
-                  modules = [
-                    {
-                      home.username = username;
-                      home.homeDirectory = homeDirectory;
-                    }
-                    ((import ./home-manager/nixPath.nix) {
-                      nixpkgs = nixpkgs-mine;
-                    })
-                    ((import ./home-manager/nixd.nix) {
-                      hostname = hostname;
-                    })
-                    ((import ./home-manager/catppuccin.nix) catppuccin)
-                    ((import ./home-manager/nix-index-database.nix) nix-index-database)
-                    ((import ./home-manager/sops-nix.nix) sops-nix)
-                    ((import ./home-manager/mcp-servers-nix.nix) mcp-servers-nix)
-                    ((import ./home-manager/nur.nix) nur)
-                    ((import ./home-manager/android-nixpkgs.nix) android-nixpkgs)
-                    ./home-manager
-                  ];
-                };
-              }
-            ))
-            nixpkgs-mine.lib.attrsets.mergeAttrsList
-          ];
 
           darwinConfigurations = nixpkgs-mine.lib.pipe machines [
             (builtins.map (
