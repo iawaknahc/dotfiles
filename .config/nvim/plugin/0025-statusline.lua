@@ -8,6 +8,8 @@
 
 ---@alias StatuslineItemList StatuslineItem[]
 
+local lib_statusline = require("lib_statusline")
+
 ---@return boolean
 local function is_active()
   local winid = vim.api.nvim_get_current_win()
@@ -82,113 +84,10 @@ local function statusline_mode()
   return { item = " " .. mode_info.label .. " ", hl = hl }
 end
 
----@return string
-local function get_terminal_job_pid()
-  local channel = vim.bo.channel
-  local pid = vim.fn.jobpid(channel)
-  return string.format("%d", pid)
-end
-
----@param win integer
----@return integer
-local function get_loclist_stack_size(win)
-  return vim.fn.getloclist(win, { nr = "$" }).nr
-end
-
----@param win integer
----@return integer
-local function get_loclist_stack_index1(win)
-  return vim.fn.getloclist(win, { nr = 0 }).nr
-end
-
----@param win integer
----@return integer
-local function get_loclist_list_size(win)
-  return vim.fn.getloclist(win, { size = 0 }).size
-end
-
----@param win integer
----@return integer
-local function get_loclist_list_index1(win)
-  return vim.fn.getloclist(win, { idx = 0 }).idx
-end
-
----@param win integer
----@return string
-local function get_loclist_title(win)
-  return vim.fn.getloclist(win, { title = 0 }).title
-end
-
----@param win integer
----@return string
-local function get_loclist_filename(win)
-  return "[loclist "
-    .. tostring(get_loclist_stack_index1(win))
-    .. "/"
-    .. tostring(get_loclist_stack_size(win))
-    .. "] "
-    .. tostring(get_loclist_list_index1(win))
-    .. "/"
-    .. tostring(get_loclist_list_size(win))
-    .. "  "
-    .. get_loclist_title(win)
-end
-
----@return integer
-local function get_qflist_stack_size()
-  return vim.fn.getqflist({ nr = "$" }).nr
-end
-
----@return integer
-local function get_qflist_stack_index1()
-  return vim.fn.getqflist({ nr = 0 }).nr
-end
-
----@return integer
-local function get_qflist_list_size()
-  return vim.fn.getqflist({ size = 0 }).size
-end
-
----@return integer
-local function get_qflist_list_index1()
-  return vim.fn.getqflist({ idx = 0 }).idx
-end
-
----@return string
-local function get_qflist_title()
-  return vim.fn.getqflist({ title = 0 }).title
-end
-
----@return string
-local function get_qflist_filename()
-  return "[quickfix "
-    .. tostring(get_qflist_stack_index1())
-    .. "/"
-    .. tostring(get_qflist_stack_size())
-    .. "] "
-    .. tostring(get_qflist_list_index1())
-    .. "/"
-    .. tostring(get_qflist_list_size())
-    .. "  "
-    .. get_qflist_title()
-end
-
 ---@return StatuslineItemString
 local function statusline_filename()
   local winid = vim.api.nvim_get_current_win()
-  local wininfo = vim.fn.getwininfo(winid)[1]
-
-  if wininfo ~= nil then
-    if wininfo.terminal == 1 then
-      return get_terminal_job_pid() .. " %{b:term_title}"
-    elseif wininfo.loclist == 1 then
-      return get_loclist_filename(winid)
-    elseif wininfo.quickfix == 1 then
-      return get_qflist_filename()
-    end
-  end
-
-  return "%f%m%r"
+  return lib_statusline.filename(winid)
 end
 
 ---@return StatuslineItemString
