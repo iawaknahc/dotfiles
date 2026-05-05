@@ -41,6 +41,10 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs-mine";
     };
+    nix-unit = {
+      url = "github:nix-community/nix-unit";
+      inputs.nixpkgs.follows = "nixpkgs-mine";
+    };
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
@@ -54,40 +58,6 @@
   };
 
   outputs =
-    inputs@{
-      flake-parts,
-      home-manager,
-      nix-darwin,
-      nixpkgs-mine,
-      ...
-    }:
-    flake-parts.lib.mkFlake { inherit inputs; } (
-      { ... }:
-      {
-        systems = [ "aarch64-darwin" ];
-
-        imports = [
-          home-manager.flakeModules.home-manager
-          nix-darwin.flakeModules.default
-
-          ./modules/flake-parts/formatter.nix
-          ./modules/flake-parts/homeConfigurations.nix
-          ./modules/flake-parts/darwinConfigurations.nix
-          ./modules/flake-parts/nixosConfigurations.nix
-        ];
-
-        perSystem =
-          { system, ... }:
-          {
-            _module.args.pkgs = nixpkgs-mine.legacyPackages.${system}; # FIXME: This can be out-of-sync with `homeManagerConfiguration { pkgs }`.
-          };
-
-        flake = {
-          tests = {
-            md5toUUID = import ./lib/md5toUUID.test.nix;
-            userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
-          };
-        };
-      }
-    );
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } (import ./modules/flake-parts);
 }
