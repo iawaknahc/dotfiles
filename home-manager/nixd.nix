@@ -9,7 +9,7 @@ in
   home.packages = with pkgs; [
     nixd
   ];
-  programs.fish.shellAbbrs = {
+  home.shellAliases = {
     # Launch `nix repl` having `pkgs` with all overlays applied.
     # We use environment variable here so that the repl is never stale.
     nixrepl = ''nix repl --expr '(builtins.getFlake ((builtins.getEnv "HOME") + "/dotfiles")).homeConfigurations."${config.home.username}@${hostname}".pkgs' '';
