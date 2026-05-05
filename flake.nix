@@ -57,26 +57,22 @@
     inputs@{
       flake-parts,
       home-manager,
-      nixpkgs-mine,
       nix-darwin,
+      nixpkgs-mine,
       sops-nix,
-      nix-homebrew,
-      homebrew-core,
-      homebrew-cask,
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } (
       { ... }:
-      let
-        machines = import ./machines.nix;
-      in
       {
         systems = [ "aarch64-darwin" ];
 
         imports = [
           home-manager.flakeModules.home-manager
+          nix-darwin.flakeModules.default
           ./modules/flake-parts/formatter.nix
           ./modules/flake-parts/homeConfigurations.nix
+          ./modules/flake-parts/darwinConfigurations.nix
         ];
 
         perSystem =
@@ -90,33 +86,6 @@
             md5toUUID = import ./lib/md5toUUID.test.nix;
             userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
           };
-
-          darwinConfigurations = nixpkgs-mine.lib.pipe machines [
-            (builtins.map (
-              {
-                hostname,
-                system,
-                username,
-                ...
-              }:
-              {
-                "${hostname}" = nix-darwin.lib.darwinSystem {
-                  modules = [
-                    {
-                      nixpkgs.hostPlatform = system;
-                      system.primaryUser = username;
-                    }
-                    ((import ./nix-darwin/homebrew.nix) {
-                      inherit nix-homebrew homebrew-core homebrew-cask;
-                    })
-                    ((import ./nix-darwin/karabiner.nix) nix-darwin)
-                    ./nix-darwin
-                  ];
-                };
-              }
-            ))
-            nixpkgs-mine.lib.attrsets.mergeAttrsList
-          ];
 
           nixosConfigurations.nas = nixpkgs-mine.lib.nixosSystem {
             modules = [
