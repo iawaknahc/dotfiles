@@ -59,7 +59,6 @@
       home-manager,
       nix-darwin,
       nixpkgs-mine,
-      sops-nix,
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } (
@@ -70,9 +69,11 @@
         imports = [
           home-manager.flakeModules.home-manager
           nix-darwin.flakeModules.default
+
           ./modules/flake-parts/formatter.nix
           ./modules/flake-parts/homeConfigurations.nix
           ./modules/flake-parts/darwinConfigurations.nix
+          ./modules/flake-parts/nixosConfigurations.nix
         ];
 
         perSystem =
@@ -85,13 +86,6 @@
           tests = {
             md5toUUID = import ./lib/md5toUUID.test.nix;
             userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
-          };
-
-          nixosConfigurations.nas = nixpkgs-mine.lib.nixosSystem {
-            modules = [
-              ./nas
-              sops-nix.nixosModules.sops
-            ];
           };
         };
       }
