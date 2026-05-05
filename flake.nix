@@ -3,19 +3,17 @@
     # Using channel has a higher possibility that the packages are available at https://cache.nixos.org
     nixpkgs-mine.url = "https://nixos.org/channels/nixpkgs-unstable/nixexprs.tar.xz";
 
-    android-nixpkgs = {
-      # platform-tools 37.0.0 was first available on 2026-03-03
-      # However, the hash of https://dl.google.com/android/repository/platform-tools_r37.0.0-darwin.zip changed on 2026-04-15
-      url = "github:tadfisher/android-nixpkgs/2026-04-15-stable";
-      # It is intentionally that we DO NOT override the input `nixpkgs` of `android-nixpkgs`.
-      # Otherwise, every time we update `nixpkgs`, the whole Android SDK has to be re-downloaded.
-      inputs.flake-utils.follows = "flake-utils";
-    };
+    # platform-tools 37.0.0 was first available on 2026-03-03
+    # However, the hash of https://dl.google.com/android/repository/platform-tools_r37.0.0-darwin.zip changed on 2026-04-15
+    #
+    # It is intentionally that we DO NOT override the input `nixpkgs` of `android-nixpkgs`.
+    # Otherwise, every time we update `nixpkgs`, the whole Android SDK has to be re-downloaded.
+    android-nixpkgs.url = "github:tadfisher/android-nixpkgs/2026-04-15-stable";
+
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs-mine";
     };
-    flake-utils.url = "github:numtide/flake-utils";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-mine";
@@ -57,7 +55,6 @@
       nixpkgs-mine,
       android-nixpkgs,
       catppuccin,
-      flake-utils,
       home-manager,
       mcp-servers-nix,
       nix-darwin,
@@ -78,9 +75,15 @@
         userscript_metadata_block = import ./lib/userscript_metadata_block/default.test.nix;
       };
 
-      formatter = flake-utils.lib.eachDefaultSystemPassThrough (system: {
-        "${system}" = nixpkgs-mine.legacyPackages.${system}.nixfmt-tree;
-      });
+      formatter = nixpkgs-mine.lib.pipe machines [
+        (builtins.map (
+          { system, ... }:
+          {
+            ${system} = nixpkgs-mine.legacyPackages.${system}.nixfmt-tree;
+          }
+        ))
+        nixpkgs-mine.lib.attrsets.mergeAttrsList
+      ];
 
       homeConfigurations = nixpkgs-mine.lib.pipe machines [
         (builtins.map (
