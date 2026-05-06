@@ -7,5 +7,5 @@
       text = builtins.readFile path;
     in
     (pkgs.writeScriptBin basename text)
-  ) (pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing ../.local/bin));
+  ) (pkgs.lib.fileset.toList (pkgs.lib.fileset.maybeMissing ./bin));
 }

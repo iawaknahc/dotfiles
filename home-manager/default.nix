@@ -77,7 +77,7 @@ _: {
 
     # Collections of programs.
     ./replace-macos-stock-programs.nix
-    ./my-scripts.nix
+    ./my-scripts
     ./simple-programs.nix
     ./language-servers.nix
     ./archive-and-compression.nix
