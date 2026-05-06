@@ -1,18 +1,13 @@
+{ inputs, config, ... }:
 {
-  nix-homebrew,
-  homebrew-core,
-  homebrew-cask,
-}:
-{ config, ... }:
-{
-  imports = [ nix-homebrew.darwinModules.nix-homebrew ];
+  imports = [ inputs.nix-homebrew.darwinModules.nix-homebrew ];
   config = {
     nix-homebrew.enable = true;
     nix-homebrew.enableRosetta = false;
     nix-homebrew.user = config.system.primaryUser;
     nix-homebrew.taps = {
-      "homebrew/homebrew-core" = homebrew-core;
-      "homebrew/homebrew-cask" = homebrew-cask;
+      "homebrew/homebrew-core" = inputs.homebrew-core;
+      "homebrew/homebrew-cask" = inputs.homebrew-cask;
     };
     nix-homebrew.mutableTaps = false;
     nix-homebrew.enableBashIntegration = false;

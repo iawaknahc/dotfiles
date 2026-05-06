@@ -13,15 +13,14 @@ in
       }:
       {
         "${hostname}" = inputs.nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs; };
           modules = [
             {
               nixpkgs.hostPlatform = system;
               system.primaryUser = username;
             }
-            ((import ../../nix-darwin/homebrew.nix) {
-              inherit (inputs) nix-homebrew homebrew-core homebrew-cask;
-            })
-            ((import ../../nix-darwin/karabiner.nix) inputs.nix-darwin)
+            ../../nix-darwin/homebrew.nix
+            ../../nix-darwin/karabiner.nix
             ../../nix-darwin
           ];
         };

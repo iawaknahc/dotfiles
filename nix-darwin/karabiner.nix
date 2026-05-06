@@ -1,11 +1,10 @@
-nix-darwin:
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   assertions = [
     {
       assertion =
         builtins.convertHash {
-          hash = builtins.hashFile "sha256" "${nix-darwin.outPath}/modules/services/karabiner-elements/default.nix";
+          hash = builtins.hashFile "sha256" "${inputs.nix-darwin.outPath}/modules/services/karabiner-elements/default.nix";
           hashAlgo = "sha256";
           toHashFormat = "sri";
         } == "sha256-LunW4grq259/PHoW5nD8PJA2PidN4gF7SX9Ctoz6ens=";
