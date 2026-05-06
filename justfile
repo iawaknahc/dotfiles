@@ -6,7 +6,7 @@ default:
 
 # Clean up any generated files
 clean:
-    rm -f ./home-manager/neovim/config/nvim/.emmyrc.json
+    rm -f ./modules/homeManager/neovim/config/nvim/.emmyrc.json
 
 # Run `clean`, followed by `generate-emmyrc-json`
 setup: clean generate-emmyrc-json
@@ -40,19 +40,19 @@ nufmt:
 
 # Copy the current config of Alfred to here for git-diff
 alfred-rsync:
-    rsync --recursive --delete ~/alfred/ ./home-manager/alfred/alfred
+    rsync --recursive --delete ~/alfred/ ./modules/homeManager/alfred/alfred
 
 # Undo the effect of `alfred-rsync`
 alfred-clean:
-    git clean -fx ./home-manager/alfred/alfred
+    git clean -fx ./modules/homeManager/alfred/alfred
 
 # Run Nix unit tests
 test:
     nix-unit --flake '.#tests'
 
-# Generate `./home-manager/neovim/config/nvim/.emmyrc.json`
+# Generate `./modules/homeManager/neovim/config/nvim/.emmyrc.json`
 generate-emmyrc-json:
-    ./home-manager/neovim/config/nvim/.emmyrc.py
+    ./modules/homeManager/neovim/config/nvim/.emmyrc.py
 
 # Update `flake.lock` without touching `android-nixpkgs`
 flake-update:
