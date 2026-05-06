@@ -4,6 +4,38 @@
   programs.ghostty.package = pkgs.ghostty-bin;
   programs.ghostty.installBatSyntax = false;
   programs.ghostty.installVimSyntax = false;
+
+  # Ghostty sets MANPATH.
+  # See https://github.com/ghostty-org/ghostty/blob/v1.3.1/src/termio/Exec.zig#L722
+  # But the explicit setting of MANPATH is problematic.
+  # See https://github.com/ghostty-org/ghostty/discussions/4532
+  # So we unset MANPATH here.
+  programs.bash.bashrcExtra = ''
+    if [ -n "$MANPATH" ]; then
+      unset MANPATH
+    fi
+  '';
+  programs.x-elvish.rcExtra = ''
+    if (has-env MANPATH) {
+      del E:MANPATH
+    }
+  '';
+  programs.fish.shellInit = ''
+    if set -q
+      set --erase MANPATH
+    end
+  '';
+  programs.zsh.initContent = ''
+    if [ -n "$MANPATH" ]; then
+      unset MANPATH
+    fi
+  '';
+  programs.nushell.extraConfig = ''
+    if 'MANPATH' in $env {
+      hide-env MANPATH
+    }
+  '';
+
   programs.ghostty.settings = {
     # Disable the confirm closing dialog, so that it never block macOS update restart.
     confirm-close-surface = false;
