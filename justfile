@@ -1,5 +1,5 @@
 STYLUA_FLAGS := "--verbose"
-STYLUA_ARGS := ".config/nvim .hammerspoon"
+STYLUA_ARGS := "./home-manager/neovim/config/nvim .hammerspoon"
 
 # List all recipes
 default:
@@ -7,7 +7,7 @@ default:
 
 # Clean up any generated files
 clean:
-    rm -f .config/nvim/.emmyrc.json
+    rm -f ./home-manager/neovim/config/nvim/.emmyrc.json
 
 # Run `clean`, followed by `generate-emmyrc-json`
 setup: clean generate-emmyrc-json
@@ -51,9 +51,9 @@ alfred-clean:
 test:
     nix-unit --flake '.#tests'
 
-# Generate `./.config/nvim/.emmyrc.json`
+# Generate `./home-manager/neovim/config/nvim/.emmyrc.json`
 generate-emmyrc-json:
-    .config/nvim/.emmyrc.py
+    ./home-manager/neovim/config/nvim/.emmyrc.py
 
 # Update `flake.lock` without touching `android-nixpkgs`
 flake-update:

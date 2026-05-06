@@ -6,8 +6,12 @@ import tomllib
 
 
 def main():
+    path_to_this_script = pathlib.Path(__file__)
+    emmyrc_toml = path_to_this_script.parent / ".emmyrc.toml"
+    emmyrc_json = path_to_this_script.parent / ".emmyrc.json"
+
     out = []
-    with open(".config/nvim/.emmyrc.toml", "rb") as f:
+    with open(emmyrc_toml, "rb") as f:
         d = tomllib.load(f)
         library = d["workspace"]["library"]
 
@@ -25,7 +29,7 @@ def main():
 
     d["workspace"]["library"] = out
 
-    with open(".config/nvim/.emmyrc.json", "w") as f:
+    with open(emmyrc_json, "w") as f:
         json.dump(d, f, indent=2)
 
 

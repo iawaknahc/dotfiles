@@ -106,7 +106,7 @@ _: {
 
     # Text editors.
     ./vim
-    ./neovim.nix
+    ./neovim
 
     # Individual programs that require configurations.
     ./_1password.nix
