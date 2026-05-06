@@ -51,7 +51,7 @@ _: {
     # Terminals.
     ./terminal.nix
     ./tmux
-    ./kitty.nix
+    ./kitty
     ./alacritty.nix
     ./wezterm.nix
     ./ghostty.nix

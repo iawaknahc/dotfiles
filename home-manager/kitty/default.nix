@@ -98,6 +98,6 @@
     #map ctrl+space>shift+l move_window right
     #map ctrl+space>shift+j move_window down
     #map ctrl+space>shift+h move_window left
-    #map ctrl+space>w       launch --type overlay ~/.config/kitty/choose_tab.py
+    #map ctrl+space>w       launch --type overlay ${./choose_tab.py}
   '';
 }
