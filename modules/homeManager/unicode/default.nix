@@ -67,37 +67,6 @@ in
   home.packages = with pkgs; [
     ucd
 
-    (bundlerApp {
-      pname = "uniscribe";
-      # Only Gemfile was hand-written.
-      # Gemfile.lock and gemset.nix were generated with `bundix -l`.
-      gemdir = ./uniscribe;
-
-      exes = [
-        "uniscribe"
-      ];
-    })
-    (bundlerApp {
-      pname = "unibits";
-      # Only Gemfile was hand-written.
-      # Gemfile.lock and gemset.nix were generated with `bundix -l`.
-      gemdir = ./unibits;
-
-      exes = [
-        "unibits"
-      ];
-    })
-    (bundlerApp {
-      pname = "unicopy";
-      # Only Gemfile was hand-written.
-      # Gemfile.lock and gemset.nix were generated with `bundix -l`.
-      gemdir = ./unicopy;
-
-      exes = [
-        "unicopy"
-      ];
-    })
-
     unicode-paracode
 
     (stdenvNoCC.mkDerivation {

@@ -14,8 +14,6 @@
 codebookignore
 codespellignore
 flake.lock
-Gemfile
-Gemfile.lock
 harperignore
 infokey
 Makefile

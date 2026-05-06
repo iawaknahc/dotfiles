@@ -6,8 +6,6 @@
 *.sh
 codebookignore
 flake.lock
-Gemfile
-Gemfile.lock
 harperignore
 **/firefox/*.json
 justfile
