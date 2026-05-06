@@ -9,7 +9,7 @@
     modules = [
       inputs.sops-nix.nixosModules.sops
 
-      ../../nas
+      ../../modules/nixos/nas
     ];
   };
 }
