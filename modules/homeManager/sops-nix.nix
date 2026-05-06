@@ -8,7 +8,7 @@
   imports = [ inputs.sops-nix.homeManagerModules.sops ];
   config = {
     home.packages = with pkgs; [ sops ];
-    sops.defaultSopsFile = ../secrets/secrets.yaml;
+    sops.defaultSopsFile = ../../secrets/secrets.yaml;
     sops.defaultSopsFormat = "yaml";
     sops.gnupg.home = config.programs.gpg.homedir;
 

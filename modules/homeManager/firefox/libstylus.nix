@@ -1,6 +1,6 @@
 { lib }:
 let
-  md5ToUUID = import ../../lib/md5toUUID.nix;
+  md5ToUUID = import ../../../lib/md5toUUID.nix;
 in
 rec {
   mkSettings =

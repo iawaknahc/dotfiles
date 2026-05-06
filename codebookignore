@@ -10,7 +10,7 @@ flake.lock
 Gemfile
 Gemfile.lock
 harperignore
-home-manager/firefox/*.json
+**/firefox/*.json
 hs
 hs.1
 justfile

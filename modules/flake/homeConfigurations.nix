@@ -32,7 +32,7 @@ in
                 home.username = username;
                 home.homeDirectory = homeDirectory;
               }
-              ../../home-manager
+              ../../modules/homeManager
             ];
           })
         );
