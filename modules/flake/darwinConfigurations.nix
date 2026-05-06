@@ -19,7 +19,7 @@ in
               nixpkgs.hostPlatform = system;
               system.primaryUser = username;
             }
-            ../../nix-darwin
+            ../../modules/darwin
           ];
         };
       }
