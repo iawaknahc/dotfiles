@@ -18,8 +18,6 @@ flake.lock
 Gemfile
 Gemfile.lock
 harperignore
-hs
-hs.1
 infokey
 Makefile
 vimrc

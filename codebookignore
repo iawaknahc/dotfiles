@@ -11,8 +11,6 @@ Gemfile
 Gemfile.lock
 harperignore
 **/firefox/*.json
-hs
-hs.1
 justfile
 Makefile
 secrets/secrets.yaml
