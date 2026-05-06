@@ -1,7 +1,6 @@
-android-nixpkgs:
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
-  imports = [ android-nixpkgs.hmModule ];
+  imports = [ inputs.android-nixpkgs.hmModule ];
   config = {
     # The home-manager module of android-nixpkgs expects `pkgs.androidSdk` to be present.
     # One way of making it present is to use `android-nixpkgs.overlays.default`.
@@ -19,7 +18,7 @@ android-nixpkgs:
     # [2]: https://github.com/tadfisher/android-nixpkgs/blob/2026-04-15-stable/flake.nix#L58
     nixpkgs.overlays = [
       (final: prev: {
-        androidSdk = android-nixpkgs.sdk."${pkgs.stdenv.hostPlatform.system}";
+        androidSdk = inputs.android-nixpkgs.sdk."${pkgs.stdenv.hostPlatform.system}";
       })
     ];
 

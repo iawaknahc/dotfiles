@@ -1,5 +1,6 @@
-mcp-servers-nix: _: {
+{ inputs, ... }:
+{
   nixpkgs.overlays = [
-    mcp-servers-nix.overlays.default
+    inputs.mcp-servers-nix.overlays.default
   ];
 }

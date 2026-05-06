@@ -1,9 +1,12 @@
 {
+  inputs,
   hostname,
+  pkgs,
+  config,
+  ...
 }:
-{ pkgs, config, ... }:
 let
-  flake = "${../.}";
+  flake = "${inputs.self}";
 in
 {
   home.packages = with pkgs; [

@@ -1,7 +1,6 @@
-catppuccin:
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
-  imports = [ catppuccin.homeModules.catppuccin ];
+  imports = [ inputs.catppuccin.homeModules.catppuccin ];
   config = {
     # vivid set LS_COLORS
     # https://github.com/sharkdp/vivid

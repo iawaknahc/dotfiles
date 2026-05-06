@@ -1,5 +1,6 @@
-nur: _: {
+{ inputs, ... }:
+{
   nixpkgs.overlays = [
-    nur.overlays.default
+    inputs.nur.overlays.default
   ];
 }

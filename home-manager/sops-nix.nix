@@ -1,11 +1,11 @@
-sops-nix:
 {
+  inputs,
   pkgs,
   config,
   ...
 }:
 {
-  imports = [ sops-nix.homeManagerModules.sops ];
+  imports = [ inputs.sops-nix.homeManagerModules.sops ];
   config = {
     home.packages = with pkgs; [ sops ];
     sops.defaultSopsFile = ../secrets/secrets.yaml;

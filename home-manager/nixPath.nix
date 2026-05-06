@@ -1,7 +1,8 @@
 {
-  nixpkgs,
+  inputs,
+  ...
 }:
-_: {
+{
   # Set NIX_PATH
   # nix-darwin also offers a similar option but we do this in home-manager because
   # nix-darwin only supports a limited number of shells.
@@ -11,6 +12,6 @@ _: {
   nix.nixPath = [
     # Keep nixpkgs in NIX_PATH for compatibility with any other things depending on it.
     # We do not use it though.
-    "nixpkgs=${nixpkgs.outPath}"
+    "nixpkgs=${inputs.nixpkgs-mine.outPath}"
   ];
 }

@@ -26,23 +26,20 @@ in
           { pkgs, ... }:
           (inputs.home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
+            extraSpecialArgs = { inherit inputs hostname; };
             modules = [
               {
                 home.username = username;
                 home.homeDirectory = homeDirectory;
               }
-              ((import ../../home-manager/nixPath.nix) {
-                nixpkgs = inputs.nixpkgs-mine;
-              })
-              ((import ../../home-manager/nixd.nix) {
-                hostname = hostname;
-              })
-              ((import ../../home-manager/catppuccin.nix) inputs.catppuccin)
-              ((import ../../home-manager/nix-index-database.nix) inputs.nix-index-database)
-              ((import ../../home-manager/sops-nix.nix) inputs.sops-nix)
-              ((import ../../home-manager/mcp-servers-nix.nix) inputs.mcp-servers-nix)
-              ((import ../../home-manager/nur.nix) inputs.nur)
-              ((import ../../home-manager/android-nixpkgs.nix) inputs.android-nixpkgs)
+              ../../home-manager/nixPath.nix
+              ../../home-manager/nixd.nix
+              ../../home-manager/catppuccin.nix
+              ../../home-manager/nix-index-database.nix
+              ../../home-manager/sops-nix.nix
+              ../../home-manager/mcp-servers-nix.nix
+              ../../home-manager/nur.nix
+              ../../home-manager/android-nixpkgs.nix
               ../../home-manager
             ];
           })
