@@ -1,5 +1,4 @@
 STYLUA_FLAGS := "--verbose"
-STYLUA_ARGS := "./home-manager/neovim/config/nvim .hammerspoon"
 
 # List all recipes
 default:
@@ -14,7 +13,7 @@ setup: clean generate-emmyrc-json
 
 # Run all checkers
 check: harper codebook codespell test
-    stylua --check {{STYLUA_FLAGS}} {{STYLUA_ARGS}}
+    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check {{STYLUA_FLAGS}}
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
@@ -33,7 +32,7 @@ format: stylua nufmt
 
 # Run formatter `stylua`
 stylua:
-    stylua {{STYLUA_FLAGS}} {{STYLUA_ARGS}}
+    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua {{STYLUA_FLAGS}}
 
 # Run formatter `nufmt`. FIXME: This is no-op due to https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169
 nufmt:
@@ -41,11 +40,11 @@ nufmt:
 
 # Copy the current config of Alfred to here for git-diff
 alfred-rsync:
-    rsync --recursive --delete ~/alfred/ ./alfred
+    rsync --recursive --delete ~/alfred/ ./home-manager/alfred/alfred
 
 # Undo the effect of `alfred-rsync`
 alfred-clean:
-    git clean -fx ./alfred
+    git clean -fx ./home-manager/alfred/alfred
 
 # Run Nix unit tests
 test:
