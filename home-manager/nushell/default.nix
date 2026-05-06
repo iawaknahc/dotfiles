@@ -19,7 +19,7 @@
   # FIXME: nushell does not support home.sessionVariables.
   # See https://github.com/nix-community/home-manager/issues/4313
   programs.nushell.environmentVariables = config.home.sessionVariables;
-  programs.nushell.configFile.source = ../.config/nushell/config.nu;
+  programs.nushell.configFile.source = ./config/nushell/config.nu;
   programs.nushell.plugins = [
     # These are official plugins.
     pkgs.nushellPlugins.polars

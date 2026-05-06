@@ -66,7 +66,7 @@ _: {
     ./x-elvish.nix
     ./elvish.nix
     ./fish.nix
-    ./nushell.nix
+    ./nushell
     ./zsh.nix
     ./starship
     ./shell-completion.nix
