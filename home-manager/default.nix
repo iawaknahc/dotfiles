@@ -118,7 +118,7 @@ _: {
     ./ripgrep.nix
     ./tldr.nix
     ./gcloud.nix
-    ./gnuinfo.nix
+    ./gnuinfo
     ./btop.nix
     ./fastfetch.nix
     ./tailscale.nix

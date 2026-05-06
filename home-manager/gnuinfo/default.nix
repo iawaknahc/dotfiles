@@ -7,6 +7,6 @@
 
   home.file.".infokey" = {
     enable = true;
-    source = ../.infokey;
+    source = ./infokey;
   };
 }

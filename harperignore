@@ -1,7 +1,6 @@
 .codespellrc
 .gitignore
 .hammerspoon/Spoons/
-.infokey
 .styluaignore
 *.conf
 *.css
@@ -21,6 +20,7 @@ Gemfile.lock
 harperignore
 hs
 hs.1
+infokey
 Makefile
 vimrc
 words.txt
