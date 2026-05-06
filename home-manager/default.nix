@@ -36,7 +36,7 @@ _: {
 
     ./unicode
 
-    ./tiling-window-manager.nix
+    ./tiling-window-manager
 
     ./karabiner.nix
 

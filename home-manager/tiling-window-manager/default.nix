@@ -29,7 +29,7 @@ in
 
       local aerospace = "${config.home.profileDirectory}/bin/aerospace";
 
-      ${builtins.readFile ../.config/sketchybar/sketchybarrc.lua}
+      ${builtins.readFile ./config/sketchybar/sketchybarrc.lua}
     '';
   };
   launchd.agents.sketchybar = {
