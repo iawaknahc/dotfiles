@@ -19,8 +19,6 @@ in
               nixpkgs.hostPlatform = system;
               system.primaryUser = username;
             }
-            ../../nix-darwin/homebrew.nix
-            ../../nix-darwin/karabiner.nix
             ../../nix-darwin
           ];
         };
