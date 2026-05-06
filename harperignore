@@ -1,6 +1,6 @@
 .codespellrc
 .gitignore
-.hammerspoon/Spoons/
+Spoons/
 .styluaignore
 *.conf
 *.css

@@ -43,7 +43,7 @@
     hammerspoon
   ];
   home.file.".hammerspoon" = {
-    source = ../../.hammerspoon;
+    source = ./hammerspoon;
     recursive = true;
   };
 }
