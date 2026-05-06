@@ -32,14 +32,6 @@ in
                 home.username = username;
                 home.homeDirectory = homeDirectory;
               }
-              ../../home-manager/nixPath.nix
-              ../../home-manager/nixd.nix
-              ../../home-manager/catppuccin.nix
-              ../../home-manager/nix-index-database.nix
-              ../../home-manager/sops-nix.nix
-              ../../home-manager/mcp-servers-nix.nix
-              ../../home-manager/nur.nix
-              ../../home-manager/android-nixpkgs.nix
               ../../home-manager
             ];
           })

@@ -24,8 +24,15 @@ _: {
   };
   imports = [
     ./nix.nix
+    ./nixPath.nix
+    ./nixd.nix
+    ./nix-index-database.nix
+    ./nur.nix
+
+    ./android-nixpkgs.nix
 
     ./fonts.nix
+    ./catppuccin.nix
 
     ./unicode
 
@@ -114,7 +121,6 @@ _: {
     ./gnuinfo.nix
     ./btop.nix
     ./fastfetch.nix
-    ./claude
     ./tailscale.nix
     ./plain-text-accounting.nix
     ./timg.nix
@@ -124,9 +130,13 @@ _: {
     ./smb.nix
     ./obsidian.nix
 
+    ./mcp-servers-nix.nix
+    ./claude
+
     # PGP and friends
     ./pgp.nix
     ./ssh.nix
+    ./sops-nix.nix
 
     # Flutter is now installed per project with flake.nix
   ];
