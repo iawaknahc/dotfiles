@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  withSystem,
   ...
 }:
 let
@@ -21,9 +22,10 @@ in
       }:
       {
         # home-manager will try homeConfigurations.username@hostname, and then homeConfigurations.username.
-        "${username}@${hostname}" = (
-          inputs.home-manager.lib.homeManagerConfiguration {
-            pkgs = inputs.nixpkgs-mine.legacyPackages.${system}; # FIXME: This can be out-of-sync with `_module.args.pkgs`.
+        "${username}@${hostname}" = withSystem system (
+          { pkgs, ... }:
+          (inputs.home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
             modules = [
               {
                 home.username = username;
@@ -43,7 +45,7 @@ in
               ((import ../../home-manager/android-nixpkgs.nix) inputs.android-nixpkgs)
               ../../home-manager
             ];
-          }
+          })
         );
       }
     ))

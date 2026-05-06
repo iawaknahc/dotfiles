@@ -17,6 +17,6 @@
   perSystem =
     { system, ... }:
     {
-      _module.args.pkgs = inputs.nixpkgs-mine.legacyPackages.${system}; # FIXME: This can be out-of-sync with `homeManagerConfiguration { pkgs }`.
+      _module.args.pkgs = inputs.nixpkgs-mine.legacyPackages.${system};
     };
 }
