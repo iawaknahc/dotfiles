@@ -10,6 +10,6 @@
   '';
   xdg.configFile."starship.toml" = {
     enable = true;
-    source = ../.config/starship.toml;
+    source = ./config/starship.toml;
   };
 }

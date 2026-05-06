@@ -68,7 +68,7 @@ _: {
     ./fish.nix
     ./nushell.nix
     ./zsh.nix
-    ./starship.nix
+    ./starship
     ./shell-completion.nix
     ./direnv.nix
     ./atuin.nix
