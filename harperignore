@@ -1,6 +1,5 @@
 .codespellrc
 .gitignore
-Spoons/
 .styluaignore
 *.conf
 *.css
