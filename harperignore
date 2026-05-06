@@ -3,7 +3,6 @@
 .hammerspoon/Spoons/
 .infokey
 .styluaignore
-.vimrc
 *.conf
 *.css
 *.fish
@@ -23,4 +22,5 @@ harperignore
 hs
 hs.1
 Makefile
+vimrc
 words.txt

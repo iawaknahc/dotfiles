@@ -1,5 +1,4 @@
 .hammerspoon/Spoons/
-.vimrc
 *.conf
 *.hy
 *.nbt
@@ -17,3 +16,4 @@ hs.1
 justfile
 Makefile
 secrets/secrets.yaml
+vimrc

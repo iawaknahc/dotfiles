@@ -105,7 +105,7 @@ _: {
     ./zig.nix
 
     # Text editors.
-    ./vim.nix
+    ./vim
     ./neovim.nix
 
     # Individual programs that require configurations.
