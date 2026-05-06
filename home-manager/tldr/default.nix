@@ -10,6 +10,6 @@
 
   xdg.configFile."tealdeer/pages" = {
     recursive = true;
-    source = ../.config/tealdeer/pages;
+    source = ./config/tealdeer/pages;
   };
 }

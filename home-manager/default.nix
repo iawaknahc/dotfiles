@@ -116,7 +116,7 @@ _: {
     ./fd.nix
     ./fzf.nix
     ./ripgrep.nix
-    ./tldr.nix
+    ./tldr
     ./gcloud.nix
     ./gnuinfo
     ./btop.nix
