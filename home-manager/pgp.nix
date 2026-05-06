@@ -52,7 +52,14 @@ in
     verify-options = "show-uid-validity,show-unusable-uids";
   };
 
-  home.file."${config.programs.gpg.homedir}/dirmngr.conf".source = ../.gnupg/dirmngr.conf;
+  home.file."${config.programs.gpg.homedir}/dirmngr.conf".text = ''
+    # The keyserver hkp://pool.sks-keyservers.net is both IPv4 and IPv6.
+    # The DNS resolver used by dirmngr seems to have problem with such server.
+    # The first workaround is to use IPv4 only keyserver while
+    # the second one is --standard-resolver.
+    # However, --standard-resolver claims that it is for debugging only.
+    keyserver hkp://ipv4.pool.sks-keyservers.net
+  '';
   home.file."${config.programs.gpg.homedir}/gpg-agent.conf".text = ''
     # pinentry-program accepts only absolute path.
     # See https://dev.gnupg.org/T4588
