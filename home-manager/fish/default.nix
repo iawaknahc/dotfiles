@@ -35,6 +35,6 @@
   xdg.configFile."fish/functions" = {
     enable = true;
     recursive = true;
-    source = ../.config/fish/functions;
+    source = ./config/fish/functions;
   };
 }
