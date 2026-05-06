@@ -125,5 +125,5 @@
   #        it works by providing a modified terminfo of xterm-256color.
   programs.tmux.terminal = "tmux-256color";
 
-  programs.tmux.extraConfig = builtins.readFile ../.config/tmux/tmux.conf;
+  programs.tmux.extraConfig = builtins.readFile ./config/tmux/tmux.conf;
 }

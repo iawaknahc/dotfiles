@@ -50,7 +50,7 @@ _: {
 
     # Terminals.
     ./terminal.nix
-    ./tmux.nix
+    ./tmux
     ./kitty.nix
     ./alacritty.nix
     ./wezterm.nix
