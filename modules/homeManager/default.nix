@@ -27,7 +27,6 @@ _: {
     ./nixPath.nix
     ./nixd.nix
     ./nix-index-database.nix
-    ./nur.nix
 
     ./android-nixpkgs.nix
 

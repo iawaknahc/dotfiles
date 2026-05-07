@@ -20,8 +20,12 @@
     {
       _module.args.pkgs = import inputs.nixpkgs-mine {
         inherit system;
-        # Apply the overlay `default` exposed by this flake.
-        overlays = [ self.overlays.default ];
+        overlays = [
+          inputs.nur.overlays.default
+
+          # Apply the overlay `default` exposed by this flake.
+          self.overlays.default
+        ];
       };
     };
 }
