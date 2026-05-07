@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import sqlite3
 import sys
@@ -29,19 +31,21 @@ class Annotation:
         return codepoints_to_cps(self.codepoints)
 
 
-def get_repertoire(tree: ET.ElementTree) -> ET.Element:
+def get_repertoire(tree: ET.ElementTree[ET.Element[str]]) -> ET.Element[str]:
     el = tree.find("{http://www.unicode.org/ns/2003/ucd/1.0}repertoire")
     assert el is not None
     return el
 
 
-def get_named_sequences(tree: ET.ElementTree) -> list[ET.Element]:
+def get_named_sequences(tree: ET.ElementTree[ET.Element[str]]) -> list[ET.Element[str]]:
     els = tree.findall(".//{http://www.unicode.org/ns/2003/ucd/1.0}named-sequence")
     assert len(els) > 100
     return els
 
 
-def get_standardized_variants(tree: ET.ElementTree) -> list[ET.Element]:
+def get_standardized_variants(
+    tree: ET.ElementTree[ET.Element[str]],
+) -> list[ET.Element[str]]:
     els = tree.findall(
         ".//{http://www.unicode.org/ns/2003/ucd/1.0}standardized-variant"
     )
@@ -49,7 +53,7 @@ def get_standardized_variants(tree: ET.ElementTree) -> list[ET.Element]:
     return els
 
 
-def get_annotations(tree: ET.ElementTree) -> list[ET.Element]:
+def get_annotations(tree: ET.ElementTree[ET.Element[str]]) -> list[ET.Element[str]]:
     els = tree.findall(".//annotation[@type='tts']")
     assert len(els) > 100
     return els
@@ -71,7 +75,7 @@ def cps_to_codepoints(cps: str) -> list[int]:
     return [int(cp, base=16) for cp in cps.strip().split(" ")]
 
 
-def get_codepoint_name(codepoint: int, el: ET.Element) -> str:
+def get_codepoint_name(codepoint: int, el: ET.Element[str]) -> str:
     na = el.attrib.get("na")
     na1 = el.attrib.get("na1")
     name_alias = el.find(
@@ -198,7 +202,7 @@ def parse_emoji_zwj_sequences_txt(
 
 
 def expand_char(
-    el: ET.Element, get_tts: Callable[[list[int]], str | None]
+    el: ET.Element[str], get_tts: Callable[[list[int]], str | None]
 ) -> list[CodepointSequence]:
     try:
         notation = el.attrib["cp"]
@@ -218,7 +222,7 @@ def expand_char(
 
 
 def process_repertoire(
-    repertoire: ET.Element, get_tts: Callable[[list[int]], str | None]
+    repertoire: ET.Element[str], get_tts: Callable[[list[int]], str | None]
 ) -> list[CodepointSequence]:
     codepoints: list[CodepointSequence] = []
     for el in repertoire:
@@ -238,7 +242,7 @@ def process_repertoire(
     return codepoints
 
 
-def process_named_sequences(els: list[ET.Element]) -> list[CodepointSequence]:
+def process_named_sequences(els: list[ET.Element[str]]) -> list[CodepointSequence]:
     named_sequences: list[CodepointSequence] = []
     for el in els:
         name = el.attrib["name"]
@@ -250,7 +254,7 @@ def process_named_sequences(els: list[ET.Element]) -> list[CodepointSequence]:
 
 
 def process_standardized_variants(
-    els: list[ET.Element],
+    els: list[ET.Element[str]],
     get_codepoint_by_cps: Callable[[str], CodepointSequence],
 ) -> list[CodepointSequence]:
     standardized_variants: list[CodepointSequence] = []
@@ -277,7 +281,7 @@ def process_standardized_variants(
 
 
 def process_annotations(
-    els: list[ET.Element],
+    els: list[ET.Element[str]],
 ) -> list[Annotation]:
     annotations: list[Annotation] = []
     for el in els:
