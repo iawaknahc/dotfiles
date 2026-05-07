@@ -20,6 +20,10 @@
       packages.EmmyLua_spoon = pkgs.callPackage ../../packages/EmmyLua_spoon.nix { };
 
       packages.py2hy = pkgs.python313Packages.callPackage ../../packages/py2hy.nix { };
+
+      packages.tree-sitter-numbat = pkgs.callPackage ../../packages/tree-sitter-numbat.nix { };
+
+      packages.nvim-colors = pkgs.callPackage ../../packages/nvim-colors.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -42,6 +46,10 @@
         EmmyLua_spoon = config.packages.EmmyLua_spoon;
 
         py2hy = config.packages.py2hy;
+
+        tree-sitter-numbat = config.packages.tree-sitter-numbat;
+
+        nvim-colors = config.packages.nvim-colors;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";

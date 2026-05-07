@@ -50,16 +50,7 @@
       _:
       nvim-treesitter.allGrammars
       ++ [
-        (pkgs.tree-sitter.buildGrammar {
-          language = "numbat";
-          version = "2026-04-13";
-          src = pkgs.fetchFromGitHub {
-            owner = "irevoire";
-            repo = "tree-sitter-numbat";
-            rev = "4d9ce55767f7cc2a0ef97dd070de7e4519920607";
-            hash = "sha256-eNr46I8YexE5rFIDoqmlivec9H6RB3tt5/8R6age5i4=";
-          };
-        })
+        pkgs.tree-sitter-numbat
       ]
     ))
 
@@ -126,18 +117,7 @@
     nvim-treesitter-context
     # Show colors.
     {
-      plugin = (
-        pkgs.vimUtils.buildVimPlugin {
-          pname = "nvim-colors";
-          version = "2026-04-20";
-          src = pkgs.fetchFromGitHub {
-            owner = "iawaknahc";
-            repo = "nvim-colors";
-            rev = "5d58b7ff7a53634a10a65c3bdd2f84b9a3447dbf";
-            hash = "sha256-9Zm2PJOrJgvjyaVzs7wfnISJ02lky9RSMrlmtlJUSac=";
-          };
-        }
-      );
+      plugin = pkgs.nvim-colors;
     }
     # Rainbow delimiters for Lisp
     rainbow-delimiters-nvim
