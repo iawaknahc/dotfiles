@@ -99,3 +99,8 @@ update-UTS58-linkification *FLAGS:
         --subpackage LinkFormattingTest_txt \
         --subpackage LinkTerm_txt \
         --flake --version {{FLAGS}}
+
+# Update Nu plugins to latest main. You will want to run this when Nushell has a new release.
+update-nu-plugins:
+    nix-update nu_plugin_dt --flake --version branch=main
+    nix-update nu_plugin_regex --flake --version branch=main

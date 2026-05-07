@@ -9,6 +9,9 @@
       packages.UTS46-idna = pkgs.callPackage ../../packages/UTS46-idna.nix { };
       packages.UTS51-emoji = pkgs.callPackage ../../packages/UTS51-emoji.nix { };
       packages.UTS58-linkification = pkgs.callPackage ../../packages/UTS58-linkification.nix { };
+
+      packages.nu_plugin_dt = pkgs.callPackage ../../packages/nu_plugin_dt.nix { };
+      packages.nu_plugin_regex = pkgs.callPackage ../../packages/nu_plugin_regex.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -22,6 +25,9 @@
         UTS46-idna = config.packages.UTS46-idna;
         UTS51-emoji = config.packages.UTS51-emoji;
         UTS58-linkification = config.packages.UTS58-linkification;
+
+        nu_plugin_dt = config.packages.nu_plugin_dt;
+        nu_plugin_regex = config.packages.nu_plugin_regex;
       }
     );
 }
