@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, self, ... }:
 {
   systems = [ "aarch64-darwin" ];
 
@@ -12,11 +12,16 @@
     ./darwinConfigurations.nix
     ./nixosConfigurations.nix
     ./tests.nix
+    ./packages.nix
   ];
 
   perSystem =
     { system, ... }:
     {
-      _module.args.pkgs = inputs.nixpkgs-mine.legacyPackages.${system};
+      _module.args.pkgs = import inputs.nixpkgs-mine {
+        inherit system;
+        # Apply the overlay `default` exposed by this flake.
+        overlays = [ self.overlays.default ];
+      };
     };
 }

@@ -57,3 +57,45 @@ generate-emmyrc-json:
 # Update `flake.lock` without touching `android-nixpkgs`
 flake-update:
     nix flake metadata --json | jq -r '.locks.nodes.root.inputs | keys | map(select(. != "android-nixpkgs")) | .[]' | xargs nix flake update
+
+# Update all Unicode Nix packages
+update-unicode *FLAGS:
+    just update-UAX44-ucd {{FLAGS}}
+    just update-UTS39-security {{FLAGS}}
+    just update-UTS46-idna {{FLAGS}}
+    just update-UTS51-emoji {{FLAGS}}
+    just update-UTS58-linkification {{FLAGS}}
+
+# Update the Nix package `UAX44-ucd`
+update-UAX44-ucd *FLAGS:
+    nix-update UAX44-ucd --flake --version {{FLAGS}}
+
+# Update the Nix package `UTS39-security`
+update-UTS39-security *FLAGS:
+    nix-update UTS39-security --flake --version {{FLAGS}}
+
+# Update the Nix package `UTS46-idna`
+update-UTS46-idna *FLAGS:
+    nix-update UTS46-idna \
+        --subpackage Idna2008_txt \
+        --subpackage IdnaMappingTable_txt \
+        --subpackage IdnaTestV2_txt \
+        --flake --version {{FLAGS}}
+
+# Update the Nix package `UTS51-emoji`
+update-UTS51-emoji *FLAGS:
+    nix-update UTS51-emoji \
+        --subpackage emoji-sequences_txt \
+        --subpackage emoji-test_txt \
+        --subpackage emoji-zwj-sequences_txt \
+        --flake --version {{FLAGS}}
+
+# Update the Nix package `UTS58-linkification`
+update-UTS58-linkification *FLAGS:
+    nix-update UTS58-linkification \
+        --subpackage LinkBracket_txt \
+        --subpackage LinkDetectionTest_txt \
+        --subpackage LinkEmail_txt \
+        --subpackage LinkFormattingTest_txt \
+        --subpackage LinkTerm_txt \
+        --flake --version {{FLAGS}}
