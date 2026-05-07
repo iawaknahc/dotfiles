@@ -12,6 +12,8 @@
 
       packages.nu_plugin_dt = pkgs.callPackage ../../packages/nu_plugin_dt.nix { };
       packages.nu_plugin_regex = pkgs.callPackage ../../packages/nu_plugin_regex.nix { };
+
+      packages.alfred-workflow-switch-appearance = pkgs.callPackage ../../packages/alfred-workflow-switch-appearance.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -28,6 +30,8 @@
 
         nu_plugin_dt = config.packages.nu_plugin_dt;
         nu_plugin_regex = config.packages.nu_plugin_regex;
+
+        alfred-workflow-switch-appearance = config.packages.alfred-workflow-switch-appearance;
       }
     );
 }

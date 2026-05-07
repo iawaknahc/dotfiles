@@ -100,6 +100,10 @@ update-UTS58-linkification *FLAGS:
         --subpackage LinkTerm_txt \
         --flake --version {{FLAGS}}
 
+# Update the Nix package `alfred-workflow-switch-appearance`
+update-alfred-workflow-switch-appearance *FLAGS:
+    nix-update alfred-workflow-switch-appearance --flake --version {{FLAGS}}
+
 # Update Nu plugins to latest main. You will want to run this when Nushell has a new release.
 update-nu-plugins:
     nix-update nu_plugin_dt --flake --version branch=main
