@@ -116,7 +116,7 @@ def parse_ucd_line(line: str) -> list[str] | None:
 def parse_emoji_sequences_txt(
     path_to_file: str, get_tts: Callable[[list[int]], str | None]
 ) -> list[CodepointSequence]:
-    emoji_sequences = []
+    emoji_sequences: list[CodepointSequence] = []
     with open(path_to_file, "r") as f:
         for line in f:
             fields = parse_ucd_line(line)
@@ -154,7 +154,7 @@ def parse_emoji_variation_sequences_txt(
     path_to_file: str,
     get_codepoint_by_cps: Callable[[str], CodepointSequence],
 ) -> list[CodepointSequence]:
-    emoji_variation_sequences = []
+    emoji_variation_sequences: list[CodepointSequence] = []
     with open(path_to_file, "r") as f:
         for line in f:
             fields = parse_ucd_line(line)
@@ -179,7 +179,7 @@ def parse_emoji_zwj_sequences_txt(
     path_to_file: str,
     get_tts: Callable[[list[int]], str | None],
 ) -> list[CodepointSequence]:
-    emoji_zwj_sequences = []
+    emoji_zwj_sequences: list[CodepointSequence] = []
     with open(path_to_file, "r") as f:
         for line in f:
             fields = parse_ucd_line(line)
@@ -207,11 +207,10 @@ def expand_char(
         tts = get_tts([cp])
         return [CodepointSequence(codepoints=[cp], name=name, tts=tts)]
     except KeyError:
-        codepoints = []
+        codepoints: list[CodepointSequence] = []
         first_cp = notation_to_codepoint(el.attrib["first-cp"])
         last_cp = notation_to_codepoint(el.attrib["last-cp"])
         for i in range(first_cp, last_cp + 1):
-            notation = codepoint_to_notation(i)
             name = get_codepoint_name(i, el)
             tts = get_tts([i])
             codepoints.append(CodepointSequence(codepoints=[i], name=name, tts=tts))
@@ -221,7 +220,7 @@ def expand_char(
 def process_repertoire(
     repertoire: ET.Element, get_tts: Callable[[list[int]], str | None]
 ) -> list[CodepointSequence]:
-    codepoints = []
+    codepoints: list[CodepointSequence] = []
     for el in repertoire:
         tag = el.tag
         if tag == "{http://www.unicode.org/ns/2003/ucd/1.0}char":
@@ -240,7 +239,7 @@ def process_repertoire(
 
 
 def process_named_sequences(els: list[ET.Element]) -> list[CodepointSequence]:
-    named_sequences = []
+    named_sequences: list[CodepointSequence] = []
     for el in els:
         name = el.attrib["name"]
         cps = el.attrib["cps"]
@@ -253,8 +252,8 @@ def process_named_sequences(els: list[ET.Element]) -> list[CodepointSequence]:
 def process_standardized_variants(
     els: list[ET.Element],
     get_codepoint_by_cps: Callable[[str], CodepointSequence],
-):
-    standardized_variants = []
+) -> list[CodepointSequence]:
+    standardized_variants: list[CodepointSequence] = []
     for el in els:
         cps = el.attrib["cps"]
         desc = el.attrib["desc"]
@@ -280,7 +279,7 @@ def process_standardized_variants(
 def process_annotations(
     els: list[ET.Element],
 ) -> list[Annotation]:
-    annotations = []
+    annotations: list[Annotation] = []
     for el in els:
         cp_str = el.attrib["cp"]
         tts = el.text or ""
@@ -297,14 +296,14 @@ def insert_codepoint_sequences(
     ]
 
     with conn:
-        conn.execute("""
+        _ = conn.execute("""
             CREATE TABLE codepoint_sequence (
                 cps        TEXT UNIQUE NOT NULL,
                 name       TEXT NOT NULL,
                 tts        TEXT
             );
         """)
-        conn.execute("""
+        _ = conn.execute("""
             CREATE VIRTUAL TABLE codepoint_sequence_trigram USING fts5(
                 cps,
                 name,
@@ -312,7 +311,7 @@ def insert_codepoint_sequences(
                 tokenize = "trigram"
             );
         """)
-        conn.execute("""
+        _ = conn.execute("""
             CREATE VIRTUAL TABLE codepoint_sequence_porter USING fts5(
                 cps,
                 name,
@@ -320,19 +319,19 @@ def insert_codepoint_sequences(
                 tokenize = "porter unicode61"
             );
         """)
-        conn.executemany(
+        _ = conn.executemany(
             """
             INSERT INTO codepoint_sequence (cps, name, tts) VALUES (?, ?, ?);
         """,
             codepoint_sequence_values,
         )
-        conn.executemany(
+        _ = conn.executemany(
             """
             INSERT INTO codepoint_sequence_trigram (cps, name, tts) VALUES (?, ?, ?);
             """,
             codepoint_sequence_values,
         )
-        conn.executemany(
+        _ = conn.executemany(
             """
             INSERT INTO codepoint_sequence_porter (cps, name, tts) VALUES (?, ?, ?);
             """,
