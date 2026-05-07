@@ -6,6 +6,7 @@ augroup
 autocmd
 autotrigger
 axdom
+basedpyright
 basenc
 bashls
 bea
@@ -200,6 +201,7 @@ prolog
 pubin
 pubout
 pumheight
+pyrefly
 pyright
 python3
 qflist

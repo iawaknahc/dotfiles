@@ -132,17 +132,22 @@ in
     c.TerminalInteractiveShell.highlighting_style = "catppuccin-mocha"
   '';
 
-  home.packages = [
-    pkgs.mypython
-    pkgs.uv
-    pkgs.ruff
-    pkgs.pyright
+  home.packages = with pkgs; [
+    mypython
+
+    uv
+    ruff
     pkgs."python${pythonVersion}Packages".debugpy
+
+    pyright
+    basedpyright
+    ty
+    pyrefly
 
     # Jupyter kernels
     # Invoking iruby will immediately exit with 2.
     # jupyter console --kernel=ruby is fine though.
-    pkgs.iruby
+    iruby
 
     # import "fmt"
     # fmt.<Tab> and it will crash.
