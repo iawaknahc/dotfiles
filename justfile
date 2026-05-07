@@ -12,7 +12,10 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers
-check: harper codebook codespell test
+check: harper codebook codespell test stylua-check pyright basedpyright
+
+# Run checker `stylua`
+stylua-check:
     find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check {{STYLUA_FLAGS}}
 
 # Run checker `harper-cli-lint`
@@ -27,11 +30,19 @@ codebook *FLAGS:
 codespell *FLAGS:
     fd --hidden --type file --ignore-file codespellignore | xargs codespell {{FLAGS}}
 
+# Run checker `pyright`
+pyright:
+    pyright
+
+# Run checker `basedpyright`
+basedpyright:
+    basedpyright
+
 # Run all formatters
-format: stylua nufmt
+format: stylua-fmt nufmt
 
 # Run formatter `stylua`
-stylua:
+stylua-fmt:
     find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua {{STYLUA_FLAGS}}
 
 # Run formatter `nufmt`. FIXME: This is no-op due to https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169

@@ -57,7 +57,8 @@ vim.lsp.enable("markdown_oxide")
 vim.lsp.enable("nil_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("nushell")
-vim.lsp.enable("pyrefly")
+-- FIXME: Figure how to make pyrefly work.
+-- vim.lsp.enable("pyrefly")
 vim.lsp.enable("pyright")
 vim.lsp.enable("rust_analyzer")
 vim.lsp.enable("sourcekit")
@@ -65,7 +66,11 @@ vim.lsp.enable("sqls")
 vim.lsp.enable("stylua")
 vim.lsp.enable("tailwindcss")
 vim.lsp.enable("taplo")
-vim.lsp.enable("ty")
+-- FIXME: The suppression comment of ty is incompatible with that of basedpyright
+-- 1. Both of them have to be on the same line.
+-- 2. basedpyright by default does not respect `# type: ignore`, so we cannot just use `# type: ignore`.
+-- 3. ty supports `# type: ignore[ty:rule1]` but basedpyright does not.
+-- vim.lsp.enable("ty")
 vim.lsp.enable("typos_lsp")
 vim.lsp.enable("vtsls")
 vim.lsp.enable("yamlls")
