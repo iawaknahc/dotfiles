@@ -100,15 +100,10 @@ update-UTS58-linkification *FLAGS:
         --subpackage LinkTerm_txt \
         --flake --version {{FLAGS}}
 
-# Update the Nix package `EmmyLua_spoon`
-update-EmmyLua_spoon *FLAGS:
-    nix-update EmmyLua_spoon --flake --version {{FLAGS}}
-
-# Update the Nix package `alfred-workflow-switch-appearance`
-update-alfred-workflow-switch-appearance *FLAGS:
-    nix-update alfred-workflow-switch-appearance --flake --version {{FLAGS}}
-
-# Update Nu plugins to latest main. You will want to run this when Nushell has a new release.
-update-nu-plugins:
+# Update trivial packages to their latest version
+update-trivial-packages:
+    nix-update EmmyLua_spoon --flake --version branch=master
     nix-update nu_plugin_dt --flake --version branch=main
     nix-update nu_plugin_regex --flake --version branch=main
+    nix-update alfred-workflow-switch-appearance --flake
+    nix-update py2hy --flake

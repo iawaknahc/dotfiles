@@ -18,6 +18,8 @@
           { };
 
       packages.EmmyLua_spoon = pkgs.callPackage ../../packages/EmmyLua_spoon.nix { };
+
+      packages.py2hy = pkgs.python313Packages.callPackage ../../packages/py2hy.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -38,6 +40,8 @@
         alfred-workflow-switch-appearance = config.packages.alfred-workflow-switch-appearance;
 
         EmmyLua_spoon = config.packages.EmmyLua_spoon;
+
+        py2hy = config.packages.py2hy;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";
