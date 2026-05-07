@@ -1,13 +1,32 @@
+from __future__ import annotations
+
 import json
 import os
 import subprocess
 import sys
-from urllib.parse import urlsplit, urljoin, quote
+from typing import Literal, TypedDict, cast
+from urllib.parse import quote, urljoin, urlsplit
 
 import pyperclip
 
 
-def to_item(url_str: str, subtitle: str):
+class Item(TypedDict):
+    title: str
+    type: Literal["default"]
+    subtitle: str
+    arg: str
+
+
+class Browser(TypedDict):
+    name: str
+    url: str | None
+
+
+class Browsers(TypedDict):
+    browsers: list[Browser]
+
+
+def to_item(url_str: str, subtitle: str) -> Item | None:
     if url_str == "":
         return None
 
@@ -32,7 +51,7 @@ def to_item(url_str: str, subtitle: str):
 
 
 def main():
-    items = []
+    items = cast(list[Item], [])
 
     arg = ""
     if len(sys.argv) > 1:
@@ -47,7 +66,7 @@ def main():
             items.append(arg_item)
     else:
         clipboard = pyperclip.paste()
-        if clipboard is None:
+        if clipboard is None:  # pyright: ignore [reportUnnecessaryComparison]
             clipboard = ""
         else:
             clipboard = clipboard.strip()
@@ -66,9 +85,9 @@ def main():
                 text=True,
                 check=True,
             )
-            browsers_output = json.loads(process.stdout)
-        except:
-            browsers_output = {"browsers": []}
+            browsers_output = cast(Browsers, json.loads(process.stdout))
+        except Exception:
+            browsers_output: Browsers = {"browsers": []}
 
         for b in browsers_output["browsers"]:
             name = b["name"]

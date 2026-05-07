@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 import re
 from pathlib import PurePath
+from typing import cast
 from urllib.parse import (
     quote_plus,
     unquote_plus,
@@ -53,14 +56,14 @@ def main():
         description="Resolve a Google Map URL to a JSON document with `name`, `url`, and `coordinates`.",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "url",
         help="The Google Map URL",
     )
 
     args = parser.parse_args()
 
-    url_str = https_maps_app_goo_gl(args.url)
+    url_str = https_maps_app_goo_gl(cast(str, args.url))
     url_str = https_www_google_com_maps_place(url_str)
     print(url_str)
 

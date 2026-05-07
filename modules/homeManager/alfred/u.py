@@ -5,7 +5,7 @@ import sys
 from contextlib import closing
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Self
+from typing import Self, cast, override
 
 
 def codepoint_to_notation(codepoint: int) -> str:
@@ -16,7 +16,7 @@ def preprocess_query(argv: list[str]) -> list[str]:
     query = " ".join(argv).upper()
     parts = [part.strip() for part in query.split(" ")]
     parts = [part for part in parts if part != ""]
-    normalized = []
+    normalized = cast(list[str], [])
     for part in parts:
         # We do not want `latin letter a` to be rewritten into `latin letter 000A`.
         # Thus, we only rewrite when the part is at least 2 characters.
@@ -37,7 +37,7 @@ def prepare_plain_query(query: list[str]) -> str:
 
 
 def prepare_fts5_query(query: list[str]) -> str:
-    escaped = []
+    escaped = cast(list[str], [])
     for term in query:
         # Escape " by doubling it
         # See https://www.sqlite.org/fts5.html#fts5_strings
@@ -81,10 +81,14 @@ class CodepointSequence:
         codepoints = cps_to_codepoints(cps)
         return cls(codepoints=codepoints, name=name, tts=tts)
 
+    @override
     def __hash__(self):
         return hash((self.cps,))
 
-    def __eq__(self, other):
+    @override
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, CodepointSequence):
+            return False
         return self.cps == other.cps
 
     def to_item(self):
@@ -136,44 +140,52 @@ def error():
 
 def get_matches(conn: sqlite3.Connection, query: list[str]) -> list[CodepointSequence]:
     # We assume the iteration order of dict is insertion order.
-    matches = {}
+    matches = cast(dict[CodepointSequence, CodepointSequence], {})
 
     query_plain = prepare_plain_query(query)
 
-    exact_match = conn.execute(
-        """
+    exact_match = cast(
+        tuple[str, str, str | None] | None,
+        conn.execute(
+            """
         SELECT cps, name, tts FROM codepoint_sequence
         WHERE cps = ?
         """,
-        (query_plain,),
-    ).fetchone()
+            (query_plain,),
+        ).fetchone(),
+    )
     if exact_match is not None:
         cs = CodepointSequence.from_sqlite3(exact_match)
         matches[cs] = cs
 
     trigram = use_trigram(query)
-    rows = []
     query_fts5 = prepare_fts5_query(query)
     if trigram:
-        rows = conn.execute(
-            """
+        rows = cast(
+            list[tuple[str, str, str | None]],
+            conn.execute(
+                """
             SELECT cps, name, tts FROM codepoint_sequence_trigram
             WHERE codepoint_sequence_trigram MATCH ?
             ORDER BY rank
             LIMIT 10
             """,
-            (query_fts5,),
-        ).fetchall()
+                (query_fts5,),
+            ).fetchall(),
+        )
     else:
-        rows = conn.execute(
-            """
+        rows = cast(
+            list[tuple[str, str, str | None]],
+            conn.execute(
+                """
             SELECT cps, name, tts FROM codepoint_sequence_porter
             WHERE codepoint_sequence_porter MATCH ?
             ORDER BY rank
             LIMIT 10
             """,
-            (query_fts5,),
-        ).fetchall()
+                (query_fts5,),
+            ).fetchall(),
+        )
 
     for row in rows:
         cs = CodepointSequence.from_sqlite3(row)
@@ -187,12 +199,7 @@ def get_matches(conn: sqlite3.Connection, query: list[str]) -> list[CodepointSeq
 
 
 def main():
-    query = ""
     query = preprocess_query(sys.argv[1:])
-
-    if query == "":
-        error()
-        return
 
     sqlite3_database_file = os.path.expanduser(
         "~/.nix-profile/share/unicode/unicode.sqlite3"
@@ -214,7 +221,7 @@ def main():
         bytes_ = json.dumps({"items": items}, ensure_ascii=False).encode(
             "utf-8", errors="surrogatepass"
         )
-        sys.stdout.buffer.write(bytes_)
+        _ = sys.stdout.buffer.write(bytes_)
 
 
 main()

@@ -8,7 +8,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import Literal, TypedDict, cast
 from zoneinfo import ZoneInfo
 
 import pytz
@@ -17,8 +17,14 @@ import tzlocal
 FZF = os.environ.get("FZF", "fzf")
 
 
+class Item(TypedDict):
+    title: str
+    type: Literal["default"]
+    arg: str
+
+
 local_timezone = tzlocal.get_localzone()
-if not isinstance(local_timezone, ZoneInfo):
+if not isinstance(local_timezone, ZoneInfo):  # pyright: ignore [reportUnnecessaryIsInstance]
     raise ValueError("This script can only work with ZoneInfo")
 
 
@@ -72,7 +78,7 @@ class Timezone:
 
         return f"{self.name} {self.alpha2} {self.region_name_in_english} {dt.strftime('%Z')} {dt.strftime('UTC%z')} {format_timedelta(relative_offset)}"
 
-    def as_alfred_item(self, local_dt: datetime) -> Dict:
+    def as_alfred_item(self, local_dt: datetime) -> Item:
         dt = local_dt.astimezone(self.tzinfo)
 
         local_dt_utcoffset = local_dt.utcoffset()
@@ -83,7 +89,7 @@ class Timezone:
 
         relative_offset = dt_utcoffset - local_dt_utcoffset
 
-        item = {
+        item: Item = {
             "title": f"{self.name}, {self.alpha2}, {self.region_name_in_english}, {dt.strftime('%Z')}, {dt.strftime('UTC%z')} [{format_timedelta(relative_offset)} from Local]",
             "type": "default",
             "arg": self.name,
@@ -109,8 +115,8 @@ def format_timedelta(td: timedelta) -> str:
     return f"-{format_timedelta_without_sign(td)}"
 
 
-def datetime_to_items(local_dt: datetime, query: str):
-    out = []
+def datetime_to_items(local_dt: datetime, query: str) -> list[Item]:
+    out = cast(list[Item], [])
     assert local_dt.tzinfo is not None
 
     if query == "":
@@ -136,7 +142,7 @@ def datetime_to_items(local_dt: datetime, query: str):
         for line in lines:
             timezone = Timezone.restore_from_line(line)
             out.append(timezone.as_alfred_item(local_dt))
-    except:
+    except Exception:
         pass
 
     return out

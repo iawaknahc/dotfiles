@@ -1,31 +1,40 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import json
 import sys
-import urllib.request
 from pathlib import Path
+from typing import TypedDict, cast
+
+import requests
 
 URL = "https://open.er-api.com/v6/latest/USD"
 
+
+class Response(TypedDict):
+    rates: dict[str, float]
+    time_last_update_utc: str
+    provider: str
+
+
 if not sys.stdin.isatty():
     try:
-        data = json.load(sys.stdin)
+        data = cast(Response, json.load(sys.stdin))
     except (json.JSONDecodeError, ValueError):
         # When run by launchd, stdin may be /dev/null
-        with urllib.request.urlopen(URL) as resp:
-            data = json.load(resp)
+        data = cast(Response, requests.get(URL).json())
 else:
-    with urllib.request.urlopen(URL) as resp:
-        data = json.load(resp)
+    data = cast(Response, requests.get(URL).json())
 
 cache = Path.home() / ".local/state/numbat/er-api-v6-usd.json"
 cache.parent.mkdir(parents=True, exist_ok=True)
-cache.write_text(json.dumps(data, indent=2))
+_ = cache.write_text(json.dumps(data, indent=2))
 
 rates = data["rates"]
 
-lines = []
-lines.append(f'# Generated on {data["time_last_update_utc"]} from {data["provider"]}')
+lines = cast(list[str], [])
+lines.append(f"# Generated on {data['time_last_update_utc']} from {data['provider']}")
 lines.append("dimension Money")
 lines.append("")
 lines.append('@name("USD")')

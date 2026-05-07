@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 import os
 import sys
+from typing import Literal, cast
 from urllib.parse import quote_from_bytes, unquote_to_bytes
 
 
@@ -22,14 +25,14 @@ def main():
     )
 
     g1 = parser.add_mutually_exclusive_group()
-    g1.add_argument(
+    _ = g1.add_argument(
         "-e",
         "--encode",
         help="Encode",
         action="store_true",
         default=True,
     )
-    g1.add_argument(
+    _ = g1.add_argument(
         "-d",
         "--decode",
         help="Decode",
@@ -38,40 +41,40 @@ def main():
     )
 
     g2 = parser.add_mutually_exclusive_group()
-    g2.add_argument(
+    _ = g2.add_argument(
         "-u",
         "--unspecified",
         help="Encode non-unreserved characters\n"
-        "https://datatracker.ietf.org/doc/html/rfc3986#section-2.3",
+        + "https://datatracker.ietf.org/doc/html/rfc3986#section-2.3",
         action="store_true",
         default=True,
     )
-    g2.add_argument(
+    _ = g2.add_argument(
         "-p",
         "--path",
         help="Encode path component\n"
-        "https://datatracker.ietf.org/doc/html/rfc3986#section-3.3",
+        + "https://datatracker.ietf.org/doc/html/rfc3986#section-3.3",
         action="store_true",
         default=argparse.SUPPRESS,
     )
-    g2.add_argument(
+    _ = g2.add_argument(
         "-q",
         "--query",
         help="Encode x-www-form-urlencoded\n"
-        "https://url.spec.whatwg.org/#application/x-www-form-urlencoded",
+        + "https://url.spec.whatwg.org/#application/x-www-form-urlencoded",
         action="store_true",
         default=argparse.SUPPRESS,
     )
-    g2.add_argument(
+    _ = g2.add_argument(
         "-f",
         "--fragment",
         help="Encode fragment\n"
-        "https://datatracker.ietf.org/doc/html/rfc3986#section-3.5",
+        + "https://datatracker.ietf.org/doc/html/rfc3986#section-3.5",
         action="store_true",
         default=argparse.SUPPRESS,
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "input",
         help="The string or byte sequence to be encoded or decoded",
         nargs="+",
@@ -79,7 +82,7 @@ def main():
 
     args = parser.parse_args()
 
-    operation = "encode"
+    operation: Literal["encode", "decode"] = "encode"
     if hasattr(args, "decode"):
         operation = "decode"
 
@@ -107,7 +110,7 @@ def main():
         # fragment    = *( pchar / '/' / '?' )
         safe = "!$&'()*+,;=" + ":@" + "/?"
 
-    for string_or_byte_sequence_as_str in args.input:
+    for string_or_byte_sequence_as_str in cast(list[str], args.input):
         # According to https://docs.python.org/3/library/sys.html#sys.argv
         # os.fsencode(arg) is the official way to access the original bytes of the arguments.
         byte_sequence = os.fsencode(string_or_byte_sequence_as_str)
@@ -125,18 +128,16 @@ def main():
         elif operation == "decode":
             if position == "query":
                 # unquote_to_bytes returns bytes, so we need a binary stream to write it.
-                sys.stdout.buffer.write(
+                _ = sys.stdout.buffer.write(
                     unquote_to_bytes(byte_sequence.replace(b"+", b" "))
                 )
                 # write() is low-level so we need to print the newline ourselves.
-                sys.stdout.buffer.write(b"\n")
+                _ = sys.stdout.buffer.write(b"\n")
             else:
                 # unquote_to_bytes returns bytes, so we need a binary stream to write it.
-                sys.stdout.buffer.write(unquote_to_bytes(byte_sequence))
+                _ = sys.stdout.buffer.write(unquote_to_bytes(byte_sequence))
                 # write() is low-level so we need to print the newline ourselves.
-                sys.stdout.buffer.write(b"\n")
-        else:
-            raise Exception("unreachable")
+                _ = sys.stdout.buffer.write(b"\n")
 
 
 if __name__ == "__main__":

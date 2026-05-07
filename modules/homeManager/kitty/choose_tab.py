@@ -1,18 +1,35 @@
 #!/usr/bin/env python3
 
-from typing import Any, Optional
-from subprocess import check_output, Popen, run, PIPE
+from __future__ import annotations
+
 import json
 import os
+from subprocess import PIPE, Popen, check_output, run
+from typing import TypedDict, cast
 
 
-def ls() -> Any:
+class OSWindow(TypedDict):
+    is_active: bool
+    is_focused: bool
+    tabs: list[KittyTab]
+
+
+class KittyTab(TypedDict):
+    title: str
+    windows: list[KittyWindow]
+
+
+class KittyWindow(TypedDict):
+    id: int
+
+
+def ls() -> list[OSWindow]:
     ls_output = check_output(["kitty", "@", "ls"])
-    os_windows = json.loads(ls_output)
+    os_windows = cast(list[OSWindow], json.loads(ls_output))
     return os_windows
 
 
-def fzf(os_windows: Any) -> Optional[int]:
+def fzf(os_windows: list[OSWindow]) -> int | None:
     KITTY_LISTEN_ON = os.environ["KITTY_LISTEN_ON"]
     args = [
         "/usr/local/bin/fzf",
@@ -23,7 +40,7 @@ def fzf(os_windows: Any) -> Optional[int]:
         f"kitty @ --to {KITTY_LISTEN_ON} get-text --ansi --match id:{{2}}",
     ]
     p = Popen(args, stdin=PIPE, stdout=PIPE)
-    lines = []
+    lines = cast(list[str], [])
     for os_window in os_windows:
         if os_window["is_active"] and os_window["is_focused"]:
             tabs = os_window["tabs"]
@@ -48,15 +65,14 @@ def fzf(os_windows: Any) -> Optional[int]:
 
 
 def focus_tab(tab_index: int) -> None:
-    run(["kitty", "@", "focus-tab", "--match", f"index:{tab_index}"])
+    _ = run(["kitty", "@", "focus-tab", "--match", f"index:{tab_index}"])
 
 
-def main() -> str:
+def main():
     os_windows = ls()
     tab_index = fzf(os_windows)
     if tab_index is not None:
         focus_tab(tab_index)
-    return ""
 
 
 if __name__ == "__main__":

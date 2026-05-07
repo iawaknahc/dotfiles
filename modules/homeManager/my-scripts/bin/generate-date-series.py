@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 from datetime import date
-from typing import Literal
+from typing import Literal, cast
 
 from dateutil.relativedelta import relativedelta
 
@@ -29,37 +31,37 @@ def main():
         formatter_class=Formatter,
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--increment",
         help="The amount to increment",
         type=nonzero,
         default=1,
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--unit",
         help="The unit to increment",
         choices=["year", "month", "day"],
         default="day",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--start",
         help="The start of the series in YYYY-MM-dd",
         type=date.fromisoformat,
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--end",
         help="The inclusive end of the series in YYYY-MM-dd",
         type=date.fromisoformat,
     )
 
     args = parser.parse_args()
-    increment: int = args.increment
-    unit: Literal["year", "month", "day"] = args.unit
-    start: date | None = args.start
-    end: date | None = args.end
+    increment = cast(int, args.increment)
+    unit = cast(Literal["year", "month", "day"], args.unit)
+    start = cast(date | None, args.start)
+    end = cast(date | None, args.end)
     if start is None:
         start = date.today()
     if end is None:
@@ -68,7 +70,7 @@ def main():
     d = start
     while True:
         print(f"=DATE({d.year}, {d.month}, {d.day})")
-        kwargs = {}
+        kwargs = cast(dict[Literal["years", "months", "days"], int], {})
         if unit == "year":
             kwargs["years"] = increment
         elif unit == "month":

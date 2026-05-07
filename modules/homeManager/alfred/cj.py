@@ -1,21 +1,37 @@
+from __future__ import annotations
+
 import json
 import sys
+from typing import Literal, TypedDict, cast
 
-import cangjie
+import cangjie  # pyright: ignore [reportMissingTypeStubs]
 
-cj = cangjie.Cangjie(
-    cangjie.versions.CANGJIE3,
-    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,
+cj = cangjie.Cangjie(  # pyright: ignore [reportAttributeAccessIssue, reportUnknownVariableType, reportUnknownMemberType]
+    cangjie.versions.CANGJIE3,  # pyright: ignore [reportUnknownMemberType]
+    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,  # pyright: ignore [reportUnknownMemberType]
 )
 
 
+class Item(TypedDict):
+    title: str
+    subtitle: str
+    type: Literal["default"]
+    arg: str
+    mods: dict[Literal["cmd", "alt"], Mod]
+
+
+class Mod(TypedDict):
+    subtitle: str
+    arg: str
+
+
 def main():
-    items = []
+    items = cast(list[Item], [])
     query = "".join(sys.argv[1:])
     for ch in query:
         try:
-            code = cj.get_codes_by_character(ch)[0].code
-            radicals = "".join([cj.get_radical(c) for c in code])
+            code = cast(str, cj.get_codes_by_character(ch)[0].code)  # pyright: ignore [reportUnknownMemberType]
+            radicals = "".join([cj.get_radical(c) for c in code])  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
             items.append(
                 {
                     "title": ch,
@@ -34,7 +50,7 @@ def main():
                     },
                 }
             )
-        except cangjie.errors.CangjieNoCharsError:
+        except cangjie.errors.CangjieNoCharsError:  # pyright: ignore [reportAttributeAccessIssue, reportUnknownMemberType]
             continue
     if len(items) > 0:
         print(json.dumps({"items": items}, ensure_ascii=False))

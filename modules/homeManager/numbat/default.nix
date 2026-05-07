@@ -8,7 +8,7 @@ let
   currency_nbt = "${config.home.homeDirectory}/${configDir}/modules/custom/currency.nbt";
   genCurrencyScript = pkgs.writeShellScript "numbat-gen-currency" ''
     mkdir -p "$(dirname "${currency_nbt}")"
-    ${pkgs.python3}/bin/python3 ${./gen_currency.py} > "${currency_nbt}"
+    ${pkgs.mypython}/bin/python3 ${./gen_currency.py} > "${currency_nbt}"
   '';
 in
 {

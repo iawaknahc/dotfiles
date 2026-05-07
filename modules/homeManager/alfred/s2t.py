@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 import sys
+from typing import cast
 
 import opencc
 import pyperclip
@@ -12,7 +15,7 @@ def main():
 
     if text == "":
         clipboard = pyperclip.paste()
-        if clipboard is None:
+        if clipboard is None:  # pyright: ignore [reportUnnecessaryComparison]
             clipboard = ""
         text = clipboard
 
@@ -32,7 +35,7 @@ def main():
         )
     else:
         converter = opencc.OpenCC("s2t.json")
-        converted = converter.convert(text)
+        converted = cast(str, converter.convert(text))
         print(
             json.dumps(
                 {

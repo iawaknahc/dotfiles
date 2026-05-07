@@ -1,17 +1,33 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
 import re
 from dataclasses import dataclass
 from pathlib import PurePath
+from typing import TypedDict, cast
 from urllib.parse import (
     unquote_plus,
     urlsplit,
 )
 
 import requests
+
+
+class SearchResponse(TypedDict):
+    places: list[SearchResponsePlace]
+
+
+class SearchResponsePlace(TypedDict):
+    id: str
+
+
+class GetResponse(TypedDict):
+    formattedAddress: str
+    types: list[str]
 
 
 @dataclass
@@ -72,7 +88,7 @@ def https_www_google_com_maps_place(url_str: str) -> Location:
         },
     )
 
-    body = response.json()
+    body = cast(SearchResponse, response.json())
     if len(body["places"]) != 1:
         raise ValueError(f"expected single place: {body}")
 
@@ -84,7 +100,7 @@ def https_www_google_com_maps_place(url_str: str) -> Location:
             "X-Goog-FieldMask": "id,formattedAddress,types",
         },
     )
-    body = response.json()
+    body = cast(GetResponse, response.json())
 
     return Location(
         name=name,
@@ -101,13 +117,13 @@ def main():
         description="Invoke Google Places API (new) on the given Google Map URL, and output a JSON document with `name`, `url`, `location`, and `coordinates`.",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "url",
         help="The Google Map URL. It must start with `https://www.google.com/maps/place/`",
     )
 
     args = parser.parse_args()
-    location = https_www_google_com_maps_place(args.url)
+    location = https_www_google_com_maps_place(cast(str, args.url))
     print(location.json())
 
 
