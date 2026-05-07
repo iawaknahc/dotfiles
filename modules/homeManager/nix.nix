@@ -23,12 +23,13 @@
 
   home.packages = with pkgs; [
     flake-checker
-    nurl
+    nil
     nix-melt
     nix-tree
     nix-unit
+    nix-update
     nixfmt
-    nil
+    nurl
   ];
   programs.nix-init.enable = true;
   programs.nh.enable = true;
