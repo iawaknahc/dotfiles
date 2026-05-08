@@ -66,5 +66,8 @@
 
     # Make without build system
     just
+
+    # https://github.com/xampprocky/tokei
+    tokei
   ];
 }
