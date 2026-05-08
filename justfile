@@ -12,11 +12,15 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers
-check: harper codebook codespell test stylua-check pyright basedpyright pyrefly ty
+check: harper codebook codespell test stylua-check ruff-fmt-check pyright basedpyright pyrefly ty
 
-# Run checker `stylua`
+# Run checker `stylua --check`
 stylua-check:
     find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check {{STYLUA_FLAGS}}
+
+# Run checker `ruff format --check`
+ruff-fmt-check:
+    ruff format --check
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
@@ -47,7 +51,7 @@ ty:
     ty check
 
 # Run all formatters
-format: stylua-fmt nufmt
+format: stylua-fmt nufmt ruff-fmt
 
 # Run formatter `stylua`
 stylua-fmt:
@@ -56,6 +60,9 @@ stylua-fmt:
 # Run formatter `nufmt`. FIXME: This is no-op due to https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169
 nufmt:
     # fd --hidden --type file --extension nu | xargs nufmt
+
+ruff-fmt:
+    ruff format
 
 # Copy the current config of Alfred to here for git-diff
 alfred-rsync:
