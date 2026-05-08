@@ -10,7 +10,11 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers
-check: harper codebook codespell test stylua-check shfmt-check ruff-fmt-check pyright basedpyright pyrefly ty
+check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check pyright basedpyright pyrefly ty
+
+# Run checker `shellcheck`
+shellcheck:
+    fd --hidden --type file --extension sh | xargs shellcheck
 
 # Run checker `shfmt --list`
 shfmt-check:

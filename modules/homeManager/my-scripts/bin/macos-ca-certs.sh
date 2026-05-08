@@ -19,7 +19,10 @@ outdir="$(mktemp -d -t macos-ca-certs)"
 outpath="$outdir/cert.pem"
 
 workdir="$(mktemp -d -t macos-ca-certs)"
-cd "$workdir"
+cd "$workdir" || {
+	printf 1>&2 "failed to change directory to %s\n" "$workdir"
+	exit 1
+}
 
 # Run /usr/bin/security find-certificate -h to see what the options do.
 /usr/bin/security find-certificate \

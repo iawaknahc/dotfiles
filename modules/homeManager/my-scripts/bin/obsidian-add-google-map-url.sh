@@ -2,6 +2,7 @@
 
 set -eu
 
+# shellcheck source=/dev/null
 . ~/.config/sops-nix/secrets/rendered/obsidian-google-places-api-key.sh
 
 u="$(google-map-url-resolve.py "$1")"
