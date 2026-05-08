@@ -70,14 +70,12 @@ def main():
     d = start
     while True:
         print(f"=DATE({d.year}, {d.month}, {d.day})")
-        kwargs = cast(dict[Literal["years", "months", "days"], int], {})
         if unit == "year":
-            kwargs["years"] = increment
+            d += relativedelta(years=increment)
         elif unit == "month":
-            kwargs["months"] = increment
+            d += relativedelta(months=increment)
         elif unit == "day":
-            kwargs["days"] = increment
-        d += relativedelta(**kwargs)
+            d += relativedelta(days=increment)
         if increment > 0 and d > end:
             break
         if increment < 0 and d < end:

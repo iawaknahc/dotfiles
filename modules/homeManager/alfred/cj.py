@@ -6,6 +6,7 @@ from typing import Literal, TypedDict, cast
 
 import cangjie  # pyright: ignore [reportMissingTypeStubs]
 
+# pyrefly: ignore[missing-attribute]
 cj = cangjie.Cangjie(  # pyright: ignore [reportAttributeAccessIssue, reportUnknownVariableType, reportUnknownMemberType]
     cangjie.versions.CANGJIE3,  # pyright: ignore [reportUnknownMemberType]
     cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,  # pyright: ignore [reportUnknownMemberType]
@@ -50,6 +51,7 @@ def main():
                     },
                 }
             )
+        # pyrefly: ignore[missing-attribute]
         except cangjie.errors.CangjieNoCharsError:  # pyright: ignore [reportAttributeAccessIssue, reportUnknownMemberType]
             continue
     if len(items) > 0:
