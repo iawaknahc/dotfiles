@@ -1,5 +1,3 @@
-STYLUA_FLAGS := "--verbose"
-
 # List all recipes
 default:
     just --list --unsorted
@@ -16,7 +14,7 @@ check: harper codebook codespell test stylua-check ruff-fmt-check pyright basedp
 
 # Run checker `stylua --check`
 stylua-check:
-    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check {{STYLUA_FLAGS}}
+    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check
 
 # Run checker `ruff format --check`
 ruff-fmt-check:
@@ -55,7 +53,7 @@ format: stylua-fmt nufmt ruff-fmt
 
 # Run formatter `stylua`
 stylua-fmt:
-    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua {{STYLUA_FLAGS}}
+    find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua
 
 # Run formatter `nufmt`. FIXME: This is no-op due to https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169
 nufmt:
