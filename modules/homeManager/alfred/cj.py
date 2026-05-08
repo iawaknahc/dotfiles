@@ -4,12 +4,11 @@ import json
 import sys
 from typing import Literal, TypedDict, cast
 
-import cangjie  # pyright: ignore [reportMissingTypeStubs]
+import cangjie  # pyright: ignore[reportMissingTypeStubs]
 
-# pyrefly: ignore[missing-attribute]
-cj = cangjie.Cangjie(  # pyright: ignore [reportAttributeAccessIssue, reportUnknownVariableType, reportUnknownMemberType]
-    cangjie.versions.CANGJIE3,  # pyright: ignore [reportUnknownMemberType]
-    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,  # pyright: ignore [reportUnknownMemberType]
+cj = cangjie.Cangjie(  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue, reportUnknownVariableType] # ty: ignore[unresolved-attribute] # pyrefly: ignore[missing-attribute]
+    cangjie.versions.CANGJIE3,  # pyright: ignore[reportUnknownMemberType]
+    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,  # pyright: ignore[reportUnknownMemberType]
 )
 
 
@@ -31,8 +30,8 @@ def main():
     query = "".join(sys.argv[1:])
     for ch in query:
         try:
-            code = cast(str, cj.get_codes_by_character(ch)[0].code)  # pyright: ignore [reportUnknownMemberType]
-            radicals = "".join([cj.get_radical(c) for c in code])  # pyright: ignore [reportUnknownMemberType, reportUnknownArgumentType]
+            code = cast(str, cj.get_codes_by_character(ch)[0].code)  # pyright: ignore[reportUnknownMemberType]
+            radicals = "".join([cj.get_radical(c) for c in code])  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
             items.append(
                 {
                     "title": ch,
@@ -51,8 +50,7 @@ def main():
                     },
                 }
             )
-        # pyrefly: ignore[missing-attribute]
-        except cangjie.errors.CangjieNoCharsError:  # pyright: ignore [reportAttributeAccessIssue, reportUnknownMemberType]
+        except cangjie.errors.CangjieNoCharsError:  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType] # ty: ignore[unresolved-attribute] # pyrefly: ignore[missing-attribute]
             continue
     if len(items) > 0:
         print(json.dumps({"items": items}, ensure_ascii=False))
