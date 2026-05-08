@@ -11,4 +11,4 @@ harperignore
 justfile
 Makefile
 secrets/secrets.yaml
-vimrc
+vimrc.vim

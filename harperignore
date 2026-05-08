@@ -17,5 +17,4 @@ flake.lock
 harperignore
 infokey
 Makefile
-vimrc
 words.txt
