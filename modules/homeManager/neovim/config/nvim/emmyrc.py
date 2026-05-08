@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+
+from __future__ import annotations
+
 import json
 import pathlib
+from typing import TypedDict, cast
 
 import tomllib
+
+
+class EmmyRC(TypedDict):
+    workspace: EmmyRCWorkspace
+
+
+class EmmyRCWorkspace(TypedDict):
+    library: list[str]
 
 
 def main():
@@ -10,9 +22,9 @@ def main():
     emmyrc_toml = path_to_this_script.parent / ".emmyrc.toml"
     emmyrc_json = path_to_this_script.parent / ".emmyrc.json"
 
-    out = []
+    out = cast(list[str], [])
     with open(emmyrc_toml, "rb") as f:
-        d = tomllib.load(f)
+        d = cast(EmmyRC, cast(object, tomllib.load(f)))
         library = d["workspace"]["library"]
 
         p_str: str

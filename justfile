@@ -63,7 +63,7 @@ test:
 
 # Generate `./modules/homeManager/neovim/config/nvim/.emmyrc.json`
 generate-emmyrc-json:
-    ./modules/homeManager/neovim/config/nvim/.emmyrc.py
+    ./modules/homeManager/neovim/config/nvim/emmyrc.py
 
 # Update `flake.lock` without touching `android-nixpkgs`
 flake-update:
