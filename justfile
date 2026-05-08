@@ -10,7 +10,11 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers
-check: harper codebook codespell test stylua-check ruff-fmt-check pyright basedpyright pyrefly ty
+check: harper codebook codespell test stylua-check shfmt-check ruff-fmt-check pyright basedpyright pyrefly ty
+
+# Run checker `shfmt --list`
+shfmt-check:
+    shfmt --list .
 
 # Run checker `stylua --check`
 stylua-check:
@@ -49,7 +53,11 @@ ty:
     ty check
 
 # Run all formatters
-format: stylua-fmt nufmt ruff-fmt
+format: shfmt stylua-fmt nufmt ruff-fmt
+
+# Run formatter `shfmt --write --list`
+shfmt:
+    shfmt --write --list .
 
 # Run formatter `stylua`
 stylua-fmt:

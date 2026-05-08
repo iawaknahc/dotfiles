@@ -41,12 +41,12 @@ E_scroll_position="$(tmux display-message -p "#{scroll_position}")"
 
 tmux send-keys -X cancel
 
-S=$(( S_copy_cursor_y - S_scroll_position))
+S=$((S_copy_cursor_y - S_scroll_position))
 
-E=$(( E_copy_cursor_y - E_scroll_position))
-E=$(( E - 1 )) # E is the line where the prompt starts, we certainly do not need it, so offset it by 1.
+E=$((E_copy_cursor_y - E_scroll_position))
+E=$((E - 1)) # E is the line where the prompt starts, we certainly do not need it, so offset it by 1.
 
-tmux capture-pane -p -e -N -S "$S" -E "$E" > /tmp/tmux_capture_pane.txt
+tmux capture-pane -p -e -N -S "$S" -E "$E" >/tmp/tmux_capture_pane.txt
 
 if [ -z "$PAGER" ]; then
 	PAGER=less

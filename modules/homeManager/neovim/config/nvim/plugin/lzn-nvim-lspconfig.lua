@@ -85,6 +85,7 @@ local function format_on_save(lsp_name, pattern)
   })
 end
 
+format_on_save("bashls", "*.sh")
 format_on_save("clojure_lsp", "*.clj")
 format_on_save("dartls", "*.dart")
 format_on_save("fish_lsp", "*.fish")

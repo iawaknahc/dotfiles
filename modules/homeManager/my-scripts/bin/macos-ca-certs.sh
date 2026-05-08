@@ -23,32 +23,32 @@ cd "$workdir"
 
 # Run /usr/bin/security find-certificate -h to see what the options do.
 /usr/bin/security find-certificate \
-  -a \
-  -p \
-  /System/Library/Keychains/SystemRootCertificates.keychain \
-  /Library/Keychains/System.keychain \
-| 2>/dev/null csplit \
-  -f prefix- \
-  -n 4 \
-  -k \
-  -s \
-  - \
-  '/-----BEGIN CERTIFICATE-----/' '{9999}'
+	-a \
+	-p \
+	/System/Library/Keychains/SystemRootCertificates.keychain \
+	/Library/Keychains/System.keychain |
+	2>/dev/null csplit \
+		-f prefix- \
+		-n 4 \
+		-k \
+		-s \
+		- \
+		'/-----BEGIN CERTIFICATE-----/' '{9999}'
 
 for f in prefix-*; do
-  fullpath="$PWD/$f"
-  # Run /usr/bin/security verify-cert -h to see what the options do.
-  /usr/bin/security verify-cert \
-    -q \
-    -l \
-    -L \
-    -R offline \
-    -c "$fullpath"
-  status="$?"
-  if [ "$status" -eq 0 ]; then
-    cat "$fullpath" >> "$outpath"
-  fi
-  rm "$fullpath"
+	fullpath="$PWD/$f"
+	# Run /usr/bin/security verify-cert -h to see what the options do.
+	/usr/bin/security verify-cert \
+		-q \
+		-l \
+		-L \
+		-R offline \
+		-c "$fullpath"
+	status="$?"
+	if [ "$status" -eq 0 ]; then
+		cat "$fullpath" >>"$outpath"
+	fi
+	rm "$fullpath"
 done
 
 printf "export SSL_CERT_FILE=%s\n" "$outpath"
