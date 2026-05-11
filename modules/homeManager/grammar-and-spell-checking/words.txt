@@ -10,6 +10,7 @@ basedpyright
 basenc
 bashls
 bea
+bidi
 bigfile
 blinkoff
 blinkon
@@ -175,6 +176,7 @@ noselect
 nounihan
 nowinfixheight
 nufmt
+nukta
 numberwidth
 numtide
 nushell
@@ -261,6 +263,7 @@ utcoffset
 vimgrep
 vimruntime
 vimscript
+virama
 virtualedit
 vscode
 vtsls
