@@ -54,7 +54,9 @@ lines.append("")
 for code in rates:
     if code != "USD":
         lines.append(f'@name("{code}")')
-        lines.append(f'unit {code}: Money = USD / _from_usd("{code}")')
+        lines.append(
+            f'unit {code}: Money = if _from_usd("{code}") == 0 then 0 else USD / _from_usd("{code}")'
+        )
         lines.append("")
 
 print("\n".join(lines))
