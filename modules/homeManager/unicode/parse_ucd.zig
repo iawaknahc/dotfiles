@@ -11,6 +11,7 @@ const KnownFile = enum {
     @"DerivedBidiClass.txt",
     @"DerivedDecompositionType.txt",
     @"UnicodeData.txt",
+    @"NameAliases.txt",
 
     fn SortByCodePoint(comptime T: type) type {
         return struct {
@@ -333,6 +334,54 @@ const KnownFile = enum {
                     };
                 }
             },
+
+            .@"NameAliases.txt" => struct {
+                const Iterator = NameAliasesTxtFileIterator;
+
+                const NameAliasType = enum {
+                    correction,
+                    control,
+                    alternate,
+                    figment,
+                    abbreviation,
+                };
+
+                const NameAlias = struct {
+                    Type: NameAliasType,
+                    Alias: []const u8,
+                };
+
+                const Property = struct {
+                    code_point: u21,
+                    Name_Alias: ?[]NameAlias,
+                };
+
+                fn parse(arena: *std.heap.ArenaAllocator, lines: Lines) anyerror!Property {
+                    var arr = std.ArrayList(NameAlias).empty;
+                    for (lines.lines) |line| {
+                        const field1 = try extractField(1, line);
+                        const field2 = try extractField(2, line);
+                        const nameAliasType = std.meta.stringToEnum(NameAliasType, field2) orelse return error.InvalidNameAliasType;
+                        const nameAlias = NameAlias{
+                            .Type = nameAliasType,
+                            .Alias = field1,
+                        };
+                        try arr.append(arena.allocator(), nameAlias);
+                    }
+                    const value = try arr.toOwnedSlice(arena.allocator());
+                    return Property{
+                        .code_point = lines.code_point,
+                        .Name_Alias = value,
+                    };
+                }
+
+                fn filler(_: *std.heap.ArenaAllocator, code_point: u21) !Property {
+                    return Property{
+                        .code_point = code_point,
+                        .Name_Alias = null,
+                    };
+                }
+            },
         };
     }
 
@@ -374,9 +423,9 @@ const KnownFile = enum {
 
         var arrayListProperties = std.ArrayList(parser.Property).empty;
 
-        var iterator = parser.Iterator{ .reader_interface = reader_interface };
+        var iterator = parser.Iterator{ .arena = arena, .reader_interface = reader_interface };
 
-        while (try iterator.next()) |line| try arrayListProperties.append(arena.allocator(), try parser.parse(arena, line));
+        while (try iterator.next()) |item| try arrayListProperties.append(arena.allocator(), try parser.parse(arena, item));
 
         const listedProperties = try arrayListProperties.toOwnedSlice(arena.allocator());
         std.sort.block(parser.Property, listedProperties, {}, SortByCodePoint(parser.Property).lessThan);
@@ -403,6 +452,11 @@ const Line = struct {
         single,
         range,
     },
+};
+
+const Lines = struct {
+    code_point: u21,
+    lines: [][]const u8,
 };
 
 fn trimComment(line_with_comment: []const u8) []const u8 {
@@ -444,6 +498,7 @@ fn extractField(field: comptime_int, line_with_comment: []const u8) ![]const u8 
 }
 
 const UnicodeDataTxtFileIterator = struct {
+    arena: *std.heap.ArenaAllocator,
     reader_interface: *std.Io.Reader,
     state: State = .init,
     const State = union(enum) {
@@ -538,6 +593,7 @@ const UnicodeDataTxtFileIterator = struct {
 
 // Iterate files that use the `X..Y` notation to indicate ranges.
 const NonUnicodeDataTxtFileIterator = struct {
+    arena: *std.heap.ArenaAllocator,
     reader_interface: *std.Io.Reader,
     state: State = .init,
     const State = union(enum) {
@@ -592,6 +648,95 @@ const NonUnicodeDataTxtFileIterator = struct {
                     } else {
                         self.state = .init;
                         continue :state_machine;
+                    }
+                },
+            }
+        }
+    }
+};
+
+// Iterate files that contain the same code point appearance adjacently more than once, like `NameAliases.txt`.
+const NameAliasesTxtFileIterator = struct {
+    arena: *std.heap.ArenaAllocator,
+    reader_interface: *std.Io.Reader,
+    state: State = .init,
+    const State = union(enum) {
+        init: void,
+        code_point: struct {
+            code_point: u21,
+            lines: std.ArrayList([]const u8),
+        },
+    };
+
+    fn next(self: *@This()) !?Lines {
+        state_machine: while (true) {
+            switch (self.state) {
+                .init => {
+                    if (try self.reader_interface.takeDelimiter('\n')) |line_with_comment| {
+                        if (try extractField0(line_with_comment)) |field0| {
+                            switch (field0) {
+                                .single => |code_point| {
+                                    const cloned_line = try self.arena.allocator().dupe(u8, line_with_comment);
+                                    var lines = std.ArrayList([]const u8).empty;
+                                    try lines.append(self.arena.allocator(), cloned_line);
+                                    self.state = .{ .code_point = .{
+                                        .code_point = code_point,
+                                        .lines = lines,
+                                    } };
+                                    continue :state_machine;
+                                },
+                                .range => unreachable,
+                            }
+                        } else {
+                            continue :state_machine;
+                        }
+                    } else {
+                        return null;
+                    }
+                },
+                .code_point => |code_point_state| {
+                    if (try self.reader_interface.takeDelimiter('\n')) |line_with_comment| {
+                        if (try extractField0(line_with_comment)) |field0| {
+                            switch (field0) {
+                                .single => |code_point| {
+                                    if (code_point_state.code_point == code_point) {
+                                        const cloned_line = try self.arena.allocator().dupe(u8, line_with_comment);
+                                        var new_code_point_state = code_point_state;
+                                        try new_code_point_state.lines.append(self.arena.allocator(), cloned_line);
+                                        self.state = .{ .code_point = new_code_point_state };
+                                        continue :state_machine;
+                                    } else {
+                                        // See another code point, emit this.
+
+                                        const cloned_line = try self.arena.allocator().dupe(u8, line_with_comment);
+                                        var lines = std.ArrayList([]const u8).empty;
+                                        try lines.append(self.arena.allocator(), cloned_line);
+                                        self.state = .{ .code_point = .{
+                                            .code_point = code_point,
+                                            .lines = lines,
+                                        } };
+
+                                        var code_point_state_mut = code_point_state;
+                                        return Lines{
+                                            .code_point = code_point_state.code_point,
+                                            .lines = try code_point_state_mut.lines.toOwnedSlice(self.arena.allocator()),
+                                        };
+                                    }
+                                },
+                                .range => unreachable,
+                            }
+                        } else {
+                            continue :state_machine;
+                        }
+                    } else {
+                        // Reach EOF, emit this.
+                        self.state = .init;
+
+                        var code_point_state_mut = code_point_state;
+                        return Lines{
+                            .code_point = code_point_state.code_point,
+                            .lines = try code_point_state_mut.lines.toOwnedSlice(self.arena.allocator()),
+                        };
                     }
                 },
             }
