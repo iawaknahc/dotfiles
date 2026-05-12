@@ -8,3 +8,5 @@ fn iso_date(dt: DateTime) -> String = format_datetime("%Y-%m-%d", dt)
 fn http_date(dt: DateTime) -> String = format_datetime("%a, %d %b %Y %H:%M:%S %Z", tz("GMT")(dt))
 
 fn rfc3339(dt: DateTime) -> String = format_datetime("%Y-%m-%dT%H:%M:%S.%f%:z", dt)
+
+fn HMS(time: Time) -> List<Time> = unit_list([hour, minute, second], time)
