@@ -9,6 +9,7 @@ const KnownFile = enum {
     @"DerivedGeneralCategory.txt",
     @"DerivedCombiningClass.txt",
     @"DerivedBidiClass.txt",
+    @"DerivedDecompositionType.txt",
     @"UnicodeData.txt",
 
     fn SortByCodePoint(comptime T: type) type {
@@ -239,6 +240,51 @@ const KnownFile = enum {
                         }
                     }
                     unreachable;
+                }
+            },
+
+            .@"DerivedDecompositionType.txt" => struct {
+                const Iterator = NonUnicodeDataTxtFileIterator;
+
+                const PropertyValue = enum {
+                    None,
+                    Canonical,
+                    Compat,
+                    Circle,
+                    Final,
+                    Font,
+                    Fraction,
+                    Initial,
+                    Isolated,
+                    Medial,
+                    Narrow,
+                    Nobreak,
+                    Small,
+                    Square,
+                    Sub,
+                    Super,
+                    Vertical,
+                    Wide,
+                };
+
+                const Property = struct {
+                    code_point: u21,
+                    Decomposition_Type: PropertyValue,
+                };
+
+                fn parse(_: *std.heap.ArenaAllocator, line: Line) anyerror!Property {
+                    const value = std.meta.stringToEnum(PropertyValue, try extractField(1, line.line)) orelse return error.InvalidDecompositionTypeValue;
+                    return Property{
+                        .code_point = line.code_point,
+                        .Decomposition_Type = value,
+                    };
+                }
+
+                fn filler(_: *std.heap.ArenaAllocator, code_point: u21) !Property {
+                    return Property{
+                        .code_point = code_point,
+                        .Decomposition_Type = .None,
+                    };
                 }
             },
 
