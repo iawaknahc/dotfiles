@@ -4,11 +4,12 @@
 *.nix
 *.plist
 *.sh
+**/firefox/*.json
 codebookignore
 flake.lock
 harperignore
-**/firefox/*.json
 justfile
 Makefile
+parse_ucd.zig
 secrets/secrets.yaml
 vimrc.vim
