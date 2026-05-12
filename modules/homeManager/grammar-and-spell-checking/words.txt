@@ -62,6 +62,7 @@ diffupdate
 direnv
 dlv
 dockerls
+duckdb
 emmylua
 emmyrc
 env

@@ -39,3 +39,13 @@ $env.config.menus ++= [{
     }
     style: {} # Omitting this field is a type error.
 }]
+
+# Take a Nushell table, pipe it into DuckDB, run the specified query, return a Nushell table.
+def nu-duckdb [
+    query: string # The DuckDB query to run
+]: table -> table {
+    let full_query = $"
+      CREATE TABLE data AS SELECT * FROM read_json\('/dev/stdin'\);
+      COPY \(($query)\) TO '/dev/stdout' \(format JSON, ARRAY true\)"
+    $in | to json | duckdb -c $full_query | from json
+}
