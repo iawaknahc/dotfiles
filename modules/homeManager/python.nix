@@ -91,6 +91,11 @@ in
                 hash = "sha256-/5a++Epr9gBsT6pVTRDc8PbAE8Z4hmhqcQxpam4S1qM=";
               };
             }))
+
+            numpy
+            scipy
+            astropy
+            jplephem
           ]
         );
       }
