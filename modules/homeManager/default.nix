@@ -129,7 +129,6 @@ _: {
     ./smb.nix
     ./obsidian.nix
 
-    ./mcp-servers-nix.nix
     ./claude
 
     # PGP and friends
