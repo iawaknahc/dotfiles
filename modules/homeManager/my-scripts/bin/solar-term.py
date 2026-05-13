@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import cast
 from zoneinfo import ZoneInfo
 
@@ -24,7 +24,7 @@ def geocentric_true_ecliptic_lon_deg_of_sun(t: Time) -> np.float64:
     with solar_system_ephemeris.set("de432s"):  # pyright: ignore[reportUnknownMemberType]
         sun = get_body("sun", t)
         sun = sun.transform_to(GeocentricTrueEcliptic(equinox=t, obstime=t))  # pyright: ignore[reportUnknownMemberType]
-        return sun.geocentrictrueecliptic.lon.deg  # pyright: ignore[reportReturnType, reportOptionalMemberAccess] # pyrefly: ignore[missing-attribute]
+        return sun.lon.deg  # pyright: ignore[reportReturnType, reportOptionalMemberAccess] # pyrefly: ignore[missing-attribute]
 
 
 def find_solar_term(degree: float, year: int, zone_info: ZoneInfo) -> Time:
@@ -85,6 +85,10 @@ def valid_year(s: str) -> int:
     return v
 
 
+def round_to_minute(dt: datetime) -> datetime:
+    return dt.replace(second=0, microsecond=0) + timedelta(minutes=dt.second // 30)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Find the date and time when the sun reaches a given ecliptic longitude",
@@ -107,6 +111,8 @@ def main() -> None:
     zone_info = ZoneInfo("Asia/Hong_Kong")
     t = find_solar_term(degree, year, zone_info)
     dt = cast(datetime, t.to_datetime(timezone=zone_info))  # pyright: ignore[reportUnknownMemberType]
+    # The result is accurate to nearest minute.
+    dt = round_to_minute(dt)
     print(dt.isoformat())
 
 
