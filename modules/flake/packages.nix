@@ -24,6 +24,8 @@
       packages.tree-sitter-numbat = pkgs.callPackage ../../packages/tree-sitter-numbat.nix { };
 
       packages.nvim-colors = pkgs.callPackage ../../packages/nvim-colors.nix { };
+
+      packages.my-ggufs = pkgs.callPackage ../../packages/my-ggufs.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -50,6 +52,8 @@
         tree-sitter-numbat = config.packages.tree-sitter-numbat;
 
         nvim-colors = config.packages.nvim-colors;
+
+        my-ggufs = config.packages.my-ggufs;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";

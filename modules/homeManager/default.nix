@@ -130,6 +130,7 @@ _: {
     ./obsidian.nix
 
     ./claude
+    ./llama-cpp
 
     # PGP and friends
     ./pgp.nix
