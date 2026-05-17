@@ -44,6 +44,26 @@ let
           cp -R $src $out/${outDir}/${name}
         '';
       };
+      pi = {
+        input = [
+          "text"
+          "image"
+        ];
+        reasoning = true;
+        thinkingLevelMap = {
+          # off is omitted to mean "Level is supported and uses the provider's default mapping"
+          # off = null;
+          minimal = null;
+          low = null;
+          # medium is omitted to mean "Level is supported and uses the provider's default mapping"
+          # medium = null;
+          high = null;
+          xhigh = null;
+        };
+        compat = {
+          thinkingFormat = "qwen-chat-template";
+        };
+      };
     }
   ];
 in

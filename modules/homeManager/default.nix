@@ -131,6 +131,7 @@ _: {
 
     ./claude
     ./llama-cpp
+    ./pi-coding-agent
 
     # PGP and friends
     ./pgp.nix
