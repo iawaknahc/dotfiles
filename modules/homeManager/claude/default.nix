@@ -11,16 +11,6 @@
 
   programs.claude-code.enable = true;
   programs.claude-code.enableMcpIntegration = false;
-  programs.claude-code.context = ''
-    ## Date format
-
-    Unless otherwise specified, output date and time in ISO 8601 format.
-
-    Examples:
-    - `2006-01-02`
-    - `2006-01-02T15:04:05Z`
-    - `2006-01-02T15:04:05.999+07:00`
-  '';
 
   # It was observed that since 2026-04-10, Claude Desktop writes to claude_desktop_config.json
   # on every launch.

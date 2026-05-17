@@ -129,6 +129,7 @@ _: {
     ./smb.nix
     ./obsidian.nix
 
+    ./coding-agent
     ./claude
     ./llama-cpp
     ./pi-coding-agent
