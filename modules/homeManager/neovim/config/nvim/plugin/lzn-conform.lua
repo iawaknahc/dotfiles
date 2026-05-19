@@ -17,5 +17,6 @@ require("conform").setup({
     swift = { "swiftformat" },
     -- FIXME: Enable `nufmt` after https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169 are released.
     -- nu = { "nufmt" },
+    ledger = { "hledger-fmt" },
   },
 })
