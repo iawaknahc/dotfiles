@@ -26,6 +26,8 @@
       packages.nvim-colors = pkgs.callPackage ../../packages/nvim-colors.nix { };
 
       packages.my-ggufs = pkgs.callPackage ../../packages/my-ggufs.nix { };
+
+      packages.hledger-lsp = pkgs.callPackage ../../packages/hledger-lsp.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -54,6 +56,8 @@
         nvim-colors = config.packages.nvim-colors;
 
         my-ggufs = config.packages.my-ggufs;
+
+        hledger-lsp = config.packages.hledger-lsp;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";

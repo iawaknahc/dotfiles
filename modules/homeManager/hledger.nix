@@ -7,6 +7,9 @@
   home.packages = with pkgs; [
     hledger
     hledger-fmt
+    hledger-ui
+    hledger-web
+    hledger-lsp
   ];
   home.sessionVariables = {
     # hledger by default passes its opinionated set of flags to `less`.

@@ -1,0 +1,6 @@
+vim.api.nvim_set_hl(0, "@lsp.type.payee.hledger", { link = "Function" })
+vim.api.nvim_set_hl(0, "@lsp.type.date.hledger", { link = "Number" })
+vim.api.nvim_set_hl(0, "@lsp.type.amount.hledger", { link = "Number" })
+vim.api.nvim_set_hl(0, "@lsp.type.directive.hledger", { link = "PreProc" })
+vim.api.nvim_set_hl(0, "@lsp.type.code.hledger", { link = "Special" })
+vim.api.nvim_set_hl(0, "@lsp.type.status.hledger", { link = "Operator" })
