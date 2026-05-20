@@ -36,6 +36,7 @@
 vim.lsp.enable("awk_ls")
 vim.lsp.enable("basedpyright")
 vim.lsp.enable("bashls")
+vim.lsp.enable("beancount")
 vim.lsp.enable("clojure_lsp")
 vim.lsp.enable("codebook")
 vim.lsp.enable("cssls")

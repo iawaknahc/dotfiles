@@ -121,13 +121,16 @@ _: {
     ./btop.nix
     ./fastfetch.nix
     ./tailscale.nix
-    ./plain-text-accounting.nix
     ./timg.nix
     ./jq.nix
     ./numbat
     ./syncthing.nix
     ./smb.nix
     ./obsidian.nix
+
+    ./ledger.nix
+    ./hledger.nix
+    ./beancount.nix
 
     ./coding-agent
     ./claude
