@@ -122,6 +122,7 @@ ignorecase
 inplace
 ipairs
 ipc
+iskeyword
 isoformat
 jdtls
 jit
@@ -220,6 +221,7 @@ searchforward
 sed
 semicoloncomma
 sessionoptions
+setlocal
 setloclist
 shada
 shellcheck
