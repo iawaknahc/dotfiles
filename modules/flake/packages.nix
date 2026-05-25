@@ -28,6 +28,8 @@
       packages.my-ggufs = pkgs.callPackage ../../packages/my-ggufs.nix { };
 
       packages.hledger-lsp = pkgs.callPackage ../../packages/hledger-lsp.nix { };
+
+      packages.beancount2ledger = pkgs.python313Packages.callPackage ../../packages/beancount2ledger.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
@@ -58,6 +60,8 @@
         my-ggufs = config.packages.my-ggufs;
 
         hledger-lsp = config.packages.hledger-lsp;
+
+        beancount2ledger = config.packages.beancount2ledger;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";
