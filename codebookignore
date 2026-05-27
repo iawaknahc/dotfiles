@@ -5,6 +5,7 @@
 *.plist
 *.sh
 **/firefox/*.json
+check_currency_decimals.py
 codebookignore
 flake.lock
 harperignore

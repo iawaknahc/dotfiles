@@ -133,7 +133,7 @@ _: {
 
     ./ledger.nix
     ./hledger.nix
-    ./beancount.nix
+    ./beancount
 
     ./coding-agent
     ./claude

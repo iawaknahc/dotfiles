@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools >= 80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beancount-my-plugins"
+version = "1.0.0"
+requires-python = "~= 3.11"
+dependencies = ["beancount ~= 3.2"]
+
+[tool.setuptools]
+packages = ["my_plugins"]
+
+[tool.setuptools.package-dir]
+my_plugins = "."

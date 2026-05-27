@@ -224,6 +224,7 @@ semicoloncomma
 sessionoptions
 setlocal
 setloclist
+setuptools
 shada
 shellcheck
 shellcmdline
@@ -289,6 +290,7 @@ wshada
 xdg
 xyz
 yamlls
+zar
 zls
 zoxide
 zwj
