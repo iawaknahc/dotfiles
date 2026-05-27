@@ -18,5 +18,7 @@ require("conform").setup({
     -- FIXME: Enable `nufmt` after https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169 are released.
     -- nu = { "nufmt" },
     ledger = { "hledger-fmt" },
+    -- FIXME: Ideally we should use beancount-language-server to do the formatting. But there is a bug https://github.com/polarmutex/beancount-language-server/issues/874
+    beancount = { "bean-format" },
   },
 })
