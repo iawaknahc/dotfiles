@@ -210,6 +210,7 @@ pumheight
 pyrefly
 pyright
 python3
+pythonpath
 qflist
 qpdf
 redrawstatus
