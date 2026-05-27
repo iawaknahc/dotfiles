@@ -232,6 +232,8 @@ def plugin(
                 #
                 # 7.83645 HKD is the exchange rate, and it typically has more decimal places.
                 # So we never validate posting.cost.
+                #
+                # These behaviors are consistent with https://beancount.github.io/docs/precision_tolerances/#prices-and-costs
                 if posting.units is not None:
                     err = validate_amount(entry, posting, posting.units)
                     if err is not None:
