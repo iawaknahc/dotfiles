@@ -96,6 +96,9 @@ in
             scipy
             astropy
             jplephem
+
+            beancount
+            beanquery
           ]
         );
       }
