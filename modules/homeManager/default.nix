@@ -93,11 +93,13 @@ _: {
     ./clojure.nix
     ./dart.nix
     ./go.nix
+    ./hy.nix
     ./janet.nix
     ./java.nix
     ./javascript.nix
     ./lua.nix
     ./perl.nix
+    ./x-python.nix
     ./python.nix
     ./ruby.nix
     ./rust.nix
@@ -127,6 +129,7 @@ _: {
     ./syncthing.nix
     ./smb.nix
     ./obsidian.nix
+    ./jupyter.nix
 
     ./ledger.nix
     ./hledger.nix

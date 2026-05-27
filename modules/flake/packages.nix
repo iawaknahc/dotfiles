@@ -19,8 +19,6 @@
 
       packages.EmmyLua_spoon = pkgs.callPackage ../../packages/EmmyLua_spoon.nix { };
 
-      packages.py2hy = pkgs.python313Packages.callPackage ../../packages/py2hy.nix { };
-
       packages.tree-sitter-numbat = pkgs.callPackage ../../packages/tree-sitter-numbat.nix { };
 
       packages.nvim-colors = pkgs.callPackage ../../packages/nvim-colors.nix { };
@@ -28,12 +26,16 @@
       packages.my-ggufs = pkgs.callPackage ../../packages/my-ggufs.nix { };
 
       packages.hledger-lsp = pkgs.callPackage ../../packages/hledger-lsp.nix { };
-
-      packages.beancount2ledger = pkgs.python313Packages.callPackage ../../packages/beancount2ledger.nix { };
     };
 
   # Expose the added packages as an overlay named `default`.
   flake.overlays.default =
+    let
+      packageOverrides = pyfinal: pyprev: {
+        py2hy = pyfinal.callPackage ../../packages/py2hy.nix { };
+        beancount2ledger = pyfinal.callPackage ../../packages/beancount2ledger.nix { };
+      };
+    in
     final: prev:
     withSystem prev.stdenv.hostPlatform.system (
       { config, ... }: # `withSystem` brings us to the scope of `perSystem` module. So `config` refers to `perSystem.config`.
@@ -51,8 +53,6 @@
 
         EmmyLua_spoon = config.packages.EmmyLua_spoon;
 
-        py2hy = config.packages.py2hy;
-
         tree-sitter-numbat = config.packages.tree-sitter-numbat;
 
         nvim-colors = config.packages.nvim-colors;
@@ -60,8 +60,6 @@
         my-ggufs = config.packages.my-ggufs;
 
         hledger-lsp = config.packages.hledger-lsp;
-
-        beancount2ledger = config.packages.beancount2ledger;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";
@@ -81,6 +79,26 @@
             hammerspoon-cli
             final.nur.repos.natsukium.hammerspoon
           ];
+        };
+
+        python311 = prev.python311.override {
+          inherit packageOverrides;
+        };
+
+        python312 = prev.python312.override {
+          inherit packageOverrides;
+        };
+
+        python313 = prev.python313.override {
+          inherit packageOverrides;
+        };
+
+        python314 = prev.python314.override {
+          inherit packageOverrides;
+        };
+
+        python315 = prev.python315.override {
+          inherit packageOverrides;
         };
       }
     );

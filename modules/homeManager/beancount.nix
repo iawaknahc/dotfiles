@@ -1,8 +1,17 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
+  mypython.packages = [
+    (
+      python-pkgs: with python-pkgs; [
+        beancount
+        beanquery
+      ]
+    )
+  ];
+
   home.packages = with pkgs; [
     beancount-language-server
-    beancount2ledger
+    config.mypython.pythonPackages.beancount2ledger
     fava
   ];
 }

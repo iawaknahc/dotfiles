@@ -1,5 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
+  mypython.packages = [
+    (python-pkgs: with python-pkgs; [ fonttools ])
+  ];
+
   home.packages = with pkgs; [
     # JetBrains Mono can be recognized as fixed-width by macOS Font Book.
     #
@@ -77,7 +81,7 @@
         # Let's make it writable first.
         chmod u+w ./SourceHanMono.ttc
         md5sum ./SourceHanMono.ttc
-        ${pkgs.mypython}/bin/python -c "$myFixScript"
+        ${config.mypython.package}/bin/python -c "$myFixScript"
         md5sum ./SourceHanMono.ttc
         # Make it read-only again.
         chmod u-w ./SourceHanMono.ttc

@@ -10,6 +10,10 @@
     programs.vivid.enableZshIntegration = true;
     programs.vivid.enableNushellIntegration = true;
 
+    mypython.packages = [
+      (python-pkgs: [ python-pkgs.catppuccin ])
+    ];
+
     home.packages = with pkgs; [
       catppuccin-whiskers
     ];

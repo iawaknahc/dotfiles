@@ -4,6 +4,39 @@
   ...
 }:
 {
+  assertions = [
+    {
+      assertion = config.mypython.pythonPackages.pycangjie.version == "1.5.0";
+      message = "A version newer than 1.5.0 of pycangjie was released. Consider switching to it.";
+    }
+  ];
+
+  mypython.packages = [
+    (
+      python-pkgs: with python-pkgs; [
+        opencc
+        pyperclip
+
+        # Timezone handling
+        tzdata
+        pytz
+        tzlocal
+
+        # The merge request was merged.
+        # https://gitlab.freedesktop.org/cangjie/pycangjie/-/merge_requests/60
+        (pycangjie.overrideAttrs (prev: {
+          src = pkgs.fetchFromGitLab {
+            domain = "gitlab.freedesktop.org";
+            owner = "cangjie";
+            repo = "pycangjie";
+            rev = "2e743c1339dc3cb1230ae3244e120a2b32b0224a";
+            hash = "sha256-/5a++Epr9gBsT6pVTRDc8PbAE8Z4hmhqcQxpam4S1qM=";
+          };
+        }))
+      ]
+    )
+  ];
+
   alfred.enable = true;
   alfred.configDir = "${config.home.homeDirectory}/alfred";
   alfred.sourceDir = "${config.home.homeDirectory}/dotfiles";
@@ -42,38 +75,38 @@
 
   home.packages = [
     (pkgs.writeShellScriptBin "alfred-workflow-uuid.py" ''
-      ${pkgs.mypython}/bin/python3 ${./uuid.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./uuid.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-godoc.py" ''
       export HS=${pkgs.hammerspoon}/bin/hs
       export HS_SCRIPT=${./get_browser_url.lua}
-      ${pkgs.mypython}/bin/python3 ${./godoc.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./godoc.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-tz.py" ''
       # Force zoneinfo to use tzdata
       # https://docs.python.org/3/library/zoneinfo.html#envvar-PYTHONTZPATH
       export PYTHONTZPATH=""
       export FZF=${pkgs.fzf}/bin/fzf
-      ${pkgs.mypython}/bin/python3 ${./tz.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./tz.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-u.py" ''
-      ${pkgs.mypython}/bin/python3 ${./u.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./u.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-cj.py" ''
-      ${pkgs.mypython}/bin/python3 ${./cj.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./cj.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-s2t.py" ''
-      ${pkgs.mypython}/bin/python3 ${./s2t.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./s2t.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-t2s.py" ''
-      ${pkgs.mypython}/bin/python3 ${./t2s.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./t2s.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-yue.py" ''
-      ${pkgs.mypython}/bin/python3 ${./yue.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./yue.py} "$@"
     '')
     (pkgs.writeShellScriptBin "alfred-workflow-nbt.py" ''
       export NUMBAT=${pkgs.numbat}/bin/numbat
-      ${pkgs.mypython}/bin/python3 ${./nbt.py} "$@"
+      ${config.mypython.package}/bin/python3 ${./nbt.py} "$@"
     '')
   ];
   # uuid

@@ -1,5 +1,24 @@
 { pkgs, ... }:
 {
+  mypython.packages = [
+    (
+      python-pkgs: with python-pkgs; [
+        # timedelta does not support calendrical calculation.
+        python-dateutil
+
+        # Timezone handling
+        tzdata
+        pytz
+        tzlocal
+
+        numpy
+        scipy
+        astropy
+        jplephem
+      ]
+    )
+  ];
+
   home.packages = builtins.map (
     path:
     let
