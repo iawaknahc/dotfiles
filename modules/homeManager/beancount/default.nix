@@ -5,6 +5,7 @@
       python-pkgs: with python-pkgs; [
         beancount
         beanquery
+        beangulp
 
         (config.mypython.pythonPackages.buildPythonPackage {
           pname = "my_plugins";
