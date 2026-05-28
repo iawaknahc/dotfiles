@@ -34,6 +34,20 @@
       packageOverrides = pyfinal: pyprev: {
         py2hy = pyfinal.callPackage ../../packages/py2hy.nix { };
         beancount2ledger = pyfinal.callPackage ../../packages/beancount2ledger.nix { };
+
+        # The docs/ directory of beanquery will be copied to site-packages/
+        # which will clash with The docs/ directory of https://github.com/pyca/cryptography/tree/48.0.0/docs
+        #
+        # I tried postBuild, preInstall, and postInstall.
+        # They all did not work.
+        # I haven't studied why it was the case.
+        # But postPatch worked for me.
+        # Maybe if postPatch is specified, the Python package will be built from source.
+        beanquery = pyprev.beanquery.overrideAttrs {
+          postPatch = ''
+            rm -r ./docs
+          '';
+        };
       };
     in
     final: prev:

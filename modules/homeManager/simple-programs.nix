@@ -22,11 +22,6 @@
     duckdb
     sqlite-interactive
 
-    # PostScript and PDF
-    qpdf
-    poppler-utils
-    ghostscript
-
     # Filesystem
     bfs
     # Interactive du.

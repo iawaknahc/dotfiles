@@ -130,6 +130,7 @@ _: {
     ./smb.nix
     ./obsidian.nix
     ./jupyter.nix
+    ./pdf.nix
 
     ./ledger.nix
     ./hledger.nix
