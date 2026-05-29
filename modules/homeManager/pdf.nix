@@ -8,6 +8,8 @@
         pymupdf # https://github.com/pymupdf/pymupdf
         pypdf # https://github.com/py-pdf/pypdf
         camelot # https://github.com/camelot-dev/camelot
+
+        matplotlib # camelot requires it to plot image for visual debugging.
       ]
     )
   ];
