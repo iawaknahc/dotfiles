@@ -4,7 +4,7 @@
   services.samba.openFirewall = true;
   services.samba.settings.global.security = "user";
   services.samba.settings.nas_samba = {
-    path = "/data";
+    path = "/data/smb";
     browsable = "yes";
     public = "no";
     writeable = "yes";
