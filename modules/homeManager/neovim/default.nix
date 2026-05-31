@@ -32,6 +32,10 @@
     ]
   );
 
+  programs.neovim.initLua = ''
+    vim.o.exrc = true
+  '';
+
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Colorscheme
     catppuccin-nvim

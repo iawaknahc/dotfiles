@@ -15,6 +15,13 @@ vim.cmd([[filetype indent off]])
 vim.o.modeline = false
 vim.o.modelines = 0
 
+-- Enable project specific settings
+-- vim.o.exrc = true
+-- vim.o.exrc has to be set in init.lua to take effect.
+-- It is because plugin/ is sourced after project-specific exrc.
+-- vim.o.exrc set by a plugin has no effect.
+-- This makes sense because otherwise external plugin can turn on vim.o.exrc.
+
 -- In a Nix file, `# TODO` is recognized as @lsp.type.comment.nix (which links to @comment) and `@comment.todo`.
 -- The fg color of `@comment.todo` SHOULD have a higher priority than that of @lsp.type.comment.nix,
 -- but since semantic tokens has higher priority, the normal fg color of comment is used instead.
@@ -70,14 +77,7 @@ vim.o.list = true
 -- Therefore, leadmultispace, lead, and trail uses dot.
 -- Tabs should be shown as multiple hyphens plus a greater-than sign tail so that it is visually different from spaces.
 -- Non-breaking spaces should be visually different from spaces and tabs, so we take the default from neovim, the plus sign.
-vim.opt.listchars = {
-  leadmultispace = "▏.",
-  leadtab = "▏->",
-  lead = ".",
-  tab = "-->",
-  trail = ".",
-  nbsp = "+",
-}
+vim.opt.listchars = { leadmultispace = "▏.", leadtab = "▏->", lead = ".", tab = "-->", trail = ".", nbsp = "+" }
 
 vim.o.breakindent = true
 
@@ -97,13 +97,9 @@ vim.o.breakindent = true
 -- | o    | horizontal | no    |
 vim.opt.guicursor = {
   "a:blinkwait1000-blinkon100-blinkoff100",
-
   "n-v-sm:block-blinkon0",
-
   "i:ver25",
-
   "c-ci-t:ver25-blinkon0",
-
   "r-cr:hor20",
   "o:hor20-blinkon0",
 }

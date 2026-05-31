@@ -71,6 +71,7 @@ esac
 esc
 expandtab
 exportcert
+exrc
 fallthrough
 feedkeys
 fileencoding
