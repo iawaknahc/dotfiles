@@ -18,6 +18,28 @@
           ];
           src = ./my_plugins;
         })
+
+        # beanprice is built by buildPythonApplication.
+        # But we need to it to be built by buildPythonPackage so that it resides along with our plugins.
+        # Otherwise, `beanprice main.beancount` will complain about `my_plguins` not found.
+        (
+          let
+            beanprice = pkgs.beanprice.override {
+              python3Packages = python-pkgs;
+            };
+          in
+          config.mypython.pythonPackages.buildPythonPackage {
+            name = beanprice.name;
+            version = beanprice.version;
+            pyproject = beanprice.pyproject;
+            src = beanprice.src;
+            build-system = beanprice.build-system;
+            dependencies = beanprice.dependencies;
+            # Skip the check because nativeCheckInputs is not available in the final package.
+            doCheck = false;
+            pythonImportsCheck = beanprice.pythonImportsCheck;
+          }
+        )
       ]
     )
   ];
