@@ -4,7 +4,7 @@ from typing import NamedTuple
 from beancount import Directive, Meta
 from beancount.core import data
 
-TIME_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
+TIME_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$")
 
 
 class PluginError(NamedTuple):
@@ -22,11 +22,11 @@ def _check_meta(
     for key, value in meta.items():  # pyright: ignore[reportAny]
         if key not in time_keys:
             continue
-        if not isinstance(value, str) or not TIME_RE.match(value):
+        if not isinstance(value, str) or TIME_RE.fullmatch(value) is None:
             errors.append(
                 PluginError(
                     source=meta,
-                    message=f'"{key}" must be a time in format `HH:MM`, got {repr(value)}',
+                    message=f'"{key}" must be a time in format `HH:MM` or `HH:MM:SS`, got {repr(value)}',
                     entry=entry,
                 )
             )
