@@ -157,7 +157,7 @@ in
   home.activation.check-config-codebook = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
     src="${codebook_home}/codebook.toml"
     if [ -f "$src" ]; then
-      ${pkgs.remarshal}/bin/toml2json "$src" | ${pkgs.jq}/bin/jq '.words | sort | .[]' -r | ${pkgs.moreutils}/bin/sponge /tmp/codebook_words.txt
+      ${config.mypython.pythonPackages.remarshal}/bin/toml2json "$src" | ${pkgs.jq}/bin/jq '.words | sort | .[]' -r | ${pkgs.moreutils}/bin/sponge /tmp/codebook_words.txt
       difference="$(LC_ALL=C ${pkgs.coreutils}/bin/comm -23 /tmp/codebook_words.txt ${./words.txt})"
       if [ -n "$difference" ]; then
         printf 1>&2 "%s has the following additions which you must manually add to words.txt\n" "$src"

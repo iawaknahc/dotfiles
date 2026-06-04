@@ -1,5 +1,14 @@
 { pkgs, ... }:
 {
+  mypython.packages = [
+    (
+      python-pkgs: with python-pkgs; [
+        # Lossless conversion between representations
+        remarshal
+      ]
+    )
+  ];
+
   home.packages = with pkgs; [
     # Secret management
     pass # https://www.passwordstore.org/
@@ -55,9 +64,6 @@
       # FIXME: The test involving invoking ffmpeg, but it was killed with signal 9. Maybe related to https://github.com/NixOS/nixpkgs/issues/507531
       disabledTests = prev.disabledTests ++ [ "test_audio" ];
     }))
-
-    # Lossless conversion between representations
-    remarshal
 
     # Make without build system
     just
