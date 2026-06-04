@@ -132,8 +132,10 @@ _: {
     ./jupyter.nix
     ./pdf.nix
 
-    ./ledger.nix
-    ./hledger.nix
+    # I use Beancount exclusively now.
+    # And hledger is really big in terms of the storage it needs.
+    # ./ledger.nix
+    # ./hledger.nix
     ./beancount
 
     ./coding-agent
