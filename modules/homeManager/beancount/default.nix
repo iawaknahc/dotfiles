@@ -7,6 +7,7 @@
         beanquery
         beangulp
         fava
+        pricehist
 
         (config.mypython.pythonPackages.buildPythonPackage {
           pname = "my_plugins";

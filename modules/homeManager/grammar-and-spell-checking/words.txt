@@ -204,6 +204,7 @@ pns
 preselect
 preselects
 prettierd
+pricehist
 prolog
 pubin
 pubout
