@@ -20,5 +20,9 @@ require("conform").setup({
     ledger = { "hledger-fmt" },
     -- FIXME: Ideally we should use beancount-language-server to do the formatting. But there is a bug https://github.com/polarmutex/beancount-language-server/issues/874
     beancount = { "bean-format" },
+    -- FIXME: Stylua, when running as an LSP server, behaves differently from running as a CLI command.
+    -- Since our Git hooks run the CLI version of Stylua, we use Stylua via CLI.
+    -- See https://github.com/JohnnyMorganz/StyLua/issues/1122
+    lua = { "stylua" },
   },
 })

@@ -94,5 +94,8 @@ format_on_save("fish_lsp", "*.fish")
 format_on_save("gopls", "*.go,go.mod,go.sum,go.work,go.work.sum")
 format_on_save("nixd", "*.nix")
 format_on_save("rust_analyzer", "*.rs")
-format_on_save("stylua", "*.lua")
+-- FIXME: Stylua, when running as an LSP server, behaves differently from running as a CLI command.
+-- Since our Git hooks run the CLI version of Stylua, we use Stylua via CLI.
+-- See https://github.com/JohnnyMorganz/StyLua/issues/1122
+-- format_on_save("stylua", "*.lua")
 format_on_save("zls", "*.zig")
