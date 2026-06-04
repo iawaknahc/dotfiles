@@ -6,5 +6,9 @@
     "--hidden"
     # Ignore .git
     "--glob=!.git/"
+
+    "--type-add=beancount:*.beancount"
+    "--type-add=just:[Jj]ustfile"
+    "--type-add=nu:*.nu"
   ];
 }
