@@ -12,12 +12,12 @@ class PluginError(NamedTuple):
 
 def _check_directive_meta(
     meta: Meta,
-    description_keys: set[str],
+    narration_keys: set[str],
     entry: Directive,
     errors: list[PluginError],
 ) -> None:
     for key, value in meta.items():  # pyright: ignore[reportAny]
-        if key not in description_keys:
+        if key not in narration_keys:
             continue
         if isinstance(entry, data.Transaction):
             errors.append(
@@ -40,12 +40,12 @@ def _check_directive_meta(
 
 def _check_posting_meta(
     meta: Meta,
-    description_keys: set[str],
+    narration_keys: set[str],
     entry: Directive,
     errors: list[PluginError],
 ) -> None:
     for key, value in meta.items():  # pyright: ignore[reportAny]
-        if key not in description_keys:
+        if key not in narration_keys:
             continue
         if not isinstance(value, str) or not value.strip():
             errors.append(
@@ -67,14 +67,14 @@ def plugin(
     if not config_str:
         return entries, errors
 
-    description_keys: set[str] = set(config_str.split(" "))
+    narration_keys: set[str] = set(config_str.split(" "))
 
     for entry in entries:
-        _check_directive_meta(entry.meta, description_keys, entry, errors)
+        _check_directive_meta(entry.meta, narration_keys, entry, errors)
         if isinstance(entry, data.Transaction):
             for posting in entry.postings:
                 if posting.meta is not None:
-                    _check_posting_meta(posting.meta, description_keys, entry, errors)
+                    _check_posting_meta(posting.meta, narration_keys, entry, errors)
 
     return entries, errors
 
