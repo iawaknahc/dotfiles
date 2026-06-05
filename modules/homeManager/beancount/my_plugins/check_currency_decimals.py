@@ -214,26 +214,32 @@ def plugin(
     errors: list[PluginError] = []
     for entry in entries:
         if isinstance(entry, Transaction):
+            # This plugin validates transactions satisfying these conditions:
+            # 1. The transaction has at least one postings.
+            # 2. All postings have no cost or price attached to them.
+            # 3. The commodity of all postings is a currency.
+
+            if len(entry.postings) == 0:  # Condition 1
+                continue
+
+            skip = False
             for posting in entry.postings:
-                # Consider this transaction
-                #
-                # 2026-05-27 *
-                #   Assets:Cash                    10 USD  @  7.83645 HKD
-                #   Assets:Cash                -78.36 HKD
-                #
-                # 7.83645 HKD is the exchange rate, and it typically has more decimal places.
-                # So we never validate posting.price.
-                #
-                # Consider this transaction
-                #
-                # 2026-05-27 *
-                #   Assets:Cash                    10 USD  {7.83645 HKD}
-                #   Assets:Cash                -78.36 HKD
-                #
-                # 7.83645 HKD is the exchange rate, and it typically has more decimal places.
-                # So we never validate posting.cost.
-                #
-                # These behaviors are consistent with https://beancount.github.io/docs/precision_tolerances/#prices-and-costs
+                if posting.cost is not None:  # Condition 2
+                    skip = True
+                    break
+                if posting.price is not None:  # Condition 2
+                    skip = True
+                    break
+                if posting.units is not None:
+                    decimal_place = _get_decimal_places(posting.units.currency)
+                    if decimal_place is None:  # Condition 3
+                        skip = True
+                        break
+            if skip:
+                continue
+
+            # If we reach here, the transaction is subject to validation.
+            for posting in entry.postings:
                 if posting.units is not None:
                     err = validate_amount(entry, posting, posting.units)
                     if err is not None:
