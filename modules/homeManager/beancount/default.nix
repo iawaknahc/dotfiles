@@ -7,10 +7,19 @@
         beanquery
         beangulp
         fava
-        pricehist
+
         autobean_refactor
         # I tried autobean_format on 2026-06-05, but it was just too slow.
         # autobean_format
+
+        # I replaced beanprice with pricehist with a custom script to invoke it.
+        # See pricehist-bean.py
+        #
+        # If we decide to switch back to beanprice in the future,
+        # we have to package it with buildPythonPackage so that it resides along with our plugins.
+        # Otherwise, `beanprice main.beancount` will complain about `my_plugins` not found.
+        #beanprice
+        pricehist
 
         (config.mypython.pythonPackages.buildPythonPackage {
           pname = "my_plugins";
@@ -22,28 +31,6 @@
           ];
           src = ./my_plugins;
         })
-
-        # beanprice is built by buildPythonApplication.
-        # But we need to it to be built by buildPythonPackage so that it resides along with our plugins.
-        # Otherwise, `beanprice main.beancount` will complain about `my_plguins` not found.
-        (
-          let
-            beanprice = pkgs.beanprice.override {
-              python3Packages = python-pkgs;
-            };
-          in
-          config.mypython.pythonPackages.buildPythonPackage {
-            name = beanprice.name;
-            version = beanprice.version;
-            pyproject = beanprice.pyproject;
-            src = beanprice.src;
-            build-system = beanprice.build-system;
-            dependencies = beanprice.dependencies;
-            # Skip the check because nativeCheckInputs is not available in the final package.
-            doCheck = false;
-            pythonImportsCheck = beanprice.pythonImportsCheck;
-          }
-        )
       ]
     )
   ];
