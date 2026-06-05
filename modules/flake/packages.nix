@@ -34,6 +34,8 @@
       packageOverrides = pyfinal: pyprev: {
         py2hy = pyfinal.callPackage ../../packages/py2hy.nix { };
         beancount2ledger = pyfinal.callPackage ../../packages/beancount2ledger.nix { };
+        autobean_refactor = pyfinal.callPackage ../../packages/autobean_refactor.nix { };
+        autobean_format = pyfinal.callPackage ../../packages/autobean_format.nix { };
 
         # The docs/ directory of beanquery will be copied to site-packages/
         # which will clash with The docs/ directory of https://github.com/pyca/cryptography/tree/48.0.0/docs

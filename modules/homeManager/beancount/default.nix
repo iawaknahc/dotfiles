@@ -8,6 +8,9 @@
         beangulp
         fava
         pricehist
+        autobean_refactor
+        # I tried autobean_format on 2026-06-05, but it was just too slow.
+        # autobean_format
 
         (config.mypython.pythonPackages.buildPythonPackage {
           pname = "my_plugins";
