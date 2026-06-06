@@ -37,8 +37,9 @@
 
   # We wrap bean-format so that it behaves deterministically.
   # The indentation is 2-space, and it counts column from 1.
-  # So The flag `--currency-column 83` means preserving 82 characters for indentation, account, and the number of the amount.
-  # The flag `--prefix-width` allocates 50 character for account.
+  # The flag `--currency-column 76` means preserving 75 characters for indentation, account, and the number of the amount.
+  # 76 is chosen to ensure that most of time when I use vertical split in Neovim, the posting line does not wrap.
+  # The flag `--prefix-width` allocates 45 character for account.
   # The flag `--num-width` allocates 30 character for the number of the amount.
   mypython.packageFuncs = [
     (
@@ -47,11 +48,11 @@
         postBuild = prev.postBuild + ''
           wrapProgram $out/bin/bean-format \
             --add-flag "--prefix-width" \
-            --add-flag "50" \
+            --add-flag "45" \
             --add-flag "--num-width" \
             --add-flag "30" \
             --add-flag "--currency-column" \
-            --add-flag "83"
+            --add-flag "76"
         '';
       })
     )
