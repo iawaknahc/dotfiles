@@ -1,0 +1,49 @@
+from typing import NamedTuple
+
+from beancount.core import data
+
+
+class PluginError(NamedTuple):
+    source: data.Meta
+    message: str
+    entry: data.Directive | None
+
+
+def plugin(
+    entries: list[data.Directive],
+    _unused_options: dict[str, None] | None,
+    config_str: str | None = None,
+) -> tuple[list[data.Directive], list[PluginError]]:
+    errors: list[PluginError] = []
+
+    try:
+        if config_str is None:
+            raise TypeError()
+        max_len = int(config_str, base=10)
+        if max_len <= 0:
+            raise ValueError()
+
+        for entry in entries:
+            if isinstance(entry, data.Open):
+                account_name_len = len(entry.account)
+                if account_name_len > max_len:
+                    errors.append(
+                        PluginError(
+                            source=entry.meta,
+                            message=f"{entry.account} has a length of {account_name_len}, which is greater than the allowed length of {max_len}.",
+                            entry=entry,
+                        )
+                    )
+    except (ValueError, TypeError):
+        errors.append(
+            PluginError(
+                source=data.new_metadata("", 0),
+                message="check_account_name_length requires a positive integer configuration to indicate the max length for account name.",
+                entry=None,
+            ),
+        )
+
+    return entries, errors
+
+
+__plugins__ = (plugin,)
