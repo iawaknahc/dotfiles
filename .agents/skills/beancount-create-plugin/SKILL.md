@@ -21,20 +21,20 @@ Create a new Beancount plug-in as a Python file in the working directory the age
 ```python
 from typing import NamedTuple
 
-from beancount import Directive, Meta
+from beancount.core import data
 
 
 class PluginError(NamedTuple):
-    source: Meta
+    source: data.Meta
     message: str
-    entry: Directive | None
+    entry: data.Directive | None
 
 
 def plugin(
-    entries: list[Directive],
+    entries: list[data.Directive],
     _unused_options: dict[str, None] | None,
     _config_str: str | None = None,
-) -> tuple[list[Directive], list[PluginError]]:
+) -> tuple[list[data.Directive], list[PluginError]]:
     errors: list[PluginError] = []
     return entries, errors
 
