@@ -1,0 +1,103 @@
+from decimal import Decimal
+from typing import NamedTuple
+
+from beancount.core import data
+
+from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
+    get_decimal_places,
+)
+
+
+class PluginError(NamedTuple):
+    source: data.Meta
+    message: str
+    entry: data.Directive | None
+
+
+ZERO = Decimal("0")
+
+
+def is_simple_transaction(txn: data.Transaction) -> bool:
+    # A transaction is simple if it satisfies the following conditions:
+    # 1. It has exactly 2 postings.
+    # 2. All postings have no cost or price.
+    # 3. The commodity of all postings are currencies.
+    # 4. It is not an imported transaction.
+    # 5. The amount is not zero.
+    if len(txn.postings) != 2:
+        return False
+    for posting in txn.postings:
+        if posting.cost is not None or posting.price is not None:
+            return False
+        if posting.units is None:
+            return False
+        decimal_place = get_decimal_places(posting.units.currency)
+        if decimal_place is None:
+            return False
+        if "imported" in txn.tags:
+            return False
+        if posting.units.number == ZERO:
+            return False
+    return True
+
+
+def is_simple_postings(txn: data.Transaction) -> bool:
+    # A transaction is said to be having simple postings if it satisfies the following conditions:
+    # 1. The transaction is simple.
+    # 2. The first posting has non-negative amount.
+    # 3. The amount of the second posting is omitted.
+    first_posting = txn.postings[0]
+    second_posting = txn.postings[1]
+    if first_posting.units is None:
+        return False
+    if first_posting.units.number is None:
+        return False
+    if first_posting.units.number < ZERO:
+        return False
+    if second_posting.meta is None:
+        return False
+    if "__automatic__" not in second_posting.meta:
+        return False
+    return True
+
+
+def has_omitted_amount(txn: data.Transaction) -> bool:
+    for posting in txn.postings:
+        if posting.meta is not None:
+            if "__automatic__" in posting.meta:
+                return True
+    return False
+
+
+def plugin(
+    entries: list[data.Directive],
+    _unused_options: dict[str, None] | None,
+    _config_str: str | None = None,
+) -> tuple[list[data.Directive], list[PluginError]]:
+    errors: list[PluginError] = []
+
+    for entry in entries:
+        if isinstance(entry, data.Transaction):
+            if is_simple_transaction(entry):
+                if not is_simple_postings(entry):
+                    errors.append(
+                        PluginError(
+                            source=entry.meta,
+                            message="This transaction is simple thus it must have simple postings. The amount of the first posting must be non-negative, and the amount of the second posting must be omitted.",
+                            entry=entry,
+                        )
+                    )
+            else:
+                if has_omitted_amount(entry):
+                    errors.append(
+                        PluginError(
+                            source=entry.meta,
+                            message="This transaction is not simple thus all postings must have explicit amounts.",
+                            entry=entry,
+                        )
+                    )
+
+    return entries, errors
+
+
+__plugins__ = (plugin,)
