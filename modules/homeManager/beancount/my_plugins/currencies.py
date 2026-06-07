@@ -105,6 +105,7 @@ TWO_DECIMAL_CURRENCIES: frozenset[str] = frozenset(
         "TWD",
         "TZS",
         "UAH",
+        "USD",
         "UYU",
         "UZS",
         "WST",
