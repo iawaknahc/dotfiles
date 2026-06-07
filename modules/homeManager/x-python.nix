@@ -8,7 +8,7 @@
   options = {
     mypython.version = lib.mkOption {
       type = lib.types.str;
-      default = "313";
+      default = "314";
       description = "The version of Python, e.g 313, 314";
     };
 
