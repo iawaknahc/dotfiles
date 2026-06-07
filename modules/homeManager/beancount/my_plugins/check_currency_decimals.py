@@ -3,170 +3,15 @@ from typing import NamedTuple
 
 from beancount import Amount, Directive, Meta, Posting, Transaction
 
+from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
+    get_decimal_places,
+)
+
 
 class PluginError(NamedTuple):
     source: Meta | None
     message: str
     entry: Transaction | None
-
-
-TWO_DECIMAL_CURRENCIES: frozenset[str] = frozenset(
-    (
-        "AED",
-        "AFN",
-        "ALL",
-        "AMD",
-        "ANG",
-        "AOA",
-        "ARS",
-        "AUD",
-        "AWG",
-        "AZN",
-        "BAM",
-        "BBD",
-        "BDT",
-        "BMD",
-        "BND",
-        "BOB",
-        "BRL",
-        "BSD",
-        "BWP",
-        "BYN",
-        "BZD",
-        "CAD",
-        "CDF",
-        "CHF",
-        "COP",
-        "CRC",
-        "CVE",
-        "CZK",
-        "DOP",
-        "DZD",
-        "EGP",
-        "ETB",
-        "EUR",
-        "FJD",
-        "FKP",
-        "GEL",
-        "GIP",
-        "GMD",
-        "GTQ",
-        "GYD",
-        "HKD",
-        "HNL",
-        "HTG",
-        "HUF",
-        "IDR",
-        "ILS",
-        "INR",
-        "ISK",
-        "JMD",
-        "KES",
-        "KGS",
-        "KHR",
-        "KYD",
-        "KZT",
-        "LAK",
-        "LBP",
-        "LKR",
-        "LRD",
-        "LSL",
-        "MAD",
-        "MDL",
-        "MKD",
-        "MMK",
-        "MNT",
-        "MOP",
-        "MUR",
-        "MVR",
-        "MWK",
-        "MXN",
-        "MYR",
-        "MZN",
-        "NAD",
-        "NGN",
-        "NIO",
-        "NPR",
-        "NZD",
-        "PAB",
-        "PEN",
-        "PGK",
-        "PHP",
-        "PKR",
-        "PLN",
-        "QAR",
-        "RON",
-        "RSD",
-        "RUB",
-        "SAR",
-        "SBD",
-        "SCR",
-        "SEK",
-        "SGD",
-        "SHP",
-        "SLE",
-        "SOS",
-        "SRD",
-        "STD",
-        "SZL",
-        "THB",
-        "TJS",
-        "TOP",
-        "TRY",
-        "TTD",
-        "TWD",
-        "TZS",
-        "UAH",
-        "UYU",
-        "UZS",
-        "WST",
-        "XCD",
-        "XCG",
-        "YER",
-        "ZAR",
-        "ZMW",
-    )
-)
-
-ZERO_DECIMAL_CURRENCIES: frozenset[str] = frozenset(
-    (
-        "BIF",
-        "CLP",
-        "DJF",
-        "GNF",
-        "JPY",
-        "KMF",
-        "KRW",
-        "MGA",
-        "PYG",
-        "RWF",
-        "UGX",
-        "VND",
-        "VUV",
-        "XAF",
-        "XOF",
-        "XPF",
-    )
-)
-
-SPECIAL_CASES_CURRENCIES: frozenset[str] = frozenset(
-    (
-        "ISK",
-        "HUF",
-        "TWD",
-        "UGX",
-    )
-)
-
-
-def _get_decimal_places(currency: str) -> int | None:
-    if currency in SPECIAL_CASES_CURRENCIES:
-        return 0
-    if currency in ZERO_DECIMAL_CURRENCIES:
-        return 0
-    if currency in TWO_DECIMAL_CURRENCIES:
-        return 2
-    return None
 
 
 def _count_decimal_places(value: Decimal) -> int:
@@ -193,7 +38,7 @@ def validate_amount(
 ) -> PluginError | None:
     if amount.number is not None:
         currency = amount.currency
-        allowed = _get_decimal_places(currency)
+        allowed = get_decimal_places(currency)
         if allowed is not None:
             decimals = _count_decimal_places(amount.number)
             if decimals > allowed:
@@ -231,7 +76,7 @@ def plugin(
                     skip = True
                     break
                 if posting.units is not None:
-                    decimal_place = _get_decimal_places(posting.units.currency)
+                    decimal_place = get_decimal_places(posting.units.currency)
                     if decimal_place is None:  # Condition 3
                         skip = True
                         break
