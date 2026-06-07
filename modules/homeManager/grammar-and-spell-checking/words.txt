@@ -125,6 +125,7 @@ ipairs
 ipc
 iskeyword
 isoformat
+isoyear
 jdtls
 jit
 jks

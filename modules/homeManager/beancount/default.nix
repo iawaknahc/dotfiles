@@ -21,6 +21,8 @@
         #beanprice
         pricehist
 
+        tabulate
+
         (config.mypython.pythonPackages.buildPythonPackage {
           pname = "my_plugins";
           version = "1.0.0";
