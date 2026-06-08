@@ -183,7 +183,7 @@ def cmd_income_statement(input: Input):
     for range in input.ranges:
         query = f"""
             SELECT {account_column}, sum(position), {period_select_columns}
-            FROM date >= {range.start} AND date < {range.end} AND account ~ '^Expenses:|^Income:'
+            FROM account ~ '^Expenses:|^Income:'
             OPEN ON {range.start}
             CLOSE ON {range.end}
             GROUP BY 1, {period_group_by}
