@@ -113,6 +113,7 @@ class Input:
     conn: beanquery.Connection
     account_level: int | None
     asset_class: list[AssetClass] | None
+    where_clause: str | None
     ranges: list[Range]
 
     def __init__(
@@ -124,6 +125,7 @@ class Input:
         conn: beanquery.Connection,
         account_level: int | None,
         asset_class: list[AssetClass] | None,
+        where_clause: str | None,
     ):
         self.period = period
         self.start = start
@@ -132,6 +134,7 @@ class Input:
         self.account_level = account_level
         self.ranges = get_ranges(period=period, start=start, end=end)
         self.asset_class = asset_class
+        self.where_clause = where_clause
 
 
 Subcommand = Callable[[Input], None]
@@ -178,6 +181,7 @@ def cmd_income_statement(input: Input):
     period_select_columns, period_group_by, period_order_by = period_to_beancount_query(
         input.period
     )
+    where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
     data_points: list[DataPoint] = []
     for range in input.ranges:
@@ -186,6 +190,7 @@ def cmd_income_statement(input: Input):
             FROM account ~ '^Expenses:|^Income:'
             OPEN ON {range.start}
             CLOSE ON {range.end}
+            WHERE {where_clause}
             GROUP BY 1, {period_group_by}
             ORDER BY 1 ASC, {period_order_by}
         """
@@ -208,6 +213,7 @@ def cmd_income_statement(input: Input):
 
 def cmd_balance_sheet(input: Input):
     account_column = account_level_to_column(input.account_level)
+    where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
     data_points: list[DataPoint] = []
     for range in input.ranges:
@@ -216,6 +222,7 @@ def cmd_balance_sheet(input: Input):
             FROM account ~ '^Assets:|^Liabilities:'
             CLOSE ON {range.end}
             CLEAR
+            WHERE {where_clause}
             GROUP BY 1
             ORDER BY 1 ASC
         """
@@ -462,6 +469,7 @@ def print_table(table: list[list[str]]) -> None:
 def parse_namespace(namespace: argparse.Namespace) -> Input:
     account_level = cast(int | None, namespace.account_level)
     asset_class = cast(list[AssetClass] | None, namespace.asset_class)
+    where_clause = cast(str | None, namespace.where_clause)
     filepath = cast(str, namespace.filepath)
     conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
     conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
@@ -494,6 +502,7 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 conn=conn,
                 account_level=account_level,
                 asset_class=asset_class,
+                where_clause=where_clause,
             )
         case "weekly":
             match (start_str, end_str):
@@ -534,6 +543,7 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 conn=conn,
                 account_level=account_level,
                 asset_class=asset_class,
+                where_clause=where_clause,
             )
         case "monthly":
             match (start_str, end_str):
@@ -561,6 +571,7 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 conn=conn,
                 account_level=account_level,
                 asset_class=asset_class,
+                where_clause=where_clause,
             )
         case "quarterly":
             match (start_str, end_str):
@@ -588,6 +599,7 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 conn=conn,
                 account_level=account_level,
                 asset_class=asset_class,
+                where_clause=where_clause,
             )
         case "yearly":
             match (start_str, end_str):
@@ -615,6 +627,7 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 conn=conn,
                 account_level=account_level,
                 asset_class=asset_class,
+                where_clause=where_clause,
             )
         case _:  # pyright: ignore[reportUnnecessaryComparison]
             raise ValueError("unreachable")  # pyright: ignore[reportUnreachable]
@@ -679,6 +692,10 @@ def main():
             ],
             action="append",
             help="If given, only show positions of the given asset class. It can be specified more than once.",
+        )
+        _ = p.add_argument(
+            "--where-clause",
+            help="Additional WHERE clause to be applied to the query.",
         )
         _ = p.add_argument("filepath", help="Path to the Beancount file")
 
