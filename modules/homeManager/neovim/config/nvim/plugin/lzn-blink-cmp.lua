@@ -16,9 +16,9 @@ local override = {
 
 require("blink.cmp").setup({
   sources = {
-    default = { "lsp", "snippets", "path", "buffer" },
+    default = { "snippets", "lsp", "path", "buffer" },
     per_filetype = {
-      sql = { "dadbod", "lsp", "snippets", "path", "buffer" },
+      sql = { "dadbod", "snippets", "lsp", "path", "buffer" },
     },
     transform_items = function(_, items)
       return items
@@ -98,9 +98,13 @@ require("blink.cmp").setup({
     -- Actually :h cmdline-completion is better than blink.cmp.
     enabled = false,
   },
-  -- `blink.cmp` by default loads LSP snippets in defined in `~/.config/nvim/snippets/package.json`, and it uses `vim.snippets` as the engine.
-  -- This means no third party snippet plugin is needed.
-  --
-  -- But now we use LuaSnip as the engine, so it is required to load `~/.config/nvim/snippets/package.json` manually.
-  snippets = { preset = "luasnip" },
+  snippets = {
+    -- `blink.cmp` by default loads LSP snippets in defined in `~/.config/nvim/snippets/package.json`, and it uses `vim.snippets` as the engine.
+    -- This means no third party snippet plugin is needed.
+    --
+    -- But now we use LuaSnip as the engine, so it is required to load `~/.config/nvim/snippets/package.json` manually.
+    preset = "luasnip",
+    -- Add a very high score_offset to snippets to ensure when I type a snippet trigger, it is the first result, so that I can press CTRL-Y to expand it immediately.
+    score_offset = 100,
+  },
 })
