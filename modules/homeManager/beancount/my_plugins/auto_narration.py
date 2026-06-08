@@ -38,11 +38,8 @@ def plugin(
         if isinstance(entry, data.Transaction):
             # This plugin only adds narration for simple transactions
             # 1. The transaction has no narration.
-            # 2. The transaction has exactly 2 postings.
-            # 3. Exactly one of the postings is from the opted in account.
+            # 2. The transaction has exactly 1 posting whose account is an opted in account.
             if entry.narration is not None and entry.narration != "":  # Condition 1
-                continue
-            if len(entry.postings) != 2:  # Condition 2
                 continue
 
             opted_in_accounts: set[data.Account] = set()
@@ -50,7 +47,7 @@ def plugin(
                 if posting.account in account_narration:
                     opted_in_accounts.add(posting.account)
 
-            if len(opted_in_accounts) != 1:  # Condition 3
+            if len(opted_in_accounts) != 1:  # Condition 2
                 continue
 
             # If we reach here, the transaction is subject to auto narration.
