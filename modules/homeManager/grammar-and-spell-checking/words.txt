@@ -47,6 +47,7 @@ cssls
 curdir
 cursorline
 cursorlineopt
+cusip
 cwindow
 cword
 cxx
@@ -189,6 +190,7 @@ nushell
 nvim
 nvimcolors
 ocaml
+occ
 omnifunc
 openssl
 operatorfunc
