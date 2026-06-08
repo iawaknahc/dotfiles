@@ -78,6 +78,8 @@
     grug-far-nvim
 
     ## Text editing
+    # Snippets
+    luasnip
     # Unicode
     {
       optional = true;

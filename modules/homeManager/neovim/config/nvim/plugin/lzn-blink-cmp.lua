@@ -16,8 +16,6 @@ local override = {
 
 require("blink.cmp").setup({
   sources = {
-    -- `blink.cmp` by default loads LSP snippets in defined in `~/.config/nvim/snippets/package.json`, and it uses `vim.snippets` as the engine.
-    -- This means no third party snippet plugin is needed.
     default = { "lsp", "snippets", "path", "buffer" },
     per_filetype = {
       sql = { "dadbod", "lsp", "snippets", "path", "buffer" },
@@ -100,4 +98,9 @@ require("blink.cmp").setup({
     -- Actually :h cmdline-completion is better than blink.cmp.
     enabled = false,
   },
+  -- `blink.cmp` by default loads LSP snippets in defined in `~/.config/nvim/snippets/package.json`, and it uses `vim.snippets` as the engine.
+  -- This means no third party snippet plugin is needed.
+  --
+  -- But now we use LuaSnip as the engine, so it is required to load `~/.config/nvim/snippets/package.json` manually.
+  snippets = { preset = "luasnip" },
 })

@@ -156,6 +156,7 @@ lsof
 lsp
 lspconfig
 lua
+luasnip
 lvimgrep
 lwindow
 macopt
@@ -165,6 +166,7 @@ modeline
 modelines
 moze
 multiclient
+myvimrc
 nargs
 natively
 neovim
