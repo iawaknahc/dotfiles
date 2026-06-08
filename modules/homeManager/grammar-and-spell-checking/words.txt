@@ -137,6 +137,7 @@ keycap
 keymaps
 keyset
 keytool
+lastweek
 latlng
 launchd
 lcd
@@ -171,6 +172,7 @@ nargs
 natively
 neovim
 netrw
+nextweek
 nixd
 nixfmt
 nixpkgs
@@ -248,6 +250,7 @@ startinsert
 statuscol
 statuscolumn
 statusline
+strftime
 strptime
 stylua
 subshell
@@ -258,6 +261,7 @@ tabpages
 tabstop
 tailwindcss
 taplo
+thisweek
 timedelta
 tmux
 tolower
