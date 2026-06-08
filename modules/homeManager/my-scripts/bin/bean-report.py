@@ -177,35 +177,43 @@ def period_to_beancount_query(period: Period) -> tuple[str, str, str]:
 
 
 def cmd_income_statement(input: Input):
-    account_column = account_level_to_column(input.account_level)
     period_select_columns, period_group_by, period_order_by = period_to_beancount_query(
         input.period
     )
     where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
+    account_column = account_level_to_column(input.account_level)
+    account_columns = [
+        account_column,  # The user-specified account column
+        "root(account, 1)",  # The total expenses and the total income
+        "root(account, 0)",  # the net income
+    ]
+
     data_points: list[DataPoint] = []
     for range in input.ranges:
-        query = f"""
-            SELECT {account_column}, sum(position), {period_select_columns}
-            FROM account ~ '^Expenses:|^Income:'
-            OPEN ON {range.start}
-            CLOSE ON {range.end}
-            WHERE {where_clause}
-            GROUP BY 1, {period_group_by}
-            ORDER BY 1 ASC, {period_order_by}
-        """
-        for row in cast(
-            list[tuple[str, Inventory]],
-            input.conn.execute(query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
-        ):
-            for position in row[1]:
-                data_points.append(
-                    DataPoint(
-                        account=row[0],
-                        position=cast(Position, position),  # pyright: ignore[reportUnnecessaryCast]
-                        range=range,
+        for account_column in account_columns:
+            query = f"""
+                SELECT {account_column}, sum(position), {period_select_columns}
+                FROM account ~ '^Expenses:|^Income:'
+                OPEN ON {range.start}
+                CLOSE ON {range.end}
+                WHERE {where_clause}
+                GROUP BY 1, {period_group_by}
+                ORDER BY 1 ASC, {period_order_by}
+            """
+            for row in cast(
+                list[tuple[str, Inventory]],
+                input.conn.execute(query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+            ):
+                for position in row[1]:
+                    data_points.append(
+                        DataPoint(
+                            account=row[0],
+                            position=cast(Position, position),  # pyright: ignore[reportUnnecessaryCast]
+                            range=range,
+                        )
                     )
-                )
+
     data_points = respect_asset_class(input, data_points)
     table = pivot(input.ranges, data_points)
     print_table(table)
@@ -435,12 +443,33 @@ def respect_asset_class(input: Input, data_points: list[DataPoint]) -> list[Data
     return filtered
 
 
+def sort_account_lots(account_lots: list[AccountLot]) -> list[AccountLot]:
+    net_income = sorted([a for a in account_lots if a.account == ""])
+    total_expenses = sorted([a for a in account_lots if a.account == "Expenses"])
+    total_income = sorted([a for a in account_lots if a.account == "Income"])
+    expenses = sorted([a for a in account_lots if a.account.startswith("Expenses:")])
+    income = sorted([a for a in account_lots if a.account.startswith("Income:")])
+    assets = sorted([a for a in account_lots if a.account.startswith("Assets:")])
+    liabilities = sorted(
+        [a for a in account_lots if a.account.startswith("Liabilities:")]
+    )
+    return (
+        assets
+        + liabilities
+        + expenses
+        + total_expenses
+        + income
+        + total_income
+        + net_income
+    )
+
+
 def pivot(ranges: list[Range], data_points: list[DataPoint]) -> list[list[str]]:
     # Gather a list of unique AccountLot
     account_lot_set: set[AccountLot] = set()
     for data_point in data_points:
         account_lot_set.add(data_point.account_lot)
-    account_lots = sorted(list(account_lot_set))
+    account_lots = sort_account_lots(list(account_lot_set))
 
     # Build the headers
     output: list[list[str]] = [["Account"] + [str(range) for range in ranges]]
@@ -463,7 +492,16 @@ def pivot(ranges: list[Range], data_points: list[DataPoint]) -> list[list[str]]:
 
 
 def print_table(table: list[list[str]]) -> None:
-    print(tabulate.tabulate(table, headers="firstrow", tablefmt="github"))
+    print(
+        tabulate.tabulate(
+            table,
+            headers="firstrow",
+            tablefmt="github",
+            colglobalalign="right",  # pyrefly: ignore
+            headersglobalalign="left",  # pyrefly: ignore
+            colalign=("left",),
+        )
+    )
 
 
 def parse_namespace(namespace: argparse.Namespace) -> Input:
