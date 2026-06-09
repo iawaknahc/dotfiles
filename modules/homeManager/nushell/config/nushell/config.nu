@@ -29,16 +29,17 @@ $env.SHELL = (command -v nu)
 
 # Customize the UI and UX of the completion menu.
 # See https://www.nushell.sh/book/line_editor.html#completion-menu
-$env.config.menus ++= [{
-    name: completion_menu
-    only_buffer_difference: false # No idea what this is. The value is taken from the documentation.
-    marker: "" # Disable the marker so that the command line does not flicker.
-    type: {
-        layout: columnar # This is the default layout.
-        columns: 1 # Make it 1-column for easier reading from top to bottom. I always find it hard to understand the reading order when columns > 1.
+$env.config.menus ++= [
+    {
+        name: completion_menu
+        only_buffer_difference: false # No idea what this is. The value is taken from the documentation.
+        marker: "" # Disable the marker so that the command line does not flicker.
+        # `layout: columnar` is the default layout.
+        # Make it 1-column for easier reading from top to bottom. I always find it hard to understand the reading order when columns > 1.
+        type: {layout: columnar, columns: 1}
+        style: {} # Omitting this field is a type error.
     }
-    style: {} # Omitting this field is a type error.
-}]
+]
 
 # Take a Nushell table, pipe it into DuckDB, run the specified query, return a Nushell table.
 def nu-duckdb [

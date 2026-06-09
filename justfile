@@ -10,7 +10,7 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers
-check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check pyright basedpyright pyrefly ty
+check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check pyright basedpyright pyrefly ty
 
 # Run checker `shellcheck`
 shellcheck:
@@ -27,6 +27,10 @@ stylua-check:
 # Run checker `ruff format --check`
 ruff-fmt-check:
     ruff format --check
+
+# Run checker `nufmt --dry-run`
+nufmt-check:
+    fd --hidden --type file --extension nu | xargs nufmt --dry-run
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
