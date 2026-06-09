@@ -16,27 +16,31 @@ AccountType = Literal["assets"] | Literal["liabilities"]
 ZERO = Decimal("0")
 
 
-def is_assets(s: str) -> bool:
-    return s.startswith("Assets:")
+def is_assets(*, receivable_account_prefix: str, s: str) -> bool:
+    return s.startswith("Assets:") and not s.startswith(receivable_account_prefix)
 
 
 def is_liabilities(s: str) -> bool:
     return s.startswith("Liabilities:")
 
 
-def account_type(s: str) -> AccountType | None:
-    if is_assets(s):
+def account_type(*, receivable_account_prefix: str, s: str) -> AccountType | None:
+    if is_assets(receivable_account_prefix=receivable_account_prefix, s=s):
         return "assets"
     if is_liabilities(s):
         return "liabilities"
     return None
 
 
-def is_assets_or_liabilities(s: str) -> bool:
-    return is_assets(s) or is_liabilities(s)
+def is_assets_or_liabilities(*, receivable_account_prefix: str, s: str) -> bool:
+    return is_assets(
+        receivable_account_prefix=receivable_account_prefix, s=s
+    ) or is_liabilities(s)
 
 
-def derive_narration(entry: data.Transaction) -> str | None:
+def derive_narration(
+    receivable_account_prefix: str, entry: data.Transaction
+) -> str | None:
     # No need to derive narration is the transaction has a narration already.
     if entry.narration is not None and entry.narration != "":
         return None
@@ -50,7 +54,9 @@ def derive_narration(entry: data.Transaction) -> str | None:
     negative_number_account_type: AccountType | None = None
     for posting in entry.postings:
         # We can only handle transactions involving Assets and Liabilities.
-        if not is_assets_or_liabilities(posting.account):
+        if not is_assets_or_liabilities(
+            receivable_account_prefix=receivable_account_prefix, s=posting.account
+        ):
             return None
 
         # We can only handle transactions without cost and price
@@ -64,9 +70,13 @@ def derive_narration(entry: data.Transaction) -> str | None:
             return None
         if posting.units.number > ZERO:
             positive_amount = posting.units
-            positive_number_account_type = account_type(posting.account)
+            positive_number_account_type = account_type(
+                receivable_account_prefix=receivable_account_prefix, s=posting.account
+            )
         elif posting.units.number < ZERO:
-            negative_number_account_type = account_type(posting.account)
+            negative_number_account_type = account_type(
+                receivable_account_prefix=receivable_account_prefix, s=posting.account
+            )
 
     if (
         positive_amount is None
@@ -90,20 +100,28 @@ def derive_narration(entry: data.Transaction) -> str | None:
 def plugin(
     entries: list[data.Directive],
     _unused_options: dict[str, None] | None,
-    _config_str: str | None = None,
+    config_str: str | None = None,
 ) -> tuple[list[data.Directive], list[PluginError]]:
     errors: list[PluginError] = []
-
-    for idx, entry in enumerate(entries):
-        if not isinstance(entry, data.Transaction):
-            continue
-        if entry.narration is not None and entry.narration != "":
-            continue
-        narration = derive_narration(entry)
-        if narration is None:
-            continue
-        new_tags = entry.tags | {"transfer"}
-        entries[idx] = entry._replace(narration=narration, tags=new_tags)
+    if config_str is None:
+        errors.append(
+            PluginError(
+                source=data.new_metadata("", 0),
+                message="expected configuration to be the prefix of receivable account, e.g. `Assets:Receivable:`",
+                entry=None,
+            )
+        )
+    else:
+        for idx, entry in enumerate(entries):
+            if not isinstance(entry, data.Transaction):
+                continue
+            if entry.narration is not None and entry.narration != "":
+                continue
+            narration = derive_narration(config_str, entry)
+            if narration is None:
+                continue
+            new_tags = entry.tags | {"transfer"}
+            entries[idx] = entry._replace(narration=narration, tags=new_tags)
 
     return entries, errors
 
