@@ -8,6 +8,7 @@ import beanquery  # pyright: ignore[reportMissingTypeStubs]
 import tabulate
 from beancount.core.inventory import Inventory
 from beancount.core.position import Cost, Position
+from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
 from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
     get_decimal_places,
 )
@@ -49,6 +50,30 @@ def parse_asset_class(s: str) -> AssetClass:
             raise ValueError()
 
 
+def date_to_period_group_key(period: Period, d: datetime.date) -> str:
+    match period:
+        case "daily":
+            return d.isoformat()
+        case "weekly":
+            return d.strftime("%G-W%V")
+        case "monthly":
+            return d.strftime("%Y-%m")
+        case "quarterly":
+            match d.month:
+                case 1 | 2 | 3:
+                    return d.strftime("%Y-Q1")
+                case 4 | 5 | 6:
+                    return d.strftime("%Y-Q2")
+                case 7 | 8 | 9:
+                    return d.strftime("%Y-Q3")
+                case 10 | 11 | 12:
+                    return d.strftime("%Y-Q4")
+                case _:
+                    raise ValueError("unreachable")
+        case "yearly":
+            return d.strftime("%Y")
+
+
 @dataclass
 class Range:
     period: Period
@@ -57,27 +82,7 @@ class Range:
 
     @override
     def __str__(self):
-        match self.period:
-            case "daily":
-                return self.start.isoformat()
-            case "weekly":
-                return self.start.strftime("%G-W%V")
-            case "monthly":
-                return self.start.strftime("%Y-%m")
-            case "quarterly":
-                match self.start.month:
-                    case 1 | 2 | 3:
-                        return self.start.strftime("%Y-Q1")
-                    case 4 | 5 | 6:
-                        return self.start.strftime("%Y-Q2")
-                    case 7 | 8 | 9:
-                        return self.start.strftime("%Y-Q3")
-                    case 10 | 11 | 12:
-                        return self.start.strftime("%Y-Q4")
-                    case _:
-                        raise ValueError("unreachable")
-            case "yearly":
-                return self.start.strftime("%Y")
+        return date_to_period_group_key(self.period, self.start)
 
 
 @dataclass(order=True, unsafe_hash=True)
@@ -150,40 +155,12 @@ def account_level_to_column(account_level: int | None) -> str:
     return f"root(account, {account_level})"
 
 
-def period_to_beancount_query(period: Period) -> tuple[str, str, str]:
-    match period:
-        case "daily":
-            return (
-                "date_part('year', date) AS year, date_part('month', date) AS month, day(date) AS day",
-                "year, month, day",
-                "year ASC, month ASC, day ASC",
-            )
-        case "weekly":
-            return (
-                "date_part('isoyear', date) AS isoyear, date_part('week', date) as week",
-                "isoyear, week",
-                "isoyear ASC, week ASC",
-            )
-        case "monthly":
-            return (
-                "date_part('year', date) AS year, date_part('month', date) AS month",
-                "year, month",
-                "year ASC, month ASC",
-            )
-        case "quarterly":
-            return (
-                "date_part('year', date) AS year, date_part('quarter', date) AS quarter",
-                "year, quarter",
-                "year ASC, quarter ASC",
-            )
-        case "yearly":
-            return ("date_part('year', date) AS year", "year", "year ASC")
+@query_env.function([str, datetime.date], str)  # pyright: ignore[reportUnknownMemberType]
+def x_date_to_period_group_key(period: Period, d: datetime.date) -> str:
+    return date_to_period_group_key(period, d)
 
 
 def cmd_income_statement(input: Input):
-    period_select_columns, period_group_by, period_order_by = period_to_beancount_query(
-        input.period
-    )
     where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
     account_column = account_level_to_column(input.account_level)
@@ -197,19 +174,19 @@ def cmd_income_statement(input: Input):
     for range in input.ranges:
         for account_column in account_columns:
             query = f"""
-                SELECT {account_column}, sum(position), {period_select_columns}
+                SELECT {account_column}, x_date_to_period_group_key('{input.period}', date), sum(position)
                 FROM account ~ '^Expenses:|^Income:'
                 OPEN ON {range.start}
                 CLOSE ON {range.end}
                 WHERE {where_clause}
-                GROUP BY 1, {period_group_by}
-                ORDER BY 1 ASC, {period_order_by}
+                GROUP BY 1, 2
+                ORDER BY 1 ASC, 2 ASC
             """
             for row in cast(
-                list[tuple[str, Inventory]],
+                list[tuple[str, str, Inventory]],
                 input.conn.execute(query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
             ):
-                for position in row[1]:
+                for position in row[2]:
                     data_points.append(
                         DataPoint(
                             account=row[0],
