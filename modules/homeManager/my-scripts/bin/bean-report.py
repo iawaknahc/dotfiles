@@ -27,6 +27,8 @@ AssetClass = (
     | Literal["derivative"]
     | Literal["retirement-fund"]
     | Literal["cryptocurrency"]
+    | Literal["property"]
+    | Literal["vehicle"]
 )
 
 
@@ -39,6 +41,8 @@ def parse_asset_class(s: str) -> AssetClass:
             | "derivative"
             | "retirement-fund"
             | "cryptocurrency"
+            | "property"
+            | "vehicle"
         ):
             return cast(AssetClass, s)  # pyright: ignore[reportUnnecessaryCast]
         case _:
@@ -727,6 +731,8 @@ def main():
                 "derivative",
                 "retirement-fund",
                 "cryptocurrency",
+                "property",
+                "vehicle",
             ],
             action="append",
             help="If given, only show positions of the given asset class. It can be specified more than once.",
