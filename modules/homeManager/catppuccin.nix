@@ -21,7 +21,8 @@
     catppuccin.accent = "blue";
     # Do not enable all supported programs.
     # Instead, we explicitly enable the programs we want.
-    catppuccin.enable = false;
+    catppuccin.autoEnable = false;
+    catppuccin.enable = true;
     catppuccin.alacritty.enable = true;
     catppuccin.btop.enable = true;
     catppuccin.fzf.enable = true;

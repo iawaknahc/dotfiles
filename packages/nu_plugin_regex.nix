@@ -6,15 +6,15 @@
 # This plugin is authored by a core maintainer of Nushell.
 rustPlatform.buildRustPackage {
   pname = "nu_plugin_regex";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-05-28";
   src = fetchFromGitHub {
     owner = "fdncred";
     repo = "nu_plugin_regex";
-    rev = "b13ad14b3e5fa333a92cb486dfe5ff3c8bf963c3";
-    hash = "sha256-6rBUkUuJAL+9ivHgDyfYWbyyHR9CAKjbjOoHrVBJfqg=";
+    rev = "83f74974de8a3588f789d82ff14e05b221d64e61";
+    hash = "sha256-jnVDteyV98uw/B6fwdBgAcKLdqJKhmS/IvfPzc6RiCE=";
   };
   doCheck = false;
-  cargoHash = "sha256-V/8ZCrzq2iJOE8h1BAsA4k0L4gYu8lslrYvuGsTs+mA=";
+  cargoHash = "sha256-Y5DxLHKgT1M8dYOTRtYjU07XF36zN0S6STMZUGCpFc4=";
   meta = {
     description = "Nushell plugin to search text with regular expressions.";
     homepage = "https://github.com/fdncred/nu_plugin_regex";

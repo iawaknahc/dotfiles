@@ -33,6 +33,7 @@ checkhealth
 chistory
 cjson
 cldr
+cli
 cljfmt
 closeoff
 cmake
@@ -68,6 +69,7 @@ duckdb
 emmylua
 emmyrc
 env
+eof
 esac
 esc
 expandtab
@@ -137,6 +139,7 @@ keycap
 keymaps
 keyset
 keytool
+kubernetes
 lastweek
 latlng
 launchd
@@ -263,12 +266,14 @@ tailwindcss
 taplo
 thisweek
 timedelta
+tls
 tmux
 tolower
 topk
 treesj
 treewalker
 tts
+txn
 tzinfo
 ucd
 ucs

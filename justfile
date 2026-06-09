@@ -67,9 +67,9 @@ shfmt:
 stylua-fmt:
     find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua
 
-# Run formatter `nufmt`. FIXME: This is no-op due to https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169
+# Run formatter `nufmt`.
 nufmt:
-    # fd --hidden --type file --extension nu | xargs nufmt
+    fd --hidden --type file --extension nu | xargs nufmt
 
 ruff-fmt:
     ruff format

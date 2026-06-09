@@ -15,7 +15,6 @@ require("conform").setup({
     -- One caveat of using cljfmt to format Hy is that f-string `f""` will be formatted to `f ""`, thus broken.
     hy = { "cljfmt" },
     swift = { "swiftformat" },
-    -- FIXME: Enable `nufmt` after https://github.com/nushell/nufmt/issues/111 and https://github.com/nushell/nufmt/issues/169 are released.
     -- nu = { "nufmt" },
     ledger = { "hledger-fmt" },
     -- FIXME: Ideally we should use beancount-language-server to do the formatting. But there is a bug https://github.com/polarmutex/beancount-language-server/issues/874

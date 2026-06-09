@@ -4,13 +4,6 @@
   ...
 }:
 {
-  assertions = [
-    {
-      assertion = pkgs.nufmt.version == "0-unstable-2026-03-26";
-      message = "nufmt has a new version. Consider turning on it usage.";
-    }
-  ];
-
   home.packages = with pkgs; [
     nufmt
   ];

@@ -11,7 +11,7 @@ let
       model = stdenvNoCC.mkDerivation rec {
         hf_owner = "unsloth";
         hf_model = "Qwen3.6-35B-A3B";
-        hf_repo = "${hf_model}-GGUF}";
+        hf_repo = "${hf_model}-GGUF";
         hf_quant = "UD-Q4_K_XL";
         hf_filename = "${hf_model}-${hf_quant}.gguf";
 
@@ -29,13 +29,13 @@ let
       mmproj = stdenvNoCC.mkDerivation rec {
         hf_owner = "unsloth";
         hf_model = "Qwen3.6-35B-A3B";
-        hf_repo = "${hf_model}-GGUF}";
+        hf_repo = "${hf_model}-GGUF";
         hf_filename = "mmproj-F16.gguf";
 
         name = "${hf_model}-${hf_filename}";
         dontUnpack = true;
         src = fetchurl {
-          url = "https://huggingface.co/${hf_owner}/${hf_owner}/resolve/main/${hf_filename}";
+          url = "https://huggingface.co/${hf_owner}/${hf_repo}/resolve/main/${hf_filename}";
           hash = "sha256-iXHuTzMf8KTGCTdPMphLPU5twIbAqjXx1jf60YKeiH8=";
         };
 
