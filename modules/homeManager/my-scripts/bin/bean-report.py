@@ -19,6 +19,7 @@ Period = (
     | Literal["monthly"]
     | Literal["quarterly"]
     | Literal["yearly"]
+    | Literal["hong-kong"]
 )
 
 AssetClass = (
@@ -72,6 +73,15 @@ def date_to_period_group_key(period: Period, d: datetime.date) -> str:
                     raise ValueError("unreachable")
         case "yearly":
             return d.strftime("%Y")
+        case "hong-kong":
+            if d.month < 4:
+                start = datetime.date(year=d.year - 1, month=4, day=1)
+                end = datetime.date(year=d.year, month=3, day=31)
+                return f"{start} to {end}"
+            else:
+                start = datetime.date(year=d.year, month=4, day=1)
+                end = datetime.date(year=d.year + 1, month=3, day=31)
+                return f"{start} to {end}"
 
 
 @dataclass
@@ -333,15 +343,25 @@ def parse_year_notation(s: str) -> datetime.date:
 
 
 def next_year(d: datetime.date) -> datetime.date:
-    assert d.month == 1
-    assert d.day == 1
     return datetime.date(year=d.year + 1, month=d.month, day=d.day)
 
 
 def previous_year(d: datetime.date) -> datetime.date:
-    assert d.month == 1
-    assert d.day == 1
     return datetime.date(year=d.year - 1, month=d.month, day=d.day)
+
+
+def start_of_hong_kong(d: datetime.date) -> datetime.date:
+    if d.month < 4:
+        return datetime.date(year=d.year - 1, month=4, day=1)
+    else:
+        return datetime.date(year=d.year, month=4, day=1)
+
+
+def parse_hong_kong(s: str) -> datetime.date:
+    d = datetime.date.fromisoformat(s)
+    if d.month != 4 or d.day != 1:
+        raise ValueError("date must be YYYY-04-01")
+    return d
 
 
 def get_ranges(
@@ -361,6 +381,8 @@ def get_ranges(
             case "quarterly":
                 range_end = next_quarter(range_start)
             case "yearly":
+                range_end = next_year(range_start)
+            case "hong-kong":
                 range_end = next_year(range_start)
         ranges.append(Range(period=period, start=range_start, end=range_end))
         range_start = range_end
@@ -648,6 +670,34 @@ def parse_namespace(namespace: argparse.Namespace) -> Input:
                 asset_class=asset_class,
                 where_clause=where_clause,
             )
+        case "hong-kong":
+            match (start_str, end_str):
+                case (None, None):
+                    today = datetime.date.today()
+                    start = start_of_hong_kong(today)
+                    end = next_year(start)
+                case (None, end_str):
+                    end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                    start = previous_year(end)
+                case (start_str, None):
+                    start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                    end = next_year(start)
+                case (start_str, end_str):
+                    start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                    end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                    if start >= end:
+                        raise ValueError("--start must be strictly less than --end")
+                case _:  # pyright: ignore[reportUnnecessaryComparison]
+                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+            return Input(
+                period="hong-kong",
+                start=start,
+                end=end,
+                conn=conn,
+                account_level=account_level,
+                asset_class=asset_class,
+                where_clause=where_clause,
+            )
         case _:  # pyright: ignore[reportUnnecessaryComparison]
             raise ValueError("unreachable")  # pyright: ignore[reportUnreachable]
 
@@ -682,7 +732,7 @@ def main():
     for p in [income_statement, balance_sheet]:
         _ = p.add_argument(
             "--period",
-            choices=["daily", "weekly", "monthly", "quarterly", "yearly"],
+            choices=["daily", "weekly", "monthly", "quarterly", "yearly", "hong-kong"],
             default="daily",
             help="The period of the report.",
         )
