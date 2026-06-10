@@ -595,7 +595,7 @@ def format_amount(conn: beanquery.Connection, amount: Amount) -> Amount:
 
 def cmd_unrealized_gains_and_losses(input: InputWithAsOf):
     table_header: tuple[str, str, str, str, str] = (
-        "Account",
+        f"As of {input.as_of.isoformat()}",
         "Position",
         "At cost",
         "Market",
