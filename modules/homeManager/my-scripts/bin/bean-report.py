@@ -7,16 +7,20 @@ from typing import Any, Literal, NamedTuple, Self, cast, override
 
 import beanquery  # pyright: ignore[reportMissingTypeStubs]
 import tabulate
-from beancount.core import prices
+from beancount.core import convert, prices
 from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
-from beancount.core.position import Cost, CostSpec, Position
+from beancount.core.position import Cost, Position
 from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
 from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
     get_decimal_places,
 )
 
-Subcommand = Literal["income-statement"] | Literal["balance-sheet"]
+Subcommand = (
+    Literal["income-statement"]
+    | Literal["balance-sheet"]
+    | Literal["unrealized-gains-and-losses"]
+)
 
 Period = (
     Literal["daily"]
@@ -146,6 +150,30 @@ class DataPoint:
             commodity=position.units.currency,
             cost=position.cost,
         )
+
+
+@dataclass
+class InputWithAsOf:
+    as_of: datetime.date
+    conn: beanquery.Connection
+
+    def __init__(self, *, as_of: datetime.date, conn: beanquery.Connection):
+        self.as_of = as_of
+        self.conn = conn
+
+    @classmethod
+    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
+        as_of_str = cast(str | None, namespace.as_of)
+        if as_of_str is None:
+            as_of = datetime.date.today()
+        else:
+            as_of = datetime.date.fromisoformat(as_of_str)
+
+        filepath = cast(str, namespace.filepath)
+        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
+        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+
+        return cls(as_of=as_of, conn=conn)
 
 
 @dataclass
@@ -397,8 +425,8 @@ def x_date_to_period_group_key(period: Period, d: datetime.date) -> str:
 
 
 # Combine 2 positions by deriving their average per-unit cost.
-# The input positions must have cost and they can either be Cost or CostSpec.
-# The output position will always have cost being CostSpec.
+# The input positions must have cost being Cost.
+# The output position will always have cost being Cost.
 def combine_positions(p1: Position, p2: Position) -> Position:
     assert p1.cost is not None
     assert p2.cost is not None
@@ -412,25 +440,9 @@ def combine_positions(p1: Position, p2: Position) -> Position:
 
     units_number = p1.units.number + p2.units.number
 
-    number_total = Decimal(0)
-    if isinstance(p1.cost, CostSpec):
-        if p1.cost.number_total is not None:
-            number_total += p1.cost.number_total
-    if isinstance(p2.cost, CostSpec):
-        if p2.cost.number_total is not None:
-            number_total += p2.cost.number_total
-
     c = Decimal(0)
-    if isinstance(p1.cost, CostSpec):
-        assert p1.cost.number_per is not None
-        c += p1.cost.number_per * p1.units.number
-    else:
-        c += p1.cost.number * p1.units.number
-    if isinstance(p2.cost, CostSpec):
-        assert p2.cost.number_per is not None
-        c += p2.cost.number_per * p2.units.number
-    else:
-        c += p2.cost.number * p2.units.number
+    c += p1.cost.number * p1.units.number
+    c += p2.cost.number * p2.units.number
     if units_number == Decimal(0):
         number_per = Decimal(0)
     else:
@@ -438,16 +450,11 @@ def combine_positions(p1: Position, p2: Position) -> Position:
 
     return Position(
         units=Amount(number=units_number, currency=base),
-        cost=cast(
-            Any,  # pyright: ignore[reportExplicitAny]
-            CostSpec(
-                number_per=number_per,
-                number_total=number_total,
-                currency=quote,
-                date=None,
-                label=None,
-                merge=None,
-            ),
+        cost=Cost(
+            number=number_per,
+            currency=quote,
+            date=cast(Any, None),  # pyright: ignore[reportExplicitAny]
+            label=None,
         ),
     )
 
@@ -484,16 +491,11 @@ def x_avg_cost(inv: Inventory) -> Inventory:
             except KeyError:
                 existing = Position(
                     units=Amount(number=Decimal(0), currency=base),
-                    cost=cast(
-                        Any,  # pyright: ignore[reportExplicitAny]
-                        CostSpec(
-                            number_per=Decimal(0),
-                            number_total=Decimal(0),
-                            currency=quote,
-                            date=None,
-                            label=None,
-                            merge=None,
-                        ),
+                    cost=Cost(
+                        number=Decimal(0),
+                        currency=quote,
+                        date=cast(Any, None),  # pyright: ignore[reportExplicitAny]
+                        label=None,
                     ),
                 )
             pair_to_position[pair] = combine_positions(existing, p)
@@ -503,27 +505,9 @@ def x_avg_cost(inv: Inventory) -> Inventory:
     for position in pair_to_position.values():
         # It is observed that cost is always of instance Cost.
         # Beancount will take care of converting CostSpec to Cost.
-        # Therefore, we can assume that number_total will always be 0.
-        # We strip number_total to make the final rendered output look nicer.
         assert position.cost is not None
-        assert isinstance(position.cost, CostSpec)
-        assert position.cost.number_total is not None
-        assert position.cost.number_total == Decimal(0)
-        position_with_number_total_stripped = Position(
-            units=position.units,
-            cost=cast(
-                Any,  # pyright: ignore[reportExplicitAny]
-                CostSpec(
-                    number_per=position.cost.number_per,
-                    number_total=None,
-                    currency=position.cost.currency,
-                    date=None,
-                    label=None,
-                    merge=None,
-                ),
-            ),
-        )
-        _ = out.add_position(position_with_number_total_stripped)
+        assert isinstance(position.cost, Cost)
+        _ = out.add_position(position)
     return out
 
 
@@ -596,6 +580,87 @@ def cmd_balance_sheet(input: InputWithPeriodStartEnd):
                 )
     data_points = respect_asset_class(input, data_points)
     table = pivot(input.ranges, data_points)
+    print_table(table)
+
+
+def format_amount(conn: beanquery.Connection, amount: Amount) -> Amount:
+    for currency, d in cast(
+        dict[str, Decimal], conn.options["display_precision"]
+    ).items():
+        if amount.currency == currency:
+            if amount.number is not None:
+                amount = Amount(number=amount.number.quantize(d), currency=currency)
+    return amount
+
+
+def cmd_unrealized_gains_and_losses(input: InputWithAsOf):
+    table_header: tuple[str, str, str, str, str] = (
+        "Account",
+        "Position",
+        "At cost",
+        "Market",
+        "Unrealized P/L",
+    )
+    table_data: list[tuple[str, Position, Amount, Amount | None, Amount | None]] = []
+    price_map = get_price_map(input.conn)
+
+    close_date = input.as_of + datetime.timedelta(days=1)
+    query = f"""
+        SELECT account, x_avg_cost(sum(position))
+        FROM account ~ '^Assets:'
+        CLOSE ON {close_date}
+        WHERE position.cost IS NOT NULL
+        GROUP BY 1
+        ORDER BY 1 ASC
+    """
+    for row in cast(list[tuple[str, Inventory]], input.conn.execute(query).fetchall()):  # pyright: ignore[reportUnknownMemberType]
+        account = row[0]
+        inv = row[1]
+        for position in inv:
+            position = cast(Position, position)  # pyright: ignore[reportUnnecessaryCast]
+            cost = position.cost
+            # The `WHERE position.cost IS NOT NULL` should do its job.
+            # We want to skip positions that is not held at cost.
+            # They are not meaningful in this report.
+            assert cost is not None
+            at_cost = cast(Amount, convert.get_cost(position))  # pyright: ignore[reportUnknownMemberType]
+            assert at_cost.number is not None
+            at_cost = format_amount(input.conn, at_cost)
+            assert at_cost.number is not None
+
+            gain_or_loss: Amount | None = None
+            market_value = cast(
+                Amount,
+                convert.convert_position(  # pyright: ignore[reportUnknownMemberType]
+                    position, cost.currency, price_map, input.as_of
+                ),
+            )
+            # Price information is unavailable.
+            if market_value.currency != cost.currency:
+                market_value = None
+            else:
+                assert market_value.number is not None
+                market_value = format_amount(input.conn, market_value)
+                assert market_value.number is not None
+                gain_or_loss = Amount(
+                    number=market_value.number - at_cost.number,
+                    currency=cost.currency,
+                )
+
+            table_data.append((account, position, at_cost, market_value, gain_or_loss))
+
+    table: list[list[str]] = []
+    table.append(list(table_header))
+    for account, position, at_cost, market_value, gain_or_loss in table_data:
+        table.append(
+            [
+                account,
+                str(position),
+                str(at_cost),
+                "" if market_value is None else str(market_value),
+                "" if gain_or_loss is None else str(gain_or_loss),
+            ]
+        )
     print_table(table)
 
 
@@ -892,6 +957,12 @@ def main():
         help="Generate a balance sheet",
     )
     _ = balance_sheet.set_defaults(command="balance-sheet")
+    unrealized_gains_and_losses = subcommand.add_parser(
+        "unrealized-gains-and-losses",
+        aliases=["upnl"],
+        help="Generate a report on unrealized gains and losses",
+    )
+    _ = unrealized_gains_and_losses.set_defaults(command="unrealized-gains-and-losses")
 
     for p in [income_statement, balance_sheet]:
         _ = p.add_argument(
@@ -932,6 +1003,14 @@ def main():
             "--where-clause",
             help="Additional WHERE clause to be applied to the query.",
         )
+
+    for p in [unrealized_gains_and_losses]:
+        _ = p.add_argument(
+            "--as-of",
+            help="The date of the report, e.g. 2026-01-01",
+        )
+
+    for p in [balance_sheet, income_statement, unrealized_gains_and_losses]:
         _ = p.add_argument("filepath", help="Path to the Beancount file")
 
     args = parser.parse_args()
@@ -940,6 +1019,8 @@ def main():
             cmd_income_statement(InputWithPeriodStartEnd.from_namespace(args))
         case "balance-sheet":
             cmd_balance_sheet(InputWithPeriodStartEnd.from_namespace(args))
+        case "unrealized-gains-and-losses":
+            cmd_unrealized_gains_and_losses(InputWithAsOf.from_namespace(args))
 
 
 main()
