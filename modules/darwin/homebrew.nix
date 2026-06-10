@@ -29,7 +29,6 @@
       { name = "libreoffice"; }
       { name = "localsend"; }
       { name = "obs"; }
-      { name = "obsidian"; }
       { name = "protonvpn"; }
       { name = "steam"; }
       { name = "tailscale-app"; }
