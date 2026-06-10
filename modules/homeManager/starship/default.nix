@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   programs.starship.enable = true;
   programs.starship.enableBashIntegration = true;
@@ -8,8 +8,5 @@
   programs.x-elvish.rcExtra = ''
     eval (${config.programs.starship.package}/bin/starship init elvish)
   '';
-  xdg.configFile."starship.toml" = {
-    enable = true;
-    source = ./config/starship.toml;
-  };
+  programs.starship.settings = lib.importTOML ./config/starship.toml;
 }

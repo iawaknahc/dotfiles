@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  programs.mpv.enable = true;
+
   home.packages = with pkgs; [
     # Image
     exiftool
@@ -11,6 +13,5 @@
 
     # Audio and video
     ffmpeg
-    mpv
   ];
 }

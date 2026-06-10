@@ -23,21 +23,30 @@
     # Instead, we explicitly enable the programs we want.
     catppuccin.autoEnable = false;
     catppuccin.enable = true;
+
+    catppuccin.atuin.enable = true;
     catppuccin.alacritty.enable = true;
     catppuccin.btop.enable = true;
+    catppuccin.delta.enable = true;
+    catppuccin.eza.enable = true;
+    catppuccin.fish.enable = true;
     catppuccin.fzf.enable = true;
     catppuccin.ghostty.enable = true;
     catppuccin.kitty.enable = true;
+    catppuccin.lsd.enable = true;
+    catppuccin.mpv.enable = true;
+    catppuccin.nushell.enable = true;
+    catppuccin.starship.enable = true;
+
     catppuccin.tmux.enable = true;
     catppuccin.tmux.extraConfig = ''
       set -g @catppuccin_status_background "default"
       set -g @catppuccin_window_status_style "rounded"
       set -g @catppuccin_window_current_number_color "#{@thm_yellow}"
     '';
-    catppuccin.fish.enable = true;
-    catppuccin.nushell.enable = true;
-    catppuccin.atuin.enable = true;
+
     catppuccin.vivid.enable = true;
+
     services.jankyborders.settings = {
       active_color = "0xff89b4fa";
       inactive_color = "0xff1e1e2e";
