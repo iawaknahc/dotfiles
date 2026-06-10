@@ -2,12 +2,14 @@
 import argparse
 import datetime
 from dataclasses import dataclass
-from typing import Any, Callable, Literal, cast, override
+from decimal import Decimal
+from typing import Any, Callable, Literal, NamedTuple, cast, override
 
 import beanquery  # pyright: ignore[reportMissingTypeStubs]
 import tabulate
+from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
-from beancount.core.position import Cost, Position
+from beancount.core.position import Cost, CostSpec, Position
 from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
 from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
     get_decimal_places,
@@ -32,6 +34,11 @@ AssetClass = (
     | Literal["property"]
     | Literal["vehicle"]
 )
+
+
+class Pair(NamedTuple):
+    base: str
+    quote: str
 
 
 def parse_asset_class(s: str) -> AssetClass:
@@ -168,6 +175,137 @@ def account_level_to_column(account_level: int | None) -> str:
 @query_env.function([str, datetime.date], str)  # pyright: ignore[reportUnknownMemberType]
 def x_date_to_period_group_key(period: Period, d: datetime.date) -> str:
     return date_to_period_group_key(period, d)
+
+
+# Combine 2 positions by deriving their average per-unit cost.
+# The input positions must have cost and they can either be Cost or CostSpec.
+# The output position will always have cost being CostSpec.
+def combine_positions(p1: Position, p2: Position) -> Position:
+    assert p1.cost is not None
+    assert p2.cost is not None
+    assert p1.units.number is not None
+    assert p2.units.number is not None
+    assert p1.units.currency == p2.units.currency
+    assert p1.cost.currency == p2.cost.currency
+
+    base = p1.units.currency
+    quote = p1.cost.currency
+
+    units_number = p1.units.number + p2.units.number
+
+    number_total = Decimal(0)
+    if isinstance(p1.cost, CostSpec):
+        if p1.cost.number_total is not None:
+            number_total += p1.cost.number_total
+    if isinstance(p2.cost, CostSpec):
+        if p2.cost.number_total is not None:
+            number_total += p2.cost.number_total
+
+    c = Decimal(0)
+    if isinstance(p1.cost, CostSpec):
+        assert p1.cost.number_per is not None
+        c += p1.cost.number_per * p1.units.number
+    else:
+        c += p1.cost.number * p1.units.number
+    if isinstance(p2.cost, CostSpec):
+        assert p2.cost.number_per is not None
+        c += p2.cost.number_per * p2.units.number
+    else:
+        c += p2.cost.number * p2.units.number
+    if units_number == Decimal(0):
+        number_per = Decimal(0)
+    else:
+        number_per = c / units_number
+
+    return Position(
+        units=Amount(number=units_number, currency=base),
+        cost=cast(
+            Any,  # pyright: ignore[reportExplicitAny]
+            CostSpec(
+                number_per=number_per,
+                number_total=number_total,
+                currency=quote,
+                date=None,
+                label=None,
+                merge=None,
+            ),
+        ),
+    )
+
+
+@query_env.function([Inventory], Inventory)  # pyright: ignore[reportUnknownMemberType]
+def x_avg_cost(inv: Inventory) -> Inventory:
+    currency_to_position: dict[str, Position] = {}
+    pair_to_position: dict[Pair, Position] = {}
+    for p in inv:
+        p = cast(Position, p)  # pyright: ignore[reportUnnecessaryCast]
+        if p.cost is None:
+            try:
+                existing = currency_to_position[p.units.currency]
+            except KeyError:
+                existing = Position(
+                    units=Amount(number=Decimal(0), currency=p.units.currency),
+                    cost=None,
+                )
+            assert existing.units.number is not None
+            assert p.units.number is not None
+            currency_to_position[existing.units.currency] = Position(
+                units=Amount(
+                    number=existing.units.number + p.units.number,
+                    currency=existing.units.currency,
+                ),
+                cost=None,
+            )
+        else:
+            base = p.units.currency
+            quote = p.cost.currency
+            pair = Pair(base=base, quote=quote)
+            try:
+                existing = pair_to_position[pair]
+            except KeyError:
+                existing = Position(
+                    units=Amount(number=Decimal(0), currency=base),
+                    cost=cast(
+                        Any,  # pyright: ignore[reportExplicitAny]
+                        CostSpec(
+                            number_per=Decimal(0),
+                            number_total=Decimal(0),
+                            currency=quote,
+                            date=None,
+                            label=None,
+                            merge=None,
+                        ),
+                    ),
+                )
+            pair_to_position[pair] = combine_positions(existing, p)
+    out = Inventory()
+    for position in currency_to_position.values():
+        _ = out.add_position(position)
+    for position in pair_to_position.values():
+        # It is observed that cost is always of instance Cost.
+        # Beancount will take care of converting CostSpec to Cost.
+        # Therefore, we can assume that number_total will always be 0.
+        # We strip number_total to make the final rendered output look nicer.
+        assert position.cost is not None
+        assert isinstance(position.cost, CostSpec)
+        assert position.cost.number_total is not None
+        assert position.cost.number_total == Decimal(0)
+        position_with_number_total_stripped = Position(
+            units=position.units,
+            cost=cast(
+                Any,  # pyright: ignore[reportExplicitAny]
+                CostSpec(
+                    number_per=position.cost.number_per,
+                    number_total=None,
+                    currency=position.cost.currency,
+                    date=None,
+                    label=None,
+                    merge=None,
+                ),
+            ),
+        )
+        _ = out.add_position(position_with_number_total_stripped)
+    return out
 
 
 def cmd_income_statement(input: Input):
