@@ -6,20 +6,44 @@ from decimal import Decimal
 from typing import Any, Literal, NamedTuple, Self, cast, override
 
 import beanquery  # pyright: ignore[reportMissingTypeStubs]
+import pyxirr
 import tabulate
-from beancount.core import convert, prices
+from beancount.core import convert, data, prices
 from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
 from beancount.core.position import Cost, Position
+from beancount.parser.grammar import ValueType
 from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
+from beanquery.sources.beancount import (  # pyright: ignore[reportMissingTypeStubs]
+    Table,
+    _typed_namedtuple_to_columns,  # pyright: ignore[reportPrivateUsage, reportUnknownVariableType]
+)
 from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
     get_decimal_places,
 )
+
+
+# Bean-query does not expose this table.
+# So we do it ourselves.
+class QueriesTable(Table):
+    name = "queries"  # pyright: ignore[reportUnannotatedClassAttribute]
+    datatype = data.Query  # pyright: ignore[reportUnannotatedClassAttribute]
+    columns = _typed_namedtuple_to_columns(datatype)  # pyright: ignore[reportUnknownVariableType, reportUnannotatedClassAttribute]
+
+
+# Bean-query does not expose this table.
+# So we do it ourselves.
+class CustomsTable(Table):
+    name = "customs"  # pyright: ignore[reportUnannotatedClassAttribute]
+    datatype = data.Custom  # pyright: ignore[reportUnannotatedClassAttribute]
+    columns = _typed_namedtuple_to_columns(datatype)  # pyright: ignore[reportUnknownVariableType, reportUnannotatedClassAttribute]
+
 
 Subcommand = (
     Literal["income-statement"]
     | Literal["balance-sheet"]
     | Literal["unrealized-gains-and-losses"]
+    | Literal["xirr"]
 )
 
 Period = (
@@ -150,6 +174,24 @@ class DataPoint:
             commodity=position.units.currency,
             cost=position.cost,
         )
+
+
+@dataclass
+class InputXIRR:
+    portfolio: str | None
+    conn: beanquery.Connection
+
+    def __init__(self, *, portfolio: str | None, conn: beanquery.Connection):
+        self.portfolio = portfolio
+        self.conn = conn
+
+    @classmethod
+    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
+        filepath = cast(str, namespace.filepath)
+        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
+        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+        portfolio = cast(str | None, namespace.portfolio)
+        return cls(portfolio=portfolio, conn=conn)
 
 
 @dataclass
@@ -509,6 +551,206 @@ def x_avg_cost(inv: Inventory) -> Inventory:
         assert isinstance(position.cost, Cost)
         _ = out.add_position(position)
     return out
+
+
+@dataclass
+class Portfolio:
+    name: str
+    cash_flow_query_name: str
+    net_worth_query_name: str
+    cash_flow_query: data.Query | None
+    net_worth_query: data.Query | None
+
+    @classmethod
+    def from_row(cls, row: tuple[data.Meta, list[ValueType]]) -> Self:
+        meta = row[0]
+        value_types = row[1]
+        portfolio_name = str(value_types[1].value)  # pyright: ignore[reportAny]
+        try:
+            cash_flow_query_name = meta["cash_flow_query"]  # pyright: ignore[reportAny]
+            if not isinstance(cash_flow_query_name, str):
+                raise TypeError(
+                    f"cash_flow_query must be a string in portfolio `{portfolio_name}`"
+                )
+        except KeyError:
+            raise ValueError(
+                f"cash_flow_query must be defined in portfolio `{portfolio_name}`"
+            )
+        try:
+            net_worth_query_name = meta["net_worth_query"]  # pyright: ignore[reportAny]
+            if not isinstance(net_worth_query_name, str):
+                raise TypeError(
+                    f"net_worth_query must be a string in portfolio `{portfolio_name}`"
+                )
+        except KeyError:
+            raise ValueError(
+                f"net_worth_query must be defined in portfolio `{portfolio_name}`"
+            )
+        return cls(
+            name=portfolio_name,
+            cash_flow_query_name=cash_flow_query_name,
+            net_worth_query_name=net_worth_query_name,
+            cash_flow_query=None,
+            net_worth_query=None,
+        )
+
+
+def cmd_xirr(input: InputXIRR):
+    # See what portfolio are defined.
+    portfolios: list[Portfolio] = []
+    customs_query = """
+        SELECT meta, values
+        FROM #customs
+        WHERE type = 'bean-report.py'
+    """
+    for row in cast(
+        list[
+            tuple[
+                data.Meta,
+                list[ValueType],
+            ]
+        ],
+        input.conn.execute(customs_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+    ):
+        value_types = row[1]
+        if len(value_types) == 2 and value_types[0].value == "xirr":  # pyright: ignore[reportAny]
+            portfolios.append(Portfolio.from_row(row))
+
+    # Gather the queries
+    query_by_name: dict[str, data.Query] = {}
+    queries_query = """
+        SELECT meta, date, name, query_string
+        FROM #queries
+    """
+    for row in cast(
+        list[tuple[data.Meta, datetime.date, str, str]],
+        input.conn.execute(queries_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+    ):
+        meta = row[0]
+        date = row[1]
+        name = row[2]
+        query_string = row[3]
+        query = data.Query(meta=meta, date=date, name=name, query_string=query_string)
+        query_by_name[name] = query
+
+    for portfolio in portfolios:
+        try:
+            cash_flow_query = query_by_name[portfolio.cash_flow_query_name]
+        except KeyError:
+            raise ValueError(
+                f"The query `{portfolio.cash_flow_query_name}` referenced by portfolio `{portfolio.name}` is missing"
+            )
+        try:
+            net_worth_query = query_by_name[portfolio.net_worth_query_name]
+        except KeyError:
+            raise ValueError(
+                f"The query `{portfolio.net_worth_query_name}` referenced by portfolio `{portfolio.name}` is missing"
+            )
+        portfolio.cash_flow_query = cash_flow_query
+        portfolio.net_worth_query = net_worth_query
+
+    # The user did not specify which portfolio to evaluate.
+    # Print them out to let the user to pick.
+    if input.portfolio is None:
+        for portfolio in portfolios:
+            print(portfolio.name)
+        return
+
+    # Otherwise, calculate the XIRR of the portfolio.
+    portfolio = next(iter([p for p in portfolios if p.name == input.portfolio]))
+    if portfolio is None:  # pyright: ignore[reportUnnecessaryComparison]
+        raise ValueError(f"portfolio `{input.portfolio}` not found")
+
+    assert portfolio.cash_flow_query is not None
+    assert portfolio.net_worth_query is not None
+
+    cash_flows: list[tuple[datetime.date, Amount]] = []
+    for cash_flow in cast(
+        list[tuple[datetime.date, Amount | Position]],
+        input.conn.execute(portfolio.cash_flow_query.query_string).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+    ):
+        if (
+            len(cash_flow) != 2
+            or not isinstance(cash_flow[0], datetime.date)  # pyright: ignore[reportUnnecessaryIsInstance]
+            or (
+                not isinstance(cash_flow[1], Amount)
+                and not isinstance(cash_flow[1], Position)  # pyright: ignore[reportUnnecessaryIsInstance]
+            )
+        ):
+            raise TypeError(
+                "cash_flow_query is expected to return a row of (datetime.date, Position)"
+            )
+        if isinstance(cash_flow[1], Position):
+            amount = cash_flow[1].units
+        else:
+            amount = cash_flow[1]
+
+        if len(cash_flows) != 0:
+            first = cash_flows[0]
+            if first[1].currency != amount.currency:
+                raise ValueError(
+                    f"expected all cash flows in `{portfolio.cash_flow_query_name}` to have the currency {first[1].currency}"
+                )
+        cash_flows.append((cash_flow[0], amount))
+    if len(cash_flows) <= 0:
+        raise ValueError(
+            f"expected `{portfolio.cash_flow_query_name}` to return non-empty cash flows"
+        )
+
+    results = cast(
+        list[tuple[Amount | Position | Inventory]],
+        input.conn.execute(portfolio.net_worth_query.query_string).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+    )
+    if len(results) != 1:
+        raise ValueError(
+            f"expected `{portfolio.net_worth_query_name}` to return exactly one row"
+        )
+    net_worth = results[0]
+    if len(net_worth) != 1:
+        raise TypeError(
+            f"expected `{portfolio.net_worth_query_name}` to return a row of (Amount | Position | Inventory)"
+        )
+
+    amount_or_position_inventory = net_worth[0]
+    if isinstance(amount_or_position_inventory, Inventory):
+        if len(amount_or_position_inventory) != 1:
+            raise ValueError(
+                f"expected `{portfolio.net_worth_query_name}` to return an Inventory of exactly one Position"
+            )
+        amount = amount_or_position_inventory.get_positions()[0].units
+    elif isinstance(amount_or_position_inventory, Position):
+        amount = amount_or_position_inventory.units
+    else:
+        amount = amount_or_position_inventory
+    assert amount is not None
+    assert amount.number is not None
+    if amount.number <= Decimal(0):
+        raise ValueError(
+            f"expected `{portfolio.net_worth_query_name}` to return a positive amount"
+        )
+
+    if amount.currency != cash_flows[0][1].currency:
+        raise ValueError(
+            f"expected `{portfolio.net_worth_query_name}` to return an Inventory / Position / Amount of currency {cash_flows[0][1].currency}"
+        )
+
+    today = datetime.date.today()
+    cash_flows.append((today, amount))
+
+    pyxirr_cash_flows = [
+        (cash_flow[0], cast(Decimal, cash_flow[1].number)) for cash_flow in cash_flows
+    ]
+    percentage = pyxirr.xirr(pyxirr_cash_flows)  # pyright: ignore[reportPrivateImportUsage]
+    if percentage is None:
+        raise ValueError("failed to find XIRR")
+
+    xirr_value = (Decimal(percentage) * Decimal(100)).quantize(Decimal("0.00"))
+    table: list[list[str]] = [["Date / XIRR", "Cash flow"]]
+    for cash_flow in cash_flows:
+        amount = format_amount(input.conn, cash_flow[1])
+        table.append([str(cash_flow[0]), str(amount)])
+    table.append(["XIRR", f"{xirr_value}%"])
+    print_table(table)
 
 
 def cmd_income_statement(input: InputWithPeriodStartEnd):
@@ -963,6 +1205,11 @@ def main():
         help="Generate a report on unrealized gains and losses",
     )
     _ = unrealized_gains_and_losses.set_defaults(command="unrealized-gains-and-losses")
+    xirr = subcommand.add_parser(
+        "xirr",
+        help="Calculate XIRR",
+    )
+    _ = xirr.set_defaults(command="xirr")
 
     for p in [income_statement, balance_sheet]:
         _ = p.add_argument(
@@ -1010,8 +1257,13 @@ def main():
             help="The date of the report, e.g. 2026-01-01",
         )
 
-    for p in [balance_sheet, income_statement, unrealized_gains_and_losses]:
+    for p in [balance_sheet, income_statement, unrealized_gains_and_losses, xirr]:
         _ = p.add_argument("filepath", help="Path to the Beancount file")
+
+    for p in [xirr]:
+        _ = p.add_argument(
+            "--portfolio", help="The portfolio. It is defined in your Beancount file."
+        )
 
     args = parser.parse_args()
     match cast(Subcommand, args.command):
@@ -1021,6 +1273,8 @@ def main():
             cmd_balance_sheet(InputWithPeriodStartEnd.from_namespace(args))
         case "unrealized-gains-and-losses":
             cmd_unrealized_gains_and_losses(InputWithAsOf.from_namespace(args))
+        case "xirr":
+            cmd_xirr(InputXIRR.from_namespace(args))
 
 
 main()
