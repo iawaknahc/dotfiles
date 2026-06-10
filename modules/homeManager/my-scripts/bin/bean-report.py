@@ -7,6 +7,7 @@ from typing import Any, Literal, NamedTuple, Self, cast, override
 
 import beanquery  # pyright: ignore[reportMissingTypeStubs]
 import tabulate
+from beancount.core import prices
 from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
 from beancount.core.position import Cost, CostSpec, Position
@@ -41,6 +42,20 @@ AssetClass = (
 class Pair(NamedTuple):
     base: str
     quote: str
+
+
+def get_price_map(conn: beanquery.Connection) -> prices.PriceMap:
+    # Based on observation, the prices table has a special property `price_map` which is an instance of prices.PriceMap.
+    # https://github.com/beancount/beanquery/blob/v0.2.0/beanquery/sources/beancount.py#L179
+    PricesTable = NamedTuple("PricesTable", [("price_map", prices.PriceMap)])  # pyright: ignore[reportAny]
+    tables = cast(
+        dict[
+            Literal["prices"],
+            PricesTable,
+        ],
+        conn.tables,
+    )
+    return tables["prices"].price_map
 
 
 def parse_asset_class(s: str) -> AssetClass:
