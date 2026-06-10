@@ -6,7 +6,7 @@
 # This plugin is authored by a core maintainer of Nushell.
 rustPlatform.buildRustPackage {
   pname = "nu_plugin_regex";
-  version = "0-unstable-2026-05-28";
+  version = "0.22.0-unstable-2026-05-28";
   src = fetchFromGitHub {
     owner = "fdncred";
     repo = "nu_plugin_regex";

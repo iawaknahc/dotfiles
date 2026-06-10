@@ -11,7 +11,7 @@
 # Therefore, ISO 8601 notation is used.
 rustPlatform.buildRustPackage {
   pname = "nu_plugin_dt";
-  version = "0-unstable-2026-05-28";
+  version = "0.2.0-unstable-2026-05-28";
   src = fetchFromGitHub {
     owner = "fdncred";
     repo = "nu_plugin_dt";

@@ -5,12 +5,12 @@
 }:
 buildPythonPackage rec {
   pname = "py2hy";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
   build-system = [ setuptools ];
   dontCheckRuntimeDeps = true;
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6h61S7Glbeg0yPyBCOoSvBt9SXCWgXs58wpEXRvcIKU=";
+    hash = "sha256-VZ04oDaKumqUfaN8i0Iqsfn4AhCw2PecUJdwJZcNZjE=";
   };
 }

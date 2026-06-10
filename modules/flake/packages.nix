@@ -1,41 +1,61 @@
 { withSystem, ... }: # This scope is in `flake` module.
+let
+  UAX44-ucd = { callPackage }: callPackage ../../packages/UAX44-ucd.nix { };
+  UTS39-security = { callPackage }: callPackage ../../packages/UTS39-security.nix { };
+  UTS46-idna = { callPackage }: callPackage ../../packages/UTS46-idna.nix { };
+  UTS51-emoji = { callPackage }: callPackage ../../packages/UTS51-emoji.nix { };
+  UTS58-linkification = { callPackage }: callPackage ../../packages/UTS58-linkification.nix { };
+  nu_plugin_dt = { callPackage }: callPackage ../../packages/nu_plugin_dt.nix { };
+  nu_plugin_regex = { callPackage }: callPackage ../../packages/nu_plugin_regex.nix { };
+  alfred-workflow-switch-appearance =
+    { callPackage }: callPackage ../../packages/alfred-workflow-switch-appearance.nix { };
+  EmmyLua_spoon = { callPackage }: callPackage ../../packages/EmmyLua_spoon.nix { };
+  tree-sitter-numbat = { callPackage }: callPackage ../../packages/tree-sitter-numbat.nix { };
+  nvim-colors = { callPackage }: callPackage ../../packages/nvim-colors.nix { };
+  my-ggufs = { callPackage }: callPackage ../../packages/my-ggufs.nix { };
+  hledger-lsp = { callPackage }: callPackage ../../packages/hledger-lsp.nix { };
+  py2hy = { callPackage }: callPackage ../../packages/py2hy.nix { };
+  beancount2ledger = { callPackage }: callPackage ../../packages/beancount2ledger.nix { };
+  autobean_refactor = { callPackage }: callPackage ../../packages/autobean_refactor.nix { };
+  autobean_format = { callPackage }: callPackage ../../packages/autobean_format.nix { };
+in
 {
   # Add packages to this flake.
   perSystem =
     { pkgs, ... }:
     {
-      packages.UAX44-ucd = pkgs.callPackage ../../packages/UAX44-ucd.nix { };
-      packages.UTS39-security = pkgs.callPackage ../../packages/UTS39-security.nix { };
-      packages.UTS46-idna = pkgs.callPackage ../../packages/UTS46-idna.nix { };
-      packages.UTS51-emoji = pkgs.callPackage ../../packages/UTS51-emoji.nix { };
-      packages.UTS58-linkification = pkgs.callPackage ../../packages/UTS58-linkification.nix { };
+      packages = {
+        UAX44-ucd = UAX44-ucd { callPackage = pkgs.callPackage; };
+        UTS39-security = UTS39-security { callPackage = pkgs.callPackage; };
+        UTS46-idna = UTS46-idna { callPackage = pkgs.callPackage; };
+        UTS51-emoji = UTS51-emoji { callPackage = pkgs.callPackage; };
+        UTS58-linkification = UTS58-linkification { callPackage = pkgs.callPackage; };
+        nu_plugin_dt = nu_plugin_dt { callPackage = pkgs.callPackage; };
+        nu_plugin_regex = nu_plugin_regex { callPackage = pkgs.callPackage; };
+        alfred-workflow-switch-appearance = alfred-workflow-switch-appearance {
+          callPackage = pkgs.callPackage;
+        };
+        EmmyLua_spoon = EmmyLua_spoon { callPackage = pkgs.callPackage; };
+        tree-sitter-numbat = tree-sitter-numbat { callPackage = pkgs.callPackage; };
+        nvim-colors = nvim-colors { callPackage = pkgs.callPackage; };
+        my-ggufs = my-ggufs { callPackage = pkgs.callPackage; };
+        hledger-lsp = hledger-lsp { callPackage = pkgs.callPackage; };
 
-      packages.nu_plugin_dt = pkgs.callPackage ../../packages/nu_plugin_dt.nix { };
-      packages.nu_plugin_regex = pkgs.callPackage ../../packages/nu_plugin_regex.nix { };
-
-      packages.alfred-workflow-switch-appearance =
-        pkgs.callPackage ../../packages/alfred-workflow-switch-appearance.nix
-          { };
-
-      packages.EmmyLua_spoon = pkgs.callPackage ../../packages/EmmyLua_spoon.nix { };
-
-      packages.tree-sitter-numbat = pkgs.callPackage ../../packages/tree-sitter-numbat.nix { };
-
-      packages.nvim-colors = pkgs.callPackage ../../packages/nvim-colors.nix { };
-
-      packages.my-ggufs = pkgs.callPackage ../../packages/my-ggufs.nix { };
-
-      packages.hledger-lsp = pkgs.callPackage ../../packages/hledger-lsp.nix { };
+        py2hy = py2hy { callPackage = pkgs.python3Packages.callPackage; };
+        beancount2ledger = beancount2ledger { callPackage = pkgs.python3Packages.callPackage; };
+        autobean_refactor = autobean_refactor { callPackage = pkgs.python3Packages.callPackage; };
+        autobean_format = autobean_format { callPackage = pkgs.python3Packages.callPackage; };
+      };
     };
 
   # Expose the added packages as an overlay named `default`.
   flake.overlays.default =
     let
       packageOverrides = pyfinal: pyprev: {
-        py2hy = pyfinal.callPackage ../../packages/py2hy.nix { };
-        beancount2ledger = pyfinal.callPackage ../../packages/beancount2ledger.nix { };
-        autobean_refactor = pyfinal.callPackage ../../packages/autobean_refactor.nix { };
-        autobean_format = pyfinal.callPackage ../../packages/autobean_format.nix { };
+        py2hy = py2hy { callPackage = pyfinal.callPackage; };
+        beancount2ledger = beancount2ledger { callPackage = pyfinal.callPackage; };
+        autobean_refactor = autobean_refactor { callPackage = pyfinal.callPackage; };
+        autobean_format = autobean_format { callPackage = pyfinal.callPackage; };
 
         # The docs/ directory of beanquery will be copied to site-packages/
         # which will clash with The docs/ directory of https://github.com/pyca/cryptography/tree/48.0.0/docs
