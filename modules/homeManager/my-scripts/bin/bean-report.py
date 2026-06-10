@@ -3,7 +3,7 @@ import argparse
 import datetime
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Any, Callable, Literal, NamedTuple, cast, override
+from typing import Any, Literal, NamedTuple, Self, cast, override
 
 import beanquery  # pyright: ignore[reportMissingTypeStubs]
 import tabulate
@@ -14,6 +14,8 @@ from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
 from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
     get_decimal_places,
 )
+
+Subcommand = Literal["income-statement"] | Literal["balance-sheet"]
 
 Period = (
     Literal["daily"]
@@ -132,7 +134,7 @@ class DataPoint:
 
 
 @dataclass
-class Input:
+class InputWithPeriodStartEnd:
     period: Period
     start: datetime.date
     end: datetime.date
@@ -162,8 +164,210 @@ class Input:
         self.asset_class = asset_class
         self.where_clause = where_clause
 
+    @classmethod
+    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
+        account_level = cast(int | None, namespace.account_level)
+        asset_class = cast(list[AssetClass] | None, namespace.asset_class)
+        where_clause = cast(str | None, namespace.where_clause)
+        filepath = cast(str, namespace.filepath)
+        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
+        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
 
-Subcommand = Callable[[Input], None]
+        start_str = cast(str | None, namespace.start)
+        end_str = cast(str | None, namespace.end)
+        match cast(Period, namespace.period):
+            case "daily":
+                match (start_str, end_str):
+                    case (None, None):
+                        start = datetime.date.today()
+                        end = start + datetime.timedelta(days=1)
+                    case (None, end_str):
+                        end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = end + datetime.timedelta(days=-1)
+                    case (start_str, None):
+                        start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = start + datetime.timedelta(days=1)
+                    case (start_str, end_str):
+                        start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="daily",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case "weekly":
+                match (start_str, end_str):
+                    case (None, None):
+                        today = datetime.date.today()
+                        start = monday(today)
+                        assert start.weekday() == 0
+                        end = start + datetime.timedelta(weeks=1)
+                    case (None, end_str):
+                        end = datetime.date.strptime(
+                            cast(str, end_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            "%G-W%V-%u",
+                        )
+                        assert end.weekday() == 0
+                        start = end + datetime.timedelta(weeks=-1)
+                        assert start.weekday() == 0
+                    case (start_str, None):
+                        start = datetime.date.strptime(
+                            cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            "%G-W%V-%u",
+                        )
+                        assert start.weekday() == 0
+                        end = start + datetime.timedelta(weeks=1)
+                        assert end.weekday() == 0
+                    case (start_str, end_str):
+                        start = datetime.date.strptime(
+                            cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            "%G-W%V-%u",
+                        )
+                        end = datetime.date.strptime(
+                            cast(str, end_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            "%G-W%V-%u",
+                        )
+                        assert start.weekday() == 0
+                        assert end.weekday() == 0
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="weekly",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case "monthly":
+                match (start_str, end_str):
+                    case (None, None):
+                        today = datetime.date.today()
+                        start = start_of_month(today)
+                        end = next_month(start)
+                    case (None, end_str):
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
+                        start = previous_month(end)
+                    case (start_str, None):
+                        start = datetime.date.fromisoformat(
+                            cast(str, start_str) + "-01"  # pyright: ignore[reportUnnecessaryCast]
+                        )
+                        end = next_month(start)
+                    case (start_str, end_str):
+                        start = datetime.date.fromisoformat(
+                            cast(str, start_str) + "-01"  # pyright: ignore[reportUnnecessaryCast]
+                        )
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="monthly",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case "quarterly":
+                match (start_str, end_str):
+                    case (None, None):
+                        today = datetime.date.today()
+                        start = start_of_quarter(today)
+                        end = next_quarter(start)
+                    case (None, end_str):
+                        end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = previous_quarter(end)
+                    case (start_str, None):
+                        start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = next_quarter(start)
+                    case (start_str, end_str):
+                        start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="quarterly",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case "yearly":
+                match (start_str, end_str):
+                    case (None, None):
+                        today = datetime.date.today()
+                        start = start_of_year(today)
+                        end = next_year(start)
+                    case (None, end_str):
+                        end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = previous_year(end)
+                    case (start_str, None):
+                        start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = next_year(start)
+                    case (start_str, end_str):
+                        start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="yearly",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case "hong-kong":
+                match (start_str, end_str):
+                    case (None, None):
+                        today = datetime.date.today()
+                        start = start_of_hong_kong(today)
+                        end = next_year(start)
+                    case (None, end_str):
+                        end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = previous_year(end)
+                    case (start_str, None):
+                        start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = next_year(start)
+                    case (start_str, end_str):
+                        start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        if start >= end:
+                            raise ValueError("--start must be strictly less than --end")
+                    case _:  # pyright: ignore[reportUnnecessaryComparison]
+                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                return cls(
+                    period="hong-kong",
+                    start=start,
+                    end=end,
+                    conn=conn,
+                    account_level=account_level,
+                    asset_class=asset_class,
+                    where_clause=where_clause,
+                )
+            case _:  # pyright: ignore[reportUnnecessaryComparison]
+                raise ValueError("unreachable")  # pyright: ignore[reportUnreachable]
 
 
 def account_level_to_column(account_level: int | None) -> str:
@@ -308,7 +512,7 @@ def x_avg_cost(inv: Inventory) -> Inventory:
     return out
 
 
-def cmd_income_statement(input: Input):
+def cmd_income_statement(input: InputWithPeriodStartEnd):
     where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
     account_column = account_level_to_column(input.account_level)
@@ -348,7 +552,7 @@ def cmd_income_statement(input: Input):
     print_table(table)
 
 
-def cmd_balance_sheet(input: Input):
+def cmd_balance_sheet(input: InputWithPeriodStartEnd):
     account_column = account_level_to_column(input.account_level)
     where_clause = input.where_clause if input.where_clause is not None else "TRUE"
 
@@ -541,7 +745,9 @@ def get_asset_class_by_name(name: str) -> AssetClass | None:
     return asset_class
 
 
-def respect_asset_class(input: Input, data_points: list[DataPoint]) -> list[DataPoint]:
+def respect_asset_class(
+    input: InputWithPeriodStartEnd, data_points: list[DataPoint]
+) -> list[DataPoint]:
     if input.asset_class is None:
         return data_points
 
@@ -645,201 +851,6 @@ def print_table(table: list[list[str]]) -> None:
     )
 
 
-def parse_namespace(namespace: argparse.Namespace) -> Input:
-    account_level = cast(int | None, namespace.account_level)
-    asset_class = cast(list[AssetClass] | None, namespace.asset_class)
-    where_clause = cast(str | None, namespace.where_clause)
-    filepath = cast(str, namespace.filepath)
-    conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-    conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
-
-    start_str = cast(str | None, namespace.start)
-    end_str = cast(str | None, namespace.end)
-    match cast(Period, namespace.period):
-        case "daily":
-            match (start_str, end_str):
-                case (None, None):
-                    start = datetime.date.today()
-                    end = start + datetime.timedelta(days=1)
-                case (None, end_str):
-                    end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    start = end + datetime.timedelta(days=-1)
-                case (start_str, None):
-                    start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = start + datetime.timedelta(days=1)
-                case (start_str, end_str):
-                    start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="daily",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case "weekly":
-            match (start_str, end_str):
-                case (None, None):
-                    today = datetime.date.today()
-                    start = monday(today)
-                    assert start.weekday() == 0
-                    end = start + datetime.timedelta(weeks=1)
-                case (None, end_str):
-                    end = datetime.date.strptime(cast(str, end_str) + "-1", "%G-W%V-%u")  # pyright: ignore[reportUnnecessaryCast]
-                    assert end.weekday() == 0
-                    start = end + datetime.timedelta(weeks=-1)
-                    assert start.weekday() == 0
-                case (start_str, None):
-                    start = datetime.date.strptime(
-                        cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
-                        "%G-W%V-%u",
-                    )
-                    assert start.weekday() == 0
-                    end = start + datetime.timedelta(weeks=1)
-                    assert end.weekday() == 0
-                case (start_str, end_str):
-                    start = datetime.date.strptime(
-                        cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
-                        "%G-W%V-%u",
-                    )
-                    end = datetime.date.strptime(cast(str, end_str) + "-1", "%G-W%V-%u")  # pyright: ignore[reportUnnecessaryCast]
-                    assert start.weekday() == 0
-                    assert end.weekday() == 0
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="weekly",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case "monthly":
-            match (start_str, end_str):
-                case (None, None):
-                    today = datetime.date.today()
-                    start = start_of_month(today)
-                    end = next_month(start)
-                case (None, end_str):
-                    end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
-                    start = previous_month(end)
-                case (start_str, None):
-                    start = datetime.date.fromisoformat(cast(str, start_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
-                    end = next_month(start)
-                case (start_str, end_str):
-                    start = datetime.date.fromisoformat(cast(str, start_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
-                    end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="monthly",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case "quarterly":
-            match (start_str, end_str):
-                case (None, None):
-                    today = datetime.date.today()
-                    start = start_of_quarter(today)
-                    end = next_quarter(start)
-                case (None, end_str):
-                    end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    start = previous_quarter(end)
-                case (start_str, None):
-                    start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = next_quarter(start)
-                case (start_str, end_str):
-                    start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="quarterly",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case "yearly":
-            match (start_str, end_str):
-                case (None, None):
-                    today = datetime.date.today()
-                    start = start_of_year(today)
-                    end = next_year(start)
-                case (None, end_str):
-                    end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    start = previous_year(end)
-                case (start_str, None):
-                    start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = next_year(start)
-                case (start_str, end_str):
-                    start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="yearly",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case "hong-kong":
-            match (start_str, end_str):
-                case (None, None):
-                    today = datetime.date.today()
-                    start = start_of_hong_kong(today)
-                    end = next_year(start)
-                case (None, end_str):
-                    end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    start = previous_year(end)
-                case (start_str, None):
-                    start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = next_year(start)
-                case (start_str, end_str):
-                    start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                    end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
-                    if start >= end:
-                        raise ValueError("--start must be strictly less than --end")
-                case _:  # pyright: ignore[reportUnnecessaryComparison]
-                    raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
-            return Input(
-                period="hong-kong",
-                start=start,
-                end=end,
-                conn=conn,
-                account_level=account_level,
-                asset_class=asset_class,
-                where_clause=where_clause,
-            )
-        case _:  # pyright: ignore[reportUnnecessaryComparison]
-            raise ValueError("unreachable")  # pyright: ignore[reportUnreachable]
-
-
 def parse_account_level(s: str) -> int:
     v = int(s, base=10)
     if v < 0:
@@ -852,20 +863,20 @@ def main():
 
     # The order is important.
     # The subcommand comes before the required filepath.
-    subcommands = parser.add_subparsers(dest="subcommands", required=True)
+    subcommand = parser.add_subparsers(dest="subcommand", required=True)
 
-    income_statement = subcommands.add_parser(
+    income_statement = subcommand.add_parser(
         "income-statement",
         aliases=["is"],
         help="Generate an income statement",
     )
-    income_statement.set_defaults(command=cmd_income_statement)
-    balance_sheet = subcommands.add_parser(
+    _ = income_statement.set_defaults(command="income-statement")
+    balance_sheet = subcommand.add_parser(
         "balance-sheet",
         aliases=["bs"],
         help="Generate a balance sheet",
     )
-    balance_sheet.set_defaults(command=cmd_balance_sheet)
+    _ = balance_sheet.set_defaults(command="balance-sheet")
 
     for p in [income_statement, balance_sheet]:
         _ = p.add_argument(
@@ -909,8 +920,11 @@ def main():
         _ = p.add_argument("filepath", help="Path to the Beancount file")
 
     args = parser.parse_args()
-    input = parse_namespace(args)
-    cast(Subcommand, args.command)(input)
+    match cast(Subcommand, args.command):
+        case "income-statement":
+            cmd_income_statement(InputWithPeriodStartEnd.from_namespace(args))
+        case "balance-sheet":
+            cmd_balance_sheet(InputWithPeriodStartEnd.from_namespace(args))
 
 
 main()
