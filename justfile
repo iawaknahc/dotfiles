@@ -153,3 +153,4 @@ update-trivial-packages:
     nix-update beancount2ledger --flake
     nix-update autobean_refactor --flake
     nix-update autobean_format --flake
+    nix-update pyxirr --flake
