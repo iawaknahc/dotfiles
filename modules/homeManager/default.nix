@@ -131,6 +131,7 @@ _: {
     ./obsidian.nix
     ./jupyter.nix
     ./pdf.nix
+    ./yt-dlp.nix
 
     # I use Beancount exclusively now.
     # And hledger is really big in terms of the storage it needs.
