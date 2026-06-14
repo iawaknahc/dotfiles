@@ -33,6 +33,13 @@ META_billing_period_start = "billing_period_start"
 META_billing_amortization_enabled = "billing_amortization_enabled"
 
 
+@dataclass
+class AmortizationResult:
+    posting: data.Posting
+    links: frozenset[str]
+    entries: list[data.Directive]
+
+
 def multiply_ItemizedDateDelta(
     d: ItemizedDateDelta, multiplier: int
 ) -> ItemizedDateDelta:
@@ -137,7 +144,9 @@ def check_quotient(
     return quotient
 
 
-def equity_account_name(*, posting: data.Posting, transaction: data.Transaction) -> str:
+def equity_account_name_and_link(
+    *, posting: data.Posting, transaction: data.Transaction
+) -> tuple[str, str]:
     # We want to generate a unique but somehow deterministic account name.
     # We want to support amortize on more than one postings in the same transaction.
     # So we do a trick here.
@@ -155,7 +164,7 @@ def equity_account_name(*, posting: data.Posting, transaction: data.Transaction)
         postings=[posting],
     )
     txn_hash = compare.hash_entry(cloned, exclude_meta=False).upper()
-    return f"Equity:{txn_hash}"
+    return f"Equity:{txn_hash}", f"amortization-{txn_hash}"
 
 
 def equity_account_open_date(
@@ -255,7 +264,7 @@ def amortize_posting(
     transaction: data.Transaction,
     posting: data.Posting,
     date_limit_exclusive: datetime.date,
-) -> tuple[data.Posting, list[data.Directive]]:
+) -> AmortizationResult:
     entries: list[data.Directive] = []
 
     assert posting.units is not None
@@ -266,11 +275,19 @@ def amortize_posting(
     # If the open date of the equity account is beyond the limit,
     # it means we cannot amortize this posting now.
     if open_date > date_limit_exclusive:
-        return posting, entries
+        return AmortizationResult(
+            posting=posting,
+            links=frozenset(),
+            entries=entries,
+        )
 
     # Open the equity account.
     original_account = posting.account
-    equity_account = equity_account_name(posting=posting, transaction=transaction)
+    equity_account, link = equity_account_name_and_link(
+        posting=posting, transaction=transaction
+    )
+    tags = frozenset({TAG})
+    links = frozenset({link})
     entries.append(
         data.Open(
             meta=data.new_metadata(
@@ -370,8 +387,8 @@ def amortize_posting(
                     original_narration=transaction.narration,
                     nth_period_0_based=idx,
                 ),
-                tags=transaction.tags | frozenset({TAG}),
-                links=transaction.links,
+                tags=transaction.tags | tags,
+                links=transaction.links | links,
                 postings=[
                     data.Posting(
                         meta=data.new_metadata(
@@ -411,7 +428,11 @@ def amortize_posting(
             ),
         )
 
-    return posting, entries
+    return AmortizationResult(
+        posting=posting,
+        entries=entries,
+        links=links,
+    )
 
 
 @dataclass
@@ -569,7 +590,7 @@ def amortize_transaction(
     entries: list[data.Directive] = []
     errors: list[PluginError] = []
 
-    amortized_at_least_once = False
+    links: frozenset[str] = frozenset()
     for idx, posting in enumerate(entry.postings):
         if posting.meta is None:
             continue
@@ -599,7 +620,7 @@ def amortize_transaction(
                 pass
             case (None, billing):
                 assert billing is not None
-                new_posting, new_entries = amortize_posting(
+                result = amortize_posting(
                     amortization_frequency=billing.instruction_on_open.amortization_frequency,
                     amortization_start=billing.billing_period_start,
                     amortization_end=billing.billing_period_start.add(
@@ -610,14 +631,14 @@ def amortize_transaction(
                     posting=posting,
                     date_limit_exclusive=date_limit_exclusive,
                 )
-                amortized_at_least_once = True
+                links = links | result.links
                 # Modify the list in-place.
-                entry.postings[idx] = new_posting
-                for e in new_entries:
+                entry.postings[idx] = result.posting
+                for e in result.entries:
                     entries.append(e)
             case (one_off, None):
                 assert one_off is not None
-                new_posting, new_entries = amortize_posting(
+                result = amortize_posting(
                     amortization_frequency=one_off.amortization_frequency,
                     amortization_start=one_off.amortization_start,
                     amortization_end=one_off.amortization_end,
@@ -626,10 +647,10 @@ def amortize_transaction(
                     posting=posting,
                     date_limit_exclusive=date_limit_exclusive,
                 )
-                amortized_at_least_once = True
+                links = links | result.links
                 # Modify the list in-place.
-                entry.postings[idx] = new_posting
-                for e in new_entries:
+                entry.postings[idx] = result.posting
+                for e in result.entries:
                     entries.append(e)
             case (_, _):
                 errors.append(
@@ -640,8 +661,10 @@ def amortize_transaction(
                     )
                 )
 
-    if amortized_at_least_once:
-        entry = entry._replace(tags=entry.tags | frozenset({TAG}))
+    if len(links) > 0:
+        entry = entry._replace(
+            tags=entry.tags | frozenset({TAG}), links=entry.links | links
+        )
 
     # If there is any errors, return the transaction unmodified.
     if len(errors) > 0:
