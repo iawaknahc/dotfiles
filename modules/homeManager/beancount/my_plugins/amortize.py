@@ -22,6 +22,8 @@ class PluginError(NamedTuple):
 
 TAG = "amortized"
 
+ACCOUNT_EXPENSES = "Expenses:"
+
 META_amortization_frequency = "amortization_frequency"
 META_amortization_start = "amortization_start"
 META_amortization_end = "amortization_end"
@@ -430,6 +432,12 @@ class BillingInstructionOnOpenDirective:
 
     @classmethod
     def from_open(cls, entry: data.Open) -> Self | PluginError:
+        if not entry.account.startswith(ACCOUNT_EXPENSES):
+            return PluginError(
+                source=entry.meta,
+                message="Amortization is applicable to expenses only",
+                entry=entry,
+            )
         subscription_start = Date(entry.date)
         billing_period = parse_iso8601_duration(
             name=META_billing_period, meta=entry.meta, entry=entry
@@ -507,6 +515,12 @@ class OneOffAmortizationInstructionOnPosting:
             and META_amortization_end not in posting.meta
         ):
             return None
+        if not posting.account.startswith(ACCOUNT_EXPENSES):
+            return PluginError(
+                source=posting.meta,
+                message="Amortization is applicable to expenses only",
+                entry=transaction,
+            )
         amortization_start = parse_iso8601_date(
             name=META_amortization_start, meta=posting.meta, entry=transaction
         )
