@@ -22,6 +22,14 @@ class PluginError(NamedTuple):
 
 TAG = "amortized"
 
+META_amortization_frequency = "amortization_frequency"
+META_amortization_start = "amortization_start"
+META_amortization_end = "amortization_end"
+
+META_billing_period = "billing_period"
+META_billing_period_start = "billing_period_start"
+META_billing_amortization_enabled = "billing_amortization_enabled"
+
 
 def multiply_ItemizedDateDelta(
     d: ItemizedDateDelta, multiplier: int
@@ -34,292 +42,259 @@ def multiply_ItemizedDateDelta(
     return ItemizedDateDelta(**kwargs)
 
 
-@dataclass
-class AmortizationInstruction:
-    billing_period: ItemizedDateDelta
-    billing_period_start: Date
-    billing_period_end: Date
-    amortization_period: ItemizedDateDelta
-    number_of_amortization_periods: int
-
-    @classmethod
-    def is_target_account(cls, entry: data.Open) -> bool:
-        if "billing_period" in entry.meta:
-            return True
-        return False
-
-    @classmethod
-    def is_target_posting(cls, posting: data.Posting) -> bool:
-        if posting.meta is not None and "billing_period" in posting.meta:
-            return True
-        return False
-
-    @classmethod
-    def is_target_transaction(cls, entry: data.Transaction) -> bool:
-        for posting in entry.postings:
-            if posting.meta is not None and "billing_period" in posting.meta:
-                return True
-        return False
-
-    @classmethod
-    def from_posting(
-        cls, posting: data.Posting, entry: data.Transaction
-    ) -> Self | PluginError:
-        assert posting.meta is not None
-        try:
-            billing_period = ItemizedDateDelta(
-                cast(str, posting.meta["billing_period"])
-            )
-        except KeyError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period must be present",
-                entry=entry,
-            )
-        except TypeError, ValueError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period must be a string of ISO 8601 duration, e.g. P1Y",
-                entry=entry,
-            )
-        try:
-            billing_period_start = Date(cast(str, posting.meta["billing_period_start"]))
-        except KeyError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_start must be present",
-                entry=entry,
-            )
-        except TypeError, ValueError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_start must be a string of ISO 8601 date, e.g. 2026-06-11",
-                entry=entry,
-            )
-        try:
-            billing_period_end = Date(cast(str, posting.meta["billing_period_end"]))
-        except KeyError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_end must be present",
-                entry=entry,
-            )
-        except TypeError, ValueError:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_end must be a string of ISO 8601 date, e.g. 2026-06-11",
-                entry=entry,
-            )
-        try:
-            amortization_period = ItemizedDateDelta(
-                cast(str, posting.meta["amortization_period"])
-            )
-        except KeyError:
-            return PluginError(
-                source=posting.meta,
-                message="amortization_period must be present",
-                entry=entry,
-            )
-        except TypeError, ValueError:
-            return PluginError(
-                source=posting.meta,
-                message="amortization_period must be a string of ISO 8601 duration, e.g. P1Y",
-                entry=entry,
-            )
-
-        # Validation
-        if billing_period_start > billing_period_end:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_start must be less than billing_period_end",
-                entry=entry,
-            )
-        if billing_period.sign() != 1:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period must be a positive ISO 8601 duration, e.g. P1Y",
-                entry=entry,
-            )
-        if amortization_period.sign() != 1:
-            return PluginError(
-                source=posting.meta,
-                message="amortization_period must be a positive ISO 8601 duration, e.g. P1Y",
-                entry=entry,
-            )
-        in_units = list(amortization_period.keys())
-        if len(in_units) != 1:
-            return PluginError(
-                source=posting.meta,
-                message="amortization_period must be specified in a single unit, e.g. P1M",
-                entry=entry,
-            )
-
-        billing_period_in_terms_of_amortization_period = billing_period_end.since(
-            billing_period_start, in_units=in_units
+def parse_iso8601_duration(
+    *, name: str, meta: data.Meta, entry: data.Directive
+) -> ItemizedDateDelta | PluginError:
+    try:
+        duration = ItemizedDateDelta(cast(str, meta[name]))
+    except KeyError:
+        return PluginError(
+            source=meta,
+            message=f"{name} must be present",
+            entry=entry,
         )
-        billing_period_in_terms_of_amortization_period_value = list(
-            billing_period_in_terms_of_amortization_period.values()
-        )[0]
-        amortization_period_value = list(amortization_period.values())[0]
-        if (
-            billing_period_in_terms_of_amortization_period_value
-            < amortization_period_value
-        ):
-            return PluginError(
-                source=posting.meta,
-                message="billing_period must be greater than or equal to amortization_period",
-                entry=entry,
-            )
-
-        number_of_amortization_periods_float = (
-            billing_period_in_terms_of_amortization_period_value
-            / amortization_period_value
+    except TypeError, ValueError:
+        return PluginError(
+            source=meta,
+            message=f"{name} must be a string of ISO 8601 duration, e.g. P1Y",
+            entry=entry,
         )
-        number_of_amortization_periods = math.floor(
-            number_of_amortization_periods_float
+    if duration.sign() != 1:
+        return PluginError(
+            source=meta,
+            message=f"{name} must be a position ISO 8601 duration, e.g. P1Y",
+            entry=entry,
         )
-        if number_of_amortization_periods_float != number_of_amortization_periods:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period must be divisible by amortization_period, e.g. P1Y is divisible by P1M, the quotient is 12.",
-                entry=entry,
-            )
+    return duration
 
-        if billing_period_start.add(billing_period) != billing_period_end:
-            return PluginError(
-                source=posting.meta,
-                message="billing_period_start + billing_period must be equal to billing_period_end.",
-                entry=entry,
-            )
 
-        return cls(
-            billing_period=billing_period,
-            billing_period_start=billing_period_start,
-            billing_period_end=billing_period_end,
-            amortization_period=amortization_period,
-            number_of_amortization_periods=number_of_amortization_periods,
+def parse_iso8601_date(
+    *, name: str, meta: data.Meta, entry: data.Directive
+) -> Date | PluginError:
+    try:
+        date = Date(cast(str, meta[name]))
+    except KeyError:
+        return PluginError(
+            source=meta,
+            message=f"{name} must be present",
+            entry=entry,
         )
-
-    def equity_account_name(
-        self, *, posting: data.Posting, transaction: data.Transaction
-    ) -> str:
-        # We want to generate a unique but somehow deterministic account name.
-        # We want to support amortize on more than one postings in the same transaction.
-        # So we do a trick here.
-        # We are going to construct a transaction with only the posting being amortized.
-        # This is not a valid transaction because it is probably not balanced.
-        # But it gives the hash we want.
-        cloned = data.Transaction(
-            meta=transaction.meta,
-            date=transaction.date,
-            flag=transaction.flag,
-            payee=transaction.payee,
-            narration=transaction.narration,
-            tags=transaction.tags,
-            links=transaction.links,
-            postings=[posting],
+    except TypeError, ValueError:
+        return PluginError(
+            source=meta,
+            message=f"{name} must be a string of ISO 8601 date, e.g. 2026-06-11",
+            entry=entry,
         )
-        txn_hash = compare.hash_entry(cloned, exclude_meta=False).upper()
-        return f"Equity:{txn_hash}"
+    return date
 
-    def equity_account_open_date(
-        self,
-        *,
-        transaction_date: datetime.date,
-    ) -> datetime.date:
-        # Return the earlier of the two to ensure the account is opened for use.
-        d1 = self.billing_period_start.to_stdlib()
-        if d1 < transaction_date:
-            return d1
-        return transaction_date
 
-    def equity_account_close_date(
-        self, *, transaction_date: datetime.date
-    ) -> datetime.date:
-        # The account can be closed on the same date when the final period ends.
-        # So the close date is the date of the final period.
-        # The date of the final period is billing_period_start + (n - 1) * amortization_period
-
-        assert self.number_of_amortization_periods >= 1
-        period_to_add = multiply_ItemizedDateDelta(
-            self.amortization_period, self.number_of_amortization_periods - 1
+def check_amortization_period(
+    *,
+    amortization_frequency: ItemizedDateDelta,
+    source: data.Meta,
+    entry: data.Directive,
+) -> tuple[Literal["years", "months", "weeks", "days"], int] | PluginError:
+    items = list(amortization_frequency.items())
+    if len(items) != 1:
+        return PluginError(
+            source=source,
+            message="amortization_period must be specified in a single unit, e.g. P1M",
+            entry=entry,
         )
-        close_date_according_to_amortization_schedule = self.billing_period_start.add(
-            period_to_add
-        ).to_stdlib()
+    return items[0]
 
-        # Return the later of the two to ensure the account is kept opened for use.
-        if close_date_according_to_amortization_schedule > transaction_date:
-            return close_date_according_to_amortization_schedule
-        return transaction_date
 
-    def amortization_amount(
-        self,
-        *,
-        original: Decimal,
-        currency: str,
-    ) -> tuple[Decimal, Decimal | None]:
-        num_periods = Decimal(self.number_of_amortization_periods)
-        amortization_mount_per_period = original / num_periods
+def check_quotient(
+    *,
+    amortization_start: Date,
+    amortization_end: Date,
+    item: tuple[Literal["years", "months", "weeks", "days"], int],
+    source: data.Meta,
+    entry: data.Directive,
+) -> int | PluginError:
+    values = list(
+        amortization_end.since(
+            amortization_start,
+            in_units=[item[0]],
+            round_mode="floor",
+            round_increment=1,
+        ).values()
+    )
+    # It should be 1 because len(in_units) == 1
+    assert len(values) == 1
 
-        decimal_for_quantization = get_decimal_for_quantization(currency)
-        # Not a currency, then we just assume the number of decimal places is unbounded.
-        if decimal_for_quantization is None:
-            return (amortization_mount_per_period, None)
-
-        amortization_mount_per_period = amortization_mount_per_period.quantize(
-            decimal_for_quantization
+    dividend = values[0]
+    divisor = item[1]
+    quotient = math.floor(dividend / divisor)
+    if quotient <= 0:
+        return PluginError(
+            source=source,
+            message="The whole amortization period must be greater than or equal to amortization_frequency",
+            entry=entry,
         )
-        product = amortization_mount_per_period * num_periods
-        adjustment = original - product
-        if adjustment == Decimal(0):
-            return (amortization_mount_per_period, None)
-        return (amortization_mount_per_period, adjustment)
+    return quotient
 
-    def amortization_narration(
-        self, original_narration: str | None, nth_period_0_based: int
-    ) -> str:
-        num_periods = self.number_of_amortization_periods
-        if original_narration is not None:
-            return f"{original_narration} ({self.billing_period_start.format_iso()} to {self.billing_period_end.format_iso()}) ({nth_period_0_based + 1}/{num_periods})"
-        return f"({self.billing_period_start.format_iso()} to {self.billing_period_end.format_iso()}) ({nth_period_0_based + 1}/{num_periods})"
 
-    def gen_idx_and_date(
-        self, date_limit_exclusive: datetime.date
-    ) -> Generator[tuple[int, datetime.date]]:
-        num_periods = self.number_of_amortization_periods
-        idx = 0
-        limit = Date(date_limit_exclusive)
-        whenever_date = self.billing_period_start
-        while idx < num_periods and whenever_date <= limit:
-            yield (idx, whenever_date.to_stdlib())
-            idx += 1
-            whenever_date = whenever_date.add(self.amortization_period)
+def equity_account_name(*, posting: data.Posting, transaction: data.Transaction) -> str:
+    # We want to generate a unique but somehow deterministic account name.
+    # We want to support amortize on more than one postings in the same transaction.
+    # So we do a trick here.
+    # We are going to construct a transaction with only the posting being amortized.
+    # This is not a valid transaction because it is probably not balanced.
+    # But it gives the hash we want.
+    cloned = data.Transaction(
+        meta=transaction.meta,
+        date=transaction.date,
+        flag=transaction.flag,
+        payee=transaction.payee,
+        narration=transaction.narration,
+        tags=transaction.tags,
+        links=transaction.links,
+        postings=[posting],
+    )
+    txn_hash = compare.hash_entry(cloned, exclude_meta=False).upper()
+    return f"Equity:{txn_hash}"
 
-    def amortize_posting(
-        self,
-        *,
-        transaction: data.Transaction,
-        posting: data.Posting,
-        date_limit_exclusive: datetime.date,
-    ) -> tuple[data.Posting, list[data.Directive]]:
-        entries: list[data.Directive] = []
 
-        assert posting.units is not None
+def equity_account_open_date(
+    *,
+    transaction_date: datetime.date,
+    amortization_start: Date,
+) -> datetime.date:
+    # Return the earlier of the two to ensure the account is opened for use.
+    d1 = amortization_start.to_stdlib()
+    if d1 < transaction_date:
+        return d1
+    return transaction_date
 
-        open_date = self.equity_account_open_date(transaction_date=transaction.date)
-        # If the open date of the equity account is beyond the limit,
-        # it means we cannot amortize this posting now.
-        if open_date > date_limit_exclusive:
-            return posting, entries
 
-        # Open the equity account.
-        original_account = posting.account
-        equity_account = self.equity_account_name(
-            posting=posting, transaction=transaction
+def equity_account_close_date(
+    *,
+    transaction_date: datetime.date,
+    amortization_start: Date,
+    amortization_frequency: ItemizedDateDelta,
+    quotient: int,
+) -> datetime.date:
+    # The account can be closed on the same date when the final period ends.
+    # So the close date is the date of the final period.
+    # The date of the final period is amortization + (n - 1) * amortization_period
+
+    assert quotient >= 1
+    period_to_add = multiply_ItemizedDateDelta(amortization_frequency, quotient - 1)
+    close_date_according_to_amortization_schedule = amortization_start.add(
+        period_to_add
+    ).to_stdlib()
+
+    # Return the later of the two to ensure the account is kept opened for use.
+    if close_date_according_to_amortization_schedule > transaction_date:
+        return close_date_according_to_amortization_schedule
+    return transaction_date
+
+
+def get_amortization_amount(
+    *,
+    quotient: int,
+    original: Decimal,
+    currency: str,
+) -> tuple[Decimal, Decimal | None]:
+    num_periods = Decimal(quotient)
+    amortization_mount_per_period = original / num_periods
+
+    decimal_for_quantization = get_decimal_for_quantization(currency)
+    # Not a currency, then we just assume the number of decimal places is unbounded.
+    if decimal_for_quantization is None:
+        return (amortization_mount_per_period, None)
+
+    amortization_mount_per_period = amortization_mount_per_period.quantize(
+        decimal_for_quantization
+    )
+    product = amortization_mount_per_period * num_periods
+    adjustment = original - product
+    if adjustment == Decimal(0):
+        return (amortization_mount_per_period, None)
+    return (amortization_mount_per_period, adjustment)
+
+
+def amortization_narration(
+    *,
+    quotient: int,
+    amortization_start: Date,
+    amortization_end: Date,
+    original_narration: str | None,
+    nth_period_0_based: int,
+) -> str:
+    if original_narration is not None:
+        return f"{original_narration} ({amortization_start.format_iso()} to {amortization_end.format_iso()}) ({nth_period_0_based + 1}/{quotient})"
+    return f"({amortization_start.format_iso()} to {amortization_end.format_iso()}) ({nth_period_0_based + 1}/{quotient})"
+
+
+def gen_idx_and_date(
+    *,
+    amortization_start: Date,
+    amortization_frequency: ItemizedDateDelta,
+    quotient: int,
+    date_limit_exclusive: datetime.date,
+) -> Generator[tuple[int, datetime.date]]:
+    idx = 0
+    limit = Date(date_limit_exclusive)
+    whenever_date = amortization_start
+    while idx < quotient and whenever_date <= limit:
+        yield (idx, whenever_date.to_stdlib())
+        idx += 1
+        whenever_date = whenever_date.add(amortization_frequency)
+
+
+def amortize_posting(
+    *,
+    amortization_start: Date,
+    amortization_end: Date,
+    amortization_frequency: ItemizedDateDelta,
+    quotient: int,
+    transaction: data.Transaction,
+    posting: data.Posting,
+    date_limit_exclusive: datetime.date,
+) -> tuple[data.Posting, list[data.Directive]]:
+    entries: list[data.Directive] = []
+
+    assert posting.units is not None
+
+    open_date = equity_account_open_date(
+        transaction_date=transaction.date, amortization_start=amortization_start
+    )
+    # If the open date of the equity account is beyond the limit,
+    # it means we cannot amortize this posting now.
+    if open_date > date_limit_exclusive:
+        return posting, entries
+
+    # Open the equity account.
+    original_account = posting.account
+    equity_account = equity_account_name(posting=posting, transaction=transaction)
+    entries.append(
+        data.Open(
+            meta=data.new_metadata(
+                "",
+                0,
+                {
+                    "__automatic__": True,
+                },
+            ),
+            date=open_date,
+            account=equity_account,
+            currencies=[posting.units.currency],
+            booking=None,
         )
+    )
+
+    # Close the account, if allowed to do so.
+    close_date = equity_account_close_date(
+        transaction_date=transaction.date,
+        amortization_start=amortization_start,
+        amortization_frequency=amortization_frequency,
+        quotient=quotient,
+    )
+    if close_date <= date_limit_exclusive:
         entries.append(
-            data.Open(
+            data.Close(
                 meta=data.new_metadata(
                     "",
                     0,
@@ -327,137 +302,296 @@ class AmortizationInstruction:
                         "__automatic__": True,
                     },
                 ),
-                date=open_date,
+                date=close_date,
                 account=equity_account,
-                currencies=[posting.units.currency],
-                booking=None,
             )
         )
-
-        # Close the account, if allowed to do so.
-        close_date = self.equity_account_close_date(transaction_date=transaction.date)
-        if close_date <= date_limit_exclusive:
-            entries.append(
-                data.Close(
-                    meta=data.new_metadata(
-                        "",
-                        0,
-                        {
-                            "__automatic__": True,
-                        },
-                    ),
-                    date=close_date,
-                    account=equity_account,
-                )
-            )
-            # Assert the balance 1 day after the close date
-            entries.append(
-                data.Balance(
-                    meta=data.new_metadata(
-                        "",
-                        0,
-                        {
-                            "__automatic__": True,
-                        },
-                    ),
-                    date=close_date + datetime.timedelta(days=1),
-                    account=equity_account,
-                    amount=Amount(number=Decimal(0), currency=posting.units.currency),
-                    tolerance=None,
-                    diff_amount=None,
+        # Assert the balance 1 day after the close date
+        entries.append(
+            data.Balance(
+                meta=data.new_metadata(
+                    "",
+                    0,
+                    {
+                        "__automatic__": True,
+                    },
                 ),
-            )
-
-        # Modify the posting
-        posting = posting._replace(account=equity_account)
-        assert posting.units is not None
-        assert posting.units.number is not None
-
-        # Insert amortized transactions.
-        amortization_amount, remainder = self.amortization_amount(
-            original=posting.units.number, currency=posting.units.currency
+                date=close_date + datetime.timedelta(days=1),
+                account=equity_account,
+                amount=Amount(number=Decimal(0), currency=posting.units.currency),
+                tolerance=None,
+                diff_amount=None,
+            ),
         )
-        num_periods = self.number_of_amortization_periods
 
-        for idx, date in self.gen_idx_and_date(date_limit_exclusive):
-            amount_number = amortization_amount
-            if idx == num_periods - 1 and remainder is not None:
-                amount_number += remainder
+    # Modify the posting
+    posting = posting._replace(account=equity_account)
+    assert posting.units is not None
+    assert posting.units.number is not None
 
-            entries.append(
-                data.Transaction(
-                    meta=data.new_metadata(
-                        "",
-                        0,
-                        {
-                            "__automatic__": True,
-                        },
-                    ),
-                    date=date,
-                    # Intentionally NOT to inherit the flag.
-                    # It is because the original transaction may be flagged as `!`.
-                    # If the generated transaction inherits it, there will be many warnings.
-                    flag="*",
-                    payee=transaction.payee,
-                    narration=self.amortization_narration(transaction.narration, idx),
-                    tags=transaction.tags | frozenset({TAG}),
-                    links=transaction.links,
-                    postings=[
-                        data.Posting(
-                            meta=data.new_metadata(
-                                "",
-                                0,
-                                {
-                                    "__automatic__": True,
-                                },
-                            ),
-                            account=original_account,
-                            units=Amount(
-                                number=amount_number,
-                                currency=posting.units.currency,
-                            ),
-                            cost=None,
-                            price=None,
-                            flag=None,
-                        ),
-                        data.Posting(
-                            meta=data.new_metadata(
-                                "",
-                                0,
-                                {
-                                    "__automatic__": True,
-                                },
-                            ),
-                            account=equity_account,
-                            units=Amount(
-                                number=-amount_number,
-                                currency=posting.units.currency,
-                            ),
-                            cost=None,
-                            price=None,
-                            flag=None,
-                        ),
-                    ],
+    # Insert amortized transactions.
+    amortization_amount, remainder = get_amortization_amount(
+        quotient=quotient,
+        original=posting.units.number,
+        currency=posting.units.currency,
+    )
+
+    for idx, date in gen_idx_and_date(
+        amortization_frequency=amortization_frequency,
+        amortization_start=amortization_start,
+        quotient=quotient,
+        date_limit_exclusive=date_limit_exclusive,
+    ):
+        amount_number = amortization_amount
+        if idx == quotient - 1 and remainder is not None:
+            amount_number += remainder
+
+        entries.append(
+            data.Transaction(
+                meta=data.new_metadata(
+                    "",
+                    0,
+                    {
+                        "__automatic__": True,
+                    },
                 ),
-            )
+                date=date,
+                # Intentionally NOT to inherit the flag.
+                # It is because the original transaction may be flagged as `!`.
+                # If the generated transaction inherits it, there will be many warnings.
+                flag="*",
+                payee=transaction.payee,
+                narration=amortization_narration(
+                    amortization_start=amortization_start,
+                    amortization_end=amortization_end,
+                    quotient=quotient,
+                    original_narration=transaction.narration,
+                    nth_period_0_based=idx,
+                ),
+                tags=transaction.tags | frozenset({TAG}),
+                links=transaction.links,
+                postings=[
+                    data.Posting(
+                        meta=data.new_metadata(
+                            "",
+                            0,
+                            {
+                                "__automatic__": True,
+                            },
+                        ),
+                        account=original_account,
+                        units=Amount(
+                            number=amount_number,
+                            currency=posting.units.currency,
+                        ),
+                        cost=None,
+                        price=None,
+                        flag=None,
+                    ),
+                    data.Posting(
+                        meta=data.new_metadata(
+                            "",
+                            0,
+                            {
+                                "__automatic__": True,
+                            },
+                        ),
+                        account=equity_account,
+                        units=Amount(
+                            number=-amount_number,
+                            currency=posting.units.currency,
+                        ),
+                        cost=None,
+                        price=None,
+                        flag=None,
+                    ),
+                ],
+            ),
+        )
 
-        return posting, entries
+    return posting, entries
 
 
-def amortize(
-    *, entry: data.Transaction, date_limit_exclusive: datetime.date
+@dataclass
+class BillingInstructionOnOpenDirective:
+    subscription_start: Date
+    billing_period: ItemizedDateDelta
+    amortization_frequency: ItemizedDateDelta
+    quotient: int
+
+    @classmethod
+    def is_target_account(cls, entry: data.Open) -> bool:
+        if (
+            META_billing_period in entry.meta
+            or META_amortization_frequency in entry.meta
+        ):
+            return True
+        return False
+
+    @classmethod
+    def from_open(cls, entry: data.Open) -> Self | PluginError:
+        subscription_start = Date(entry.date)
+        billing_period = parse_iso8601_duration(
+            name=META_billing_period, meta=entry.meta, entry=entry
+        )
+        if isinstance(billing_period, PluginError):
+            return billing_period
+        amortization_frequency = parse_iso8601_duration(
+            name=META_amortization_frequency, meta=entry.meta, entry=entry
+        )
+        if isinstance(amortization_frequency, PluginError):
+            return amortization_frequency
+        item = check_amortization_period(
+            amortization_frequency=amortization_frequency,
+            source=entry.meta,
+            entry=entry,
+        )
+        if isinstance(item, PluginError):
+            return item
+        quotient = check_quotient(
+            amortization_start=subscription_start,
+            amortization_end=subscription_start.add(billing_period),
+            item=item,
+            source=entry.meta,
+            entry=entry,
+        )
+        if isinstance(quotient, PluginError):
+            return quotient
+        return cls(
+            subscription_start=subscription_start,
+            billing_period=billing_period,
+            amortization_frequency=amortization_frequency,
+            quotient=quotient,
+        )
+
+
+@dataclass
+class BillingInstructionOnPosting:
+    billing_period_start: Date
+    instruction_on_open: BillingInstructionOnOpenDirective
+
+    @classmethod
+    def from_posting(
+        cls,
+        instruction_on_open: BillingInstructionOnOpenDirective,
+        posting: data.Posting,
+        transaction: data.Transaction,
+    ) -> Self | PluginError:
+        assert posting.meta is not None
+        billing_period_start = parse_iso8601_date(
+            name=META_billing_period_start, meta=posting.meta, entry=transaction
+        )
+        if isinstance(billing_period_start, PluginError):
+            return billing_period_start
+        return cls(
+            instruction_on_open=instruction_on_open,
+            billing_period_start=billing_period_start,
+        )
+
+
+@dataclass
+class OneOffAmortizationInstructionOnPosting:
+    amortization_frequency: ItemizedDateDelta
+    amortization_start: Date
+    amortization_end: Date
+    quotient: int
+
+    @classmethod
+    def from_posting(
+        cls, posting: data.Posting, transaction: data.Transaction
+    ) -> Self | PluginError | None:
+        assert posting.meta is not None
+        if (
+            META_amortization_frequency not in posting.meta
+            and META_amortization_start not in posting.meta
+            and META_amortization_end not in posting.meta
+        ):
+            return None
+        amortization_start = parse_iso8601_date(
+            name=META_amortization_start, meta=posting.meta, entry=transaction
+        )
+        if isinstance(amortization_start, PluginError):
+            return amortization_start
+        amortization_end = parse_iso8601_date(
+            name=META_amortization_end, meta=posting.meta, entry=transaction
+        )
+        if isinstance(amortization_end, PluginError):
+            return amortization_end
+        amortization_frequency = parse_iso8601_duration(
+            name=META_amortization_frequency, meta=posting.meta, entry=transaction
+        )
+        if isinstance(amortization_frequency, PluginError):
+            return amortization_frequency
+        item = check_amortization_period(
+            amortization_frequency=amortization_frequency,
+            source=posting.meta,
+            entry=transaction,
+        )
+        if isinstance(item, PluginError):
+            return item
+        quotient = check_quotient(
+            amortization_start=amortization_start,
+            amortization_end=amortization_end,
+            item=item,
+            source=posting.meta,
+            entry=transaction,
+        )
+        if isinstance(quotient, PluginError):
+            return quotient
+        return cls(
+            amortization_start=amortization_start,
+            amortization_end=amortization_end,
+            amortization_frequency=amortization_frequency,
+            quotient=quotient,
+        )
+
+
+def amortize_transaction(
+    *,
+    entry: data.Transaction,
+    date_limit_exclusive: datetime.date,
+    opted_in_accounts: dict[str, BillingInstructionOnOpenDirective],
 ) -> tuple[list[data.Directive], list[PluginError]]:
     entries: list[data.Directive] = []
     errors: list[PluginError] = []
 
     amortized_at_least_once = False
     for idx, posting in enumerate(entry.postings):
-        if posting.meta is not None and "billing_period" in posting.meta:
-            instruction_or_error = AmortizationInstruction.from_posting(posting, entry)
-            if isinstance(instruction_or_error, PluginError):
-                errors.append(instruction_or_error)
-            else:
-                new_posting, new_entries = instruction_or_error.amortize_posting(
+        if posting.meta is None:
+            continue
+
+        one_off: OneOffAmortizationInstructionOnPosting | PluginError | None = (
+            OneOffAmortizationInstructionOnPosting.from_posting(posting, entry)
+        )
+        billing: BillingInstructionOnPosting | PluginError | None = None
+        if posting.account in opted_in_accounts and (
+            META_billing_amortization_enabled not in posting.meta
+            or posting.meta[META_billing_amortization_enabled] is not False
+        ):
+            billing = BillingInstructionOnPosting.from_posting(
+                opted_in_accounts[posting.account], posting, entry
+            )
+
+        if isinstance(one_off, PluginError):
+            errors.append(one_off)
+            continue
+
+        if isinstance(billing, PluginError):
+            errors.append(billing)
+            continue
+
+        match (one_off, billing):
+            case (None, None):
+                pass
+            case (None, billing):
+                assert billing is not None
+                new_posting, new_entries = amortize_posting(
+                    amortization_frequency=billing.instruction_on_open.amortization_frequency,
+                    amortization_start=billing.billing_period_start,
+                    amortization_end=billing.billing_period_start.add(
+                        billing.instruction_on_open.billing_period
+                    ),
+                    quotient=billing.instruction_on_open.quotient,
                     transaction=entry,
                     posting=posting,
                     date_limit_exclusive=date_limit_exclusive,
@@ -467,6 +601,31 @@ def amortize(
                 entry.postings[idx] = new_posting
                 for e in new_entries:
                     entries.append(e)
+            case (one_off, None):
+                assert one_off is not None
+                new_posting, new_entries = amortize_posting(
+                    amortization_frequency=one_off.amortization_frequency,
+                    amortization_start=one_off.amortization_start,
+                    amortization_end=one_off.amortization_end,
+                    quotient=one_off.quotient,
+                    transaction=entry,
+                    posting=posting,
+                    date_limit_exclusive=date_limit_exclusive,
+                )
+                amortized_at_least_once = True
+                # Modify the list in-place.
+                entry.postings[idx] = new_posting
+                for e in new_entries:
+                    entries.append(e)
+            case (_, _):
+                errors.append(
+                    PluginError(
+                        source=posting.meta,
+                        message="The posting has billing amortization and one-off amortization. They conflict with each other.",
+                        entry=entry,
+                    )
+                )
+
     if amortized_at_least_once:
         entry = entry._replace(tags=entry.tags | frozenset({TAG}))
 
@@ -485,48 +644,31 @@ def plugin(
     today = datetime.date.today()
     errors: list[PluginError] = []
 
-    # This plugin does two things.
-    # 1. It amortizes an expense in a transaction if the posting contains a meta key "billing_period".
-    # 2. If an account has a meta key "billing_period", and it appears in a postings without the meta key, then it is an error.
-    #    The rationale is ensure that once an account is supposed to be amortized, it is always amortized.
-
-    opted_in_accounts: set[str] = set()
+    opted_in_accounts: dict[str, BillingInstructionOnOpenDirective] = {}
     for entry in entries:
-        if isinstance(entry, data.Open) and AmortizationInstruction.is_target_account(
-            entry
-        ):
-            opted_in_accounts.add(entry.account)
+        if isinstance(
+            entry, data.Open
+        ) and BillingInstructionOnOpenDirective.is_target_account(entry):
+            instruction = BillingInstructionOnOpenDirective.from_open(entry)
+            if isinstance(instruction, PluginError):
+                errors.append(instruction)
+            else:
+                opted_in_accounts[entry.account] = instruction
 
     out: list[data.Directive] = []
     for entry in entries:
-        if isinstance(entry, data.Transaction):
-            for posting in entry.postings:
-                if (
-                    posting.account in opted_in_accounts
-                    and not AmortizationInstruction.is_target_posting(posting)
-                ):
-                    errors.append(
-                        PluginError(
-                            source=posting.meta or entry.meta,
-                            message=f"{posting.account} has opted in amortization but this posting has no amortization instructions.",
-                            entry=entry,
-                        ),
-                    )
-
-        if (
-            not isinstance(entry, data.Transaction)
-            or TAG in entry.tags
-            or not AmortizationInstruction.is_target_transaction(entry)
-        ):
-            out.append(entry)
-        else:
-            new_entries, new_errors = amortize(
-                entry=entry, date_limit_exclusive=today + datetime.timedelta(days=1)
+        if isinstance(entry, data.Transaction) and TAG not in entry.tags:
+            new_entries, new_errors = amortize_transaction(
+                entry=entry,
+                date_limit_exclusive=today + datetime.timedelta(days=1),
+                opted_in_accounts=opted_in_accounts,
             )
             for e in new_errors:
                 errors.append(e)
             for e in new_entries:
                 out.append(e)
+        else:
+            out.append(entry)
 
     return out, errors
 
