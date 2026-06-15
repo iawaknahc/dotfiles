@@ -18,9 +18,6 @@ from beanquery.sources.beancount import (  # pyright: ignore[reportMissingTypeSt
     Table,
     _typed_namedtuple_to_columns,  # pyright: ignore[reportPrivateUsage, reportUnknownVariableType]
 )
-from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
-    get_decimal_places,
-)
 
 
 # Bean-query does not expose this table.
@@ -84,23 +81,6 @@ def get_price_map(conn: beanquery.Connection) -> prices.PriceMap:
         conn.tables,
     )
     return tables["prices"].price_map
-
-
-def parse_asset_class(s: str) -> AssetClass:
-    match s:
-        case (
-            "cash"
-            | "stock"
-            | "fixed-income"
-            | "derivative"
-            | "retirement-fund"
-            | "cryptocurrency"
-            | "property"
-            | "vehicle"
-        ):
-            return cast(AssetClass, s)  # pyright: ignore[reportUnnecessaryCast]
-        case _:
-            raise ValueError()
 
 
 def date_to_period_group_key(period: Period, d: datetime.date) -> str:
@@ -225,7 +205,6 @@ class InputWithPeriodStartEnd:
     end: datetime.date
     conn: beanquery.Connection
     account_level: int | None
-    asset_class: list[AssetClass] | None
     where_clause: str | None
     ranges: list[Range]
 
@@ -237,7 +216,6 @@ class InputWithPeriodStartEnd:
         end: datetime.date,
         conn: beanquery.Connection,
         account_level: int | None,
-        asset_class: list[AssetClass] | None,
         where_clause: str | None,
     ):
         self.period = period
@@ -246,13 +224,11 @@ class InputWithPeriodStartEnd:
         self.conn = conn
         self.account_level = account_level
         self.ranges = get_ranges(period=period, start=start, end=end)
-        self.asset_class = asset_class
         self.where_clause = where_clause
 
     @classmethod
     def from_namespace(cls, namespace: argparse.Namespace) -> Self:
         account_level = cast(int | None, namespace.account_level)
-        asset_class = cast(list[AssetClass] | None, namespace.asset_class)
         where_clause = cast(str | None, namespace.where_clause)
         filepath = cast(str, namespace.filepath)
         conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
@@ -285,7 +261,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case "weekly":
@@ -332,7 +307,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case "monthly":
@@ -364,7 +338,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case "quarterly":
@@ -392,7 +365,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case "yearly":
@@ -420,7 +392,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case "hong-kong":
@@ -448,7 +419,6 @@ class InputWithPeriodStartEnd:
                     end=end,
                     conn=conn,
                     account_level=account_level,
-                    asset_class=asset_class,
                     where_clause=where_clause,
                 )
             case _:  # pyright: ignore[reportUnnecessaryComparison]
@@ -788,7 +758,6 @@ def cmd_income_statement(input: InputWithPeriodStartEnd):
                         )
                     )
 
-    data_points = respect_asset_class(input, data_points)
     table = pivot(input.ranges, data_points)
     print_table(table)
 
@@ -820,7 +789,6 @@ def cmd_balance_sheet(input: InputWithPeriodStartEnd):
                         range=range,
                     )
                 )
-    data_points = respect_asset_class(input, data_points)
     table = pivot(input.ranges, data_points)
     print_table(table)
 
@@ -1054,64 +1022,6 @@ def get_ranges(
     return ranges
 
 
-def get_asset_class_by_name(name: str) -> AssetClass | None:
-    asset_class: AssetClass | None = None
-    if name.startswith("OCC_"):
-        asset_class = "derivative"
-    elif name.startswith("CUSIP_"):
-        asset_class = "fixed-income"
-    else:
-        decimal_place = get_decimal_places(name)
-        if decimal_place is not None:
-            asset_class = "cash"
-    return asset_class
-
-
-def respect_asset_class(
-    input: InputWithPeriodStartEnd, data_points: list[DataPoint]
-) -> list[DataPoint]:
-    if input.asset_class is None:
-        return data_points
-
-    # Build a map for explicitly declared commodities.
-    name_to_asset_class: dict[str, AssetClass] = {}
-    rows = cast(
-        list[tuple[str, dict[str, Any]]],  # pyright: ignore[reportExplicitAny]
-        input.conn.execute("SELECT name, meta FROM #commodities").fetchall(),  # pyright: ignore[reportUnknownMemberType]
-    )
-    for name, meta in rows:
-        asset_class: AssetClass | None = None
-        if "asset_class" in meta:
-            try:
-                asset_class_raw = meta["asset_class"]  # pyright: ignore[reportAny]
-                if not isinstance(asset_class_raw, str):
-                    raise TypeError()
-                asset_class = parse_asset_class(asset_class_raw)
-            except (ValueError, TypeError):
-                pass
-        else:
-            asset_class = get_asset_class_by_name(name)
-
-        if asset_class is not None:
-            name_to_asset_class[name] = asset_class
-
-    filtered: list[DataPoint] = []
-    for data_point in data_points:
-        name = data_point.position.units.currency
-
-        asset_class = name_to_asset_class.get(name)
-        # If the commodity is not explicitly defined,
-        # derive its asset class by looking at its name.
-        if asset_class is None:
-            asset_class = get_asset_class_by_name(name)
-
-        if asset_class is None or asset_class not in input.asset_class:
-            continue
-
-        filtered.append(data_point)
-    return filtered
-
-
 def sort_account_lots(account_lots: list[AccountLot]) -> list[AccountLot]:
     net_income = sorted([a for a in account_lots if a.account == ""])
     total_expenses = sorted([a for a in account_lots if a.account == "Expenses"])
@@ -1230,21 +1140,6 @@ def main():
             "--account-level",
             type=parse_account_level,
             help="Truncate account to this level. If 0 is given, all accounts are truncated to 1 account.",
-        )
-        _ = p.add_argument(
-            "--asset-class",
-            choices=[
-                "cash",
-                "stock",
-                "fixed-income",
-                "derivative",
-                "retirement-fund",
-                "cryptocurrency",
-                "property",
-                "vehicle",
-            ],
-            action="append",
-            help="If given, only show positions of the given asset class. It can be specified more than once.",
         )
         _ = p.add_argument(
             "--where-clause",
