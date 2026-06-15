@@ -761,7 +761,7 @@ def cmd_xirr(input: InputXIRR):
     pyxirr_cash_flows = [
         (cash_flow[0], cast(Decimal, cash_flow[1].number)) for cash_flow in cash_flows
     ]
-    percentage = pyxirr.xirr(pyxirr_cash_flows)  # pyright: ignore[reportPrivateImportUsage]
+    percentage = pyxirr.xirr(pyxirr_cash_flows)
     if percentage is None:
         raise ValueError("failed to find XIRR")
 
