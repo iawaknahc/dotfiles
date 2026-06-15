@@ -21,7 +21,7 @@ def plugin(
     for entry in entries:
         if isinstance(entry, data.Open):
             if "auto_narration" in entry.meta:
-                value = entry.meta["auto_narration"]  # pyright: ignore[reportAny]
+                value = entry.meta["auto_narration"]
                 if not isinstance(value, str):
                     errors.append(
                         PluginError(

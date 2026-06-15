@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from beancount.core import data
 
-from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
+from my_plugins.currencies import (
     get_decimal_places,
 )
 

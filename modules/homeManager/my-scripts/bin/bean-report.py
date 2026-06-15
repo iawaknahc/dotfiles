@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any, Literal, NamedTuple, Self, cast, override
 
-import beanquery  # pyright: ignore[reportMissingTypeStubs]
+import beanquery
 import pyxirr
 import tabulate
 from beancount.core import convert, data, prices
@@ -13,8 +13,8 @@ from beancount.core.amount import Amount
 from beancount.core.inventory import Inventory
 from beancount.core.position import Cost, Position
 from beancount.parser.grammar import ValueType
-from beanquery import query_env  # pyright: ignore[reportMissingTypeStubs]
-from beanquery.sources.beancount import (  # pyright: ignore[reportMissingTypeStubs]
+from beanquery import query_env
+from beanquery.sources.beancount import (
     Table,
     _typed_namedtuple_to_columns,  # pyright: ignore[reportPrivateUsage, reportUnknownVariableType]
 )
@@ -23,16 +23,16 @@ from beanquery.sources.beancount import (  # pyright: ignore[reportMissingTypeSt
 # Bean-query does not expose this table.
 # So we do it ourselves.
 class QueriesTable(Table):
-    name = "queries"  # pyright: ignore[reportUnannotatedClassAttribute]
-    datatype = data.Query  # pyright: ignore[reportUnannotatedClassAttribute]
+    name = "queries"
+    datatype = data.Query
     columns = _typed_namedtuple_to_columns(datatype)  # pyright: ignore[reportUnknownVariableType, reportUnannotatedClassAttribute]
 
 
 # Bean-query does not expose this table.
 # So we do it ourselves.
 class CustomsTable(Table):
-    name = "customs"  # pyright: ignore[reportUnannotatedClassAttribute]
-    datatype = data.Custom  # pyright: ignore[reportUnannotatedClassAttribute]
+    name = "customs"
+    datatype = data.Custom
     columns = _typed_namedtuple_to_columns(datatype)  # pyright: ignore[reportUnknownVariableType, reportUnannotatedClassAttribute]
 
 
@@ -72,7 +72,7 @@ class Pair(NamedTuple):
 def get_price_map(conn: beanquery.Connection) -> prices.PriceMap:
     # Based on observation, the prices table has a special property `price_map` which is an instance of prices.PriceMap.
     # https://github.com/beancount/beanquery/blob/v0.2.0/beanquery/sources/beancount.py#L179
-    PricesTable = NamedTuple("PricesTable", [("price_map", prices.PriceMap)])  # pyright: ignore[reportAny]
+    PricesTable = NamedTuple("PricesTable", [("price_map", prices.PriceMap)])
     tables = cast(
         dict[
             Literal["prices"],
@@ -168,8 +168,8 @@ class InputXIRR:
     @classmethod
     def from_namespace(cls, namespace: argparse.Namespace) -> Self:
         filepath = cast(str, namespace.filepath)
-        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+        conn = beanquery.connect(None)
+        conn.attach(f"beancount:{filepath}")
         portfolio = cast(str | None, namespace.portfolio)
         return cls(portfolio=portfolio, conn=conn)
 
@@ -192,8 +192,8 @@ class InputWithAsOf:
             as_of = datetime.date.fromisoformat(as_of_str)
 
         filepath = cast(str, namespace.filepath)
-        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+        conn = beanquery.connect(None)
+        conn.attach(f"beancount:{filepath}")
 
         return cls(as_of=as_of, conn=conn)
 
@@ -242,13 +242,13 @@ class InputWithPeriodStartEnd:
                     list[ValueType],
                 ]
             ],
-            conn.execute(customs_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+            conn.execute(customs_query).fetchall(),
         ):
             value_types = row[1]
-            if len(value_types) == 1 and value_types[0].value == command:  # pyright: ignore[reportAny]
+            if len(value_types) == 1 and value_types[0].value == command:
                 meta = row[0]
                 try:
-                    default_where_clause = meta["default_where_clause"]  # pyright: ignore[reportAny]
+                    default_where_clause = meta["default_where_clause"]
                     if isinstance(default_where_clause, str):
                         return default_where_clause
                 except KeyError:
@@ -259,8 +259,8 @@ class InputWithPeriodStartEnd:
         account_level = cast(int | None, namespace.account_level)
         where_clause = cast(str | None, namespace.where_clause)
         filepath = cast(str, namespace.filepath)
-        conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-        conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+        conn = beanquery.connect(None)
+        conn.attach(f"beancount:{filepath}")
 
         if where_clause is None:
             where_clause = cls.get_default_where_clause(conn, command)
@@ -274,18 +274,18 @@ class InputWithPeriodStartEnd:
                         start = datetime.date.today()
                         end = start + datetime.timedelta(days=1)
                     case (None, end_str):
-                        end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = datetime.date.fromisoformat(cast(str, end_str))
                         start = end + datetime.timedelta(days=-1)
                     case (start_str, None):
-                        start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = datetime.date.fromisoformat(cast(str, start_str))
                         end = start + datetime.timedelta(days=1)
                     case (start_str, end_str):
-                        start = datetime.date.fromisoformat(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                        end = datetime.date.fromisoformat(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = datetime.date.fromisoformat(cast(str, start_str))
+                        end = datetime.date.fromisoformat(cast(str, end_str))
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="daily",
                     start=start,
@@ -303,7 +303,7 @@ class InputWithPeriodStartEnd:
                         end = start + datetime.timedelta(weeks=1)
                     case (None, end_str):
                         end = datetime.date.strptime(
-                            cast(str, end_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, end_str) + "-1",
                             "%G-W%V-%u",
                         )
                         assert end.weekday() == 0
@@ -311,7 +311,7 @@ class InputWithPeriodStartEnd:
                         assert start.weekday() == 0
                     case (start_str, None):
                         start = datetime.date.strptime(
-                            cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, start_str) + "-1",
                             "%G-W%V-%u",
                         )
                         assert start.weekday() == 0
@@ -319,19 +319,19 @@ class InputWithPeriodStartEnd:
                         assert end.weekday() == 0
                     case (start_str, end_str):
                         start = datetime.date.strptime(
-                            cast(str, start_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, start_str) + "-1",
                             "%G-W%V-%u",
                         )
                         end = datetime.date.strptime(
-                            cast(str, end_str) + "-1",  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, end_str) + "-1",
                             "%G-W%V-%u",
                         )
                         assert start.weekday() == 0
                         assert end.weekday() == 0
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="weekly",
                     start=start,
@@ -347,22 +347,22 @@ class InputWithPeriodStartEnd:
                         start = start_of_month(today)
                         end = next_month(start)
                     case (None, end_str):
-                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")
                         start = previous_month(end)
                     case (start_str, None):
                         start = datetime.date.fromisoformat(
-                            cast(str, start_str) + "-01"  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, start_str) + "-01"
                         )
                         end = next_month(start)
                     case (start_str, end_str):
                         start = datetime.date.fromisoformat(
-                            cast(str, start_str) + "-01"  # pyright: ignore[reportUnnecessaryCast]
+                            cast(str, start_str) + "-01"
                         )
-                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # pyright: ignore[reportUnnecessaryCast]
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="monthly",
                     start=start,
@@ -378,18 +378,18 @@ class InputWithPeriodStartEnd:
                         start = start_of_quarter(today)
                         end = next_quarter(start)
                     case (None, end_str):
-                        end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_quarter_notation(cast(str, end_str))
                         start = previous_quarter(end)
                     case (start_str, None):
-                        start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_quarter_notation(cast(str, start_str))
                         end = next_quarter(start)
                     case (start_str, end_str):
-                        start = parse_quarter_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                        end = parse_quarter_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_quarter_notation(cast(str, start_str))
+                        end = parse_quarter_notation(cast(str, end_str))
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="quarterly",
                     start=start,
@@ -405,18 +405,18 @@ class InputWithPeriodStartEnd:
                         start = start_of_year(today)
                         end = next_year(start)
                     case (None, end_str):
-                        end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_year_notation(cast(str, end_str))
                         start = previous_year(end)
                     case (start_str, None):
-                        start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_year_notation(cast(str, start_str))
                         end = next_year(start)
                     case (start_str, end_str):
-                        start = parse_year_notation(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                        end = parse_year_notation(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_year_notation(cast(str, start_str))
+                        end = parse_year_notation(cast(str, end_str))
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="yearly",
                     start=start,
@@ -432,18 +432,18 @@ class InputWithPeriodStartEnd:
                         start = start_of_hong_kong(today)
                         end = next_year(start)
                     case (None, end_str):
-                        end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        end = parse_hong_kong(cast(str, end_str))
                         start = previous_year(end)
                     case (start_str, None):
-                        start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_hong_kong(cast(str, start_str))
                         end = next_year(start)
                     case (start_str, end_str):
-                        start = parse_hong_kong(cast(str, start_str))  # pyright: ignore[reportUnnecessaryCast]
-                        end = parse_hong_kong(cast(str, end_str))  # pyright: ignore[reportUnnecessaryCast]
+                        start = parse_hong_kong(cast(str, start_str))
+                        end = parse_hong_kong(cast(str, end_str))
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
-                    case _:  # pyright: ignore[reportUnnecessaryComparison]
-                        raise TypeError("unreachable")  # pyright: ignore[reportUnreachable]
+                    case _:
+                        raise TypeError("unreachable")
                 return cls(
                     period="hong-kong",
                     start=start,
@@ -452,8 +452,8 @@ class InputWithPeriodStartEnd:
                     account_level=account_level,
                     where_clause=where_clause,
                 )
-            case _:  # pyright: ignore[reportUnnecessaryComparison]
-                raise ValueError("unreachable")  # pyright: ignore[reportUnreachable]
+            case _:
+                raise ValueError("unreachable")
 
 
 def account_level_to_column(account_level: int | None) -> str:
@@ -462,8 +462,8 @@ def account_level_to_column(account_level: int | None) -> str:
     return f"root(account, {account_level})"
 
 
-@query_env.function([str], dict, pass_context=True, name="account_meta")  # pyright: ignore[reportUnknownMemberType]
-@query_env.function([str, str], object, pass_context=True, name="account_meta")  # pyright: ignore[reportUnknownMemberType]
+@query_env.function([str], dict, pass_context=True, name="account_meta")
+@query_env.function([str, str], object, pass_context=True, name="account_meta")
 def account_meta(
     context: beanquery.Connection, account: str, key: str | None = None
 ) -> data.Meta | object | None:
@@ -482,7 +482,7 @@ def account_meta(
     return None
 
 
-@query_env.function([str, datetime.date], str)  # pyright: ignore[reportUnknownMemberType]
+@query_env.function([str, datetime.date], str)
 def x_date_to_period_group_key(period: Period, d: datetime.date) -> str:
     return date_to_period_group_key(period, d)
 
@@ -516,18 +516,18 @@ def combine_positions(p1: Position, p2: Position) -> Position:
         cost=Cost(
             number=number_per,
             currency=quote,
-            date=cast(Any, None),  # pyright: ignore[reportExplicitAny]
+            date=cast(Any, None),
             label=None,
         ),
     )
 
 
-@query_env.function([Inventory], Inventory)  # pyright: ignore[reportUnknownMemberType]
+@query_env.function([Inventory], Inventory)
 def x_avg_cost(inv: Inventory) -> Inventory:
     currency_to_position: dict[str, Position] = {}
     pair_to_position: dict[Pair, Position] = {}
     for p in inv:
-        p = cast(Position, p)  # pyright: ignore[reportUnnecessaryCast]
+        p = cast(Position, p)
         if p.cost is None:
             try:
                 existing = currency_to_position[p.units.currency]
@@ -557,7 +557,7 @@ def x_avg_cost(inv: Inventory) -> Inventory:
                     cost=Cost(
                         number=Decimal(0),
                         currency=quote,
-                        date=cast(Any, None),  # pyright: ignore[reportExplicitAny]
+                        date=cast(Any, None),
                         label=None,
                     ),
                 )
@@ -586,9 +586,9 @@ class Portfolio:
     def from_row(cls, row: tuple[data.Meta, list[ValueType]]) -> Self:
         meta = row[0]
         value_types = row[1]
-        portfolio_name = str(value_types[1].value)  # pyright: ignore[reportAny]
+        portfolio_name = str(value_types[1].value)
         try:
-            cash_flow_query_name = meta["cash_flow_query"]  # pyright: ignore[reportAny]
+            cash_flow_query_name = meta["cash_flow_query"]
             if not isinstance(cash_flow_query_name, str):
                 raise TypeError(
                     f"cash_flow_query must be a string in portfolio `{portfolio_name}`"
@@ -598,7 +598,7 @@ class Portfolio:
                 f"cash_flow_query must be defined in portfolio `{portfolio_name}`"
             )
         try:
-            net_worth_query_name = meta["net_worth_query"]  # pyright: ignore[reportAny]
+            net_worth_query_name = meta["net_worth_query"]
             if not isinstance(net_worth_query_name, str):
                 raise TypeError(
                     f"net_worth_query must be a string in portfolio `{portfolio_name}`"
@@ -631,10 +631,10 @@ def cmd_xirr(input: InputXIRR):
                 list[ValueType],
             ]
         ],
-        input.conn.execute(customs_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        input.conn.execute(customs_query).fetchall(),
     ):
         value_types = row[1]
-        if len(value_types) == 2 and value_types[0].value == "xirr":  # pyright: ignore[reportAny]
+        if len(value_types) == 2 and value_types[0].value == "xirr":
             portfolios.append(Portfolio.from_row(row))
 
     # Gather the queries
@@ -645,7 +645,7 @@ def cmd_xirr(input: InputXIRR):
     """
     for row in cast(
         list[tuple[data.Meta, datetime.date, str, str]],
-        input.conn.execute(queries_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        input.conn.execute(queries_query).fetchall(),
     ):
         meta = row[0]
         date = row[1]
@@ -679,7 +679,7 @@ def cmd_xirr(input: InputXIRR):
 
     # Otherwise, calculate the XIRR of the portfolio.
     portfolio = next(iter([p for p in portfolios if p.name == input.portfolio]))
-    if portfolio is None:  # pyright: ignore[reportUnnecessaryComparison]
+    if portfolio is None:
         raise ValueError(f"portfolio `{input.portfolio}` not found")
 
     assert portfolio.cash_flow_query is not None
@@ -688,14 +688,14 @@ def cmd_xirr(input: InputXIRR):
     cash_flows: list[tuple[datetime.date, Amount]] = []
     for cash_flow in cast(
         list[tuple[datetime.date, Amount | Position]],
-        input.conn.execute(portfolio.cash_flow_query.query_string).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        input.conn.execute(portfolio.cash_flow_query.query_string).fetchall(),
     ):
         if (
             len(cash_flow) != 2
-            or not isinstance(cash_flow[0], datetime.date)  # pyright: ignore[reportUnnecessaryIsInstance]
+            or not isinstance(cash_flow[0], datetime.date)
             or (
                 not isinstance(cash_flow[1], Amount)
-                and not isinstance(cash_flow[1], Position)  # pyright: ignore[reportUnnecessaryIsInstance]
+                and not isinstance(cash_flow[1], Position)
             )
         ):
             raise TypeError(
@@ -720,7 +720,7 @@ def cmd_xirr(input: InputXIRR):
 
     results = cast(
         list[tuple[Amount | Position | Inventory]],
-        input.conn.execute(portfolio.net_worth_query.query_string).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        input.conn.execute(portfolio.net_worth_query.query_string).fetchall(),
     )
     if len(results) != 1:
         raise ValueError(
@@ -798,13 +798,13 @@ def cmd_income_statement(input: InputWithPeriodStartEnd):
             """
             for row in cast(
                 list[tuple[str, str, Inventory]],
-                input.conn.execute(query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+                input.conn.execute(query).fetchall(),
             ):
                 for position in row[2]:
                     data_points.append(
                         DataPoint(
                             account=row[0],
-                            position=cast(Position, position),  # pyright: ignore[reportUnnecessaryCast]
+                            position=cast(Position, position),
                             range=range,
                         )
                     )
@@ -830,13 +830,13 @@ def cmd_balance_sheet(input: InputWithPeriodStartEnd):
         """
         for row in cast(
             list[tuple[str, Inventory]],
-            input.conn.execute(query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+            input.conn.execute(query).fetchall(),
         ):
             for position in row[1]:
                 data_points.append(
                     DataPoint(
                         account=row[0],
-                        position=cast(Position, position),  # pyright: ignore[reportUnnecessaryCast]
+                        position=cast(Position, position),
                         range=range,
                     )
                 )
@@ -874,17 +874,17 @@ def cmd_unrealized_gains_and_losses(input: InputWithAsOf):
         GROUP BY 1
         ORDER BY 1 ASC
     """
-    for row in cast(list[tuple[str, Inventory]], input.conn.execute(query).fetchall()):  # pyright: ignore[reportUnknownMemberType]
+    for row in cast(list[tuple[str, Inventory]], input.conn.execute(query).fetchall()):
         account = row[0]
         inv = row[1]
         for position in inv:
-            position = cast(Position, position)  # pyright: ignore[reportUnnecessaryCast]
+            position = cast(Position, position)
             cost = position.cost
             # The `WHERE position.cost IS NOT NULL` should do its job.
             # We want to skip positions that is not held at cost.
             # They are not meaningful in this report.
             assert cost is not None
-            at_cost = cast(Amount, convert.get_cost(position))  # pyright: ignore[reportUnknownMemberType]
+            at_cost = cast(Amount, convert.get_cost(position))
             assert at_cost.number is not None
             at_cost = format_amount(input.conn, at_cost)
             assert at_cost.number is not None
@@ -892,7 +892,7 @@ def cmd_unrealized_gains_and_losses(input: InputWithAsOf):
             gain_or_loss: Amount | None = None
             market_value = cast(
                 Amount,
-                convert.convert_position(  # pyright: ignore[reportUnknownMemberType]
+                convert.convert_position(
                     position, cost.currency, price_map, input.as_of
                 ),
             )

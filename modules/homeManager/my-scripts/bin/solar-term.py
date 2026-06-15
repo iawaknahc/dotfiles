@@ -8,12 +8,12 @@ from typing import cast
 from zoneinfo import ZoneInfo
 
 import numpy as np
-from astropy.coordinates import (  # pyright: ignore[reportMissingTypeStubs]
+from astropy.coordinates import (
     GeocentricTrueEcliptic,
-    get_body,  # pyright: ignore[reportUnknownVariableType]
+    get_body,
     solar_system_ephemeris,
 )
-from astropy.time import Time  # pyright: ignore[reportMissingTypeStubs]
+from astropy.time import Time
 
 
 class Formatter(argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpFormatter):
@@ -21,19 +21,19 @@ class Formatter(argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpForm
 
 
 def geocentric_true_ecliptic_lon_deg_of_sun(t: Time) -> np.float64:
-    with solar_system_ephemeris.set("de432s"):  # pyright: ignore[reportUnknownMemberType]
+    with solar_system_ephemeris.set("de432s"):
         sun = get_body("sun", t)
-        sun = sun.transform_to(GeocentricTrueEcliptic(equinox=t, obstime=t))  # pyright: ignore[reportUnknownMemberType]
+        sun = sun.transform_to(GeocentricTrueEcliptic(equinox=t, obstime=t))
         return sun.lon.deg  # pyright: ignore[reportReturnType, reportOptionalMemberAccess] # pyrefly: ignore[missing-attribute]
 
 
 def find_solar_term(degree: float, year: int, zone_info: ZoneInfo) -> Time:
-    start = Time(  # pyright: ignore[reportUnknownVariableType]
+    start = Time(
         datetime(year=year, month=1, day=1, tzinfo=zone_info),
         format="datetime",
         scale="utc",
     )
-    end = Time(  # pyright: ignore[reportUnknownVariableType]
+    end = Time(
         datetime(year=year + 1, month=1, day=1, tzinfo=zone_info),
         format="datetime",
         scale="utc",
@@ -110,7 +110,7 @@ def main() -> None:
 
     zone_info = ZoneInfo("Asia/Hong_Kong")
     t = find_solar_term(degree, year, zone_info)
-    dt = cast(datetime, t.to_datetime(timezone=zone_info))  # pyright: ignore[reportUnknownMemberType]
+    dt = cast(datetime, t.to_datetime(timezone=zone_info))
     # The result is accurate to nearest minute.
     dt = round_to_minute(dt)
     print(dt.isoformat())

@@ -34,7 +34,6 @@
 -- })
 
 vim.lsp.enable("awk_ls")
-vim.lsp.enable("basedpyright")
 vim.lsp.enable("bashls")
 vim.lsp.enable("beancount")
 vim.lsp.enable("clojure_lsp")
@@ -59,19 +58,25 @@ vim.lsp.enable("markdown_oxide")
 vim.lsp.enable("nil_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("nushell")
-vim.lsp.enable("pyrefly")
-vim.lsp.enable("pyright")
 vim.lsp.enable("rust_analyzer")
 vim.lsp.enable("sourcekit")
 vim.lsp.enable("sqls")
 vim.lsp.enable("stylua")
 vim.lsp.enable("tailwindcss")
 vim.lsp.enable("taplo")
-vim.lsp.enable("ty")
 vim.lsp.enable("typos_lsp")
 vim.lsp.enable("vtsls")
 vim.lsp.enable("yamlls")
 vim.lsp.enable("zls")
+
+-- Since I installed and enabled these 4 LSP servers, I noticed a lag when
+-- a Python file edited in a vertical split.
+-- I did some bisects and found that the minimal reproducible configuration is just basedpyright or pyright itself.
+-- So it does not relate to multiple LSP servers running on the same buffer.
+-- vim.lsp.enable("basedpyright")
+-- vim.lsp.enable("pyright")
+vim.lsp.enable("pyrefly")
+vim.lsp.enable("ty")
 
 local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
 local function format_on_save(lsp_name, pattern)

@@ -16,7 +16,7 @@ def _check_directive_meta(
     entry: Directive,
     errors: list[PluginError],
 ) -> None:
-    for key, value in meta.items():  # pyright: ignore[reportAny]
+    for key, value in meta.items():
         if key not in narration_keys:
             continue
         if isinstance(entry, data.Transaction):
@@ -44,7 +44,7 @@ def _check_posting_meta(
     entry: Directive,
     errors: list[PluginError],
 ) -> None:
-    for key, value in meta.items():  # pyright: ignore[reportAny]
+    for key, value in meta.items():
         if key not in narration_keys:
             continue
         if not isinstance(value, str) or not value.strip():

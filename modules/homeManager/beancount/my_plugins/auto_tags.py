@@ -23,7 +23,7 @@ def plugin(
             if "auto_tags" in entry.meta:
                 try:
                     tags_: set[str] = set()
-                    tags_str = entry.meta["auto_tags"]  # pyright: ignore[reportAny]
+                    tags_str = entry.meta["auto_tags"]
                     if not isinstance(tags_str, str):
                         raise ValueError()
 

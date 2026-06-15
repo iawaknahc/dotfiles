@@ -28,7 +28,7 @@ class FixedAsset:
 
 def validate_currency(entry: data.Open, key: str) -> str | PluginError:
     try:
-        base_currency = entry.meta[key]  # pyright: ignore[reportAny]
+        base_currency = entry.meta[key]
         if not isinstance(base_currency, str):
             raise TypeError()
         if base_currency not in entry.currencies:
@@ -96,7 +96,7 @@ def plugin(
             if META_base_currency in entry.meta or META_quote_currency in entry.meta:
                 fixed_asset = validate_open(entry)
                 if isinstance(fixed_asset, list):
-                    for e in cast(list[PluginError], fixed_asset):  # pyright: ignore[reportUnnecessaryCast] # pyrefly: ignore [redundant-cast]
+                    for e in cast(list[PluginError], fixed_asset):  # pyrefly: ignore [redundant-cast]
                         errors.append(e)
                 else:
                     accounts[fixed_asset.account] = fixed_asset

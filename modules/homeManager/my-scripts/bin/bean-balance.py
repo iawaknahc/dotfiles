@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from datetime import date, timedelta
 from typing import cast
 
-import beanquery  # pyright: ignore[reportMissingTypeStubs]
+import beanquery
 from beancount import Inventory
 
 
@@ -20,14 +20,14 @@ def main():
     tomorrow = today + timedelta(days=1)
 
     filename = cast(str, args.filename)
-    conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-    conn.attach(f"beancount:{filename}")  # pyright: ignore[reportUnknownMemberType]
+    conn = beanquery.connect(None)
+    conn.attach(f"beancount:{filename}")
 
     accounts = [
         t[0]
         for t in cast(
             list[tuple[str]],
-            conn.execute(  # pyright: ignore[reportUnknownMemberType]
+            conn.execute(
                 "SELECT account FROM #accounts WHERE account ~ 'Assets:|Liabilities:' "
             ).fetchall(),
         )
@@ -35,7 +35,7 @@ def main():
 
     rows_of_account_and_inventories = cast(
         list[tuple[str, Sequence[Inventory]]],
-        conn.execute("SELECT account, sum(position) FROM CLEAR").fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        conn.execute("SELECT account, sum(position) FROM CLEAR").fetchall(),
     )
 
     # Find the longest width so that we can print the lines nicely.

@@ -9,7 +9,7 @@ from beancount.core import compare, data
 from beancount.core.amount import Amount
 from whenever import Date, ItemizedDateDelta
 
-from my_plugins.currencies import (  # pyright: ignore[reportMissingTypeStubs]
+from my_plugins.currencies import (
     get_decimal_for_quantization,
 )
 

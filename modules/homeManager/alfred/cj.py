@@ -4,11 +4,11 @@ import json
 import sys
 from typing import Literal, TypedDict, cast
 
-import cangjie  # pyright: ignore[reportMissingTypeStubs]
+import cangjie
 
 cj = cangjie.Cangjie(  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue, reportUnknownVariableType] # ty: ignore[unresolved-attribute] # pyrefly: ignore[missing-attribute]
-    cangjie.versions.CANGJIE3,  # pyright: ignore[reportUnknownMemberType]
-    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,  # pyright: ignore[reportUnknownMemberType]
+    cangjie.versions.CANGJIE3,
+    cangjie.filters.BIG5 | cangjie.filters.HKSCS | cangjie.filters.CHINESE,
 )
 
 
@@ -30,7 +30,7 @@ def main():
     query = "".join(sys.argv[1:])
     for ch in query:
         try:
-            code = cast(str, cj.get_codes_by_character(ch)[0].code)  # pyright: ignore[reportUnknownMemberType]
+            code = cast(str, cj.get_codes_by_character(ch)[0].code)
             radicals = "".join([cj.get_radical(c) for c in code])  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
             items.append(
                 {

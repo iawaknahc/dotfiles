@@ -19,7 +19,7 @@ def _check_meta(
     entry: Directive,
     errors: list[PluginError],
 ) -> None:
-    for key, value in meta.items():  # pyright: ignore[reportAny]
+    for key, value in meta.items():
         if key not in time_keys:
             continue
         if not isinstance(value, str) or TIME_RE.fullmatch(value) is None:

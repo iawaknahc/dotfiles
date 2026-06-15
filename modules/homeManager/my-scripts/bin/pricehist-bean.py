@@ -6,7 +6,7 @@ import sys
 from pathlib import PurePath
 from typing import NamedTuple, cast
 
-import beanquery  # pyright: ignore[reportMissingTypeStubs]
+import beanquery
 
 
 class PriceHistory(NamedTuple):
@@ -48,7 +48,7 @@ def build_price_history(conn: beanquery.Connection) -> list[PriceHistory]:
     out: list[PriceHistory] = []
     prices = cast(
         list[tuple[str, str, datetime.date, datetime.date]],
-        conn.execute(  # pyright: ignore[reportUnknownMemberType]
+        conn.execute(
             "SELECT currency AS base, currency(amount) AS quote, min(date) AS min_date, max(date) AS max_date FROM #prices GROUP BY 1, 2"
         ).fetchall(),
     )
@@ -72,7 +72,7 @@ def build_invocations(
     out: list[PriceHistInvocation] = []
     commodities = cast(
         list[tuple[datetime.date, str, str]],
-        conn.execute(  # pyright: ignore[reportUnknownMemberType]
+        conn.execute(
             "SELECT date, name AS base, meta['pricehist'] FROM #commodities WHERE 'pricehist' IN meta"
         ).fetchall(),
     )
@@ -135,8 +135,8 @@ def main():
 
     filename = cast(str, args.filename)
     output = cast(str, args.output)
-    conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
-    conn.attach(f"beancount:{filename}")  # pyright: ignore[reportUnknownMemberType]
+    conn = beanquery.connect(None)
+    conn.attach(f"beancount:{filename}")
 
     end_date_default = datetime.date.today() + datetime.timedelta(days=1)
     global_end_date = cast(datetime.date | None, args.end) or end_date_default

@@ -9,8 +9,8 @@ clean:
 # Run `clean`, followed by `generate-emmyrc-json`
 setup: clean generate-emmyrc-json
 
-# Run all checkers
-check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check pyright basedpyright pyrefly ty
+# Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
+check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check pyrefly ty
 
 # Run checker `shellcheck`
 shellcheck:
