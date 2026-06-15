@@ -227,12 +227,43 @@ class InputWithPeriodStartEnd:
         self.where_clause = where_clause
 
     @classmethod
-    def from_namespace(cls, namespace: argparse.Namespace) -> Self:
+    def get_default_where_clause(
+        cls, conn: beanquery.Connection, command: str
+    ) -> str | None:
+        customs_query = """
+            SELECT meta, values
+            FROM #customs
+            WHERE type = 'bean-report.py'
+        """
+        for row in cast(
+            list[
+                tuple[
+                    data.Meta,
+                    list[ValueType],
+                ]
+            ],
+            conn.execute(customs_query).fetchall(),  # pyright: ignore[reportUnknownMemberType]
+        ):
+            value_types = row[1]
+            if len(value_types) == 1 and value_types[0].value == command:  # pyright: ignore[reportAny]
+                meta = row[0]
+                try:
+                    default_where_clause = meta["default_where_clause"]  # pyright: ignore[reportAny]
+                    if isinstance(default_where_clause, str):
+                        return default_where_clause
+                except KeyError:
+                    pass
+
+    @classmethod
+    def from_namespace(cls, command: str, namespace: argparse.Namespace) -> Self:
         account_level = cast(int | None, namespace.account_level)
         where_clause = cast(str | None, namespace.where_clause)
         filepath = cast(str, namespace.filepath)
         conn = beanquery.connect(None)  # pyright: ignore[reportUnknownMemberType]
         conn.attach(f"beancount:{filepath}")  # pyright: ignore[reportUnknownMemberType]
+
+        if where_clause is None:
+            where_clause = cls.get_default_where_clause(conn, command)
 
         start_str = cast(str | None, namespace.start)
         end_str = cast(str | None, namespace.end)
@@ -1183,9 +1214,13 @@ def main():
     args = parser.parse_args()
     match cast(Subcommand, args.command):
         case "income-statement":
-            cmd_income_statement(InputWithPeriodStartEnd.from_namespace(args))
+            cmd_income_statement(
+                InputWithPeriodStartEnd.from_namespace("income-statement", args)
+            )
         case "balance-sheet":
-            cmd_balance_sheet(InputWithPeriodStartEnd.from_namespace(args))
+            cmd_balance_sheet(
+                InputWithPeriodStartEnd.from_namespace("balance-sheet", args)
+            )
         case "unrealized-gains-and-losses":
             cmd_unrealized_gains_and_losses(InputWithAsOf.from_namespace(args))
         case "xirr":
