@@ -431,6 +431,26 @@ def account_level_to_column(account_level: int | None) -> str:
     return f"root(account, {account_level})"
 
 
+@query_env.function([str], dict, pass_context=True, name="account_meta")  # pyright: ignore[reportUnknownMemberType]
+@query_env.function([str, str], object, pass_context=True, name="account_meta")  # pyright: ignore[reportUnknownMemberType]
+def account_meta(
+    context: beanquery.Connection, account: str, key: str | None = None
+) -> data.Meta | object | None:
+    accounts = cast(
+        dict[str, tuple[data.Open | None, data.Close | None]],
+        context.tables["accounts"].accounts,  # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]  # ty:ignore[unresolved-attribute]
+    )
+    try:
+        open_directive, _ = accounts[account]
+        if open_directive is not None:
+            if key is not None:
+                return open_directive.meta.get(key)
+            return open_directive.meta
+    except KeyError:
+        pass
+    return None
+
+
 @query_env.function([str, datetime.date], str)  # pyright: ignore[reportUnknownMemberType]
 def x_date_to_period_group_key(period: Period, d: datetime.date) -> str:
     return date_to_period_group_key(period, d)
