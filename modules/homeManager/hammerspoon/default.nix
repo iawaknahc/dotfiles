@@ -20,6 +20,5 @@
   };
   home.file.".hammerspoon/Spoons/EmmyLua.spoon" = {
     source = "${pkgs.EmmyLua_spoon}/share/Spoons/EmmyLua.spoon";
-    recursive = true;
   };
 }

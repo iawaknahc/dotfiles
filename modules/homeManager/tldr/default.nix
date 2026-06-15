@@ -9,7 +9,6 @@
   programs.tealdeer.settings.directories.custom_pages_dir = "${config.xdg.configHome}/tealdeer/pages";
 
   xdg.configFile."tealdeer/pages" = {
-    recursive = true;
     source = ./config/tealdeer/pages;
   };
 }

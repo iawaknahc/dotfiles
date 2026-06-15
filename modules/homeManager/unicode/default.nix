@@ -93,6 +93,5 @@ in
   ];
   home.file.".unicode" = {
     source = "${ucd}/share/unicode";
-    recursive = true;
   };
 }

@@ -21,9 +21,25 @@
     # Open fugitive.
     g = "nvim +G +only";
   };
-  xdg.configFile."nvim" = {
-    source = ./config/nvim;
-    recursive = true;
+
+  xdg.configFile."nvim/ftdetect" = {
+    source = ./config/nvim/ftdetect;
+  };
+  xdg.configFile."nvim/ftplugin" = {
+    source = ./config/nvim/ftplugin;
+  };
+  xdg.configFile."nvim/lsp" = {
+    source = ./config/nvim/lsp;
+    recursive = true; # nvim/lsp has to be recursive because nvim/lsp/nixd.lua is generated.
+  };
+  xdg.configFile."nvim/lua" = {
+    source = ./config/nvim/lua;
+  };
+  xdg.configFile."nvim/plugin" = {
+    source = ./config/nvim/plugin;
+  };
+  xdg.configFile."nvim/snippets" = {
+    source = ./config/nvim/snippets;
   };
 
   programs.neovim.extraLuaPackages = (

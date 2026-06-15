@@ -33,8 +33,6 @@
   # The remaining diff and grep are not harmful, so just leave them.
 
   xdg.configFile."fish/functions" = {
-    enable = true;
-    recursive = true;
     source = ./config/fish/functions;
   };
 }

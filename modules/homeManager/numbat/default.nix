@@ -36,7 +36,6 @@ in
   # The overriding of prelude is documented at https://numbat.dev/docs/cli/customization/#startup
   home.file."${configDir}/modules" = {
     source = ./modules;
-    recursive = true;
   };
 
   launchd.agents.numbat-gen-currency = {
