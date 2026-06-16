@@ -228,6 +228,7 @@ pyxirr
 qflist
 qpdf
 redrawstatus
+reedline
 rgi
 rustfmt
 screenpos

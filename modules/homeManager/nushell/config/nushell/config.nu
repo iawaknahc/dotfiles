@@ -18,6 +18,10 @@
 # we disable vi mode in shell.
 # $env.config.edit_mode = "vi";
 
+# As of 2026-06-16, Nushell (Reedline) does not support binding key sequences.
+# So we cannot bind ctrl-x ctrl-e to edit the command line.
+# We have to use the default ctrl-o key binding.
+
 # https://www.nushell.sh/book/background_jobs.html#job-suspension
 alias fg = job unfreeze
 

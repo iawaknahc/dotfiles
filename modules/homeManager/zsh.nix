@@ -8,6 +8,10 @@
   # we disable vi mode in shell.
   # programs.zsh.defaultKeymap = "viins";
   programs.zsh.initContent = lib.mkBefore ''
+    autoload -Uz edit-command-line
+    zle -N edit-command-line
+    bindkey '^x^e' edit-command-line
+
     # Ensure SHELL is correctly set.
     # Note that this must appear after we have set up the PATH,
     # otherwise, `command -v zsh` points to a zsh that is not installed by Nix.
