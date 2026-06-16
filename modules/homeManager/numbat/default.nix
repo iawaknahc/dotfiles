@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 let
   configDir =
-    if pkgs.stdenv.hostPlatform.isDarwin then
+    if pkgs.stdenv.hostPlatform.isDarwin && !config.xdg.enable then
       "Library/Application Support/numbat"
     else
       "${config.xdg.configHome}/numbat";
@@ -22,20 +22,21 @@ in
     )
   ];
 
-  programs.numbat.enable = true;
-  programs.numbat.initFile = ./init.nbt;
-  programs.numbat.settings = {
-    exchange-rates = {
-      # Numbat's support for currency is limited as of 2026-04-13
-      # See https://github.com/sharkdp/numbat/issues/438
-      # We set fetching-policy to "never" so that Numbat will not fetch and define currency units.
-      fetching-policy = "never";
-    };
+  # programs.numbat is not used because it does not support xdg.enable.
+
+  home.sessionVariables = {
+    NUMBAT_MODULES_PATH = "${config.home.homeDirectory}/${configDir}";
   };
+  home.packages = with pkgs; [
+    numbat
+  ];
+  home.file."${configDir}/config.toml".source = ./config.toml;
+  home.file."${configDir}/init.nbt".source = ./init.nbt;
   # Build our custom prelude to exclude dimension Money and the associated units.
   # The overriding of prelude is documented at https://numbat.dev/docs/cli/customization/#startup
   home.file."${configDir}/modules" = {
     source = ./modules;
+    recursive = true; # It has to be recursive because we will write to modules/custom/
   };
 
   launchd.agents.numbat-gen-currency = {

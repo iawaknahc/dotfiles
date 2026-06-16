@@ -1,0 +1,5 @@
+# The support for currency is limited as of 2026-04-13
+# See https://github.com/sharkdp/numbat/issues/438
+# We set fetching-policy to "never" so that Numbat will not fetch and define currency units.
+[exchange-rates]
+fetching-policy = "never"
