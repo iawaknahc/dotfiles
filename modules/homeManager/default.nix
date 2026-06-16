@@ -108,6 +108,7 @@ _: {
     # Text editors.
     ./vim
     ./neovim
+    ./emacs
 
     # Individual programs that require configurations.
     ./_1password.nix
