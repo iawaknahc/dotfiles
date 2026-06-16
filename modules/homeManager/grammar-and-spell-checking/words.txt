@@ -239,6 +239,7 @@ semicoloncomma
 sessionoptions
 setlocal
 setloclist
+setq
 setuptools
 shada
 shellcheck
