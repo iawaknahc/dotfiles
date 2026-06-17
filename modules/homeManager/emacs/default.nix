@@ -9,6 +9,7 @@
       goto-chg
       evil
       evil-collection
+      evil-terminal-cursor-changer
     ];
   home.file.".emacs.d/init.el".source = ./emacs.d/init.el;
 }
