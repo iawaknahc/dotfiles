@@ -48,9 +48,7 @@
     ]
   );
 
-  programs.neovim.initLua = ''
-    vim.o.exrc = true
-  '';
+  programs.neovim.initLua = builtins.readFile ./config/nvim/init.lua;
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Colorscheme
