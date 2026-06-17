@@ -1,0 +1,5 @@
+-- On 2026-04-05, I tried to migrate all vim.o to vim.go
+-- The buffer I provide in argument does not seem to read from vim.go
+-- For example, nvim main.go, then main.go has no number.
+-- But nvim followed by :e main.go has number.
+-- So stick with vim.o in this file.

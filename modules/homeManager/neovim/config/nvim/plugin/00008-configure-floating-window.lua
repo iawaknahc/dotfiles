@@ -1,3 +1,5 @@
+vim.o.winborder = "rounded"
+
 vim.api.nvim_create_user_command("CloseFloatingWindows", function()
   local wins = vim.api.nvim_list_wins()
   for _, win in ipairs(wins) do

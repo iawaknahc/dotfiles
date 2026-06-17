@@ -1,3 +1,10 @@
+-- The default is :filetype detection:ON plugin:ON indent:ON
+-- We want to turn off ftplugin-based indentation.
+vim.cmd([[filetype indent off]])
+
+-- Show indentation for wrapped lines.
+vim.o.breakindent = true
+
 vim.api.nvim_create_user_command("Space", function(t)
   local n = tonumber(t.fargs[1])
   if n ~= nil then
@@ -24,15 +31,4 @@ vim.api.nvim_create_user_command("Tab", function(t)
 end, {
   desc = "Use a tab of N width for indentation",
   nargs = 1,
-})
-
-vim.api.nvim_create_user_command("Reverse", function(args)
-  local line1 = args.line1
-  local line2 = args.line2
-  local command = string.format("%d,%d" .. "global/^/move %d", line1, line2, line1 - 1)
-  vim.cmd(command)
-  vim.notify(command)
-end, {
-  desc = "Reverse line order as in :help 12.4",
-  range = "%",
 })

@@ -1,3 +1,7 @@
+-- vim.o.foldmethod is not set so fold is effectively disabled.
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldlevelstart = 99
+
 -- When treesitter is used to create fold, the following were observed:
 -- 1. There is a noticeable delay if a large file is opened.
 -- 2. There is a great delay in a 60000 lines CSS file when 30000 lines are deleted and undo-ed immediately.
