@@ -19,6 +19,7 @@ return {
         local d = ls.dynamic_node
         local r = ls.restore_node
         local fmt = require("luasnip.extras.fmt").fmt
+        local rep = require("luasnip.extras").rep
 
         {}
       ]],
