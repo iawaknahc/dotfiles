@@ -19,6 +19,12 @@ require("catppuccin").setup({
       DiffChange = { bg = U.blend(colors.blue, colors.base, 0.10) }, -- Changed lines
       DiffText = { bg = U.blend(colors.blue, colors.base, 0.25) }, -- Changed text in changed lines
       DiffTextAdd = { bg = U.blend(colors.green, colors.base, 0.25) }, -- Added text in changed lines
+
+      -- Use the background of statusline in winbar and cmdline.
+      WinBar = { bg = colors.mantle },
+      WinBarNC = { bg = colors.mantle },
+      -- For unknown reason, it has no effect.
+      --MsgArea = { bg = colors.mantle },
     }
   end,
 })
