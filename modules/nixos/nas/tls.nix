@@ -62,8 +62,8 @@ in
   services.nginx.recommendedProxySettings = true;
   services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
-    sslCertificate = /etc/nginx/tls-certificate.pem;
-    sslCertificateKey = /etc/nginx/tls-key.pem;
+    sslCertificate = "/etc/nginx/tls-certificate.pem";
+    sslCertificateKey = "/etc/nginx/tls-key.pem";
     locations."/" = {
       return = "200 '<html><body>It works</body></html>'";
       extraConfig = ''
