@@ -37,6 +37,7 @@
   };
   xdg.configFile."nvim/plugin" = {
     source = ./config/nvim/plugin;
+    recursive = true; # Make nvim/plugin a normal directory instead of a symlink to the Nix store, so that I can place regular files in it.
   };
   xdg.configFile."nvim/snippets" = {
     source = ./config/nvim/snippets;
