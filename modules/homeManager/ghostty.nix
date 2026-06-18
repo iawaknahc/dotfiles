@@ -103,5 +103,15 @@
     # The cursor-text color is incorrect in dark flavors
     # See https://github.com/catppuccin/ghostty/pull/16
     cursor-text = "#11111b";
+
+    macos-titlebar-style = "transparent"; # "transparent" is the default value.
+    window-padding-balance = true; # window-padding-color has no visual effects if window-padding-balance is false.
+    # On 2026-06-18, I tried configuring window-padding-color but it does not do what I expect.
+    #
+    # It does not extend to the macOS title bar.
+    # The color of the macOS title bar is still the background color of Ghostty.
+    #
+    # It also does not work well if the tmux status contains rounded elements.
+    # window-padding-color = "extend-always";
   };
 }
