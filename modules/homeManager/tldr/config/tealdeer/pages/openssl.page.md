@@ -72,7 +72,7 @@
 
 - Generate a TLS certificate signed by a CA valid for 30 days:
 
-`openssl req x509 -CA {{ca-cert.pem}} -CAkey {{ca-priv.pem}} -key {{tls-priv.pem}} -subj "/CN=tls" -addext "basicConstraints=critical,CA:FALSE" -addext "keyUsage=critical, digitalSignature" -addext "extendedKeyUsage=critical, serverAuth, clientAuth" -addext "subjectAltName=critical, DNS:localhost, IP:127.0.0.1, IP:::1" -days 30 -out {{tls-cert.pem}}`
+`openssl req -x509 -CA {{ca-cert.pem}} -CAkey {{ca-priv.pem}} -key {{tls-priv.pem}} -subj "/CN=tls" -addext "basicConstraints=critical,CA:FALSE" -addext "keyUsage=critical, digitalSignature" -addext "extendedKeyUsage=critical, serverAuth, clientAuth" -addext "subjectAltName=critical, DNS:localhost, IP:127.0.0.1, IP:::1" -days 30 -out {{tls-cert.pem}}`
 
 - Print the SHA256 / SHA1 / MD5 fingerprint of a certificate:
 

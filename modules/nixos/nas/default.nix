@@ -19,5 +19,6 @@
     ./smb.nix
     ./restic.nix
     ./syncthing.nix
+    ./tls.nix
   ];
 }
