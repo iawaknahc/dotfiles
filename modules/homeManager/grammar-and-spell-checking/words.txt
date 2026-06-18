@@ -275,6 +275,7 @@ tls
 tmux
 tolower
 topk
+trailspace
 treesj
 treewalker
 tts

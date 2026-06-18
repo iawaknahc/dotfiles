@@ -142,6 +142,8 @@
     }
     # Rainbow delimiters for Lisp
     rainbow-delimiters-nvim
+    # Highlight trailing spaces in red.
+    mini-trailspace
 
     ## LSP and diagnostics
     nvim-lspconfig
