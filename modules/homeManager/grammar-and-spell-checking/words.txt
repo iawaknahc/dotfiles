@@ -128,6 +128,7 @@ inplace
 ipairs
 ipc
 iskeyword
+isn
 isoformat
 isoyear
 jdtls

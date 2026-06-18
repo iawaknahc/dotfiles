@@ -7,7 +7,10 @@ require("luasnip.loaders.from_vscode").load({
 })
 
 local ls = require("luasnip")
-local s, f = ls.snippet, ls.function_node
+local s = ls.snippet
+local i = ls.insert_node
+local f = ls.function_node
+local fmt = require("luasnip.extras.fmt").fmt
 
 ---@return string
 local function today()
@@ -97,24 +100,36 @@ ls.setup({
 })
 
 ls.add_snippets("all", {
-  s("today", {
-    f(today, {}),
-  }),
-  s("yesterday", {
-    f(yesterday, {}),
-  }),
-  s("tomorrow", {
-    f(tomorrow, {}),
-  }),
-  s("thisweek", {
-    f(thisweek, {}),
-  }),
-  s("lastweek", {
-    f(lastweek, {}),
-  }),
-  s("nextweek", {
-    f(nextweek, {}),
-  }),
+  s("today", f(today, {})),
+  s("yesterday", f(yesterday, {})),
+  s("tomorrow", f(tomorrow, {})),
+  s("thisweek", f(thisweek, {})),
+  s("lastweek", f(lastweek, {})),
+  s("nextweek", f(nextweek, {})),
+})
+
+ls.add_snippets("lua", {
+  s(
+    "luasnip",
+    fmt(
+      [[
+        local ls = require("luasnip")
+        local s = ls.snippet
+        local sn = ls.snippet_node
+        local isn = ls.indent_snippet_node
+        local t = ls.text_node
+        local i = ls.insert_node
+        local f = ls.function_node
+        local c = ls.choice_node
+        local d = ls.dynamic_node
+        local r = ls.restore_node
+        local fmt = require("luasnip.extras.fmt").fmt
+
+        {}
+      ]],
+      { i(0) }
+    )
+  ),
 })
 
 -- Make CTRL-K works like CTRL-Y
