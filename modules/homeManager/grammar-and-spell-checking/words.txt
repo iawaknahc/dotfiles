@@ -295,6 +295,7 @@ vimgrep
 vimruntime
 vimscript
 virama
+virt
 virtualedit
 vscode
 vtsls

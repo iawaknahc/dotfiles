@@ -6,13 +6,21 @@ require("luasnip.loaders.from_lua").load({
   },
 })
 
-require("luasnip").setup({
+local types = require("luasnip.util.types")
+require("luasnip").config.setup({
   keep_roots = true,
   link_roots = true,
   link_children = true,
   exit_roots = false,
   update_events = { "InsertLeave", "TextChanged", "TextChangedI" },
   region_check_events = { "InsertEnter" },
+  ext_opts = {
+    [types.choiceNode] = {
+      active = {
+        virt_text = { { "Hit CTRL-L to choose", "Comment" } },
+      },
+    },
+  },
 })
 
 -- Make CTRL-K works like CTRL-Y
@@ -30,5 +38,13 @@ vim.keymap.set({ "i", "s" }, "<C-J>", function()
   local ls = require("luasnip")
   if ls.jumpable(-1) then
     ls.jump(-1)
+  end
+end)
+
+-- L is next to K and J.
+vim.keymap.set({ "i", "s" }, "<C-L>", function()
+  local ls = require("luasnip")
+  if ls.choice_active() then
+    require("luasnip.extras.select_choice")()
   end
 end)
