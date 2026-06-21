@@ -356,7 +356,9 @@ vim.o.statuscolumn = build_segments_into_statuscolumn({
       -- Render wrapped lines so that the hunk will not appear as separate.
       return virtnum >= 0
     end,
-    -- By observation, the sign is "| ", so two characters.
-    fallback = "  ",
+    -- By observation, the sign is "┃ ", so two characters.
+    -- The fallback is the same as added lines.
+    -- The highlight group LineNr is applied to it so that it will not be highlighted by the option 'cursorline' and 'cursorlineopt=number'.
+    fallback = "%#LineNr#┃ %*",
   },
 })
