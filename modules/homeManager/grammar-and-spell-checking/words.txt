@@ -76,6 +76,8 @@ etcc
 expandtab
 exportcert
 exrc
+extmark
+extmarks
 fallthrough
 feedkeys
 fileencoding
@@ -84,11 +86,13 @@ filesize
 fixendofline
 fnlfmt
 focusable
+foldclose
 foldcolumn
 foldexpr
 foldfunc
 foldlevelstart
 foldmethod
+foldopen
 fromisoformat
 fromtimestamp
 fsencode
@@ -155,6 +159,7 @@ lhistory
 linematch
 linters
 listchars
+lnum
 localleader
 loclist
 louischan
@@ -167,9 +172,11 @@ lvimgrep
 lwindow
 macopt
 menuone
+minwid
 mjml
 modeline
 modelines
+mousepos
 moze
 multiclient
 myvimrc
@@ -296,6 +303,7 @@ vimruntime
 vimscript
 virama
 virt
+virtnum
 virtualedit
 vscode
 vtsls

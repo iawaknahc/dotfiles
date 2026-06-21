@@ -130,8 +130,6 @@
     fzf-lua
 
     ## Visual aids
-    # statuscolumn
-    statuscol-nvim
     # Key clues and submodes.
     mini-clue
     # Show context.
