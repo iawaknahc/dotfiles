@@ -8,12 +8,15 @@ vim.keymap.set({ "n" }, "<Leader>v", function()
   local enabled = vim.lsp.inlay_hint.is_enabled({
     bufnr = 0,
   })
+
   vim.lsp.inlay_hint.enable(not enabled, {
     bufnr = 0,
   })
   vim.lsp.codelens.enable(not enabled, {
     bufnr = 0,
   })
+  require("gitsigns").toggle_current_line_blame(not enabled)
+
   if enabled then
     local config = vim.diagnostic.config()
     config = vim.tbl_deep_extend("force", config, {

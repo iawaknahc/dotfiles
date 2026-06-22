@@ -154,6 +154,7 @@
     vim-fugitive
     vim-rhubarb
     gitsigns-nvim
+    diffview-plus-nvim
 
     # Replace netrw.
     # Treating directories as buffers is more intuitive for me.
