@@ -62,6 +62,7 @@ devinfo
 diffopt
 difftool
 diffupdate
+diffview
 direnv
 dlv
 dockerls
