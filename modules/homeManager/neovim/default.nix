@@ -153,6 +153,7 @@
     ## Git integration
     vim-fugitive
     vim-rhubarb
+    vim-flog
     gitsigns-nvim
     diffview-plus-nvim
 
