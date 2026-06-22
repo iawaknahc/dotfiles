@@ -273,6 +273,7 @@ subshell
 surrogatepass
 swapfile
 swiftformat
+tabclose
 tabpages
 tabstop
 tailwindcss
