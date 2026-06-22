@@ -18,8 +18,8 @@
     MANPAGER = "nvim +Man!";
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
-    # Open fugitive.
-    g = "nvim +G +only";
+    # Open diffview.
+    g = "nvim +'DiffviewOpen' +tabonly";
   };
 
   xdg.configFile."nvim/ftdetect" = {
