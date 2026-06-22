@@ -13,14 +13,13 @@
 local MOTION_SPECS = {
   { mode = { "n", "x" }, forward = "l", backward = "h" },
   { mode = { "n", "x" }, forward = "j", backward = "k" },
-  { mode = { "n", "x" }, forward = "G", backward = "G" },
-  { mode = { "n", "x" }, forward = "gg", backward = "gg" },
   { mode = { "n", "x" }, forward = "w", backward = "b" },
   { mode = { "n", "x" }, forward = "W", backward = "B" },
   { mode = { "n", "x" }, forward = "e", backward = "ge" },
   { mode = { "n", "x" }, forward = "E", backward = "gE" },
   { mode = { "n", "x" }, forward = ")", backward = "(" },
   { mode = { "n", "x" }, forward = "}", backward = "{" },
+  { mode = { "n" }, forward = "gt", backward = "gT" },
   { mode = { "x" }, forward = "an", backward = "in" },
   { mode = { "n", "x" }, forward = "f", backward = "F", has_char_argument = true },
   { mode = { "n", "x" }, forward = "t", backward = "T", has_char_argument = true },
@@ -42,63 +41,83 @@ local function match_mode(motion_spec, nvim_mode)
   return false
 end
 
+---@param s string
+---@param prefix string
+---@return boolean
+local function startswith(s, prefix)
+  return s:sub(1, #prefix) == prefix
+end
+
 ---@param motion_spec MotionSpec
 ---@param input_buffer string
 ---@return boolean
-local function match_motion(motion_spec, input_buffer)
-  return input_buffer == motion_spec.forward or input_buffer == motion_spec.backward
+local function match_prefix(motion_spec, input_buffer)
+  if #input_buffer > #motion_spec.forward or #input_buffer > #motion_spec.backward then
+    return false
+  end
+  return startswith(motion_spec.forward, input_buffer) or startswith(motion_spec.backward, input_buffer)
+end
+
+---@return integer|nil
+local function get_count()
+  if vim.v.count ~= 0 then
+    return vim.v.count
+  end
+  return nil
+end
+
+---@param motion_spec MotionSpec
+---@param input_buffer string
+---@return CapturedMotion|nil
+local function capture_motion(motion_spec, input_buffer)
+  if motion_spec.has_char_argument == true then
+    local without_char_argument = input_buffer:sub(1, #input_buffer - 1)
+    local char_argument = input_buffer:sub(#input_buffer, #input_buffer)
+
+    if without_char_argument == motion_spec.forward or without_char_argument == motion_spec.backward then
+      return {
+        motion = motion_spec,
+        count = get_count(),
+        char = char_argument,
+      }
+    end
+  else
+    if input_buffer == motion_spec.forward or input_buffer == motion_spec.backward then
+      return {
+        motion = motion_spec,
+        count = get_count(),
+        char = nil,
+      }
+    end
+  end
+
+  return nil
 end
 
 vim.on_key(
   ---@param _ string
   ---@param typed string
   function(_, typed)
-    if vim.w.semicoloncomma_input_buffer == nil then
-      vim.w.semicoloncomma_input_buffer = ""
-    end
-
-    if vim.w.semicoloncomma_pending_char_argument == nil then
-      vim.w.semicoloncomma_pending_char_argument = false
-    end
-
     typed = vim.fn.keytrans(typed)
+
+    if vim.g.semicoloncomma_input_buffer == nil then
+      vim.g.semicoloncomma_input_buffer = ""
+    end
+    vim.g.semicoloncomma_input_buffer = vim.g.semicoloncomma_input_buffer .. typed
+
     local mode = vim.api.nvim_get_mode().mode
 
-    -- If we are not pending char argument, we have to consider the typed key now.
-    -- Otherwise, we look at the buffered keys to find out what the motion was.
-    if not vim.w.semicoloncomma_pending_char_argument then
-      vim.w.semicoloncomma_input_buffer = vim.w.semicoloncomma_input_buffer .. typed
-    end
-
     for _, motion_spec in ipairs(MOTION_SPECS) do
-      if match_mode(motion_spec, mode) and match_motion(motion_spec, vim.w.semicoloncomma_input_buffer) then
-        -- The motion does not require a char argument, we can capture it immediately.
-        if motion_spec.has_char_argument == nil or motion_spec.has_char_argument == false then
-          vim.w.semicoloncomma_captured_motion = {
-            motion = motion_spec,
-          }
-          if vim.v.count ~= 0 then
-            vim.w.semicoloncomma_captured_motion.count = vim.v.count
-          end
+      if match_mode(motion_spec, mode) then
+        local captured_motion = capture_motion(motion_spec, vim.g.semicoloncomma_input_buffer)
+        if captured_motion ~= nil then
+          vim.g.semicoloncomma_captured_motion = captured_motion
           goto cleanup
         end
 
-        -- Otherwise, the motion require a char argument.
-        -- We were waiting already.
-        if vim.w.semicoloncomma_pending_char_argument then
-          vim.w.semicoloncomma_captured_motion = {
-            motion = motion_spec,
-            char = typed,
-          }
-          if vim.v.count ~= 0 then
-            vim.w.semicoloncomma_captured_motion.count = vim.v.count
-          end
-          goto cleanup
+        if match_prefix(motion_spec, vim.g.semicoloncomma_input_buffer) then
+          goto wait_for_next_key
         end
-
-        -- Otherwise, wait for the next char.
-        vim.w.semicoloncomma_pending_char_argument = true
-        goto wait_for_next_key
       end
     end
 
@@ -106,8 +125,7 @@ vim.on_key(
     -- This means the input keys match nothing.
     -- We forget everything and start from scratch.
     ::cleanup::
-    vim.w.semicoloncomma_input_buffer = ""
-    vim.w.semicoloncomma_pending_char_argument = false
+    vim.g.semicoloncomma_input_buffer = ""
 
     ::wait_for_next_key::
   end
@@ -115,16 +133,16 @@ vim.on_key(
 
 ---@param direction "forward"|"backward"
 local function repeat_last_motion(direction)
-  if vim.w.semicoloncomma_captured_motion == nil then
+  if vim.g.semicoloncomma_captured_motion == nil then
     return
   end
 
-  local command = vim.w.semicoloncomma_captured_motion.motion[direction]
-  if vim.w.semicoloncomma_captured_motion.count ~= nil then
-    command = vim.w.semicoloncomma_captured_motion.count .. command
+  local command = vim.g.semicoloncomma_captured_motion.motion[direction]
+  if vim.g.semicoloncomma_captured_motion.count ~= nil then
+    command = vim.g.semicoloncomma_captured_motion.count .. command
   end
-  if vim.w.semicoloncomma_captured_motion.char ~= nil then
-    command = command .. vim.w.semicoloncomma_captured_motion.char
+  if vim.g.semicoloncomma_captured_motion.char ~= nil then
+    command = command .. vim.g.semicoloncomma_captured_motion.char
   end
 
   -- m: remap keys so that mappings like [h (from gitsigns) work
