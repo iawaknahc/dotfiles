@@ -84,22 +84,6 @@ local function statusline_mode()
   return { item = " " .. mode_info.label .. " ", hl = hl }
 end
 
----@return StatuslineItemString
-local function statusline_filename()
-  local winid = vim.api.nvim_get_current_win()
-  return lib_statusline.filename(winid)
-end
-
----@return StatuslineItemString
-local function statusline_bufnr()
-  return "b" .. tostring(vim.api.nvim_get_current_buf())
-end
-
----@return StatuslineItemString
-local function statusline_winid()
-  return "w" .. tostring(vim.api.nvim_get_current_win())
-end
-
 ---@param field_name string
 ---@param symbol string
 ---@param hl string
@@ -196,12 +180,10 @@ function STATUSLINE_STATUSLINE()
   local mode = statusline_mode()
   return StatuslineItem_to_statusline({
     mode,
-
-    { item = { " ", statusline_bufnr(), " ", statusline_winid(), " " }, hl = "MiniStatuslineDevinfo" },
     {
-      " ",
-      "%<",
-      statusline_filename(),
+      item = {
+        { item = { " ", "%{&filetype}", " ", statusline_filesize(), " " }, hl = "MiniStatuslineFileinfo" },
+      },
     },
 
     {
@@ -234,12 +216,7 @@ function STATUSLINE_STATUSLINE()
     },
 
     "%=",
-    {
-      item = {
-        " ",
-        { item = { " ", "%{&filetype}", " ", statusline_filesize(), " " }, hl = "MiniStatuslineFileinfo" },
-      },
-    },
+    "%<",
     {
       item = {
         " ",

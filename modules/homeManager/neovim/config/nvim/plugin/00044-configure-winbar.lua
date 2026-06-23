@@ -1,7 +1,11 @@
 local lib_statusline = require("lib_statusline")
 
 function WINBAR_WINBAR()
-  return lib_statusline.filename(vim.api.nvim_get_current_win())
+  local winid = vim.api.nvim_get_current_win()
+  local bufnr = vim.api.nvim_win_get_buf(winid)
+  local filename = lib_statusline.filename(winid)
+  local colon = "%#NonText#:%*"
+  return "w" .. tostring(winid) .. colon .. "b" .. tostring(bufnr) .. colon .. "%<" .. filename
 end
 
 -- Set winbar to filename.
