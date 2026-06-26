@@ -1,7 +1,9 @@
 { pkgs, ... }:
 {
   programs.emacs.enable = true;
-  programs.emacs.package = pkgs.emacs-pgtk;
+  programs.emacs.package =
+    # It has to be Emacs Macport otherwise the scrollbar has a non-customizable white background color.
+    if pkgs.stdenv.hostPlatform.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
   programs.emacs.extraPackages =
     emacsPackages: with emacsPackages; [
       catppuccin-theme

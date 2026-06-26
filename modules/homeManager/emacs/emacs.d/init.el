@@ -1,6 +1,7 @@
 (setq inhibit-startup-screen t)
-
+(set-frame-font "JetBrainsMonoNL Nerd Font Mono 13")
 (menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (global-display-line-numbers-mode t)
 (setq-default display-line-numbers-width 4)
