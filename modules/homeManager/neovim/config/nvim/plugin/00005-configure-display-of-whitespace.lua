@@ -11,3 +11,6 @@ vim.o.list = true
 -- Tabs should be shown as multiple hyphens plus a greater-than sign tail so that it is visually different from spaces.
 -- Non-breaking spaces should be visually different from spaces and tabs, so we take the default from neovim, the plus sign.
 vim.opt.listchars = { leadmultispace = "▏.", leadtab = "▏->", lead = ".", tab = "-->", trail = ".", nbsp = "+" }
+
+-- Emacs display-table-slot 'wrap
+vim.o.showbreak = [[\]]
