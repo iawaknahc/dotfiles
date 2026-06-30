@@ -6,6 +6,9 @@
 (global-display-line-numbers-mode t)
 (setq-default display-line-numbers-width 4)
 
+(setq mac-command-modifier 'meta)
+(setq mac-right-command-modifier 'none)
+
 (load-theme 'catppuccin :no-confirm)
 (setq catppuccin-flavor 'mocha)
 (catppuccin-reload)
