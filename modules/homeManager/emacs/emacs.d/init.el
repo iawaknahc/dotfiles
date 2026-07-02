@@ -5,6 +5,9 @@
 (when (display-graphic-p)
   (tool-bar-mode -1))
 
+; Echo the incomplete commands after 10ms
+(setq echo-keystrokes 0.01)
+
 (global-display-line-numbers-mode t)
 (setq-default display-line-numbers-width 4)
 
