@@ -10,7 +10,15 @@ vim.o.list = true
 -- Therefore, leadmultispace, lead, and trail uses dot.
 -- Tabs should be shown as multiple hyphens plus a greater-than sign tail so that it is visually different from spaces.
 -- Non-breaking spaces should be visually different from spaces and tabs, so we take the default from neovim, the plus sign.
-vim.opt.listchars = { leadmultispace = "▏.", leadtab = "▏->", lead = ".", tab = "-->", trail = ".", nbsp = "+" }
+vim.opt.listchars = {
+  leadmultispace = "▏.",
+  leadtab = "▏->",
+  lead = ".",
+  tab = "-->",
+  trail = ".",
+  nbsp = "+",
+  extends = "$", -- Emacs shows `$` by default. See https://www.gnu.org/software/emacs/manual/html_node/emacs/Continuation-Lines.html
+}
 
--- Emacs display-table-slot 'wrap
+-- Emacs shows `\` by default. See https://www.gnu.org/software/emacs/manual/html_node/emacs/Continuation-Lines.html
 vim.o.showbreak = [[\]]
