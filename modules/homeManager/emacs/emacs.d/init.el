@@ -8,6 +8,9 @@
 ; Echo the incomplete commands after 10ms
 (setq echo-keystrokes 0.01)
 
+; Make C-x = show Unicode character name.
+(setq what-cursor-show-names t)
+
 (global-display-line-numbers-mode t)
 (setq-default display-line-numbers-width 4)
 
