@@ -7,6 +7,7 @@
   programs.emacs.extraPackages =
     emacsPackages: with emacsPackages; [
       catppuccin-theme
+      mu4e
     ];
   home.file.".emacs.d/init.el".source = ./emacs.d/init.el;
 }

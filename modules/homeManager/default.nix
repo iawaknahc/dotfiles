@@ -150,6 +150,9 @@ _: {
     ./ssh.nix
     ./sops-nix.nix
 
+    # Email
+    ./email
+
     ./ascii
 
     # Flutter is now installed per project with flake.nix

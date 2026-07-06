@@ -1,6 +1,7 @@
 addext
 akey
 alacritty
+alist
 atuin
 augroup
 autocmd
@@ -172,6 +173,8 @@ luasnip
 lvimgrep
 lwindow
 macopt
+maildir
+mbsync
 menuone
 minwid
 mjml
@@ -246,6 +249,7 @@ scrolloff
 searchforward
 sed
 semicoloncomma
+sendmail
 sessionoptions
 setlocal
 setloclist
