@@ -5,21 +5,16 @@
 -- :map gf :edit <cfile><CR>
 -- But that does not seem to handle path like ../.foo/bar
 vim.keymap.set("n", "gf", function()
-  local file_under_cursor = vim.fn.expand("<cfile>")
-
-  -- Absolute path
-  if vim.startswith(file_under_cursor, "/") then
-    -- Fallback to original gf.
-    vim.cmd([[normal! gf]])
+  local cfile = vim.fn.expand("<cfile>") --[[@as string]]
+  -- Absolute path or relative path to HOME
+  if vim.startswith(cfile, "/") or vim.startswith(cfile, "~/") then
+    vim.cmd([[edit ]] .. vim.fn.fnameescape(cfile))
     return
   end
 
   -- Otherwise, we construct a path relative to the current file.
-  local parent_directory = vim.fn.expand("%:h")
-  local path = vim.fs.joinpath(parent_directory, file_under_cursor)
-  local normalized = vim.fs.normalize(path)
-  local fname = vim.fn.fnameescape(normalized)
-  vim.cmd([[edit ]] .. fname)
+  local dirname = vim.fn.expand("%:h") --[[@as string]]
+  vim.cmd([[edit ]] .. vim.fn.fnameescape(vim.fs.normalize(vim.fs.joinpath(dirname, cfile))))
 end, {
   desc = "Edit file under cursor",
 })
