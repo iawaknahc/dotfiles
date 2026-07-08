@@ -269,6 +269,9 @@ in
           mbsync.extraConfig.account = {
             AuthMechs = "XOAUTH2";
           };
+          msmtp.extraConfig = {
+            auth = "xoauth2";
+          };
         })
 
         (lib.mkIf (value.flavor == "outlook.office365.com") {
@@ -276,6 +279,9 @@ in
           passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
           mbsync.extraConfig.account = {
             AuthMechs = "XOAUTH2";
+          };
+          msmtp.extraConfig = {
+            auth = "xoauth2";
           };
         })
 
