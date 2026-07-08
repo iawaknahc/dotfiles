@@ -6,48 +6,110 @@
 }:
 let
   enabledEmailAccounts = lib.attrsets.filterAttrs (name: value: value.enable) config.email.accounts;
+
+  mkMaildirShortcuts =
+    flavor: address:
+    if flavor == "gmail.com" then
+      lib.strings.concatLines [
+        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
+        ''(:maildir "/${address}/[Gmail]/All Mail" :name "Archive" :key ?a)''
+        ''(:maildir "/${address}/[Gmail]/Sent Mail" :name "Sent" :key ?s)''
+        ''(:maildir "/${address}/[Gmail]/Drafts" :name "Drafts" :key ?d)''
+        ''(:maildir "/${address}/[Gmail]/Trash" :name "Trash" :key ?t)''
+        ''(:maildir "/${address}/[Gmail]/Spam" :name "Junk" :key ?j)''
+      ]
+    else
+      throw "unknown flavor";
+
+  folderFor =
+    flavor: address: folder:
+    if flavor == "gmail.com" then
+      if folder == "sent" then
+        "/${address}/[Gmail]/Sent Mail"
+      else if folder == "drafts" then
+        "/${address}/[Gmail]/Drafts"
+      else if folder == "trash" then
+        "/${address}/[Gmail]/Trash"
+      else if folder == "refile" then
+        "/${address}/[Gmail]/All Mail"
+      else
+        throw "unknown folder"
+    else
+      throw "unknown flavor";
+
+  mkMu4eContext = (
+    account:
+    let
+      f = folderFor account.flavor account.address;
+    in
+    ''
+      (make-mu4e-context
+        :name "${account.mu4eContextName}"
+        :vars '((user-full-name . "${account.realName}")
+                (user-mail-address . "${account.address}")
+                (mu4e-sent-folder . "${f "sent"}")
+                (mu4e-drafts-folder . "${f "drafts"}")
+                (mu4e-trash-folder . "${f "trash"}")
+                (mu4e-refile-folder . "${f "refile"}")
+                (mu4e-maildir-shortcuts . (${mkMaildirShortcuts account.flavor account.address}))))
+    ''
+  );
 in
 {
   options = {
     email.enable = lib.mkEnableOption "email";
     email.accounts = lib.mkOption {
       type = lib.types.attrsOf (
-        lib.types.submodule {
-          options = {
-            name = lib.mkOption {
-              type = lib.types.str;
-              readOnly = true;
+        lib.types.submodule (
+          { name, ... }: {
+            config = {
+              inherit name;
+              address = name;
             };
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                readOnly = true;
+              };
+              address = lib.mkOption {
+                type = lib.types.str;
+                readOnly = true;
+              };
 
-            enable = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-            };
+              enable = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+              };
 
-            primary = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-            };
+              primary = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+              };
 
-            flavor = lib.mkOption {
-              type = lib.types.enum [
-                "gmail.com"
-                "outlook.office365.com"
-              ];
-            };
+              flavor = lib.mkOption {
+                type = lib.types.enum [
+                  "gmail.com"
+                  "outlook.office365.com"
+                ];
+              };
 
-            realName = lib.mkOption {
-              type = lib.types.str;
-            };
+              realName = lib.mkOption {
+                type = lib.types.str;
+              };
 
-            sopsClientID = lib.mkOption {
-              type = lib.types.str;
+              mu4eContextName = lib.mkOption {
+                type = lib.types.str;
+              };
+
+              sopsClientID = lib.mkOption {
+                type = lib.types.str;
+              };
+              sopsClientSecret = lib.mkOption {
+                type = lib.types.str;
+              };
             };
-            sopsClientSecret = lib.mkOption {
-              type = lib.types.str;
-            };
-          };
-        }
+          }
+        )
       );
     };
   };
@@ -178,5 +240,13 @@ in
       mu.enable = true;
       msmtp.enable = true;
     }) enabledEmailAccounts;
+
+    home.file.".emacs.d/mu4e-contexts.el".text = ''
+      (setq mu4e-contexts (list ${
+        lib.strings.concatStrings (
+          lib.attrsets.mapAttrsToList (name: value: mkMu4eContext value) enabledEmailAccounts
+        )
+      }))
+    '';
   };
 }

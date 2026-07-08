@@ -8,6 +8,7 @@
       primary = true;
       flavor = "gmail.com";
       realName = "Louis Chan";
+      mu4eContextName = "personal";
 
       sopsClientID = "pizauth/google/client_id";
       sopsClientSecret = "pizauth/google/client_secret";

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs.emacs.enable = true;
   programs.emacs.package =
@@ -9,5 +9,8 @@
       catppuccin-theme
       mu4e
     ];
+  programs.emacs.extraConfig = ''
+    (setq mu4e-attachment-dir "${config.home.homeDirectory}/Downloads")
+  '';
   home.file.".emacs.d/init.el".source = ./emacs.d/init.el;
 }
