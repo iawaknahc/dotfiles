@@ -8,10 +8,18 @@
       primary = true;
       flavor = "gmail.com";
       realName = "Louis Chan";
-      mu4eContextName = "personal";
+      mu4eContextName = "gmail";
 
       sopsClientID = "pizauth/google/client_id";
       sopsClientSecret = "pizauth/google/client_secret";
+    };
+
+    email.accounts."chankawai49@netvigator.com" = {
+      flavor = "netvigator.com";
+      realName = "Louis Chan";
+      mu4eContextName = "netvigator";
+
+      sopsPassword = "chankawai49_at_netvigator_dot_com/password";
     };
 
     email.accounts."louischan0325@hotmail.com" = {

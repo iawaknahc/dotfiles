@@ -6,6 +6,10 @@
 }:
 let
   enabledEmailAccounts = lib.attrsets.filterAttrs (name: value: value.enable) config.email.accounts;
+  # The primary is the first element.
+  enabledEmailAccountsList = lib.lists.sort (a: b: a.primary) (
+    lib.attrsets.mapAttrsToList (name: value: value) enabledEmailAccounts
+  );
 
   mkMaildirShortcuts =
     flavor: address:
@@ -18,8 +22,17 @@ let
         ''(:maildir "/${address}/[Gmail]/Trash" :name "Trash" :key ?t)''
         ''(:maildir "/${address}/[Gmail]/Spam" :name "Junk" :key ?j)''
       ]
+    else if flavor == "netvigator.com" then
+      lib.strings.concatLines [
+        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
+        ''(:maildir "/${address}/Archive" :name "Archive" :key ?a)''
+        ''(:maildir "/${address}/Sent" :name "Sent" :key ?s)''
+        ''(:maildir "/${address}/Drafts" :name "Drafts" :key ?d)''
+        ''(:maildir "/${address}/Trash" :name "Trash" :key ?t)''
+        ''(:maildir "/${address}/Junk" :name "Junk" :key ?j)''
+      ]
     else
-      throw "unknown flavor";
+      "";
 
   folderFor =
     flavor: address: folder:
@@ -32,6 +45,17 @@ let
         "/${address}/[Gmail]/Trash"
       else if folder == "refile" then
         "/${address}/[Gmail]/All Mail"
+      else
+        throw "unknown folder"
+    else if flavor == "netvigator.com" then
+      if folder == "sent" then
+        "/${address}/Sent"
+      else if folder == "drafts" then
+        "/${address}/Drafts"
+      else if folder == "trash" then
+        "/${address}/Trash"
+      else if folder == "refile" then
+        "/${address}/Archive"
       else
         throw "unknown folder"
     else
@@ -90,6 +114,7 @@ in
                 type = lib.types.enum [
                   "gmail.com"
                   "outlook.office365.com"
+                  "netvigator.com"
                 ];
               };
 
@@ -105,6 +130,10 @@ in
                 type = lib.types.str;
               };
               sopsClientSecret = lib.mkOption {
+                type = lib.types.str;
+              };
+
+              sopsPassword = lib.mkOption {
                 type = lib.types.str;
               };
             };
@@ -138,10 +167,21 @@ in
     # In particular, it also provides the executable `sendmail` which Emacs can use.
     programs.msmtp.enable = true; # The configuration of this program is at ~/.config/msmtp/config
 
-    sops.secrets = lib.attrsets.concatMapAttrs (name: value: {
-      "${value.sopsClientID}" = { };
-      "${value.sopsClientSecret}" = { };
-    }) enabledEmailAccounts;
+    sops.secrets = lib.attrsets.concatMapAttrs (
+      name: value:
+      if value.flavor == "gmail.com" || value.flavor == "outlook.office365.com" then
+        {
+          "${value.sopsClientID}" = { };
+          "${value.sopsClientSecret}" = { };
+        }
+      else if value.flavor == "netvigator.com" then
+        {
+          "${value.sopsPassword}" = { };
+        }
+      else
+        {
+        }
+    ) enabledEmailAccounts;
 
     # It is required to specify a fixed port because some OAuth providers like Azure, require static redirect URI.
     #
@@ -220,32 +260,58 @@ in
       };
     };
 
-    accounts.email.accounts = lib.attrsets.mapAttrs (name: value: {
-      inherit (value)
-        primary
-        flavor
-        realName
-        enable
-        ;
-      address = name;
+    accounts.email.accounts = lib.attrsets.mapAttrs (
+      name: value:
+      lib.mkMerge [
+        (lib.mkIf (value.flavor == "gmail.com") {
+          flavor = "gmail.com";
+          passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
+          mbsync.extraConfig.account = {
+            AuthMechs = "XOAUTH2";
+          };
+        })
 
-      passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
+        (lib.mkIf (value.flavor == "outlook.office365.com") {
+          flavor = "outlook.office365.com";
+          passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
+          mbsync.extraConfig.account = {
+            AuthMechs = "XOAUTH2";
+          };
+        })
 
-      mbsync.enable = true;
-      mbsync.create = "both"; # Allow mbsync to create necessary local directories.
-      mbsync.expunge = "both";
-      mbsync.extraConfig.account = {
-        AuthMechs = "XOAUTH2";
-      };
-      mu.enable = true;
-      msmtp.enable = true;
-    }) enabledEmailAccounts;
+        (lib.mkIf (value.flavor == "netvigator.com") {
+          flavor = "plain";
+          userName = name;
+          passwordCommand = "cat ${config.sops.defaultSymlinkPath}/${value.sopsPassword}";
+          imap.host = "imap.netvigator.com";
+          imap.port = 993;
+          imap.tls.enable = true;
+          smtp.host = "smtp.netvigator.com";
+          smtp.port = 465;
+          smtp.tls.enable = true;
+        })
 
+        {
+          inherit (value)
+            primary
+            realName
+            enable
+            ;
+          address = name;
+
+          mbsync.enable = true;
+          mbsync.create = "both"; # Allow mbsync to create necessary local directories.
+          mbsync.expunge = "both";
+          mu.enable = true;
+          msmtp.enable = true;
+        }
+      ]
+    ) enabledEmailAccounts;
+
+    # Use enabledEmailAccountsList so that the first context is the primary account.
     home.file.".emacs.d/mu4e-contexts.el".text = ''
       (setq mu4e-contexts (list ${
-        lib.strings.concatStrings (
-          lib.attrsets.mapAttrsToList (name: value: mkMu4eContext value) enabledEmailAccounts
-        )
+        lib.strings.concatStrings (lib.lists.map (value: mkMu4eContext value) enabledEmailAccountsList)
       }))
     '';
   };
