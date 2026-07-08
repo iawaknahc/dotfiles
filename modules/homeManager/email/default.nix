@@ -23,9 +23,11 @@
   # In particular, it also provides the executable `sendmail` which Emacs can use.
   programs.msmtp.enable = true; # The configuration of this program is at ~/.config/msmtp/config
 
-  sops.secrets."accounts/louischan0325_at_gmail_dot_com/app_password" = { };
-  sops.secrets."accounts/louischan0325_at_gmail_dot_com/pizauth/client_id" = { };
-  sops.secrets."accounts/louischan0325_at_gmail_dot_com/pizauth/client_secret" = { };
+  sops.secrets."pizauth/google/client_id" = { };
+  sops.secrets."pizauth/google/client_secret" = { };
+  sops.secrets."pizauth/azure/client_id" = { };
+  sops.secrets."pizauth/azure/client_secret" = { };
+
   sops.templates."pizauth.conf" = {
     mode = "0700";
     content = ''
@@ -37,12 +39,8 @@
         auth_uri_fields = {"login_hint": "louischan0325@gmail.com"};
         token_uri = "https://oauth2.googleapis.com/token";
         scopes = ["https://mail.google.com/"];
-        client_id = "${
-          config.sops.placeholder."accounts/louischan0325_at_gmail_dot_com/pizauth/client_id"
-        }";
-        client_secret = "${
-          config.sops.placeholder."accounts/louischan0325_at_gmail_dot_com/pizauth/client_secret"
-        }";
+        client_id = "${config.sops.placeholder."pizauth/google/client_id"}";
+        client_secret = "${config.sops.placeholder."pizauth/google/client_secret"}";
       }
     '';
     path = "${config.home.homeDirectory}/.config/pizauth.conf";
