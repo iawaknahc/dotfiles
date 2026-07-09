@@ -15,32 +15,32 @@ let
     flavor: address:
     if flavor == "gmail.com" then
       lib.strings.concatLines [
-        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
-        ''(:maildir "/${address}/[Gmail]/All Mail" :name "Archive" :key ?a)''
-        ''(:maildir "/${address}/[Gmail]/Sent Mail" :name "Sent" :key ?s)''
-        ''(:maildir "/${address}/[Gmail]/Drafts" :name "Drafts" :key ?d)''
-        ''(:maildir "/${address}/[Gmail]/Trash" :name "Trash" :key ?t)''
-        ''(:maildir "/${address}/[Gmail]/Spam" :name "Junk" :key ?j)''
+        ''(:maildir "/${address}/Inbox" :name "${address} - Inbox" :key ?i)''
+        ''(:maildir "/${address}/[Gmail]/All Mail" :name "${address} - Archive" :key ?a)''
+        ''(:maildir "/${address}/[Gmail]/Sent Mail" :name "${address} - Sent" :key ?s)''
+        ''(:maildir "/${address}/[Gmail]/Drafts" :name "${address} - Drafts" :key ?d)''
+        ''(:maildir "/${address}/[Gmail]/Trash" :name "${address} - Trash" :key ?t)''
+        ''(:maildir "/${address}/[Gmail]/Spam" :name "${address} - Junk" :key ?j)''
       ]
     else if flavor == "netvigator.com" then
       lib.strings.concatLines [
-        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
-        ''(:maildir "/${address}/Archive" :name "Archive" :key ?a)''
-        ''(:maildir "/${address}/Sent" :name "Sent" :key ?s)''
-        ''(:maildir "/${address}/Drafts" :name "Drafts" :key ?d)''
-        ''(:maildir "/${address}/Trash" :name "Trash" :key ?t)''
-        ''(:maildir "/${address}/Junk" :name "Junk" :key ?j)''
+        ''(:maildir "/${address}/Inbox" :name "${address} - Inbox" :key ?i)''
+        ''(:maildir "/${address}/Archive" :name "${address} - Archive" :key ?a)''
+        ''(:maildir "/${address}/Sent" :name "${address} - Sent" :key ?s)''
+        ''(:maildir "/${address}/Drafts" :name "${address} - Drafts" :key ?d)''
+        ''(:maildir "/${address}/Trash" :name "${address} - Trash" :key ?t)''
+        ''(:maildir "/${address}/Junk" :name "${address} - Junk" :key ?j)''
       ]
     else if flavor == "davmail" then
       lib.strings.concatLines [
-        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
-        ''(:maildir "/${address}/Archive" :name "Archive" :key ?a)''
-        ''(:maildir "/${address}/Sent Items" :name "Sent" :key ?s)''
-        ''(:maildir "/${address}/Drafts" :name "Drafts" :key ?d)''
-        ''(:maildir "/${address}/Deleted Items" :name "Trash" :key ?t)''
-        ''(:maildir "/${address}/Junk Email" :name "Junk" :key ?j)''
-        ''(:maildir "/${address}/Outbox" :name "Outbox" :key ?o)''
-        ''(:maildir "/${address}/Conversation History" :name "Conversation History" :key ?h)''
+        ''(:maildir "/${address}/Inbox" :name "${address} - Inbox" :key ?i)''
+        ''(:maildir "/${address}/Archive" :name "${address} - Archive" :key ?a)''
+        ''(:maildir "/${address}/Sent Items" :name "${address} - Sent" :key ?s)''
+        ''(:maildir "/${address}/Drafts" :name "${address} - Drafts" :key ?d)''
+        ''(:maildir "/${address}/Deleted Items" :name "${address} - Trash" :key ?t)''
+        ''(:maildir "/${address}/Junk Email" :name "${address} - Junk" :key ?j)''
+        ''(:maildir "/${address}/Outbox" :name "${address} - Outbox" :key ?o)''
+        ''(:maildir "/${address}/Conversation History" :name "${address} - Conversation History" :key ?h)''
       ]
     else
       "";
