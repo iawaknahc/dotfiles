@@ -37,7 +37,25 @@
       (msg)
       (let* ((maildir (mu4e-message-field msg :maildir)))
         (nth 1 (file-name-split maildir)))))))
- (setq mu4e-headers-fields `((:maildir-first-component . 30) (:human-date . ,(length "2006-01-02")) (:flags . 6) (:from . 30) (:subject)))
+ (setq mu4e-headers-fields
+       `((:maildir-first-component . 30)
+         (:human-date . ,(length "2006-01-02"))
+         (:flags . 6)
+         (:from . 30)
+         (:subject)))
+ (setq mu4e-bookmarks
+       '((:name
+          "Unread non-trashed non-junk messages"
+          :query "flag:unread AND NOT flag:trashed AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
+          :key ?u)
+         (:name
+          "Junk messages"
+          :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
+          :key ?j)
+         (:name
+          "Trashed messages"
+          :query "flag:trashed"
+          :key ?t)))
  (require 'init-mu4e-contexts))
 
 (provide 'init-mu4e)
