@@ -1,9 +1,7 @@
 { config, ... }:
 {
   programs.fzf.enable = true;
-  programs.fzf.defaultCommand = ''
-    fd --type f --hidden
-  '';
+  programs.fzf.defaultCommand = "fd --type f --hidden";
   programs.fzf.defaultOptions = [
     # Setting --with-shell breaks the CTRL-R key binding introduced by
     # https://github.com/junegunn/fzf/blob/master/shell/key-bindings.fish
@@ -16,8 +14,7 @@
   programs.fzf.enableBashIntegration = true;
   programs.fzf.enableFishIntegration = true;
   programs.fzf.enableZshIntegration = true;
-  # FIXME: Enable fzf nushell integration.
-  programs.fzf.enableNushellIntegration = false;
+  programs.fzf.enableNushellIntegration = true;
 
   # FZF_CTRL_R_COMMAND
   # We use atuin to manage shell history.
