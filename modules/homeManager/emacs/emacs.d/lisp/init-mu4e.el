@@ -10,6 +10,8 @@
   ;; 2006-01-02
   (setq mu4e-headers-date-format "%F")
   (setq mu4e-headers-time-format "%T")
+  ;; Do not move point after mark
+  (setq mu4e-headers-advance-after-mark nil)
   ;; Update every 5 minutes.
   (setq mu4e-update-interval 300)
   ;; Load remote images.
