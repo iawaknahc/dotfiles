@@ -19,7 +19,9 @@
   };
   home.shellAliases = lib.mkIf config.programs.neovim.enable {
     # Open diffview.
-    g = "nvim +'DiffviewOpen' +tabonly";
+    # By default, it is opened in a new tabpage.
+    # This is what we want because we may want to switch back to the unnamed tabpage to open files for edit.
+    g = "nvim +'DiffviewOpen'";
   };
 
   xdg.configFile."nvim/ftdetect" = {
