@@ -278,6 +278,10 @@ in
         davmail.ssl.nosecurepop=true
         davmail.ssl.nosecuresmtp=true
 
+        # Set it back to false
+        # https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/Settings.java#L249
+        davmail.imapAutoExpunge=false
+
         davmail.logFilePath=/dev/stderr
         log4j.logger.davmail=INFO
         log4j.logger.httpclient.wire=WARN
