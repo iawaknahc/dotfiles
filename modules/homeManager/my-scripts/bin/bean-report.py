@@ -274,14 +274,14 @@ class InputWithPeriodStartEnd:
                         start = datetime.date.today()
                         end = start + datetime.timedelta(days=1)
                     case (None, end_str):
-                        end = datetime.date.fromisoformat(cast(str, end_str))
+                        end = datetime.date.fromisoformat(cast(str, end_str))  # ty:ignore[redundant-cast]
                         start = end + datetime.timedelta(days=-1)
                     case (start_str, None):
-                        start = datetime.date.fromisoformat(cast(str, start_str))
+                        start = datetime.date.fromisoformat(cast(str, start_str))  # ty:ignore[redundant-cast]
                         end = start + datetime.timedelta(days=1)
                     case (start_str, end_str):
-                        start = datetime.date.fromisoformat(cast(str, start_str))
-                        end = datetime.date.fromisoformat(cast(str, end_str))
+                        start = datetime.date.fromisoformat(cast(str, start_str))  # ty:ignore[redundant-cast]
+                        end = datetime.date.fromisoformat(cast(str, end_str))  # ty:ignore[redundant-cast]
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
                     case _:
@@ -303,7 +303,7 @@ class InputWithPeriodStartEnd:
                         end = start + datetime.timedelta(weeks=1)
                     case (None, end_str):
                         end = datetime.date.strptime(
-                            cast(str, end_str) + "-1",
+                            cast(str, end_str) + "-1",  # ty:ignore[redundant-cast]
                             "%G-W%V-%u",
                         )
                         assert end.weekday() == 0
@@ -311,7 +311,7 @@ class InputWithPeriodStartEnd:
                         assert start.weekday() == 0
                     case (start_str, None):
                         start = datetime.date.strptime(
-                            cast(str, start_str) + "-1",
+                            cast(str, start_str) + "-1",  # ty:ignore[redundant-cast]
                             "%G-W%V-%u",
                         )
                         assert start.weekday() == 0
@@ -319,11 +319,11 @@ class InputWithPeriodStartEnd:
                         assert end.weekday() == 0
                     case (start_str, end_str):
                         start = datetime.date.strptime(
-                            cast(str, start_str) + "-1",
+                            cast(str, start_str) + "-1",  # ty:ignore[redundant-cast]
                             "%G-W%V-%u",
                         )
                         end = datetime.date.strptime(
-                            cast(str, end_str) + "-1",
+                            cast(str, end_str) + "-1",  # ty:ignore[redundant-cast]
                             "%G-W%V-%u",
                         )
                         assert start.weekday() == 0
@@ -347,18 +347,18 @@ class InputWithPeriodStartEnd:
                         start = start_of_month(today)
                         end = next_month(start)
                     case (None, end_str):
-                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # ty:ignore[redundant-cast]
                         start = previous_month(end)
                     case (start_str, None):
                         start = datetime.date.fromisoformat(
-                            cast(str, start_str) + "-01"
+                            cast(str, start_str) + "-01"  # ty:ignore[redundant-cast]
                         )
                         end = next_month(start)
                     case (start_str, end_str):
                         start = datetime.date.fromisoformat(
-                            cast(str, start_str) + "-01"
+                            cast(str, start_str) + "-01"  # ty:ignore[redundant-cast]
                         )
-                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")
+                        end = datetime.date.fromisoformat(cast(str, end_str) + "-01")  # ty:ignore[redundant-cast]
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
                     case _:
@@ -378,14 +378,14 @@ class InputWithPeriodStartEnd:
                         start = start_of_quarter(today)
                         end = next_quarter(start)
                     case (None, end_str):
-                        end = parse_quarter_notation(cast(str, end_str))
+                        end = parse_quarter_notation(cast(str, end_str))  # ty:ignore[redundant-cast]
                         start = previous_quarter(end)
                     case (start_str, None):
-                        start = parse_quarter_notation(cast(str, start_str))
+                        start = parse_quarter_notation(cast(str, start_str))  # ty:ignore[redundant-cast]
                         end = next_quarter(start)
                     case (start_str, end_str):
-                        start = parse_quarter_notation(cast(str, start_str))
-                        end = parse_quarter_notation(cast(str, end_str))
+                        start = parse_quarter_notation(cast(str, start_str))  # ty:ignore[redundant-cast]
+                        end = parse_quarter_notation(cast(str, end_str))  # ty:ignore[redundant-cast]
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
                     case _:
@@ -405,14 +405,14 @@ class InputWithPeriodStartEnd:
                         start = start_of_year(today)
                         end = next_year(start)
                     case (None, end_str):
-                        end = parse_year_notation(cast(str, end_str))
+                        end = parse_year_notation(cast(str, end_str))  # ty:ignore[redundant-cast]
                         start = previous_year(end)
                     case (start_str, None):
-                        start = parse_year_notation(cast(str, start_str))
+                        start = parse_year_notation(cast(str, start_str))  # ty:ignore[redundant-cast]
                         end = next_year(start)
                     case (start_str, end_str):
-                        start = parse_year_notation(cast(str, start_str))
-                        end = parse_year_notation(cast(str, end_str))
+                        start = parse_year_notation(cast(str, start_str))  # ty:ignore[redundant-cast]
+                        end = parse_year_notation(cast(str, end_str))  # ty:ignore[redundant-cast]
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
                     case _:
@@ -432,14 +432,14 @@ class InputWithPeriodStartEnd:
                         start = start_of_hong_kong(today)
                         end = next_year(start)
                     case (None, end_str):
-                        end = parse_hong_kong(cast(str, end_str))
+                        end = parse_hong_kong(cast(str, end_str))  # ty:ignore[redundant-cast]
                         start = previous_year(end)
                     case (start_str, None):
-                        start = parse_hong_kong(cast(str, start_str))
+                        start = parse_hong_kong(cast(str, start_str))  # ty:ignore[redundant-cast]
                         end = next_year(start)
                     case (start_str, end_str):
-                        start = parse_hong_kong(cast(str, start_str))
-                        end = parse_hong_kong(cast(str, end_str))
+                        start = parse_hong_kong(cast(str, start_str))  # ty:ignore[redundant-cast]
+                        end = parse_hong_kong(cast(str, end_str))  # ty:ignore[redundant-cast]
                         if start >= end:
                             raise ValueError("--start must be strictly less than --end")
                     case _:
