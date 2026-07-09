@@ -67,6 +67,7 @@ diffview
 direnv
 dlv
 dockerls
+dolist
 duckdb
 elispfeature
 emmylua
@@ -178,6 +179,7 @@ maildir
 mbsync
 menuone
 minwid
+misalign
 mjml
 modeline
 modelines
