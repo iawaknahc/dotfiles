@@ -22,6 +22,15 @@
   (add-to-list 'display-buffer-alist
                `(,(regexp-quote mu4e-main-buffer-name)
                   display-buffer-same-window))
+  (add-to-list 'mu4e-header-info-custom
+               '(:maildir-first-component . (
+                 :name "The first path component of :maildir"
+                 :shortname "Mailbox"
+                 :help "The first path component of :maildir"
+                 :function (lambda (msg)
+                   (let* ((maildir (mu4e-message-field msg :maildir)))
+                     (nth 1 (file-name-split maildir)))))))
+  (setq mu4e-headers-fields `((:maildir-first-component . 30) (:human-date . ,(length "2006-01-02")) (:flags . 6) (:from . 30) (:subject)))
   (require 'init-mu4e-contexts))
 
 (provide 'init-mu4e)
