@@ -106,12 +106,6 @@ let
 
   codebook_config = {
     ignore_patterns = [
-      # FIXME: Work around this bug https://github.com/blopker/codebook/issues/172
-      "\\p{Han}"
-      "\\p{Hiragana}"
-      "\\p{Hangul}"
-      "\\p{Katakana}"
-
       # Ignore Neovim abbreviations.
       "^cnoreabbrev.*"
     ];
