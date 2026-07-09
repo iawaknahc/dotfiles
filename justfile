@@ -10,7 +10,7 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check pyrefly ty
+check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check elisp-fmt-check pyrefly ty
 
 # Run checker `shellcheck`
 shellcheck:
@@ -31,6 +31,10 @@ ruff-fmt-check:
 # Run checker `nufmt --dry-run`
 nufmt-check:
     fd --hidden --type file --extension nu | xargs nufmt --dry-run
+
+# Run checker `cljfmt check` on elisp files.
+elisp-fmt-check:
+    fd --hidden --type file --extension el | xargs cljfmt check
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
@@ -61,7 +65,7 @@ ty:
     ty check
 
 # Run all formatters
-format: shfmt stylua-fmt nufmt ruff-fmt
+format: shfmt stylua-fmt nufmt ruff-fmt elisp-fmt
 
 # Run formatter `shfmt --write --list`
 shfmt:
@@ -75,8 +79,13 @@ stylua-fmt:
 nufmt:
     fd --hidden --type file --extension nu | xargs nufmt
 
+# Run formatter `ruff format`.
 ruff-fmt:
     ruff format
+
+# Run formatter `cljfmt fix` on elisp files.
+elisp-fmt:
+    fd --hidden --type file --extension el | xargs cljfmt fix
 
 # Copy the current config of Alfred to here for git-diff
 alfred-rsync:

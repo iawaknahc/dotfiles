@@ -14,6 +14,7 @@ require("conform").setup({
     css = prettier,
     -- One caveat of using cljfmt to format Hy is that f-string `f""` will be formatted to `f ""`, thus broken.
     hy = { "cljfmt" },
+    lisp = { "cljfmt" },
     swift = { "swiftformat" },
     nu = { "nufmt" },
     ledger = { "hledger-fmt" },
