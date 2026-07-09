@@ -31,6 +31,17 @@ let
         ''(:maildir "/${address}/Trash" :name "Trash" :key ?t)''
         ''(:maildir "/${address}/Junk" :name "Junk" :key ?j)''
       ]
+    else if flavor == "davmail" then
+      lib.strings.concatLines [
+        ''(:maildir "/${address}/Inbox" :name "Inbox" :key ?i)''
+        ''(:maildir "/${address}/Archive" :name "Archive" :key ?a)''
+        ''(:maildir "/${address}/Sent Items" :name "Sent" :key ?s)''
+        ''(:maildir "/${address}/Drafts" :name "Drafts" :key ?d)''
+        ''(:maildir "/${address}/Deleted Items" :name "Trash" :key ?t)''
+        ''(:maildir "/${address}/Junk Email" :name "Junk" :key ?j)''
+        ''(:maildir "/${address}/Outbox" :name "Outbox" :key ?o)''
+        ''(:maildir "/${address}/Conversation History" :name "Conversation History" :key ?h)''
+      ]
     else
       "";
 
@@ -54,6 +65,17 @@ let
         "/${address}/Drafts"
       else if folder == "trash" then
         "/${address}/Trash"
+      else if folder == "refile" then
+        "/${address}/Archive"
+      else
+        throw "unknown folder"
+    else if flavor == "davmail" then
+      if folder == "sent" then
+        "/${address}/Sent Items"
+      else if folder == "drafts" then
+        "/${address}/Drafts"
+      else if folder == "trash" then
+        "/${address}/Deleted Items"
       else if folder == "refile" then
         "/${address}/Archive"
       else
@@ -82,6 +104,9 @@ in
 {
   options = {
     email.enable = lib.mkEnableOption "email";
+    email.davmail.sopsClientID = lib.mkOption {
+      type = lib.types.str;
+    };
     email.accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
@@ -113,8 +138,8 @@ in
               flavor = lib.mkOption {
                 type = lib.types.enum [
                   "gmail.com"
-                  "outlook.office365.com"
                   "netvigator.com"
+                  "davmail"
                 ];
               };
 
@@ -146,6 +171,7 @@ in
   config = lib.mkIf config.email.enable {
     home.packages = with pkgs; [
       pizauth
+      davmail
     ];
 
     nixpkgs.overlays = [
@@ -167,21 +193,25 @@ in
     # In particular, it also provides the executable `sendmail` which Emacs can use.
     programs.msmtp.enable = true; # The configuration of this program is at ~/.config/msmtp/config
 
-    sops.secrets = lib.attrsets.concatMapAttrs (
-      name: value:
-      if value.flavor == "gmail.com" || value.flavor == "outlook.office365.com" then
-        {
-          "${value.sopsClientID}" = { };
-          "${value.sopsClientSecret}" = { };
-        }
-      else if value.flavor == "netvigator.com" then
-        {
-          "${value.sopsPassword}" = { };
-        }
-      else
-        {
-        }
-    ) enabledEmailAccounts;
+    sops.secrets =
+      lib.attrsets.concatMapAttrs (
+        name: value:
+        if value.flavor == "gmail.com" then
+          {
+            "${value.sopsClientID}" = { };
+            "${value.sopsClientSecret}" = { };
+          }
+        else if value.flavor == "netvigator.com" then
+          {
+            "${value.sopsPassword}" = { };
+          }
+        else
+          {
+          }
+      ) enabledEmailAccounts
+      // {
+        "${config.email.davmail.sopsClientID}" = { };
+      };
 
     # It is required to specify a fixed port because some OAuth providers like Azure, require static redirect URI.
     #
@@ -189,7 +219,7 @@ in
     # So I did not set `auth_notify_cmd` or `error_notify_cmd`.
     sops.templates."pizauth.conf" = {
       mode = "0700";
-      path = "${config.home.homeDirectory}/.config/pizauth.conf";
+      path = "${config.xdg.configHome}/pizauth.conf";
       content = ''
         http_listen = "127.0.0.1:8001";
         https_listen = "127.0.0.1:8002";
@@ -211,31 +241,49 @@ in
               }
 
             ''
-          else if value.flavor == "outlook.office365.com" then
-            ''
-              account "${name}" {
-                auth_uri = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize";
-                auth_uri_fields = { "login_hint": "${name}" };
-                token_uri = "https://login.microsoftonline.com/common/oauth2/v2.0/token";
-                scopes = [
-                  "https://outlook.office.com/IMAP.AccessAsUser.All",
-                  "https://outlook.office.com/POP.AccessAsUser.All",
-                  "https://outlook.office.com/SMTP.Send",
-                  "https://graph.microsoft.com/IMAP.AccessAsUser.All",
-                  "https://graph.microsoft.com/POP.AccessAsUser.All",
-                  "https://graph.microsoft.com/SMTP.Send",
-                  "offline_access"
-                ];
-                client_id = "${config.sops.placeholder."${value.sopsClientID}"}";
-                client_secret = "${config.sops.placeholder."${value.sopsClientSecret}"}";
-                redirect_uri = "http://localhost:8001/";
-              }
-
-            ''
           else
             ""
         ) enabledEmailAccounts
       );
+    };
+
+    sops.templates."davmail.properties" = {
+      mode = "0700";
+      path = "${config.xdg.configHome}/davmail/davmail.properties";
+      content = ''
+        davmail.server=true
+        davmail.disableUpdateCheck=true
+        davmail.allowRemote=false
+        davmail.bindAddress=127.0.0.1
+        davmail.exitOnBindFailed=true
+
+        davmail.mode=O365Graph
+        davmail.authentication=O365Manual
+        davmail.enableGraph=true
+        davmail.enableOidc=true
+        davmail.oauth.persistToken=true
+        davmail.oauth.tokenFilePath=${config.xdg.stateHome}/davmail/oauth-tokens.properties
+        davmail.oauth.clientId=${config.sops.placeholder."${config.email.davmail.sopsClientID}"}
+        davmail.oauth.redirectUri=http://localhost/
+        davmail.oauth.tenantId=common
+
+        davmail.caldavPort=1080
+        davmail.imapPort=1143
+        davmail.ldapPort=1389
+        davmail.popPort=1110
+        davmail.smtpPort=1025
+        davmail.ssl.nosecurecaldav=true
+        davmail.ssl.nosecureimap=true
+        davmail.ssl.nosecureldap=true
+        davmail.ssl.nosecurepop=true
+        davmail.ssl.nosecuresmtp=true
+
+        davmail.logFilePath=/dev/stderr
+        log4j.logger.davmail=INFO
+        log4j.logger.httpclient.wire=WARN
+        log4j.logger.httpclient=WARN
+        log4j.rootLogger=INFO
+      '';
     };
 
     launchd.agents.pizauth = {
@@ -260,22 +308,25 @@ in
       };
     };
 
+    launchd.agents.davmail = {
+      enable = true;
+      config = {
+        Program = "${pkgs.davmail}/bin/davmail";
+        ProgramArguments = [
+          "${config.xdg.configHome}/davmail/davmail.properties"
+        ];
+        KeepAlive = true;
+        RunAtLoad = true;
+        StandardOutPath = "/tmp/davmail.stdout";
+        StandardErrorPath = "/tmp/davmail.stderr";
+      };
+    };
+
     accounts.email.accounts = lib.attrsets.mapAttrs (
       name: value:
       lib.mkMerge [
         (lib.mkIf (value.flavor == "gmail.com") {
           flavor = "gmail.com";
-          passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
-          mbsync.extraConfig.account = {
-            AuthMechs = "XOAUTH2";
-          };
-          msmtp.extraConfig = {
-            auth = "xoauth2";
-          };
-        })
-
-        (lib.mkIf (value.flavor == "outlook.office365.com") {
-          flavor = "outlook.office365.com";
           passwordCommand = "${pkgs.pizauth}/bin/pizauth show ${name}";
           mbsync.extraConfig.account = {
             AuthMechs = "XOAUTH2";
@@ -295,6 +346,23 @@ in
           smtp.host = "smtp.netvigator.com";
           smtp.port = 465;
           smtp.tls.enable = true;
+        })
+
+        (lib.mkIf (value.flavor == "davmail") {
+          flavor = "plain";
+          userName = name;
+          # The password command is expected to print something, otherwise, mbsync will skip the account.
+          passwordCommand = "printf unimportant";
+          mbsync.extraConfig.account = {
+            # mbsync requires explictitly enabled LOGIN because TLS is not used.
+            AuthMechs = "LOGIN";
+          };
+          imap.host = "localhost";
+          imap.port = 1143;
+          imap.tls.enable = false;
+          smtp.host = "localhost";
+          smtp.port = 1025;
+          smtp.tls.enable = false;
         })
 
         {

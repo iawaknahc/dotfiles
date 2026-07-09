@@ -4,6 +4,8 @@
   config = {
     email.enable = true;
 
+    email.davmail.sopsClientID = "davmail/client_id";
+
     email.accounts."louischan0325@gmail.com" = {
       primary = true;
       flavor = "gmail.com";
@@ -23,35 +25,62 @@
     };
 
     email.accounts."louischan0325@hotmail.com" = {
-      # On 2026-07-08, I successfully set up pizauth to obtain access token.
-      # But when the access token was used to access the account via IMAP
-      # The error message "User is authenticated but not connected." was shown.
-      # https://learn.microsoft.com/en-us/answers/questions/5673167/imap-oauth-regression-user-is-authenticated-but-no
+      # As of davmail 6.8.0, it does not run an HTTP server to handle the OAuth redirect URI.
+      # Instead, it expects us to copy the redirect URI and paste it to the terminal.
+      # Therefore, the value of the redirect URI really does not matter, as long as it is an allowed redirect URI.
       #
-      # Some Google results suggested that IMAP has to be enabled on outlook.com.
-      # I checked and it is enabled for this account.
-      #
-      # Asking LLM does not give any working answer neither.
-      #
-      # So we can only disable this account at the moment.
-      enable = false;
-      flavor = "outlook.office365.com";
-      realName = "Louis Chan";
-
+      # Here are the steps to create an OAuth2 application.
       # 1. Visit https://portal.azure.com
-      # 2. Go to Entra ID
-      # 3. Create an application.
-      #   3.1. It must be a Web application, not a Desktop application. Otherwise, it is considered as public client and client secret is disallowed.
-      #        What makes debugging hard is that pizauth outputs no log when the token endpoint returns an error saying that public client is not allowed to use client secret.
-      #        I figured this out myself by running the OAuth request with cURL.
-      #        The redirect URI is associated with the type of the application. Specify the redirect URI matching the configuration of pizauth below.
-      #   3.2. The supported account types must be "Any Entra ID Tenant + Personal Microsoft accounts". When this account type is used, the tenant is `common`.
-      # 4. Create a client secret. It is always expiring.
-      # 5. Grant `offline_grant` to the application.
+      # 2. Go to "Microsoft Entra ID"
+      # 3. Go to "App registrations"
+      # 4. Create a client with a redirect URI of native client. A native client does not (and cannot) use client secret.
+      #    Use "http://localhost/" as the redirect URI, as mentioned above, no server is expected to be running at 127.0.0.1:80
+      # 5. Go to "Manage -> Authentication"
+      #   5.1. Go to "Settings". Make sure "Allow public client flows" is enabled.
+      #   5.2. Go to "Supported Accounts". Make sure it is "Any Entra ID Tenant + Personal Microsoft accounts".
+      #   5.3. Go to "Redirect URI configuration". Make sure there is a "Mobile and desktop applications" with redirect URI "http://localhost/".
+      # 6. Go to "Manage -> API permissions"
+      #   6.1. Add the scope davmail uses by default. As of davmail 6.8.0, they are:
+      #        - Under "Microsoft Graph -> Delegated Permissions -> OpenId permissions"
+      #          - `offline_access`
+      #          - `openid`
+      #          - `profile`
+      #        - Under "Microsoft Graph -> Delegated Permissions -> Mail"
+      #          - `Mail.ReadWrite`
+      #          - `Mail.ReadWrite.Shared`
+      #          - `Mail.Send`
+      #        - Under "Microsoft Graph -> Delegated Permissions -> MailboxSettings"
+      #          - `MailboxSettings.Read`
+      #        - Under "Microsoft Graph -> Delegated Permissions -> Calendars"
+      #          - `Calendars.ReadWrite`
+      #        - Under "Microsoft Graph -> Delegated Permissions -> Contacts"
+      #          - `Contacts.ReadWrite`
+      #        - Under "Microsoft Graph -> Delegated Permissions -> Tasks"
+      #          - `Tasks.ReadWrite`
       #
-      # See https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth
-      sopsClientID = "pizauth/azure/client_id";
-      sopsClientSecret = "pizauth/azure/client_secret";
+      # When we run davmail in headless mode, it can print the authorization URL when we run `mbsync EMAIL`.
+      # It does not print the authorization URL on second attempt, so we have to restart the server if we want to retry.
+      #
+      # When it prints the authorization URL, it asks us to paste back the redirect URI.
+      # The instruction is incorrect, it is expecting us to paste the URL decoded authorization code.
+      # It is very likely that the redirect URI is URL encoded in our browser.
+      # What we have to do is to copy the redirect URI to our editor,
+      # manually extract the query parameter `code`, and URL decode it.
+      #
+      # The refresh token is stored by davmail if `davmail.oauth.persistToken=true`.
+      # The refresh token is encrypted using the IMAP password as the encryption key.
+      # The stored file looks like the following
+      #
+      # #Oauth tokens
+      # #Thu Jul 09 19:01:54 HKT 2026
+      # user@example.com={AES}blahblahblah
+      #
+      # See https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/exchange/auth/O365Token.java#L321
+      # See https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/util/StringEncryptor.java#L40
+      # See https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/Settings.java#L647
+      flavor = "davmail";
+      realName = "Louis Chan";
+      mu4eContextName = "hotmail";
     };
   };
 }
