@@ -11,6 +11,9 @@ let
     lib.attrsets.mapAttrsToList (name: value: value) enabledEmailAccounts
   );
 
+  mkDavMailLaunchdAgentName =
+    address: "${builtins.replaceStrings [ "@" "." "+" ] [ "_at_" "_dot_" "_plus_" ] address}_davmail";
+
   mkMaildirShortcuts =
     flavor: address:
     if flavor == "gmail.com" then
@@ -104,9 +107,6 @@ in
 {
   options = {
     email.enable = lib.mkEnableOption "email";
-    email.davmail.sopsClientID = lib.mkOption {
-      type = lib.types.str;
-    };
     email.accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
@@ -161,6 +161,31 @@ in
               sopsPassword = lib.mkOption {
                 type = lib.types.str;
               };
+
+              loginURL = lib.mkOption {
+                type = lib.types.str;
+              };
+              redirectURI = lib.mkOption {
+                type = lib.types.str;
+              };
+              tenant = lib.mkOption {
+                type = lib.types.str;
+              };
+              caldavPort = lib.mkOption {
+                type = lib.types.int;
+              };
+              imapPort = lib.mkOption {
+                type = lib.types.int;
+              };
+              ldapPort = lib.mkOption {
+                type = lib.types.int;
+              };
+              popPort = lib.mkOption {
+                type = lib.types.int;
+              };
+              smtpPort = lib.mkOption {
+                type = lib.types.int;
+              };
             };
           }
         )
@@ -193,138 +218,159 @@ in
     # In particular, it also provides the executable `sendmail` which Emacs can use.
     programs.msmtp.enable = true; # The configuration of this program is at ~/.config/msmtp/config
 
-    sops.secrets =
+    sops.secrets = lib.attrsets.concatMapAttrs (
+      name: value:
+      if value.flavor == "gmail.com" then
+        {
+          "${value.sopsClientID}" = { };
+          "${value.sopsClientSecret}" = { };
+        }
+      else if value.flavor == "netvigator.com" then
+        {
+          "${value.sopsPassword}" = { };
+        }
+      else if value.flavor == "davmail" then
+        {
+          "${value.sopsClientID}" = { };
+        }
+      else
+        { }
+    ) enabledEmailAccounts;
+
+    sops.templates =
       lib.attrsets.concatMapAttrs (
         name: value:
-        if value.flavor == "gmail.com" then
+        if value.flavor == "davmail" then
           {
-            "${value.sopsClientID}" = { };
-            "${value.sopsClientSecret}" = { };
-          }
-        else if value.flavor == "netvigator.com" then
-          {
-            "${value.sopsPassword}" = { };
+            "${name}/davmail.properties" = {
+
+              mode = "0700";
+              path = "${config.xdg.configHome}/davmail/${name}/davmail.properties";
+              content = ''
+                davmail.server=true
+                davmail.disableUpdateCheck=true
+                davmail.allowRemote=false
+                davmail.bindAddress=127.0.0.1
+                davmail.exitOnBindFailed=true
+
+                davmail.mode=O365Graph
+                davmail.authentication=O365Manual
+                davmail.loginUrl=${value.loginURL}
+                davmail.enableGraph=true
+                davmail.enableOidc=true
+                davmail.oauth.persistToken=true
+                davmail.oauth.tokenFilePath=${config.xdg.stateHome}/davmail/${name}/oauth-tokens.properties
+                davmail.oauth.clientId=${config.sops.placeholder."${value.sopsClientID}"}
+                davmail.oauth.redirectUri=${value.redirectURI}
+                davmail.oauth.tenantId=${value.tenant}
+
+                davmail.caldavPort=${toString value.caldavPort}
+                davmail.imapPort=${toString value.imapPort}
+                davmail.ldapPort=${toString value.ldapPort}
+                davmail.popPort=${toString value.popPort}
+                davmail.smtpPort=${toString value.smtpPort}
+                davmail.ssl.nosecurecaldav=true
+                davmail.ssl.nosecureimap=true
+                davmail.ssl.nosecureldap=true
+                davmail.ssl.nosecurepop=true
+                davmail.ssl.nosecuresmtp=true
+
+                # Set it back to false
+                # https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/Settings.java#L249
+                davmail.imapAutoExpunge=false
+
+                davmail.logFilePath=/dev/stderr
+                log4j.logger.davmail=INFO
+                log4j.logger.httpclient.wire=WARN
+                log4j.logger.httpclient=WARN
+                log4j.rootLogger=INFO
+              '';
+            };
           }
         else
-          {
-          }
+          { }
       ) enabledEmailAccounts
       // {
-        "${config.email.davmail.sopsClientID}" = { };
-      };
+        # It is required to specify a fixed port because some OAuth providers like Azure, require static redirect URI.
+        #
+        # When pizauth is run by launchd, it cannot invoke hammerspoon to create notification.
+        # So I did not set `auth_notify_cmd` or `error_notify_cmd`.
+        "pizauth.conf" = {
+          mode = "0700";
+          path = "${config.xdg.configHome}/pizauth.conf";
+          content = ''
+            http_listen = "127.0.0.1:8001";
+            https_listen = "127.0.0.1:8002";
 
-    # It is required to specify a fixed port because some OAuth providers like Azure, require static redirect URI.
-    #
-    # When pizauth is run by launchd, it cannot invoke hammerspoon to create notification.
-    # So I did not set `auth_notify_cmd` or `error_notify_cmd`.
-    sops.templates."pizauth.conf" = {
-      mode = "0700";
-      path = "${config.xdg.configHome}/pizauth.conf";
-      content = ''
-        http_listen = "127.0.0.1:8001";
-        https_listen = "127.0.0.1:8002";
+          ''
+          + lib.strings.concatStrings (
+            lib.attrsets.mapAttrsToList (
+              name: value:
+              if value.flavor == "gmail.com" then
+                ''
+                  account "${name}" {
+                    auth_uri = "https://accounts.google.com/o/oauth2/auth";
+                    auth_uri_fields = {"login_hint": "${name}"};
+                    token_uri = "https://oauth2.googleapis.com/token";
+                    scopes = ["https://mail.google.com/"];
+                    client_id = "${config.sops.placeholder."${value.sopsClientID}"}";
+                    client_secret = "${config.sops.placeholder."${value.sopsClientSecret}"}";
+                    redirect_uri = "http://localhost:8001/";
+                  }
 
-      ''
-      + lib.strings.concatStrings (
-        lib.attrsets.mapAttrsToList (
-          name: value:
-          if value.flavor == "gmail.com" then
-            ''
-              account "${name}" {
-                auth_uri = "https://accounts.google.com/o/oauth2/auth";
-                auth_uri_fields = {"login_hint": "${name}"};
-                token_uri = "https://oauth2.googleapis.com/token";
-                scopes = ["https://mail.google.com/"];
-                client_id = "${config.sops.placeholder."${value.sopsClientID}"}";
-                client_secret = "${config.sops.placeholder."${value.sopsClientSecret}"}";
-                redirect_uri = "http://localhost:8001/";
-              }
-
-            ''
-          else
-            ""
-        ) enabledEmailAccounts
-      );
-    };
-
-    sops.templates."davmail.properties" = {
-      mode = "0700";
-      path = "${config.xdg.configHome}/davmail/davmail.properties";
-      content = ''
-        davmail.server=true
-        davmail.disableUpdateCheck=true
-        davmail.allowRemote=false
-        davmail.bindAddress=127.0.0.1
-        davmail.exitOnBindFailed=true
-
-        davmail.mode=O365Graph
-        davmail.authentication=O365Manual
-        davmail.enableGraph=true
-        davmail.enableOidc=true
-        davmail.oauth.persistToken=true
-        davmail.oauth.tokenFilePath=${config.xdg.stateHome}/davmail/oauth-tokens.properties
-        davmail.oauth.clientId=${config.sops.placeholder."${config.email.davmail.sopsClientID}"}
-        davmail.oauth.redirectUri=http://localhost/
-        davmail.oauth.tenantId=common
-
-        davmail.caldavPort=1080
-        davmail.imapPort=1143
-        davmail.ldapPort=1389
-        davmail.popPort=1110
-        davmail.smtpPort=1025
-        davmail.ssl.nosecurecaldav=true
-        davmail.ssl.nosecureimap=true
-        davmail.ssl.nosecureldap=true
-        davmail.ssl.nosecurepop=true
-        davmail.ssl.nosecuresmtp=true
-
-        # Set it back to false
-        # https://github.com/mguessan/davmail/blob/6.8.0/src/java/davmail/Settings.java#L249
-        davmail.imapAutoExpunge=false
-
-        davmail.logFilePath=/dev/stderr
-        log4j.logger.davmail=INFO
-        log4j.logger.httpclient.wire=WARN
-        log4j.logger.httpclient=WARN
-        log4j.rootLogger=INFO
-      '';
-    };
-
-    launchd.agents.pizauth = {
-      enable = true;
-      config = {
-        Program = "${pkgs.pizauth}/bin/pizauth";
-        ProgramArguments = [
-          "server"
-          "-d" # Do not daemonize.
-          "-vvvv" # Enable most verbose logging.
-          "-c" # Give an explicit path to the configuration so that XDG_* or HOME is not required.
-          "${config.sops.templates."pizauth.conf".path}"
-        ];
-        EnvironmentVariables = {
-          # According to `man pizauth.conf`, pizauth reads SHELL to determine which shell to use.
-          SHELL = "${pkgs.bash}";
+                ''
+              else
+                ""
+            ) enabledEmailAccounts
+          );
         };
-        KeepAlive = true;
-        RunAtLoad = true;
-        StandardOutPath = "/tmp/pizauth.stdout";
-        StandardErrorPath = "/tmp/pizauth.stderr";
       };
-    };
 
-    launchd.agents.davmail = {
-      enable = true;
-      config = {
-        Program = "${pkgs.davmail}/bin/davmail";
-        ProgramArguments = [
-          "${config.xdg.configHome}/davmail/davmail.properties"
-        ];
-        KeepAlive = true;
-        RunAtLoad = true;
-        StandardOutPath = "/tmp/davmail.stdout";
-        StandardErrorPath = "/tmp/davmail.stderr";
+    launchd.agents =
+      lib.attrsets.concatMapAttrs (
+        name: value:
+        if value.flavor == "davmail" then
+          {
+            "${mkDavMailLaunchdAgentName name}" = {
+              enable = true;
+              config = {
+                Program = "${pkgs.davmail}/bin/davmail";
+                ProgramArguments = [
+                  "${config.xdg.configHome}/davmail/${name}/davmail.properties"
+                ];
+                KeepAlive = true;
+                RunAtLoad = true;
+                StandardOutPath = "${config.xdg.stateHome}/davmail/${name}/davmail.stdout";
+                StandardErrorPath = "${config.xdg.stateHome}/davmail/${name}/davmail.stderr";
+              };
+            };
+          }
+        else
+          { }
+      ) enabledEmailAccounts
+      // {
+        pizauth = {
+          enable = true;
+          config = {
+            Program = "${pkgs.pizauth}/bin/pizauth";
+            ProgramArguments = [
+              "server"
+              "-d" # Do not daemonize.
+              "-vvvv" # Enable most verbose logging.
+              "-c" # Give an explicit path to the configuration so that XDG_* or HOME is not required.
+              "${config.sops.templates."pizauth.conf".path}"
+            ];
+            EnvironmentVariables = {
+              # According to `man pizauth.conf`, pizauth reads SHELL to determine which shell to use.
+              SHELL = "${pkgs.bash}";
+            };
+            KeepAlive = true;
+            RunAtLoad = true;
+            StandardOutPath = "/tmp/pizauth.stdout";
+            StandardErrorPath = "/tmp/pizauth.stderr";
+          };
+        };
       };
-    };
 
     accounts.email.accounts = lib.attrsets.mapAttrs (
       name: value:
@@ -362,10 +408,10 @@ in
             AuthMechs = "LOGIN";
           };
           imap.host = "localhost";
-          imap.port = 1143;
+          imap.port = value.imapPort;
           imap.tls.enable = false;
           smtp.host = "localhost";
-          smtp.port = 1025;
+          smtp.port = value.smtpPort;
           smtp.tls.enable = false;
         })
 

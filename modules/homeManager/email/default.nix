@@ -4,8 +4,6 @@
   config = {
     email.enable = true;
 
-    email.davmail.sopsClientID = "davmail/client_id";
-
     email.accounts."louischan0325@gmail.com" = {
       primary = true;
       flavor = "gmail.com";
@@ -81,6 +79,16 @@
       flavor = "davmail";
       realName = "Louis Chan";
       mu4eContextName = "hotmail";
+
+      sopsClientID = "louischan0325_at_hotmail_dot_com/client_id";
+      loginURL = "https://login.microsoftonline.com";
+      redirectURI = "http://localhost/";
+      tenant = "common";
+      caldavPort = 1080;
+      imapPort = 1143;
+      ldapPort = 1389;
+      popPort = 1110;
+      smtpPort = 1025;
     };
   };
 }
