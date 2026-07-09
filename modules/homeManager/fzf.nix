@@ -16,17 +16,14 @@
   programs.fzf.enableBashIntegration = true;
   programs.fzf.enableFishIntegration = true;
   programs.fzf.enableZshIntegration = true;
-  # FIXME: programs.fzf.enableNushellIntegration does not exist
+  # FIXME: Enable fzf nushell integration.
+  programs.fzf.enableNushellIntegration = false;
 
-  home.sessionVariables = {
-    # We use atuin to manage shell history.
-    # programs.fzf does not offer an option to set this.
-    # According to the readme, setting this to empty disable the particular key binding.
-    # See https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
-    FZF_CTRL_R_COMMAND = "";
-  };
-  # FZF_CTRL_T_COMMAND
-  programs.fzf.fileWidgetCommand = config.programs.fzf.defaultCommand;
+  # FZF_CTRL_R_COMMAND
+  # We use atuin to manage shell history.
+  programs.fzf.historyWidget.command = "";
   # FZF_ALT_C_COMMAND
-  programs.fzf.changeDirWidgetCommand = "fd --type d --hidden";
+  programs.fzf.changeDirWidget.command = "fd --type d --hidden";
+  # FZF_CTRL_T_COMMAND
+  programs.fzf.fileWidget.command = config.programs.fzf.defaultCommand;
 }

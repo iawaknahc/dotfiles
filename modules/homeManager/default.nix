@@ -140,10 +140,11 @@ _: {
     # ./hledger.nix
     ./beancount
 
-    ./coding-agent
     ./claude
-    ./llama-cpp
-    ./pi-coding-agent
+    ./coding-agent
+    # FIXME: On 2026-07-09, when I updated flake.lock, the model took a very long time to download.
+    # ./llama-cpp
+    # ./pi-coding-agent
 
     # PGP and friends
     ./pgp.nix

@@ -73,7 +73,7 @@
   # Since $SHELL is invoked without -l, the shell is not a login shell.
   programs.tmux.shell = "/bin/sh";
 
-  # $TERMINFO and $TERMINFO_DIRS
+  # $TERMINFO and `TERMINFO_DIRS`
   #
   # Some terminal emulators, like kitty and ghostty, set $TERMINFO to point to a directory
   # containing the most accurate terminfo describing their capabilities.
@@ -82,9 +82,9 @@
   # If $TERMINFO is left set inside tmux, the terminal-based program cannot see the capability of tmux, since that directory does not contain the terminfo of tmux-256color.
   #
   # Thus, setting $TERMINFO is actually a problem.
-  # A more correct approach is to set $TERMINFO_DIRS instead.
+  # A more correct approach is to set `TERMINFO_DIRS` instead.
   # Those terminal emulators set $TERMINFO before launching the shell,
-  # we can set $TERMINFO_DIRS and unset $TERMINFO in shell initialization script.
+  # we can set `TERMINFO_DIRS` and unset $TERMINFO in shell initialization script.
   # See home.nix for details.
   #
   #
@@ -113,9 +113,9 @@
   #   1.2. ghostty sets $TERM to xterm-ghostty (done by ghostty by default)
   #   1.3. iTerm2 sets $TERM to xterm-256color. (You can ask iTerm2 to do this)
   #   1.4. alacritty sets $TERM to alacritty. (No idea why it does not do this by default)
-  # 2. $TERMINFO is unset, and $TERMINFO_DIRS contains a list of directory that
+  # 2. $TERMINFO is unset, and `TERMINFO_DIRS` contains a list of directory that
   #    include all terminal emulators and terminal multiplexers. For terminal emulators
-  #    that set $TERMINFO, $TERMINFO is PREPENDED to $TERMINFO_DIRS, so the bundled, most
+  #    that set $TERMINFO, $TERMINFO is PREPENDED to `TERMINFO_DIRS`, so the bundled, most
   #    accurate capabilities advertised by the terminal emulators are used.
   #   2.1. kitty bundles its terminfo. The entries are xterm-kitty.
   #   2.2. ghostty bundles its terminfo. The entries are xterm-ghostty.

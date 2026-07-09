@@ -154,8 +154,8 @@ in
       # the experience of `git difftool -t nvim` is still suboptimal.
       # nvim is invoked once for each file.
       # After we quit, git will open a new instance of nvim to view the diff of the next file, until there are no more files to view.
-      # This can be worked around by using --dir-diff
-      # With --dir-diff, nvim is invoked once on two directories, and
+      # This can be worked around by using `--dir-diff`
+      # With `--dir-diff`, nvim is invoked once on two directories, and
       # this is exactly what :DiffTool is designed to handle.
       #
       # This concludes that the correct invocation is `git difftool -t nvim --dir-diff`,
