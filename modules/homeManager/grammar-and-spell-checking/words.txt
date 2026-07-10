@@ -71,6 +71,7 @@ direnv
 dlv
 dockerls
 dolist
+dotimes
 duckdb
 elispfeature
 emmylua
