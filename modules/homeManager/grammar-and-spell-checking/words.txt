@@ -26,6 +26,7 @@ bufnr
 bufpath
 buftype
 builtin
+caar
 caml
 cangjie
 catppuccin
@@ -57,6 +58,8 @@ dadbod
 dartls
 dbui
 debugpy
+defun
+defvar
 deno
 denols
 devinfo
@@ -103,6 +106,7 @@ fsencode
 ftdetect
 ftplugin
 fts
+funcall
 fzf
 genpkey
 getcmdline
