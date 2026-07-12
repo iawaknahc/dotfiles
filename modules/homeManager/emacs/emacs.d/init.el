@@ -9,6 +9,7 @@
 (require 'init-echo-area)
 (require 'init-display-line-numbers-mode)
 (require 'init-what-cursor-position)
+(require 'init-scrolling)
 (require 'init-mu4e)
 
 (provide 'init)

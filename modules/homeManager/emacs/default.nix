@@ -8,6 +8,7 @@
     emacsPackages: with emacsPackages; [
       catppuccin-theme
       mu4e
+      ultra-scroll
     ];
   programs.emacs.extraConfig = ''
     (setq mu4e-attachment-dir "${config.home.homeDirectory}/Downloads")
