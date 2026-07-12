@@ -20,5 +20,6 @@
   };
   home.file.".hammerspoon/Spoons/EmmyLua.spoon" = {
     source = "${pkgs.EmmyLua_spoon}/share/Spoons/EmmyLua.spoon";
+    recursive = true; # This has to be recursive because this spoon writes to its own directory.
   };
 }
