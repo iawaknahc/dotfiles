@@ -170,6 +170,7 @@ linters
 listchars
 lnum
 localleader
+lockfiles
 loclist
 louischan
 lsof
