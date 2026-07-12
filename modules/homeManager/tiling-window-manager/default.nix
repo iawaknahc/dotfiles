@@ -12,8 +12,20 @@ let
   # border width of window A + spacing + border width of window B.
   window_spacing = sketchybar_spacing + border_width * 2;
   bar_y_offset = 4;
+
+  lua = pkgs.lua5_5.withPackages (luaPackages: [
+    luaPackages.lua-cjson
+    pkgs.sbarlua
+  ]);
 in
 {
+  assertions = [
+    {
+      assertion = lua.luaversion == "5.5";
+      message = "It is expected that sbarlua is a Lua ${lua.luaversion} module";
+    }
+  ];
+
   services.jankyborders.enable = true;
   services.jankyborders.settings = {
     style = "round";
@@ -25,7 +37,7 @@ in
   xdg.configFile."sketchybar/sketchybarrc" = {
     executable = true;
     text = ''
-      #!${config.home.profileDirectory}/bin/lua
+      #!${lua}/bin/lua
 
       local aerospace = "${config.home.profileDirectory}/bin/aerospace";
 

@@ -3,7 +3,13 @@
   ...
 }:
 let
-  lua55 = with pkgs; lua5_5;
+  # Luarocks hits a limit of LuaJIT.
+  # So we have to run luarocks with Lua 5.4
+  # See https://github.com/luarocks/luarocks/issues/1797
+  #
+  # Hammerspoon supports Lua 5.4 only
+  # See https://github.com/Hammerspoon/hammerspoon/issues/3867
+  lua54 = with pkgs; lua5_4;
 in
 {
   home.packages = with pkgs; [
@@ -16,21 +22,17 @@ in
     fennel-ls
     fnlfmt
 
-    # Luarocks hits a limit of LuaJIT.
-    # So we have to run luarocks with Lua > 5.1
-    # https://github.com/luarocks/luarocks/issues/1797
-    (lua55.withPackages (
-      packages: with packages; [
+    (lua54.withPackages (
+      luaPackages: with luaPackages; [
         luautf8
-        fennel
+        inspect
         luarocks
+
+        fennel
+        luaPackages.readline
 
         llscheck # llscheck requires lua-language-server on PATH.
         luaprompt # luap provides a better REPL experience than lua(1).
-
-        lua-cjson
-        inspect
-        sbarlua # sbarlua is the Lua API to SketchyBar
       ]
     ))
   ];
