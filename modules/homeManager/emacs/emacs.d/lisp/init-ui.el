@@ -1,10 +1,16 @@
 ;;; -*- lexical-binding: t -*-
 
 (setq inhibit-startup-screen t)
-(set-frame-font "JetBrainsMonoNL Nerd Font Mono 13")
-(menu-bar-mode -1)
 
+(menu-bar-mode -1)
 (when (display-graphic-p)
   (tool-bar-mode -1))
+
+(set-face-attribute
+ 'default
+ nil
+ :family "JetBrainsMonoNL Nerd Font Mono"
+ :weight 'light
+ :height 130)
 
 (provide 'init-ui)
