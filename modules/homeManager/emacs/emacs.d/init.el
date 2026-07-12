@@ -14,5 +14,6 @@
 (require 'init-treesitter)
 (require 'init-scrolling)
 (require 'init-mu4e)
+(require 'init-evil)
 
 (provide 'init)

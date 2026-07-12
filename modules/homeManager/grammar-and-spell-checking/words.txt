@@ -323,6 +323,7 @@ virt
 virtnum
 virtualedit
 vscode
+vsplit
 vtsls
 webike
 wezterm
