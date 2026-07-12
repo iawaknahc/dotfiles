@@ -299,6 +299,7 @@ tmux
 tolower
 topk
 trailspace
+treesit
 treesj
 treewalker
 tts
