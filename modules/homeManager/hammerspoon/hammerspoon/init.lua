@@ -1,3 +1,6 @@
+-- Hammerspoon 1.0.0 embeds Lua 5.4.
+print("The version of Lua running hammerspoon init.lua is " .. _VERSION)
+
 -- Enable IPC
 -- See https://www.hammerspoon.org/docs/hs.ipc.html
 --
