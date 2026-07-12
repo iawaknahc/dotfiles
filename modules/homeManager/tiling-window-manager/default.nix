@@ -46,6 +46,8 @@ in
   programs.aerospace.enable = true;
   programs.aerospace.launchd.enable = true;
   programs.aerospace.settings = {
+    config-version = 2;
+
     enable-normalization-flatten-containers = true;
     enable-normalization-opposite-orientation-for-nested-containers = true;
 
@@ -64,7 +66,9 @@ in
     # Make all windows tiled by default.
     on-window-detected = [
       {
+        "if" = "true";
         run = "exec-and-forget ${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_on_window_detected";
+        check-further-callbacks = true;
       }
     ];
 
