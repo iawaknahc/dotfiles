@@ -102,7 +102,10 @@
  :config
  (setq
   cape-file-directory #'my/resolve-directory-before-point
-  cape-file-prefix '("/" "~/" "./" "../")))
+  cape-file-prefix '("/" "~/" "./" "../")
+  ;; cape-capf-super unconditionally set :display-sort-function to identity.
+  ;; So we revert to use the default sort function.
+  corfu-sort-override-function #'corfu-sort-length-alpha))
 
 (defun my/elisp-completion-at-point-annotation-function (candidate)
   "Annotate CANDIDATE assuming that CANDIDATE is a string that can be converted to an Elisp symbol."
