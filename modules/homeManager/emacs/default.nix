@@ -25,6 +25,8 @@
       catppuccin-theme
       mu4e
       ultra-scroll
+
+      goto-chg
       evil
 
       treesit-grammars.with-all-grammars

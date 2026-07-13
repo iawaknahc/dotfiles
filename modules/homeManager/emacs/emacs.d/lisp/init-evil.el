@@ -1,7 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
+(use-package goto-chg)
+
 (use-package
  evil
+ :after (goto-chg)
  :init
  (setq
   evil-default-state 'emacs
