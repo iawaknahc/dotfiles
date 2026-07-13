@@ -57,6 +57,7 @@ cusip
 cwindow
 cword
 cxx
+dabbrev
 dadbod
 dartls
 dbui

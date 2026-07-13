@@ -82,7 +82,19 @@
           "/homeless-shelter"))))
 
 (defun my/cape-after-change-major-mode-hook ()
-  (add-hook 'completion-at-point-functions #'cape-file nil t))
+  ;; Add cape-dabbrev to completion-at-point-functions.
+  ;; It should be compatible with the existing capf, in terms of beginning position.
+  ;; cape-wrap-super can only merge capf that have the same beginning position.
+  ;; See https://github.com/minad/cape/blob/2.7/cape.el#L941
+  ;;
+  ;; add-hook takes care of making completion-at-point-functions a buffer-local variable, and add t at the end.
+  (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
+  ;; Then we merge whatever appears in completion-at-point-functions except the last element (which is t).
+  (let* ((without-t (remove t completion-at-point-functions))
+         (merged (apply #'cape-capf-super without-t)))
+    ;; Finally we put cape-file at the front.
+    ;; It is okay to do this because cape-file has very specific trigger prefixes.
+    (setq-local completion-at-point-functions (list #'cape-file merged t))))
 
 (use-package
  cape
