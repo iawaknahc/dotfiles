@@ -30,6 +30,7 @@
       evil
 
       corfu
+      cape
 
       treesit-grammars.with-all-grammars
 
