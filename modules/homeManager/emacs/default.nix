@@ -29,6 +29,8 @@
       goto-chg
       evil
 
+      corfu
+
       treesit-grammars.with-all-grammars
 
       fish-mode

@@ -234,6 +234,7 @@ pkeyopt
 pkgs
 pnl
 pns
+popupinfo
 preselect
 preselects
 prettierd
@@ -275,6 +276,7 @@ sketchybar
 smartcase
 softtabstop
 sourcekit
+spc
 sqls
 starship
 startinsert

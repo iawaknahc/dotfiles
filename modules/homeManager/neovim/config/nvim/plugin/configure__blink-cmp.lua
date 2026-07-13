@@ -1,14 +1,13 @@
-local trigger_characters = {}
-for i = 32, 126, 1 do
-  table.insert(trigger_characters, vim.fn.nr2char(i))
-end
+-- As of 2025-07-01, blink.cmp has an issue of not triggering when
+-- the snippet prefix is a non-alphabetical character.
+-- https://github.com/Saghen/blink.cmp/issues/1688
+--
+-- We work around this by completely override get_trigger_characters().
+-- Printable ASCII characters, with ` '"()[]{}` removed.
+local trigger_characters =
+  vim.split("!#$%&*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_`abcdefghijklmnopqrstuvwxyz|~", "")
+
 local override = {
-  -- As of 2025-07-01, blink.cmp has an issue of not triggering when
-  -- the snippet prefix is a non-alphabetical character.
-  -- https://github.com/Saghen/blink.cmp/issues/1688
-  --
-  -- We work around this by completely override get_trigger_characters().
-  -- The trigger_characters is just all ASCII characters that are printable.
   get_trigger_characters = function()
     return trigger_characters
   end,
