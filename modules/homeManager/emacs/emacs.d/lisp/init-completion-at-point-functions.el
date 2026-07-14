@@ -23,8 +23,6 @@
   "Wrap CAPF :annotation-function"
   (cape-wrap-properties capf :annotation-function #'my/elisp-completion-at-point-annotation-function))
 
-(advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around)
-
 ;; Configure completion-at-point-functions
 (defun my/get-filepath-before-point ()
   "Looking before point and see if there is a filepath.
@@ -81,9 +79,13 @@
 (use-package
  cape
  :hook (after-change-major-mode-hook . my/cape-after-change-major-mode-hook)
+ :custom
+ (cape-file-directory #'my/resolve-directory-before-point)
+ (cape-file-prefix '("/" "~/" "./" "../")))
+
+(use-package
+ emacs
  :config
- (setq
-  cape-file-directory #'my/resolve-directory-before-point
-  cape-file-prefix '("/" "~/" "./" "../")))
+ (advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around))
 
 (provide 'init-completion-at-point-functions)

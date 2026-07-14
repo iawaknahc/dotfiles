@@ -5,6 +5,7 @@
 (use-package
  evil
  :after (goto-chg)
+ ;; Use :init instead of :custom because some variables have to be set before evil-mode is enabled.
  :init
  (setq
   evil-default-state 'emacs

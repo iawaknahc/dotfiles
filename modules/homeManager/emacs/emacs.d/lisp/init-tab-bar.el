@@ -1,10 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-(tab-bar-mode 1)
-;; Show tab number.
-(setq tab-bar-tab-hints t)
-(setq tab-bar-new-tab-choice "*scratch*")
-
 (defvar my-tab-bar-layout
   '(("mu4e"    . my-tab-bar-email-tab)
     ("*scratch*"  . my-tab-bar-scratch-tab)))
@@ -34,14 +29,24 @@
   ;; Select the first tab.
   (tab-bar-select-tab-by-name (caar my-tab-bar-layout)))
 
-(add-hook 'after-init-hook #'my-tab-bar-reset)
-
-;; Shadow M-1, M-2, and so on, which are bound to digit-argument by default.
-(dotimes (i 9)
-  (let ((n (+ 1 i)))
-    (keymap-global-set (format "M-%d" n)
-                       (lambda ()
-                               (interactive)
-                               (tab-bar-select-tab n)))))
+(use-package
+ emacs
+ :ensure nil
+ :custom
+ ;; Show tab number.
+ (tab-bar-tab-hints t)
+ (tab-bar-new-tab-choice "*scratch*")
+ :config
+ (tab-bar-mode 1)
+ ;; We cannot use :hook as it implies :defer, and emacs is not a package we can actually load.
+ (add-hook 'after-init-hook #'my-tab-bar-reset)
+ ;; Shadow M-1, M-2, and so on, which are bound to digit-argument by default.
+ (dotimes (i 9)
+   (let ((n (+ 1 i)))
+     (keymap-global-set
+      (format "M-%d" n)
+      (lambda ()
+              (interactive)
+              (tab-bar-select-tab n))))))
 
 (provide 'init-tab-bar)

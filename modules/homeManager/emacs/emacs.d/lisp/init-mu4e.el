@@ -1,24 +1,49 @@
 ;;; -*- lexical-binding: t -*-
 
+(defun my/maildir-first-component (msg)
+  (msg)
+  (let* ((maildir (mu4e-message-field msg :maildir)))
+    (nth 1 (file-name-split maildir))))
+
 (use-package
  mu4e
  :ensure nil
- :config
- (setq mu4e-get-mail-command "mbsync --all")
- (setq mu4e-context-policy 'pick-first)
- (setq mu4e-compose-context-policy 'ask-if-none)
- (setq mu4e-view-scroll-to-next nil)
+ :custom
+ (mu4e-get-mail-command "mbsync --all")
+ (mu4e-context-policy 'pick-first)
+ (mu4e-compose-context-policy 'ask-if-none)
+ (mu4e-view-scroll-to-next nil)
   ;; 2006-01-02
- (setq mu4e-headers-date-format "%F")
- (setq mu4e-headers-time-format "%T")
+ (mu4e-headers-date-format "%F")
+ (mu4e-headers-time-format "%T")
   ;; Do not move point after mark
- (setq mu4e-headers-advance-after-mark nil)
+ (mu4e-headers-advance-after-mark nil)
   ;; Update every 5 minutes.
- (setq mu4e-update-interval 300)
+ (mu4e-update-interval 300)
   ;; Load remote images.
- (setq gnus-blocked-images nil)
+ (gnus-blocked-images nil)
   ;; Use the executable `sendmail` in PATH to send emails.
- (setq message-send-mail-function 'message-send-mail-with-sendmail)
+ (message-send-mail-function 'message-send-mail-with-sendmail)
+ (mu4e-headers-fields
+  `((:maildir-first-component . 30)
+    (:human-date . ,(length "2006-01-02"))
+    (:flags . 6)
+    (:from . 30)
+    (:subject)))
+ (mu4e-bookmarks
+  '((:name
+     "Unread non-trashed non-junk messages"
+     :query "flag:unread AND NOT flag:trashed AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
+     :key ?u)
+    (:name
+     "Junk messages"
+     :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
+     :key ?j)
+    (:name
+     "Trashed messages"
+     :query "flag:trashed"
+     :key ?t)))
+ :config
   ;; Make the main view use the same window.
  (add-to-list
   'display-buffer-alist
@@ -32,30 +57,7 @@
      "The first path component of :maildir"
      :shortname "Mailbox"
      :help "The first path component of :maildir"
-     :function
-     (lambda
-      (msg)
-      (let* ((maildir (mu4e-message-field msg :maildir)))
-        (nth 1 (file-name-split maildir)))))))
- (setq mu4e-headers-fields
-       `((:maildir-first-component . 30)
-         (:human-date . ,(length "2006-01-02"))
-         (:flags . 6)
-         (:from . 30)
-         (:subject)))
- (setq mu4e-bookmarks
-       '((:name
-          "Unread non-trashed non-junk messages"
-          :query "flag:unread AND NOT flag:trashed AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
-          :key ?u)
-         (:name
-          "Junk messages"
-          :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
-          :key ?j)
-         (:name
-          "Trashed messages"
-          :query "flag:trashed"
-          :key ?t)))
+     :function #'my/maildir-first-component)))
  (require 'init-mu4e-contexts))
 
 (provide 'init-mu4e)

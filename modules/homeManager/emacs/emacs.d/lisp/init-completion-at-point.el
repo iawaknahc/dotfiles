@@ -4,16 +4,15 @@
  corfu
  :hook ((prog-mode . corfu-mode)
         (text-mode . corfu-mode))
- :init
- (setq
-  ;; Preselect the prompt, that is, what was typed.
-  ;; Use corfu-next select the first candidate.
-  corfu-preselect 'prompt
-  ;; The default is 100, which is too large.
-  corfu-max-width 50
-  ;; cape-capf-super unconditionally set :display-sort-function to identity.
-  ;; So we revert to use the default sort function.
-  corfu-sort-override-function #'corfu-sort-length-alpha)
+ :custom
+ ;; Preselect the prompt, that is, what was typed.
+ ;; Use corfu-next select the first candidate.
+ (corfu-preselect 'prompt)
+ ;; The default is 100, which is too large.
+ (corfu-max-width 50)
+ ;; cape-capf-super unconditionally set :display-sort-function to identity.
+ ;; So we revert to use the default sort function.
+ (corfu-sort-override-function #'corfu-sort-length-alpha)
  :config
  (keymap-unset corfu-map "TAB") ; TAB should be self-inserting.
  (keymap-unset corfu-map "RET") ; RET should be self-inserting.
@@ -31,21 +30,19 @@
 (use-package
  corfu-auto
  :after (corfu)
- :init
- (setq
-  corfu-auto t
-  corfu-auto-delay 0.1
-  ;; Trigger with 1 character.
-  corfu-auto-prefix 1
-  ;; Printable ASCII characters, with ` '"()[]{}` removed.
-  corfu-auto-trigger "!#$%&*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_`abcdefghijklmnopqrstuvwxyz|~"))
+ :custom
+ (corfu-auto t)
+ (corfu-auto-delay 0.1)
+ ;; Trigger with 1 character.
+ (corfu-auto-prefix 1)
+ ;; Printable ASCII characters, with ` '"()[]{}` removed.
+ (corfu-auto-trigger "!#$%&*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_`abcdefghijklmnopqrstuvwxyz|~"))
 
 (use-package
  corfu-popupinfo
  :after (corfu)
- :init
- (setq
-  corfu-popupinfo-delay '(0.1 . 0.1))
+ :custom
+ (corfu-popupinfo-delay '(0.1 . 0.1))
  :config
  (corfu-popupinfo-mode 1))
 

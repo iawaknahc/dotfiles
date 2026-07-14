@@ -1,5 +1,9 @@
 ;;; -*- lexical-binding: t -*-
 
-(setq create-lockfiles nil)
+(use-package
+ emacs
+ :ensure nil
+ :custom
+ (create-lockfiles nil))
 
 (provide 'init-interlocking)

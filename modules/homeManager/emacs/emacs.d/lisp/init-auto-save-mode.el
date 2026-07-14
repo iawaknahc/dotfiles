@@ -1,5 +1,9 @@
 ;;; -*- lexical-binding: t -*-
 
-(setq auto-save-default nil)
+(use-package
+ emacs
+ :ensure nil
+ :custom
+ (auto-save-default nil))
 
 (provide 'init-auto-save-mode)
