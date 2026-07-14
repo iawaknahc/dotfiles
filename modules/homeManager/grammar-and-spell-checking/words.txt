@@ -194,6 +194,7 @@ macrop
 maildir
 mbsync
 menuone
+minibuffer
 minwid
 misalign
 mjml
@@ -245,6 +246,7 @@ pkgs
 pnl
 pns
 popupinfo
+posframe
 preselect
 preselects
 prettierd
