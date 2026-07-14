@@ -71,6 +71,7 @@ diffopt
 difftool
 diffupdate
 diffview
+dired
 direnv
 dlv
 dockerls

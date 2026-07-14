@@ -11,6 +11,7 @@
 (require 'init-echo-area)
 (require 'init-display-line-numbers-mode)
 (require 'init-what-cursor-position)
+(require 'init-dired)
 
 ;; Completion
 (require 'init-completion-at-point)
