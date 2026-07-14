@@ -1,28 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-;; Configure elisp-completion-at-point
-(defun my/elisp-completion-at-point-annotation-function (candidate)
-  "Annotate CANDIDATE assuming that CANDIDATE is a string that can be converted to an Elisp symbol."
-  (when-let ((sym (intern-soft candidate)))
-    (cond
-      ((special-form-p sym) "special-form")
-      ((primitive-function-p sym) "primitive")
-      ((native-comp-function-p sym) "native-comp")
-      ((byte-code-function-p sym) "byte-code")
-      ((macrop sym) "macro")
-      ((commandp sym) "command")
-      ((functionp sym) "function")
-      ((facep sym) "face")
-      ((custom-variable-p sym) "custom-var")
-      ((special-variable-p sym) "dynamic-var")
-      ((or (local-variable-p sym) (local-variable-if-set-p sym)) "buffer-var")
-      ((boundp sym) "variable")
-      (t "unknown"))))
-
-(defun my/elisp-completion-at-point-around (capf)
-  "Wrap CAPF :annotation-function"
-  (cape-wrap-properties capf :annotation-function #'my/elisp-completion-at-point-annotation-function))
-
 ;; Configure completion-at-point-functions
 (defun my/get-filepath-before-point ()
   "Looking before point and see if there is a filepath.
@@ -89,10 +66,5 @@
  :custom
  (cape-file-directory #'my/resolve-directory-before-point)
  (cape-file-prefix '("/" "~/" "./" "../")))
-
-(use-package
- emacs
- :config
- (advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around))
 
 (provide 'init-completion-at-point-functions)

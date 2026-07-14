@@ -33,6 +33,7 @@
       cape
       vertico
       orderless
+      marginalia
 
       treesit-grammars.with-all-grammars
 

@@ -17,6 +17,8 @@
 (require 'init-completion-at-point-functions)
 (require 'init-completing-read)
 (require 'init-completion-styles)
+(require 'init-annotation-function)
+(require 'init-elisp-completion-at-point)
 
 (require 'init-treesitter)
 (require 'init-scrolling)
