@@ -11,7 +11,11 @@
 (require 'init-echo-area)
 (require 'init-display-line-numbers-mode)
 (require 'init-what-cursor-position)
+
+;; Completion
 (require 'init-completion-at-point)
+(require 'init-completion-at-point-functions)
+
 (require 'init-treesitter)
 (require 'init-scrolling)
 (require 'init-mu4e)
