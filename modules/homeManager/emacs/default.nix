@@ -38,6 +38,8 @@
       corfu-prescient
       vertico-prescient
       embark
+      consult
+      embark-consult
 
       treesit-grammars.with-all-grammars
 

@@ -21,6 +21,7 @@
 (require 'init-display-sort-function)
 (require 'init-elisp-completion-at-point)
 (require 'init-embark)
+(require 'init-consult)
 
 (require 'init-treesitter)
 (require 'init-scrolling)
