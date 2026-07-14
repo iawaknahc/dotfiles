@@ -34,6 +34,9 @@
       vertico
       orderless
       marginalia
+      prescient
+      corfu-prescient
+      vertico-prescient
 
       treesit-grammars.with-all-grammars
 
