@@ -3,9 +3,9 @@
 -- https://github.com/Saghen/blink.cmp/issues/1688
 --
 -- We work around this by completely override get_trigger_characters().
--- Printable ASCII characters, with ` '"()[]{}` removed.
+-- Printable ASCII characters from 33 to 126 inclusive.
 local trigger_characters =
-  vim.split("!#$%&*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_`abcdefghijklmnopqrstuvwxyz|~", "")
+  vim.split("!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~", "")
 
 local override = {
   get_trigger_characters = function()

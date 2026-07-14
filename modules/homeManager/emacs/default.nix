@@ -32,6 +32,7 @@
       corfu
       cape
       vertico
+      orderless
 
       treesit-grammars.with-all-grammars
 

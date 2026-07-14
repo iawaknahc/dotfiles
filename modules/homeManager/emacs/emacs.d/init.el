@@ -16,6 +16,7 @@
 (require 'init-completion-at-point)
 (require 'init-completion-at-point-functions)
 (require 'init-completing-read)
+(require 'init-completion-styles)
 
 (require 'init-treesitter)
 (require 'init-scrolling)

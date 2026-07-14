@@ -33,10 +33,13 @@
  :custom
  (corfu-auto t)
  (corfu-auto-delay 0.1)
- ;; Trigger with 1 character.
- (corfu-auto-prefix 1)
- ;; Printable ASCII characters, with ` '"()[]{}` removed.
- (corfu-auto-trigger "!#$%&*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\^_`abcdefghijklmnopqrstuvwxyz|~"))
+
+ ;; It is unnecessary to configure corfu-auto-prefix because
+ ;; corfu respects :company-prefix-length advertised by the CAPF.
+ ;(corfu-auto-prefix 3)
+
+ ;; Printable ASCII characters from 33 to 126 inclusive.
+ (corfu-auto-trigger "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"))
 
 (use-package
  corfu-popupinfo

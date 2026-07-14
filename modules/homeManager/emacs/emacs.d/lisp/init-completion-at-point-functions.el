@@ -71,10 +71,17 @@
   (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
   ;; Then we merge whatever appears in completion-at-point-functions except the last element (which is t).
   (let* ((without-t (remove t completion-at-point-functions))
-         (merged (apply #'cape-capf-super without-t)))
-    ;; Finally we put cape-file at the front.
-    ;; It is okay to do this because cape-file has very specific trigger prefixes.
-    (setq-local completion-at-point-functions (list #'cape-file merged t))))
+         (merged (apply #'cape-capf-super without-t))
+         ;; It is important that this CAPF has a prefix-length larger than cape-file.
+         ;; Otherwise, this CAPF will be triggered in the following case.
+         ;;
+         ;; Suppose you type `.`, since `.` is a wildcard character recognized by Orderless,
+         ;; this CAPF will be chosen.
+         ;; cape-file will not be chosen because `.` is not one of the trigger prefixes.
+         ;; By the time you type `/` to make it `./`, it is too late.
+         (prefix-length-enforced (cape-capf-prefix-length merged 3)))
+    ;; Put cape-file at the front because it has several trigger prefixes, with one of them being `/` (which is just 1).
+    (setq-local completion-at-point-functions (list #'cape-file prefix-length-enforced t))))
 
 (use-package
  cape
