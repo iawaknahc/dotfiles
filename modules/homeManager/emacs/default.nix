@@ -37,6 +37,7 @@
       prescient
       corfu-prescient
       vertico-prescient
+      embark
 
       treesit-grammars.with-all-grammars
 
