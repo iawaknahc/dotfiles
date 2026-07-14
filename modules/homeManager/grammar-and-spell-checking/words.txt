@@ -100,6 +100,7 @@ fileencoding
 fileformat
 filesize
 fixendofline
+flydiff
 fnlfmt
 focusable
 foldclose

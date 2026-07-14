@@ -22,13 +22,20 @@
     if pkgs.stdenv.hostPlatform.isDarwin then pkgs.emacs30-macport else pkgs.emacs30-pgtk;
   programs.emacs.extraPackages =
     emacsPackages: with emacsPackages; [
+      # Theme
       catppuccin-theme
+
+      # Email
       mu4e
+
+      # Scrolling
       ultra-scroll
 
+      # Evil
       goto-chg
       evil
 
+      # Completion
       corfu
       cape
       vertico
@@ -41,8 +48,13 @@
       consult
       embark-consult
 
+      # Tree-sitter
       treesit-grammars.with-all-grammars
 
+      # VC
+      diff-hl
+
+      # Modes
       fish-mode
       just-ts-mode
       lua-mode # lua-ts-mode is built-in.
