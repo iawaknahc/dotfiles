@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
-;; Configure completion-at-point-functions
+;; FIXME: This function does not handle cases like `my/foobar`.
+;; In that case, the completion should be handled by another CAPF.
 (defun my/get-filepath-before-point ()
   "Looking before point and see if there is a filepath.
   Return the filepath if found, otherwise nil."
