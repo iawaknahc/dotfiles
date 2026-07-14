@@ -31,6 +31,7 @@
 
       corfu
       cape
+      vertico
 
       treesit-grammars.with-all-grammars
 

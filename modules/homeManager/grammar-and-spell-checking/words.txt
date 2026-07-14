@@ -326,6 +326,7 @@ urlbar
 urlsplit
 usr
 utcoffset
+vertico
 vimgrep
 vimruntime
 vimscript
