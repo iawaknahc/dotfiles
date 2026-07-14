@@ -1,10 +1,5 @@
 ;;; -*- lexical-binding: t -*-
 
-(defun my/maildir-first-component (msg)
-  (msg)
-  (let* ((maildir (mu4e-message-field msg :maildir)))
-    (nth 1 (file-name-split maildir))))
-
 (use-package
  mu4e
  :ensure nil
@@ -13,16 +8,16 @@
  (mu4e-context-policy 'pick-first)
  (mu4e-compose-context-policy 'ask-if-none)
  (mu4e-view-scroll-to-next nil)
-  ;; 2006-01-02
+ ;; 2006-01-02
  (mu4e-headers-date-format "%F")
  (mu4e-headers-time-format "%T")
-  ;; Do not move point after mark
+ ;; Do not move point after mark
  (mu4e-headers-advance-after-mark nil)
-  ;; Update every 5 minutes.
+ ;; Update every 5 minutes.
  (mu4e-update-interval 300)
-  ;; Load remote images.
+ ;; Load remote images.
  (gnus-blocked-images nil)
-  ;; Use the executable `sendmail` in PATH to send emails.
+ ;; Use the executable `sendmail` in PATH to send emails.
  (message-send-mail-function 'message-send-mail-with-sendmail)
  (mu4e-headers-fields
   `((:maildir-first-component . 30)
@@ -44,7 +39,7 @@
      :query "flag:trashed"
      :key ?t)))
  :config
-  ;; Make the main view use the same window.
+ ;; Make the main view use the same window.
  (add-to-list
   'display-buffer-alist
   `((regexp-quote mu4e-main-buffer-name)
@@ -57,7 +52,9 @@
      "The first path component of :maildir"
      :shortname "Mailbox"
      :help "The first path component of :maildir"
-     :function #'my/maildir-first-component)))
+     :function (lambda (msg)
+                       (let* ((maildir (mu4e-message-field msg :maildir)))
+                         (nth 1 (file-name-split maildir)))))))
  (require 'init-mu4e-contexts))
 
 (provide 'init-mu4e)
