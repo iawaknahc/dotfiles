@@ -8,7 +8,9 @@
  (setq
   ;; Preselect the prompt, that is, what was typed.
   ;; Use corfu-next select the first candidate.
-  corfu-preselect 'prompt)
+  corfu-preselect 'prompt
+  ;; The default is 100, which is too large.
+  corfu-max-width 50)
  :config
  (keymap-unset corfu-map "TAB") ; TAB should be self-inserting.
  (keymap-unset corfu-map "RET") ; RET should be self-inserting.
