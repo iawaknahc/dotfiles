@@ -60,6 +60,7 @@
       lua-mode # lua-ts-mode is built-in.
       markdown-mode
       markdown-ts-mode
+      nix-mode
       nix-ts-mode
       nushell-ts-mode
       typescript-mode # typescript-ts-mode is built-in.
