@@ -4,6 +4,19 @@
 
 (use-package goto-chg)
 
+(defun my/evil-search-next (f &rest args)
+  "An :around advice of evil-search-next to make it always search forward."
+  (let ((isearch-forward t))
+    (apply f args)))
+
+(defun my/evil-search-previous (f &rest args)
+  "An :around advice of evil-search-previous to make to always search backward."
+  ;; This is intentionally.
+  ;; evil-search-previous negates isearch-forward internally.
+  ;; So we always set it to t.
+  (let ((isearch-forward t))
+    (apply f args)))
+
 (use-package
  evil
  :after (goto-chg)
@@ -27,6 +40,9 @@
   ;; Unless we are editing source code or text.
  (evil-set-initial-state 'prog-mode 'normal)
  (evil-set-initial-state 'text-mode 'normal)
+ ;; Make n and N have deterministic direction.
+ (advice-add 'evil-search-next :around #'my/evil-search-next)
+ (advice-add 'evil-search-previous :around #'my/evil-search-previous)
  (evil-mode 1))
 
 (provide 'init-evil)

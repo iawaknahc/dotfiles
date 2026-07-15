@@ -152,6 +152,7 @@ ignorecase
 inplace
 ipairs
 ipc
+isearch
 iskeyword
 isn
 isoformat
