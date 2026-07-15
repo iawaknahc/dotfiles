@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-annotation-function.el --- init-annotation-function.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  marginalia
@@ -8,3 +10,4 @@
  (marginalia-mode))
 
 (provide 'init-annotation-function)
+;;; init-annotation-function.el ends here

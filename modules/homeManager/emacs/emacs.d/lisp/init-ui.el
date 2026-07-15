@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-ui.el --- init-ui.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -17,3 +19,4 @@
   :height 130))
 
 (provide 'init-ui)
+;;; init-ui.el ends here

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-interlocking.el --- init-interlocking.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -7,3 +9,4 @@
  (create-lockfiles nil))
 
 (provide 'init-interlocking)
+;;; init-interlocking.el ends here

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-completion-at-point.el --- init-completion-at-point.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  corfu
@@ -50,3 +52,4 @@
  (corfu-popupinfo-mode 1))
 
 (provide 'init-completion-at-point)
+;;; init-completion-at-point.el ends here

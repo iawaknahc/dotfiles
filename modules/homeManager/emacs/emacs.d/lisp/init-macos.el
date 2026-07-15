@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-macos.el --- init-macos.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -8,3 +10,4 @@
  (mac-right-command-modifier 'none))
 
 (provide 'init-macos)
+;;; init-macos.el ends here

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-display-line-numbers-mode.el --- init-display-line-numbers-mode.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -10,3 +12,4 @@
         (text-mode . display-line-numbers-mode)))
 
 (provide 'init-display-line-numbers-mode)
+;;; init-display-line-numbers-mode.el ends here

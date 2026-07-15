@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-diff-hl.el --- init-diff-hl.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  diff-hl
@@ -13,3 +15,4 @@
  (diff-hl-flydiff-mode 1))
 
 (provide 'init-diff-hl)
+;;; init-diff-hl.el ends here

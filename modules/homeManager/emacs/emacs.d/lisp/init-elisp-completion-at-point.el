@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-elisp-completion-at-point.el --- init-elisp-completion-at-point.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (defun my/elisp-completion-at-point-annotation-function (candidate)
   (when-let* ((sym (intern-soft candidate)))
@@ -16,3 +18,4 @@
  (advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around))
 
 (provide 'init-elisp-completion-at-point)
+;;; init-elisp-completion-at-point.el ends here

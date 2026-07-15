@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-treesitter.el --- init-treesitter.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  treesit
@@ -13,3 +15,4 @@
  (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode)))
 
 (provide 'init-treesitter)
+;;; init-treesitter.el ends here

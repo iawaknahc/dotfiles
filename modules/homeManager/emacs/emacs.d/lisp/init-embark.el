@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-embark.el --- init-embark.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; The official documentation mentions that
 ;; describe-bindings can be remapped to embark-bindings.
@@ -16,3 +18,4 @@
  (embark-auto-prefix-help-delay 0))
 
 (provide 'init-embark)
+;;; init-embark.el ends here

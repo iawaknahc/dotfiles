@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-consult.el --- init-consult.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  consult
@@ -26,3 +28,4 @@
  :ensure nil)
 
 (provide 'init-consult)
+;;; init-consult.el ends here

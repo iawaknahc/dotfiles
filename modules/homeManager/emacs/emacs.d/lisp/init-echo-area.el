@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-echo-area.el --- init-echo-area.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -7,3 +9,4 @@
  (echo-keystrokes 0.01))
 
 (provide 'init-echo-area)
+;;; init-echo-area.el ends here

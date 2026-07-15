@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-tab-bar.el --- init-tab-bar.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (defvar my-tab-bar-layout
   '(("mu4e"    . my-tab-bar-email-tab)
@@ -50,3 +52,4 @@
               (tab-bar-select-tab n))))))
 
 (provide 'init-tab-bar)
+;;; init-tab-bar.el ends here

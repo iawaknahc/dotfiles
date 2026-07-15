@@ -13,11 +13,14 @@ return {
     "elispfeature",
     fmt(
       [[
-      ;;; -*- lexical-binding: t -*-
+      ;;; {2}.el --- {2}.el -*- lexical-binding: t -*-
+      ;;; Commentary:
+      ;;; Code:
 
-      {}
+      {1}
 
-      (provide '{})
+      (provide '{2})
+      ;;; {2}.el ends here
     ]],
       {
         i(0),

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-scrolling.el --- init-scrolling.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  ultra-scroll
@@ -18,3 +20,4 @@
         ([remap scroll-down-command] . pixel-scroll-interpolate-up)))
 
 (provide 'init-scrolling)
+;;; init-scrolling.el ends here

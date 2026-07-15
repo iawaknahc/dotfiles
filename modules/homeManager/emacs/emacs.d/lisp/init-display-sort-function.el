@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-display-sort-function.el --- init-display-sort-function.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  prescient
@@ -26,3 +28,4 @@
  (vertico-prescient-mode 1))
 
 (provide 'init-display-sort-function)
+;;; init-display-sort-function.el ends here

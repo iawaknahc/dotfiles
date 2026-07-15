@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-completion-at-point-functions.el --- init-completion-at-point-functions.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; FIXME: This function does not handle cases like `my/foobar`.
 ;; In that case, the completion should be handled by another CAPF.
@@ -69,3 +71,4 @@
  (cape-file-prefix '("/" "~/" "./" "../")))
 
 (provide 'init-completion-at-point-functions)
+;;; init-completion-at-point-functions.el ends here

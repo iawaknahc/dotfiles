@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-evil.el --- init-evil.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package goto-chg)
 
@@ -20,3 +22,4 @@
  (evil-mode 1))
 
 (provide 'init-evil)
+;;; init-evil.el ends here

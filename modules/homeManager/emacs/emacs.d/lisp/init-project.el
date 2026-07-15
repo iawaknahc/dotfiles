@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-project.el --- init-project.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 ;; The default implementation of project-buffers looks at default-directory of the buffer.
 ;; If the value of default-directory matches the project-root, then it is considered as a project buffer.
@@ -18,3 +20,4 @@
  (advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return))
 
 (provide 'init-project)
+;;; init-project.el ends here

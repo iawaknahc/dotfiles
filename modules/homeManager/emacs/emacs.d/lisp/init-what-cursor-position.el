@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-what-cursor-position.el --- init-what-cursor-position.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -7,3 +9,4 @@
  (what-cursor-show-names t))
 
 (provide 'init-what-cursor-position)
+;;; init-what-cursor-position.el ends here

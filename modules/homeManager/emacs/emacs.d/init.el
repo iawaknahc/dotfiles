@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init.el --- My init.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
@@ -38,3 +40,4 @@
 ;(require 'init-evil)
 
 (provide 'init)
+;;; init.el ends here

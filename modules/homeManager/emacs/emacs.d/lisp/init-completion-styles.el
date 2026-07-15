@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-completion-styles.el --- init-completion-styles.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  orderless
@@ -13,3 +15,4 @@
  (completion-category-defaults '((file (styles partial-completion)))))
 
 (provide 'init-completion-styles)
+;;; init-completion-styles.el ends here

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-mu4e.el --- init-mu4e.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  mu4e

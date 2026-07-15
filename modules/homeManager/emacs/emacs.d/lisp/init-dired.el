@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-dired.el --- init-dired.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  dired
@@ -13,3 +15,4 @@
   ("C-c C-c" . dired-create-empty-file)))
 
 (provide 'init-dired)
+;;; init-dired.el ends here

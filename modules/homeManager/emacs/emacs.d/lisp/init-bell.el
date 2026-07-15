@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-bell.el --- init-bell.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -8,3 +10,4 @@
  (visible-bell t))
 
 (provide 'init-bell)
+;;; init-bell.el ends here

@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-auto-save-mode.el --- init-auto-save-mode.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  emacs
@@ -7,3 +9,4 @@
  (auto-save-default nil))
 
 (provide 'init-auto-save-mode)
+;;; init-auto-save-mode.el ends here

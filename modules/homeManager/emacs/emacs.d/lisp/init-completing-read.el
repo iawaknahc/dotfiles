@@ -1,4 +1,6 @@
-;;; -*- lexical-binding: t -*-
+;;; init-completing-read.el --- init-completing-read.el -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (use-package
  vertico
@@ -22,3 +24,4 @@
  (vertico-mode 1))
 
 (provide 'init-completing-read)
+;;; init-completing-read.el ends here
