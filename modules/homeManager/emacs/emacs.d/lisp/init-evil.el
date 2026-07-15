@@ -40,6 +40,12 @@
   ;; Unless we are editing source code or text.
  (evil-set-initial-state 'prog-mode 'normal)
  (evil-set-initial-state 'text-mode 'normal)
+ ;; Evil has its own opinions on using insert state in some modes, revert them.
+ (dolist (mode evil-insert-state-modes)
+         (evil-set-initial-state mode 'emacs))
+ ;; Evil has its own opinions on using motion state in some modes, revert them.
+ (dolist (mode evil-motion-state-modes)
+         (evil-set-initial-state mode 'emacs))
  ;; Make n and N have deterministic direction.
  (advice-add 'evil-search-next :around #'my/evil-search-next)
  (advice-add 'evil-search-previous :around #'my/evil-search-previous)
