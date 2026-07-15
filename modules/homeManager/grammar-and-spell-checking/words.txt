@@ -5,6 +5,7 @@ alist
 atuin
 augroup
 autocmd
+autorevert
 autotrigger
 axdom
 basedpyright
