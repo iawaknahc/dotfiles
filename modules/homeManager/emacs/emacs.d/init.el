@@ -4,6 +4,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(require 'init-shell)
 (require 'init-auto-save-mode)
 (require 'init-auto-revert-mode)
 (require 'init-backup-files)
