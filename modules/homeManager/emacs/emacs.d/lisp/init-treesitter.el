@@ -10,7 +10,6 @@
  (add-to-list 'major-mode-remap-alist '(lua-mode . lua-ts-mode))
  (add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode))
  (add-to-list 'major-mode-remap-alist '(tsx-mode . tsx-ts-mode))
- (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
- (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode)))
+ (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode)))
 
 (provide 'init-treesitter)
