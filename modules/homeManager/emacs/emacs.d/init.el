@@ -19,6 +19,7 @@
 (require 'init-dired)
 (require 'init-recentf)
 (require 'init-project)
+(require 'init-whitespace)
 
 ;; Completion
 (require 'init-completion-at-point)

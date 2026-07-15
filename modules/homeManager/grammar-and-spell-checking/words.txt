@@ -133,6 +133,7 @@ ghostty
 gitcommit
 gitgutter
 gitsigns
+glyphless
 gnormal
 gopls
 grepprg
@@ -148,6 +149,7 @@ hledger
 hlgroup
 hlsearch
 hostnames
+hspace
 ignorecase
 inplace
 ipairs
