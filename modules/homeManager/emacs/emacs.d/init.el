@@ -36,9 +36,7 @@
 (require 'init-mu4e)
 (require 'init-diff-hl)
 
-;; It seems that corfu is not compatible with evil.
-;; In evil insert state, C-n is taken by evil, not corfu.
-;(require 'init-evil)
+(require 'init-evil)
 
 (provide 'init)
 ;;; init.el ends here
