@@ -13,6 +13,7 @@
 (require 'init-display-line-numbers-mode)
 (require 'init-what-cursor-position)
 (require 'init-dired)
+(require 'init-recentf)
 
 ;; Completion
 (require 'init-completion-at-point)

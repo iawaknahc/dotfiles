@@ -264,6 +264,7 @@ pythonpath
 pyxirr
 qflist
 qpdf
+recentf
 redrawstatus
 reedline
 rgi
