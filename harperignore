@@ -3,6 +3,7 @@
 .styluaignore
 *.conf
 *.css
+*.el
 *.fish
 *.hy
 *.json
@@ -16,5 +17,6 @@ codespellignore
 flake.lock
 harperignore
 infokey
+justfile
 Makefile
 words.txt

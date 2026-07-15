@@ -6,6 +6,7 @@
 (require 'init-interlocking)
 (require 'init-macos)
 (require 'init-theme)
+(require 'init-bell)
 (require 'init-ui)
 (require 'init-tab-bar)
 (require 'init-echo-area)
