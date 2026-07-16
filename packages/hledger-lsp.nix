@@ -5,12 +5,12 @@
 }:
 buildGoModule {
   pname = "hledger-lsp";
-  version = "0.2.45";
+  version = "0.2.49";
   src = fetchFromGitHub {
     owner = "juev";
     repo = "hledger-lsp";
-    rev = "v0.2.45";
-    hash = "sha256-SyTxqtOhyYFkONM0LlBGswcqaJ3FpEacBy1ag1U/4ss=";
+    rev = "v0.2.49";
+    hash = "sha256-j+AC21EEZEz3kElX+P3GMvm13AYxNd87add8IZFS+7Q=";
   };
   vendorHash = "sha256-Oo/8LCX6svcH/0vCowzOiAhlif9LJfNrU3OgNiZDupo=";
   meta = {

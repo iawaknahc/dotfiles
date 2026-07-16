@@ -1,9 +1,6 @@
 { config, ... }:
 {
-  # FIXME: On 2026-07-09, when I updated flake.lock, wezterm is not cached.
-  # It took a very long time to compile it.
-  # Since I rarely use wezterm, I worked around by disabling it.
-  programs.wezterm.enable = false;
+  programs.wezterm.enable = true;
   programs.wezterm.extraConfig = ''
     local wezterm = require("wezterm")
     local config = wezterm.config_builder()

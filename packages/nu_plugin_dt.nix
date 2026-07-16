@@ -11,15 +11,15 @@
 # Therefore, ISO 8601 notation is used.
 rustPlatform.buildRustPackage {
   pname = "nu_plugin_dt";
-  version = "0.2.0-unstable-2026-05-28";
+  version = "0.2.0-unstable-2026-07-11";
   src = fetchFromGitHub {
     owner = "fdncred";
     repo = "nu_plugin_dt";
-    rev = "dca9d1b9c879c3002d35f293ad086b3cfe744ee4";
-    hash = "sha256-BOkUkRd0sZ+LnLCfUxFHjz1a4gim541K/Vt+IMzRNmI=";
+    rev = "85a04ae1048ad20166027e5e2c3e913fbf4b5ab7";
+    hash = "sha256-r7Vow8Nnazj2mBX+Mz6KjCpLo4bXOajdh7Nj0WhjBfk=";
   };
   doCheck = false;
-  cargoHash = "sha256-UwP4jCUaEErCMKmINIUargotLEe3/l2CiNxI1YyoEsc=";
+  cargoHash = "sha256-ea5hk94XHlEDITu6vuKrYZW/0OUkGOrT5mdyCCMCX9Y=";
   meta = {
     description = "A nushell datetime plugin that uses the jiff crate ";
     homepage = "https://github.com/fdncred/nu_plugin_dt";
