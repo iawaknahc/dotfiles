@@ -6,6 +6,8 @@ apheleia
 atuin
 augroup
 autocmd
+autoload
+autoloaded
 autorevert
 autotrigger
 axdom

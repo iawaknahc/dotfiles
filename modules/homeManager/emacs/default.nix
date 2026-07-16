@@ -60,13 +60,10 @@
       fennel-mode
       fish-mode
       just-ts-mode
-      lua-mode # lua-ts-mode is built-in.
       # markdown-ts-mode is broken. Its replacement is available on Emacs 31.
       markdown-mode
-      nix-mode
       nix-ts-mode
       nushell-ts-mode
-      typescript-mode # typescript-ts-mode is built-in.
       zig-ts-mode
     ];
   programs.emacs.extraConfig = ''
