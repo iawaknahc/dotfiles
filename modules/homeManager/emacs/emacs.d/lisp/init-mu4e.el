@@ -31,7 +31,11 @@
   '((:name
      "Unread non-trashed non-junk messages"
      :query "flag:unread AND NOT flag:trashed AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
-     :key ?u)
+     :key ?u
+     ;; Make this favorite.
+     ;; This will be used in the global modeline.
+     ;; See https://www.djcbsoftware.nl/code/mu/mu4e/Modeline.html#Favorite-bookmark-modeline-item
+     :favorite t)
     (:name
      "Junk messages"
      :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
