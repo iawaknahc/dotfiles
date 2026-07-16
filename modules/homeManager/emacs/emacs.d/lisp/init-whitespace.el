@@ -50,7 +50,8 @@
     tabs ; The presence of this means use whitespace-tab to highlight tabs.
     spaces ; The presence of this means use whitespace-space and whitespace-hspace to highlight spaces.
     newline ; The presence of this means use whitespace-newline to highlight newlines.
-    newline-mark
+    ;; I found it quite distracting to have newline shown.
+    ;newline-mark
     space-mark
     tab-mark
 
