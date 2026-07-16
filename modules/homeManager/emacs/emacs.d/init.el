@@ -21,6 +21,7 @@
 (require 'init-recentf)
 (require 'init-project)
 (require 'init-whitespace)
+(require 'init-show-paren)
 
 ;; Completion
 (require 'init-completion-at-point)
