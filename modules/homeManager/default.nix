@@ -134,10 +134,7 @@ _: {
     ./pdf.nix
     ./yt-dlp.nix
 
-    # I use Beancount exclusively now.
-    # And hledger is really big in terms of the storage it needs.
-    # ./ledger.nix
-    # ./hledger.nix
+    # Plaintext accounting
     ./beancount
 
     ./claude

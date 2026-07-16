@@ -2,6 +2,7 @@ addext
 akey
 alacritty
 alist
+apheleia
 atuin
 augroup
 autocmd
@@ -104,6 +105,7 @@ fileformat
 filesize
 fixendofline
 flydiff
+fnl
 fnlfmt
 focusable
 foldclose
@@ -159,6 +161,7 @@ isearch
 iskeyword
 isn
 isoformat
+isort
 isoyear
 jdtls
 jit
@@ -282,6 +285,7 @@ sed
 semicoloncomma
 sendmail
 sessionoptions
+setf
 setlocal
 setloclist
 setq

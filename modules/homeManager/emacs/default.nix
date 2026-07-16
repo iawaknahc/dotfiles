@@ -53,7 +53,11 @@
       # VC
       diff-hl
 
+      # Auto-format on save
+      apheleia
+
       # Modes
+      fennel-mode
       fish-mode
       just-ts-mode
       lua-mode # lua-ts-mode is built-in.

@@ -5,6 +5,8 @@
 (use-package
  treesit
  :ensure nil
+ :mode (("\\.nu\\'" . nushell-ts-mode)
+        ("\\.fnl\\'" . fennel-mode))
  :custom
  (treesit-font-lock-level 4)
  :config

@@ -41,6 +41,7 @@
 (require 'init-diff-hl)
 (require 'init-evil)
 (require 'init-rainbow-delimiters)
+(require 'init-apheleia)
 
 (provide 'init)
 ;;; init.el ends here
