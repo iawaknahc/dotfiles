@@ -23,6 +23,7 @@
 (require 'init-whitespace)
 (require 'init-show-paren)
 (require 'init-electric-pair-mode)
+(require 'init-indent-tabs-mode)
 
 ;; Completion
 (require 'init-completion-at-point)
