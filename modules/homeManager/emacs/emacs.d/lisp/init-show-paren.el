@@ -12,9 +12,12 @@
  (show-paren-delay 0)
  (show-paren-context-when-offscreen t)
  (show-paren-highlight-openparen t)
- (show-paren-style 'expression)
+ ;; Highlight parenthesis only for non-Lisp languages.
+ (show-paren-style 'parenthesis)
  (show-paren-when-point-in-periphery t)
- (show-paren-when-point-inside-paren t))
+ (show-paren-when-point-inside-paren t)
+ ;; But for Lisp languages, highlight the whole expression because there are too many parenthesis.
+ :hook ((lisp-data-mode . (lambda () (setq-local show-paren-style 'expression)))))
 
 (provide 'init-show-paren)
 ;;; init-show-paren.el ends here
