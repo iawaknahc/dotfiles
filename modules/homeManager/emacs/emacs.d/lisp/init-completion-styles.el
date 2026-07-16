@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(defun my/orderless-literal-suffix (component)
+  "Match COMPONENT as a literal suffix string."
+  `(seq (literal ,component) string-end))
+
 (use-package
  orderless
  :ensure nil
@@ -17,7 +21,11 @@
  ;; The default is one or more SPC, which does not work well for Corfu with auto-completion.
  ;; With underscore and hyphen added, I can type `foo_bar` to means `foo bar`.
  ;; Note that corfu-separator is left unchanged and set to SPC by default.
- (orderless-component-separator (rx (+ (in "- _")))))
+ (orderless-component-separator (rx (+ (in "- _"))))
+ :config
+ ;; Add `foo$` to match the end of the candidate literally.
+ ;; No idea why it is not included by default while `^foo` is included.
+ (add-to-list 'orderless-affix-dispatch-alist `(?$ . ,#'my/orderless-literal-suffix)))
 
 (provide 'init-completion-styles)
 ;;; init-completion-styles.el ends here
