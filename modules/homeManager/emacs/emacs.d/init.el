@@ -37,8 +37,8 @@
 (require 'init-scrolling)
 (require 'init-mu4e)
 (require 'init-diff-hl)
-
 (require 'init-evil)
+(require 'init-rainbow-delimiters)
 
 (provide 'init)
 ;;; init.el ends here

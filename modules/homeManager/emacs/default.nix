@@ -27,6 +27,9 @@
       # Scrolling
       ultra-scroll
 
+      # Lisp
+      rainbow-delimiters
+
       # Evil
       goto-chg
       evil
