@@ -22,6 +22,7 @@
 (require 'init-project)
 (require 'init-whitespace)
 (require 'init-show-paren)
+(require 'init-electric-pair-mode)
 
 ;; Completion
 (require 'init-completion-at-point)

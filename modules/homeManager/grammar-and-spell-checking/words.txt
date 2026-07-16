@@ -80,6 +80,7 @@ dolist
 dotimes
 duckdb
 dwim
+elec
 elisp
 elispfeature
 emmylua
