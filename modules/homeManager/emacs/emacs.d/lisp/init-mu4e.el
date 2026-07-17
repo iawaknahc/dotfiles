@@ -19,6 +19,11 @@
  (mu4e-update-interval 300)
  ;; Load remote images.
  (gnus-blocked-images nil)
+ ;; Show the Date: header three times, in different forms.
+ ;; 1. The original header.
+ ;; 2. The original header converted to local timezone.
+ ;; 3. The lapsed time in human readable form.
+ (gnus-article-date-headers '(original local lapsed))
  ;; Use the executable `sendmail` in PATH to send emails.
  (message-send-mail-function 'message-send-mail-with-sendmail)
  (mu4e-headers-fields
