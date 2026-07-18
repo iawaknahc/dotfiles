@@ -26,6 +26,7 @@
 (require 'init-electric-pair-mode)
 (require 'init-indent-tabs-mode)
 (require 'init-help)
+(require 'init-info)
 
 ;; Completion
 (require 'init-completion-at-point)
