@@ -4,8 +4,6 @@
 
 (use-package
  corfu
- :hook ((prog-mode . corfu-mode)
-        (text-mode . corfu-mode))
  :custom
  ;; Preselect the prompt, that is, what was typed.
  ;; Use corfu-next select the first candidate.
@@ -27,7 +25,13 @@
  (keymap-unset corfu-map "M-g") ; M-g is corfu-info-location, which I do not use.
  (keymap-unset corfu-map "M-h") ; M-g is corfu-info-documentation, which I do not use.
  (keymap-unset corfu-map "<remap> <move-beginning-of-line>")
- (keymap-unset corfu-map "<remap> <move-end-of-line>"))
+ (keymap-unset corfu-map "<remap> <move-end-of-line>")
+ ;; Enable Corfu mode in minibuffer and all buffers.
+ ;; Previously I just enabled it in text-mode and prog-mode.
+ ;; It does not come with an API to enable in minibuffer specifically.
+ ;; So global-corfu-mode has to be used.
+ ;; Enable in the minibuffer is essential for commands like M-:
+ (global-corfu-mode 1))
 
 (use-package
  corfu-auto
