@@ -46,6 +46,7 @@
 (require 'init-evil)
 (require 'init-rainbow-delimiters)
 (require 'init-apheleia)
+(require 'init-flycheck)
 
 (provide 'init)
 ;;; init.el ends here

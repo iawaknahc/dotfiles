@@ -12,7 +12,9 @@
  :custom
  (diff-hl-flydiff-delay 0.1)
  :config
- (diff-hl-flydiff-mode 1))
+ (diff-hl-flydiff-mode 1)
+ ;; Use margin instead of fringe
+ (diff-hl-margin-mode 1))
 
 (provide 'init-diff-hl)
 ;;; init-diff-hl.el ends here

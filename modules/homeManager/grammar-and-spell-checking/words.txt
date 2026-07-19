@@ -106,7 +106,9 @@ fileencoding
 fileformat
 filesize
 fixendofline
+flycheck
 flydiff
+flymake
 fnl
 fnlfmt
 focusable
@@ -265,6 +267,7 @@ preselects
 prettierd
 pricehist
 prolog
+propertize
 pubin
 pubout
 pumheight
