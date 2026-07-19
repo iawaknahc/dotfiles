@@ -27,6 +27,7 @@
 (require 'init-indent-tabs-mode)
 (require 'init-help)
 (require 'init-info)
+(require 'init-eldoc)
 
 ;; Completion
 (require 'init-completion-at-point)

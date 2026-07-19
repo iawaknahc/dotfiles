@@ -22,16 +22,16 @@
          (text-mode . flycheck-mode))
   :custom
   (flycheck-indication-mode 'left-margin)
-  ;; Display error in the echo area without delay.
+  ;; Display error at point without delay.
   (flycheck-display-errors-delay 0)
   :config
+  ;; FIXME: flycheck 37.0 has flycheck-error-list-display-buffer-action.
   (add-to-list
    'display-buffer-alist
-   `(,(rx "*Flycheck errors*")
+   `(,(rx string-start "*Flycheck errors*" string-end)
      (display-buffer-reuse-window display-buffer-in-side-window)
      (side . bottom)
-     (reusable-frames . visible)
-     (window-height . 0.33))))
+     (window-height . 0.25))))
 
 (defun my/flycheck-error-format-message-and-id (err &optional _include-snippet)
   "Override flycheck-error-format-message-and-id.
