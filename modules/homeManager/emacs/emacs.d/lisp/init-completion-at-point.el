@@ -26,7 +26,7 @@
  (keymap-unset corfu-map "M-h") ; M-g is corfu-info-documentation, which I do not use.
  (keymap-unset corfu-map "<remap> <move-beginning-of-line>")
  (keymap-unset corfu-map "<remap> <move-end-of-line>")
- ;; Enable Corfu mode in minibuffer and all buffers.
+ ;; Enable Corfu mode in minibuffer where completion-at-point-functions is set, and in all buffers.
  ;; Previously I just enabled it in text-mode and prog-mode.
  ;; It does not come with an API to enable in minibuffer specifically.
  ;; So global-corfu-mode has to be used.

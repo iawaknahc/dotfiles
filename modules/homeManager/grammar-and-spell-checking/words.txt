@@ -209,6 +209,7 @@ maildir
 mbsync
 menuone
 minibuffer
+minibuffers
 minwid
 misalign
 mjml
