@@ -8,14 +8,10 @@
 ;;
 ;; Similarly, embark-prefix-help-command is provided for us to set to prefix-help-command.
 ;; embark-prefix-help-command and embark-bindings share the same UI.
-(use-package
- embark
- :ensure nil
- :bind
- (("C-." . embark-act)
-  ("C-;" . embark-dwim))
- :custom
- (embark-auto-prefix-help-delay 0))
+(keymap-global-set "C-." #'embark-act)
+(keymap-global-set "C-;" #'embark-dwim)
+
+(setq embark-auto-prefix-help-delay 0)
 
 (provide 'init-embark)
 ;;; init-embark.el ends here

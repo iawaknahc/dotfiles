@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- emacs
- :init
- (load-theme 'catppuccin :no-confirm)
- (setq catppuccin-flavor 'mocha)
- (setq catppuccin-italic-comments t)
- (catppuccin-reload))
+(load-theme 'catppuccin :no-confirm)
+(setq
+  catppuccin-flavor 'mocha
+  catppuccin-italic-comments t)
+(catppuccin-reload)
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

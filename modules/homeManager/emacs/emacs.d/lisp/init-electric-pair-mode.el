@@ -2,10 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- elec-pair
- :ensure nil
- :hook ((prog-mode . electric-pair-local-mode)))
+(add-hook 'prog-mode-hook #'electric-pair-local-mode)
 
 (provide 'init-electric-pair-mode)
 ;;; init-electric-pair-mode.el ends here

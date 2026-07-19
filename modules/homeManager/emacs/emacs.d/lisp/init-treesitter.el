@@ -4,37 +4,21 @@
 
 ;; nix-ts-mode does not add-to-list auto-mode-alist, as nix-mode does.
 ;; See https://github.com/NixOS/nix-mode/blob/v1.5.0/nix-mode.el#L1054
-(use-package
- nix-ts-mode
- :ensure nil
- :mode (("\\.nix\\'" . nix-ts-mode)))
+(add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-ts-mode))
 
 ;; nushell-ts-mode does not use autoload to add-to-list auto-mode-alist.
 ;; See https://github.com/herbertjones/nushell-ts-mode/blob/49915cd99d62b7e743bd8cf9023a5819479d166f/nushell-ts-mode.el#L352
-(use-package
- nushell-ts-mode
- :ensure nil
- :mode (("\\.nu\\'" . nushell-ts-mode)))
+(add-to-list 'auto-mode-alist '("\\.nu\\'" . nushell-ts-mode))
 
 ;; FIXME: Revisit in Emacs 31 when treesit-enabled-modes is available.
-;; lua-ts-mode is built-in but it is not autoloaded in 30.2.
 ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/progmodes/lua-ts-mode.el#L846
-(use-package
- lua-ts-mode
- :ensure nil)
+(require 'lua-ts-mode) ; lua-ts-mode is built-in but it is not autoloaded in 30.2.
 
 ;; FIXME: Revisit in Emacs 31 when treesit-enabled-modes is available.
-;; typescript-ts-mode is built-in but it is not autoloaded in 30.2.
 ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/progmodes/typescript-ts-mode.el#L546
-(use-package
- typescript-ts-mode
- :ensure nil)
+(require 'typescript-ts-mode) ; typescript-ts-mode is built-in but it is not autoloaded in 30.2.
 
-(use-package
- treesit
- :ensure nil
- :custom
- (treesit-font-lock-level 4))
+(setq treesit-font-lock-level 4)
 
 (provide 'init-treesitter)
 ;;; init-treesitter.el ends here

@@ -2,12 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- emacs
- :custom
- ;; Always use /bin/sh, instead of reading SHELL.
- (shell-file-name "/bin/sh")
- (sh-shell-file "/bin/sh"))
+;; Always use /bin/sh, instead of reading SHELL.
+(setq
+ shell-file-name "/bin/sh"
+ sh-shell-file "/bin/sh")
 
 (provide 'init-shell)
 ;;; init-shell.el ends here

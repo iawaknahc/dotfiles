@@ -2,12 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- marginalia
- :init
- ;; The documentation says it has to be enabled in :init
- ;; See https://github.com/minad/marginalia#configuration
- (marginalia-mode))
+;; The documentation says it has to be enabled before the completion UI is used.
+;; See https://github.com/minad/marginalia#configuration
+(marginalia-mode 1)
 
 (provide 'init-annotation-function)
 ;;; init-annotation-function.el ends here

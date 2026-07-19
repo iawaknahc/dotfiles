@@ -2,11 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- emacs
- :ensure nil
- :custom
- (create-lockfiles nil))
+(setq create-lockfiles nil)
 
 (provide 'init-interlocking)
 ;;; init-interlocking.el ends here

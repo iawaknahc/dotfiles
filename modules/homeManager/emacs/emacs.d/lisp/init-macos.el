@@ -2,12 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- emacs
- :ensure nil
- :custom
- (mac-command-modifier 'meta)
- (mac-right-command-modifier 'none))
+(setq
+ mac-command-modifier 'meta
+ mac-right-command-modifier 'none)
 
 (provide 'init-macos)
 ;;; init-macos.el ends here

@@ -11,11 +11,7 @@
   "Wrap CAPF :annotation-function"
   (cape-wrap-properties capf :annotation-function #'my/elisp-completion-at-point-annotation-function))
 
-(use-package
- emacs
- :after (cape marginalia)
- :config
- (advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around))
+(advice-add 'elisp-completion-at-point :around #'my/elisp-completion-at-point-around)
 
 (provide 'init-elisp-completion-at-point)
 ;;; init-elisp-completion-at-point.el ends here

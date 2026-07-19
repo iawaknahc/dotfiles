@@ -2,11 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(use-package
- emacs
- :ensure nil
- :custom
- (auto-save-default nil))
+(setq auto-save-default nil)
 
 (provide 'init-auto-save-mode)
 ;;; init-auto-save-mode.el ends here

@@ -9,10 +9,7 @@
      (list (read-string (format-prompt "Info apropos" sym) nil nil sym))))
   (info-apropos string))
 
-(use-package
- info
- :ensure nil
- :bind (("C-c i" . #'my/info-apropos)))
+(keymap-global-set "C-c i" #'my/info-apropos)
 
 (provide 'init-info)
 ;;; init-info.el ends here

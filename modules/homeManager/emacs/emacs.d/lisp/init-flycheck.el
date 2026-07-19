@@ -15,23 +15,20 @@
 ;;
 ;;; Code:
 
-(use-package
-  flycheck
-  :ensure nil
-  :hook ((prog-mode . flycheck-mode)
-         (text-mode . flycheck-mode))
-  :custom
-  (flycheck-indication-mode 'left-margin)
-  ;; Display error at point without delay.
-  (flycheck-display-errors-delay 0)
-  :config
-  ;; FIXME: flycheck 37.0 has flycheck-error-list-display-buffer-action.
-  (add-to-list
-   'display-buffer-alist
-   `(,(rx string-start "*Flycheck errors*" string-end)
-     (display-buffer-reuse-window display-buffer-in-side-window)
-     (side . bottom)
-     (window-height . 0.25))))
+(add-hook 'prog-mode-hook #'flycheck-mode)
+(add-hook 'text-mode-hook #'flycheck-mode)
+
+(setq
+ flycheck-indication-mode 'left-margin
+ ;; Display error at point without delay.
+ flycheck-display-errors-delay 0)
+;; FIXME: flycheck 37.0 has flycheck-error-list-display-buffer-action.
+(add-to-list
+ 'display-buffer-alist
+ `(,(rx string-start "*Flycheck errors*" string-end)
+   (display-buffer-reuse-window display-buffer-in-side-window)
+   (side . bottom)
+   (window-height . 0.25)))
 
 (defun my/flycheck-error-format-message-and-id (err &optional _include-snippet)
   "Override flycheck-error-format-message-and-id.

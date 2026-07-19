@@ -31,25 +31,21 @@
   ;; Select the first tab.
   (tab-bar-select-tab-by-name (caar my-tab-bar-layout)))
 
-(use-package
- emacs
- :ensure nil
- :custom
+(setq
  ;; Show tab number.
- (tab-bar-tab-hints t)
- (tab-bar-new-tab-choice "*scratch*")
- :config
- (tab-bar-mode 1)
- ;; We cannot use :hook as it implies :defer, and emacs is not a package we can actually load.
- (add-hook 'after-init-hook #'my-tab-bar-reset)
- ;; Shadow M-1, M-2, and so on, which are bound to digit-argument by default.
- (dotimes (i 9)
-   (let ((n (+ 1 i)))
-     (keymap-global-set
-      (format "M-%d" n)
-      (lambda ()
-              (interactive)
-              (tab-bar-select-tab n))))))
+ tab-bar-tab-hints t
+ tab-bar-new-tab-choice "*scratch*")
+
+(tab-bar-mode 1)
+(add-hook 'after-init-hook #'my-tab-bar-reset)
+;; Shadow M-1, M-2, and so on, which are bound to digit-argument by default.
+(dotimes (i 9)
+  (let ((n (+ 1 i)))
+    (keymap-global-set
+     (format "M-%d" n)
+     (lambda ()
+             (interactive)
+             (tab-bar-select-tab n)))))
 
 (provide 'init-tab-bar)
 ;;; init-tab-bar.el ends here

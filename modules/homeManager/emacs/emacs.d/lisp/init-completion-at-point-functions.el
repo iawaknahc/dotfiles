@@ -69,12 +69,11 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
       ;; Put cape-file at the front because it has several trigger prefixes, with one of them being `/` (which is just 1).
       (setq-local completion-at-point-functions (list #'cape-file prefix-length-enforced t)))))
 
-(use-package
-  cape
-  :hook (after-change-major-mode-hook . my/cape-after-change-major-mode-hook)
-  :custom
-  (cape-file-directory #'my/resolve-directory-before-point)
-  (cape-file-prefix '("/" "~/" "./" "../")))
+(setq
+ cape-file-directory #'my/resolve-directory-before-point
+ cape-file-prefix '("/" "~/" "./" "../"))
+
+(add-hook 'after-change-major-mode-hook #'my/cape-after-change-major-mode-hook)
 
 (provide 'init-completion-at-point-functions)
 ;;; init-completion-at-point-functions.el ends here

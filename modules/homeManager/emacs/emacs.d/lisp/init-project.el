@@ -13,11 +13,8 @@
   "An :filter-return advice to project-buffers that also check buffer-file-name to be non-nil."
   (seq-filter (lambda (b) (buffer-file-name b)) buffers))
 
-(use-package
- project
- :ensure nil
- :config
- (advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return))
+(require 'project) ; because project-buffers is not autoloaded.
+(advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return)
 
 (provide 'init-project)
 ;;; init-project.el ends here
