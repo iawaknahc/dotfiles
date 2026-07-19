@@ -13,6 +13,9 @@
 ;; Namely, it can only display inline message where point is, and
 ;; the displayed message must be below the current line.
 ;;
+;; The Emacs Lisp checker has a limitation of emitting false positives on autoloaded symbols.
+;; The issue cannot be worked around even with `flycheck-emacs-lisp-initialize-packages' or `flycheck-emacs-lisp-load-path'.
+;; See https://github.com/flycheck/flycheck/issues/2063
 ;;; Code:
 
 (add-hook 'prog-mode-hook #'flycheck-mode)
@@ -21,7 +24,12 @@
 (setq
  flycheck-indication-mode 'left-margin
  ;; Display error at point without delay.
- flycheck-display-errors-delay 0)
+ flycheck-display-errors-delay 0
+ ;; Always initialize packages because I manage my configuration with Nix.
+ ;; The source of the configuration does not appear in user-init-file or user-emacs-directory.
+ flycheck-emacs-lisp-initialize-packages t
+ ;; Use the same load path.
+ flycheck-emacs-lisp-load-path 'inherit)
 ;; FIXME: flycheck 37.0 has flycheck-error-list-display-buffer-action.
 (add-to-list
  'display-buffer-alist
