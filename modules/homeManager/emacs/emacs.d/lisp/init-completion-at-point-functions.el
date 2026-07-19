@@ -52,9 +52,9 @@ cape-wrap-super can only merge capf that have the same beginning position.
 See https://github.com/minad/cape/blob/2.7/cape.el#L941"
   ;; It is important to check the major mode, otherwise all minibuffers will have `completion-at-point-functions' set, and
   ;; Corfu will interfere with Vertico.
-  (if (derived-mode-p '(prog-mode text-mode))
+  (when (derived-mode-p '(prog-mode text-mode))
       ;; add-hook takes care of making completion-at-point-functions a buffer-local variable, and add t at the end.
-      (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
+    (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
     ;; Then we merge whatever appears in completion-at-point-functions except the last element (which is t).
     (let* ((without-t (remove t completion-at-point-functions))
            (merged (apply #'cape-capf-super without-t))
