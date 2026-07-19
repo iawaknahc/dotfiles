@@ -13,8 +13,7 @@ require("conform").setup({
     typescriptreact = prettier,
     css = prettier,
     -- One caveat of using cljfmt to format Hy is that f-string `f""` will be formatted to `f ""`, thus broken.
-    hy = { "cljfmt" },
-    lisp = { "cljfmt" },
+    -- One caveat of using cljfmt to format Elisp is that the comma in backtick quote forms will be deleted.
     swift = { "swiftformat" },
     nu = { "nufmt" },
     -- FIXME: Ideally we should use beancount-language-server to do the formatting. But there is a bug https://github.com/polarmutex/beancount-language-server/issues/874

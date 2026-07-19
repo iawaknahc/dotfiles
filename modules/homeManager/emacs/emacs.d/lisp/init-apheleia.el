@@ -14,8 +14,6 @@
        '(ruff-isort ruff))
  (setf (alist-get 'python-ts-mode apheleia-mode-alist)
        '(ruff-isort ruff))
- (setf (alist-get 'emacs-lisp-mode apheleia-mode-alist)
-       'cljfmt)
  (push '(nushell-ts-mode . nufmt) apheleia-mode-alist)
  (push '(fennel-mode . fnlfmt) apheleia-mode-alist))
 
