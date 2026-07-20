@@ -30,6 +30,7 @@
 (require 'init-info)
 (require 'init-eldoc)
 (require 'init-eval-expression)
+(require 'init-compilation-mode)
 (require 'init-grep-mode)
 
 ;; Configure completion.
