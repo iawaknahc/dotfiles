@@ -66,6 +66,7 @@ dabbrev
 dadbod
 dartls
 dbui
+deadgrep
 debugpy
 defalias
 defun
@@ -270,6 +271,7 @@ preselect
 preselects
 prettierd
 pricehist
+proj
 prolog
 propertize
 pubin
@@ -286,6 +288,7 @@ recentf
 redrawstatus
 reedline
 rgi
+ripgrep
 rustfmt
 screenpos
 scrolloff

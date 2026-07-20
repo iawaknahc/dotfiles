@@ -15,7 +15,6 @@
  `(,(rx string-start "*eldoc")
    (display-buffer-reuse-window display-buffer-in-side-window)
    (side . bottom)
-   (reusable-frames . visible)
    (window-height . 0.2)))
 
 (provide 'init-eldoc)

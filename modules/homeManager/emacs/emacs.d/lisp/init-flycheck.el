@@ -36,7 +36,7 @@
  `(,(rx string-start "*Flycheck errors*" string-end)
    (display-buffer-reuse-window display-buffer-in-side-window)
    (side . bottom)
-   (window-height . 0.25)))
+   (window-height . 0.33)))
 
 (defun my/flycheck-error-format-message-and-id (err &optional _include-snippet)
   "Override flycheck-error-format-message-and-id.
