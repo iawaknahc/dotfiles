@@ -59,6 +59,9 @@
       # Auto-format on save
       apheleia
 
+      # FIXME: Switch to grep-edit-mode in Emacs 31.
+      wgrep
+
       # Modes
       fennel-mode
       fish-mode

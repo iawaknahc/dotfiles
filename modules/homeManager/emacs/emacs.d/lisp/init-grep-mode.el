@@ -19,17 +19,42 @@
 ;; This is supported by `grep-mode' out of the box.
 ;; C-u g brings up a minibuffer with the previous command pre-filled.
 ;;
+;; Grug-far.nvim is a Neovim plugin is similar to grep-mode, and it has native support for type filter and paths.
+;; To replicate it, we can append the type filter and paths after the regexp.
+;; When `grep' is called interactively, the prompt is pre-filled with `grep-command', like this:
+;;
+;;  rg --color=auto ... --regexp
+;;
+;; Let's say we want to search "local" in all Lua files rooted at ./a/b,
+;; we will type in:
+;;  rg --color=auto ... --regexp local --type lua ./a/b
+;;
 ;;; Code:
 
 (setq
+ ;; Do not ask to save buffers before search.
  grep-save-buffers nil
+ ;; Suppress appending /dev/null to `grep-command'.
  grep-use-null-device nil
+ ;; This corresponds to --null in `grep-command'.
  grep-use-null-filename-separator t
+ ;; This corresponds to --color=auto in `grep-command'.
+ grep-highlight-matches 'auto
+ ;; Also set `grep-program' to match `grep-command'.
+ ;; `grep-program' is not actually used because `grep-command' is set.
+ grep-program "rg"
+ ;; <C> is not included because we have inlined the options.
+ ;; <X> is not included because we do not support it.
+ ;; <N> is not included because `grep-use-null-device' is nil.
+ ;; <R> is where the search regexp should go.
+ ;; <F> is where we put type filter and paths.
+ ;; `grep-template' is not actually used because `grep-command' is set.
+ grep-template "rg --color=auto --no-heading --with-filename --line-number --null --regexp <R> <F>"
  grep-command "rg --color=auto --no-heading --with-filename --line-number --null --regexp ")
 
 (defun my/grep-around (f &rest args)
-  (let* ((proj (project-current))
-         (proj-root (or (and proj (project-root proj)) default-directory))
+  (let* ((proj (or (project-current) (error "Running grep without a project is not supported. You would be running grep rooted at your HOME directory.")))
+         (proj-root (project-root proj))
          (default-directory (expand-file-name proj-root)))
     (apply f args)))
 (advice-add 'grep :around #'my/grep-around)

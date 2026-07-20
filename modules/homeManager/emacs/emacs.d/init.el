@@ -59,6 +59,10 @@
 ;; Configure on-the-fly checking.
 (require 'init-flycheck)
 
+;; FIXME: Switch to grep-edit-mode in Emacs 31.
+;; Configure wgrep.el
+(require 'init-wgrep)
+
 ;; Configure rainbow parenthesis.
 (require 'init-rainbow-delimiters)
 

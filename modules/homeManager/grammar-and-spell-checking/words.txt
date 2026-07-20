@@ -148,6 +148,7 @@ glyphless
 gnormal
 gopls
 grepprg
+grug
 gsub
 guicursor
 gvisual
@@ -367,6 +368,7 @@ vsplit
 vtsls
 webike
 wezterm
+wgrep
 wildmode
 winbar
 winborder
