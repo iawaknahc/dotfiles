@@ -9,7 +9,7 @@
  ;; Make it work for Dired buffers.
  global-auto-revert-non-file-buffers t)
 
-(global-auto-revert-mode 1)
+(add-hook 'after-init-hook #'global-auto-revert-mode)
 
 (provide 'init-auto-revert-mode)
 ;;; init-auto-revert-mode.el ends here

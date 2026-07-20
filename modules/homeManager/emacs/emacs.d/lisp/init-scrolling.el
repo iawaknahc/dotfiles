@@ -15,7 +15,7 @@
 (keymap-global-set "<remap> <scroll-up-command>" #'pixel-scroll-interpolate-down)
 (keymap-global-set "<remap> <scroll-down-command>" #'pixel-scroll-interpolate-up)
 
-(ultra-scroll-mode 1)
+(add-hook 'after-init-hook #'ultra-scroll-mode)
 
 (provide 'init-scrolling)
 ;;; init-scrolling.el ends here

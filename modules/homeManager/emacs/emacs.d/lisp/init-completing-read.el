@@ -19,7 +19,7 @@
  ;; Also, unlike Corfu, in the minibuffer, I am expected to select something, so it is okay to preselect the first choice.
  vertico-preselect 'first)
 
-(vertico-mode 1)
+(add-hook 'after-init-hook #'vertico-mode)
 
 (provide 'init-completing-read)
 ;;; init-completing-read.el ends here

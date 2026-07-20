@@ -6,7 +6,6 @@
   "Match COMPONENT as a literal suffix string."
   `(seq (literal ,component) string-end))
 
-(require 'orderless) ; because orderless-affix-dispatch-alist is not autoloaded.
 (setq
  ;; Use Orderless everything.
  completion-styles '(orderless basic)
@@ -21,9 +20,10 @@
  ;; Note that corfu-separator is left unchanged and set to SPC by default.
  orderless-component-separator (rx (+ (in "- _"))))
 
-;; Add `foo$` to match the end of the candidate literally.
-;; No idea why it is not included by default while `^foo` is included.
-(add-to-list 'orderless-affix-dispatch-alist `(?$ . ,#'my/orderless-literal-suffix))
+(with-eval-after-load 'orderless
+  ;; Add `foo$` to match the end of the candidate literally.
+  ;; No idea why it is not included by default while `^foo` is included.
+  (add-to-list 'orderless-affix-dispatch-alist `(?$ . ,#'my/orderless-literal-suffix)))
 
 (provide 'init-completion-styles)
 ;;; init-completion-styles.el ends here

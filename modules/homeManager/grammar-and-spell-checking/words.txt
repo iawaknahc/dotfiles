@@ -2,6 +2,7 @@ addext
 akey
 alacritty
 alist
+alpheleia
 apheleia
 atuin
 augroup

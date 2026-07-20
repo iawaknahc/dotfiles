@@ -10,11 +10,13 @@
 ;; Given that special buffers like the buffer list, scratch has no file associated with them,
 ;; a simple heuristic is to also check buffer-file-name of the buffer.
 (defun my/project-buffers-filter-return (buffers)
-  "An :filter-return advice to project-buffers that also check buffer-file-name to be non-nil."
+  "An :filter-return advice to project-buffers.
+It calls function `buffer-file-name' for each buffer in BUFFERS,
+and ensures it is non-nil."
   (seq-filter (lambda (b) (buffer-file-name b)) buffers))
 
-(require 'project) ; because project-buffers is not autoloaded.
-(advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return)
+(with-eval-after-load 'project
+  (advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return))
 
 (provide 'init-project)
 ;;; init-project.el ends here

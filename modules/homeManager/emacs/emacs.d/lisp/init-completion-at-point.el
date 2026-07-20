@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'corfu) ; because corfu-sort-length-alpha is not autoloaded.
+(autoload 'corfu-sort-length-alpha "corfu" "Run (require corfu) to see the actual documentation")
 (setq
  ;; Preselect the prompt, that is, what was typed.
  ;; Use corfu-next select the first candidate.
@@ -12,24 +12,27 @@
  ;; cape-capf-super unconditionally set :display-sort-function to identity.
  ;; So we revert to use the default sort function.
  corfu-sort-override-function #'corfu-sort-length-alpha)
-(keymap-unset corfu-map "TAB") ; TAB should be self-inserting.
-(keymap-unset corfu-map "RET") ; RET should be self-inserting.
-(keymap-unset corfu-map "<up>") ; <up> is an alias of C-p.
-(keymap-unset corfu-map "<down>") ; <down> is an alias of C-n.
-(keymap-unset corfu-map "M-n") ; M-n is an alias of C-n.
-(keymap-unset corfu-map "M-p") ; M-p is an alias of C-p.
-(keymap-unset corfu-map "M-SPC") ; M-SPC is Spotlight on macOS.
-(keymap-unset corfu-map "C-M-i") ; `C-M-i` is completion-at-point.
-(keymap-unset corfu-map "M-g") ; M-g is corfu-info-location, which I do not use.
-(keymap-unset corfu-map "M-h") ; M-g is corfu-info-documentation, which I do not use.
-(keymap-unset corfu-map "<remap> <move-beginning-of-line>")
-(keymap-unset corfu-map "<remap> <move-end-of-line>")
+
+(with-eval-after-load 'corfu
+  (keymap-unset corfu-map "TAB") ; TAB should be self-inserting.
+  (keymap-unset corfu-map "RET") ; RET should be self-inserting.
+  (keymap-unset corfu-map "<up>") ; <up> is an alias of C-p.
+  (keymap-unset corfu-map "<down>") ; <down> is an alias of C-n.
+  (keymap-unset corfu-map "M-n") ; M-n is an alias of C-n.
+  (keymap-unset corfu-map "M-p") ; M-p is an alias of C-p.
+  (keymap-unset corfu-map "M-SPC") ; M-SPC is Spotlight on macOS.
+  (keymap-unset corfu-map "C-M-i") ; `C-M-i` is completion-at-point.
+  (keymap-unset corfu-map "M-g") ; M-g is corfu-info-location, which I do not use.
+  (keymap-unset corfu-map "M-h") ; M-g is corfu-info-documentation, which I do not use.
+  (keymap-unset corfu-map "<remap> <move-beginning-of-line>")
+  (keymap-unset corfu-map "<remap> <move-end-of-line>"))
+
 ;; Enable Corfu mode in minibuffer where completion-at-point-functions is set, and in all buffers.
 ;; Previously I just enabled it in text-mode and prog-mode.
 ;; It does not come with an API to enable in minibuffer specifically.
 ;; So global-corfu-mode has to be used.
 ;; Enable in the minibuffer is essential for commands like M-:
-(global-corfu-mode 1)
+(add-hook 'after-init-hook #'global-corfu-mode)
 
 (setq
  corfu-auto t
@@ -43,7 +46,7 @@
  corfu-auto-trigger "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
 
 (setq corfu-popupinfo-delay '(0.1 . 0.1))
-(corfu-popupinfo-mode 1)
+(add-hook 'after-init-hook #'corfu-popupinfo-mode)
 
 (provide 'init-completion-at-point)
 ;;; init-completion-at-point.el ends here

@@ -2,12 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(global-diff-hl-mode 1)
-
 (setq diff-hl-flydiff-delay 0.1)
-(diff-hl-flydiff-mode 1)
+
+(add-hook 'after-init-hook #'global-diff-hl-mode)
+(add-hook 'after-init-hook #'diff-hl-flydiff-mode)
 ;; Use margin instead of fringe
-(diff-hl-margin-mode 1)
+(add-hook 'after-init-hook #'diff-hl-margin-mode)
 
 (provide 'init-diff-hl)
 ;;; init-diff-hl.el ends here
