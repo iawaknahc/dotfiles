@@ -4,6 +4,7 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; Configure features that come with Emacs.
 (require 'init-keymap)
 (require 'init-shell)
 (require 'init-auto-save-mode)
@@ -30,7 +31,7 @@
 (require 'init-eldoc)
 (require 'init-eval-expression)
 
-;; Completion
+;; Configure completion.
 (require 'init-completion-at-point)
 (require 'init-completion-at-point-functions)
 (require 'init-completing-read)
@@ -41,14 +42,29 @@
 (require 'init-embark)
 (require 'init-consult)
 
+;; Configure treesitter.
 (require 'init-treesitter)
+
+;; Configure scrolling.
 (require 'init-scrolling)
-(require 'init-mu4e)
-(require 'init-diff-hl)
+
+;; Configure modal editing.
 (require 'init-evil)
-(require 'init-rainbow-delimiters)
+
+;; Configure format after save.
 (require 'init-apheleia)
+
+;; Configure on-the-fly checking.
 (require 'init-flycheck)
+
+;; Configure rainbow parenthesis.
+(require 'init-rainbow-delimiters)
+
+;; Configure Git integration.
+(require 'init-diff-hl)
+
+;; Configure email client.
+(require 'init-mu4e)
 
 (provide 'init)
 ;;; init.el ends here
