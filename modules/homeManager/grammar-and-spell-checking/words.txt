@@ -67,6 +67,7 @@ dadbod
 dartls
 dbui
 debugpy
+defalias
 defun
 defvar
 deno
