@@ -28,6 +28,7 @@
 (require 'init-help)
 (require 'init-info)
 (require 'init-eldoc)
+(require 'init-eval-expression)
 
 ;; Completion
 (require 'init-completion-at-point)
