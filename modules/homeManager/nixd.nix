@@ -44,4 +44,27 @@ in
       },
     }
   '';
+
+  home.file.".emacs.d/lisp/init-lsp-mode-nixd.el".text = ''
+    ;;; -*- lexical-binding: t -*-
+
+    (with-eval-after-load 'lsp-mode
+      (with-eval-after-load 'lsp-nix
+        (lsp-defcustom lsp-nix-nixd-darwin-options-expr nil
+          "Option set for nix-darwin option completion."
+          :type 'string
+          :group 'lsp-nix-nixd
+          :lsp-path "nixd.options.nix-darwin.expr"
+          :package-version '(lsp-mode . "10.0.0"))
+
+        (setq
+          lsp-nix-nixd-formatting-command [ "nixfmt" ]
+          lsp-nix-nixd-nixpkgs-expr "(builtins.getFlake (builtins.toString \"${flake}\")).homeConfigurations.\"${config.home.username}@${hostname}\".pkgs"
+          lsp-nix-nixd-home-manager-options-expr "(builtins.getFlake (builtins.toString \"${flake}\")).homeConfigurations.\"${config.home.username}@${hostname}\".options"
+          lsp-nix-nixd-nixos-options-expr "(builtins.getFlake (builtins.toString \"${flake}\")).nixosConfigurations.nas.options"
+          lsp-nix-nixd-darwin-options-expr "(builtins.getFlake (builtins.toString \"${flake}\")).darwinConfigurations.\"${hostname}\".options"
+          lsp-nix-nixd-server-arguments '("--log=verbose"))))
+
+    (provide 'init-lsp-mode-nixd)
+  '';
 }

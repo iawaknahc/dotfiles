@@ -4,6 +4,7 @@ alacritty
 alist
 alpheleia
 apheleia
+aset
 atuin
 augroup
 autocmd
@@ -86,6 +87,7 @@ dolist
 dotimes
 duckdb
 dwim
+eglot
 eldoc
 elec
 elisp
@@ -136,6 +138,7 @@ genpkey
 getcmdline
 getcmdtype
 getcwd
+gethash
 getpass
 getpos
 getreg
@@ -154,6 +157,7 @@ guicursor
 gvisual
 hadolint
 hammerspoon
+headerline
 healthcheck
 helpgrep
 hexkey
@@ -285,6 +289,7 @@ pythonpath
 pyxirr
 qflist
 qpdf
+rassumfrassum
 recentf
 redrawstatus
 reedline
