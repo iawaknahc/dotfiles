@@ -75,6 +75,7 @@ vim.lsp.enable("denols")
 
 -- Language servers that should run alongside with a main language server.
 vim.lsp.enable("eslint")
+vim.lsp.enable("ruff")
 
 local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
 local function format_on_save(lsp_name, pattern)

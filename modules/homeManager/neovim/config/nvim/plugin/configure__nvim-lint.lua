@@ -1,7 +1,6 @@
 require("lint").linters_by_ft = {
   sh = { "shellcheck" },
   dockerfile = { "hadolint" },
-  python = { "ruff" },
 }
 
 local function codespell(ev)

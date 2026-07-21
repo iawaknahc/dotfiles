@@ -10,7 +10,7 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test shellcheck stylua-check shfmt-check ruff-fmt-check nufmt-check pyrefly ty
+check: harper codebook codespell test shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty
 
 # Run checker `shellcheck`
 shellcheck:
@@ -24,8 +24,12 @@ shfmt-check:
 stylua-check:
     find . -type f -name 'stylua.toml' -exec dirname {} \; | xargs stylua --check
 
+# Run checker `ruff check`
+ruff-check:
+    ruff check
+
 # Run checker `ruff format --check`
-ruff-fmt-check:
+ruff-format-check:
     ruff format --check
 
 # Run checker `nufmt --dry-run`
@@ -61,7 +65,7 @@ ty:
     ty check
 
 # Run all formatters
-format: shfmt stylua-fmt nufmt ruff-fmt
+format: shfmt stylua-fmt nufmt ruff-format
 
 # Run formatter `shfmt --write --list`
 shfmt:
@@ -76,7 +80,7 @@ nufmt:
     fd --hidden --type file --extension nu | xargs nufmt
 
 # Run formatter `ruff format`.
-ruff-fmt:
+ruff-format:
     ruff format
 
 # Copy the current config of Alfred to here for git-diff

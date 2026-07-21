@@ -36,7 +36,7 @@ def main():
                 }
             )
         )
-    except:
+    except subprocess.CalledProcessError:
         print(
             json.dumps(
                 {
