@@ -116,6 +116,7 @@ fixendofline
 flycheck
 flydiff
 flymake
+fmqd
 fnl
 fnlfmt
 focusable
@@ -291,6 +292,7 @@ pythonpath
 pyxirr
 qflist
 qpdf
+quickdef
 rassumfrassum
 recentf
 redrawstatus

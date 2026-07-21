@@ -59,6 +59,9 @@
 ;; Configure format after save.
 (require 'init-apheleia)
 
+;; Configure additional Flymake backends
+(require 'init-flymake-quickdef)
+
 ;; FIXME: Switch to grep-edit-mode in Emacs 31.
 ;; Configure wgrep.el
 (require 'init-wgrep)

@@ -56,6 +56,9 @@
       # Auto-format on save
       apheleia
 
+      # Define Flymake backends
+      flymake-quickdef
+
       # FIXME: Switch to grep-edit-mode in Emacs 31.
       wgrep
 

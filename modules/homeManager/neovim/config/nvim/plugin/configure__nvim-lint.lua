@@ -4,15 +4,22 @@ require("lint").linters_by_ft = {
   python = { "ruff" },
 }
 
+local function codespell(ev)
+  -- Run if the file is not big, and it is a normal buffer.
+  if vim.bo[ev.buf].filetype ~= "bigfile" and vim.bo[ev.buf].buftype == "" then
+    require("lint").try_lint({ "codespell" }, { ignore_errors = true })
+  end
+end
+
 local lintGroup = vim.api.nvim_create_augroup("MyLintAutoCommands", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = lintGroup,
+  callback = codespell,
+})
+
 vim.api.nvim_create_autocmd("InsertLeave", {
   group = lintGroup,
-  callback = function(ev)
-    -- Run if the file is not big.
-    if vim.bo[ev.buf].filetype ~= "bigfile" then
-      require("lint").try_lint({ "codespell" }, { ignore_errors = true })
-    end
-  end,
+  callback = codespell,
 })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
