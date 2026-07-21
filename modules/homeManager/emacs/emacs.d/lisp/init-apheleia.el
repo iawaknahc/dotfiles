@@ -94,7 +94,7 @@
      ;; Lisp
      (lisp-mode . lisp-indent)
      (emacs-lisp-mode . lisp-indent)
-     (lisp-mode . lisp-indent)
+     (common-lisp-mode . lisp-indent)
      ;; Prettier
      (css-mode . prettier-css)
      (css-ts-mode . prettier-css)
