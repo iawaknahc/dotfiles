@@ -9,6 +9,8 @@
  mu4e-context-policy 'pick-first
  mu4e-compose-context-policy 'ask-if-none
  mu4e-view-scroll-to-next nil
+ ;; Do not echo messages to echo area.
+ mu4e-hide-index-messages t
  ;; 2006-01-02
  mu4e-headers-date-format "%F"
  mu4e-headers-time-format "%T"
