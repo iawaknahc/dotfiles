@@ -21,10 +21,6 @@
          (msg (match-string 2)))
     (list fmqd-source beg end type (list "codespell" nil msg))))
 
-;; cat ./a/Dockerfile | hadolint --format tty --no-color --file-path-in-report hello -
-;; -:3 DL3003 warning: Use WORKDIR to switch to a directory
-;; -:3 SC2164 warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
-
 (flymake-quickdef-backend
   flymake-hadolint
   "Flymake backend for Hadolint."
@@ -51,11 +47,12 @@
          (end (cdr pos))
          (code (match-string 2))
          (level (match-string 3))
-         (type (cond ((eq "error" level) :error)
-                     ((eq "warning" level) :warning)
-                     ((eq "info" level) :note)
-                     ((eq "style" level) :note)
-                     (t :error)))
+         (type (pcase level
+                 ("error" :error)
+                 ("warning" :warning)
+                 ("info" :note)
+                 ("style" :note)
+                 (_ :error)))
          (msg (match-string 4)))
     (list fmqd-source beg end type (list "hadolint" code msg))))
 
