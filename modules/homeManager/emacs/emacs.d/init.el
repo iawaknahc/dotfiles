@@ -18,6 +18,7 @@
 (require 'init-tab-bar)
 (require 'init-echo-area)
 (require 'init-display-line-numbers-mode)
+(require 'init-margin)
 (require 'init-what-cursor-position)
 (require 'init-dired)
 (require 'init-recentf)
@@ -32,6 +33,7 @@
 (require 'init-eval-expression)
 (require 'init-compilation-mode)
 (require 'init-grep-mode)
+(require 'init-flymake)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
@@ -57,7 +59,7 @@
 (require 'init-apheleia)
 
 ;; Configure on-the-fly checking.
-(require 'init-flycheck)
+;; (require 'init-flycheck)
 
 ;; FIXME: Switch to grep-edit-mode in Emacs 31.
 ;; Configure wgrep.el
