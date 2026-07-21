@@ -27,6 +27,7 @@
 (require 'init-show-paren)
 (require 'init-electric-pair-mode)
 (require 'init-indent-tabs-mode)
+(require 'init-sh-mode)
 (require 'init-help)
 (require 'init-info)
 (require 'init-eldoc)

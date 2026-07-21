@@ -313,6 +313,7 @@ setuptools
 shada
 shellcheck
 shellcmdline
+shfmt
 shiftwidth
 shlvl
 showbreak

@@ -22,5 +22,6 @@ require("conform").setup({
     -- Since our Git hooks run the CLI version of Stylua, we use Stylua via CLI.
     -- See https://github.com/JohnnyMorganz/StyLua/issues/1122
     lua = { "stylua" },
+    sh = { "shfmt" },
   },
 })

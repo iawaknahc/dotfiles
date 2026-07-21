@@ -76,6 +76,9 @@
   (setq
    apheleia-mode-alist
    '(
+     ;; Shell
+     (sh-mode . shfmt)
+     (bash-ts-mode . shfmt)
      ;; Python
      (python-mode . (ruff-isort ruff))
      (python-ts-mode . (ruff-isort ruff))
