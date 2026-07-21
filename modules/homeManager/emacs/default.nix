@@ -47,9 +47,6 @@
       consult
       embark-consult
 
-      # Flymake
-      flycheck
-
       # Tree-sitter
       treesit-grammars.with-all-grammars
 
