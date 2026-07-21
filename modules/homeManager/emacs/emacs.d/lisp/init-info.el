@@ -2,12 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(defun my/info-apropos (string)
-  "Like `info-apropos', but defaults to the symbol at point."
+(defun my/info-apropos (s)
+  "Like `info-apropos', but defaults to S at point."
   (interactive
    (let ((sym (thing-at-point 'symbol t)))
      (list (read-string (format-prompt "Info apropos" sym) nil nil sym))))
-  (info-apropos string))
+  (info-apropos s))
 
 (keymap-global-set "C-c i" #'my/info-apropos)
 

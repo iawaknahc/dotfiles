@@ -10,7 +10,11 @@ clean:
 setup: clean generate-emmyrc-json
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty
+check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty
+
+# Run checker `elisp-checkdoc`
+elisp-checkdoc:
+    fd --hidden --type file --ignore-file elisp-checkdoc-ignore --extension el | xargs elisp-checkdoc.el
 
 # Run checker `shellcheck`
 shellcheck:

@@ -53,7 +53,9 @@
  grep-command "rg --color=auto --no-heading --with-filename --line-number --null --regexp ")
 
 (defun my/grep-around (f &rest args)
-  (let* ((proj (or (project-current) (error "Running grep without a project is not supported. You would be running grep rooted at your HOME directory.")))
+  "An :around advice of `grep'.
+Apply F with ARGS."
+  (let* ((proj (or (project-current) (error "Running grep without a project is unsupported")))
          (proj-root (project-root proj))
          (default-directory (expand-file-name proj-root)))
     (apply f args)))

@@ -3,12 +3,14 @@
 ;;; Code:
 
 (defun my/evil-search-next (f &rest args)
-  "An :around advice of evil-search-next to make it always search forward."
+  "An :around advice of `evil-search-next' to make it always search forward.
+Apply F with ARGS."
   (let ((isearch-forward t))
     (apply f args)))
 
 (defun my/evil-search-previous (f &rest args)
-  "An :around advice of evil-search-previous to make to always search backward."
+  "An :around advice of `evil-search-previous' to make to always search backward.
+Apply F with ARGS."
   ;; This is intentionally.
   ;; evil-search-previous negates isearch-forward internally.
   ;; So we always set it to t.

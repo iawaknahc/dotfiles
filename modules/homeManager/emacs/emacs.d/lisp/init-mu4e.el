@@ -63,8 +63,9 @@
     :shortname "Mailbox"
     :help "The first path component of :maildir"
     :function (lambda (msg)
-                      (let* ((maildir (mu4e-message-field msg :maildir)))
-                        (nth 1 (file-name-split maildir)))))))
+                (let* ((maildir (mu4e-message-field msg :maildir)))
+                  (nth 1 (file-name-split maildir)))))))
 (require 'init-mu4e-contexts)
 
 (provide 'init-mu4e)
+;;; init-mu4e.el ends here
