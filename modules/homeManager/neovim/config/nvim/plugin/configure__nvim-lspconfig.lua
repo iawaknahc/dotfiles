@@ -32,42 +32,32 @@
 --     end
 --   end,
 -- })
+--
 
-vim.lsp.enable("awk_ls")
-vim.lsp.enable("bashls")
-vim.lsp.enable("beancount")
-vim.lsp.enable("clojure_lsp")
+-- Language servers that should always run.
 vim.lsp.enable("codebook")
+vim.lsp.enable("harper_ls")
+vim.lsp.enable("typos_lsp")
+
+-- Language servers that correspond to a specific filetype.
+vim.lsp.enable("beancount")
 vim.lsp.enable("cssls")
 vim.lsp.enable("dartls")
-vim.lsp.enable("denols")
-vim.lsp.enable("docker_compose_language_service")
-vim.lsp.enable("dockerls")
 vim.lsp.enable("emmylua_ls")
-vim.lsp.enable("eslint")
 vim.lsp.enable("fennel_ls")
 vim.lsp.enable("fish_lsp")
 vim.lsp.enable("gopls")
-vim.lsp.enable("graphql")
-vim.lsp.enable("harper_ls")
 vim.lsp.enable("html")
 vim.lsp.enable("jdtls")
 vim.lsp.enable("jsonls")
-vim.lsp.enable("markdown_oxide")
 vim.lsp.enable("nil_ls")
 vim.lsp.enable("nixd")
 vim.lsp.enable("nushell")
 vim.lsp.enable("rust_analyzer")
-vim.lsp.enable("sourcekit")
-vim.lsp.enable("sqls")
-vim.lsp.enable("stylua")
-vim.lsp.enable("tailwindcss")
 vim.lsp.enable("taplo")
-vim.lsp.enable("typos_lsp")
 vim.lsp.enable("vtsls")
 vim.lsp.enable("yamlls")
 vim.lsp.enable("zls")
-
 -- Since I installed and enabled these 4 LSP servers, I noticed a lag when
 -- a Python file edited in a vertical split.
 -- I did some bisects and found that the minimal reproducible configuration is just basedpyright or pyright itself.
@@ -76,6 +66,15 @@ vim.lsp.enable("zls")
 -- vim.lsp.enable("pyright")
 vim.lsp.enable("pyrefly")
 vim.lsp.enable("ty")
+
+-- Language servers that correspond to a number of filetypes.
+vim.lsp.enable("tailwindcss")
+
+-- Language servers that correspond to a specific filetype in a specific environment.
+vim.lsp.enable("denols")
+
+-- Language servers that should run alongside with a main language server.
+vim.lsp.enable("eslint")
 
 local group = vim.api.nvim_create_augroup("MyLSP", { clear = true })
 local function format_on_save(lsp_name, pattern)
@@ -91,15 +90,9 @@ local function format_on_save(lsp_name, pattern)
   })
 end
 
-format_on_save("bashls", "*.sh")
-format_on_save("clojure_lsp", "*.clj")
 format_on_save("dartls", "*.dart")
 format_on_save("fish_lsp", "*.fish")
 format_on_save("gopls", "*.go,go.mod,go.sum,go.work,go.work.sum")
 format_on_save("nixd", "*.nix")
 format_on_save("rust_analyzer", "*.rs")
--- FIXME: Stylua, when running as an LSP server, behaves differently from running as a CLI command.
--- Since our Git hooks run the CLI version of Stylua, we use Stylua via CLI.
--- See https://github.com/JohnnyMorganz/StyLua/issues/1122
--- format_on_save("stylua", "*.lua")
 format_on_save("zls", "*.zig")

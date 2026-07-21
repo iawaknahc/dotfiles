@@ -4,6 +4,5 @@
     gawk # provides awk
     nawk
     mawk
-    awk-language-server
   ];
 }
