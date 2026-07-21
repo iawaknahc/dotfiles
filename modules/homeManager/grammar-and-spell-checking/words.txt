@@ -246,6 +246,7 @@ nop
 noselect
 nounihan
 nowinfixheight
+npx
 nufmt
 nukta
 numberwidth

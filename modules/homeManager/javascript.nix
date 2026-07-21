@@ -5,5 +5,6 @@
     deno
     nodejs
     yarn
+    prettier
   ];
 }

@@ -63,6 +63,7 @@
       wgrep
 
       # Modes
+      beancount
       fennel-mode
       fish-mode
       just-ts-mode
