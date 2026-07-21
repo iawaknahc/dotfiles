@@ -30,11 +30,14 @@ Turn DIAG into text.
 Note that this function is used in many places, for example,
 ElDoc, end-of-line, tabulated list.
 In these contexts, the level and the line are shown already.
-So the text only contains the backend, the code, and the message."
-  (let* ((code (flymake-diagnostic-code diag))
+So the text only contains the origin (or the backend), the code (optional), and the message."
+  (let* ((origin (flymake-diagnostic-origin diag))
+         (code (flymake-diagnostic-code diag))
          (msg (flymake-diagnostic-message diag))
          (backend (flymake-diagnostic-backend diag)))
-    (cond (code (format "(%s)[%s] %s" backend code msg))
+    (cond ((and origin code) (format "(%s)(%s) %s" origin code msg))
+          (origin (format "(%s) %s" origin msg))
+          (code (format "(%s)(%s) %s" backend code msg))
           (t (format "(%s) %s" backend msg)))))
 (advice-add 'flymake-diagnostic-text :override #'my/flymake-diagnostic-text)
 
