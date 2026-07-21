@@ -407,10 +407,14 @@ in
             # mbsync requires explictitly enabled LOGIN because TLS is not used.
             AuthMechs = "LOGIN";
           };
-          imap.host = "localhost";
+          # The host has to be 127.0.0.1, not localhost.
+          # Otherwise, mbsync will try to connect via ::1, which davmail does not listen on.
+          imap.host = "127.0.0.1";
           imap.port = value.imapPort;
           imap.tls.enable = false;
-          smtp.host = "localhost";
+          # The host has to be 127.0.0.1, not localhost.
+          # Otherwise, mbsync will try to connect via ::1, which davmail does not listen on.
+          smtp.host = "127.0.0.1";
           smtp.port = value.smtpPort;
           smtp.tls.enable = false;
         })
