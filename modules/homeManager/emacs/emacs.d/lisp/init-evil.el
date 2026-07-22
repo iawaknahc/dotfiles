@@ -19,9 +19,17 @@ Apply F with ARGS."
 
 ;; Set these before (require 'evil) because some variables have to be set before evil-mode is enabled.
 (setq
- ;; Emacs by default.
+ ;; The default state is emacs state.
  evil-default-state 'emacs
- ;; Make insert state just like Emacs state.
+ ;; Never start with insert state.
+ evil-insert-state-modes nil
+ ;; Never start with motion state.
+ evil-motion-state-modes nil
+ ;; The default is emacs state already.
+ evil-emacs-state-modes nil
+ ;; Start in normal state if we are editing source code or text.
+ evil-normal-state-modes '(prog-mode text-mode)
+ ;; Make insert state just like emacs state.
  evil-disable-insert-state-bindings t
  ;; C-u to scroll half page.
  evil-want-C-u-scroll t
@@ -39,15 +47,6 @@ Apply F with ARGS."
    (require 'goto-chg)
    (require 'evil)
 
-   ;; Unless we are editing source code or text.
-   (evil-set-initial-state 'prog-mode 'normal)
-   (evil-set-initial-state 'text-mode 'normal)
-   ;; Evil has its own opinions on using insert state in some modes, revert them.
-   (dolist (mode evil-insert-state-modes)
-     (evil-set-initial-state mode 'emacs))
-   ;; Evil has its own opinions on using motion state in some modes, revert them.
-   (dolist (mode evil-motion-state-modes)
-     (evil-set-initial-state mode 'emacs))
    ;; Make n and N have deterministic direction.
    (advice-add 'evil-search-next :around #'my/evil-search-next)
    (advice-add 'evil-search-previous :around #'my/evil-search-previous)
