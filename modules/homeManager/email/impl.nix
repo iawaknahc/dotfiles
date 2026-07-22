@@ -301,7 +301,9 @@ in
           content = ''
             http_listen = "127.0.0.1:8001";
             https_listen = "127.0.0.1:8002";
-
+            auth_notify_cmd = "${pkgs.hammerspoon}/bin/hs -c \"hs.notify.new(function() hs.urlevent.openURL(_cli._args[6]) end, { title = _cli._args[5] }):send()\" -- $PIZAUTH_ACCOUNT $PIZAUTH_URL";
+            auth_notify_interval = 1m;
+            error_notify_cmd = "${pkgs.hammerspoon}/bin/hs -c \"hs.notify.new({ title = _cli._args[5], subTitle = _cli._args[6] }):send()\" -- $PIZAUTH_ACCOUNT $PIZAUTH_MSG";
           ''
           + lib.strings.concatStrings (
             lib.attrsets.mapAttrsToList (
@@ -362,7 +364,7 @@ in
             ];
             EnvironmentVariables = {
               # According to `man pizauth.conf`, pizauth reads SHELL to determine which shell to use.
-              SHELL = "${pkgs.bash}";
+              SHELL = "${pkgs.bash}/bin/bash";
             };
             KeepAlive = true;
             RunAtLoad = true;
