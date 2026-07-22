@@ -19,7 +19,7 @@
       "tcp://louischan-m4.tail78d407.ts.net:22000"
     ];
   };
-  services.syncthing.settings.folders."/data/louischan/obsidian/vaults/personal/" = {
+  services.syncthing.settings.folders."/data/syncthing/louischan/obsidian/vaults/personal/" = {
     id = "obsidian-personal";
     type = "sendreceive";
     devices = [
