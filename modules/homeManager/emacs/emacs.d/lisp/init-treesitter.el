@@ -19,6 +19,10 @@
 (require 'typescript-ts-mode) ; typescript-ts-mode is built-in but it is not autoloaded in 30.2.
 
 ;; FIXME: Revisit in Emacs 31 when treesit-enabled-modes is available.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/progmodes/go-ts-mode.el#L301
+(require 'go-ts-mode) ; go-ts-mode is built-in but it is not autoloaded in 30.2.
+
+;; FIXME: Revisit in Emacs 31 when treesit-enabled-modes is available.
 ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/progmodes/dockerfile-ts-mode.el#L170
 (require 'dockerfile-ts-mode)
 
