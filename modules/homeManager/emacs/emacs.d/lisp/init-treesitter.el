@@ -26,6 +26,9 @@
 ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/progmodes/dockerfile-ts-mode.el#L170
 (require 'dockerfile-ts-mode)
 
+;; Prefer python-ts-mode over python-mode.
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
 (setq treesit-font-lock-level 4)
 
 (provide 'init-treesitter)
