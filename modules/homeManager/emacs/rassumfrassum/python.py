@@ -10,3 +10,7 @@ def servers():
         common.harper(),
         common.typos(),
     ]
+
+
+def logic_class():
+    return common.HarperLogicClass
