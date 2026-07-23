@@ -19,6 +19,7 @@ let
   autobean_refactor = { callPackage }: callPackage ../../packages/autobean_refactor.nix { };
   autobean_format = { callPackage }: callPackage ../../packages/autobean_format.nix { };
   pyxirr = { callPackage }: callPackage ../../packages/pyxirr.nix { };
+  rassumfrassum = { callPackage }: callPackage ../../packages/rassumfrassum.nix { };
 in
 {
   # Add packages to this flake.
@@ -47,6 +48,7 @@ in
         autobean_refactor = autobean_refactor { callPackage = pkgs.python3Packages.callPackage; };
         autobean_format = autobean_format { callPackage = pkgs.python3Packages.callPackage; };
         pyxirr = pyxirr { callPackage = pkgs.python3Packages.callPackage; };
+        rassumfrassum = rassumfrassum { callPackage = pkgs.python3Packages.callPackage; };
       };
     };
 
@@ -59,6 +61,7 @@ in
         autobean_refactor = autobean_refactor { callPackage = pyfinal.callPackage; };
         autobean_format = autobean_format { callPackage = pyfinal.callPackage; };
         pyxirr = pyxirr { callPackage = pyfinal.callPackage; };
+        rassumfrassum = rassumfrassum { callPackage = pyfinal.callPackage; };
 
         # The docs/ directory of beanquery will be copied to site-packages/
         # which will clash with The docs/ directory of https://github.com/pyca/cryptography/tree/48.0.0/docs

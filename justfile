@@ -163,3 +163,4 @@ update-trivial-packages:
     nix-update autobean_refactor --flake
     nix-update autobean_format --flake
     nix-update pyxirr --flake
+    nix-update rassumfrassum --flake

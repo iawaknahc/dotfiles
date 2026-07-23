@@ -82,4 +82,15 @@
     # recursive is needed because .emacs.d/lisp may contain generated files.
     recursive = true;
   };
+  mypython.packages = [
+    (
+      python-pkgs: with python-pkgs; [
+        rassumfrassum
+      ]
+    )
+  ];
+  xdg.configFile."rassumfrassum" = {
+    source = ./rassumfrassum;
+    recursive = true;
+  };
 }
