@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from typing import Any, cast
 
 from rassumfrassum.frassum import LspLogic, Server
@@ -17,31 +19,10 @@ def typos() -> list[str]:
     return ["typos-lsp"]
 
 
-CONFIGURATION_HARPER_LS = {
-    "harper-ls": {
-        "linters": {
-            "ExpandTimeShorthands": True,
-            "UseTitleCase": False,
-            "SentenceCapitalization": False,
-            "ExpandControl": False,
-            "ExpandPrevious": False,
-            "MoreAdjective": False,
-            "ExpandArgument": False,
-            "SplitWords": False,
-            "UnclosedQuotes": False,
-            "ExpandStandardInputAndOutput": False,
-            "Spaces": False,
-            "SpellCheck": False,
-            "OrthographicConsistency": False,
-            "Dashes": False,
-            "EllipsisLength": False,
-            "ExpandMemoryShorthands": False,
-            "DisjointPrefixes": False,
-            "LongSentences": False,
-            "CapitalizePersonalPronouns": False,
-        }
-    },
-}
+with open(
+    Path.home() / ".config" / "rassumfrassum" / "harper-ls_configuration.json"
+) as f:
+    CONFIGURATION_HARPER_LS = json.load(f)
 
 
 def make_logic_class_for_static_configuration(

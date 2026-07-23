@@ -34,14 +34,16 @@ let
     "UseTitleCase" # See https://github.com/Automattic/harper/issues/2640
   ];
 
-  harper-ls_lspconfig = {
-    settings = {
-      harper-ls = {
-        linters = builtins.foldl' (
-          attrs: linter: attrs // { ${linter} = false; }
-        ) { } harperLintersToBeDisabled;
-      };
+  harper-ls_configuration = {
+    harper-ls = {
+      linters = builtins.foldl' (
+        attrs: linter: attrs // { ${linter} = false; }
+      ) { } harperLintersToBeDisabled;
     };
+  };
+
+  harper-ls_lspconfig = {
+    settings = harper-ls_configuration;
     # The default list from nvim-lspconfig is incomplete.
     # This list is up-to-date as of 2026-04-17.
     # https://writewithharper.com/docs/integrations/language-server#Supported-Languages
@@ -81,8 +83,13 @@ let
     ];
   };
 
-  harper-ls_lspconfig_json = pkgs.writeText "harper_ls.json" (builtins.toJSON harper-ls_lspconfig);
-  harper-ls_lspconfig_lua = pkgs.runCommand "harper_ls.lua" { } ''
+  harper-ls_configuration_json = pkgs.writeText "harper-ls_configuration.json" (
+    builtins.toJSON harper-ls_configuration
+  );
+  harper-ls_lspconfig_json = pkgs.writeText "harper-ls_lspconfig.json" (
+    builtins.toJSON harper-ls_lspconfig
+  );
+  harper-ls_lspconfig_lua = pkgs.runCommand "harper-ls_lspconfig.lua" { } ''
     printf "return " > $out
     "${pkgs.lua55Packages.cjson}"/bin/json2lua "${harper-ls_lspconfig_json}" >> $out
   '';
@@ -134,6 +141,10 @@ in
     #languagetool
     #ltex-ls-plus
   ];
+
+  xdg.configFile."rassumfrassum/harper-ls_configuration.json".source = "${
+    harper-ls_configuration_json
+  }";
 
   xdg.configFile."nvim/lsp/harper_ls.lua".source = "${harper-ls_lspconfig_lua}";
 
