@@ -13,11 +13,12 @@
                 python-mode-hook
                 python-ts-mode-hook
                 fish-mode-hook
-                nushell-ts-mode-hook))
+                nushell-ts-mode-hook
+                nix-ts-mode-hook))
   (add-hook hook #'eglot-ensure))
 
 ;; For these major modes, ask the language server to format the buffer.
-(dolist (hook '(go-ts-mode-hook fish-mode-hook))
+(dolist (hook '(go-ts-mode-hook fish-mode-hook nix-ts-mode-hook))
   (add-hook hook #'my/add-before-save-hook-for-eglot-format-buffer))
 
 ;; In beancount file, beancount-language-server reported aligned balance as inlay hint.
@@ -31,7 +32,8 @@
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
   (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
   (setf (alist-get 'fish-mode eglot-server-programs) '("rass" "fish"))
-  (setf (alist-get 'nushell-ts-mode eglot-server-programs) '("rass" "nushell")))
+  (setf (alist-get 'nushell-ts-mode eglot-server-programs) '("rass" "nushell"))
+  (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix")))
 
 (provide 'init-eglot)
 ;;; init-eglot.el ends here

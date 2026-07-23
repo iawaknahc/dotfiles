@@ -24,16 +24,20 @@ with open(
 ) as f:
     CONFIGURATION_HARPER_LS = json.load(f)
 
+with open(Path.home() / ".config" / "rassumfrassum" / "nixd-configuration.json") as f:
+    CONFIGURATION_NIXD = json.load(f)
+
 
 def make_logic_class_for_static_configuration(
     *,
     class_name: str,
     class_qualname: str,
+    super_class: type[LspLogic],
     server_regexp_str: str,
     server_name: str,
     configuration: dict[str, Any],
 ):
-    class StaticConfigurationLogicClass(LspLogic):
+    class StaticConfigurationLogicClass(super_class):  # ty:ignore[unsupported-base]
         def process_request(
             self, method: str, params: JSON, server: Server
         ) -> JSON | None:
@@ -65,9 +69,7 @@ def make_logic_class_for_static_configuration(
                 params = dmerge(
                     params,
                     {
-                        "settings": {
-                            server_name: configuration,
-                        },
+                        "settings": configuration,
                     },
                 )
             await super().on_client_notification(method, params)
@@ -118,7 +120,17 @@ def make_logic_class_for_static_configuration(
 HarperLogicClass = make_logic_class_for_static_configuration(
     class_name="HarperLogicClass",
     class_qualname=f"{__name__}.HarperLogicClass",
+    super_class=LspLogic,
     server_regexp_str="harper-ls",
     server_name="harper-ls",
     configuration=CONFIGURATION_HARPER_LS,
+)
+
+NixdLogicClass = make_logic_class_for_static_configuration(
+    class_name="NixdLogicClass",
+    class_qualname=f"{__name__}.NixdLogicClass",
+    super_class=HarperLogicClass,
+    server_regexp_str="nixd",
+    server_name="nixd",
+    configuration=CONFIGURATION_NIXD,
 )
