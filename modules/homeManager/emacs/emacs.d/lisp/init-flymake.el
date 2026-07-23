@@ -20,8 +20,9 @@
  flymake-wrap-around nil
  ;; Always show 3 counts.
  flymake-suppress-zero-counters nil
- ;; Show only the most severe diagnostic at end of line.
- flymake-show-diagnostics-at-end-of-line 'short)
+ ;; The end-of-line message will get wrapped, making the buffer
+ ;; keep flickering during editing.
+ flymake-show-diagnostics-at-end-of-line nil)
 
 (defun my/flymake-diagnostic-text (diag &optional _ignored)
   "Override `flymake-diagnostic-text'.
