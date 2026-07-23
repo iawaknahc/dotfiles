@@ -1,7 +1,10 @@
+from my_rass import common
+
+
 def servers():
     return [
         ["gopls"],
-        ["codebook-lsp", "serve"],
-        ["harper-ls", "--stdio"],
-        ["typos-lsp"],
+        common.codebook(),
+        common.harper(),
+        common.typos(),
     ]

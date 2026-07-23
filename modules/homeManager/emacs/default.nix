@@ -86,6 +86,14 @@
     (
       python-pkgs: with python-pkgs; [
         rassumfrassum
+
+        (config.mypython.pythonPackages.buildPythonPackage {
+          pname = "my_rass";
+          version = "1.0.0";
+          pyproject = true;
+          build-system = [ setuptools ];
+          src = ./my_rass;
+        })
       ]
     )
   ];
