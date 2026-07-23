@@ -35,6 +35,7 @@
 (require 'init-compilation-mode)
 (require 'init-grep-mode)
 (require 'init-flymake)
+(require 'init-eglot)
 
 ;; Configure completion.
 (require 'init-completion-at-point)

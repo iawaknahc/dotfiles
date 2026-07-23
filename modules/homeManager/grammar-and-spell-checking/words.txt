@@ -298,6 +298,7 @@ pyxirr
 qflist
 qpdf
 quickdef
+rass
 rassumfrassum
 recentf
 redrawstatus
