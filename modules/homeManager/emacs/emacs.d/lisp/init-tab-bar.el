@@ -41,14 +41,6 @@
 
 (tab-bar-mode 1)
 (add-hook 'after-init-hook #'my-tab-bar-reset)
-;; Shadow M-1, M-2, and so on, which are bound to digit-argument by default.
-(dotimes (i 9)
-  (let ((n (+ 1 i)))
-    (keymap-global-set
-     (format "M-%d" n)
-     (lambda ()
-       (interactive)
-       (tab-bar-select-tab n)))))
 
 (provide 'init-tab-bar)
 ;;; init-tab-bar.el ends here
