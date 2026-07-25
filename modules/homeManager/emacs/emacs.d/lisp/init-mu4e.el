@@ -51,11 +51,23 @@
     :query "flag:trashed"
     :key ?t)))
 
+(defun my/mu4e-view-in-xwidget-action ()
+  "Call `mu4e-action-view-in-xwidget' with the message at point.
+It is literally a shortcut to `a x`.
+But `a` is not implemented as a keymap,
+so we need this wrapper."
+  (interactive)
+  (let ((msg (mu4e-message-at-point)))
+    (mu4e-action-view-in-xwidget msg)))
+
+(keymap-set mu4e-view-mode-map "X" #'my/mu4e-view-in-xwidget-action)
+
 ;; Make the main view use the same window.
 (add-to-list
  'display-buffer-alist
  `((regexp-quote mu4e-main-buffer-name)
    display-buffer-same-window))
+
 (add-to-list
  'mu4e-header-info-custom
  '(:maildir-first-component
@@ -67,6 +79,7 @@
     :function (lambda (msg)
                 (let* ((maildir (mu4e-message-field msg :maildir)))
                   (nth 1 (file-name-split maildir)))))))
+
 (require 'init-mu4e-contexts)
 
 (provide 'init-mu4e)

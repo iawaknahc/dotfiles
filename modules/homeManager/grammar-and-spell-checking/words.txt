@@ -399,6 +399,7 @@ writebackup
 wshada
 xdg
 xirr
+xwidget
 xyz
 yamlls
 zar
