@@ -48,7 +48,39 @@
       embark-consult
 
       # Tree-sitter
-      treesit-grammars.with-all-grammars
+      # Originally, it was `treesit-grammars.with-all-grammars`.
+      # But the tsx parser built by it does not contain the expected symbol `tree_sitter_tsx`.
+      # Instead, it contains `tree_sitter_typescript`.
+      # This problem was surfaced by the warning emitted by treesit.el during the startup of Emacs.
+      #
+      # I did not go into details on why that happen.
+      # I know that Neovim works fine in this case,
+      # so I work around this by using the parsers of nvim-treesitter.
+      #
+      # Since treesit-grammars does not expose its logic for override[1],
+      # I need to duplicate its logic here, and
+      # replace `pkgs.tree-sitter-grammars.allGrammars` with
+      # `pkgs.vimPlugins.nvim-treesitter.allGrammars`.
+      #
+      # [1]: https://github.com/NixOS/nixpkgs/blob/26.05/pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/package.nix
+      (
+        let
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+          grammarToAttrSet = drv: {
+            name = "lib/lib${
+              lib.strings.replaceStrings [ "_" ] [ "-" ] (
+                lib.strings.removeSuffix "-grammar" (lib.strings.getName drv)
+              )
+            }${libExt}";
+            path = "${drv}/parser";
+          };
+
+          grammarPackage = grammars: pkgs.linkFarm "emacs-treesit-grammars" (map grammarToAttrSet grammars);
+
+          with-all-grammars = grammarPackage pkgs.vimPlugins.nvim-treesitter.allGrammars;
+        in
+        with-all-grammars
+      )
 
       # VC
       diff-hl
