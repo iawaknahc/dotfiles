@@ -17,7 +17,11 @@
  ;; But in consult-buffer, if the prompt is preselect, the preview is not the current buffer.
  ;; This is very annoying.
  ;; Also, unlike Corfu, in the minibuffer, I am expected to select something, so it is okay to preselect the first choice.
- vertico-preselect 'first)
+ ;;
+ ;; Previously I set vertico-preselect to first.
+ ;; But when I hit C-x d, I want to press RET immediately to open the directory with Dired.
+ ;; Thus, the default value directory probably is the best value.
+ vertico-preselect 'directory)
 
 (add-hook 'after-init-hook #'vertico-mode)
 
