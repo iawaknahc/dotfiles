@@ -8,6 +8,8 @@
  tab-bar-new-tab-choice "*scratch*")
 
 (tab-bar-mode 1)
+;; `tab-bar-history-mode' is `winner-mode'.
+(tab-bar-history-mode 1)
 
 (provide 'init-tab-bar)
 ;;; init-tab-bar.el ends here
