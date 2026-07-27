@@ -94,6 +94,7 @@ eldoc
 elec
 elisp
 elispfeature
+emacsclient
 emmylua
 emmyrc
 env
@@ -203,6 +204,7 @@ lhistory
 linematch
 linters
 listchars
+llm
 lnum
 localleader
 lockfiles
@@ -216,6 +218,7 @@ luasnip
 lvimgrep
 lwindow
 macopt
+macport
 macrop
 maildir
 mapconcat
