@@ -151,6 +151,7 @@ ghostty
 gitcommit
 gitgutter
 gitsigns
+gls
 glyphless
 gnormal
 gopls
