@@ -84,6 +84,7 @@
 
       # VC
       diff-hl
+      magit
 
       # Auto-format on save
       apheleia
