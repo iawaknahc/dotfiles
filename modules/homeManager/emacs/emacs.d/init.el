@@ -49,6 +49,9 @@
 (require 'init-embark)
 (require 'init-consult)
 
+;; Configure snippet.
+(require 'init-tempel)
+
 ;; Configure treesitter.
 (require 'init-treesitter)
 

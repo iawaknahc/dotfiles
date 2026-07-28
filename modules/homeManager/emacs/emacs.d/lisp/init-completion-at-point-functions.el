@@ -65,8 +65,15 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
            ;; cape-file will not be chosen because `.` is not one of the trigger prefixes.
            ;; By the time you type `/` to make it `./`, it is too late.
            (prefix-length-enforced (cape-capf-prefix-length merged 3)))
-      ;; Put cape-file at the front because it has several trigger prefixes, with one of them being `/` (which is just 1).
-      (setq-local completion-at-point-functions (list #'cape-file prefix-length-enforced t)))))
+      (setq-local
+       completion-at-point-functions
+       (list
+        ;; Trigger prefix is @
+        (cape-capf-trigger #'tempel-complete ?@)
+        ;; Trigger prefix is `cape-file-prefix'.
+        #'cape-file
+        prefix-length-enforced
+        t)))))
 
 (setq
  cape-file-directory #'my/resolve-directory-before-point

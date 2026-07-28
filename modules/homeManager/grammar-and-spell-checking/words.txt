@@ -354,6 +354,7 @@ tabpages
 tabstop
 tailwindcss
 taplo
+tempel
 thisweek
 timedelta
 tls

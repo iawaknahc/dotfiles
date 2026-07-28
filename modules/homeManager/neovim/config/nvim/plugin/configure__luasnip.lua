@@ -23,21 +23,28 @@ require("luasnip").config.setup({
   },
 })
 
--- Make CTRL-K works like CTRL-Y
 vim.keymap.set({ "i", "s" }, "<C-K>", function()
   local ls = require("luasnip")
-  if ls.expand_or_jumpable() then
-    ls.expand_or_jump()
-  else
-    require("blink.cmp").select_and_accept()
+  if ls.expandable() then
+    ls.expand()
   end
 end)
 
--- Since CTRL-K jumps forward, it follows naturally that CTRL-J jumps backward.
-vim.keymap.set({ "i", "s" }, "<C-J>", function()
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+  local ls = require("luasnip")
+  if ls.jumpable(1) then
+    ls.jump(1)
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+  end
+end)
+
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
   local ls = require("luasnip")
   if ls.jumpable(-1) then
     ls.jump(-1)
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<S-Tab>", true, false, true), "n", false)
   end
 end)
 

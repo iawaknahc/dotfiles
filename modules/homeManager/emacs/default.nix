@@ -34,6 +34,9 @@
       goto-chg
       evil
 
+      # Snippet
+      tempel
+
       # Completion
       corfu
       cape
@@ -115,6 +118,7 @@
     # recursive is needed because .emacs.d/lisp may contain generated files.
     recursive = true;
   };
+  home.file.".emacs.d/templates".source = ./emacs.d/templates.el;
   mypython.packages = [
     (
       python-pkgs: with python-pkgs; [
