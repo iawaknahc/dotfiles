@@ -2,23 +2,23 @@
 ;;; Commentary:
 ;;; Code:
 
-;; FIXME: This function does not handle cases like `my/foobar`.
-;; In that case, the completion should be handled by another CAPF.
 (defun my/get-filepath-before-point ()
   "Looking before point and see if there is a filepath.
 Return the filepath if found, otherwise nil."
-  (let ((end (point))
+  (let (result
+        (end (point))
         (bol (pos-bol))
         (regexp (rx (or (seq
                          (in "`\"'")
                          (group-n 1
-                           (or "/" "./" "../" "~/")
-                           (zero-or-more (in "- !\"#$%&'()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"))))
+                           (| "/" "~/" "./" "../")
+                           (* (in "- !#$%&()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~")))
+                         (in "`\"'"))
                         (seq
+                         (| line-start space)
                          (group-n 1
-                           (or "/" "./" "../" "~/")
-                           (zero-or-more (in  "-!\"#$%&'()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")))))))
-        result)
+                           (| "/" "~/" "./" "../")
+                           (* (in  "-!#$%&()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~"))))))))
     (save-excursion
       (goto-char bol)
       (while (re-search-forward regexp end t)
@@ -31,29 +31,28 @@ Return the filepath if found, otherwise nil."
 The filepath may or may not exist."
   (let* ((filepath (my/get-filepath-before-point))
          (base-directory (or (and buffer-file-name (file-name-directory buffer-file-name)) default-directory)))
-    (if filepath
-        (expand-file-name filepath base-directory))))
+    (when filepath
+      (expand-file-name filepath base-directory))))
 
 (defun my/resolve-directory-before-point ()
   "Resolve the filepath representing a directory before point.
 Return /homeless-shelter if no directory is found."
   (let* ((filepath (my/expand-filepath-before-point)))
-    (if filepath
-        (or (and (file-directory-p filepath) filepath)
-            (and (file-directory-p (file-name-directory filepath)) (file-name-directory filepath))
-            "/homeless-shelter"))))
+    (or (and filepath (file-directory-p filepath) filepath)
+        (and filepath (file-directory-p (file-name-directory filepath)) (file-name-directory filepath))
+        "/homeless-shelter")))
 
 (defun my/cape-after-change-major-mode-hook ()
   "Add `cape-dabbrev' to `completion-at-point-functions'.
 
 It should be compatible with the existing capf, in terms of beginning position.
-cape-wrap-super can only merge capf that have the same beginning position.
+`cape-wrap-super' can only merge capf that have the same beginning position.
 
 See https://github.com/minad/cape/blob/2.7/cape.el#L941"
   ;; It is important to check the major mode, otherwise all minibuffers will have `completion-at-point-functions' set, and
   ;; Corfu will interfere with Vertico.
   (when (derived-mode-p '(prog-mode text-mode))
-      ;; add-hook takes care of making completion-at-point-functions a buffer-local variable, and add t at the end.
+    ;; add-hook takes care of making completion-at-point-functions a buffer-local variable, and add t at the end.
     (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
     ;; Then we merge whatever appears in completion-at-point-functions except the last element (which is t).
     (let* ((without-t (remove t completion-at-point-functions))
