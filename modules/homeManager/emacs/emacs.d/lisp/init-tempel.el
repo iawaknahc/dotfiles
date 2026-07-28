@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(keymap-global-set "C-c C-k" #'tempel-expand)
+(keymap-global-set "C-c k" #'tempel-expand)
 (with-eval-after-load 'tempel
   (keymap-set tempel-map "<tab>" #'tempel-next)
   (keymap-set tempel-map "S-<tab>" #'tempel-previous))
