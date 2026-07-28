@@ -235,6 +235,7 @@ modelines
 mousepos
 moze
 multiclient
+mylauncher
 myvimrc
 nargs
 natively
@@ -343,6 +344,7 @@ statuscol
 statuscolumn
 statusline
 strftime
+stringp
 strptime
 stylua
 subshell
@@ -371,10 +373,12 @@ tzinfo
 ucd
 ucs
 unarchive
+unsplittable
 updatetime
 upnl
 urlbar
 urlsplit
+usimplify
 usr
 utcoffset
 vertico

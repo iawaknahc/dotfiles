@@ -80,5 +80,7 @@
 ;; Configure email client.
 (require 'init-mu4e)
 
+(require 'init-launcher)
+
 (provide 'init)
 ;;; init.el ends here

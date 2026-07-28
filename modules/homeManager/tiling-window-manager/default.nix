@@ -94,6 +94,11 @@ in
         run = "exec-and-forget ${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_on_window_detected";
         check-further-callbacks = true;
       }
+      {
+        "if" = "test %{app-bundle-id} = org.gnu.Emacs && test %{window-title} = mylauncher";
+        run = [ "layout floating" ];
+        check-further-callbacks = true;
+      }
     ];
 
     gaps = {
