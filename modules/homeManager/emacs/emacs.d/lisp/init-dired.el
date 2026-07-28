@@ -5,6 +5,9 @@
 (setq
  insert-directory-program "gls"
  dired-listing-switches "--all --format=long --human-readable --group-directories-first"
+ ;; When open two Dired buffers side by side,
+ ;; guess the target to be the another buffer.
+ dired-dwim-target t
  dired-hide-details-hide-symlink-targets t
  dired-hide-details-hide-information-lines t
  ;; When -l is given, according to POSIX,
