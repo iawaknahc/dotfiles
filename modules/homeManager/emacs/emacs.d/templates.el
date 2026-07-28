@@ -1,9 +1,9 @@
-fundamental-mode ;; Available everywhere
+fundamental-mode
 
 (today
  (format-time-string "%Y-%m-%d")
- :ann "Today's date"
- :doc "Insert today's date")
+ :ann "Date"
+ :doc "Today in ISO 8601 format")
 
 emacs-lisp-mode
 
@@ -19,6 +19,6 @@ emacs-lisp-mode
   "(provide '" (s file) ")" n
   ";;; " (s file) ".el ends here" n
   )
- :ann "elispfeature"
- :doc "elispfeature")
+ :ann "Elisp"
+ :doc "Elisp package template")
 
