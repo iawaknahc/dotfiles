@@ -1,4 +1,4 @@
-;;; init-whitespace.el --- init-whitespace.el -*- lexical-binding: t -*-
+;;; init-whitespace-mode.el --- init-whitespace-mode.el -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -50,7 +50,7 @@
    spaces ; The presence of this means use whitespace-space and whitespace-hspace to highlight spaces.
    newline ; The presence of this means use whitespace-newline to highlight newlines.
    ;; I found it quite distracting to have newline shown.
-   ;newline-mark
+   ;;newline-mark
    space-mark
    tab-mark
 
@@ -65,5 +65,5 @@
    space-before-tab; This uses whitespace-space-before-tab.
    ))
 
-(provide 'init-whitespace)
-;;; init-whitespace.el ends here
+(provide 'init-whitespace-mode)
+;;; init-whitespace-mode.el ends here.
