@@ -221,6 +221,7 @@ lwindow
 macopt
 macport
 macrop
+magit
 maildir
 mapconcat
 mbsync

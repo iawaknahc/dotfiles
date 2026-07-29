@@ -9,5 +9,8 @@
 ;; Use margin instead of fringe
 (add-hook 'after-init-hook #'diff-hl-margin-mode)
 
+(with-eval-after-load 'magit
+  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
+
 (provide 'init-diff-hl)
 ;;; init-diff-hl.el ends here
