@@ -28,6 +28,11 @@
 (custom-set-faces
  '(eglot-inlay-hint-face ((t (:inherit shadow)))))
 
+(defun my/eglot-managed-mode-hook ()
+  "Disable inlay hints and semantic tokens by default."
+  (eglot-inlay-hints-mode -1)
+  (eglot-semantic-tokens-mode -1))
+
 (with-eval-after-load 'eglot
   (setf (alist-get 'beancount-mode eglot-server-programs) '("rass" "beancount"))
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
@@ -42,7 +47,9 @@
   (setf (alist-get 'typescript-ts-mode eglot-server-programs) '("tsgo" "--lsp" "--stdio"))
   (setf (alist-get 'fish-mode eglot-server-programs) '("rass" "fish"))
   (setf (alist-get 'nushell-ts-mode eglot-server-programs) '("rass" "nushell"))
-  (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix")))
+  (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix"))
+
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-managed-mode-hook))
 
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
