@@ -28,6 +28,12 @@
 (custom-set-faces
  '(eglot-inlay-hint-face ((t (:inherit shadow)))))
 
+(setq
+ ;; The default is a light bulb emoji, which causes
+ ;; the text to flicker when point lands on the line.
+ ;; So we set it to a printable ASCII character.
+ eglot-code-action-indicator "?")
+
 (defun my/eglot-managed-mode-hook ()
   "Disable inlay hints and semantic tokens by default."
   (eglot-inlay-hints-mode -1)
