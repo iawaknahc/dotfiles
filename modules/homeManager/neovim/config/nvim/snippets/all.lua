@@ -6,82 +6,41 @@ local f = ls.function_node
 local c = ls.choice_node
 local d = ls.dynamic_node
 
+---@param subcommand string
+---@return string
+local function snippet(subcommand)
+  local result = vim.system({ "snippet.py", subcommand }, { text = true }):wait()
+  return vim.trim(result.stdout)
+end
+
 ---@return string
 local function today()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today()
-vim.vars["python_string"] = d.isoformat()
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("today")
 end
 
 ---@return string
 local function yesterday()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today() + datetime.timedelta(days=-1)
-vim.vars["python_string"] = d.isoformat()
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("yesterday")
 end
 
 ---@return string
 local function tomorrow()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today() + datetime.timedelta(days=1)
-vim.vars["python_string"] = d.isoformat()
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("tomorrow")
 end
 
 ---@return string
 local function thisweek()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today()
-vim.vars["python_string"] = d.strftime("%G-W%V")
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("thisweek")
 end
 
 ---@return string
 local function lastweek()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today() + datetime.timedelta(weeks=-1)
-vim.vars["python_string"] = d.strftime("%G-W%V")
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("lastweek")
 end
 
 ---@return string
 local function nextweek()
-  vim.cmd([[python <<EOF
-import datetime
-import vim
-
-d = datetime.date.today() + datetime.timedelta(weeks=1)
-vim.vars["python_string"] = d.strftime("%G-W%V")
-EOF
-]])
-  return tostring(vim.g.python_string)
+  return snippet("nextweek")
 end
 
 return {
