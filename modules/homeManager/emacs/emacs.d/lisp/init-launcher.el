@@ -15,21 +15,24 @@ INPUT is the raw user input."
   (let* ((calc-result (my/calc-eval (string-trim input))))
     (or calc-result (list "ERROR"))))
 
+(defun my/launcher-make-frame ()
+  "Make a frame suitable for launcher."
+  (make-frame `((name . "mylauncher")
+                (width . 0.5)
+                (height . 20)
+                (left . 0.5)
+                (top . 0.15)
+                (minibuffer . only)
+                (unsplittable . t)
+                (no-other-frame . t)
+                (undecorated . t)
+                (auto-raise . t))))
+
 (defun my/launcher ()
   "Open the launcher."
   (interactive)
   (require 'consult)
-  (let* ((frame
-          (make-frame `((name . "mylauncher")
-                        (width . 0.5)
-                        (height . 20)
-                        (left . 0.5)
-                        (top . 0.15)
-                        (minibuffer . only)
-                        (unsplittable . t)
-                        (no-other-frame . t)
-                        (undecorated . t)
-                        (auto-raise . t)))))
+  (let* ((frame (my/launcher-make-frame)))
     (select-frame frame)
     (select-frame-set-input-focus frame)
     (condition-case err
