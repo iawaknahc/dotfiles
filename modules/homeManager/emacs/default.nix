@@ -98,6 +98,21 @@
       # FIXME: Switch to grep-edit-mode in Emacs 31.
       wgrep
 
+      # Install the latest version of builtin packages that I really care about.
+      # Note that the following list is not exhaustive.
+      # There are way more bundled packages that are also available on GNU ELPA.
+      compat
+      eglot
+      eldoc
+      flymake
+      jsonrpc
+      org
+      project
+      seq
+      track-changes
+      tramp
+      xref
+
       # Modes
       beancount
       fennel-mode
