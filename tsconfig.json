@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["ES2025", "ESNext.Temporal"]
+  }
+}

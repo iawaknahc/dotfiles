@@ -55,7 +55,7 @@ vim.lsp.enable("nixd")
 vim.lsp.enable("nushell")
 vim.lsp.enable("rust_analyzer")
 vim.lsp.enable("taplo")
-vim.lsp.enable("vtsls")
+vim.lsp.enable("tsgo")
 vim.lsp.enable("yamlls")
 vim.lsp.enable("zls")
 -- Since I installed and enabled these 4 LSP servers, I noticed a lag when

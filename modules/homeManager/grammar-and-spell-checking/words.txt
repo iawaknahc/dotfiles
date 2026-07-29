@@ -367,12 +367,14 @@ trailspace
 treesit
 treesj
 treewalker
+tsgo
 tts
 txn
 tzinfo
 ucd
 ucs
 unarchive
+undici
 unsplittable
 updatetime
 upnl

@@ -1,4 +1,6 @@
-#!/usr/bin/env -S deno run --allow-run=solar-term.py
+#!/usr/bin/env node
+
+import { spawnSync } from "node:child_process";
 
 interface SolarTerm {
   name: string;
@@ -157,13 +159,13 @@ function isMonthDay(a: SolarTerm | MonthDay): a is MonthDay {
   return Object.prototype.hasOwnProperty.call(a, "monthCodeAndDay");
 }
 
-async function main() {
-  const query = Deno.args[0];
+function main() {
+  const query = process.argv[2];
   if (query == null) {
     console.error(
       `expected query to be one of:\n${format_available_queries()}`,
     );
-    Deno.exit(1);
+    process.exit(1);
   }
 
   const parsedQuery = parseQuery(query);
@@ -171,24 +173,24 @@ async function main() {
     console.error(
       `expected query to be one of:\n${format_available_queries()}`,
     );
-    Deno.exit(1);
+    process.exit(1);
   }
 
   // The input year, in ISO 8601 calendar.
   let isoYear: number;
-  if (Deno.args[1] != null) {
-    const yearStr = Deno.args[1];
+  if (process.argv[3] != null) {
+    const yearStr = process.argv[3];
     const y = parseInt(yearStr, 10);
     if (isNaN(y)) {
       console.error(`expected year to be an integer: ${yearStr}`);
-      Deno.exit(1);
+      process.exit(1);
     }
 
     if (y < 1583) {
       console.error(
         `expected year >= 1583, the first whole year when Gregorian calendar was put in use: ${y}`,
       );
-      Deno.exit(1);
+      process.exit(1);
     }
 
     isoYear = y;
@@ -219,16 +221,11 @@ async function main() {
     console.log(answer.toString());
   } else {
     const degree = parsedQuery.degree;
-    const command = new Deno.Command("solar-term.py", {
-      args: [`${degree}`, `${isoYear}`],
-      stdin: "null",
-      stdout: "inherit",
-      stderr: "inherit",
+    const result = spawnSync("solar-term.py", [`${degree}`, `${isoYear}`], {
+      stdio: ["ignore", "inherit", "inherit"],
     });
-    const process = command.spawn();
-    const status = await process.status;
-    Deno.exit(status.code);
+    process.exit(result.status ?? 1);
   }
 }
 
-await main();
+main();

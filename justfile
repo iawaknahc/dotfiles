@@ -4,13 +4,17 @@ default:
 
 # Clean up any generated files
 clean:
+    rm -rf ./node_modules/
     rm -f ./modules/homeManager/neovim/config/nvim/.emmyrc.json
 
-# Run `clean`, followed by `generate-emmyrc-json`
-setup: clean generate-emmyrc-json
+npm-install:
+    npm install
+
+# Run necessary recipes.
+setup: clean generate-emmyrc-json npm-install
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty
+check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty tsgo-check
 
 # Run checker `elisp-checkdoc`
 elisp-checkdoc:
@@ -67,6 +71,9 @@ pyrefly:
 # Run checker `ty`
 ty:
     ty check
+
+tsgo-check:
+    tsgo --noEmit
 
 # Run all formatters
 format: shfmt stylua-fmt nufmt ruff-format

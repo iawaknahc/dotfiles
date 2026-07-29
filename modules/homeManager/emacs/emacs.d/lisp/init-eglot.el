@@ -12,6 +12,7 @@
                 go-ts-mode-hook
                 python-mode-hook
                 python-ts-mode-hook
+                typescript-ts-mode-hook
                 fish-mode-hook
                 nushell-ts-mode-hook
                 nix-ts-mode-hook))
@@ -31,6 +32,8 @@
   (setf (alist-get 'beancount-mode eglot-server-programs) '("rass" "beancount"))
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
   (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
+  ;; FIXME: For unknown reason, no diagnostics are shown in typescript-ts-mode.
+  (setf (alist-get 'typescript-ts-mode eglot-server-programs) '("rass" "typescript"))
   (setf (alist-get 'fish-mode eglot-server-programs) '("rass" "fish"))
   (setf (alist-get 'nushell-ts-mode eglot-server-programs) '("rass" "nushell"))
   (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix")))

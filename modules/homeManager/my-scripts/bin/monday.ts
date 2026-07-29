@@ -1,4 +1,4 @@
-#!/usr/bin/env deno
+#!/usr/bin/env node
 
 // hledger does not support notation like "2026-W20".
 // This script allows us to write `hledger is --period "weekly $(monday.ts 2026-W20)"`.
@@ -19,11 +19,11 @@ function mondayInWeek(
   return mondayInWeekN;
 }
 
-if (Deno.args[0] != null) {
-  const match = PATTERN.exec(Deno.args[0]);
+if (process.argv[2] != null) {
+  const match = PATTERN.exec(process.argv[2]);
   if (match == null) {
     console.error("expected argument to be a ISO week, e.g. 2026-W01");
-    Deno.exit(1);
+    process.exit(1);
   }
 
   const yearOfWeek = parseInt(match[1], 10);
@@ -36,7 +36,7 @@ if (Deno.args[0] != null) {
   const weekNumber = today.weekOfYear;
   if (yearOfWeek == null || weekNumber == null) {
     console.error("expected the default calendar to be ISO");
-    Deno.exit(1);
+    process.exit(1);
   }
   const mondayInWeekN = mondayInWeek(yearOfWeek, weekNumber);
   console.log(mondayInWeekN.toString());

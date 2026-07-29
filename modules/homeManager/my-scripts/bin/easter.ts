@@ -1,19 +1,19 @@
-#!/usr/bin/env deno
+#!/usr/bin/env node
 
 let year: number;
-if (Deno.args[0] != null) {
-  const yearStr = Deno.args[0];
+if (process.argv[2] != null) {
+  const yearStr = process.argv[2];
   const y = parseInt(yearStr, 10);
   if (isNaN(y)) {
     console.error(`expected year to be an integer: ${yearStr}`);
-    Deno.exit(1);
+    process.exit(1);
   }
 
   if (y < 1583) {
     console.error(
       `expected year >= 1583, the first Easter when Gregorian calendar was put in use: ${y}`,
     );
-    Deno.exit(1);
+    process.exit(1);
   }
 
   year = y;
