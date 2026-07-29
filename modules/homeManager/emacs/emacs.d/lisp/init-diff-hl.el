@@ -12,5 +12,11 @@
 (with-eval-after-load 'magit
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
+(defun my/diff-hl-vc-refresh-state-after ()
+  "An :after advice of `vc-refresh-state' to invoke `diff-hl-update'.
+`vc-refresh-state' is called by Auto-Revert mode when `auto-revert-check-vc-info' is t."
+  (diff-hl-update))
+(advice-add #'vc-refresh-state :after #'my/diff-hl-vc-refresh-state-after)
+
 (provide 'init-diff-hl)
 ;;; init-diff-hl.el ends here

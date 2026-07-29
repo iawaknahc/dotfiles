@@ -3,9 +3,12 @@
 ;;; Code:
 
 (setq
- ;; Do not poll on systems that support notification.
- auto-revert-avoid-polling t
+ ;; When this is set to t, `vc-refresh-state' will be called automatically.
+ ;; An :after advice is added to `vc-refresh-state' to call `diff-hl-update'.
  auto-revert-check-vc-info t
+ ;; In my testing, even polling is disabled,
+ ;; `vc-refresh-state' is still called.
+ auto-revert-avoid-polling t
  ;; The documentation of `global-auto-revert-non-file-buffers' is for
  ;; Global Auto-Revert Mode to operate on non-file buffers, including
  ;; Dired buffers and Buffer List buffer.
