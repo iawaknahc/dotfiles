@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(add-hook 'conf-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'text-mode-hook #'flymake-mode)
 

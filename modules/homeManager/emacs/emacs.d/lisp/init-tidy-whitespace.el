@@ -15,6 +15,7 @@ This matches the behavior of `visit-save' of `mode-require-final-newline'."
   (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)
   (delete-trailing-whitespace))
 
+(add-hook 'conf-mode-hook #'my/add-delete-trailing-whitespace-hook)
 (add-hook 'prog-mode-hook #'my/add-delete-trailing-whitespace-hook)
 (add-hook 'text-mode-hook #'my/add-delete-trailing-whitespace-hook)
 

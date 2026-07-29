@@ -60,6 +60,7 @@
   "Add all custom backends to `flymake-diagnostic-functions'."
   (add-hook 'flymake-diagnostic-functions #'flymake-codespell nil t))
 
+(add-hook 'conf-mode-hook #'my/flymake-add-all-custom-backends)
 (add-hook 'prog-mode-hook #'my/flymake-add-all-custom-backends)
 (add-hook 'text-mode-hook #'my/flymake-add-all-custom-backends)
 

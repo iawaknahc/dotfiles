@@ -6,6 +6,7 @@
 
 ;; Only enable display-line-numbers-mode when editing programming language source code and text files.
 ;; For example, if display-line-numbers-mode is enabled in the mu4e headers view, the column header and the column content will misalign.
+(add-hook 'conf-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
 

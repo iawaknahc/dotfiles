@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(add-hook 'conf-mode-hook #'apheleia-mode)
 (add-hook 'prog-mode-hook #'apheleia-mode)
 (add-hook 'text-mode-hook #'apheleia-mode)
 

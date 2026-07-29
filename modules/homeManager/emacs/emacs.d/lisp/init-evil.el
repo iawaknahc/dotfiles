@@ -28,7 +28,7 @@ Apply F with ARGS."
  ;; The default is emacs state already.
  evil-emacs-state-modes nil
  ;; Start in normal state if we are editing source code or text.
- evil-normal-state-modes '(prog-mode text-mode)
+ evil-normal-state-modes '(conf-mode prog-mode text-mode)
  ;; Make insert state just like emacs state.
  evil-disable-insert-state-bindings t
  ;; C-u to scroll half page.

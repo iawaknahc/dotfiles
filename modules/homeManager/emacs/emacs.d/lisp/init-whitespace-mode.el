@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(add-hook 'conf-mode-hook #'whitespace-mode)
 (add-hook 'prog-mode-hook #'whitespace-mode)
 (add-hook 'text-mode-hook #'whitespace-mode)
 

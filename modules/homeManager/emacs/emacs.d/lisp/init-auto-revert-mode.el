@@ -18,6 +18,7 @@
 ;; Therefore, instead of turning on `global-auto-revert-mode',
 ;; we turn on the local `auto-revert-mode' in file-visiting buffers,
 ;; and Dired buffers.
+(add-hook 'conf-mode-hook #'auto-revert-mode)
 (add-hook 'prog-mode-hook #'auto-revert-mode)
 (add-hook 'text-mode-hook #'auto-revert-mode)
 (add-hook 'dired-mode-hook #'auto-revert-mode)
