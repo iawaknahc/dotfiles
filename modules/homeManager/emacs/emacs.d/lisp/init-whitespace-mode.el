@@ -27,7 +27,6 @@ ARGS is ignored."
 
 (defun my/whitespace-mode--set-whitespace-display-mappings (tab-width)
   "Set `whitespace-display-mappings' with TAB-WIDTH."
-  (require 'whitespace)
   (let* ((v (my/whitespace-mode--tab-width-to-vector tab-width)))
     (setq-local
      whitespace-display-mappings
