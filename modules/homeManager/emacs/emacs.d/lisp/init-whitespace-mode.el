@@ -104,7 +104,8 @@ BUFFER is checked to ensure the buffer-local `tab-width' is being set."
    missing-newline-at-eof ; This uses whitespace-trailing.
    empty
 
-   big-indent
+   ;; I found it quite distracting in a file with `indent-tabs-mode' on and `tab-width' being 8.
+   ;;big-indent
 
    indentation
    space-after-tab
