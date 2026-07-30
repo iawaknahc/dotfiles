@@ -32,7 +32,7 @@ POINT is ignored."
  ;; For file, Orderless cannot be used because we need to consider the compatibility with TRAMP.
  completion-category-defaults
  '((file (styles partial-completion))
-   (my/calc (styles my/no-filter)))
+   (my/launcher-item (styles my/no-filter)))
  ;; Set the separators to be one or more SPC, underscore, or hyphen.
  ;; The default is one or more SPC, which does not work well for Corfu with auto-completion.
  ;; With underscore and hyphen added, I can type `foo_bar` to means `foo bar`.

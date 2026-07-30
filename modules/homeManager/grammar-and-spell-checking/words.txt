@@ -137,6 +137,7 @@ ftplugin
 fts
 funcall
 functionp
+funs
 fzf
 genpkey
 getcmdline
@@ -223,6 +224,7 @@ macport
 macrop
 magit
 maildir
+mapcat
 mapconcat
 mbsync
 menuone
