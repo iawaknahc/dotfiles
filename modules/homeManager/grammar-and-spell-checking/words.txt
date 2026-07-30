@@ -386,6 +386,7 @@ urlsplit
 usimplify
 usr
 utcoffset
+vconcat
 vertico
 vimgrep
 vimruntime

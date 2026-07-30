@@ -2,10 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Turn on whitespace-mode.
 (add-hook 'conf-mode-hook #'whitespace-mode)
 (add-hook 'prog-mode-hook #'whitespace-mode)
 (add-hook 'text-mode-hook #'whitespace-mode)
 
+;; Customize `whitespace-space' and `whitespace-tab' whenever the theme changes.
 (defun my/whitespace-refresh-faces (&rest args)
   "It gets the :background of `default' face.
 And then set it as :foreground to `whitespace-space' and `whitespace-tab'.
@@ -16,6 +18,40 @@ ARGS is ignored."
      `(whitespace-tab ((t (:foreground ,bg)))))))
 (my/whitespace-refresh-faces)
 (add-hook 'enable-theme-functions #'my/whitespace-refresh-faces)
+
+(defun my/whitespace-mode--tab-width-to-vector (tab-width)
+  "Derive a vector from TAB-WIDTH."
+  (cond
+   ((<= tab-width 1) [?>])
+   (t (vconcat (make-vector (- tab-width 1) ?-) [?>]))))
+
+(defun my/whitespace-mode--set-whitespace-display-mappings (tab-width)
+  "Set `whitespace-display-mappings' with TAB-WIDTH."
+  (require 'whitespace)
+  (let* ((v (my/whitespace-mode--tab-width-to-vector tab-width)))
+    (setq-local
+     whitespace-display-mappings
+     `((tab-mark ?\t ,v [?\t])
+       (space-mark ?\s [?.] [?\s])
+       (space-mark ?\N{U+00A0} [?+] [?\N{U+00A0}])))))
+
+(defun my/whitespace-mode--set-whitespace-display-mappings0 ()
+  "Set `whitespace-display-mappings' with `tab-width'."
+  (my/whitespace-mode--set-whitespace-display-mappings tab-width))
+
+;; Customize `whitespace-display-mappings' whenever `tab-width' changes.
+(defun my/whitespace-mode-tab-width-watcher (sym new-value op buffer)
+  "It is a variable watcher for `tab-width'.
+SYM is ignored because it must be `tab-width'.
+NEW-VALUE is used to derive `whitespace-display-mappings'.
+OP is ignored because it is not important.
+BUFFER is checked to ensure the buffer-local `tab-width' is being set."
+  (when buffer
+    (my/whitespace-mode--set-whitespace-display-mappings new-value)))
+(add-variable-watcher 'tab-width #'my/whitespace-mode-tab-width-watcher)
+(add-hook 'conf-mode-hook #'my/whitespace-mode--set-whitespace-display-mappings0)
+(add-hook 'prog-mode-hook #'my/whitespace-mode--set-whitespace-display-mappings0)
+(add-hook 'text-mode-hook #'my/whitespace-mode--set-whitespace-display-mappings0)
 
 (setq
  ;; Set this to a very large value so that long lines are not highlighted by default.
@@ -72,8 +108,7 @@ ARGS is ignored."
 
    indentation
    space-after-tab
-   space-before-tab
-   ))
+   space-before-tab))
 
 (provide 'init-whitespace-mode)
 ;;; init-whitespace-mode.el ends here.
