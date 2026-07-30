@@ -37,6 +37,9 @@
       # Snippet
       tempel
 
+      # Reading
+      olivetti
+
       # Completion
       corfu
       cape
