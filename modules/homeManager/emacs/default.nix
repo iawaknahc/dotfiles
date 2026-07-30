@@ -16,6 +16,80 @@
   programs.emacs.package =
     # It has to be Emacs Macport otherwise the scrollbar has a non-customizable white background color.
     if pkgs.stdenv.hostPlatform.isDarwin then pkgs.emacs30-macport else pkgs.emacs30-pgtk;
+
+  # overrides is the documented way to ensure a package is from a specific package set.
+  # See https://nixos.org/manual/nixpkgs/stable/#sec-emacs-config
+  #
+  # The convention here is whenever we add a package,
+  # we must specify its package set, and its dependencies' package set.
+  programs.emacs.overrides = self: super: {
+    # manualPackages
+    mu4e = self.manualPackages.mu4e;
+
+    # melpaPackages
+    # FIXME: ccatppuccin-theme from melpaStablePackages is too old to have ccatppuccin-reload.
+    catppuccin-theme = self.melpaPackages.catppuccin-theme;
+    just-ts-mode = self.melpaPackages.just-ts-mode;
+    nushell-ts-mode = self.melpaPackages.nushell-ts-mode;
+
+    # melpaStablePackages
+    apheleia = self.melpaStablePackages.apheleia;
+    corfu-prescient = self.melpaStablePackages.corfu-prescient;
+    evil = self.melpaStablePackages.evil;
+    fennel-mode = self.melpaStablePackages.fennel-mode;
+    fish-mode = self.melpaStablePackages.fish-mode;
+    flymake-quickdef = self.melpaStablePackages.flymake-quickdef;
+    # goto-chg is a dependency of evil.
+    goto-chg = self.melpaStablePackages.goto-chg;
+    nix-ts-mode = self.melpaStablePackages.nix-ts-mode;
+    olivetti = self.melpaStablePackages.olivetti;
+    prescient = self.melpaStablePackages.prescient;
+    rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
+    ultra-scroll = self.melpaStablePackages.ultra-scroll;
+    vertico-prescient = self.melpaStablePackages.vertico-prescient;
+    # FIXME: wgrep is available on elpaPackages as well, but it cannot build due to missing dash at test time.
+    # I tried `dontCheck = true` but it did not work.
+    wgrep = self.melpaStablePackages.wgrep;
+    zig-ts-mode = self.melpaStablePackages.zig-ts-mode;
+
+    # elpaPackages
+    cape = self.elpaPackages.cape;
+    compat = self.elpaPackages.compat;
+    consult = self.elpaPackages.consult;
+    corfu = self.elpaPackages.corfu;
+    diff-hl = self.elpaPackages.diff-hl;
+    eglot = self.elpaPackages.eglot;
+    eldoc = self.elpaPackages.eldoc;
+    embark = self.elpaPackages.embark;
+    embark-consult = self.elpaPackages.embark-consult;
+    flymake = self.elpaPackages.flymake;
+    jsonrpc = self.elpaPackages.jsonrpc;
+    marginalia = self.elpaPackages.marginalia;
+    orderless = self.elpaPackages.orderless;
+    org = self.elpaPackages.org;
+    project = self.elpaPackages.project;
+    seq = self.elpaPackages.seq;
+    tempel = self.elpaPackages.tempel;
+    track-changes = self.elpaPackages.track-changes;
+    tramp = self.elpaPackages.tramp;
+    vertico = self.elpaPackages.vertico;
+    xref = self.elpaPackages.xref;
+    # transient is a dependency of magit.
+    transient = self.elpaPackages.transient;
+
+    # nongnuPackages
+    beancount = self.nongnuPackages.beancount;
+    # llama is a dependency of magit.
+    llama = self.nongnuPackages.llama;
+    # `cond-let` is a dependency of magit.
+    cond-let = self.nongnuPackages.cond-let;
+    magit = self.nongnuPackages.magit;
+    # magit-section is a dependency of magit.
+    magit-section = self.nongnuPackages.magit-section;
+    markdown-mode = self.nongnuPackages.markdown-mode;
+    # with-with-editor is a dependency of magit.
+    with-editor = self.nongnuPackages.with-editor;
+  };
   programs.emacs.extraPackages =
     emacsPackages: with emacsPackages; [
       # Theme
@@ -31,7 +105,6 @@
       rainbow-delimiters
 
       # Evil
-      goto-chg
       evil
 
       # Snippet
