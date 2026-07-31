@@ -38,6 +38,7 @@
 (require 'init-flymake)
 (require 'init-eglot)
 (require 'init-server)
+(require 'init-org-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
