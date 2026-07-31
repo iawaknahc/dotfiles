@@ -39,6 +39,11 @@
     fennel-mode = self.melpaStablePackages.fennel-mode;
     fish-mode = self.melpaStablePackages.fish-mode;
     flymake-quickdef = self.melpaStablePackages.flymake-quickdef;
+    # Hyperbole is also available on elpaPackages.
+    # But it is broken there.
+    # The one from melpaStablePackages has fixes applied.
+    # See https://github.com/NixOS/nixpkgs/blob/26.05/pkgs/applications/editors/emacs/elisp-packages/melpa-packages.nix#L1325
+    hyperbole = self.melpaStablePackages.hyperbole;
     # goto-chg is a dependency of evil.
     goto-chg = self.melpaStablePackages.goto-chg;
     nix-ts-mode = self.melpaStablePackages.nix-ts-mode;
@@ -106,6 +111,9 @@
 
       # Evil
       evil
+
+      # Hyperbole
+      hyperbole
 
       # Snippet
       tempel
