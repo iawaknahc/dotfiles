@@ -12,7 +12,9 @@
  ;; 6. Nothing happens.
  org-src-tab-acts-natively nil
  ;; Change the indentation added by C-c ' to 0.
- org-src-content-indentation 0)
+ org-src-content-indentation 0
+ ;; Do not conceal links.
+ org-link-descriptive nil)
 
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
