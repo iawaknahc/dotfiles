@@ -47,15 +47,15 @@ Apply F with ARGS."
    (require 'goto-chg)
    (require 'evil)
 
-   ;; Rebind `evil-jump-forward' to `<tab>'.
-   ;; This only makes sense if C-i and <tab> are made separate,
+   ;; Rebind `evil-jump-forward' to `<control-i>'.
+   ;; This only makes sense if the physical control-i and the physical tab are made separate,
    ;; otherwise, it is a no-op because `<tab>' is mapped to `[9]' in `function-key-map'.
    ;; The separation is done in `init-keymap.el'.
    ;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
-   ;; In addition, it is very nice to have `<tab>' (which is physically CTRL-i) to jump forward, and
+   ;; In addition, it is very nice to have `<control-i>' to jump forward, and
    ;; `C-o' to jump backward.
    (keymap-unset evil-motion-state-map "C-i" t)
-   (keymap-set evil-motion-state-map "<tab>" #'evil-jump-forward)
+   (keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
 
    ;; Make n and N have deterministic direction.
    (advice-add 'evil-search-next :around #'my/evil-search-next)
