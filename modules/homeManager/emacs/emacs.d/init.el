@@ -5,6 +5,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; Configure features that come with Emacs.
+(require 'init-timezone)
 (require 'init-keymap)
 (require 'init-shell)
 (require 'init-auto-save-mode)
