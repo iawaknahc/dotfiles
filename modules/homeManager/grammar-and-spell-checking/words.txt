@@ -260,6 +260,7 @@ noselect
 nounihan
 nowinfixheight
 npx
+nreverse
 nufmt
 nukta
 numberwidth

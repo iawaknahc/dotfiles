@@ -45,5 +45,23 @@ And in fact, it has a higher priority than us."
       t)))
 (add-hook 'org-ctrl-c-ctrl-c-hook #'my/org-ctrl-c-ctrl-c-column-view)
 
+;; Integrate `org-lint' with `flymake'.
+(defun my/flymake-org-lint (report-fn &rest _args)
+  "A flymake backend for `org-lint'.
+REPORT-FN is respected."
+  (let* ((source (current-buffer))
+         (reports-alist (org-lint))
+         diags)
+    (dolist (element reports-alist)
+      (pcase-let* ((`(,id [,line ,trust ,msg ,checker]) element)
+                   (`(,beg . ,end) (flymake-diag-region source (string-to-number line)))
+                   (code (symbol-name (org-lint-checker-name checker)))
+                   (info (list "org-lint" code msg))
+                   (diag (flymake-make-diagnostic source beg end :error info)))
+        (push diag diags)))
+    (funcall report-fn (nreverse diags))))
+(add-hook 'org-mode-hook (lambda ()
+                           (add-hook 'flymake-diagnostic-functions #'my/flymake-org-lint nil t)))
+
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
