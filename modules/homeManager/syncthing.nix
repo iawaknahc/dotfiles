@@ -32,6 +32,13 @@
       "LouisChan16"
     ];
   };
+  services.syncthing.settings.folders."~/org/" = {
+    id = "org";
+    type = "sendreceive";
+    devices = [
+      "nas"
+    ];
+  };
 
   # Bind on the loopback interface only.
   # The web UI is intended for local access.

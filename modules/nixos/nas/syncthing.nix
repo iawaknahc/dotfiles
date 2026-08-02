@@ -32,6 +32,13 @@
       "louischan-m4"
     ];
   };
+  services.syncthing.settings.folders."/data/syncthing/louischan/org/" = {
+    id = "org";
+    type = "sendreceive";
+    devices = [
+      "louischan-m4"
+    ];
+  };
   services.syncthing.settings.options = {
     listenAddresses = [ "tcp://0.0.0.0:22000" ];
 
