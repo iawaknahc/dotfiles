@@ -39,6 +39,7 @@
 (require 'init-eglot)
 (require 'init-server)
 (require 'init-org-mode)
+(require 'init-calc)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
