@@ -32,5 +32,18 @@
   ;; The default "C-c C-x C-t" is too long.
   (keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays))
 
+(defun my/org-ctrl-c-ctrl-c-column-view ()
+  "Turn on column view when we are at the buffer global COLUMNS property line.
+When column view is on, \\[org-ctrl-c-ctrl-c] already turns it off.
+And in fact, it has a higher priority than us."
+  (when (save-excursion
+          (beginning-of-line)
+          (looking-at-p (rx line-start "#+COLUMNS: ")))
+    ;; `org-columns-overlays' is unbound until the first time `org-columns' is called.
+    (unless (and (boundp 'org-columns-overlays) org-columns-overlays)
+      (org-columns)
+      t)))
+(add-hook 'org-ctrl-c-ctrl-c-hook #'my/org-ctrl-c-ctrl-c-column-view)
+
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
