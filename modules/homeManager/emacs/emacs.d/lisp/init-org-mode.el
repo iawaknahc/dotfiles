@@ -28,8 +28,9 @@
  org-agenda-files (list "~/org/"))
 
 (keymap-global-set "C-c c" #'org-capture)
-;; The default "C-c C-x C-t" is too long.
-(keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays)
+(with-eval-after-load 'org
+  ;; The default "C-c C-x C-t" is too long.
+  (keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays))
 
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
