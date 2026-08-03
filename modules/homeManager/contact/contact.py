@@ -17,6 +17,7 @@
 #     the UID is stable as long as the phone numbers or email addresses do not change.
 # 12. Sort all components according to UID.
 
+import argparse
 import sys
 
 import icu
@@ -303,9 +304,10 @@ def visit_bday(blank: vobject.base.Component, content_lines: list[vobject.base.V
     add(blank, content_lines)
 
 
-def main():
+def normalize(path: str):
     components = []
-    with open(sys.argv[1]) as f:
+    f = sys.stdin if path == "-" else open(path)
+    try:
         gen = vobject.readComponents(
             f, validate=True, transform=True, ignoreUnreadable=False, allowQP=False
         )
@@ -358,11 +360,33 @@ def main():
                 ]
 
             components.append(blank)
+    finally:
+        if path != "-":
+            f.close()
+
     components = sorted(
         components, key=lambda component: component.getChildValue("uid")
     )
     for component in components:
         print(component.serialize(), end="")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub_commands = parser.add_subparsers(dest="command", required=True)
+
+    sub_command_normalize = sub_commands.add_parser(
+        "normalize",
+        help="normalize a vCard export from Google Contacts or iOS Contacts",
+    )
+    sub_command_normalize.add_argument(
+        "filepath", help="filepath to the input file, or '-' to read from stdin"
+    )
+
+    args = parser.parse_args()
+    match args.command:
+        case "normalize":
+            normalize(args.filepath)
 
 
 main()

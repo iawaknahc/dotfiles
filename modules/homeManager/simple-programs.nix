@@ -5,13 +5,6 @@
       python-pkgs: with python-pkgs; [
         # Lossless conversion between representations
         remarshal
-
-        # Manipulate vCard
-        vobject
-        # Parse phone number found in vCard
-        phonenumbers
-        # Parse country found in vCard
-        pyicu
       ]
     )
   ];

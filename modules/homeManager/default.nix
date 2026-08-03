@@ -151,6 +151,8 @@ _: {
     # Email
     ./email
 
+    ./contact
+
     ./ascii
 
     # Flutter is now installed per project with flake.nix
