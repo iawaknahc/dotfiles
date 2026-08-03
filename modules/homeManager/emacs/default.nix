@@ -221,7 +221,6 @@
   mypython.packages = [
     (
       python-pkgs: with python-pkgs; [
-        vobject
         rassumfrassum
 
         (config.mypython.pythonPackages.buildPythonPackage {
