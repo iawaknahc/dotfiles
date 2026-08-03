@@ -1,4 +1,6 @@
+ablabel
 addext
+adr
 akey
 alacritty
 alist
@@ -18,6 +20,7 @@ backtab
 basedpyright
 basenc
 bashls
+bday
 bea
 beancount
 bidi
@@ -174,6 +177,7 @@ hlsearch
 hostnames
 hspace
 ignorecase
+impp
 inplace
 ipairs
 ipc
@@ -234,6 +238,7 @@ minibuffers
 minwid
 misalign
 mjml
+mmdd
 modeline
 modelines
 mousepos
@@ -293,6 +298,7 @@ preselects
 prettierd
 pricehist
 princ
+prodid
 progn
 proj
 prolog
