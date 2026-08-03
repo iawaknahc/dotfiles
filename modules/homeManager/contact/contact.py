@@ -18,6 +18,9 @@
 # 12. Sort all components according to UID.
 
 import argparse
+import glob
+import os
+import shutil
 import sys
 
 import icu
@@ -371,6 +374,49 @@ def normalize(path: str):
         print(component.serialize(), end="")
 
 
+_FILENAME_SAFE_CHARACTERS = frozenset(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ-abcdefghijklmnopqrstuvwxyz0123456789."
+)
+
+
+def encode_uid_to_filename_stem(uid: str) -> str:
+    # Percent-encoding with % replaced by _.
+    encoded = []
+    for byte in uid.encode("utf-8"):
+        char = chr(byte)
+        if char in _FILENAME_SAFE_CHARACTERS:
+            encoded.append(char)
+        else:
+            encoded.append(f"_{byte:02X}")
+    return "".join(encoded)
+
+
+def sync_to_radicale(vcf_filepath: str, radicale_collection_directory: str):
+    if not os.path.isdir(radicale_collection_directory):
+        raise ValueError(f"{radicale_collection_directory} is not a directory")
+
+    cache_directory = os.path.join(radicale_collection_directory, ".Radicale.cache")
+    if os.path.exists(cache_directory):
+        shutil.rmtree(cache_directory)
+
+    for existing_vcf_filepath in glob.glob(
+        os.path.join(radicale_collection_directory, "*.vcf")
+    ):
+        os.remove(existing_vcf_filepath)
+
+    with open(vcf_filepath) as f:
+        components = vobject.readComponents(
+            f, validate=True, transform=True, ignoreUnreadable=False, allowQP=False
+        )
+        for component in components:
+            uid = component.getChildValue("uid")
+            filename = encode_uid_to_filename_stem(uid) + ".vcf"
+            with open(
+                os.path.join(radicale_collection_directory, filename), "w"
+            ) as out:
+                out.write(component.serialize())
+
+
 def main():
     parser = argparse.ArgumentParser()
     sub_commands = parser.add_subparsers(dest="command", required=True)
@@ -383,10 +429,30 @@ def main():
         "filepath", help="filepath to the input file, or '-' to read from stdin"
     )
 
+    sub_command_sync_to_radicale = sub_commands.add_parser(
+        "sync-to-radicale",
+        help="Take a .vcf file and split by component, and then store in at a Radicale collection directory. Existing components in the directory are removed. .Radicale.cache is also removed.",
+    )
+    sub_command_sync_to_radicale.add_argument(
+        "--vcf-filepath",
+        required=True,
+        help="filepath to the .vcf file",
+    )
+    sub_command_sync_to_radicale.add_argument(
+        "--radicale-collection-directory",
+        required=True,
+        help="filepath to the Radicale collection directory. It should be a sub-directory of filesystem_folder.",
+    )
+
     args = parser.parse_args()
     match args.command:
         case "normalize":
             normalize(args.filepath)
+        case "sync-to-radicale":
+            sync_to_radicale(
+                vcf_filepath=args.vcf_filepath,
+                radicale_collection_directory=args.radicale_collection_directory,
+            )
 
 
 main()

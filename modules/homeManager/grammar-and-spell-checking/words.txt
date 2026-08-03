@@ -315,6 +315,7 @@ qflist
 qpdf
 qualname
 quickdef
+radicale
 rass
 rassumfrassum
 recentf
