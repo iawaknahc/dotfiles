@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, tailscaleIPv4, ... }:
 {
   services.syncthing.enable = true;
   services.syncthing.user = "nixos";
@@ -40,7 +40,10 @@
     ];
   };
   services.syncthing.settings.options = {
-    listenAddresses = [ "tcp://0.0.0.0:22000" ];
+    listenAddresses = [
+      "tcp://127.0.0.1:22000"
+      "tcp://${tailscaleIPv4}:22000"
+    ];
 
     globalAnnounceServers = [ ];
     stunServers = [ ];

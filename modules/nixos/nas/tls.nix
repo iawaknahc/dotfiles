@@ -1,7 +1,10 @@
-{ pkgs, config, ... }:
-let
-  domain = "nas.tail78d407.ts.net";
-in
+{
+  pkgs,
+  config,
+  tailscaleFullDomain,
+  tailscaleIPv4,
+  ...
+}:
 {
   sops.secrets."ca/private_key_pem" = {
     path = "/run/secrets/ca-key.pem";
@@ -20,8 +23,12 @@ in
     };
     script =
       let
-        pathKey = builtins.toString config.services.nginx.virtualHosts."${domain}".sslCertificateKey;
-        pathCert = builtins.toString config.services.nginx.virtualHosts."${domain}".sslCertificate;
+        pathKey =
+          builtins.toString
+            config.services.nginx.virtualHosts."${tailscaleFullDomain}".sslCertificateKey;
+        pathCert =
+          builtins.toString
+            config.services.nginx.virtualHosts."${tailscaleFullDomain}".sslCertificate;
         days = "30";
       in
       ''
@@ -36,7 +43,7 @@ in
 
         ${pkgs.openssl}/bin/openssl req -x509 -CA ${config.sops.secrets."ca/certificate_pem".path} -CAkey ${
           config.sops.secrets."ca/private_key_pem".path
-        } -key ${pathKey} -subj "/CN=tls" -addext "basicConstraints=critical,CA:FALSE" -addext "keyUsage=critical, digitalSignature" -addext "extendedKeyUsage=critical, serverAuth, clientAuth" -addext "subjectAltName=critical, DNS:${domain}" -days ${days} -out ${pathCert}
+        } -key ${pathKey} -subj "/CN=tls" -addext "basicConstraints=critical,CA:FALSE" -addext "keyUsage=critical, digitalSignature" -addext "extendedKeyUsage=critical, serverAuth, clientAuth" -addext "subjectAltName=critical, DNS:${tailscaleFullDomain}" -days ${days} -out ${pathCert}
         chmod 644 ${pathCert}
         chown ${config.services.nginx.user}:${config.services.nginx.group} ${pathCert}
 
@@ -56,12 +63,18 @@ in
   services.nginx.user = "nixos";
   services.nginx.group = "users";
   services.nginx.enableReload = true;
+  services.nginx.defaultHTTPListenPort = 80;
+  services.nginx.defaultSSLListenPort = 443;
+  services.nginx.defaultListenAddresses = [
+    "127.0.0.1"
+    tailscaleIPv4
+  ];
   services.nginx.recommendedTlsSettings = true;
   services.nginx.recommendedOptimisation = true;
   services.nginx.recommendedBrotliSettings = true;
   services.nginx.recommendedGzipSettings = true;
   services.nginx.recommendedProxySettings = true;
-  services.nginx.virtualHosts."${domain}" = {
+  services.nginx.virtualHosts."${tailscaleFullDomain}" = {
     forceSSL = true;
     sslCertificate = "/etc/nginx/tls-certificate.pem";
     sslCertificateKey = "/etc/nginx/tls-key.pem";
