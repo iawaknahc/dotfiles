@@ -15,7 +15,6 @@ in
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      RemainAfterExit = true;
       User = "root";
       Group = "root";
     };
