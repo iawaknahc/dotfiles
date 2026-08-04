@@ -20,5 +20,6 @@
     ./restic.nix
     ./syncthing.nix
     ./tls.nix
+    ./radicale.nix
   ];
 }
