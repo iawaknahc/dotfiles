@@ -32,13 +32,13 @@ in
 
         ${pkgs.openssl}/bin/openssl genpkey -algorithm EC -out ${pathKey} -outpubkey /dev/null -pkeyopt ec_paramgen_curve:P-256
         chmod 640 ${pathKey}
-        chown root:nginx ${pathKey}
+        chown ${config.services.nginx.user}:${config.services.nginx.group} ${pathKey}
 
         ${pkgs.openssl}/bin/openssl req -x509 -CA ${config.sops.secrets."ca/certificate_pem".path} -CAkey ${
           config.sops.secrets."ca/private_key_pem".path
         } -key ${pathKey} -subj "/CN=tls" -addext "basicConstraints=critical,CA:FALSE" -addext "keyUsage=critical, digitalSignature" -addext "extendedKeyUsage=critical, serverAuth, clientAuth" -addext "subjectAltName=critical, DNS:${domain}" -days ${days} -out ${pathCert}
         chmod 644 ${pathCert}
-        chown root:nginx ${pathCert}
+        chown ${config.services.nginx.user}:${config.services.nginx.group} ${pathCert}
 
         systemctl reload nginx
       '';
@@ -53,6 +53,8 @@ in
   };
 
   services.nginx.enable = true;
+  services.nginx.user = "nixos";
+  services.nginx.group = "users";
   services.nginx.enableReload = true;
   services.nginx.recommendedTlsSettings = true;
   services.nginx.recommendedOptimisation = true;
