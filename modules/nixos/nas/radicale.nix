@@ -22,6 +22,27 @@
     '';
   };
 
+  # Restart Radicale daily to pick up renewed TLS certificate.
+  systemd.services."restart-radicale" = {
+    description = "Restart Radicale to pick up renewed TLS certificate";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      Group = "root";
+    };
+    script = ''
+      systemctl restart radicale.service
+    '';
+  };
+  systemd.timers."restart-redicale" = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;
+    };
+  };
+
   services.radicale.enable = true;
   services.radicale.user = "nixos";
   services.radicale.group = "users";
