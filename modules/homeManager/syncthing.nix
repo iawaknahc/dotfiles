@@ -1,4 +1,5 @@
 {
+  tailscaleIPv4,
   ...
 }:
 {
@@ -46,7 +47,10 @@
   # The default is repeated here so that I can read my code to know the port.
   services.syncthing.guiAddress = "127.0.0.1:8384";
   services.syncthing.settings.options = {
-    listenAddresses = [ "tcp://0.0.0.0:22000" ];
+    listenAddresses = [
+      "tcp://127.0.0.1:22000"
+      "tcp://${tailscaleIPv4}:22000"
+    ];
 
     globalAnnounceServers = [ ];
     stunServers = [ ];

@@ -18,6 +18,8 @@ in
         # I aware there exists `moduleWithSystem`,
         # but `homeConfigurations` are not modules, so it is inapplicable.
         system,
+        tailscaleFullDomain,
+        tailscaleIPv4,
         ...
       }:
       {
@@ -26,7 +28,14 @@ in
           { pkgs, ... }:
           (inputs.home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = { inherit inputs hostname; };
+            extraSpecialArgs = {
+              inherit
+                inputs
+                hostname
+                tailscaleFullDomain
+                tailscaleIPv4
+                ;
+            };
             modules = [
               {
                 home.username = username;
