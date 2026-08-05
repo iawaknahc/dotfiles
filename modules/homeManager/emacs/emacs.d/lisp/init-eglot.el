@@ -32,7 +32,11 @@
  ;; The default is a light bulb emoji, which causes
  ;; the text to flicker when point lands on the line.
  ;; So we set it to a printable ASCII character.
- eglot-code-action-indicator "?")
+ eglot-code-action-indicator "?"
+ ;; The default is '(eldoc-hint margin)
+ ;; We already have the indicator in the margin,
+ ;; the indicator of eldoc is just redundant and takes up precious space.
+ eglot-code-action-indications '(margin))
 
 (defun my/eglot-managed-mode-hook ()
   "Disable inlay hints and semantic tokens by default."
