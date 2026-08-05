@@ -162,7 +162,7 @@ def visit_tel(
                 content_line.params = {"TYPE": ["WORK", "VOICE"]}
             case {"TYPE": ["pref"]}:
                 content_line.params = {"TYPE": ["CELL", "VOICE"]}
-            case {}:
+            case {**rest} if not rest:
                 content_line.params = {"TYPE": ["CELL", "VOICE"]}
             case _:
                 raise ValueError(f"unknown tel params: {content_line}")
@@ -199,11 +199,13 @@ def visit_email(blank: vobject.base.Component, content_lines: list[vobject.base.
         content_line.group = None
 
         match content_line.params:
+            case {"TYPE": ["INTERNET", "HOME", "pref"]}:
+                content_line.params = {"TYPE": ["INTERNET", "HOME"]}
             case {"TYPE": ["INTERNET", "HOME"]}:
                 content_line.params = {"TYPE": ["INTERNET", "HOME"]}
             case {"TYPE": ["INTERNET"]}:
                 content_line.params = {"TYPE": ["INTERNET", "HOME"]}
-            case {}:
+            case {**rest} if not rest:
                 content_line.params = {"TYPE": ["INTERNET", "HOME"]}
             case _:
                 raise ValueError(f"unknown email params: {content_line}")
@@ -229,7 +231,7 @@ def visit_address(
         match content_line.params:
             case {"TYPE": ["HOME"]}:
                 content_line.params = {"TYPE": ["HOME"]}
-            case {}:
+            case {**rest} if not rest:
                 content_line.params = {"TYPE": ["HOME"]}
             case _:
                 raise ValueError(f"unknown adr params: {content_line}")
@@ -293,7 +295,16 @@ def visit_bday(blank: vobject.base.Component, content_lines: list[vobject.base.V
             month_day = whenever.MonthDay(month=date.month, day=date.day)
             content_lines[0].params = {}
             content_lines[0].value = whenever_month_day_to_bday(month_day)
-        case {}:
+        case {"VALUE": ["date"]}:
+            try:
+                date = whenever.Date.parse_iso(content_lines[0].value)
+                content_lines[0].value = date.format_iso(basic=True)
+            except ValueError:
+                # No need to try this, just let whenever to raise.
+                month_day = whenever.MonthDay.parse_iso(content_lines[0].value)
+                content_lines[0].value = whenever_month_day_to_bday(month_day)
+            content_lines[0].params = {}
+        case {**rest} if not rest:
             try:
                 date = whenever.Date.parse_iso(content_lines[0].value)
                 content_lines[0].value = date.format_iso(basic=True)
@@ -307,6 +318,65 @@ def visit_bday(blank: vobject.base.Component, content_lines: list[vobject.base.V
     add(blank, content_lines)
 
 
+def normalize_one(original: vobject.base.Component) -> vobject.base.Component:
+    uid_phone_number = None
+    uid_email = None
+    n = None
+    normalized = vobject.vCard()
+    for key, content_lines in original.contents.items():
+        match key:
+            case "version":
+                visit_version(normalized, content_lines)
+            case "fn":
+                visit_fn(normalized, content_lines)
+            case "n":
+                n = visit_n(normalized, content_lines)
+            case "prodid":
+                visit_prodid(normalized, content_lines)
+            case "categories":
+                visit_categories(normalized, content_lines)
+            case "tel":
+                uid_phone_number = visit_tel(normalized, content_lines)
+            case "email":
+                uid_email = visit_email(normalized, content_lines)
+            case "adr":
+                visit_address(normalized, content_lines)
+            case "note":
+                visit_note(normalized, content_lines)
+            case "bday":
+                visit_bday(normalized, content_lines)
+            case "url" | "impp" | "x-ablabel" | "org" | "photo" | "rev":
+                # These are ignored.
+                pass
+            case "uid":
+                # Original UID is ignored.
+                # We always derive one from TEL or EMAIL.
+                pass
+            case _:
+                raise ValueError(f"unknown attribute: {key}")
+
+    # Set a deterministic UID
+    if uid_phone_number is not None:
+        normalized.add(uid_phone_number)
+    elif uid_email is not None:
+        normalized.add(uid_email)
+    else:
+        raise ValueError(f"{original} has no phone number nor email")
+
+    # Set FN if N is found.
+    if n is not None:
+        fn_value = str(n).strip()
+        normalized.contents["fn"] = [
+            vobject.base.ContentLine(name="FN", params={}, value=fn_value)
+        ]
+
+    return normalized
+
+
+def sort_by_uid(component: vobject.base.Component):
+    return component.getChildValue("uid")
+
+
 def normalize(path: str):
     components = []
     f = sys.stdin if path == "-" else open(path)
@@ -315,61 +385,13 @@ def normalize(path: str):
             f, validate=True, transform=True, ignoreUnreadable=False, allowQP=False
         )
         for original in gen:
-            uid_phone_number = None
-            uid_email = None
-            n = None
-            blank = vobject.vCard()
-            for key, content_lines in original.contents.items():
-                match key:
-                    case "version":
-                        visit_version(blank, content_lines)
-                    case "fn":
-                        visit_fn(blank, content_lines)
-                    case "n":
-                        n = visit_n(blank, content_lines)
-                    case "prodid":
-                        visit_prodid(blank, content_lines)
-                    case "categories":
-                        visit_categories(blank, content_lines)
-                    case "tel":
-                        uid_phone_number = visit_tel(blank, content_lines)
-                    case "email":
-                        uid_email = visit_email(blank, content_lines)
-                    case "adr":
-                        visit_address(blank, content_lines)
-                    case "note":
-                        visit_note(blank, content_lines)
-                    case "bday":
-                        visit_bday(blank, content_lines)
-                    case "url" | "impp" | "x-ablabel" | "org" | "photo":
-                        # These are ignored.
-                        pass
-                    case _:
-                        raise ValueError(f"unknown attribute: {key}")
-
-            # Set a deterministic UID
-            if uid_phone_number is not None:
-                blank.add(uid_phone_number)
-            elif uid_email is not None:
-                blank.add(uid_email)
-            else:
-                raise ValueError(f"{original} has no phone number nor email")
-
-            # Set FN if N is found.
-            if n is not None:
-                fn_value = str(n).strip()
-                blank.contents["fn"] = [
-                    vobject.base.ContentLine(name="FN", params={}, value=fn_value)
-                ]
-
-            components.append(blank)
+            normalized = normalize_one(original)
+            components.append(normalized)
     finally:
         if path != "-":
             f.close()
 
-    components = sorted(
-        components, key=lambda component: component.getChildValue("uid")
-    )
+    components = sorted(components, key=sort_by_uid)
     for component in components:
         print(component.serialize(), end="")
 
@@ -417,6 +439,24 @@ def sync_to_radicale(vcf_filepath: str, radicale_collection_directory: str):
                 out.write(component.serialize())
 
 
+def import_from_radicale(radicale_collection_directory: str):
+    if not os.path.isdir(radicale_collection_directory):
+        raise ValueError(f"{radicale_collection_directory} is not a directory")
+
+    components = []
+    for filepath in glob.glob(os.path.join(radicale_collection_directory, "*.vcf")):
+        with open(filepath) as f:
+            gen = vobject.readComponents(
+                f, validate=True, transform=True, ignoreUnreadable=False, allowQP=False
+            )
+            for original in gen:
+                normalized = normalize_one(original)
+                components.append(normalized)
+    components = sorted(components, key=sort_by_uid)
+    for component in components:
+        print(component.serialize(), end="")
+
+
 def main():
     parser = argparse.ArgumentParser()
     sub_commands = parser.add_subparsers(dest="command", required=True)
@@ -444,6 +484,16 @@ def main():
         help="filepath to the Radicale collection directory. It should be a sub-directory of filesystem_folder.",
     )
 
+    sub_command_import_from_radicale = sub_commands.add_parser(
+        "import-from-radicale",
+        help="Take a Radicale collection directory and import all .vcf files to a single .vcf file.",
+    )
+    sub_command_import_from_radicale.add_argument(
+        "--radicale-collection-directory",
+        required=True,
+        help="filepath to the Radicale collection directory. It should be a sub-directory of filesystem_folder.",
+    )
+
     args = parser.parse_args()
     match args.command:
         case "normalize":
@@ -451,6 +501,10 @@ def main():
         case "sync-to-radicale":
             sync_to_radicale(
                 vcf_filepath=args.vcf_filepath,
+                radicale_collection_directory=args.radicale_collection_directory,
+            )
+        case "import-from-radicale":
+            import_from_radicale(
                 radicale_collection_directory=args.radicale_collection_directory,
             )
 
