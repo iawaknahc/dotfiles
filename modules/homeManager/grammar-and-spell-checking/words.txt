@@ -89,6 +89,7 @@ dired
 direnv
 dlv
 dockerls
+docstrings
 dolist
 dotimes
 duckdb

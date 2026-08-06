@@ -127,11 +127,30 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
      ;; in the selected frame.
      (reusable-frames . the-selected-frame)))))
 
-;; I have no idea how to configure *info* buffers yet.
-;; Sometimes I am configuring Emacs, and I want to look up something.
-;; In this use case, it seems better to have it displayed as side window, just like *Help*.
-;; Sometimes I want to read manuals as if I am reading a book.
-;; In this use case, I want it to be the only window in the frame.
+;; *info*
+(defun my/display-buffer-alist-from-help-to-info-match (buffer-or-name &rest _args)
+  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a *Help* buffer."
+  (if-let* ((selected-buf (window-buffer))
+            (_ (with-current-buffer selected-buf (derived-mode-p 'help-mode)))
+            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
+      t))
+
+;; Here is a concrete example of I know for sure where an Info buffer should go.
+;; Docstrings include reference to various Info manuals.
+;; When I follow the reference,
+;; I expect the manual to be displayed in the same window.
+;; We cannot use `display-buffer-same-window' because
+;; the *Help* buffer is displayed in a dedicated side window.
+(add-to-list
+ 'display-buffer-alist
+ ;; When display a *info* buffer from a *Help* buffer,
+ `(,(function my/display-buffer-alist-from-help-to-info-match) .
+   ;; display it in a side window
+   ((display-buffer-in-side-window) .
+    ;; on the right
+    ((side . right)
+     ;; spanning 80 columns.
+     (window-width . 80)))))
 
 (provide 'init-display-buffer)
 ;;; init-display-buffer.el ends here
