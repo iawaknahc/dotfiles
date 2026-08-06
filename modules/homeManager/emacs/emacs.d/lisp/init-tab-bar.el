@@ -20,5 +20,65 @@
 ;; `tab-bar-history-mode' is `winner-mode'.
 (tab-bar-history-mode 1)
 
+(defun my/consult-tabs ()
+  "Switch to a tab using `consult--read'.
+The candidates are from `tab-bar-tabs-function'.
+
+The difference between this command and `tab-bar-switch-to-tab' are
+1. `tab-bar-switch-to-tab' sorts the tabs by recency,
+    while this command sorts by tab-number.
+2. `tab-bar-switch-to-tab' excludes the current tab,
+    while this command includes and make it the default selected candidate.
+3. The candidate string includes the tab number, the tab group,
+   and the tab number.
+   So we need not use & to search in the annotation.
+
+In fact, `tab-bar-switch-to-tab' is invoked non-interactively to
+actually switch to the selected tab."
+  (interactive)
+  (require 'tab-bar)
+  (require 'consult)
+  (let* ((tabs (funcall tab-bar-tabs-function))
+         (candidates
+          (cl-loop for tab in tabs
+                   for tab-number from 1
+                   collect
+                   (let* ((current-tab-p (eq (car tab) 'current-tab))
+                          (tab-name (alist-get 'name tab))
+                          (tab-group (alist-get 'group tab)))
+                     (propertize
+                      (format "%s %d [%s] %s"
+                              (if current-tab-p "*" " ")
+                              tab-number
+                              (or tab-group "NO-GROUP")
+                              tab-name)
+                      'tab-name tab-name
+                      'tab-group tab-group
+                      'tab-number tab-number
+                      'current-tab-p current-tab-p)))))
+    (tab-bar-switch-to-tab
+     (consult--read
+      candidates
+      :prompt "Switch to tab: "
+      :require-match t
+      :sort nil
+      :default (cl-find-if
+                (lambda (c) (get-text-property 0 'current-tab-p c))
+                candidates)
+      ;; If we use 'tab as the category, the :annotate function will not be called.
+      ;; I guess this is due to `marginalia-annotate-tab' is registered as a annotation function of category 'tab.
+      ;; Thus, we use a custom category here, and specify an annotation function.
+      ;; The annotation function just delegate to `marginalia-annotate-tab'.
+      :category 'my/tab
+      :annotate (lambda (c)
+                  (let* ((tab-name (get-text-property 0 'tab-name c)))
+                    (marginalia-annotate-tab tab-name)))
+      :lookup (apply-partially #'consult--lookup-prop 'tab-name)
+      ;; Previewing with :state does not work using `tab-bar-select-tab' does not work.
+      ;; Let's give up preview here.
+      ))))
+
+(keymap-global-set "C-x t RET" #'my/consult-tabs)
+
 (provide 'init-tab-bar)
 ;;; init-tab-bar.el ends here
