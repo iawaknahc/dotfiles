@@ -12,7 +12,7 @@
 ;;; Code:
 
 (defun my/project-buffers-filter-return (buffers)
-  "An :filter-return advice to project-buffers.
+  "An :filter-return advice to `project-buffers'.
 It calls function `buffer-file-name' for each buffer in BUFFERS,
 and ensures it is non-nil."
   (seq-filter (lambda (b) (buffer-file-name b)) buffers))
