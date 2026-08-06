@@ -11,14 +11,9 @@
  ;; For example, when I spam C-n to move point, it flickers.
  eldoc-idle-delay 0.5
  ;; Allow ElDoc to resize echo area.
- eldoc-echo-area-use-multiline-p t)
-
-(add-to-list
- 'display-buffer-alist
- `(,(rx string-start "*eldoc")
-   (display-buffer-reuse-window display-buffer-in-side-window)
-   (side . bottom)
-   (window-height . 0.2)))
+ eldoc-echo-area-use-multiline-p t
+ ;; Do not show in echo area if Eldoc buffer is being shown.
+ eldoc-echo-area-prefer-doc-buffer t)
 
 (provide 'init-eldoc)
 ;;; init-eldoc.el ends here

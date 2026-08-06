@@ -62,12 +62,6 @@ so we need this wrapper."
 
 (keymap-set mu4e-view-mode-map "X" #'my/mu4e-view-in-xwidget-action)
 
-;; Make the main view use the same window.
-(add-to-list
- 'display-buffer-alist
- `((regexp-quote mu4e-main-buffer-name)
-   display-buffer-same-window))
-
 (add-to-list
  'mu4e-header-info-custom
  '(:maildir-first-component

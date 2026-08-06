@@ -131,13 +131,5 @@ It is kept solely for maintaining the original function signature."
     (compilation-start command #'grep-mode)))
 (advice-add 'lgrep :override #'my/lgrep-override)
 
-;; Make the grep window always shown at the bottom.
-(add-to-list
- 'display-buffer-alist
- `(,(rx string-start "*grep*" string-end)
-   (display-buffer-reuse-window display-buffer-in-side-window)
-   (side . bottom)
-   (window-height . 0.33)))
-
 (provide 'init-grep-mode)
 ;;; init-grep-mode.el ends here
