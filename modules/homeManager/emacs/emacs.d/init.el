@@ -41,6 +41,7 @@
 (require 'init-server)
 (require 'init-org-mode)
 (require 'init-calc)
+(require 'init-switch-to-buffer)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
