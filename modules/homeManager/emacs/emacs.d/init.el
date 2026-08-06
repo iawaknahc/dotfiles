@@ -43,6 +43,7 @@
 (require 'init-calc)
 (require 'init-switch-to-buffer)
 (require 'init-display-buffer)
+(require 'init-lisp-interaction-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)

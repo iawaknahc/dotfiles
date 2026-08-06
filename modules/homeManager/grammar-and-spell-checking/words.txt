@@ -336,6 +336,7 @@ setlocal
 setloclist
 setq
 setuptools
+sexp
 shada
 shellcheck
 shellcmdline
