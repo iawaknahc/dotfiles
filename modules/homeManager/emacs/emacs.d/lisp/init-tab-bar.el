@@ -33,8 +33,8 @@ The difference between this command and `tab-bar-switch-to-tab' are
    and the tab number.
    So we need not use & to search in the annotation.
 
-In fact, `tab-bar-switch-to-tab' is invoked non-interactively to
-actually switch to the selected tab."
+Finally, `tab-bar-select-tab' is used to select tab by tab number.
+`tab-bar-switch-to-tab' is not used because tabs can have duplicated names."
   (interactive)
   (require 'tab-bar)
   (require 'consult)
@@ -56,7 +56,7 @@ actually switch to the selected tab."
                       'tab-group tab-group
                       'tab-number tab-number
                       'current-tab-p current-tab-p)))))
-    (tab-bar-switch-to-tab
+    (tab-bar-select-tab
      (consult--read
       candidates
       :prompt "Switch to tab: "
@@ -73,7 +73,7 @@ actually switch to the selected tab."
       :annotate (lambda (c)
                   (let* ((tab-name (get-text-property 0 'tab-name c)))
                     (marginalia-annotate-tab tab-name)))
-      :lookup (apply-partially #'consult--lookup-prop 'tab-name)
+      :lookup (apply-partially #'consult--lookup-prop 'tab-number)
       ;; Previewing with :state does not work using `tab-bar-select-tab' does not work.
       ;; Let's give up preview here.
       ))))
