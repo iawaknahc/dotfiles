@@ -1,3 +1,5 @@
+---@diagnostic disable: missing-fields
+
 -- As of 2025-07-01, blink.cmp has an issue of not triggering when
 -- the snippet prefix is a non-alphabetical character.
 -- https://github.com/Saghen/blink.cmp/issues/1688
@@ -12,7 +14,6 @@ local override = {
     return trigger_characters
   end,
 }
-
 require("blink.cmp").setup({
   sources = {
     default = { "snippets", "lsp", "path", "buffer" },
@@ -101,7 +102,5 @@ require("blink.cmp").setup({
     --
     -- But now we use LuaSnip as the engine, so it is required to load `~/.config/nvim/snippets/package.json` manually.
     preset = "luasnip",
-    -- Add a very high score_offset to snippets to ensure when I type a snippet trigger, it is the first result, so that I can press CTRL-Y to expand it immediately.
-    score_offset = 100,
   },
-})
+} --[[@as blink.cmp.Config]])
