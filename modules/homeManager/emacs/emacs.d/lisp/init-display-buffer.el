@@ -135,7 +135,7 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
             (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
       t))
 
-;; Here is a concrete example of I know for sure where an Info buffer should go.
+;; Here is a concrete example of I know for sure where an *info* buffer should go.
 ;; Docstrings include reference to various Info manuals.
 ;; When I follow the reference,
 ;; I expect the manual to be displayed in the same window.
@@ -143,8 +143,29 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
 ;; the *Help* buffer is displayed in a dedicated side window.
 (add-to-list
  'display-buffer-alist
- ;; When display a *info* buffer from a *Help* buffer,
+ ;; When display an *info* buffer from a *Help* buffer,
  `(,(function my/display-buffer-alist-from-help-to-info-match) .
+   ;; display it in a side window
+   ((display-buffer-in-side-window) .
+    ;; on the right
+    ((side . right)
+     ;; spanning 80 columns.
+     (window-width . 80)))))
+
+(defun my/display-buffer-alist-from-project-file-to-info-match (buffer-or-name &rest _args)
+  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a project file."
+  (if-let* ((selected-buf (window-buffer))
+            (current-proj (with-current-buffer selected-buf (project-current)))
+            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
+      t))
+
+;; Here is another concrete example of where an *info* buffer should go.
+;; When I am in some project, and I need to look up the manual.
+;; I want display the manual in a side window, rather than taking up the whole frame.
+(add-to-list
+ 'display-buffer-alist
+ ;; When display an *info* buffer from a project file,
+ `(,(function my/display-buffer-alist-from-project-file-to-info-match) .
    ;; display it in a side window
    ((display-buffer-in-side-window) .
     ;; on the right
