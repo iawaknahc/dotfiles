@@ -2,6 +2,33 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Security
+(setq
+ ;; No directories are safe.
+ safe-local-variable-directories nil
+ ;; Disable dir-local variables in remote files.
+ enable-remote-dir-locals nil
+
+ ;; Disable file local variables.
+ enable-local-variables nil
+ ;; No values are safe.
+ safe-local-variable-values nil
+ ;; But always allow `lexical-binding' and `read-symbol-shorthands'.
+ ;; This is the default.
+ permanently-enabled-local-variables '(lexical-binding read-symbol-shorthands)
+
+ ;; Disable `eval' in file local variables.
+ enable-local-eval nil
+ ;; No forms are safe.
+ safe-local-eval-forms nil
+
+ ;; Nothing is trusted.
+ ;; This effects the return value of `trusted-content-p'.
+ ;; As far as I know, users are `elisp-flymake-byte-compile' and `elisp-completion-at-point'.
+ ;; The expected result is that no macros will be expanded.
+ ;; See https://eshelyaron.com/posts/2024-11-27-emacs-aritrary-code-execution-and-how-to-avoid-it.html
+ trusted-content nil)
+
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; Configure features that come with Emacs.
