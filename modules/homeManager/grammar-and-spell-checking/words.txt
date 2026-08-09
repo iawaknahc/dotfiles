@@ -176,6 +176,7 @@ hledger
 hlgroup
 hlsearch
 hostnames
+hpath
 hspace
 ignorecase
 impp

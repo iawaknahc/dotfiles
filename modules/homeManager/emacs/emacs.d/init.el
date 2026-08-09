@@ -95,9 +95,6 @@
 ;; Configure modal editing.
 (require 'init-evil)
 
-;; Configure Hyperbole.
-(require 'init-hyperbole)
-
 ;; Configure format after save.
 (require 'init-apheleia)
 

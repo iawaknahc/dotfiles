@@ -112,9 +112,6 @@
       # Evil
       evil
 
-      # Hyperbole
-      hyperbole
-
       # Snippet
       tempel
 
