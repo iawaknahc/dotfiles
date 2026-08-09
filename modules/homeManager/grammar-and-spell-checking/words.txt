@@ -244,6 +244,7 @@ modeline
 modelines
 mousepos
 moze
+mru
 multiclient
 mylauncher
 myvimrc

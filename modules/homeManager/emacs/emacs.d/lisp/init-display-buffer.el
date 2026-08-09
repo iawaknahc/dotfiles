@@ -2,6 +2,43 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Set the base action.
+;; The intention is to avoid splitting windows.
+;; Sometimes it is unavoidable because packages have hard-coded '(inhibit-same-window . t).
+;; In that case, we use `display-buffer-in-direction'
+(setq
+ display-buffer-base-action
+ ;; Reuse a window already showing the buffer.
+ `((
+    display-buffer-reuse-window
+    ;; Reuse a window whose major mode is the same as that of the buffer about to being displayed.
+    display-buffer-reuse-mode-window
+    ;; Reuse the selected window
+    display-buffer-same-window
+    ;; Reuse a window which is not dedicated.
+    display-buffer-use-some-window
+    ;; As a last resort, make a new window on the right
+    display-buffer-in-direction) .
+    ;; in the selected frame
+    ((reusable-frames . the-selected-frame)
+     ;; Allow reusing the selected window
+     (inhibit-same-window . nil)
+     ;; Use the most recently used window
+     (some-window . mru)
+     ;; Make a window on the right
+     (direction . right)
+     ;; relative to `window-main-window'.
+     (window . main)))
+ ;; By default, `magit-commit-show-diff' is non-nil.
+ ;; When commit, Magit first shows the commit buffer, followed by the diff buffer.
+ ;; But `magit-commit-diff-inhibit-same-window' is nil by default, thus,
+ ;; The diff buffer will hide the commit buffer, making the commit flow looks broken.
+ ;; When we are committing, we expect the UI to be ready to accept commit message,
+ ;; not viewing the diff.
+ ;; On the other hand, we have enable the flag --verbose by default in git config.
+ ;; The diff is already included in the commit buffer.
+ magit-commit-show-diff nil)
+
 ;; *scratch*
 (add-to-list
  'display-buffer-alist
@@ -42,41 +79,65 @@
      ;; in the selected frame.
      (reusable-frames . the-selected-frame)))))
 
-;; grep-mode
+;; Buffers that I prefer displaying in the bottom side window.
 (add-to-list
  'display-buffer-alist
- ;; When the command `grep' is invoked,
- `(,(rx string-start "*grep*" string-end) .
-   ;; display the grep buffer in a side window
-   ((display-buffer-in-side-window) .
-    ;; at the bottom
-    ((side . bottom)
-     ;; spanning 1/3 of the frame height.
-     (window-height . 0.33)))))
+ `((or (derived-mode . compilation-mode)
+       (derived-mode . occur-mode)
+       (derived-mode . flymake-diagnostics-buffer-mode)
+       (derived-mode . flymake-project-diagnostics-mode)
+       (derived-mode . xref--xref-buffer-mode)
+       (derived-mode . xref-edit-mode)
+       (derived-mode . debugger-mode)
+       (derived-mode . apropos-mode)
+       ;; The *Warnings* is in special-mode, so just match by name.
+       ,(rx string-start "*Warnings*" string-end)
+       ;; The Eldoc buffer is in special-mode.
+       ;; The buffer name keeps changing, thus we only match the prefix.
+       ,(rx string-start "*eldoc")) .
+       ;; display in a side window
+       ((display-buffer-in-side-window) .
+        ;; at the bottom
+        ((side . bottom)
+         ;; spanning 1/3 of the frame height.
+         (window-height . 0.33)))))
 
-;; Eldoc
-(add-to-list
- 'display-buffer-alist
- ;; When the command `eldoc-doc-buffer' is invoked,
- `(,(rx string-start "*eldoc") . ; The buffer name keeps changing, thus we only match the prefix.
-   ;; display the Eldoc buffer in a side window
-   ((display-buffer-in-side-window) .
-    ;; at the bottom
-    ((side . bottom)
-     ;; spanning 1/3 of the frame height.
-     (window-height . 0.33)))))
+;; Buffers that I prefer displaying in the right side window.
 
-;; Help
+;; Here is a concrete example of I know for sure where an *info* buffer should go.
+;; Docstrings include reference to various Info manuals.
+;; When I follow the reference,
+;; I expect the manual to be displayed in the same window.
+;; We cannot use `display-buffer-same-window' because
+;; the *Help* buffer is displayed in a dedicated side window.
+(defun my/display-buffer-alist-from-help-to-info-match (buffer-or-name &rest _args)
+  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a *Help* buffer."
+  (if-let* ((selected-buf (window-buffer))
+            (_ (with-current-buffer selected-buf (derived-mode-p 'help-mode)))
+            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
+      t))
+
+;; Here is another concrete example of where an *info* buffer should go.
+;; When I am in some project, and I need to look up the manual.
+;; I want display the manual in a side window, rather than taking up the whole frame.
+(defun my/display-buffer-alist-from-project-file-to-info-match (buffer-or-name &rest _args)
+  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a project file."
+  (if-let* ((selected-buf (window-buffer))
+            (current-proj (with-current-buffer selected-buf (project-current)))
+            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
+      t))
+
 (add-to-list
  'display-buffer-alist
- ;; Whenever the help buffer is shown,
- `(,(rx string-start "*Help*" string-end) .
-   ;; display it in a side window
-   ((display-buffer-in-side-window) .
-    ;; on the right
-    ((side . right)
-     ;; spanning 80 columns.
-     (window-width . 80)))))
+ `((or (derived-mode . help-mode)
+       ,(function my/display-buffer-alist-from-help-to-info-match)
+       ,(function my/display-buffer-alist-from-project-file-to-info-match)) .
+       ;; display in a side window
+       ((display-buffer-in-side-window) .
+        ;; on the right
+        ((side . right)
+         ;; spanning 80 columns.
+         (window-width . 80)))))
 
 ;; Project file
 (defun my/display-buffer-alist-project-file-match-project-file (buffer-or-name &rest _args)
@@ -126,52 +187,6 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
      (tab-group . ,(function my/display-buffer-alist-project-file-tab-group))
      ;; in the selected frame.
      (reusable-frames . the-selected-frame)))))
-
-;; *info*
-(defun my/display-buffer-alist-from-help-to-info-match (buffer-or-name &rest _args)
-  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a *Help* buffer."
-  (if-let* ((selected-buf (window-buffer))
-            (_ (with-current-buffer selected-buf (derived-mode-p 'help-mode)))
-            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
-      t))
-
-;; Here is a concrete example of I know for sure where an *info* buffer should go.
-;; Docstrings include reference to various Info manuals.
-;; When I follow the reference,
-;; I expect the manual to be displayed in the same window.
-;; We cannot use `display-buffer-same-window' because
-;; the *Help* buffer is displayed in a dedicated side window.
-(add-to-list
- 'display-buffer-alist
- ;; When display an *info* buffer from a *Help* buffer,
- `(,(function my/display-buffer-alist-from-help-to-info-match) .
-   ;; display it in a side window
-   ((display-buffer-in-side-window) .
-    ;; on the right
-    ((side . right)
-     ;; spanning 80 columns.
-     (window-width . 80)))))
-
-(defun my/display-buffer-alist-from-project-file-to-info-match (buffer-or-name &rest _args)
-  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a project file."
-  (if-let* ((selected-buf (window-buffer))
-            (current-proj (with-current-buffer selected-buf (project-current)))
-            (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
-      t))
-
-;; Here is another concrete example of where an *info* buffer should go.
-;; When I am in some project, and I need to look up the manual.
-;; I want display the manual in a side window, rather than taking up the whole frame.
-(add-to-list
- 'display-buffer-alist
- ;; When display an *info* buffer from a project file,
- `(,(function my/display-buffer-alist-from-project-file-to-info-match) .
-   ;; display it in a side window
-   ((display-buffer-in-side-window) .
-    ;; on the right
-    ((side . right)
-     ;; spanning 80 columns.
-     (window-width . 80)))))
 
 (provide 'init-display-buffer)
 ;;; init-display-buffer.el ends here
