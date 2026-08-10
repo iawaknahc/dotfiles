@@ -290,6 +290,7 @@ paramgen
 pathlen
 pcase
 pchar
+pixelwise
 pkeyopt
 pkgs
 pnl

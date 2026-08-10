@@ -188,5 +188,24 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
      ;; in the selected frame.
      (reusable-frames . the-selected-frame)))))
 
+(defun my/maximize-window (&optional window)
+  "Like `maximize-window', but ignore is set to `safe'.
+If WINDOW is nil, it is selected window."
+  (interactive)
+  (setq window (window-normalize-window window))
+  (let* ((horizontal nil)
+         (vertical t)
+         (ignore 'safe)
+         (trail nil)
+         (no-up nil)
+         (no-down nil)
+         (horizontal-max-delta (window-max-delta window horizontal ignore trail no-up no-down window-resize-pixelwise))
+         (vertical-max-delta (window-max-delta window vertical ignore trail no-up no-down window-resize-pixelwise)))
+    (window-resize window horizontal-max-delta horizontal ignore window-resize-pixelwise)
+    (window-resize window vertical-max-delta vertical ignore window-resize-pixelwise)))
+;; It is expected to use \\[C-c <left>] and \\[C-c <right>] to restore.
+;; The above key bindings are the defaults of `winner-mode' and `tab-bar-history-mode'.
+(keymap-global-set "C-x w m" #'my/maximize-window)
+
 (provide 'init-display-buffer)
 ;;; init-display-buffer.el ends here
