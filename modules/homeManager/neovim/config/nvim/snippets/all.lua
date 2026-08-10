@@ -48,6 +48,7 @@ return {
   s("#!nu", t("#!/usr/bin/env nu")),
   s("#!nvim", t("#!/usr/bin/env -S nvim -l")),
   s("#!sh", t("#!/bin/sh")),
+  s("#!eshell", t("#!/usr/bin/env -S emacs --quick --batch --funcall eshell-batch-file")),
   s("today", f(today)),
   s("yesterday", f(yesterday)),
   s("tomorrow", f(tomorrow)),
