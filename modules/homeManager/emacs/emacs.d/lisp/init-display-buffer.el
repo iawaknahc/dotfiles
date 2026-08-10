@@ -130,6 +130,8 @@
 (add-to-list
  'display-buffer-alist
  `((or (derived-mode . help-mode)
+       ;; The buffer displayed by `org-capture'.
+       ,(rx string-start "*Org Select*" string-end)
        ,(function my/display-buffer-alist-from-help-to-info-match)
        ,(function my/display-buffer-alist-from-project-file-to-info-match)) .
        ;; display in a side window

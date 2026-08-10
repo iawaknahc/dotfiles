@@ -72,6 +72,7 @@ cxx
 dabbrev
 dadbod
 dartls
+datetree
 dbui
 deadgrep
 debugpy
@@ -278,6 +279,7 @@ nvim
 nvimcolors
 ocaml
 occ
+olp
 omnifunc
 openparen
 openssl
@@ -325,6 +327,7 @@ rassumfrassum
 recentf
 redrawstatus
 reedline
+remf
 rgi
 ripgrep
 rustfmt
