@@ -29,13 +29,15 @@
     # melpaPackages
     # FIXME: ccatppuccin-theme from melpaStablePackages is too old to have ccatppuccin-reload.
     catppuccin-theme = self.melpaPackages.catppuccin-theme;
+    # The latest release on NonGNU ELPA is 1.15.0 which was released in 2024.
+    # The latest release on MELPA stable is 1.14.2 which is even older.
+    evil = self.melpaPackages.evil;
     just-ts-mode = self.melpaPackages.just-ts-mode;
     nushell-ts-mode = self.melpaPackages.nushell-ts-mode;
 
     # melpaStablePackages
     apheleia = self.melpaStablePackages.apheleia;
     corfu-prescient = self.melpaStablePackages.corfu-prescient;
-    evil = self.melpaStablePackages.evil;
     fennel-mode = self.melpaStablePackages.fennel-mode;
     fish-mode = self.melpaStablePackages.fish-mode;
     flymake-quickdef = self.melpaStablePackages.flymake-quickdef;

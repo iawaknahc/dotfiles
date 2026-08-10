@@ -31,15 +31,25 @@ Apply F with ARGS."
  evil-normal-state-modes '(conf-mode prog-mode text-mode)
  ;; Make insert state just like emacs state.
  evil-disable-insert-state-bindings t
- ;; C-u to scroll half page.
- evil-want-C-u-scroll t
+ ;; I used to set `evil-want-C-u-scroll' to t.
+ ;; But we are using Emacs, C-u should be `universal-argument'.
+ evil-want-C-u-scroll nil
+ ;; Since C-u does not scroll,
+ ;; C-d should not scroll.
+ evil-want-C-d-scroll nil
+ ;; We will rebind `evil-jump-forward' below.
+ ;; Thus, the default binding can be reset.
+ evil-want-C-i-jump nil
+ ;; This matches the behavior of Neovim.
  evil-want-Y-yank-to-eol t
  evil-search-wrap nil
  evil-v$-excludes-newline t
  ;; C-x 2 is split-window-below
  evil-split-window-below t
  ;; C-x 3 is split-window-right
- evil-vsplit-window-right t)
+ evil-vsplit-window-right t
+ ;; Make CTRL-r work.
+ evil-undo-system 'undo-redo)
 
 (add-hook
  'after-init-hook
@@ -54,8 +64,14 @@ Apply F with ARGS."
    ;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
    ;; In addition, it is very nice to have `<control-i>' to jump forward, and
    ;; `C-o' to jump backward.
-   (keymap-unset evil-motion-state-map "C-i" t)
    (keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
+
+   ;; I do not use `evil-scroll-page-down' or `evil-scroll-page-up',
+   ;; so replace their bindings to scroll half page.
+   (keymap-set evil-motion-state-map "C-f" #'evil-scroll-down)
+   (keymap-set evil-motion-state-map "C-b" #'evil-scroll-up)
+   ;; We have to bind C-d to `ignore', otherwise, `delete-char' is invoked.
+   (keymap-set evil-motion-state-map "C-d" #'ignore)
 
    ;; Make n and N have deterministic direction.
    (advice-add 'evil-search-next :around #'my/evil-search-next)
