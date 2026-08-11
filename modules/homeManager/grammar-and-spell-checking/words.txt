@@ -264,6 +264,7 @@ noenc
 noeol
 nohlsearch
 noncharacter
+nondirectory
 noout
 nop
 noselect
@@ -310,6 +311,7 @@ progn
 proj
 prolog
 propertize
+propertized
 pubin
 pubout
 pumheight
