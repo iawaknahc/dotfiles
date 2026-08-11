@@ -95,6 +95,7 @@ dolist
 dotimes
 duckdb
 dwim
+ediff
 eglot
 eldoc
 elec

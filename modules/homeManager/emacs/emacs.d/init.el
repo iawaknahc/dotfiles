@@ -71,6 +71,7 @@
 (require 'init-switch-to-buffer)
 (require 'init-display-buffer)
 (require 'init-lisp-interaction-mode)
+(require 'init-ediff)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
