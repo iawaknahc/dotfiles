@@ -136,6 +136,7 @@ foldfunc
 foldlevelstart
 foldmethod
 foldopen
+fontset
 fromisoformat
 fromtimestamp
 fsencode

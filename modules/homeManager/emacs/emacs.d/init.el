@@ -40,6 +40,13 @@
 ;; this file is generated in Nix.
 (require 'init-exec-path-from-shell)
 
+;; Theme must be configured BEFORE font.
+;; It is because `set-face-attribute' is used on the face `default'.
+;; If the theme call `set-face-attribute' on the face `default',
+;; my font configuration may be altered.
+(require 'init-theme)
+(require 'init-font)
+
 ;; Configure features that come with Emacs.
 (require 'init-timezone)
 (require 'init-keymap)
@@ -49,7 +56,6 @@
 (require 'init-backup-files)
 (require 'init-interlocking)
 (require 'init-macos)
-(require 'init-theme)
 (require 'init-bell)
 (require 'init-ui)
 (require 'init-tab-bar)

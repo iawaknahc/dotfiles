@@ -2,27 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-
 (menu-bar-mode -1)
 (when (display-graphic-p)
   (tool-bar-mode -1))
 
-(set-face-attribute
- 'default
- nil
- :family "JetBrainsMonoNL Nerd Font Mono"
- :weight 'light
- :height 130)
-(set-face-attribute
- 'variable-pitch
- nil
- :family "Source Han Sans"
- :weight 'normal
- :height 160)
-
-(setq
-  inhibit-startup-screen t
-  list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 😀")
+(setq inhibit-startup-screen t)
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

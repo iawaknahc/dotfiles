@@ -5,10 +5,11 @@
 *.plist
 *.sh
 **/firefox/*.json
-currencies.py
 codebookignore
+currencies.py
 flake.lock
 harperignore
+init-font.el
 justfile
 Makefile
 parse_ucd.zig
