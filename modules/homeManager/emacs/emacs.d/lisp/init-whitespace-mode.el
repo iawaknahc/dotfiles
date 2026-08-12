@@ -39,4 +39,4 @@
    ))
 
 (provide 'init-whitespace-mode)
-;;; init-whitespace-mode.el ends here.
+;;; init-whitespace-mode.el ends here
