@@ -107,9 +107,6 @@
       # Email
       mu4e
 
-      # Lisp
-      rainbow-delimiters
-
       # Evil
       evil
 

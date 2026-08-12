@@ -116,9 +116,6 @@
 ;; Configure wgrep.el
 (require 'init-wgrep)
 
-;; Configure rainbow parenthesis.
-(require 'init-rainbow-delimiters)
-
 ;; Configure Git integration.
 (require 'init-diff-hl)
 
