@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'mu4e)
-
 (setq
  mu4e-get-mail-command "mbsync --all"
  mu4e-context-policy 'pick-first
@@ -60,21 +58,20 @@ so we need this wrapper."
   (let ((msg (mu4e-message-at-point)))
     (mu4e-action-view-in-xwidget msg)))
 
-(keymap-set mu4e-view-mode-map "X" #'my/mu4e-view-in-xwidget-action)
-
-(add-to-list
- 'mu4e-header-info-custom
- '(:maildir-first-component
-   .
-   (:name
-    "The first path component of :maildir"
-    :shortname "Mailbox"
-    :help "The first path component of :maildir"
-    :function (lambda (msg)
-                (let* ((maildir (mu4e-message-field msg :maildir)))
-                  (nth 1 (file-name-split maildir)))))))
-
-(require 'init-mu4e-contexts)
+(with-eval-after-load 'mu4e
+  (keymap-set mu4e-view-mode-map "X" #'my/mu4e-view-in-xwidget-action)
+  (add-to-list
+   'mu4e-header-info-custom
+   '(:maildir-first-component
+     .
+     (:name
+      "The first path component of :maildir"
+      :shortname "Mailbox"
+      :help "The first path component of :maildir"
+      :function (lambda (msg)
+                  (let* ((maildir (mu4e-message-field msg :maildir)))
+                    (nth 1 (file-name-split maildir)))))))
+  (require 'init-mu4e-contexts))
 
 (provide 'init-mu4e)
 ;;; init-mu4e.el ends here

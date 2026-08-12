@@ -31,6 +31,15 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; When using the PGTK build on macOS, and
+;; the application is launched by Spotlight or something similar,
+;; the environment variables are minimal.
+;; We need the environment variables initialized like in a shell.
+;; There is a third party package `exec-path-from-shell' designed exactly for this purpose.
+;; To keep environment variables synced with my Nix configuration,
+;; this file is generated in Nix.
+(require 'init-exec-path-from-shell)
+
 ;; Configure features that come with Emacs.
 (require 'init-timezone)
 (require 'init-keymap)

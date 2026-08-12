@@ -294,6 +294,7 @@ paramgen
 pathlen
 pcase
 pchar
+pgtk
 pixelwise
 pkeyopt
 pkgs

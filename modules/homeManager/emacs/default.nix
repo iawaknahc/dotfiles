@@ -13,9 +13,7 @@
   ];
 
   programs.emacs.enable = true;
-  programs.emacs.package =
-    # It has to be Emacs Macport otherwise the scrollbar has a non-customizable white background color.
-    if pkgs.stdenv.hostPlatform.isDarwin then pkgs.emacs30-macport else pkgs.emacs30-pgtk;
+  programs.emacs.package = pkgs.emacs30-pgtk;
 
   # overrides is the documented way to ensure a package is from a specific package set.
   # See https://nixos.org/manual/nixpkgs/stable/#sec-emacs-config
@@ -86,6 +84,7 @@
 
     # nongnuPackages
     beancount = self.nongnuPackages.beancount;
+    exec-path-from-shell = self.nongnuPackages.exec-path-from-shell;
     # llama is a dependency of magit.
     llama = self.nongnuPackages.llama;
     # `cond-let` is a dependency of magit.
@@ -99,14 +98,14 @@
   };
   programs.emacs.extraPackages =
     emacsPackages: with emacsPackages; [
+      # Fix environment variables
+      exec-path-from-shell
+
       # Theme
       catppuccin-theme
 
       # Email
       mu4e
-
-      # Scrolling
-      ultra-scroll
 
       # Lisp
       rainbow-delimiters
@@ -216,7 +215,26 @@
     # recursive is needed because .emacs.d/lisp may contain generated files.
     recursive = true;
   };
+  home.file.".emacs.d/lisp/init-exec-path-from-shell.el".text =
+    let
+      pairs = (lib.attrsets.attrsToList config.home.sessionVariables);
+      quoted = (builtins.map ({ name, ... }: ''"${name}"'') pairs);
+      vars = lib.strings.join " " quoted;
+    in
+    ''
+      ;;; init-exec-path-from-shell.el --- init-exec-path-from-shell.el -*- lexical-binding: t -*-
+      ;;; Commentary:
+      ;;; Code:
+
+      (setq exec-path-from-shell-variables (list "NIX_PROFILES" "NIX_SSL_CERT_FILE" "NIX_USER_PROFILE_DIR" "PATH" "SSH_AUTH_SOCK" ${vars}))
+      (when (memq window-system '(ns))
+        (exec-path-from-shell-initialize))
+
+      (provide 'init-exec-path-from-shell)
+      ;;; init-exec-path-from-shell.el ends here
+    '';
   home.file.".emacs.d/templates".source = ./emacs.d/templates.el;
+
   mypython.packages = [
     (
       python-pkgs: with python-pkgs; [
