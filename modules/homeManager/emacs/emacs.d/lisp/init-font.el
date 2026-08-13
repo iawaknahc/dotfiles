@@ -2,6 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq
+ ;; Customize the sample text so that it includes:
+ ;; 1. All uppercase and lowercase English characters.
+ ;; 2. All digits.
+ ;; 3. A few CJK characters.
+ ;; 4. An emoji.
+ ;; 5. A Nerd Font symbol.
+ list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 😀 ♥ "
+ ;; Ask Emacs to respect fontset for script `symbol'.
+ ;; However, it does not seem to work as intended.
+ ;; For example, JetBrains Mono has glyph for U+2208 whose script is `symbol'.
+ ;; I expect Noto Sans Symbols 2 should be used, but it is not the case.
+ use-default-font-for-symbols nil)
+
 (defconst my/noto-font-mapping '((latin . "Noto Sans")
                                  (phonetic . "Noto Sans")
                                  (greek . "Noto Sans")
@@ -220,15 +234,6 @@ As of Emacs 30.2, they all start with `mathematical-'."
    for-all-frames
    :font "fontset-default"
    :height 160))
-
-(setq
- ;; Customize the sample text so that it includes:
- ;; 1. All uppercase and lowercase English characters.
- ;; 2. All digits.
- ;; 3. A few CJK characters.
- ;; 4. An emoji.
- ;; 5. A Nerd Font symbol.
- list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 😀 ♥ ")
 
 (provide 'init-font)
 ;;; init-font.el ends here
