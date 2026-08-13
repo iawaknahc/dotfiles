@@ -50,21 +50,21 @@
 
     # kitty main font must be monospace.
     # We ask kitty to use this font for CJK.
-    symbol_map        U+4E00-U+9FFF   Source Han Mono
-    symbol_map        U+3400–U+4DBF   Source Han Mono
-    symbol_map        U+20000–U+2A6DF Source Han Mono
-    symbol_map        U+2A700–U+2B73F Source Han Mono
-    symbol_map        U+2B740–U+2B81F Source Han Mono
-    symbol_map        U+2B820–U+2CEAF Source Han Mono
-    symbol_map        U+2CEB0–U+2EBEF Source Han Mono
-    symbol_map        U+30000–U+3134F Source Han Mono
-    symbol_map        U+31350–U+323AF Source Han Mono
-    symbol_map        U+2EBF0–U+2EE5F Source Han Mono
-    symbol_map        U+F900–U+FAFF   Source Han Mono
-    symbol_map        U+3300–U+33FF   Source Han Mono
-    symbol_map        U+FE30–U+FE4F   Source Han Mono
-    symbol_map        U+F900–U+FAFF   Source Han Mono
-    symbol_map        U+2F800–U+2FA1F Source Han Mono
+    symbol_map        U+4E00-U+9FFF   Source Han Sans HC
+    symbol_map        U+3400–U+4DBF   Source Han Sans HC
+    symbol_map        U+20000–U+2A6DF Source Han Sans HC
+    symbol_map        U+2A700–U+2B73F Source Han Sans HC
+    symbol_map        U+2B740–U+2B81F Source Han Sans HC
+    symbol_map        U+2B820–U+2CEAF Source Han Sans HC
+    symbol_map        U+2CEB0–U+2EBEF Source Han Sans HC
+    symbol_map        U+30000–U+3134F Source Han Sans HC
+    symbol_map        U+31350–U+323AF Source Han Sans HC
+    symbol_map        U+2EBF0–U+2EE5F Source Han Sans HC
+    symbol_map        U+F900–U+FAFF   Source Han Sans HC
+    symbol_map        U+3300–U+33FF   Source Han Sans HC
+    symbol_map        U+FE30–U+FE4F   Source Han Sans HC
+    symbol_map        U+F900–U+FAFF   Source Han Sans HC
+    symbol_map        U+2F800–U+2FA1F Source Han Sans HC
 
     # Tabs
     tab_bar_style        hidden

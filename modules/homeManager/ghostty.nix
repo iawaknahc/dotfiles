@@ -48,24 +48,7 @@
     font-family = [
       "" # Reset instead of appending to the default.
       "JetBrains Mono NL"
-      # I tried putting "Symbols Nerd Font Mono" before "Source Han Mono HC",
-      # hoping Ghostty will use Nerd Font to display U+2665.
-      # But it does not.
       "Symbols Nerd Font Mono"
-      # It has these variants:
-      # - Source Han Mono (Japanese)
-      # - Source Han Mono HC (Hong Kong)
-      # - Source Han Mono K (Korean)
-      # - Source Han Mono SC (Simplified Chinese)
-      # - Source Han Mono TC (Traditional Chinese)
-      #
-      # The details can be found at https://raw.githubusercontent.com/adobe-fonts/source-han-mono/master/SourceHanMonoReadMe.pdf
-      # In context like an HTML document, we can rely on `<html lang=>` to determine the language,
-      # and select a suitable variant.
-      # The strokes of a character then can conform to the convention of the language.
-      # In a terminal environment, we have no such information available.
-      # So we just use the Hong Kong version here.
-      "Source Han Mono HC"
     ];
     # Use font-font-codepoint-map to force Ghostty to use Nerd Font
     # We can verify if it is working by running `ghostty +show-face --cp=0x2665`.

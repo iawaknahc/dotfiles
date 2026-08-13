@@ -28,10 +28,10 @@
 (new-fontset "-*-*-*-*-*-*-*-*-*-*-*-*-fontset-monospace" '())
 (let* ((for-all-frames nil)
        (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13))
-       (source-han-mono-hc (font-spec :family "Source Han Mono HC" :weight 'light :size 13)))
-  ;; Use Source Han Mono HC for all codepoints.
-  (set-fontset-font "fontset-monospace" '(#x0 . #x10FFFF) source-han-mono-hc for-all-frames 'prepend)
-  ;; But for ASCII range, use JetBrains Mono because it looks much nicer than Source Han Mono.
+       (source-han-sans (font-spec :family "Source Han Sans HC" :weight 'light :size 13)))
+  ;; Use Source Han Sans HC for all codepoints.
+  (set-fontset-font "fontset-monospace" '(#x0 . #x10FFFF) source-han-sans for-all-frames 'prepend)
+  ;; But for ASCII range, use JetBrains Mono.
   (set-fontset-font "fontset-monospace" 'latin jetbrains-mono for-all-frames 'prepend))
 (my/configure-nerd-font "fontset-monospace")
 
