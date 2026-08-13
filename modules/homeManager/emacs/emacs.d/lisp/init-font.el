@@ -55,7 +55,7 @@ like `mathematical-monospace' are not handled for now."
                     (tai-le . "Noto Sans Tai Le")
                     (tai-lue . "Noto Sans New Tai Lue")
                     (tai-tham . "Noto Sans Tai Tham")
-                    (symbol . "Noto Sans Math")
+                    (symbol . "Noto Sans Symbols 2")
                     (braille . "Noto Sans Symbols 2")
                     (ideographic-description . "Noto Sans CJK HK")
                     (cjk-misc . "Noto Sans CJK HK")
