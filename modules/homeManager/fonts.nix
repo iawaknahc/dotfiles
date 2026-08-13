@@ -19,21 +19,6 @@
     # It is also used in Ghostty because Ghostty has `font-codepoint-map`.
     nerd-fonts.symbols-only
 
-    # Fonts by Adobe.
-    source-serif
-    source-serif-pro
-    source-sans
-    source-sans-pro
-    source-code-pro
-    source-han-sans
-    source-han-serif
-    # I used to install Source Han Mono 1.002
-    # But it cannot be recognized as monospace font on macOS,
-    # no matter how do we patch it with fonttools.
-    # Technically it is Source Code Pro combined with Source Han Sans.
-    # It is trivial to use Source Han Sans in Emacs because
-    # Emacs does not really care if it is a monospace font.
-
     # Fonts by Google.
     # This package contains a lot of fonts.
     # But it does not include CJK fonts.
