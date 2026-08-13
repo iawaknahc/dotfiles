@@ -161,11 +161,20 @@
   "Configure FONTSET so that all recognized scripts are configured to use Noto.
 
 The list was obtained by `script-representative-chars'.
-Some trailing enties in `script-representative-chars'
-like `mathematical-monospace' are not handled for now."
+
+Some entries at the end of the list are injected at runtime,
+and they are not really valid recognized script.
+As of Emacs 30.2, they all start with `mathematical-'."
   (let* ((for-all-frames nil))
     (dolist (entry my/noto-font-mapping)
       (set-fontset-font fontset (car entry) (font-spec :family (cdr entry) :weight 'regular) for-all-frames 'prepend))))
+
+(defun my/configure-math-font (fontset)
+  "Configure FONTSET so that all Mathematics scripts are configured to use a appropriate font."
+  (let* ((for-all-frames nil))
+    ;; Reference the block by the codepoint range.
+    ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/international/fontset.el#L883
+    (set-fontset-font fontset '(#x1D400 . #x1D7FF) (font-spec :family "Latin Modern Math" :weight 'regular) for-all-frames 'prepend)))
 
 (defun my/configure-nerd-font (fontset)
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
@@ -185,6 +194,7 @@ like `mathematical-monospace' are not handled for now."
     (set-fontset-font fontset '(#xF0000 . #xFFFFD) nerd-font for-all-frames 'prepend)))
 
 (my/configure-noto-font "fontset-default")
+(my/configure-math-font "fontset-default")
 (my/configure-nerd-font "fontset-default")
 
 ;; Create a new fontset "fontset-monospace" to be used by the face `default'.
