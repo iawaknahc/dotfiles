@@ -10,17 +10,13 @@
     # Replacement of Arial, Times New Roman, and Courier New.
     liberation_ttf_v2
 
-    # JetBrains Mono can be recognized as fixed-width by macOS Font Book.
-    #
-    # Install the nerd-font variant of it so that I can use set it as
-    # the default monospace in Firefox to show nerd font icons.
-    nerd-fonts.jetbrains-mono
     # The original JetBrains Mono without Nerd Font patch.
     jetbrains-mono
 
     # The Nerd Font (Symbols only).
     # It is used in Emacs because Emacs allows me to specify which font to use for
     # a particular Unicode code point range.
+    # It is also used in Ghostty because Ghostty has `font-codepoint-map`.
     nerd-fonts.symbols-only
 
     # Fonts by Adobe.

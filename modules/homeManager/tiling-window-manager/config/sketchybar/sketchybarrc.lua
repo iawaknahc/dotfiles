@@ -126,7 +126,7 @@ for _, workspace in ipairs(workspaces) do
       padding_left = sketchybar_spacing,
       padding_right = sketchybar_spacing,
       font = {
-        family = "JetBrainsMonoNL Nerd Font Mono",
+        family = "JetBrains Mono NL",
         size = font_size,
       },
       align = "center",

@@ -47,7 +47,11 @@
 
     font-family = [
       "" # Reset instead of appending to the default.
-      "JetBrainsMonoNL Nerd Font Mono"
+      "JetBrains Mono NL"
+      # I tried putting "Symbols Nerd Font Mono" before "Source Han Mono HC",
+      # hoping Ghostty will use Nerd Font to display U+2665.
+      # But it does not.
+      "Symbols Nerd Font Mono"
       # It has these variants:
       # - Source Han Mono (Japanese)
       # - Source Han Mono HC (Hong Kong)
@@ -62,6 +66,22 @@
       # In a terminal environment, we have no such information available.
       # So we just use the Hong Kong version here.
       "Source Han Mono HC"
+    ];
+    # Use font-font-codepoint-map to force Ghostty to use Nerd Font
+    # We can verify if it is working by running `ghostty +show-face --cp=0x2665`.
+    # If it works, it should print something like
+    #   U+2665 « ♥ » found in face “Symbols Nerd Font Mono”.
+    font-codepoint-map = [
+      "U+23FB-U+23FE=Symbols Nerd Font Mono"
+      "U+2500-U+259F=Symbols Nerd Font Mono"
+      "U+2630=Symbols Nerd Font Mono"
+      "U+2665=Symbols Nerd Font Mono"
+      "U+26A1=Symbols Nerd Font Mono"
+      "U+276C-U+2771=Symbols Nerd Font Mono"
+      "U+2800-U+28FF=Symbols Nerd Font Mono"
+      "U+2B58=Symbols Nerd Font Mono"
+      "U+E000-U+F8FF=Symbols Nerd Font Mono"
+      "U+F0000-U+FFFFD=Symbols Nerd Font Mono"
     ];
     font-style = "Light";
     font-style-bold = "Bold";
