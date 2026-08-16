@@ -120,5 +120,14 @@ REPORT-FN is respected."
 (add-hook 'org-mode-hook (lambda ()
                            (add-hook 'flymake-diagnostic-functions #'my/flymake-org-lint nil t)))
 
+;; Add a command to insert datetree.
+(defun my/org-datetree-insert ()
+  "Insert datetree into current buffer."
+  (interactive)
+  (let* ((widen-the-buffer nil)
+         (org-date (org-read-date))
+         (greg-date (org-date-to-gregorian org-date)))
+    (org-datetree-find-date-create greg-date widen-the-buffer)))
+
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
