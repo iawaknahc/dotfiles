@@ -9,18 +9,19 @@
  ;; Disable dir-local variables in remote files.
  enable-remote-dir-locals nil
 
- ;; Disable file local variables.
- enable-local-variables nil
+ ;; :safe means allow `safe-local-variable-values' and `enable-local-eval'.
+ ;; If it is nil, then `enable-local-eval' is completely ignored.
+ enable-local-variables :safe
  ;; No values are safe.
  safe-local-variable-values nil
- ;; But always allow `lexical-binding' and `read-symbol-shorthands'.
+ ;; Always allow `lexical-binding' and `read-symbol-shorthands'.
  ;; This is the default.
  permanently-enabled-local-variables '(lexical-binding read-symbol-shorthands)
 
- ;; Disable `eval' in file local variables.
- enable-local-eval nil
- ;; No forms are safe.
- safe-local-eval-forms nil
+ ;; Unless allowed in `safe-local-eval-forms', ask first.
+ enable-local-eval :x-ask-me-first
+ ;; Allow starting Org in Columns View.
+ safe-local-eval-forms '((org-columns))
 
  ;; Nothing is trusted.
  ;; This effects the return value of `trusted-content-p'.
