@@ -63,6 +63,14 @@
   (keymap-set org-mode-map "C-c C-x <control-i>" #'org-clock-in))
 
 
+;; Agenda
+(setq
+ org-agenda-custom-commands
+ `(("a" "Daily/weekly agenda" agenda ""
+    ((org-agenda-tag-filter-preset '("-life"))))
+   ("A" "All daily/weekly agenda" agenda "")))
+
+
 (defun my/org-ctrl-c-ctrl-c-column-view ()
   "Turn on column view when we are at the buffer global COLUMNS property line.
 When column view is on, \\[org-ctrl-c-ctrl-c] already turns it off.
