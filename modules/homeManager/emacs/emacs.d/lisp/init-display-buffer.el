@@ -94,13 +94,13 @@
        ,(rx string-start "*Warnings*" string-end)
        ;; The Eldoc buffer is in special-mode.
        ;; The buffer name keeps changing, thus we only match the prefix.
-       ,(rx string-start "*eldoc")) .
-       ;; display in a side window
-       ((display-buffer-in-side-window) .
-        ;; at the bottom
-        ((side . bottom)
-         ;; spanning 1/3 of the frame height.
-         (window-height . 0.33)))))
+       ,(rx string-start "*eldoc"))
+   ;; display in a side window
+   . ((display-buffer-in-side-window) .
+      ;; at the bottom
+      ((side . bottom)
+       ;; spanning 1/3 of the frame height.
+       (window-height . 0.33)))))
 
 ;; Buffers that I prefer displaying in the right side window.
 
@@ -189,6 +189,20 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
      (tab-group . ,(function my/display-buffer-alist-project-file-tab-group))
      ;; in the selected frame.
      (reusable-frames . the-selected-frame)))))
+
+
+;; Org
+(add-to-list
+ 'display-buffer-alist
+ ;; I tried using (derived-mode . org-agenda-mode) but it does not work.
+ `((or ,(rx string-start "*Org Agenda*" string-end)
+       ;; The buffer name has a preceding space in it.
+       ,(rx string-start " *Agenda Commands*" string-end))
+   . ((display-buffer-in-tab) .
+      ((tab-name . "*Org Agenda*")
+       (tab-group . "PROJECT:org")
+       (reusable-frames . the-selected-frame)))))
+
 
 (defun my/maximize-window (&optional window)
   "Like `maximize-window', but ignore is set to `safe'.

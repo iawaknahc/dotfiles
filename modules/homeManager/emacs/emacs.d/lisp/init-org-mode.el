@@ -33,7 +33,7 @@
 
 ;; TODO and clock
 (setq
- ;; Log timestamp and prompt for a note when a TODO is DONE.
+ ;; Log timestamp when a TODO is DONE.
  org-log-done 'time
  ;; Only save the running clock.
  org-clock-persist 'clock
@@ -66,10 +66,17 @@
 ;; Agenda
 (setq
  org-agenda-custom-commands
- `(("a" "Daily/weekly agenda" agenda ""
-    ((org-agenda-tag-filter-preset '("-life"))))
-   ("A" "All daily/weekly agenda" agenda "")))
-
+ `(("a" "General agenda" agenda ""
+    ((org-agenda-skip-function
+      '(when (member "life" (org-get-tags))
+         (point)))))
+   ("A" "All agenda" agenda "")
+   ("y" "Yearly agenda of services" agenda ""
+    ((org-agenda-span ,(* 7 53))
+     (org-agenda-show-all-dates nil)
+     (org-agenda-skip-function
+      '(when (not (member "service" (org-get-tags)))
+         (point)))))))
 
 (defun my/org-ctrl-c-ctrl-c-column-view ()
   "Turn on column view when we are at the buffer global COLUMNS property line.
