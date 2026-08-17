@@ -42,10 +42,13 @@
  ;; Clock out when the task is marked DONE.
  ;; The default is t.
  org-clock-out-when-done t
- ;; Or, mark DONE when clock out.
- ;; The default is nil.
- ;; I have no idea why the default does not match `org-clock-out-when-done'.
- org-clock-out-switch-to-state "DONE"
+ ;; Do not switch state when clocking out.
+ ;; When a capture template has :clock-in and :clock-resume,
+ ;; the time spent on creating the capture is clocked.
+ ;; When the capture is a TODO item,
+ ;; we want to track the time we spent on creating the capture,
+ ;; but definitely do not want to mark the TODO item as DONE.
+ org-clock-out-switch-to-state nil
  ;; Reserve the frame title solely for clock.
  frame-title-format
  `(:eval (progn
@@ -57,6 +60,7 @@
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c c" #'org-capture)
+(keymap-global-set "C-c C" #'org-capture-goto-last-stored)
 (with-eval-after-load 'org
   ;; The default "C-c C-x C-t" is too long.
   (keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays)
@@ -108,13 +112,13 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
 (setq org-capture-templates nil)
 (my/org-add-capture-template
  :key "t"
- :description "Create a new task and clock in"
+ :description "Create a new task and clock the time spent on creating it"
  :type 'entry
- :target '(file+olp+datetree "~/org/worklog.org")
+ :target '(file+olp+datetree "~/org/inbox.org")
  :template "TODO %?
 %U"
  :clock-in t
- :clock-keep t)
+ :clock-resume t)
 
 
 ;; Integrate `org-lint' with `flymake'.
