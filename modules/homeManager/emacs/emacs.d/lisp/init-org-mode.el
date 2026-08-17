@@ -36,6 +36,7 @@
  ;; Log timestamp when a TODO is DONE.
  org-log-done 'time
  ;; Only save the running clock.
+ ;; `org-clock-persistence-insinuate' must be called in order to make this effective.
  org-clock-persist 'clock
  ;; Update the clock mode line string every 20 seconds.
  org-clock-update-period 20
@@ -49,13 +50,18 @@
  ;; we want to track the time we spent on creating the capture,
  ;; but definitely do not want to mark the TODO item as DONE.
  org-clock-out-switch-to-state nil
- ;; Reserve the frame title solely for clock.
- frame-title-format
- `(:eval (progn
-           (require 'org-clock)
-           (if (org-clocking-p)
-               org-mode-line-string
-             "No clock is running"))))
+ ;; On macOS PGTK build, frame-title-format is buggy.
+ ;; Here are the steps to reproduce the bug:
+ ;; 1. Clock in
+ ;; 2. See the frame title show the clock correctly.
+ ;; 3. Switch to another tab-bar-mode tab.
+ ;; 4. See the frame title does not show the clock.
+ ;;
+ ;; Even running `force-mode-line-update' in the tab does not help.
+ org-clock-clocked-in-display 'both)
+;; This function must be called.
+;; Otherwise, `org-clock-persist' has no effect.
+(org-clock-persistence-insinuate)
 
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c l" #'org-store-link)
