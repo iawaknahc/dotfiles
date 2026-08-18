@@ -22,6 +22,7 @@ import glob
 import os
 import shutil
 import sys
+from typing import cast
 
 import icu
 import phonenumbers
@@ -183,7 +184,10 @@ def visit_tel(
         )
 
     # Sort phone numbers, and then report the first one as UID.
-    content_lines = sorted(content_lines, key=lambda content_line: content_line.value)
+    content_lines = sorted(
+        content_lines,
+        key=lambda content_line: cast(vobject.base.ContentLine, content_line).value,
+    )
     add(blank, content_lines)
     assert isinstance(content_lines[0], vobject.base.ContentLine)
     uid_value = f"tel:{content_lines[0].value}"
@@ -211,7 +215,10 @@ def visit_email(blank: vobject.base.Component, content_lines: list[vobject.base.
                 raise ValueError(f"unknown email params: {content_line}")
 
     # Sort email addresses, and then report the first one as UID.
-    content_lines = sorted(content_lines, key=lambda content_line: content_line.value)
+    content_lines = sorted(
+        content_lines,
+        key=lambda content_line: cast(vobject.base.ContentLine, content_line).value,
+    )
     add(blank, content_lines)
     assert isinstance(content_lines[0], vobject.base.ContentLine)
     uid_value = f"mailto:{content_lines[0].value}"
@@ -255,7 +262,11 @@ def visit_address(
 
     # Sort addresses.
     content_lines = sorted(
-        content_lines, key=lambda content_line: str(content_line.value)
+        content_lines,
+        # pyrefly: ignore [unnecessary-type-conversion]
+        key=lambda content_line: str(
+            cast(vobject.base.ContentLine, content_line).value
+        ),
     )
     add(blank, content_lines)
 
@@ -379,7 +390,7 @@ def sort_by_uid(component: vobject.base.Component):
 
 def normalize(path: str):
     components = []
-    f = sys.stdin if path == "-" else open(path)
+    f = sys.stdin if path == "-" else open(path)  # noqa: SIM115
     try:
         gen = vobject.readComponents(
             f, validate=True, transform=True, ignoreUnreadable=False, allowQP=False

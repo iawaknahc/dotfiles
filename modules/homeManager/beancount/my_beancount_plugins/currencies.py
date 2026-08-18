@@ -151,7 +151,7 @@ SPECIAL_CASES_CURRENCIES: frozenset[str] = frozenset(
 )
 
 
-def get_decimal_places(currency: str) -> Literal[0] | Literal[2] | None:
+def get_decimal_places(currency: str) -> Literal[0, 2] | None:
     if currency in SPECIAL_CASES_CURRENCIES:
         return 0
     if currency in ZERO_DECIMAL_CURRENCIES:
@@ -166,6 +166,6 @@ def get_decimal_for_quantization(currency: str) -> Decimal | None:
         case None:
             return None
         case 0:
-            return Decimal("1")
+            return Decimal(1)
         case 2:
             return Decimal("0.01")

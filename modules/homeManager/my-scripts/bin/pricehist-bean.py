@@ -165,13 +165,14 @@ def main():
             invocation.end_date.isoformat(),
         ]
         print(" ".join(command), file=sys.stderr)
-        _ = subprocess.run(
-            command,
-            shell=False,
-            # Do not check because sometimes, there is no available source.
-            check=False,
-            stdout=open(PurePath(output) / f"{invocation.base}.beancount", "a"),
-        )
+        with open(PurePath(output) / f"{invocation.base}.beancount", "a") as stdout:
+            _ = subprocess.run(
+                command,
+                shell=False,
+                # Do not check because sometimes, there is no available source.
+                check=False,
+                stdout=stdout,
+            )
 
 
 main()

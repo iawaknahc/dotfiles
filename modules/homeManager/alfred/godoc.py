@@ -30,7 +30,7 @@ def to_item(url_str: str, subtitle: str) -> Item | None:
     if url_str == "":
         return None
 
-    if not (url_str.startswith("http://") or url_str.startswith("https://")):
+    if not url_str.startswith(("http://", "https://")):
         url_str = "https://" + url_str
 
     parsed = urlsplit(url_str)
@@ -86,7 +86,7 @@ def main():
                 check=True,
             )
             browsers_output = cast(Browsers, json.loads(process.stdout))
-        except Exception:
+        except subprocess.CalledProcessError:
             browsers_output: Browsers = {"browsers": []}
 
         for b in browsers_output["browsers"]:

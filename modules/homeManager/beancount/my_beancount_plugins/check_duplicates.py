@@ -92,7 +92,7 @@ def validate_no_duplicates(
             errors.append(
                 PluginError(
                     entry.meta,
-                    "Duplicate entry: {} == {}".format(entry, other_entry),
+                    f"Duplicate entry: {entry} == {other_entry}",
                     entry,
                 )
             )

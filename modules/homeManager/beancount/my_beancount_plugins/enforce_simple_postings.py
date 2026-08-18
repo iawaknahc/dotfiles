@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from beancount.core import data
 
-from my_plugins.currencies import (
+from my_beancount_plugins.currencies import (
     get_decimal_places,
 )
 
@@ -14,7 +14,7 @@ class PluginError(NamedTuple):
     entry: data.Directive | None
 
 
-ZERO = Decimal("0")
+ZERO = Decimal(0)
 
 
 def is_simple_transaction(txn: data.Transaction) -> bool:
@@ -56,16 +56,13 @@ def is_simple_postings(txn: data.Transaction) -> bool:
         return False
     if second_posting.meta is None:
         return False
-    if "__automatic__" not in second_posting.meta:
-        return False
-    return True
+    return "__automatic__" in second_posting.meta
 
 
 def has_omitted_amount(txn: data.Transaction) -> bool:
     for posting in txn.postings:
-        if posting.meta is not None:
-            if "__automatic__" in posting.meta:
-                return True
+        if posting.meta is not None and "__automatic__" in posting.meta:
+            return True
     return False
 
 

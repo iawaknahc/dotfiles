@@ -36,32 +36,22 @@ class CustomsTable(Table):
     columns = _typed_namedtuple_to_columns(datatype)  # pyright: ignore[reportUnknownVariableType, reportUnannotatedClassAttribute]
 
 
-Subcommand = (
-    Literal["income-statement"]
-    | Literal["balance-sheet"]
-    | Literal["unrealized-gains-and-losses"]
-    | Literal["xirr"]
-)
+Subcommand = Literal[
+    "income-statement", "balance-sheet", "unrealized-gains-and-losses", "xirr"
+]
 
-Period = (
-    Literal["daily"]
-    | Literal["weekly"]
-    | Literal["monthly"]
-    | Literal["quarterly"]
-    | Literal["yearly"]
-    | Literal["hong-kong"]
-)
+Period = Literal["daily", "weekly", "monthly", "quarterly", "yearly", "hong-kong"]
 
-AssetClass = (
-    Literal["cash"]
-    | Literal["stock"]
-    | Literal["fixed-income"]
-    | Literal["derivative"]
-    | Literal["retirement-fund"]
-    | Literal["cryptocurrency"]
-    | Literal["property"]
-    | Literal["vehicle"]
-)
+AssetClass = Literal[
+    "cash",
+    "stock",
+    "fixed-income",
+    "derivative",
+    "retirement-fund",
+    "cryptocurrency",
+    "property",
+    "vehicle",
+]
 
 
 class Pair(NamedTuple):
@@ -69,10 +59,13 @@ class Pair(NamedTuple):
     quote: str
 
 
+# Based on observation, the prices table has a special property `price_map` which is an instance of prices.PriceMap.
+# https://github.com/beancount/beanquery/blob/v0.2.0/beanquery/sources/beancount.py#L179
+class PricesTable(NamedTuple):
+    price_map: prices.PriceMap
+
+
 def get_price_map(conn: beanquery.Connection) -> prices.PriceMap:
-    # Based on observation, the prices table has a special property `price_map` which is an instance of prices.PriceMap.
-    # https://github.com/beancount/beanquery/blob/v0.2.0/beanquery/sources/beancount.py#L179
-    PricesTable = NamedTuple("PricesTable", [("price_map", prices.PriceMap)])
     tables = cast(
         dict[
             Literal["prices"],
@@ -848,9 +841,8 @@ def format_amount(conn: beanquery.Connection, amount: Amount) -> Amount:
     for currency, d in cast(
         dict[str, Decimal], conn.options["display_precision"]
     ).items():
-        if amount.currency == currency:
-            if amount.number is not None:
-                amount = Amount(number=amount.number.quantize(d), currency=currency)
+        if amount.currency == currency and amount.number is not None:
+            amount = Amount(number=amount.number.quantize(d), currency=currency)
     return amount
 
 

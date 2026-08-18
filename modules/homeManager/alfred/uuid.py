@@ -1,5 +1,5 @@
-import uuid
 import json
+import uuid
 
 lowercase_uuid4 = str(uuid.uuid4()).lower()
 uppercase_uuid4 = lowercase_uuid4.upper()

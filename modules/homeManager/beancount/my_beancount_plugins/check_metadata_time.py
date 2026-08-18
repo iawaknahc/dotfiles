@@ -26,7 +26,7 @@ def _check_meta(
             errors.append(
                 PluginError(
                     source=meta,
-                    message=f'"{key}" must be a time in format `HH:MM` or `HH:MM:SS`, got {repr(value)}',
+                    message=f'"{key}" must be a time in format `HH:MM` or `HH:MM:SS`, got {value!r}',
                     entry=entry,
                 )
             )

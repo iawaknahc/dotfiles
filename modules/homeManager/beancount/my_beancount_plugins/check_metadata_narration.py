@@ -32,7 +32,7 @@ def _check_directive_meta(
                 errors.append(
                     PluginError(
                         source=meta,
-                        message=f'"{key}" must be a non-empty string, got {repr(value)}',
+                        message=f'"{key}" must be a non-empty string, got {value!r}',
                         entry=entry,
                     )
                 )
@@ -51,7 +51,7 @@ def _check_posting_meta(
             errors.append(
                 PluginError(
                     source=meta,
-                    message=f'"{key}" must be a non-empty string, got {repr(value)}',
+                    message=f'"{key}" must be a non-empty string, got {value!r}',
                     entry=entry,
                 )
             )

@@ -19,19 +19,18 @@ def plugin(
     # First, see what account has opted in this plugin.
     account_narration: dict[data.Account, str] = {}
     for entry in entries:
-        if isinstance(entry, data.Open):
-            if "auto_narration" in entry.meta:
-                value = entry.meta["auto_narration"]
-                if not isinstance(value, str):
-                    errors.append(
-                        PluginError(
-                            source=entry.meta,
-                            message="The value of `auto_narration` must be a string. It is the narration.",
-                            entry=entry,
-                        )
+        if isinstance(entry, data.Open) and "auto_narration" in entry.meta:
+            value = entry.meta["auto_narration"]
+            if not isinstance(value, str):
+                errors.append(
+                    PluginError(
+                        source=entry.meta,
+                        message="The value of `auto_narration` must be a string. It is the narration.",
+                        entry=entry,
                     )
-                else:
-                    account_narration[entry.account] = entry.meta["auto_narration"]
+                )
+            else:
+                account_narration[entry.account] = entry.meta["auto_narration"]
 
     # Then, we add narrations.
     for idx, entry in enumerate(entries):

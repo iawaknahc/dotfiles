@@ -9,7 +9,7 @@ from beancount.core import compare, data
 from beancount.core.amount import Amount
 from whenever import Date, ItemizedDateDelta
 
-from my_plugins.currencies import (
+from my_beancount_plugins.currencies import (
     get_decimal_for_quantization,
 )
 
@@ -43,9 +43,7 @@ class AmortizationResult:
 def multiply_ItemizedDateDelta(
     d: ItemizedDateDelta, multiplier: int
 ) -> ItemizedDateDelta:
-    kwargs: dict[
-        Literal["years"] | Literal["months"] | Literal["weeks"] | Literal["days"], int
-    ] = {}
+    kwargs: dict[Literal["years", "months", "weeks", "days"], int] = {}
     for key, value in d.items():
         kwargs[key] = value * multiplier
     return ItemizedDateDelta(**kwargs)
@@ -444,12 +442,10 @@ class BillingInstructionOnOpenDirective:
 
     @classmethod
     def is_target_account(cls, entry: data.Open) -> bool:
-        if (
+        return (
             META_billing_period in entry.meta
             or META_amortization_frequency in entry.meta
-        ):
-            return True
-        return False
+        )
 
     @classmethod
     def from_open(cls, entry: data.Open) -> Self | PluginError:
@@ -635,7 +631,7 @@ def amortize_transaction(
                 # Modify the list in-place.
                 entry.postings[idx] = result.posting
                 for e in result.entries:
-                    entries.append(e)
+                    entries.append(e)  # noqa: PERF402
             case (one_off, None):
                 assert one_off is not None
                 result = amortize_posting(
@@ -651,7 +647,7 @@ def amortize_transaction(
                 # Modify the list in-place.
                 entry.postings[idx] = result.posting
                 for e in result.entries:
-                    entries.append(e)
+                    entries.append(e)  # noqa: PERF402
             case (_, _):
                 errors.append(
                     PluginError(
@@ -701,9 +697,9 @@ def plugin(
                 opted_in_accounts=opted_in_accounts,
             )
             for e in new_errors:
-                errors.append(e)
+                errors.append(e)  # noqa: PERF402
             for e in new_entries:
-                out.append(e)
+                out.append(e)  # noqa: PERF402
         else:
             out.append(entry)
 

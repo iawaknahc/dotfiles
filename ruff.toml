@@ -1,0 +1,5 @@
+[lint]
+# It makes perfect sense to use `datetime.date.today()`,
+# if we really want to get a datetime.date that is today in local timezone.
+# https://docs.astral.sh/ruff/rules/call-date-today/
+ignore = ["DTZ011"]

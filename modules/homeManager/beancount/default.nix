@@ -17,7 +17,7 @@
         #
         # If we decide to switch back to beanprice in the future,
         # we have to package it with buildPythonPackage so that it resides along with our plugins.
-        # Otherwise, `beanprice main.beancount` will complain about `my_plugins` not found.
+        # Otherwise, `beanprice main.beancount` will complain about `my_beancount_plugins` not found.
         #beanprice
         pricehist
 
@@ -28,14 +28,14 @@
         whenever
 
         (config.mypython.pythonPackages.buildPythonPackage {
-          pname = "my_plugins";
+          pname = "my_beancount_plugins";
           version = "1.0.0";
           pyproject = true;
           build-system = [ setuptools ];
           dependencies = [
             beancount
           ];
-          src = ./my_plugins;
+          src = ./my_beancount_plugins;
         })
       ]
     )

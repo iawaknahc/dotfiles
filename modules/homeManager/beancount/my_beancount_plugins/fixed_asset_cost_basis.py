@@ -92,14 +92,15 @@ def plugin(
     accounts: dict[str, FixedAsset] = {}
 
     for entry in entries:
-        if isinstance(entry, data.Open):
-            if META_base_currency in entry.meta or META_quote_currency in entry.meta:
-                fixed_asset = validate_open(entry)
-                if isinstance(fixed_asset, list):
-                    for e in cast(list[PluginError], fixed_asset):  # pyrefly: ignore [redundant-cast]
-                        errors.append(e)
-                else:
-                    accounts[fixed_asset.account] = fixed_asset
+        if isinstance(entry, data.Open) and (
+            META_base_currency in entry.meta or META_quote_currency in entry.meta
+        ):
+            fixed_asset = validate_open(entry)
+            if isinstance(fixed_asset, list):
+                for e in cast(list[PluginError], fixed_asset):  # pyrefly: ignore [redundant-cast]
+                    errors.append(e)  # noqa: PERF402
+            else:
+                accounts[fixed_asset.account] = fixed_asset
 
     # Validate, and get the initial cost basis.
     for entry in entries:
@@ -121,8 +122,8 @@ def plugin(
                             )
 
                         if posting.units.number != Decimal(
-                            "1"
-                        ) and posting.units.number != Decimal("-1"):
+                            1
+                        ) and posting.units.number != Decimal(-1):
                             errors.append(
                                 PluginError(
                                     source=posting.meta or entry.meta,
@@ -132,7 +133,7 @@ def plugin(
                             )
 
                         if (
-                            posting.units.number == Decimal("1")
+                            posting.units.number == Decimal(1)
                             and len(fixed_asset.cost_basis) == 0
                         ):
                             assert posting.cost is not None
@@ -172,7 +173,7 @@ def plugin(
                                     data.Posting(
                                         account=posting.account,
                                         units=Amount(
-                                            number=Decimal("-1"),
+                                            number=Decimal(-1),
                                             currency=fixed_asset.base_currency,
                                         ),
                                         cost=last_cost_basis,
@@ -200,7 +201,7 @@ def plugin(
                                     data.Posting(
                                         account=posting.account,
                                         units=Amount(
-                                            number=Decimal("1"),
+                                            number=Decimal(1),
                                             currency=fixed_asset.base_currency,
                                         ),
                                         cost=new_cost_basis,

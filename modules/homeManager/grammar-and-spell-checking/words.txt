@@ -93,6 +93,7 @@ dockerls
 docstrings
 dolist
 dotimes
+dtz
 duckdb
 dwim
 ediff

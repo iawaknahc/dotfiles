@@ -192,7 +192,7 @@ def get_matches(conn: sqlite3.Connection, query: list[str]) -> list[CodepointSeq
         if cs not in matches:
             matches[cs] = cs
 
-    ordered_matches = [m for m in matches.keys()]
+    ordered_matches = [m for m in matches]
 
     # Return at most 9 matches so that the result list in Alfred does not have a scrollbar.
     return ordered_matches[:9]

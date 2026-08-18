@@ -65,7 +65,7 @@ def fzf(os_windows: list[OSWindow]) -> int | None:
 
 
 def focus_tab(tab_index: int) -> None:
-    _ = run(["kitty", "@", "focus-tab", "--match", f"index:{tab_index}"])
+    _ = run(["kitty", "@", "focus-tab", "--match", f"index:{tab_index}"], check=True)
 
 
 def main():

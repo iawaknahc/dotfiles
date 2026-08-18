@@ -46,11 +46,11 @@ def main():
             if account == row[0]:
                 inventories = row[1]
                 if len(inventories) > 0:
-                    if len(account) > longest_account_len:
-                        longest_account_len = len(account)
+                    longest_account_len = max(longest_account_len, len(account))
                 for inventory in inventories:
-                    if len(str(inventory)) > longest_inventory_len:
-                        longest_inventory_len = len(str(inventory))
+                    longest_inventory_len = max(
+                        longest_inventory_len, len(str(inventory))
+                    )
 
     # We iterate from `accounts`, assuming that the source order of accounts is the expected order.
     for account in accounts:
@@ -59,7 +59,7 @@ def main():
                 inventories = row[1]
                 for inventory in inventories:
                     print(
-                        f"{tomorrow.isoformat()} balance {account:<{longest_account_len}}  {str(inventory):>{longest_inventory_len}}"
+                        f"{tomorrow.isoformat()} balance {account:<{longest_account_len}}  {inventory!s:>{longest_inventory_len}}"
                     )
 
 

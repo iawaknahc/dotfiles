@@ -19,28 +19,27 @@ def plugin(
     # First, see what account has opted in this plugin.
     account_tags: dict[data.Account, frozenset[str]] = {}
     for entry in entries:
-        if isinstance(entry, data.Open):
-            if "auto_tags" in entry.meta:
-                try:
-                    tags_: set[str] = set()
-                    tags_str = entry.meta["auto_tags"]
-                    if not isinstance(tags_str, str):
+        if isinstance(entry, data.Open) and "auto_tags" in entry.meta:
+            try:
+                tags_: set[str] = set()
+                tags_str = entry.meta["auto_tags"]
+                if not isinstance(tags_str, str):
+                    raise TypeError()
+
+                for tag in tags_str.split(" "):
+                    if not tag.startswith("#"):
                         raise ValueError()
+                    tags_.add(tag[1:])
 
-                    for tag in tags_str.split(" "):
-                        if not tag.startswith("#"):
-                            raise ValueError()
-                        tags_.add(tag[1:])
-
-                    account_tags[entry.account] = frozenset(tags_)
-                except ValueError:
-                    errors.append(
-                        PluginError(
-                            source=entry.meta,
-                            message='`auto_tags` must be a string containing space-separated tags, for example "#a #b"',
-                            entry=entry,
-                        )
+                account_tags[entry.account] = frozenset(tags_)
+            except TypeError, ValueError:
+                errors.append(
+                    PluginError(
+                        source=entry.meta,
+                        message='`auto_tags` must be a string containing space-separated tags, for example "#a #b"',
+                        entry=entry,
                     )
+                )
 
     for idx, entry in enumerate(entries):
         if isinstance(entry, data.Transaction):

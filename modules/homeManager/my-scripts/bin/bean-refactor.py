@@ -3,12 +3,13 @@
 import argparse
 import copy
 import io
+from collections.abc import Callable
 from decimal import Decimal
-from typing import Callable, cast
+from typing import cast
 
 from autobean_refactor import models, parser, printer
 
-ZERO = Decimal("0")
+ZERO = Decimal(0)
 
 Subcommand = Callable[[argparse.Namespace], None]
 
@@ -21,32 +22,31 @@ def cmd_simplify(args: argparse.Namespace):
     p = parser.Parser()
     file = p.parse(text, models.File)
     for directive in file.directives:
-        if isinstance(directive, models.Transaction):
-            if len(directive.postings) == 2:
-                first_posting = cast(models.Posting, directive.postings[0])
-                second_posting = cast(models.Posting, directive.postings[1])
-                if (
-                    first_posting.cost is None
-                    and second_posting.cost is None
-                    and first_posting.price is None
-                    and second_posting.price is None
-                ):
-                    assert first_posting.number is not None
-                    if first_posting.number == ZERO:
-                        continue
+        if isinstance(directive, models.Transaction) and len(directive.postings) == 2:
+            first_posting = cast(models.Posting, directive.postings[0])
+            second_posting = cast(models.Posting, directive.postings[1])
+            if (
+                first_posting.cost is None
+                and second_posting.cost is None
+                and first_posting.price is None
+                and second_posting.price is None
+            ):
+                assert first_posting.number is not None
+                if first_posting.number == ZERO:
+                    continue
 
-                    if first_posting.number < ZERO:
-                        first_posting, second_posting = (
-                            copy.deepcopy(second_posting),
-                            copy.deepcopy(first_posting),
-                        )
-                        directive.postings[0] = first_posting
-                        directive.postings[1] = second_posting
+                if first_posting.number < ZERO:
+                    first_posting, second_posting = (
+                        copy.deepcopy(second_posting),
+                        copy.deepcopy(first_posting),
+                    )
+                    directive.postings[0] = first_posting
+                    directive.postings[1] = second_posting
 
-                    new_second_posting = copy.deepcopy(second_posting)
-                    new_second_posting.number = None
-                    new_second_posting.currency = None
-                    directive.postings[1] = new_second_posting
+                new_second_posting = copy.deepcopy(second_posting)
+                new_second_posting.number = None
+                new_second_posting.currency = None
+                directive.postings[1] = new_second_posting
 
     print(printer.print_model(file, io.StringIO()).getvalue())
 

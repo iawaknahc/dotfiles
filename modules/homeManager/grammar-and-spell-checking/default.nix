@@ -18,8 +18,10 @@ let
     "DisjointPrefixes" # It suggests to join "multi-user" to become "multiuser", which seems incorrect.
     "EllipsisLength" # `..` in Lua is an operator.
     "ExpandArgument" # It is perfectly fine use arg and args in programming settings.
+    "ExpandConfiguration" # The word "config" is very common in programming settings.
     "ExpandControl" # The word "CTRL" is very common in programming settings.
     "ExpandMemoryShorthands" # The shorthands are much more common.
+    "ExpandPreference" # The word "pref" is very common in programming settings.
     "ExpandPrevious" # The word "prev" is very common in programming settings.
     "ExpandStandardInputAndOutput" # It is perfectly fine use stdin, stdout, and stderr in programming settings.
     "ExpandTimeShorthands" # The shorthands are fine.

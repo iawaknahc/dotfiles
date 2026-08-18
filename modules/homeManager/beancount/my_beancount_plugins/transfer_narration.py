@@ -11,9 +11,9 @@ class PluginError(NamedTuple):
     entry: data.Directive | None
 
 
-AccountType = Literal["assets"] | Literal["liabilities"]
+AccountType = Literal["assets", "liabilities"]
 
-ZERO = Decimal("0")
+ZERO = Decimal(0)
 
 
 def is_assets(*, receivable_account_prefix: str, s: str) -> bool:

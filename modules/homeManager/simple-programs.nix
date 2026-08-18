@@ -24,9 +24,6 @@
     # https://github.com/sharkdp/hexyl
     hexyl
 
-    # Dialects of Chinese
-    opencc
-
     # Database
     duckdb
     sqlite-interactive

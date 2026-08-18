@@ -25,7 +25,7 @@ class Item(TypedDict):
 
 local_timezone = tzlocal.get_localzone()
 if not isinstance(local_timezone, ZoneInfo):  # pyright: ignore [reportUnnecessaryIsInstance]
-    raise ValueError("This script can only work with ZoneInfo")
+    raise TypeError("This script can only work with ZoneInfo")
 
 
 now_local = datetime.now().astimezone(local_timezone)
@@ -136,13 +136,17 @@ def datetime_to_items(local_dt: datetime, query: str) -> list[Item]:
 
     try:
         proc = subprocess.run(
-            [FZF, "--filter", query], input=stdin, text=True, capture_output=True
+            [FZF, "--filter", query],
+            input=stdin,
+            text=True,
+            capture_output=True,
+            check=True,
         )
         lines = [line.strip() for line in proc.stdout.split("\n") if line != ""]
         for line in lines:
             timezone = Timezone.restore_from_line(line)
             out.append(timezone.as_alfred_item(local_dt))
-    except Exception:
+    except subprocess.CalledProcessError:
         pass
 
     return out

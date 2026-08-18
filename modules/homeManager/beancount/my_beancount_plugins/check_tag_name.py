@@ -21,12 +21,12 @@ def plugin(
     for entry in entries:
         if not isinstance(entry, Transaction):
             continue
-        for link in entry.links:
-            if not REGULAR_EXPRESSION.match(link):
+        for tag in entry.tags:
+            if not REGULAR_EXPRESSION.match(tag):
                 errors.append(
                     PluginError(
                         source=entry.meta,
-                        message=f"^{link} does not match the regular expression {repr(REGULAR_EXPRESSION)}",
+                        message=f"#{tag} does not match the regular expression {REGULAR_EXPRESSION!r}",
                         entry=entry,
                     )
                 )
