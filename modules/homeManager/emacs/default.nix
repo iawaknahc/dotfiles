@@ -191,6 +191,11 @@
     (setq mu4e-attachment-dir "${config.home.homeDirectory}/Downloads")
   '';
   home.file.".emacs.d/init.el".source = ./emacs.d/init.el;
+  home.file.".emacs.d/user-lisp" = {
+    source = ./emacs.d/user-lisp;
+    # recursive is needed because .emacs.d/user-lisp may contain generated files.
+    recursive = true;
+  };
   home.file.".emacs.d/lisp" = {
     source = ./emacs.d/lisp;
     # recursive is needed because .emacs.d/lisp may contain generated files.
