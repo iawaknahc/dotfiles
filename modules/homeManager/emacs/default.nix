@@ -5,15 +5,8 @@
   ...
 }:
 {
-  assertions = [
-    {
-      assertion = (lib.versions.majorMinor config.programs.emacs.package.version) == "30.2";
-      message = "lua-mode should be built-in when Emacs > 30.2";
-    }
-  ];
-
   programs.emacs.enable = true;
-  programs.emacs.package = pkgs.emacs30-pgtk;
+  programs.emacs.package = pkgs.emacs31-pgtk;
 
   # overrides is the documented way to ensure a package is from a specific package set.
   # See https://nixos.org/manual/nixpkgs/stable/#sec-emacs-config
@@ -52,9 +45,6 @@
     rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
     ultra-scroll = self.melpaStablePackages.ultra-scroll;
     vertico-prescient = self.melpaStablePackages.vertico-prescient;
-    # FIXME: wgrep is available on elpaPackages as well, but it cannot build due to missing dash at test time.
-    # I tried `dontCheck = true` but it did not work.
-    wgrep = self.melpaStablePackages.wgrep;
     zig-ts-mode = self.melpaStablePackages.zig-ts-mode;
 
     # elpaPackages
@@ -92,7 +82,6 @@
     magit = self.nongnuPackages.magit;
     # magit-section is a dependency of magit.
     magit-section = self.nongnuPackages.magit-section;
-    markdown-mode = self.nongnuPackages.markdown-mode;
     # with-with-editor is a dependency of magit.
     with-editor = self.nongnuPackages.with-editor;
   };
@@ -174,9 +163,6 @@
       # Define Flymake backends
       flymake-quickdef
 
-      # FIXME: Switch to grep-edit-mode in Emacs 31.
-      wgrep
-
       # Install the latest version of builtin packages that I really care about.
       # Note that the following list is not exhaustive.
       # There are way more bundled packages that are also available on GNU ELPA.
@@ -197,8 +183,6 @@
       fennel-mode
       fish-mode
       just-ts-mode
-      # markdown-ts-mode is broken. Its replacement is available on Emacs 31.
-      markdown-mode
       nix-ts-mode
       nushell-ts-mode
       zig-ts-mode

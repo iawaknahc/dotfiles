@@ -30,6 +30,11 @@
  ;; See https://eshelyaron.com/posts/2024-11-27-emacs-aritrary-code-execution-and-how-to-avoid-it.html
  trusted-content nil)
 
+;; I am aware that there is a User Lisp directory feature since Emacs 31.
+;; But it is not suitable for putting configuration files.
+;; I tried it and when Emacs starts, it generated a lot of warnings,
+;; saying that a symbol from a third package is undefined.
+;; Maybe this feature is for writing my own library packages.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; When using the PGTK build on macOS, and
@@ -118,10 +123,6 @@
 
 ;; Configure additional Flymake backends
 (require 'init-flymake-quickdef)
-
-;; FIXME: Switch to grep-edit-mode in Emacs 31.
-;; Configure wgrep.el
-(require 'init-wgrep)
 
 ;; Configure Git integration.
 (require 'init-diff-hl)
