@@ -20,31 +20,6 @@
 ;; `tab-bar-history-mode' is `winner-mode'.
 (tab-bar-history-mode 1)
 
-(defun my/tab-bar-kill-buffer-hook ()
-  "When a buffer is about to be killed, and the following conditions hold:
-
-1. `tab-tab-mode' is enabled.
-2. The buffer is in the current tab.
-3. The current tab has only one window showing the buffer.
-
-Then the tab will be closed together.
-
-The implementation does not loop through all tabs
-because non-current tabs have no window objects.
-It is required to actually switch to the tabs in order to
-make the windows appear.
-That may cause flickering."
-  (if-let* ((_ (bound-and-true-p tab-bar-mode))
-            (buf (current-buffer))
-            (win (get-buffer-window buf))
-            (tabs (funcall tab-bar-tabs-function))
-            (tab (tab-bar--current-tab-find tabs))
-            (tab-index (tab-bar--tab-index tab tabs))
-            (tab-number (1+ tab-index))
-            (_ (with-selected-window win (one-window-p 'exclude-mini-buffer))))
-      (tab-bar-close-tab tab-number)))
-(add-hook 'kill-buffer-hook #'my/tab-bar-kill-buffer-hook)
-
 (defun my/consult-tabs ()
   "Switch to a tab using `consult--read'.
 The candidates are from `tab-bar-tabs-function'.
