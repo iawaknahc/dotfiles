@@ -13,8 +13,6 @@
  org-src-tab-acts-natively nil
  ;; Change the indentation added by C-c ' to 0.
  org-src-content-indentation 0
- ;; Do not conceal links.
- org-link-descriptive nil
  ;; Org-mode timestamp format cannot be customized.
  ;; Attempt to modify `org-timestamp-formats' will cause Org-mode unable to parse the timestamp correctly.
  ;; Therefore, we work around by using `org-timestamp-custom-formats'.
@@ -29,6 +27,30 @@
  org-default-notes-file "~/org/inbox.org"
  org-attach-id-dir "~/org/attachments/"
  org-agenda-files (list "~/org/"))
+
+
+;; Links and IDs
+(setq
+ ;; Do not conceal links.
+ org-link-descriptive nil
+ ;; Use `org-id-ts-format' to generate ID.
+ org-id-method 'ts
+ ;; When prefix is non-nil,
+ ;; The generated ID is PREFIX : GENERATED
+ ;; That is, a colon is always added between the prefix and the generated part.
+ ;; This is not documented in `org-id-prefix',
+ ;; but documented in the example given in `org-id-new'.
+ ;; I do not like this behavior, so just leave `org-id-prefix' as nil, which is also the default.
+ org-id-prefix nil
+ ;; Make `org-store-link' create an ID.
+ ;; This is barely useful because we want to be able to fuzzy search any headlines in any files, and
+ ;; generate an ID in-just-time, and finally insert the link to that ID.
+ ;; The built-in pcomplete "[[*" of Org does not support this.
+ ;; It merely inserts the search-based link in the same file.
+ org-id-link-to-org-use-id 'create-if-interactive
+ ;; Instead of using `org-id-prefix' to add prefix,
+ ;; we embed the prefix in `org-id-ts-format'.
+ org-id-ts-format "org_%Y%m%d_%H%M%S_%N")
 
 
 ;; TODO and clock
