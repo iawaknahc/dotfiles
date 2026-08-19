@@ -68,6 +68,11 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
       (setq-local
        completion-at-point-functions
        (list
+        ;; `org-mode' derives from `text-mode' and it uses pcomplete to do completion.
+        ;; Therefore, we have to add the bridge `pcomplete-completions-at-point'.
+        ;; We place it at the front of the list with the assumption that
+        ;; there is no major modes other than `org-mode' using pcomplete.
+        #'pcomplete-completions-at-point
         ;; Trigger prefix is @
         (cape-capf-trigger #'tempel-complete ?@)
         ;; Trigger prefix is `cape-file-prefix'.
