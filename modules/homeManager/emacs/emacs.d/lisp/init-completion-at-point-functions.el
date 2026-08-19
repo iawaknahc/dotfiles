@@ -65,20 +65,30 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
            ;; cape-file will not be chosen because `.` is not one of the trigger prefixes.
            ;; By the time you type `/` to make it `./`, it is too late.
            (prefix-length-enforced (cape-capf-prefix-length merged 3)))
-      (setq-local
-       completion-at-point-functions
-       (list
-        ;; `org-mode' derives from `text-mode' and it uses pcomplete to do completion.
-        ;; Therefore, we have to add the bridge `pcomplete-completions-at-point'.
-        ;; We place it at the front of the list with the assumption that
-        ;; there is no major modes other than `org-mode' using pcomplete.
-        #'pcomplete-completions-at-point
-        ;; Trigger prefix is @
-        (cape-capf-trigger #'tempel-complete ?@)
-        ;; Trigger prefix is `cape-file-prefix'.
-        #'cape-file
-        prefix-length-enforced
-        t)))))
+
+      ;; `add-hook' adds to the front when DEPTH is the same.
+      ;; So the one we want to be at the front, has to be added last.
+      ;; First of all, we reset `completion-at-point-functions' to a list containing t.
+      (setq-local completion-at-point-functions '(t))
+
+      ;; Trigger by prefix length of 3
+      (add-hook 'completion-at-point-functions prefix-length-enforced nil t)
+
+      ;; Trigger prefix is `cape-file-prefix'.
+      (add-hook 'completion-at-point-functions #'cape-file nil t)
+
+      ;; Trigger prefix is @
+      (add-hook 'completion-at-point-functions (cape-capf-trigger #'tempel-complete ?@) nil t)
+
+      ;; `org-mode' derives from `text-mode' and it uses pcomplete to do completion.
+      ;; Therefore, we have to add the bridge `pcomplete-completions-at-point'.
+      ;; We place it at the front of the list with the assumption that
+      ;; there is no major modes other than `org-mode' using pcomplete.
+      ;; It is very important that `pcomplete-completions-at-point' is added only for buffers in `org-mode'.
+      ;; I observed that in Emacs 31.0.91 with Org 9.8, adding `pcomplete-completions-at-point' unconditionally
+      ;; will make Emacs lags on every keystroke.
+      (when (derived-mode-p 'org-mode)
+        (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t)))))
 
 (setq
  cape-file-directory #'my/resolve-directory-before-point
