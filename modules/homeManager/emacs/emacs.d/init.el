@@ -94,6 +94,7 @@
 (require 'init-lisp-interaction-mode)
 (require 'init-ediff)
 (require 'init-mode-line)
+(require 'init-visual-line-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
