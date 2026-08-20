@@ -60,6 +60,8 @@ in
     };
     core = {
       pager = "delta";
+      # Make git status show filenames containing Chinese characters in their natural forms.
+      quotePath = false;
     };
     delta = {
       # Suppress all structural modification by delta.
