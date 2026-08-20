@@ -132,5 +132,8 @@
 
 (require 'init-launcher)
 
+;; Configure input method.
+(require 'init-input-method)
+
 (provide 'init)
 ;;; init.el ends here

@@ -30,6 +30,8 @@ _: {
 
     ./android-nixpkgs.nix
 
+    ./input-method.nix
+
     ./fonts.nix
     ./catppuccin.nix
 
