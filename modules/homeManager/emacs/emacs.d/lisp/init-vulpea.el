@@ -16,7 +16,11 @@
  vulpea-db-parse-method 'single-temp-buffer
 
  vulpea-create-default-template
- (list :file-name "${title}.org"))
+ (list :file-name "${title}.org")
+
+ ;; Prevent typing the word "org" from matching all notes.
+ ;; It is because "org_" is used as the prefix of all IDs.
+ vulpea-select-match-ids nil)
 
 (vulpea-db-autosync-mode 1)
 
