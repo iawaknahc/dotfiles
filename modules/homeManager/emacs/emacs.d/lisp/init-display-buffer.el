@@ -127,20 +127,6 @@
             (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
       t))
 
-(add-to-list
- 'display-buffer-alist
- `((or (derived-mode . help-mode)
-       ;; The buffer displayed by `org-capture'.
-       ,(rx string-start "*Org Select*" string-end)
-       ,(function my/display-buffer-alist-from-help-to-info-match)
-       ,(function my/display-buffer-alist-from-project-file-to-info-match)) .
-       ;; display in a side window
-       ((display-buffer-in-side-window) .
-        ;; on the right
-        ((side . right)
-         ;; spanning 80 columns.
-         (window-width . 80)))))
-
 ;; Project file
 (defun my/display-buffer-alist-project-file-match-project-file (buffer-or-name &rest _args)
   "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME belongs to a project."
@@ -192,6 +178,7 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
 
 
 ;; Org
+;; *Org Agenda*
 (add-to-list
  'display-buffer-alist
  ;; I tried using (derived-mode . org-agenda-mode) but it does not work.
@@ -202,6 +189,21 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
       ((tab-name . "*Org Agenda*")
        (tab-group . "PROJECT:org")
        (reusable-frames . the-selected-frame)))))
+
+;; *Org Select*
+(add-to-list
+ 'display-buffer-alist
+ `((or (derived-mode . help-mode)
+       ;; The buffer displayed by `org-capture'.
+       ,(rx string-start "*Org Select*" string-end)
+       ,(function my/display-buffer-alist-from-help-to-info-match)
+       ,(function my/display-buffer-alist-from-project-file-to-info-match)) .
+       ;; display in a side window
+       ((display-buffer-in-side-window) .
+        ;; on the right
+        ((side . right)
+         ;; spanning 80 columns.
+         (window-width . 80)))))
 
 
 (defun my/maximize-window (&optional window)

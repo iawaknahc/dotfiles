@@ -136,5 +136,8 @@
 ;; Configure input method.
 (require 'init-input-method)
 
+;; Configure vulpea
+(require 'init-vulpea)
+
 (provide 'init)
 ;;; init.el ends here

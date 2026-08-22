@@ -14,6 +14,7 @@ autoload
 autoloaded
 autoresize
 autorevert
+autosync
 autotrigger
 axdom
 backtab
@@ -141,6 +142,7 @@ fontset
 fromisoformat
 fromtimestamp
 fsencode
+fswatch
 ftdetect
 ftplugin
 fts
@@ -426,6 +428,7 @@ virtualedit
 vscode
 vsplit
 vtsls
+vulpea
 webike
 wezterm
 wgrep

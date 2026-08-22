@@ -5,6 +5,11 @@
   ...
 }:
 {
+  home.packages = with pkgs; [
+    # fswatch is required by vulpea
+    fswatch
+  ];
+
   programs.emacs.enable = true;
   programs.emacs.package = pkgs.emacs31-pgtk;
 
@@ -43,8 +48,11 @@
     olivetti = self.melpaStablePackages.olivetti;
     prescient = self.melpaStablePackages.prescient;
     rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
+    # `s` is a dependency of vulpea.
+    s = self.melpaStablePackages.s;
     ultra-scroll = self.melpaStablePackages.ultra-scroll;
     vertico-prescient = self.melpaStablePackages.vertico-prescient;
+    vulpea = self.melpaStablePackages.vulpea;
     zig-ts-mode = self.melpaStablePackages.zig-ts-mode;
 
     # elpaPackages
@@ -53,6 +61,8 @@
     consult = self.elpaPackages.consult;
     corfu = self.elpaPackages.corfu;
     diff-hl = self.elpaPackages.diff-hl;
+    # dash is a dependency of vulpea.
+    dash = self.elpaPackages.dash;
     eglot = self.elpaPackages.eglot;
     eldoc = self.elpaPackages.eldoc;
     embark = self.elpaPackages.embark;
@@ -75,6 +85,8 @@
     # nongnuPackages
     beancount = self.nongnuPackages.beancount;
     exec-path-from-shell = self.nongnuPackages.exec-path-from-shell;
+    # emacsql is a dependency of vulpea.
+    emacsql = self.nongnuPackages.emacsql;
     # llama is a dependency of magit.
     llama = self.nongnuPackages.llama;
     # `cond-let` is a dependency of magit.
@@ -177,6 +189,9 @@
       track-changes
       tramp
       xref
+
+      # Notes
+      vulpea
 
       # Modes
       beancount
