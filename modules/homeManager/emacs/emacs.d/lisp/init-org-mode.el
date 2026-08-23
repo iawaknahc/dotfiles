@@ -2,6 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
+
+;; Make sure Org-mode only read and write in ~/org
+(setq
+ org-directory "~/org"
+ org-default-notes-file "~/org/inbox.org"
+ org-attach-id-dir "~/org/attachments/"
+ org-agenda-files (list "~/org/"))
+
+
+;; Source blocks
 (setq
  ;; To work around a very annoying bug.
  ;; 1. It is in org-mode.
@@ -12,21 +22,27 @@
  ;; 6. Nothing happens.
  org-src-tab-acts-natively nil
  ;; Change the indentation added by C-c ' to 0.
- org-src-content-indentation 0
+ org-src-content-indentation 0)
+
+
+;; Startup visibility
+(setq
+ ;; This is equivalent to having =#+startup: content= in every file.
+ ;; This is particularly useful since every file now has a top-level properties drawer
+ ;; containing an ID property.
+ org-startup-folded 'content
+ ;; Hide blocks.
+ org-hide-block-startup t)
+
+
+;; Timestamps
+(setq
  ;; Org-mode timestamp format cannot be customized.
  ;; Attempt to modify `org-timestamp-formats' will cause Org-mode unable to parse the timestamp correctly.
  ;; Therefore, we work around by using `org-timestamp-custom-formats'.
  org-timestamp-custom-formats '("%G-W%V-%u" . "%G-W%V-%u %H:%M")
  ;; Increment minute by 5 minutes. This is the default.
  org-timestamp-rounding-minutes '(0 5))
-
-
-;; Make sure Org-mode only read and write in ~/org
-(setq
- org-directory "~/org"
- org-default-notes-file "~/org/inbox.org"
- org-attach-id-dir "~/org/attachments/"
- org-agenda-files (list "~/org/"))
 
 
 ;; Links and IDs
@@ -85,6 +101,7 @@
 ;; Otherwise, `org-clock-persist' has no effect.
 (org-clock-persistence-insinuate)
 
+
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c c" #'org-capture)
@@ -109,6 +126,7 @@
      (org-agenda-skip-function
       '(when (not (member "service" (org-get-tags)))
          (point)))))))
+
 
 (defun my/org-ctrl-c-ctrl-c-column-view ()
   "Turn on column view when we are at the buffer global COLUMNS property line.

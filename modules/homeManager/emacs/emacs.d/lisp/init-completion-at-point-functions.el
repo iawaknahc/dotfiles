@@ -88,7 +88,10 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
       ;; I observed that in Emacs 31.0.91 with Org 9.8, adding `pcomplete-completions-at-point' unconditionally
       ;; will make Emacs lags on every keystroke.
       (when (derived-mode-p 'org-mode)
-        (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t)))))
+        (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
+
+      ;; Always allow completing =[[id:]]=
+      (add-hook 'completion-at-point-functions #'my/vulpea-insert-capf))))
 
 (setq
  cape-file-directory #'my/resolve-directory-before-point

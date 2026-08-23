@@ -78,6 +78,7 @@ dbui
 deadgrep
 debugpy
 defalias
+defconst
 defun
 defvar
 deno
