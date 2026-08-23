@@ -24,7 +24,9 @@
 
  ;; Prevent typing the word "org" from matching all notes.
  ;; It is because "org_" is used as the prefix of all IDs.
- vulpea-select-match-ids nil)
+ vulpea-select-match-ids nil
+ ;; Show "Filename -> Parent Heading -> Note Title" for heading notes.
+ vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
 
 (vulpea-db-autosync-mode 1)
 
