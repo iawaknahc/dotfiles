@@ -179,6 +179,8 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
 
 ;; Org
 ;; *Org Agenda*
+;; Make Org close the tab when `org-agenda-quit' runs.
+(setq org-agenda-window-setup 'other-tab)
 (add-to-list
  'display-buffer-alist
  ;; I tried using (derived-mode . org-agenda-mode) but it does not work.
@@ -188,6 +190,9 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
    . ((display-buffer-in-tab) .
       ((tab-name . "*Org Agenda*")
        (tab-group . "PROJECT:org")
+       ;; Make the window dedicated,
+       ;; so hitting RET in the agenda buffer will split window.
+       (dedicated . t)
        (reusable-frames . the-selected-frame)))))
 
 ;; *Org Select*
