@@ -5,6 +5,13 @@
   ...
 }:
 {
+  assertions = [
+    {
+     assertion = pkgs.emacsPackages.melpaStablePackages.vulpea.version == "2.7.0";
+     message = "vulpea has a newer version than 2.7.0. Read the changelog and plan the upgrade.";
+    }
+  ];
+
   home.packages = with pkgs; [
     # fswatch is required by vulpea
     fswatch

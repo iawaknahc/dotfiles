@@ -59,6 +59,7 @@
          ;; On exit the completion, delete the candidate string, and insert the ID link and the note title.
          :exit-function (lambda (candidate _status)
                           (when-let* ((note-id (get-text-property 0 'vulpea-note-id candidate))
+                                      ;; FIXME: Make use of https://github.com/d12frosted/vulpea/issues/436
                                       (note (vulpea-db-get-by-id note-id))
                                       (note-title (vulpea-note-title note)))
                             (delete-char (- (length candidate)))
