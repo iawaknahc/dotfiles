@@ -20,7 +20,9 @@
  ;; Skip `org-mode-hook' while indexing.
  vulpea-db-parse-method 'single-temp-buffer
 
- vulpea-create-default-template (list :file-name "${title}.org")
+ vulpea-create-default-template `(
+                                  :file-name "${title}.org"
+                                  :properties (("CREATED" . "%<[%Y-%m-%d %a %H:%M]>")))
 
  ;; Prevent typing the word "org" from matching all notes.
  ;; It is because "org_" is used as the prefix of all IDs.

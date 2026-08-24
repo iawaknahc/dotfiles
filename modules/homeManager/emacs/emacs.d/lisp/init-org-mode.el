@@ -159,11 +159,14 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
 (setq org-capture-templates nil)
 (my/org-add-capture-template
  :key "t"
- :description "Create a new task and clock the time spent on creating it"
+ :description "Create a vulpea-compatible heading-level note and clock the time spent on creating it"
  :type 'entry
- :target '(file+olp+datetree "~/org/inbox.org")
+ :target '(file "~/org/inbox.org")
  :template "TODO %?
-%U"
+:PROPERTIES:
+:ID:      %(org-id-new)
+:CREATED: %<[%Y-%m-%d %a %H:%M]>
+:END:"
  :clock-in t
  :clock-resume t)
 
