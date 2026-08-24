@@ -99,5 +99,10 @@ See https://github.com/minad/cape/blob/2.7/cape.el#L941"
 
 (add-hook 'after-change-major-mode-hook #'my/cape-after-change-major-mode-hook)
 
+;; A private function used by `dabbrev-capf' `dabbrev--abbrev-at-point' may signal (user-error "No possible abbreviation preceding point").
+;; In my experience, this situation MUST happen in a Magit gitcommit buffer when I start typing.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/dabbrev.el#L678
+(advice-add 'dabbrev-capf :around #'cape-wrap-silent)
+
 (provide 'init-completion-at-point-functions)
 ;;; init-completion-at-point-functions.el ends here
