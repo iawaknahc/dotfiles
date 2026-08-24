@@ -166,9 +166,9 @@ And in fact, it has a higher priority than us."
 
 
 ;; Capture
-(cl-defun my/org-add-capture-template
+(cl-defun my/org-capture-template
     (&rest args &key key description type target template &allow-other-keys)
-  "A helper to add capture template.
+  "A helper to create a capture template.
 ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted according to the manual."
   (let* ((rest (copy-sequence args)))
     (cl-remf rest :key)
@@ -176,22 +176,22 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
     (cl-remf rest :type)
     (cl-remf rest :target)
     (cl-remf rest :template)
-    (add-to-list 'org-capture-templates `(,key ,description ,type ,target ,template ,@rest))))
+    `(,key ,description ,type ,target ,template ,@rest)))
 
-;; Set `org-capture-templates' to nil to ensure it exists.
-(setq org-capture-templates nil)
-(my/org-add-capture-template
- :key "t"
- :description "Create a vulpea-compatible heading-level note and clock the time spent on creating it"
- :type 'entry
- :target '(file "~/org/inbox.org")
- :template "TODO %?
+(setq
+ org-capture-templates
+ (list (my/org-capture-template
+        :key "t"
+        :description "Create a vulpea-compatible heading-level note and clock the time spent on creating it"
+        :type 'entry
+        :target '(file "~/org/inbox.org")
+        :template "TODO %?
 :PROPERTIES:
 :ID:      %(org-id-new)
 :CREATED: %<<%Y-%m-%d %a %H:%M>>
 :END:"
- :clock-in t
- :clock-resume t)
+        :clock-in t
+        :clock-resume t)))
 
 
 ;; Refile
