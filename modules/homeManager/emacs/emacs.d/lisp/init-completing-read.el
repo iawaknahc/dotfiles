@@ -21,9 +21,15 @@
  ;; Previously I set vertico-preselect to first.
  ;; But when I hit C-x d, I want to press RET immediately to open the directory with Dired.
  ;; Thus, the default value directory probably is the best value.
- vertico-preselect 'directory)
+ vertico-preselect 'directory
+ vertico-multiform-commands
+ ;; Make C-c C-c on a headline or C-c C-q preselect the prompt by default.
+ ;; So C-c C-c on a headline and then press RET immediately does not insert the first arbitrary tag.
+ `((org-set-tags-command . ((vertico-preselect . prompt)))
+   (org-ctrl-c-ctrl-c . ((vertico-preselect . prompt)))))
 
 (add-hook 'after-init-hook #'vertico-mode)
+(add-hook 'after-init-hook #'vertico-multiform-mode)
 
 (provide 'init-completing-read)
 ;;; init-completing-read.el ends here
