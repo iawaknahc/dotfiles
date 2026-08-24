@@ -139,5 +139,8 @@
 ;; Configure vulpea
 (require 'init-vulpea)
 
+;; Configure Magit
+(require 'init-magit)
+
 (provide 'init)
 ;;; init.el ends here
