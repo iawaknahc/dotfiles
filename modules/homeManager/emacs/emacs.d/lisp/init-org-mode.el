@@ -186,38 +186,6 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
  ;; Typically we type something like "filename partial-heading1 partial-heading2" to locate the target.
  org-outline-path-complete-in-steps nil)
 
-(defun my/org-refile-datetree ()
-  "Refile the level 4 headline at point to a target file.
-
-The level 4 headline must be within a subtree.
-The target files are populated from function `org-agenda-files'."
-  (interactive)
-  (cl-block nil
-    (let* (parent-level heading decode-time-value target-file)
-      (save-excursion
-        (setq parent-level (org-up-heading-safe)))
-      (unless (equal parent-level 3)
-        (cl-return (message "This command must be invoked in a level 4 headline")))
-      (save-excursion
-        (org-up-heading-safe)
-        (setq heading (org-get-heading 'no-tags 'no-todo 'no-priority 'no-comment)))
-      ;; Extract the ISO8601 string.
-      (setq heading (substring heading 0 10))
-      (setq decode-time-value (iso8601-parse-date heading))
-      ;; Prompt for a target file.
-      (setq target-file (completing-read "Select a target file: " (org-agenda-files)))
-      ;; Cut the subtree.
-      (org-back-to-heading 'invisible-ok)
-      (org-cut-subtree)
-      ;; Create the datetree and paste the subtree.
-      (with-current-buffer (find-file-noselect target-file)
-        (let ((widen-the-buffer nil))
-          (org-datetree-find-date-create (org-date-to-gregorian decode-time-value) widen-the-buffer))
-        (org-end-of-subtree 'invisible-ok 'to-heading)
-        (org-paste-subtree 4)
-        (save-buffer)
-        (message "Refiled the headline to %s" (buffer-name))))))
-
 
 ;; Integrate `org-lint' with `flymake'.
 (defun my/flymake-org-lint (report-fn &rest _args)
@@ -237,14 +205,6 @@ REPORT-FN is respected."
 (add-hook 'org-mode-hook (lambda ()
                            (add-hook 'flymake-diagnostic-functions #'my/flymake-org-lint nil t)))
 
-;; Add a command to insert datetree.
-(defun my/org-datetree-insert ()
-  "Insert datetree into current buffer."
-  (interactive)
-  (let* ((widen-the-buffer nil)
-         (org-date (org-read-date))
-         (greg-date (org-date-to-gregorian org-date)))
-    (org-datetree-find-date-create greg-date widen-the-buffer)))
 
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
