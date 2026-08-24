@@ -22,7 +22,7 @@
 
  vulpea-create-default-template `(
                                   :file-name "${title}.org"
-                                  :properties (("CREATED" . "%<[%Y-%m-%d %a %H:%M]>")))
+                                  :properties (("CREATED" . "%<<%Y-%m-%d %a %H:%M>>")))
 
  ;; Prevent typing the word "org" from matching all notes.
  ;; It is because "org_" is used as the prefix of all IDs.

@@ -441,6 +441,7 @@ winids
 wininfo
 winopts
 winsize
+worklog
 wrapscan
 writebackup
 wshada

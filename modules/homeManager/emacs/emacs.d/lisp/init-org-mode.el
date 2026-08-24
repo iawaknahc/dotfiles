@@ -7,8 +7,7 @@
 (setq
  org-directory "~/org"
  org-default-notes-file "~/org/inbox.org"
- org-attach-id-dir "~/org/attachments/"
- org-agenda-files (list "~/org/"))
+ org-attach-id-dir "~/org/attachments/")
 
 
 ;; Source blocks
@@ -113,19 +112,43 @@
 
 
 ;; Agenda
+(defun my/org-agenda-before--set-org-agenda-files (&rest _args)
+  "Set the variable `org-agenda-files'.
+
+Only Project or Area file-level notes are targets of agenda."
+  (let* ((file-notes (vulpea-db-query (lambda (note)
+                                        (let* ((tags (vulpea-note-tags note))
+                                               (level (vulpea-note-level note)))
+                                          (and (equal 0 level)
+                                               (or (seq-contains-p tags "project")
+                                                   (seq-contains-p tags "area")))))))
+         (filepaths (seq-map #'vulpea-note-path file-notes)))
+    (setq org-agenda-files filepaths)))
+;; Just-in-time set variable `org-agenda-files' before `org-agenda' runs.
+(advice-add #'org-agenda :before #'my/org-agenda-before--set-org-agenda-files)
+
 (setq
  org-agenda-custom-commands
  `(("a" "General agenda" agenda ""
     ((org-agenda-skip-function
-      '(when (member "life" (org-get-tags))
-         (point)))))
+      '(let* ((tags (org-get-tags)))
+         (when (or (seq-contains-p tags "life")
+                   (seq-contains-p tags "worklog"))
+           (point))))))
    ("A" "All agenda" agenda "")
+   ("w" "Worklog entries" agenda ""
+    ((org-agenda-files (list "~/org/worklog.org"))
+     (org-agenda-skip-function
+      '(let* ((tags (org-get-tags)))
+         (unless (seq-contains-p tags "worklog")
+           (point))))))
    ("y" "Yearly agenda of services" agenda ""
     ((org-agenda-span ,(* 7 53))
      (org-agenda-show-all-dates nil)
      (org-agenda-skip-function
-      '(when (not (member "service" (org-get-tags)))
-         (point)))))))
+      '(let* ((tags (org-get-tags)))
+         (unless (seq-contains-p tags "service")
+           (point))))))))
 
 
 (defun my/org-ctrl-c-ctrl-c-column-view ()
@@ -165,17 +188,24 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
  :template "TODO %?
 :PROPERTIES:
 :ID:      %(org-id-new)
-:CREATED: %<[%Y-%m-%d %a %H:%M]>
+:CREATED: %<<%Y-%m-%d %a %H:%M>>
 :END:"
  :clock-in t
  :clock-resume t)
 
 
 ;; Refile
+(defun my/org-refile-targets-with-vulpea ()
+  "Return a list of filepaths suitable for `org-refile-targets'."
+  (let* ((file-notes (vulpea-db-query (lambda (note)
+                                        (let* ((level (vulpea-note-level note)))
+                                          (equal 0 level)))))
+         (filepaths (seq-map #'vulpea-note-path file-notes)))
+    filepaths))
+
 (setq
- ;; `org-agenda-files' is set to include all Org files.
- ;; We of course want to refile to any Org files.
- org-refile-targets '((org-agenda-files . t))
+ ;; All file-level notes are refile targets.
+ org-refile-targets '((my/org-refile-targets-with-vulpea . t))
  ;; Setting to file means the candidate in the Refile interface looks like
  ;; "file.org/heading1/heading2/heading3".
  ;; Having the filename allows me to fuzzy search using Orderless.
