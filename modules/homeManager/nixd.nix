@@ -40,8 +40,6 @@ let
     # See https://github.com/nix-community/nixd/issues/629#issuecomment-2558520043
     cmd = [
       "nixd"
-      "--inlay-hints=true"
-      "--semantic-tokens=true"
     ];
     settings = nixd-configuration;
   };

@@ -3,7 +3,7 @@ from my_rass import common
 
 def servers():
     return [
-        ["nixd", "--inlay-hints=true", "--semantic-tokens=true"],
+        ["nixd"],
         ["nil"],
         common.harper(),
         common.typos(),
