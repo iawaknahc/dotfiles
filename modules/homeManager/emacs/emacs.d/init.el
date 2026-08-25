@@ -95,6 +95,7 @@
 (require 'init-ediff)
 (require 'init-mode-line)
 (require 'init-visual-line-mode)
+(require 'init-outline-minor-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
