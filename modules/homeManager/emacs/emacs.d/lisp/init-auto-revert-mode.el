@@ -3,9 +3,10 @@
 ;;; Code:
 
 (setq
- ;; When this is set to t, `vc-refresh-state' will be called automatically.
- ;; An :after advice is added to `vc-refresh-state' to call `diff-hl-update'.
- auto-revert-check-vc-info t
+ ;; I have a 30k lines beancount file.
+ ;; When `auto-revert-check-vc-info' is set to t,
+ ;; `vc-refresh-state' takes a lot of CPU time to run.
+ auto-revert-check-vc-info nil
  ;; In my testing, even polling is disabled,
  ;; `vc-refresh-state' is still called.
  auto-revert-avoid-polling t

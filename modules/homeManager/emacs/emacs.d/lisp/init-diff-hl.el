@@ -12,11 +12,13 @@
 (with-eval-after-load 'magit
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
-(defun my/diff-hl-vc-refresh-state-after ()
-  "An :after advice of `vc-refresh-state' to invoke `diff-hl-update'.
-`vc-refresh-state' is called by Auto-Revert mode when `auto-revert-check-vc-info' is t."
-  (diff-hl-update))
-(advice-add #'vc-refresh-state :after #'my/diff-hl-vc-refresh-state-after)
+(defun my/vc-refresh-state-on-focus ()
+  "Listen to `after-focus-change-function' and call `vc-refresh-state' and `diff-hl-update'."
+  (when (and (frame-focus-state) buffer-file-name (vc-backend buffer-file-name))
+    (vc-refresh-state)
+    (when (bound-and-true-p diff-hl-mode)
+      (diff-hl-update))))
+(add-function :after after-focus-change-function #'my/vc-refresh-state-on-focus)
 
 (provide 'init-diff-hl)
 ;;; init-diff-hl.el ends here
