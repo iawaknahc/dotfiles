@@ -30,7 +30,10 @@
  ;; Show "Filename -> Parent Heading -> Note Title" for heading notes.
  vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
 
+;; Turn on auto sync
 (vulpea-db-autosync-mode 1)
+;; Validate notes against schema.
+(add-hook 'org-mode-hook #'vulpea-schema-flymake-mode)
 
 ;; `vulpea-find' is used to open notes or create a new note.
 (keymap-global-set "M-o" #'vulpea-find)
