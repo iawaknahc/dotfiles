@@ -77,5 +77,16 @@
  ;; See also `vulpea-db-parse-method'.
  vulpea-ui-fast-parse t)
 
+
+(defun my/vulpea-load-schema-in-org-directory ()
+  "Use `load-file' to load the file local-schemas.el in `org-directory'."
+  (when-let* ((_ org-directory)
+              (schema-file (expand-file-name "local-schemas.el" org-directory))
+              (_ (file-readable-p schema-file)))
+    (load-file schema-file)
+    (message "Loaded schema file %S in org-directory %S" schema-file org-directory)))
+(add-hook 'after-init-hook #'my/vulpea-load-schema-in-org-directory)
+
+
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here
