@@ -6,6 +6,16 @@
 (add-hook 'prog-mode-hook #'apheleia-mode)
 (add-hook 'text-mode-hook #'apheleia-mode)
 
+(cl-defun my/org-fmt (&key scratch callback &allow-other-keys)
+  "An Apheleia-compatible formatter function.
+Format SCRATCH, and then invoke CALLBACK."
+  (with-current-buffer scratch
+    (org-mode)
+    (org-table-map-tables #'org-table-align 'quietly)
+    (org-align-tags 'all)
+    (org-indent-region (point-min) (point-max))
+    (funcall callback)))
+
 ;; Alpheleia is written in a way that even apheleia-mode is autoloaded,
 ;; most of its dependencies are not loaded until the first save.
 ;; Therefore, `apheleia-formatters' and `apheleia-mode-alist' only exist
@@ -71,6 +81,8 @@
   (setf (alist-get 'bean-format apheleia-formatters)
         '("bean-format" "-"))
 
+  (setf (alist-get 'my/org-fmt apheleia-formatters) #'my/org-fmt)
+
   ;; Replace `apheleia-mode-alist' with the following value.
   ;; By default, apheleia-mode-alist is pre-configured with many formatters for many major modes.
   ;; Keeping them enabled will definitely interfere with LSP.
@@ -96,6 +108,8 @@
      (lisp-mode . lisp-indent)
      (emacs-lisp-mode . lisp-indent)
      (common-lisp-mode . lisp-indent)
+     ;; Org
+     (org-mode . my/org-fmt)
      ;; Prettier
      (css-mode . prettier-css)
      (css-ts-mode . prettier-css)
