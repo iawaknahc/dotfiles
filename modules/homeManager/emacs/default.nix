@@ -7,8 +7,8 @@
 {
   assertions = [
     {
-     assertion = pkgs.emacsPackages.melpaStablePackages.vulpea.version == "2.7.0";
-     message = "vulpea has a newer version than 2.7.0. Read the changelog and plan the upgrade.";
+      assertion = pkgs.emacsPackages.melpaStablePackages.vulpea.version == "2.7.0";
+      message = "vulpea has a newer version than 2.7.0. Read the changelog and plan the upgrade.";
     }
   ];
 
@@ -59,7 +59,9 @@
     s = self.melpaStablePackages.s;
     ultra-scroll = self.melpaStablePackages.ultra-scroll;
     vertico-prescient = self.melpaStablePackages.vertico-prescient;
+    vui = self.melpaStablePackages.vui;
     vulpea = self.melpaStablePackages.vulpea;
+    vulpea-ui = self.melpaStablePackages.vulpea-ui;
     zig-ts-mode = self.melpaStablePackages.zig-ts-mode;
 
     # elpaPackages
@@ -199,6 +201,7 @@
 
       # Notes
       vulpea
+      vulpea-ui
 
       # Modes
       beancount

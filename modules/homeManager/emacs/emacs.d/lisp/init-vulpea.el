@@ -18,6 +18,7 @@
  ;; Do not index links without square brackets.
  vulpea-db-index-plain-links nil
  ;; Skip `org-mode-hook' while indexing.
+ ;; See also `vulpea-ui-fast-parse'.
  vulpea-db-parse-method 'single-temp-buffer
 
  vulpea-create-default-template `(
@@ -69,6 +70,12 @@
                                       (note-title (vulpea-note-title note)))
                             (delete-char (- (length candidate)))
                             (insert note-id "][" note-title))))))))
+
+
+(setq
+ ;; Skip `org-mode-hook' while parsing.
+ ;; See also `vulpea-db-parse-method'.
+ vulpea-ui-fast-parse t)
 
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here
