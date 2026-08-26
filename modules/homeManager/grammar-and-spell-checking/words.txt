@@ -188,6 +188,7 @@ hspace
 ignorecase
 impp
 inplace
+intermonth
 ipairs
 ipc
 isearch

@@ -3,9 +3,6 @@
 ;;; Code:
 
 (setq
- ;; Roughly the center of Hong Kong at zoom level 11.
- calendar-latitude 22.34
- calendar-longitude 114.17
  ;; The zoom level the whole Hong Kong can be displayed on my MacBook.
  osm-default-zoom 11
  ;; Use the MapTiler tile server defined below.

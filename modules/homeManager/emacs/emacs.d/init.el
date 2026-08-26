@@ -96,6 +96,7 @@
 (require 'init-mode-line)
 (require 'init-visual-line-mode)
 (require 'init-outline-minor-mode)
+(require 'init-calendar)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
