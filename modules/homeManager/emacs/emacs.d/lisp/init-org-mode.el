@@ -132,8 +132,8 @@ Only Project or Area file-level notes are targets of agenda."
  `(("a" "General agenda" agenda ""
     ((org-agenda-skip-function
       '(let* ((tags (org-get-tags)))
-         (when (or (seq-contains-p tags "life")
-                   (seq-contains-p tags "worklog"))
+         (when (or (seq-contains-p tags "warranty_period")
+                   (seq-contains-p tags "contract_period"))
            (point))))))
    ("A" "All agenda" agenda "")
    ("w" "Worklog entries" agenda ""
