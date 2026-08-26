@@ -143,5 +143,8 @@
 ;; Configure Magit
 (require 'init-magit)
 
+;; Configure osm.el
+(require 'init-osm)
+
 (provide 'init)
 ;;; init.el ends here

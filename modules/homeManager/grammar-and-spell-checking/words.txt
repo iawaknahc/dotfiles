@@ -242,6 +242,7 @@ magit
 maildir
 mapcat
 mapconcat
+maptiler
 mbsync
 menuone
 minibuffer
@@ -296,6 +297,7 @@ openssl
 operatorfunc
 osascript
 osc
+osm
 outpubkey
 packadd
 paramgen

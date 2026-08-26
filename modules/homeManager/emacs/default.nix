@@ -53,6 +53,7 @@
     goto-chg = self.melpaStablePackages.goto-chg;
     nix-ts-mode = self.melpaStablePackages.nix-ts-mode;
     olivetti = self.melpaStablePackages.olivetti;
+    osm = self.melpaStablePackages.osm;
     prescient = self.melpaStablePackages.prescient;
     rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
     # `s` is a dependency of vulpea.
@@ -202,6 +203,7 @@
       # Notes
       vulpea
       vulpea-ui
+      osm
 
       # Modes
       beancount
@@ -264,5 +266,13 @@
   xdg.configFile."rassumfrassum" = {
     source = ./rassumfrassum;
     recursive = true;
+  };
+
+  sops.secrets."emacs_osm_maptiler/api_key" = { };
+  sops.templates.".authinfo" = {
+    path = "${config.home.homeDirectory}/.authinfo";
+    content = ''
+      machine maptiler.com login apikey password ${config.sops.placeholder."emacs_osm_maptiler/api_key"}
+    '';
   };
 }
