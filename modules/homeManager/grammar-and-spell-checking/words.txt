@@ -97,6 +97,7 @@ dockerls
 docstrings
 dolist
 dotimes
+dtstart
 dtz
 duckdb
 dwim
@@ -188,6 +189,7 @@ hlsearch
 hostnames
 hpath
 hspace
+icalendar
 ignorecase
 impp
 inplace
@@ -423,8 +425,10 @@ urlsplit
 usimplify
 usr
 utcoffset
+vcalendar
 vconcat
 vertico
+vevent
 vimgrep
 vimruntime
 vimscript

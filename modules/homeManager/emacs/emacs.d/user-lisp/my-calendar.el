@@ -6,6 +6,8 @@
 (require 'cal-julian)
 (require 'solar)
 (require 'holidays)
+(require 'icalendar-parser)
+(require 'icalendar-ast)
 
 (defconst my/solar-terms
   '(("春分" 0 (3 21))
@@ -155,6 +157,32 @@ Compute the holiday for SOLAR-TERM."
     (holiday-chinese 8 15 "中秋節")
     (holiday-chinese 9 9 "重陽節"))
   "A list of Chinese festivals intended to be added to `holiday-other-holidays'.")
+
+(defun my/holiday-exact (month day year description)
+  "Like `holiday-fixed' but with YEAR.
+Return ((MONTH DAY YEAR) DESCRIPTION)"
+  (holiday-filter-visible-calendar
+   (list
+    (list (list month day year) description))))
+
+(defconst my/holiday-other-holidays-hong-kong-public-holidays
+  (let* ((file (expand-file-name "香港公眾假期.ics" user-emacs-directory))
+         (s (with-temp-buffer (insert-file-contents file) (buffer-string)))
+         (vcalendar (icalendar-parse-from-string 'icalendar-vcalendar s))
+         (children (icalendar-ast-node-children vcalendar)))
+    (cl-loop
+     for vevent in children
+     for type = (icalendar-ast-node-type vevent)
+     when (eq type 'icalendar-vevent)
+     collect (let* ((dtstart (icalendar-ast-node-value (icalendar-ast-node-first-child-of 'icalendar-dtstart vevent)))
+                    (summary (icalendar-ast-node-value (icalendar-ast-node-first-child-of 'icalendar-summary vevent)))
+                    (date (icalendar-ast-node-value dtstart))
+                    (month (nth 0 date))
+                    (day (nth 1 date))
+                    (year (nth 2 date))
+                    (description (icalendar-ast-node-value summary)))
+               `(my/holiday-exact ,month ,day ,year ,(format "%s %s" "[香港公眾假期]" description)))))
+  "A list of Hong Kong public holidays intended to be added to `holiday-other-holidays'.")
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here

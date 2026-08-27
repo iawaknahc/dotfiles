@@ -64,7 +64,11 @@
   ;; They are replaced by my/holiday-other-holidays-solar-term.
   (setopt holiday-solar-holidays nil)
 
-  (setopt holiday-other-holidays (append my/holiday-other-holidays-solar-term my/holiday-other-holidays-chinese-festivals)))
+  (setopt holiday-other-holidays (append
+                                  my/holiday-other-holidays-solar-term
+                                  my/holiday-other-holidays-chinese-festivals
+                                  my/holiday-other-holidays-hong-kong-public-holidays
+                                  nil)))
 
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
