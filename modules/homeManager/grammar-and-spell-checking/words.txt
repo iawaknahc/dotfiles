@@ -7,6 +7,7 @@ alist
 alpheleia
 apheleia
 aset
+astro
 atuin
 augroup
 autocmd
@@ -40,6 +41,7 @@ bufpath
 buftype
 builtin
 caar
+cadr
 caml
 cangjie
 capf
@@ -179,6 +181,7 @@ headerline
 healthcheck
 helpgrep
 hexkey
+hkt
 hledger
 hlgroup
 hlsearch

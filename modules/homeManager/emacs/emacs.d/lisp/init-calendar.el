@@ -47,6 +47,15 @@
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
 ;; This marks today with face `calendar-today', which is underline.
 (add-hook 'calendar-today-visible-hook #'calendar-mark-today)
+;; Mark holidays when calendar is opened.
+(add-hook 'calendar-initial-window-hook #'calendar-mark-holidays)
+
+(defun my/holiday-other-holidays-add ()
+  "Add my holidays to `holiday-other-holidays'."
+  (require 'my-calendar)
+  (setopt holiday-other-holidays my/holiday-other-holidays-solar-term))
+
+(add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
 (provide 'init-calendar)
 ;;; init-calendar.el ends here
