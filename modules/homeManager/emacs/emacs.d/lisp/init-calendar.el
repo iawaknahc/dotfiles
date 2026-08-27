@@ -53,7 +53,18 @@
 (defun my/holiday-other-holidays-add ()
   "Add my holidays to `holiday-other-holidays'."
   (require 'my-calendar)
-  (setopt holiday-other-holidays my/holiday-other-holidays-solar-term))
+
+  ;; I do not know these calendars.
+  (setopt holiday-hebrew-holidays nil)
+  (setopt holiday-islamic-holidays nil)
+  (setopt holiday-bahai-holidays nil)
+
+  ;; They are replaced by my/holiday-other-holidays-chinese-festivals.
+  (setopt holiday-oriental-holidays nil)
+  ;; They are replaced by my/holiday-other-holidays-solar-term.
+  (setopt holiday-solar-holidays nil)
+
+  (setopt holiday-other-holidays (append my/holiday-other-holidays-solar-term my/holiday-other-holidays-chinese-festivals)))
 
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
