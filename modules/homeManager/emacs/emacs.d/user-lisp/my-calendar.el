@@ -4,6 +4,7 @@
 
 (require 'calendar)
 (require 'cal-julian)
+(require 'cal-china)
 (require 'solar)
 (require 'holidays)
 (require 'icalendar-parser)
@@ -183,6 +184,83 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
                     (description (icalendar-ast-node-value summary)))
                `(my/holiday-exact ,month ,day ,year ,(format "%s %s" "[香港公眾假期]" description)))))
   "A list of Hong Kong public holidays intended to be added to `holiday-other-holidays'.")
+
+(defconst my/calendar-chinese-celestial-stem
+  ["甲" "乙" "丙" "丁" "戊" "己" "庚" "辛" "壬" "癸"]
+  "The names of the 10 celestial stems.")
+
+(defconst my/calendar-chinese-terrestrial-branch
+  ["子" "丑" "寅" "卯" "辰" "巳" "午" "未" "申" "酉" "戌" "亥"]
+  "The names of the 12 terrestrial branches.")
+
+(defconst my/calendar-chinese-zodiac-name-array
+  ["鼠" "牛" "虎" "兔" "龍" "蛇" "馬" "羊" "猴" "雞" "狗" "豬"]
+  "The names of the zodiac.")
+
+(defconst my/calendar-chinese-month-name-array
+  ["正月" "二月" "三月" "四月" "五月" "六月" "七月" "八月" "九月" "十月" "冬月" "臘月"]
+  "The names of the months.")
+
+(defconst my/calendar-chinese-day-name-array
+  ["初一" "初二" "初三" "初四" "初五" "初六" "初七" "初八" "初九" "初十"
+   "十一" "十二" "十三" "十四" "十五" "十六" "十七" "十八" "十九" "二十"
+   "廿一" "廿二" "廿三" "廿四" "廿五" "廿六" "廿七" "廿八" "廿九" "三十"]
+  "The names of the days in a month.")
+
+(defconst my/calendar-chinese-leap-month-prefix "閏" "The prefix for the leap month.")
+
+(defun my/calendar-chinese-sexagesimal-name (n)
+  "Return the name of N in the 60-year cycle."
+  (let* ((a (1- n))
+         (b (% a 10))
+         (c (% a 12))
+         (d (aref my/calendar-chinese-celestial-stem b))
+         (e (aref my/calendar-chinese-terrestrial-branch c)))
+    (format "%s%s" d e)))
+
+(defun my/calendar-chinese-zodiac-name (year)
+  "Return the name of the zodiac of YEAR."
+  (aref my/calendar-chinese-zodiac-name-array (% (1- year) 12)))
+
+(defun my/calendar-chinese-month-name (month)
+  "Return the name of MONTH."
+  (let* ((name (aref my/calendar-chinese-month-name-array (1- (floor month)))))
+    (if (integerp month)
+        name
+      (format "%s%s" my/calendar-chinese-leap-month-prefix name))))
+
+(defun my/calendar-chinese-day-name (day)
+  "Return the name of DAY."
+  (aref my/calendar-chinese-day-name-array (1- day)))
+
+(defun my/calendar-chinese-date-string (date)
+  "Return the string form of chinese date DATE."
+  (let* ((year (nth 1 date))
+         (month (nth 2 date))
+         (day (nth 3 date)))
+    (format
+     "%s年（肖%s）%s%s"
+     (my/calendar-chinese-sexagesimal-name year)
+     (my/calendar-chinese-zodiac-name year)
+     (my/calendar-chinese-month-name month)
+     (my/calendar-chinese-day-name day))))
+
+(defun my/calendar-chinese-date-string-from-gregorian (date)
+  "Return the string from of Gregorian date DATE."
+  (my/calendar-chinese-date-string (calendar-chinese-from-absolute (calendar-absolute-from-gregorian date))))
+
+(defun my/calendar-iso-ordinal-date-string (date)
+  "Return the string for ISO8601 ordinal date of Gregorian date DATE."
+  (let* ((day-of-year (calendar-day-number date)))
+    (format "%.4d-%.3d" (calendar-extract-year date) day-of-year)))
+
+(defun my/calendar-iso-week-date-string (date)
+  "Return string for ISO8601 week date of Gregorian date DATE."
+  (let* ((iso-date (calendar-iso-from-absolute (calendar-absolute-from-gregorian date)))
+         (year (calendar-extract-year iso-date))
+         (week-number (calendar-extract-month iso-date))
+         (day-number (calendar-extract-day iso-date)))
+    (format "%.4d-W%.2d-%d" year week-number day-number)))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here

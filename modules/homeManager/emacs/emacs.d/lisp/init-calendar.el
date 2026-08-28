@@ -12,7 +12,7 @@
  calendar-intermonth-text
  '(propertize
    (format "W%.2d"
-           (nth 0 (calendar-iso-from-absolute (calendar-absolute-from-gregorian (list month day year)))))
+           (calendar-extract-month (calendar-iso-from-absolute (calendar-absolute-from-gregorian (list month day year)))))
    'font-lock-face 'calendar-month-header)
 
  ;; Display ISO week day number instead of two-letter abbreviation of day name.
@@ -42,13 +42,22 @@
  ;; Display time in European style.
  calendar-time-display-form
  '(24-hours ":" minutes
-            (if time-zone " (") time-zone (if time-zone ")")))
+            (if time-zone " (") time-zone (if time-zone ")"))
+
+ ;; Display today in various forms.
+ calendar-mode-line-format
+ '((calendar-date-string date)
+   (my/calendar-iso-week-date-string date)
+   (my/calendar-iso-ordinal-date-string date)
+   (my/calendar-chinese-date-string-from-gregorian date)))
 
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
 ;; This marks today with face `calendar-today', which is underline.
 (add-hook 'calendar-today-visible-hook #'calendar-mark-today)
 ;; Mark holidays when calendar is opened.
 (add-hook 'calendar-initial-window-hook #'calendar-mark-holidays)
+;; Redraw the mode line as point moves.
+(add-hook 'calendar-move-hook #'calendar-update-mode-line)
 
 (defun my/holiday-other-holidays-add ()
   "Add my holidays to `holiday-other-holidays'."

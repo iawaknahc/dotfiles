@@ -6,6 +6,7 @@ alacritty
 alist
 alpheleia
 apheleia
+aref
 aset
 astro
 atuin
@@ -193,6 +194,7 @@ icalendar
 ignorecase
 impp
 inplace
+integerp
 intermonth
 ipairs
 ipc
