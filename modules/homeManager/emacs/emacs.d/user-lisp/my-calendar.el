@@ -233,21 +233,33 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
   "Return the name of DAY."
   (aref my/calendar-chinese-day-name-array (1- day)))
 
-(defun my/calendar-chinese-date-string (date)
-  "Return the string form of chinese date DATE."
-  (let* ((year (nth 1 date))
-         (month (nth 2 date))
-         (day (nth 3 date)))
-    (format
-     "%s年（肖%s）%s%s"
-     (my/calendar-chinese-sexagesimal-name year)
-     (my/calendar-chinese-zodiac-name year)
-     (my/calendar-chinese-month-name month)
-     (my/calendar-chinese-day-name day))))
+(defun my/calendar-chinese-start-year-of-cycle (date)
+  "Return the start year of the cycle of Gregorian date DATE."
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (chinese-date (calendar-chinese-from-absolute abs-date))
+         (cycle (calendar-extract-month chinese-date))
+         (first-date-of-cycle (list cycle 1 1 1))
+         (abs-date (calendar-chinese-to-absolute first-date-of-cycle))
+         (date (calendar-gregorian-from-absolute abs-date)))
+    (calendar-extract-year date)))
 
 (defun my/calendar-chinese-date-string-from-gregorian (date)
-  "Return the string from of Gregorian date DATE."
-  (my/calendar-chinese-date-string (calendar-chinese-from-absolute (calendar-absolute-from-gregorian date))))
+  "Return the string form of Gregorian date DATE."
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (chinese-date (calendar-chinese-from-absolute abs-date))
+         (cycle (nth 0 chinese-date))
+         (year (nth 1 chinese-date))
+         (month (nth 2 chinese-date))
+         (day (nth 3 chinese-date)))
+    (format
+     "(循環%d %d年 始於%.4d年 肖%s) %s年%s%s"
+     cycle
+     year
+     (my/calendar-chinese-start-year-of-cycle date)
+     (my/calendar-chinese-zodiac-name year)
+     (my/calendar-chinese-sexagesimal-name year)
+     (my/calendar-chinese-month-name month)
+     (my/calendar-chinese-day-name day))))
 
 (defun my/calendar-iso-ordinal-date-string (date)
   "Return the string for ISO8601 ordinal date of Gregorian date DATE."
