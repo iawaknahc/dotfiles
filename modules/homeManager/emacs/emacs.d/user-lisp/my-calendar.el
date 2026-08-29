@@ -10,6 +10,53 @@
 (require 'icalendar-parser)
 (require 'icalendar-ast)
 
+(defconst my/astrological-signs
+  '((aries 0 30 "白羊座")
+    (taurus 30 60 "金牛座")
+    (gemini 60 90 "雙子座")
+    (cancer 90 120 "巨蟹座")
+    (leo 120 150 "獅子座")
+    (virgo 150 180 "處女座")
+    (libra 180 210 "天秤座")
+    (scorpio 210 240 "天蠍座")
+    (sagittarius 240 270 "人馬座")
+    (capricorn 270 300 "山羊座")
+    (aquarius 300 330 "水瓶座")
+    (pisces 330 360 "雙魚座"))
+  "The list of Astrological signs.
+
+The first element is the name of the sign.
+The second element is the start degree, inclusive.
+The third element is the end degree, exclusive.
+The fourth element is the Chinese name.")
+
+(defun my/astrological-sign-of-solar-longitude (longitude)
+  "Return the astrological sign of LONGITUDE."
+  (cl-loop
+   for astrological-sign in my/astrological-signs
+   for sign = (nth 0 astrological-sign)
+   for lower-bound = (nth 1 astrological-sign)
+   for upper-bound = (nth 2 astrological-sign)
+   if (and (>= longitude lower-bound) (< longitude upper-bound)) return sign))
+
+(defun my/calendar-gregorian-solar-longitude (date)
+  "Return the solar longitude of Gregorian date DATE."
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (julian-date-number (calendar-astro-from-absolute abs-date)))
+    (solar-longitude julian-date-number)))
+
+(defun my/astrological-sign-chinese-name (sign)
+  "Return the Chinese name for SIGN."
+  (when-let* ((val (alist-get sign my/astrological-signs)))
+    (nth 2 val)))
+
+(defun my/astrological-sign-string (date)
+  "Display the solar longitude and the astrological sign of Gregorian date DATE."
+  (let* ((longitude (my/calendar-gregorian-solar-longitude date))
+         (sign (my/astrological-sign-of-solar-longitude longitude))
+         (name (my/astrological-sign-chinese-name sign)))
+    (format "%s %.1f°" name longitude)))
+
 (defconst my/solar-terms
   '(("春分" 0 (3 21))
     ("清明" 15 (4 5))
