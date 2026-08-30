@@ -34,8 +34,7 @@
 (with-eval-after-load 'dired
   ;; For unknown reason, this command is not bound by default.
   ;; Given that c, C, n, N are bound already in dired-mode,
-  ;; we bind it to C-c c and C-c C-c
-  (keymap-set dired-mode-map "C-c c" #'dired-create-empty-file)
+  ;; we bind it to C-c C-c
   (keymap-set dired-mode-map "C-c C-c" #'dired-create-empty-file)
   ;; ( is bound to `dired-hide-details-mode', so
   ;; it follows naturally that ) is bound to `dired-omit-mode'.
@@ -51,7 +50,6 @@
   (split-window-right)
   (other-window 1)
   (dired (format "~/Volumes/nas_samba/%s" user-login-name)))
-
 (keymap-global-set "C-c d" #'my/dired)
 
 (provide 'init-dired)
