@@ -50,9 +50,10 @@
    (my/calendar-iso-week-date-string date)
    (my/calendar-iso-ordinal-date-string date)
    (my/calendar-chinese-date-string-from-gregorian date)
+   (my/sexagenary-month-day-string date)
    (my/astrological-sign-string date))
  ;; Increase the right margin to allow more room for mode line.
- calendar-right-margin 100)
+ calendar-right-margin 120)
 
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
 ;; This marks today with face `calendar-today', which is underline.

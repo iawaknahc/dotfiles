@@ -10,6 +10,30 @@
 (require 'icalendar-parser)
 (require 'icalendar-ast)
 
+(defun my/solar-longitude-local (date)
+  "Invoke `solar-longitude' with DATE without binding variables."
+  (solar-longitude date))
+
+(defun my/solar-longitude-chinese (date)
+  "Invoke `solar-longitude' with DATE with variables bound to Chinese timezone."
+  (let* ((calendar-daylight-savings-starts nil)
+         (calendar-daylight-savings-starts-time 0)
+         (calendar-daylight-savings-ends nil)
+         (calendar-chinese-daylight-saving-end-time 0)
+         (calendar-daylight-time-offset 0)
+         (calendar-time-zone 480))
+    (solar-longitude date)))
+
+(defun my/solar-date-next-longitude-chinese (date degree)
+  "Invoke `solar-date-next-longitude' with DATE and DEGREE with variables bound to Chinese timezone."
+  (let* ((calendar-daylight-savings-starts nil)
+         (calendar-daylight-savings-starts-time 0)
+         (calendar-daylight-savings-ends nil)
+         (calendar-chinese-daylight-saving-end-time 0)
+         (calendar-daylight-time-offset 0)
+         (calendar-time-zone 480))
+    (solar-date-next-longitude date degree)))
+
 (defconst my/astrological-signs
   '((aries 0 30 "白羊座")
     (taurus 30 60 "金牛座")
@@ -39,12 +63,6 @@ The fourth element is the Chinese name.")
    for upper-bound = (nth 2 astrological-sign)
    if (and (>= longitude lower-bound) (< longitude upper-bound)) return sign))
 
-(defun my/calendar-gregorian-solar-longitude (date)
-  "Return the solar longitude of Gregorian date DATE."
-  (let* ((abs-date (calendar-absolute-from-gregorian date))
-         (julian-date-number (calendar-astro-from-absolute abs-date)))
-    (solar-longitude julian-date-number)))
-
 (defun my/astrological-sign-chinese-name (sign)
   "Return the Chinese name for SIGN."
   (when-let* ((val (alist-get sign my/astrological-signs)))
@@ -52,7 +70,9 @@ The fourth element is the Chinese name.")
 
 (defun my/astrological-sign-string (date)
   "Display the solar longitude and the astrological sign of Gregorian date DATE."
-  (let* ((longitude (my/calendar-gregorian-solar-longitude date))
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (julian-day-number (calendar-astro-from-absolute abs-date))
+         (longitude (my/solar-longitude-local julian-day-number))
          (sign (my/astrological-sign-of-solar-longitude longitude))
          (name (my/astrological-sign-chinese-name sign)))
     (format "%s %.1f°" name longitude)))
@@ -108,19 +128,12 @@ The return value can be used directly as a holiday."
            (day (cadr month-day))
            ;; Subtract 2 days from the typical day so that we will never overshoot.
            (start (list month (- day 2) year))
-           ;; Dynamically bind the variables used by `solar-date-next-longitude'.
-           (calendar-daylight-savings-starts nil)
-           (calendar-daylight-savings-starts-time 0)
-           (calendar-daylight-savings-ends nil)
-           (calendar-chinese-daylight-saving-end-time 0)
-           (calendar-daylight-time-offset 0)
-           (calendar-time-zone 480)
            ;; Convert `start' to absolute date.
            (start-abs (calendar-absolute-from-gregorian start))
            ;; Convert absolute date to Julian date.
            (start-astro (calendar-astro-from-absolute start-abs))
-           ;; Call `solar-date-next-longitude' to do the heavy lifting.
-           (result-astro (solar-date-next-longitude start-astro 15))
+           ;; Call `my/solar-date-next-longitude-chinese' to do the heavy lifting.
+           (result-astro (my/solar-date-next-longitude-chinese start-astro 15))
            ;; Convert the result (in Julian date) to absolute date.
            (result-abs (calendar-astro-to-absolute result-astro))
            ;; Here is the tricky part.
@@ -259,15 +272,15 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
 (defun my/calendar-chinese-sexagesimal-name (n)
   "Return the name of N in the 60-year cycle."
   (let* ((a (1- n))
-         (b (% a 10))
-         (c (% a 12))
+         (b (mod a 10))
+         (c (mod a 12))
          (d (aref my/calendar-chinese-celestial-stem b))
          (e (aref my/calendar-chinese-terrestrial-branch c)))
     (format "%s%s" d e)))
 
 (defun my/calendar-chinese-zodiac-name (year)
   "Return the name of the zodiac of YEAR."
-  (aref my/calendar-chinese-zodiac-name-array (% (1- year) 12)))
+  (aref my/calendar-chinese-zodiac-name-array (mod (1- year) 12)))
 
 (defun my/calendar-chinese-month-name (month)
   "Return the name of MONTH."
@@ -320,6 +333,85 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
          (week-number (calendar-extract-month iso-date))
          (day-number (calendar-extract-day iso-date)))
     (format "%.4d-W%.2d-%d" year week-number day-number)))
+
+(defun my/sexagenary-day (date)
+  "Return the numeric sexagenary day of Gregorian date DATE.
+
+Borrowing the known fact stated in https://ytliu0.github.io/ChineseCalendar/sexagenary_chinese.html
+Sexagenary day of DATE = 1 + mod(Julian day number - 11, 60)"
+  ;; This is treated as midnight
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         ;; But Julian day number starts at noon
+         (julian-day-number (calendar-astro-from-absolute abs-date))
+         ;; So we need to add half day.
+         (julian-day-number (floor (+ 0.5 julian-day-number))))
+    (1+ (mod (- julian-day-number 11) 60))))
+
+(defun my/sexagenary-day-string (date)
+  "Return the string for the sexagenary day of Gregorian date DATE."
+  (format "%s日" (my/calendar-chinese-sexagesimal-name (my/sexagenary-day date))))
+
+(defun my/sexagenary-month-branch-1 (date)
+  "Return the numeric sexagenary month branch of Gregorian date DATE.
+
+The algorithm used here is the one used by 八字."
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (julian-day-number (calendar-astro-from-absolute abs-date))
+         (longitude (my/solar-longitude-chinese julian-day-number)))
+    (cond
+     ;; 大雪至小寒為子月
+     ((and (>= longitude 255) (< longitude 285)) 11)
+     ;; 小寒至立春為丑月
+     ((and (>= longitude 285) (< longitude 315)) 12)
+     ;; 立春至驚蟄為寅月
+     ((and (>= longitude 315) (< longitude 345)) 1)
+     ;; 清明至立夏為辰月
+     ((and (>= longitude 15)  (< longitude 45))  3)
+     ;; 立夏至芒種為巳月
+     ((and (>= longitude 45)  (< longitude 75))  4)
+     ;; 芒種至小暑為午月
+     ((and (>= longitude 75)  (< longitude 105)) 5)
+     ;; 小暑至立秋為未月
+     ((and (>= longitude 105) (< longitude 135)) 6)
+     ;; 立秋至白露為申月
+     ((and (>= longitude 135) (< longitude 165)) 7)
+     ;; 白露至寒露為酉月
+     ((and (>= longitude 165) (< longitude 195)) 8)
+     ;; 白露至寒露為酉月
+     ((and (>= longitude 195) (< longitude 225)) 9)
+     ;; 寒露至立冬為戌月
+     ((and (>= longitude 225) (< longitude 255)) 10)
+     ;; 驚蟄至清明為卯月
+     (t                                          2))))
+
+(defun my/sexagenary-month-string (date)
+  "Return the sexagenary month of Gregorian date DATE.
+
+The algorithm used here is the one used by 八字."
+  (let* ((abs-date (calendar-absolute-from-gregorian date))
+         (chinese-date (calendar-chinese-from-absolute abs-date))
+         (year (nth 1 chinese-date))
+         (year-stem-1 (1+ (mod (1- year) 10)))
+         (month-branch-1 (my/sexagenary-month-branch-1 date))
+         (month-stem-offset-1 (pcase year-stem-1
+                                ((or 1 6) 2)
+                                ((or 2 7) 4)
+                                ((or 3 8) 6)
+                                ((or 4 9) 8)
+                                ((or 5 10) 0)))
+         (month-stem-1 (1+ (mod (+ (1- month-branch-1) month-stem-offset-1) 10)))
+         (month-stem-0 (1- month-stem-1))
+         ;; The first month is 寅月, so we have to add 2.
+         (month-branch-0 (mod (+ 2 (1- month-branch-1)) 12))
+         (month-stem (aref my/calendar-chinese-celestial-stem month-stem-0))
+         (month-branch (aref my/calendar-chinese-terrestrial-branch month-branch-0)))
+    (format "%s%s月" month-stem month-branch)))
+
+(defun my/sexagenary-month-day-string (date)
+  "Return the sexagenary month day string of Gregorian date DATE.
+
+The algorithm used here is the one used by 八字."
+  (format "%s%s" (my/sexagenary-month-string date) (my/sexagenary-day-string date)))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
