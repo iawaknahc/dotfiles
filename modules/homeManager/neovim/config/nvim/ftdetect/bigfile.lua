@@ -9,8 +9,7 @@
 -- 4. LSP is disabled because there is no LSP server for bigfile.
 -- 5. Other plugins that assume correct filetype no longer function.
 
--- FIXME: Original it was 1MiB but my beancount is more than 1MiB now.
-local BIGFILE_FILESIZE = 2 * 1024 * 1024 -- 1MiB
+local BIGFILE_FILESIZE = 2 * 1024 * 1024 -- 2 MiB
 local BIGFILE_LONG_LINE = 1000
 
 vim.api.nvim_create_autocmd({ "BufRead" }, {

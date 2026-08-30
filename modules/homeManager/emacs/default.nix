@@ -30,7 +30,6 @@
     mu4e = self.manualPackages.mu4e;
 
     # melpaPackages
-    # FIXME: ccatppuccin-theme from melpaStablePackages is too old to have ccatppuccin-reload.
     catppuccin-theme = self.melpaPackages.catppuccin-theme;
     # The latest release on NonGNU ELPA is 1.15.0 which was released in 2024.
     # The latest release on MELPA stable is 1.14.2 which is even older.

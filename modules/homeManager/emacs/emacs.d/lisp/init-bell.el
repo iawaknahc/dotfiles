@@ -2,14 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
-;; TODO: Re-visit this when Emacs is upgraded to 31.1.
-;; See https://github.com/emacs-mirror/emacs/blob/master/lisp/ring-bell-fns.el
 (setq
  ;; On PGTK build, the visible bell is a large image displayed at the center of the screen.
  ;; This is too annoying.
  visible-bell nil
- ;; So disable the bell by setting `ring-bell-function' to `ignore'.
- ring-bell-function #'ignore)
+ ;; Flashing some faces to indicate a bell.
+ ring-bell-function #'flash-face-bell-function
+ ;; Flash the face `mode-line-active'.
+ flash-face-faces '(mode-line-active)
+ ;; Customize the attributes to stay consistent with the theme.
+ flash-face-attributes `(:background ,(catppuccin-color 'red) :foreground ,(catppuccin-color 'text)))
 
 (provide 'init-bell)
 ;;; init-bell.el ends here
