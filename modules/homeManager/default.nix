@@ -31,6 +31,7 @@ _: {
     ./android-nixpkgs.nix
 
     ./input-method.nix
+    ./rime
 
     ./fonts.nix
     ./catppuccin.nix

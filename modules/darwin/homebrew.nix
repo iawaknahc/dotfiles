@@ -32,6 +32,7 @@
       # See https://github.com/NixOS/nixpkgs/blob/nixpkgs-26.05-darwin/pkgs/applications/video/obs-studio/default.nix#L262
       { name = "obs"; }
       { name = "protonvpn"; }
+      { name = "squirrel-app"; }
       { name = "steam"; }
       { name = "tailscale-app"; }
     ];

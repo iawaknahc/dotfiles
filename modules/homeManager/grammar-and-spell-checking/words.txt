@@ -1,6 +1,7 @@
 ablabel
 addext
 adr
+aeiouymngptk
 akey
 alacritty
 alist
@@ -209,6 +210,7 @@ jit
 jks
 json
 jsonls
+jyut
 karabiner
 keycap
 keylayout
@@ -321,6 +323,7 @@ pnl
 pns
 popupinfo
 posframe
+preedit
 preselect
 preselects
 prettierd
@@ -335,6 +338,8 @@ propertized
 pubin
 pubout
 pumheight
+punct
+punctuator
 pyrefly
 pyright
 python3
@@ -358,6 +363,8 @@ screenpos
 scrolloff
 searchforward
 sed
+segmentor
+segmentors
 semicoloncomma
 sendmail
 sessionoptions
@@ -458,7 +465,9 @@ wrapscan
 writebackup
 wshada
 xdg
+xform
 xirr
+xlit
 xwidget
 xyz
 yamlls

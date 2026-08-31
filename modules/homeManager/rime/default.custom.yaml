@@ -1,0 +1,12 @@
+patch:
+  "menu/page_size": 9
+  "schema_list":
+  - schema: cangjie5_jyut6ping3
+  "ascii_composer/switch_key":
+    Shift_L: commit_text
+  "switcher/save_options":
+  - simplification
+  "key_binder/bindings":
+  - {accept: "Control+g", send: Escape, when: composing}
+  - {accept: "Control+n", send: Page_Down, when: has_menu}
+  - {accept: "Control+p", send: Page_Up, when: has_menu}

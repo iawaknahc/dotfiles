@@ -1,0 +1,110 @@
+schema:
+  schema_id: cangjie5_jyut6ping3
+  version: "2026.08.31"
+  dependencies:
+  # Must include this line to refer to jyut6ping3.schema.yaml
+  # so that jyut6ping3.reverse.bin is generated.
+  - jyut6ping3
+
+switches:
+- name: simplification
+  states: ["繁", "简"]
+
+engine:
+  processors:
+  - ascii_composer
+  - recognizer
+  - key_binder
+  - speller
+  - punctuator
+  - selector
+  - navigator
+  - express_editor
+  segmentors:
+  - ascii_segmentor
+  - matcher
+  - abc_segmentor
+  - punct_segmentor
+  - fallback_segmentor
+  translators:
+  - punct_translator
+  - table_translator
+  - script_translator@translator_jyut6ping3
+  filters:
+  - simplifier
+  - uniquifier
+  - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
+  - reverse_lookup_filter@reverse_lookup_filter_cangjie5
+
+speller:
+  alphabet: abcdefghijklmnopqrstuvwxyz
+  delimiter: " "
+  algebra:
+  # 將碼表中的編碼複製一份，然後將數字刪去。
+  # 由於只有粵拼的編碼有數字，所以此行作用為忽略聲調。
+  - derive/\d//
+  # 然後，將碼表中有數字的編碼更換成英文字。
+  # 原因是數字會和選字鍵相衝。
+  - xform/1/v/                  # 陰平
+  - xform/4/vv/                 # 陽平
+  - xform/2/x/                  # 陰上
+  - xform/5/xx/                 # 陽上
+  - xform/3/q/                  # 陰去
+  - xform/6/qq/                 # 陽去
+
+abc_segmentor:
+  extra_tags:
+  - translator_cangjie5
+  - translator_jyut6ping3
+
+translator:
+  enable_charset_filter: true
+  tag: translator_cangjie5
+  dictionary: cangjie5_char
+  prism: cangjie5_jyut6ping3
+  preedit_format:
+  - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符|"
+  comment_format:
+  - "xlit|abcdefghijklmnopqrstuvwxyz~|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符～|"
+  # Based on my testing, I need to set this to 2.0 and jyut6ping3 to 0.0
+  # in order for 水 and 人 appear as the first candidate.
+  initial_quality: 2.0
+
+translator_jyut6ping3:
+  dictionary: jyut6ping3
+  tag: translator_jyut6ping3
+  preedit_format:
+  # 最後，在顯示時，還原聲調。
+  - xform/([aeiouymngptk])vv/${1}4/
+  - xform/([aeiouymngptk])xx/${1}5/
+  - xform/([aeiouymngptk])qq/${1}6/
+  - xform/([aeiouymngptk])v/${1}1/
+  - xform/([aeiouymngptk])x/${1}2/
+  - xform/([aeiouymngptk])q/${1}3/
+  initial_quality: 0.0
+
+reverse_lookup_filter_jyut6ping3:
+  tags:
+  - translator_cangjie5
+  dictionary: jyut6ping3
+  append_comment: true
+
+reverse_lookup_filter_cangjie5:
+  tags:
+  - translator_jyut6ping3
+  dictionary: cangjie5_char
+  comment_format:
+  - "xlit|abcdefghijklmnopqrstuvwxyz~|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符～|"
+  append_comment: true
+
+simplifier:
+  tips: all  # 簡化字模式下提示對應的傳統漢字
+
+punctuator:
+  import_preset: default
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
