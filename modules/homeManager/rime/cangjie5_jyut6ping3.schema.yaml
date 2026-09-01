@@ -7,38 +7,250 @@ schema:
   - jyut6ping3
 
 switches:
+  # If a switch is defined by name, then it is a toggle option.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/switches.cc#L21
+  #
+  # A toggle option has two possible values, 0 or 1.
+  # The default value is 0.
+  #
+  # simplifier, by default, assumes its switch is a toggle option named "simplification".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L196
 - name: simplification
+  # states define the labels.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/switches.cc#L138
   states: ["繁", "简"]
+  # If abbreviation is desired and abbrev is present, it overrides states.
+  abbrev: ["繁", "简"]
+  # if reset is present, it defines the default value.
+  # For toggle option, the valid values are of course 0 or 1.
+  # For radio group, the valid values are [ 0 .. length(options)-1 ].
+  reset: 0
+  # If a switch is defined by options, then it is radio group.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/switches.cc#L29
+  #
+  # Like radio group in general sense, only one option is selected at a time.
+- options: ["option1", "option2", "option3"]
+  states: ["option1", "option2", "option3"]
 
+# engine defines the pipeline of the schema.
+# It has four types of components.
+# See https://github.com/rime/home/wiki/RimeWithSchemata#%E8%BC%B8%E5%85%A5%E6%B3%95%E5%BC%95%E6%93%8E%E8%88%87%E5%8A%9F%E8%83%BD%E7%B5%84%E4%BB%B6
 engine:
+  # processors handle input events.
   processors:
+  # ascii_composer handles switching between English and non-English.
+  # This feature is documented.
+  # See https://github.com/rime/home/wiki/CustomizationGuide#%E4%BD%BF%E7%94%A8control%E9%8D%B5%E5%88%87%E6%8F%9B%E4%B8%AD%E8%A5%BF%E6%96%87
+  #
+  # It reads configuration rooted at "ascii_composer".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/ascii_composer.cc#L188
+  #
+  # It reads a toggle option named "ascii_mode".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/ascii_composer.cc#L129
+  #
+  # The shape of "ascii_composer" is
+  # ascii_composer:
+  #   good_old_caps_lock: true
+  #   switch_key:
+  #     Control_L: inline_ascii | commit_text | commit_code | clear | set_ascii_mode | unset_ascii_mode | noop
+  #
+  # The key of "switch_key" is a string that can be parsed by KeyEvent.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/ascii_composer.cc#L43
+  # For a list of documented keys, see https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md#%E5%85%AB%E5%85%B6%E5%AE%83
+  #
+  # inline_ascii means switch to English, and switch back after commit.
+  # commit_text means commit the current selected candidate, and switch to English or non-English.
+  # commit_code means commit the current input, and switch to English or non-English.
+  # clear means clear the current input, and switch to English or non-English
+  # noop means noop. It is useful when you need to override the configuration.
   - ascii_composer
+  # recognizer reads configuration rooted at "recognizer".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/recognizer.cc#L76
+  # recognizer must be paired with the segmentor matcher.
+  #
+  # The shape of "recognizer" is
+  # recognizer:
+  #   use_space: true
+  #   patterns:
+  #     tag: regexp
+  #
+  # If use_space is true, then space is not ignored.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/recognizer.cc#L90
+  #
+  # The key of patterns is the name of the tag assigned to the segment if regexp matches.
+  # regexp is a regular expression in Perl flavor.
   - recognizer
+  # key_binder handle defined key bindings.
+  # It reads configuration rooted at "key_binder".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/key_binder.cc#L305
+  #
+  # The shape of "key_binder" is
+  # key_binder:
+  #   bindings:
+  #   - when: predicting | paging | has_menu | composing | always
+  #     accept: KeyEvent
+  #     send: KeyEvent
+  #     send_sequence: KeySequence
+  #     toggle: option_name
+  #     set_option: option_name
+  #     unset_option: option_name
+  #     select: schema_name
+  #
+  # when and accept are required.
+  #
+  # The value of accept must be a string that can be parsed by KeyEvent.
+  # For a list of documented keys, see https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md#%E5%85%AB%E5%85%B6%E5%AE%83
+  #
+  # Either one of send, send_sequence, toggle, set_option, unset_option, or select must be present.
+  #
+  # when is an enum, with valid values listed above.
+  # always means always.
+  # composing means there is an input.
+  # has_menu means there is a menu.
+  # paging means when you have navigated to the next page.
   - key_binder
+  # speller handle input events, and convert them into input.
+  #
+  # It reads configuration rooted at "speller".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/speller.cc#L74
+  #
+  # The shape of "speller" is
+  # speller:
+  #   alphabet: abcdefghijklmnopqrstuvwxyz
+  #   initials: string of character set
+  #   finals: string of character set
+  #   delimiter: string of character set
+  #   max_code_length: number or omitted
+  #   auto_select: true
+  #   auto_select_pattern: regexp
+  #   use_space: true
+  #   auto_clear: auto | manual | max_length
+  #   algebra: explained below
+  #
+  # alphabet defines the character set of input.
+  #
+  # initials defines the character set of the first character of input.
+  # If initials is unspecified, it is taken to be alphabet.
+  #
+  # finals defines the character set of the last character of input.
+  #
+  # max_code_length defines the maximum length of input.
+  # If the input is longer than max_code_length, the input is committed.
+  #
+  # When auto_select is true, and there is only one candidate, the candidate is committed.
+  # When auto_select_pattern is defined, the input is matched against this regexp before auto_select runs.
+  #
+  # If use_space is true, then space is not ignored.
+  #
+  # delimiter defines the character set that you can type in the input to delimit codes.
+  # For example, if you set delimiter to "-", you can type "竹手戈-人弓火" and get a candidate of "我你".
+  # If you specify a space in delimiter, then you should also set use_space to true,
+  # otherwise the space in delimiter has no effect.
+  # In particular, if you type cangjie character by character, you need not set delimiter at all.
+  # delimiter is only relevant for script_translator like jyut6ping3 where you typically type a word.
+  #
+  # algebra is a powerful feature, and well documented.
+  # See https://github.com/rime/home/wiki/SpellingAlgebra
   - speller
+  # punctuator handles input events and commits punctuation.
+  #
+  # It reads a toggle option named "full_shape".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/punctuator.cc#L24
+  #
+  # It reads a toggle option named "ascii_punct".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/punctuator.cc#L102
+  # When ascii_punct is 1, punctuator is noop.
+  #
+  # It reads configuration rooted at "punctuator".
+  #
+  # The shape of "punctuator" is
+  # punctuator:
+  #   full_shape:
+  #     a: see below
+  #   half_shape:
+  #     a: see below
+  #   symbols:
+  #   digit_separators: string
+  #   digit_separator_action: string
+  #   use_space: true
+  #
+  # The key of full_shape and half_shape must be a single-character string.
+  # The value of full_shape and half_shape can be
+  # - a string, which means commit that string.
+  # - a list of strings, which is used as a list of candidates.
+  # - { commit: string }, which means commit that string.
+  # - { pair: [string1, string2] }, which means the first commit commits string1, the second commit commits string2.
+  #
+  # When use_space is true, space is not ignored.
+  # I can hardly find the documentation of digit_separators and digit_separator_action.
   - punctuator
+  # selector handles key events related to candidate selections, navigate the candidate menu, etc.
+  # I never see it is configured in major schemas so it should work out-of-the-box.
   - selector
+  # navigator handles the movement of the cursor.
+  # I never see it is configured in major schemas so it should work out-of-the-box.
   - navigator
+  # express_editor handles, space, return, backspace, etc.
+  # I never see it is configured in major schemas so it should work out-of-the-box.
   - express_editor
   segmentors:
+  # ascii_segmentor reads a toggle option named "ascii_mode".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/ascii_segmentor.cc#L20
+  #
+  # When "ascii_mode" is 0, ascii_segmentor is noop.
+  # Otherwise, it tags the input as "raw".
   - ascii_segmentor
+  # matcher reads configuration rooted at "recognizer".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/matcher.cc#L20
+  #
+  # It tags the corresponding tag if a regexp matches the input.
   - matcher
+  # abc_segmentor reads configuration rooted at "speller".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/abc_segmentor.cc#L22
+  #
+  # Additionally, it reads "abc_segmentor/extra_tags".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/abc_segmentor.cc#L26
+  #
+  # It tags the segments in the input with "abc" matching the configuration of "speller".
   - abc_segmentor
+  # punct_segmentor reads configuration rooted at "punctuator".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/punctuator.cc#L242
+  #
+  # It tags the segments in the input with "punct" or "punct_number" matching the key of "punctuator/full_shape" or "punctuator/half_shape".
   - punct_segmentor
+  # fallback_segmentor tags the input with "raw".
   - fallback_segmentor
   translators:
+  # punct_translator translates the segments tagged with "punct" or "punct_number".
   - punct_translator
+  # The first unnamed table_translator or script_translator is the primary translator in the schema.
+  #
+  # It reads configuration rooted at "translator".
+  #
+  # Translator is well-documented.
+  # See https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md#%E4%B8%89translator
   - table_translator
+  # Other table_translator or script_translator must be named.
   - script_translator@translator_jyut6ping3
   filters:
+  # simplifier reads configuration rooted at "simplifier"
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L172
+  #
+  # If "simplifier/option_name" is unspecified, it reads a toggle option named "simplification".
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L196
+  #
+  # It is well-documented.
+  # See https://github.com/LEOYoon-Tsaw/Rime_collections/blob/master/Rime_description.md#%E4%BA%94simplifier
   - simplifier
+  # uniquifier removes duplicate candidates.
   - uniquifier
+  # reverse_lookup_filter modifies the comment of the candidate by
+  # reverse lookup the candidate in another dictionary.
   - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
   - reverse_lookup_filter@reverse_lookup_filter_cangjie5
 
 speller:
   alphabet: abcdefghijklmnopqrstuvwxyz
-  delimiter: " "
   algebra:
   # 將碼表中的編碼複製一份，然後將數字刪去。
   # 由於只有粵拼的編碼有數字，所以此行作用為忽略聲調。
