@@ -7,6 +7,9 @@ schema:
   - jyut6ping3
 
 switches:
+- name: full_shape
+  states: ["半", "全"]
+  reset: 1
   # If a switch is defined by name, then it is a toggle option.
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/switches.cc#L21
   #

@@ -42,7 +42,7 @@ in
     hash = "sha256-z8jNqBdSBr2tpfyfx/T7SS5Zt7mjU2qbbAmaP47gO74=";
   };
 
-  home.file."${rimeUserDirectory}/default.custom.yaml".source = ./default.custom.yaml;
+  home.file."${rimeUserDirectory}/default.yaml".source = ./default.yaml;
   home.file."${rimeUserDirectory}/squirrel.custom.yaml".source = ./squirrel.custom.yaml;
   home.file."${rimeUserDirectory}/cangjie5_jyut6ping3.schema.yaml".source =
     ./cangjie5_jyut6ping3.schema.yaml;

@@ -1,0 +1,126 @@
+config_version: 0.50
+
+switcher:
+  abbreviate_options: false
+  # When the following conditions hold:
+  # 1. fold_options is false
+  # 2. There are two schemas, namely schema_1, and schema_2.
+  # 3. There are two switches, namely a toggle option named simplification, and a radio group with option1, option2, option3.
+  # The switcher displays a menu like this
+  # 1. schema_1
+  #    Selecting this switches to this schema.
+  # 2. simplification
+  #    Selecting this toggles the toggle option simplification.
+  # 3. option1
+  # 4. option2
+  # 5. option3
+  # 6. schema_2
+  #    Selecting this switches to this schema.
+  #
+  # When the following conditions hold:
+  # 1. fold_options is true
+  # 2. There are two schemas, namely schema_1, and schema_2.
+  # 3. There are two switches, namely a toggle option named simplification, and a radio group with option1, option2, option3.
+  # The switcher displays a menu like this
+  # 1. schema_1
+  #    Selecting this switches to this schema.
+  # 2. 繁/option1
+  #    Selecting this expands the menu. See below.
+  # 3. schema_2
+  #    Selecting this switches to this schema.
+  # When 2 is selected, the switcher displays a menu as if fold_options is false.
+  fold_options: true
+  caption: "〔方案選單〕"
+  hotkeys:
+  - "Control+grave"
+  option_list_separator: "/"
+
+schema_list:
+- schema: cangjie5_jyut6ping3
+
+menu:
+  page_size: 9
+
+key_binder:
+  bindings:
+  - {accept: "Control+g", send: Escape, when: composing}
+  - {accept: "Control+n", send: Page_Down, when: has_menu}
+  - {accept: "Control+p", send: Page_Up, when: has_menu}
+
+# Many schemas are written as
+#
+# recognizer:
+#   import_preset: default
+#
+# So this section must appear.
+recognizer:
+  patterns: {}
+
+punctuator:
+  full_shape:
+    " ": "　"
+    "!": "！"
+    "\"": {pair: ["“", "”"]}
+    "#": "＃"
+    "$": "＄"
+    "%": "％"
+    "&": "＆"
+    "'": {pair: ["‘", "’"]}
+    "(": "（"
+    ")": "）"
+    "*": "＊"
+    "+": "＋"
+    ",": "，"
+    "-": "－"
+    ".": "。"
+    "/": "／"
+    ":": "："
+    ";": "；"
+    "<": ["《", "〈", "«", "‹"]
+    "=": "＝"
+    ">": ["》", "〉", "»", "›"]
+    "?": "？"
+    "@": "＠"
+    "[": ["「", "【", "〔", "［"]
+    "\\": "、"
+    "]": ["」", "】", "〕", "］"]
+    "^": "＾"
+    "_": "＿"
+    "`": "｀"
+    "{": ["『", "〖", "｛"]
+    "|": "｜"
+    "}": ["』", "〗", "｝"]
+    "~": "～"
+  half_shape:
+    "!": "!"
+    "\"": "\""
+    "#": "#"
+    "$": "$"
+    "%": "%"
+    "&": "&"
+    "'": "'"
+    "(": "("
+    ")": ")"
+    "*": "*"
+    "+": "+"
+    ",": ","
+    "-": "-"
+    ".": "."
+    "/": "/"
+    ":": ":"
+    ";": ";"
+    "<": "<"
+    "=": "="
+    ">": ">"
+    "?": "?"
+    "@": "@"
+    "[": "["
+    "\\": "\\"
+    "]": "]"
+    "^": "^"
+    "_": "_"
+    "`": "`"
+    "{": "{"
+    "|": "|"
+    "}": "}"
+    "~": "~"
