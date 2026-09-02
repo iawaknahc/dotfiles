@@ -5,7 +5,7 @@ schema:
 switches:
 - name: full_shape
   states: ["半", "全"]
-  reset: 1
+  reset: 0
 - name: simplification
   states: ["繁", "简"]
   reset: 0

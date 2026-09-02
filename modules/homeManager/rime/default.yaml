@@ -56,6 +56,14 @@ key_binder:
 recognizer:
   patterns: {}
 
+# In my testing, when the toggle option full_shape is 0,
+# half_shape is used, and the value is respected.
+# That means if we specify a half width character, then it will be committed.
+#
+# When the toggle option full_shape is 1,
+# full_shape is used.
+# But in my observation, the value is not respected.
+# In particular, if we specify a half width character, then it will be converted to its full width equivalent.
 punctuator:
   full_shape:
     " ": "　"
@@ -92,35 +100,35 @@ punctuator:
     "}": ["』", "〗", "｝"]
     "~": "～"
   half_shape:
-    "!": "!"
-    "\"": "\""
+    "!": "！"
+    "\"": {pair: ["“", "”"]}
     "#": "#"
     "$": "$"
     "%": "%"
     "&": "&"
-    "'": "'"
-    "(": "("
-    ")": ")"
+    "'": {pair: ["‘", "’"]}
+    "(": "（"
+    ")": "）"
     "*": "*"
     "+": "+"
-    ",": ","
-    "-": "-"
-    ".": "."
+    ",": "，"
+    "-": "－"
+    ".": "。"
     "/": "/"
-    ":": ":"
-    ";": ";"
+    ":": "："
+    ";": "；"
     "<": "<"
     "=": "="
     ">": ">"
-    "?": "?"
+    "?": "？"
     "@": "@"
-    "[": "["
-    "\\": "\\"
-    "]": "]"
+    "[": ["「", "【", "〔", "［"]
+    "\\": "、"
+    "]": ["」", "】", "〕", "］"]
     "^": "^"
     "_": "_"
     "`": "`"
-    "{": "{"
+    "{": ["『", "〖", "｛"]
     "|": "|"
-    "}": "}"
-    "~": "~"
+    "}": ["』", "〗", "｝"]
+    "~": "～"
