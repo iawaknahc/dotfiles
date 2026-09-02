@@ -90,6 +90,7 @@ local function search_by_fts5_query(query, segment)
   SELECT cps, name, tts
   FROM t
   ORDER BY rank ASC
+  LIMIT 90
   ]],
     query,
     query
