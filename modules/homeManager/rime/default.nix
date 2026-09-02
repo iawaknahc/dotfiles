@@ -3,8 +3,25 @@ let
   rimeUserDirectory = "Library/Rime";
   rime-cangjie = "52d90a1b1312e74042b38c1cbc8142defbc53171";
   rime-cantonese = "259f0e48bba840c3a2e0d117539e96937f3d89bc";
+  librime-lua = "ad1e4a6c98abf634dd34242a747f9b1d5d069fbe";
 in
 {
+  home.packages = [
+    (pkgs.stdenv.mkDerivation {
+      name = "librime.lua";
+      src = pkgs.fetchFromGitHub {
+        owner = "hchunhui";
+        repo = "librime-lua";
+        rev = librime-lua;
+        hash = "sha256-Zi5VyFyLk4n34+TEDvV2HEYQKL60mEiVVLFKb6hWFdE=";
+      };
+      buildPhase = ''
+        mkdir -p $out/share/librime-lua
+        cp $src/contrib/librime.lua $out/share/librime-lua/librime.lua
+      '';
+    })
+  ];
+
   home.file."${rimeUserDirectory}/cangjie5.base.dict.yaml".source = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/rime/rime-cangjie/${rime-cangjie}/cangjie5.base.dict.yaml";
     hash = "sha256-hpDyrYqv04eAhGiBqpFrV3nm2SR6NRodpCbT8yV6/KQ=";
@@ -47,4 +64,10 @@ in
   home.file."${rimeUserDirectory}/cangjie5_jyut6ping3.schema.yaml".source =
     ./cangjie5_jyut6ping3.schema.yaml;
   home.file."${rimeUserDirectory}/jyut6ping3.schema.yaml".source = ./jyut6ping3.schema.yaml;
+
+  home.file."${rimeUserDirectory}/rime.lua".source = ./rime.lua;
+  home.file."${rimeUserDirectory}/lua" = {
+    source = ./lua;
+    recursive = true;
+  };
 }

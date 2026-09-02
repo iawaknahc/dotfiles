@@ -17,6 +17,7 @@ codespellignore
 flake.lock
 harperignore
 infokey
+json.lua
 justfile
 Makefile
 words.txt

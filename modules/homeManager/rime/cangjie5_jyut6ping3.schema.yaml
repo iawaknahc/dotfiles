@@ -66,7 +66,7 @@ engine:
   # commit_code means commit the current input, and switch to English or non-English.
   # clear means clear the current input, and switch to English or non-English
   # noop means noop. It is useful when you need to override the configuration.
-  - ascii_composer
+  #- ascii_composer
   # recognizer reads configuration rooted at "recognizer".
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/recognizer.cc#L76
   # recognizer must be paired with the segmentor matcher.
@@ -202,7 +202,7 @@ engine:
   #
   # When "ascii_mode" is 0, ascii_segmentor is noop.
   # Otherwise, it tags the input as "raw".
-  - ascii_segmentor
+  #- ascii_segmentor
   # matcher reads configuration rooted at "recognizer".
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/matcher.cc#L20
   #
@@ -235,6 +235,7 @@ engine:
   - table_translator
   # Other table_translator or script_translator must be named.
   - script_translator@translator_jyut6ping3
+  - lua_translator@unicode_translator
   filters:
   # simplifier reads configuration rooted at "simplifier"
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L172
@@ -323,3 +324,5 @@ key_binder:
 
 recognizer:
   import_preset: default
+  patterns:
+    unicode: "^U.*$"

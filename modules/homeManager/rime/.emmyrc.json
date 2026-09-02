@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
+  "runtime": {
+    "version": "Lua5.3",
+    "requirePattern": [
+      "?.lua"
+    ]
+  },
+  "strict": {
+    "typeCall": true
+  },
+  "workspace": {
+    "library": [
+      "~/.nix-profile/share/librime-lua"
+    ]
+  }
+}
