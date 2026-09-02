@@ -45,14 +45,8 @@ def prepare_fts5_query(query: list[str]) -> str:
         # Enclose the entire query in " to make an FTS5 string.
         term = f'"{term}"'
         escaped.append(term)
-    return " ".join(escaped)
-
-
-def use_trigram(query: list[str]) -> bool:
-    for term in query:
-        if len(term) < 3:
-            return False
-    return True
+    column_filter = "{name tts} : "
+    return f"{column_filter}{' '.join(escaped)}"
 
 
 def codepoints_to_cps(codepoints: list[int]) -> str:
@@ -158,34 +152,26 @@ def get_matches(conn: sqlite3.Connection, query: list[str]) -> list[CodepointSeq
         cs = CodepointSequence.from_sqlite3(exact_match)
         matches[cs] = cs
 
-    trigram = use_trigram(query)
     query_fts5 = prepare_fts5_query(query)
-    if trigram:
-        rows = cast(
-            list[tuple[str, str, str | None]],
-            conn.execute(
-                """
-            SELECT cps, name, tts FROM codepoint_sequence_trigram
-            WHERE codepoint_sequence_trigram MATCH ?
-            ORDER BY rank
-            LIMIT 10
-            """,
-                (query_fts5,),
-            ).fetchall(),
+    rows = cast(
+        list[tuple[str, str, str | None]],
+        conn.execute(
+            """
+        WITH t AS (
+          SELECT cps, name, tts, rank FROM codepoint_sequence_trigram
+          WHERE codepoint_sequence_trigram MATCH ?
+          UNION
+          SELECT cps, name, tts, rank FROM codepoint_sequence_porter
+          WHERE codepoint_sequence_porter MATCH ?
         )
-    else:
-        rows = cast(
-            list[tuple[str, str, str | None]],
-            conn.execute(
-                """
-            SELECT cps, name, tts FROM codepoint_sequence_porter
-            WHERE codepoint_sequence_porter MATCH ?
-            ORDER BY rank
-            LIMIT 10
-            """,
-                (query_fts5,),
-            ).fetchall(),
-        )
+        SELECT cps, name, tts
+        FROM t
+        ORDER BY rank ASC
+        LIMIT 10
+        """,
+            (query_fts5, query_fts5),
+        ).fetchall(),
+    )
 
     for row in rows:
         cs = CodepointSequence.from_sqlite3(row)
