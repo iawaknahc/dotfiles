@@ -307,22 +307,41 @@ def insert_codepoint_sequences(
                 tts        TEXT
             );
         """)
+        # A case-insensitive trigram tokenizer with diacritics removed.
+        # See https://www.sqlite.org/fts5.html#the_trigram_tokenizer
         _ = conn.execute("""
             CREATE VIRTUAL TABLE codepoint_sequence_trigram USING fts5(
                 cps,
                 name,
                 tts,
-                tokenize = "trigram"
+                tokenize = "trigram case_sensitive 0 remove_diacritics 1"
             );
         """)
+        # A stemming tokenizer with diacritics removed.
+        # See https://www.sqlite.org/fts5.html#porter_tokenizer
+        # and https://www.sqlite.org/fts5.html#unicode61_tokenizer
         _ = conn.execute("""
             CREATE VIRTUAL TABLE codepoint_sequence_porter USING fts5(
                 cps,
                 name,
                 tts,
-                tokenize = "porter unicode61"
+                tokenize = "porter unicode61 remove_diacritics 2"
             );
         """)
+
+        # Configure rank
+        # See https://www.sqlite.org/fts5.html#the_rank_configuration_option
+        #
+        # In particular, the column cps has zero weight, because it should not be considered in full-text search.
+        # The column tts has a larger weight than the column name because
+        # it is supposed to contain a more user-friendly description.
+        _ = conn.execute("""
+            INSERT INTO codepoint_sequence_trigram(codepoint_sequence_trigram, rank) VALUES('rank', 'bm25(0.0, 1.0, 2.0)');
+        """)
+        _ = conn.execute("""
+            INSERT INTO codepoint_sequence_porter(codepoint_sequence_porter, rank) VALUES('rank', 'bm25(0.0, 1.0, 2.0)');
+        """)
+
         _ = conn.executemany(
             """
             INSERT INTO codepoint_sequence (cps, name, tts) VALUES (?, ?, ?);
@@ -341,6 +360,15 @@ def insert_codepoint_sequences(
             """,
             codepoint_sequence_values,
         )
+
+        # Optimize the full-text tables because we have done writing them.
+        # See https://www.sqlite.org/fts5.html#the_optimize_command
+        _ = conn.execute("""
+            INSERT INTO codepoint_sequence_trigram(codepoint_sequence_trigram) VALUES('optimize');
+        """)
+        _ = conn.execute("""
+            INSERT INTO codepoint_sequence_porter(codepoint_sequence_porter) VALUES('optimize');
+        """)
 
 
 def make_get_tts(annotations: list[Annotation]) -> Callable[[list[int]], str | None]:
