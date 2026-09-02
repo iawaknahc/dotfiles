@@ -1,4 +1,3 @@
 patch:
-  "style/candidate_list_layout": "linear"
-  "style/show_paging": true
+  "style/candidate_list_layout": "vertical"
   "app_options": {}

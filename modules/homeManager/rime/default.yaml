@@ -44,8 +44,8 @@ menu:
 key_binder:
   bindings:
   - {accept: "Control+g", send: Escape, when: composing}
-  - {accept: "Control+n", send: Page_Down, when: has_menu}
-  - {accept: "Control+p", send: Page_Up, when: has_menu}
+  - {accept: "Control+n", send: Down, when: has_menu}
+  - {accept: "Control+p", send: Up, when: has_menu}
 
 # Many schemas are written as
 #
