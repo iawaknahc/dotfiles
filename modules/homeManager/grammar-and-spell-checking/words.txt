@@ -468,6 +468,7 @@ xdg
 xform
 xirr
 xlit
+xnpv
 xwidget
 xyz
 yamlls
