@@ -97,11 +97,6 @@
     ## Text editing
     # Snippets
     luasnip
-    # Unicode
-    {
-      optional = true;
-      plugin = unicode-vim;
-    }
     # Edit surroundings.
     nvim-surround
     # Motion

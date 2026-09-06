@@ -73,8 +73,6 @@ in
     UTS51-emoji
     UTS58-linkification
 
-    unicode-paracode
-
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
       nativeBuildInputs = [
@@ -91,7 +89,4 @@ in
       '';
     })
   ];
-  home.file.".unicode" = {
-    source = "${ucd}/share/unicode";
-  };
 }
