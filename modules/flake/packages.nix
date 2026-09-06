@@ -5,6 +5,7 @@ let
   UTS46-idna = { callPackage }: callPackage ../../packages/UTS46-idna.nix { };
   UTS51-emoji = { callPackage }: callPackage ../../packages/UTS51-emoji.nix { };
   UTS58-linkification = { callPackage }: callPackage ../../packages/UTS58-linkification.nix { };
+
   nu_plugin_dt = { callPackage }: callPackage ../../packages/nu_plugin_dt.nix { };
   nu_plugin_regex = { callPackage }: callPackage ../../packages/nu_plugin_regex.nix { };
   alfred-workflow-switch-appearance =
@@ -14,6 +15,11 @@ let
   nvim-colors = { callPackage }: callPackage ../../packages/nvim-colors.nix { };
   my-ggufs = { callPackage }: callPackage ../../packages/my-ggufs.nix { };
   hledger-lsp = { callPackage }: callPackage ../../packages/hledger-lsp.nix { };
+
+  librime-lua = { callPackage }: callPackage ../../packages/librime-lua.nix { };
+  rime-cangjie = { callPackage }: callPackage ../../packages/rime-cangjie.nix { };
+  rime-cantonese = { callPackage }: callPackage ../../packages/rime-cantonese.nix { };
+
   py2hy = { callPackage }: callPackage ../../packages/py2hy.nix { };
   beancount2ledger = { callPackage }: callPackage ../../packages/beancount2ledger.nix { };
   autobean_refactor = { callPackage }: callPackage ../../packages/autobean_refactor.nix { };
@@ -32,6 +38,7 @@ in
         UTS46-idna = UTS46-idna { callPackage = pkgs.callPackage; };
         UTS51-emoji = UTS51-emoji { callPackage = pkgs.callPackage; };
         UTS58-linkification = UTS58-linkification { callPackage = pkgs.callPackage; };
+
         nu_plugin_dt = nu_plugin_dt { callPackage = pkgs.callPackage; };
         nu_plugin_regex = nu_plugin_regex { callPackage = pkgs.callPackage; };
         alfred-workflow-switch-appearance = alfred-workflow-switch-appearance {
@@ -42,6 +49,10 @@ in
         nvim-colors = nvim-colors { callPackage = pkgs.callPackage; };
         my-ggufs = my-ggufs { callPackage = pkgs.callPackage; };
         hledger-lsp = hledger-lsp { callPackage = pkgs.callPackage; };
+
+        librime-lua = librime-lua { callPackage = pkgs.callPackage; };
+        rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
+        rime-cantonese = rime-cantonese { callPackage = pkgs.callPackage; };
 
         py2hy = py2hy { callPackage = pkgs.python3Packages.callPackage; };
         beancount2ledger = beancount2ledger { callPackage = pkgs.python3Packages.callPackage; };
@@ -102,6 +113,10 @@ in
         my-ggufs = config.packages.my-ggufs;
 
         hledger-lsp = config.packages.hledger-lsp;
+
+        librime-lua = config.packages.librime-lua;
+        rime-cangjie = config.packages.rime-cangjie;
+        rime-cantonese = config.packages.rime-cantonese;
 
         hammerspoon-cli = prev.stdenv.mkDerivation {
           name = "hammerspoon-cli";

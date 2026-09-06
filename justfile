@@ -171,3 +171,6 @@ update-trivial-packages:
     nix-update autobean_format --flake
     nix-update pyxirr --flake
     nix-update rassumfrassum --flake
+    nix-update librime-lua --flake --version branch=master
+    nix-update rime-cangjie --flake --version branch=master
+    nix-update rime-cantonese --flake --version branch=main
