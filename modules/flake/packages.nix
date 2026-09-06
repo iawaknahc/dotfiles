@@ -6,6 +6,8 @@ let
   UTS51-emoji = { callPackage }: callPackage ../../packages/UTS51-emoji.nix { };
   UTS58-linkification = { callPackage }: callPackage ../../packages/UTS58-linkification.nix { };
 
+  cldr-common = { callPackage }: callPackage ../../packages/cldr-common.nix { };
+
   nu_plugin_dt = { callPackage }: callPackage ../../packages/nu_plugin_dt.nix { };
   nu_plugin_regex = { callPackage }: callPackage ../../packages/nu_plugin_regex.nix { };
   alfred-workflow-switch-appearance =
@@ -37,6 +39,8 @@ in
         UTS46-idna = UTS46-idna { callPackage = pkgs.callPackage; };
         UTS51-emoji = UTS51-emoji { callPackage = pkgs.callPackage; };
         UTS58-linkification = UTS58-linkification { callPackage = pkgs.callPackage; };
+
+        cldr-common = cldr-common { callPackage = pkgs.callPackage; };
 
         nu_plugin_dt = nu_plugin_dt { callPackage = pkgs.callPackage; };
         nu_plugin_regex = nu_plugin_regex { callPackage = pkgs.callPackage; };
@@ -96,6 +100,8 @@ in
         UTS46-idna = config.packages.UTS46-idna;
         UTS51-emoji = config.packages.UTS51-emoji;
         UTS58-linkification = config.packages.UTS58-linkification;
+
+        cldr-common = config.packages.cldr-common;
 
         nu_plugin_dt = config.packages.nu_plugin_dt;
         nu_plugin_regex = config.packages.nu_plugin_regex;

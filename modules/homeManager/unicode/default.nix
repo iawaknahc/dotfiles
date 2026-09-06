@@ -1,7 +1,6 @@
 { pkgs, ... }:
 let
   unicode_version = "17.0.0";
-  cldr_version = "48.2";
 
   ucdxml-nounihan = (
     pkgs.stdenvNoCC.mkDerivation rec {
@@ -15,21 +14,6 @@ let
       installPhase = ''
         mkdir -p $out/share/unicode
         mv ucd.nounihan.flat.xml $out/share/unicode/
-      '';
-    }
-  );
-  cldr-common = (
-    pkgs.stdenvNoCC.mkDerivation rec {
-      pname = "cldr-common";
-      version = cldr_version;
-      src = pkgs.fetchzip {
-        url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
-        stripRoot = false;
-        hash = "sha256-fFSLvhND8lg9gQFsrP3XScpSsGwCWWjuLhN22gQSVNs=";
-      };
-      installPhase = ''
-        mkdir -p $out/share/unicode/cldr
-        mv common $out/share/unicode/cldr/
       '';
     }
   );
@@ -53,7 +37,6 @@ let
           pkgs.unicode-emoji
         }"
         "${ucdxml-nounihan}"
-        "${cldr-common}"
       ];
 
       installPhase = ''
@@ -65,27 +48,30 @@ let
 in
 {
   home.packages = with pkgs; [
-    ucd
-
     UTS39-security
     UAX44-ucd
     UTS46-idna
     UTS51-emoji
     UTS58-linkification
 
+    cldr-common
+
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
       nativeBuildInputs = [
         ucd
+        cldr-common
         python3
       ];
       src = ./.;
 
-      ucd = "${ucd}";
-
       installPhase = ''
         mkdir -p $out/share/unicode
-        python3 ./build_sqlite.py "$ucd"/share/unicode/ucd.nounihan.flat.xml "$ucd"/share/unicode "$ucd"/share/unicode/cldr $out/share/unicode/unicode.sqlite3
+        python3 ./build_sqlite.py \
+          ${ucd}/share/unicode/ucd.nounihan.flat.xml \
+          ${ucd}/share/unicode \
+          ${cldr-common}/share/cldr/${cldr-common.version} \
+          $out/share/unicode/unicode.sqlite3
       '';
     })
   ];
