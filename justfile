@@ -164,7 +164,6 @@ update-trivial-packages:
     nix-update alfred-workflow-switch-appearance --flake
     nix-update tree-sitter-numbat --flake --version branch=main
     nix-update nvim-colors --flake --version branch=main
-    nix-update hledger-lsp --flake
     nix-update py2hy --flake
     nix-update beancount2ledger --flake
     nix-update autobean_refactor --flake

@@ -14,7 +14,6 @@ let
   tree-sitter-numbat = { callPackage }: callPackage ../../packages/tree-sitter-numbat.nix { };
   nvim-colors = { callPackage }: callPackage ../../packages/nvim-colors.nix { };
   my-ggufs = { callPackage }: callPackage ../../packages/my-ggufs.nix { };
-  hledger-lsp = { callPackage }: callPackage ../../packages/hledger-lsp.nix { };
 
   librime-lua = { callPackage }: callPackage ../../packages/librime-lua.nix { };
   rime-cangjie = { callPackage }: callPackage ../../packages/rime-cangjie.nix { };
@@ -48,7 +47,6 @@ in
         tree-sitter-numbat = tree-sitter-numbat { callPackage = pkgs.callPackage; };
         nvim-colors = nvim-colors { callPackage = pkgs.callPackage; };
         my-ggufs = my-ggufs { callPackage = pkgs.callPackage; };
-        hledger-lsp = hledger-lsp { callPackage = pkgs.callPackage; };
 
         librime-lua = librime-lua { callPackage = pkgs.callPackage; };
         rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
@@ -111,8 +109,6 @@ in
         nvim-colors = config.packages.nvim-colors;
 
         my-ggufs = config.packages.my-ggufs;
-
-        hledger-lsp = config.packages.hledger-lsp;
 
         librime-lua = config.packages.librime-lua;
         rime-cangjie = config.packages.rime-cangjie;
