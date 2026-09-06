@@ -402,19 +402,22 @@ def make_get_codepoint_by_cps(
 
 def main():
     ucd_nounihan_flat_xml = sys.argv[1]
-    ucd_directory = sys.argv[2]
-    cldr_directory = sys.argv[3]
-    sqlite3_database_file = sys.argv[4]
+    uax44_directory = sys.argv[2]
+    uts51_directory = sys.argv[3]
+    cldr_directory = sys.argv[4]
+    sqlite3_database_file = sys.argv[5]
 
-    ucd_emoji_emoji_sequences_txt = os.path.join(
-        ucd_directory, "./emoji/emoji-sequences.txt"
+    emoji_emoji_variation_sequences_txt = os.path.join(
+        uax44_directory, "./ucd/emoji/emoji-variation-sequences.txt"
     )
-    ucd_emoji_emoji_variation_sequences_txt = os.path.join(
-        ucd_directory, "./emoji/emoji-variation-sequences.txt"
+
+    emoji_emoji_sequences_txt = os.path.join(
+        uts51_directory, "./emoji/emoji-sequences.txt"
     )
-    ucd_emoji_emoji_zwj_sequences_txt = os.path.join(
-        ucd_directory, "./emoji/emoji-zwj-sequences.txt"
+    emoji_emoji_zwj_sequences_txt = os.path.join(
+        uts51_directory, "./emoji/emoji-zwj-sequences.txt"
     )
+
     cldr_common_annotations_en_xml = os.path.join(
         cldr_directory, "./common/annotations/en.xml"
     )
@@ -440,12 +443,12 @@ def main():
     standardized_variants = process_standardized_variants(
         get_standardized_variants(tree), get_codepoint_by_cps
     )
-    emoji_sequences = parse_emoji_sequences_txt(ucd_emoji_emoji_sequences_txt, get_tts)
+    emoji_sequences = parse_emoji_sequences_txt(emoji_emoji_sequences_txt, get_tts)
     emoji_variant_sequences = parse_emoji_variation_sequences_txt(
-        ucd_emoji_emoji_variation_sequences_txt, get_codepoint_by_cps
+        emoji_emoji_variation_sequences_txt, get_codepoint_by_cps
     )
     emoji_zwj_sequences = parse_emoji_zwj_sequences_txt(
-        ucd_emoji_emoji_zwj_sequences_txt, get_tts
+        emoji_emoji_zwj_sequences_txt, get_tts
     )
     codepoint_sequences = (
         codepoints

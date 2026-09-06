@@ -422,6 +422,7 @@ tsgo
 tts
 txn
 tzinfo
+uax
 ucd
 ucs
 unarchive

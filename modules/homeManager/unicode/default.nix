@@ -60,6 +60,8 @@ in
       name = "unicode.sqlite3";
       nativeBuildInputs = [
         ucd
+        UAX44-ucd
+        UTS51-emoji
         cldr-common
         python3
       ];
@@ -69,7 +71,8 @@ in
         mkdir -p $out/share/unicode
         python3 ./build_sqlite.py \
           ${ucd}/share/unicode/ucd.nounihan.flat.xml \
-          ${ucd}/share/unicode \
+          ${UAX44-ucd}/share/unicode/${UAX44-ucd.version} \
+          ${UTS51-emoji}/share/unicode/${UTS51-emoji.version} \
           ${cldr-common}/share/cldr/${cldr-common.version} \
           $out/share/unicode/unicode.sqlite3
       '';
