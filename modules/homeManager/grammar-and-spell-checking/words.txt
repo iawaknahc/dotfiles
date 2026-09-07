@@ -180,6 +180,7 @@ guicursor
 gvisual
 hadolint
 hammerspoon
+hant
 headerline
 healthcheck
 helpgrep

@@ -227,7 +227,7 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
     (list (list month day year) description))))
 
 (defconst my/holiday-other-holidays-hong-kong-public-holidays
-  (let* ((file (expand-file-name "香港公眾假期.ics" user-emacs-directory))
+  (let* ((file (expand-file-name "hong-kong-public-holidays-zh-hant.ics" user-emacs-directory))
          (s (with-temp-buffer (insert-file-contents file) (buffer-string)))
          (vcalendar (icalendar-parse-from-string 'icalendar-vcalendar s))
          (children (icalendar-ast-node-children vcalendar)))

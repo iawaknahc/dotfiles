@@ -246,11 +246,8 @@
       ;;; init-exec-path-from-shell.el ends here
     '';
   home.file.".emacs.d/templates".source = ./emacs.d/templates.el;
-  home.file.".emacs.d/香港公眾假期.ics".source = pkgs.fetchurl {
-    url = "https://www.1823.gov.hk/common/ical/tc.ics";
-    name = "香港公眾假期.ics";
-    hash = "sha256-HmBOkOeyuXKXihsf1A1pYt2ezHqc+HdSr/+znDfT+0c=";
-  };
+  home.file.".emacs.d/hong-kong-public-holidays-zh-hant.ics".source =
+    "${pkgs.ics-hong-kong-public-holidays-zh-hant}/share/ics/hong-kong-public-holidays-zh-hant.ics";
 
   mypython.packages = [
     (

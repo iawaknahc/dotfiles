@@ -10,6 +10,9 @@ let
 
   cldr-common = { callPackage }: callPackage ../../packages/cldr-common.nix { };
 
+  ics-hong-kong-public-holidays-zh-hant =
+    { callPackage }: callPackage ../../packages/ics-hong-kong-public-holidays-zh-hant.nix { };
+
   nu_plugin_dt = { callPackage }: callPackage ../../packages/nu_plugin_dt.nix { };
   nu_plugin_regex = { callPackage }: callPackage ../../packages/nu_plugin_regex.nix { };
   alfred-workflow-switch-appearance =
@@ -44,6 +47,10 @@ in
         ucdxml-ucd-nounihan-flat = ucdxml-ucd-nounihan-flat { callPackage = pkgs.callPackage; };
 
         cldr-common = cldr-common { callPackage = pkgs.callPackage; };
+
+        ics-hong-kong-public-holidays-zh-hant = ics-hong-kong-public-holidays-zh-hant {
+          callPackage = pkgs.callPackage;
+        };
 
         nu_plugin_dt = nu_plugin_dt { callPackage = pkgs.callPackage; };
         nu_plugin_regex = nu_plugin_regex { callPackage = pkgs.callPackage; };
@@ -106,6 +113,8 @@ in
         ucdxml-ucd-nounihan-flat = config.packages.ucdxml-ucd-nounihan-flat;
 
         cldr-common = config.packages.cldr-common;
+
+        ics-hong-kong-public-holidays-zh-hant = config.packages.ics-hong-kong-public-holidays-zh-hant;
 
         nu_plugin_dt = config.packages.nu_plugin_dt;
         nu_plugin_regex = config.packages.nu_plugin_regex;

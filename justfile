@@ -123,6 +123,10 @@ update-unicode *FLAGS:
     just update-UTS58-linkification {{FLAGS}}
     just update-ucdxml-ucd-nounihan-flat {{FLAGS}}
 
+# Update the Nix package `ics-hong-kong-public-holidays-zh-hant`
+update-ics-hong-kong-holidays-zh-hant *FLAGS:
+    nix-update ics-hong-kong-public-holidays-zh-hant --flake --version {{FLAGS}}
+
 # Update the Nix pkacage `cldr-common`
 update-cldr-common *FLAGS:
     nix-update cldr-common --flake --version {{FLAGS}}
