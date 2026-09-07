@@ -424,6 +424,7 @@ txn
 tzinfo
 uax
 ucd
+ucdxml
 ucs
 unarchive
 undici

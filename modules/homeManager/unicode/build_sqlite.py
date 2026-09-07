@@ -401,12 +401,15 @@ def make_get_codepoint_by_cps(
 
 
 def main():
-    ucd_nounihan_flat_xml = sys.argv[1]
+    ucdxml_directory = sys.argv[1]
     uax44_directory = sys.argv[2]
     uts51_directory = sys.argv[3]
     cldr_directory = sys.argv[4]
     sqlite3_database_file = sys.argv[5]
 
+    ucd_nounihan_flat_xml = os.path.join(
+        ucdxml_directory, "./ucdxml/ucd.nounihan.flat.xml"
+    )
     emoji_emoji_variation_sequences_txt = os.path.join(
         uax44_directory, "./ucd/emoji/emoji-variation-sequences.txt"
     )

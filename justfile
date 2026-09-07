@@ -121,6 +121,7 @@ update-unicode *FLAGS:
     just update-UTS46-idna {{FLAGS}}
     just update-UTS51-emoji {{FLAGS}}
     just update-UTS58-linkification {{FLAGS}}
+    just update-ucdxml-ucd-nounihan-flat {{FLAGS}}
 
 # Update the Nix pkacage `cldr-common`
 update-cldr-common *FLAGS:
@@ -159,6 +160,10 @@ update-UTS58-linkification *FLAGS:
         --subpackage LinkFormattingTest_txt \
         --subpackage LinkTerm_txt \
         --flake --version {{FLAGS}}
+
+# Update the Nix package `ucdxml-ucd-nounihan-flat`
+update-ucdxml-ucd-nounihan-flat *FLAGS:
+    nix-update ucdxml-ucd-nounihan-flat --flake --version {{FLAGS}}
 
 # Update trivial packages to their latest version
 update-trivial-packages:

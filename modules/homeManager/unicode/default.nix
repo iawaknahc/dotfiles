@@ -1,51 +1,4 @@
 { pkgs, ... }:
-let
-  unicode_version = "17.0.0";
-
-  ucdxml-nounihan = (
-    pkgs.stdenvNoCC.mkDerivation rec {
-      pname = "ucdxml-nounihan";
-      version = unicode_version;
-      src = pkgs.fetchzip {
-        url = "https://www.unicode.org/Public/${version}/ucdxml/ucd.nounihan.flat.zip";
-        stripRoot = false;
-        hash = "sha256-9rHBJYX9ZcfAunc9couv25Rs1GzGUBmNPpII4SRStEE=";
-      };
-      installPhase = ''
-        mkdir -p $out/share/unicode
-        mv ucd.nounihan.flat.xml $out/share/unicode/
-      '';
-    }
-  );
-  ucd = (
-    pkgs.stdenvNoCC.mkDerivation {
-      name = "ucd";
-
-      # We need to set sourceRoot because we now have multiple directories.
-      sourceRoot = ".";
-      srcs = [
-        "${
-          assert pkgs.unicode-character-database.version == unicode_version;
-          pkgs.unicode-character-database
-        }"
-        "${
-          assert pkgs.unicode-idna.version == unicode_version;
-          pkgs.unicode-idna
-        }"
-        "${
-          assert pkgs.unicode-emoji.version == unicode_version;
-          pkgs.unicode-emoji
-        }"
-        "${ucdxml-nounihan}"
-      ];
-
-      installPhase = ''
-        mkdir -p $out/share/unicode
-        cp -R */share/unicode/. $out/share/unicode/
-      '';
-    }
-  );
-in
 {
   home.packages = with pkgs; [
     UTS39-security
@@ -53,13 +6,14 @@ in
     UTS46-idna
     UTS51-emoji
     UTS58-linkification
+    ucdxml-ucd-nounihan-flat
 
     cldr-common
 
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";
       nativeBuildInputs = [
-        ucd
+        ucdxml-ucd-nounihan-flat
         UAX44-ucd
         UTS51-emoji
         cldr-common
@@ -70,7 +24,7 @@ in
       installPhase = ''
         mkdir -p $out/share/unicode
         python3 ./build_sqlite.py \
-          ${ucd}/share/unicode/ucd.nounihan.flat.xml \
+          ${ucdxml-ucd-nounihan-flat}/share/unicode/${ucdxml-ucd-nounihan-flat.version} \
           ${UAX44-ucd}/share/unicode/${UAX44-ucd.version} \
           ${UTS51-emoji}/share/unicode/${UTS51-emoji.version} \
           ${cldr-common}/share/cldr/${cldr-common.version} \

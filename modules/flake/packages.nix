@@ -5,6 +5,8 @@ let
   UTS46-idna = { callPackage }: callPackage ../../packages/UTS46-idna.nix { };
   UTS51-emoji = { callPackage }: callPackage ../../packages/UTS51-emoji.nix { };
   UTS58-linkification = { callPackage }: callPackage ../../packages/UTS58-linkification.nix { };
+  ucdxml-ucd-nounihan-flat =
+    { callPackage }: callPackage ../../packages/ucdxml-ucd-nounihan-flat.nix { };
 
   cldr-common = { callPackage }: callPackage ../../packages/cldr-common.nix { };
 
@@ -39,6 +41,7 @@ in
         UTS46-idna = UTS46-idna { callPackage = pkgs.callPackage; };
         UTS51-emoji = UTS51-emoji { callPackage = pkgs.callPackage; };
         UTS58-linkification = UTS58-linkification { callPackage = pkgs.callPackage; };
+        ucdxml-ucd-nounihan-flat = ucdxml-ucd-nounihan-flat { callPackage = pkgs.callPackage; };
 
         cldr-common = cldr-common { callPackage = pkgs.callPackage; };
 
@@ -100,6 +103,7 @@ in
         UTS46-idna = config.packages.UTS46-idna;
         UTS51-emoji = config.packages.UTS51-emoji;
         UTS58-linkification = config.packages.UTS58-linkification;
+        ucdxml-ucd-nounihan-flat = config.packages.ucdxml-ucd-nounihan-flat;
 
         cldr-common = config.packages.cldr-common;
 
