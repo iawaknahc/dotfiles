@@ -103,6 +103,8 @@ dtstart
 dtz
 duckdb
 dwim
+ecard
+ecards
 ediff
 eglot
 eldoc
@@ -129,6 +131,7 @@ feedkeys
 fileencoding
 fileformat
 filesize
+filetags
 fixendofline
 flycheck
 flydiff
@@ -438,6 +441,7 @@ usimplify
 usr
 utcoffset
 vcalendar
+vcard
 vconcat
 vertico
 vevent
