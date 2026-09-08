@@ -186,3 +186,4 @@ update-trivial-packages:
     nix-update librime-lua --flake --version branch=master
     nix-update rime-cangjie --flake --version branch=master
     nix-update rime-cantonese --flake --version branch=main
+    nix-update emacs-ecard --flake --version branch=main

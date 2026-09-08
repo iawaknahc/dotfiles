@@ -32,6 +32,8 @@ let
   autobean_format = { callPackage }: callPackage ../../packages/autobean_format.nix { };
   pyxirr = { callPackage }: callPackage ../../packages/pyxirr.nix { };
   rassumfrassum = { callPackage }: callPackage ../../packages/rassumfrassum.nix { };
+
+  emacs-ecard = { callPackage }: callPackage ../../packages/emacs-ecard.nix { };
 in
 {
   # Add packages to this flake.
@@ -72,6 +74,8 @@ in
         autobean_format = autobean_format { callPackage = pkgs.python3Packages.callPackage; };
         pyxirr = pyxirr { callPackage = pkgs.python3Packages.callPackage; };
         rassumfrassum = rassumfrassum { callPackage = pkgs.python3Packages.callPackage; };
+
+        emacs-ecard = emacs-ecard { callPackage = pkgs.emacsPackages.callPackage; };
       };
     };
 

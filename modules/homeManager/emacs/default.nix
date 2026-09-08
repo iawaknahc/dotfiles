@@ -204,6 +204,9 @@
       vulpea-ui
       osm
 
+      # vCard
+      (emacsPackages.callPackage (import ../../../packages/emacs-ecard.nix) { })
+
       # Modes
       beancount
       fennel-mode
