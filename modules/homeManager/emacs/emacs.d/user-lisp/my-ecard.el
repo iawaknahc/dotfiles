@@ -7,19 +7,30 @@
 (require 'ecard)
 (require 'ecard-compat)
 (require 'iso8601)
+(require 'vulpea-db)
 
 (defun my/calendar-date-to-org-timestamp (date)
   "Format calendar-gregorian DATE to a Org timestamp."
   (let ((time (encode-time 0 0 0 (nth 1 date) (nth 0 date) (nth 2 date))))
     (format-time-string "%Y-%m-%d %a" time)))
 
+(defun my/calendar-date-to-bday (date)
+  "Format calendar-gregorian DATE to a vCard BDAY.
+
+If the year is 1583, then year is omitted."
+  (let* ((year (nth 2 date))
+         (time (encode-time 0 0 0 (nth 1 date) (nth 0 date) year)))
+    (if (equal year 1583)
+        (format-time-string "--%m%d" time)
+      (format-time-string "%Y%m%d" time))))
+
 (defun my/ecard-to-vulpea-note (ecard)
   "Convert ecard ECARD into a string representing a vulpea headline note."
   (let* ((uid-value (ecard-get-property-value ecard 'uid))
          (fn-value (ecard-get-property-value ecard 'fn))
-         (tel-props (ecard-tel ecard))
-         (email-props (ecard-email ecard))
-         (adr-props (ecard-adr ecard))
+         (tel-props (reverse (ecard-tel ecard)))
+         (email-props (reverse (ecard-email ecard)))
+         (adr-props (reverse (ecard-adr ecard)))
          (bday-value (ecard-get-property-value ecard 'bday))
          (note-value (ecard-get-property-value ecard 'note))
          (output ""))
@@ -105,16 +116,97 @@
 (defun my/vcard-to-org ()
   "Convert ~/org/contacts.vcf to ~/org/contacts.org."
   (interactive)
-  (let* ((contents (my/ecard-parse-file (expand-file-name "~/org/contacts.vcf")))
-         (buf (find-file-noselect (expand-file-name "~/org/contacts.org"))))
-    (with-current-buffer buf
-      (erase-buffer)
-      (insert (format ":PROPERTIES:
+  (with-current-buffer (find-file-noselect (expand-file-name "~/org/contacts.org"))
+    (erase-buffer)
+    (insert (format ":PROPERTIES:
 :ID: contacts
 :END:
 #+filetags: :area:contact:
 
-") contents)
+") (my/ecard-parse-file (expand-file-name "~/org/contacts.vcf")))
+    (save-buffer)))
+
+(defun my/vulpea-note-to-ecard (note)
+  "Convert a vulpea note NOTE to ecard."
+  (let* ((fn (vulpea-note-title note))
+         (ecard (ecard-create-struct))
+         (home-addresses (vulpea-note-meta-get-list note "home_address"))
+         (home-regions (vulpea-note-meta-get-list note "home_region"))
+         (addresses (seq-mapn (lambda (address region) (list "" "" address "" "" "" region)) home-addresses home-regions))
+         (mobile-phone-number-props (seq-map (lambda (value)
+                                               (ecard-property-create :name "TEL" :value value :parameters '(("TYPE" . "cell,voice"))))
+                                             (vulpea-note-meta-get-list note "mobile_phone_number")))
+         (home-phone-number-props (seq-map (lambda (value)
+                                             (ecard-property-create :name "TEL" :value value :parameters '(("TYPE" . "home,voice"))))
+                                           (vulpea-note-meta-get-list note "home_phone_number")))
+         (work-phone-number-props (seq-map (lambda (value)
+                                             (ecard-property-create :name "TEL" :value value :parameters '(("TYPE" . "work,voice"))))
+                                           (vulpea-note-meta-get-list note "work_phone_number")))
+         (tel-props (append mobile-phone-number-props home-phone-number-props work-phone-number-props nil))
+         (tel-props (seq-sort-by (lambda (prop) (ecard-property-value prop)) #'string< tel-props)))
+    (ecard-set-property ecard 'uid (vulpea-note-id note))
+    (ecard-set-property ecard 'fn fn)
+    (ecard-set-property ecard 'n (list nil fn nil nil nil))
+
+    (ecard--set-slot-value ecard 'tel tel-props)
+
+    (dolist (value (vulpea-note-meta-get-list note "personal_email_address"))
+      (ecard-add-property ecard 'email value '(("TYPE" . "internet,home"))))
+
+    (dolist (value addresses)
+      (ecard-add-property ecard 'adr value '(("TYPE" . "home"))))
+
+    (when-let* ((bday (vulpea-note-meta-get note "birthday"))
+                (decode-time (org-parse-time-string bday))
+                (value (pcase decode-time
+                         (`(0 0 0 ,day ,month ,year nil -1 nil) (my/calendar-date-to-bday (list month day year)))
+                         (_ (user-error "Unsupported birthday: %S" bday)))))
+      (ecard-set-property ecard 'bday value))
+
+    (when-let* ((value (vulpea-note-meta-get note "note")))
+      (ecard-set-property ecard 'note value))
+
+    ecard))
+
+(defun my/ecard-compat-serialize (ecard)
+  "Serialize ECARD to vCard 3.0."
+  (let ((lines '("BEGIN:VCARD" "VERSION:3.0")))
+
+    (dolist (slot '(uid adr anniversary bday caladruri caluri categories clientpidmap
+                        email fburl fn gender geo impp key kind lang logo member n nickname
+                        note org photo prodid related rev role sound source tel title tz url xml))
+      (let ((props (ecard--slot-value ecard slot)))
+        (when props
+          (setq lines (append lines (ecard-compat--serialize-properties-30 props))))))
+
+    (let ((extended (ecard-extended ecard)))
+      (dolist (entry extended)
+        (let ((props (cdr entry)))
+          (setq lines (append lines (ecard-compat--serialize-properties-30 props))))))
+
+    (setq lines (append lines '("END:VCARD")))
+
+    (mapconcat #'identity lines "\n")))
+
+(defun my/ecard-compat-serialize-multiple (ecards)
+  "Serialize ECARDS to vCard 3.0."
+  (mapconcat #'my/ecard-compat-serialize ecards "\n"))
+
+;;;###autoload
+(defun my/org-to-vcard ()
+  "Convert ~/org/contacts.org to ~/org/contacts.vcf."
+  (interactive)
+  (let* (ecards vcard-str)
+    (with-current-buffer (find-file-noselect (expand-file-name "~/org/contacts.org"))
+      (setq ecards (org-map-entries (lambda ()
+                                      (let* ((id (org-entry-get (point) "ID"))
+                                             (note (vulpea-db-get-by-id id))
+                                             (ecard (my/vulpea-note-to-ecard note)))
+                                        ecard)))))
+    (setq vcard-str (my/ecard-compat-serialize-multiple ecards))
+    (with-current-buffer (find-file-noselect (expand-file-name "~/org/contacts.vcf"))
+      (erase-buffer)
+      (insert vcard-str "\n")
       (save-buffer))))
 
 (provide 'my-ecard)

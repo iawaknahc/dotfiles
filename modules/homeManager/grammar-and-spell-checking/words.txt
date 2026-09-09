@@ -44,6 +44,8 @@ buftype
 builtin
 caar
 cadr
+caladruri
+caluri
 caml
 cangjie
 capf
@@ -55,6 +57,7 @@ chistory
 cjson
 cldr
 cli
+clientpidmap
 cljfmt
 closeoff
 cmake
@@ -127,6 +130,7 @@ extmarks
 facep
 fallthrough
 fboundp
+fburl
 feedkeys
 fileencoding
 fileformat
@@ -256,6 +260,7 @@ magit
 maildir
 mapcat
 mapconcat
+mapn
 maptiler
 mbsync
 menuone
