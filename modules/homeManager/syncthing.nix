@@ -38,6 +38,7 @@
     type = "sendreceive";
     devices = [
       "nas"
+      "LouisChan16"
     ];
   };
 

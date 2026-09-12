@@ -36,6 +36,7 @@
     id = "org";
     type = "sendreceive";
     devices = [
+      "LouisChan16"
       "louischan-m4"
     ];
   };
