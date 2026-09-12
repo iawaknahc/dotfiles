@@ -132,14 +132,7 @@ Only Project or Area file-level notes are targets of agenda."
  ;; Include holidays in the agenda view.
  org-agenda-include-diary t
  org-agenda-custom-commands
- `(("a" "General agenda" agenda ""
-    ((org-agenda-skip-function
-      '(let* ((tags (org-get-tags)))
-         (when (or (seq-contains-p tags "warranty_period")
-                   (seq-contains-p tags "contract_period"))
-           (point))))))
-   ("A" "All agenda" agenda "")
-   ("w" "Worklog entries" agenda ""
+ `(("w" "Worklog entries" agenda ""
     ((org-agenda-files (list "~/org/worklog.org"))
      (org-agenda-skip-function
       '(let* ((tags (org-get-tags)))
