@@ -249,8 +249,6 @@
       ;;; init-exec-path-from-shell.el ends here
     '';
   home.file.".emacs.d/templates".source = ./emacs.d/templates.el;
-  home.file.".emacs.d/hong-kong-public-holidays-zh-hant.ics".source =
-    "${pkgs.ics-hong-kong-public-holidays-zh-hant}/share/ics/hong-kong-public-holidays-zh-hant.ics";
 
   mypython.packages = [
     (

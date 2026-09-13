@@ -80,7 +80,7 @@
   (setopt holiday-other-holidays (append
                                   my/holiday-other-holidays-solar-term
                                   my/holiday-other-holidays-chinese-festivals
-                                  my/holiday-other-holidays-hong-kong-public-holidays
+                                  '((my/holiday-other-holidays-hong-kong-general-holidays :strict nil))
                                   nil)))
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
@@ -88,7 +88,7 @@
   (setq my/calendar-business-day-holidays (append
                                            '((my/holiday-saturday))
                                            '((my/holiday-sunday))
-                                           my/holiday-other-holidays-hong-kong-public-holidays
+                                           '((my/holiday-other-holidays-hong-kong-general-holidays :strict t))
                                            nil)))
 
 (with-eval-after-load 'calendar

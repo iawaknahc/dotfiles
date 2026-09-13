@@ -433,6 +433,7 @@ treesj
 treewalker
 tsgo
 tts
+tuen
 txn
 tzinfo
 uax
@@ -488,6 +489,7 @@ xnpv
 xwidget
 xyz
 yamlls
+yeung
 zar
 zls
 zoxide
