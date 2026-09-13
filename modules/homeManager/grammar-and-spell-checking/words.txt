@@ -86,6 +86,7 @@ deadgrep
 debugpy
 defalias
 defconst
+defcustom
 defun
 defvar
 deno
@@ -119,6 +120,7 @@ emmylua
 emmyrc
 env
 eof
+eql
 esac
 esc
 etcc
@@ -233,6 +235,7 @@ lcd
 lclose
 leadmultispace
 leadtab
+lessp
 lgrep
 lhelpgrep
 lhistory
@@ -349,6 +352,7 @@ pubout
 pumheight
 punct
 punctuator
+puthash
 pyrefly
 pyright
 python3

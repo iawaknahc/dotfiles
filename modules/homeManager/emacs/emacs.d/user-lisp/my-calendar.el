@@ -5,6 +5,7 @@
 (require 'calendar)
 (require 'cal-julian)
 (require 'cal-china)
+(require 'cl-lib)
 (require 'solar)
 (require 'holidays)
 (require 'icalendar-parser)
@@ -245,6 +246,25 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
                `(my/holiday-exact ,month ,day ,year ,(format "%s %s" "[香港公眾假期]" description)))))
   "A list of Hong Kong public holidays intended to be added to `holiday-other-holidays'.")
 
+(defun my/holiday-saturday ()
+  "It is a shorthand for (my/holiday-day-of-week 6)."
+  (my/holiday-day-of-week 6 "Saturday"))
+
+(defun my/holiday-sunday ()
+  "It is a shorthand for (my/holiday-day-of-week 0)."
+  (my/holiday-day-of-week 0 "Sunday"))
+
+(defun my/holiday-day-of-week (day-of-week description)
+  "A `holiday-other-holidays' s-expression to make DAY-OF-WEEK a holiday with DESCRIPTION."
+  (pcase-let* ((`(,beg . ,end) (calendar-get-date-range t)))
+    (let* ((beg-abs (calendar-absolute-from-gregorian beg))
+           (end-abs (calendar-absolute-from-gregorian end)))
+      (cl-loop
+       for day-number from beg-abs to end-abs
+       for gregorian = (calendar-gregorian-from-absolute day-number)
+       if (equal day-of-week (calendar-day-of-week gregorian))
+       collect (list gregorian description)))))
+
 (defconst my/calendar-chinese-celestial-stem
   ["甲" "乙" "丙" "丁" "戊" "己" "庚" "辛" "壬" "癸"]
   "The names of the 10 celestial stems.")
@@ -442,6 +462,83 @@ The algorithm used here is the one used by 八字."
         (setq end cursor))
       (setq days (1+ days))
       (message "Region [%s]--[%s] has %d days (inclusive)"
+               (my/calendar-gregorian-to-org-string beg)
+               (my/calendar-gregorian-to-org-string end)
+               days))))
+
+(defcustom my/calendar-business-day-holidays nil
+  "A variable that works like `holiday-other-holidays' but for calculating business days."
+  :type 'sexp)
+
+(defun my/calendar-date< (date1 date2)
+  "Return non-nil if DATE1 < DATE2."
+  (< (calendar-absolute-from-gregorian date1) (calendar-absolute-from-gregorian date2)))
+
+(defun my/calendar-date-within (beg end date)
+  "Return non-nil if DATE >= BEG and DATE <= END."
+  (cond
+   ((calendar-date-equal date beg) t)
+   ((calendar-date-equal date end) t)
+   ((and (my/calendar-date< date end) (my/calendar-date< beg date)) t)
+   (t nil)))
+
+(defun my/calendar-business-day-holidays (beg end)
+  "Return a list of holidays between Gregorian date BEG and END.
+
+The holidays are defined in variable `my/calendar-business-day-holidays'."
+  (defvar displayed-month)
+  (defvar displayed-year)
+  (defvar calendar-total-months)
+  (let* ((beg-year (calendar-extract-year beg))
+         (end-year (calendar-extract-year end))
+         (holidays-in-years (cl-loop
+                             for year from beg-year to end-year
+                             append (let* ((calendar-total-months 12)
+                                           (displayed-month 2)
+                                           (displayed-year year))
+                                      (cl-loop
+                                       for exp in my/calendar-business-day-holidays
+                                       append (eval exp t)))))
+         (holidays (cl-loop
+                    for holiday in holidays-in-years
+                    for holiday-date = (car holiday)
+                    if (my/calendar-date-within beg end holiday-date)
+                    collect holiday)))
+    (sort holidays :key #'car :lessp #'my/calendar-date<)))
+
+(defun my/calendar-count-business-days-region ()
+  "Print the number of business days between mark and point.
+
+Holidays are defined by variable `my/calendar-business-day-holidays'."
+  (interactive)
+  (when-let* ((mark (car calendar-mark-ring))
+              (cursor (calendar-cursor-to-date))
+              (mark-abs (calendar-absolute-from-gregorian mark))
+              (cursor-abs (calendar-absolute-from-gregorian cursor)))
+    (let* (beg end beg-abs end-abs holidays holidays-hash (days 0))
+      (if (< (- cursor-abs mark-abs) 0)
+          (progn
+            (setq beg cursor)
+            (setq end mark)
+            (setq beg-abs cursor-abs)
+            (setq end-abs mark-abs))
+        (setq beg mark)
+        (setq end cursor)
+        (setq beg-abs mark-abs)
+        (setq end-abs cursor-abs))
+      (setq holidays (my/calendar-business-day-holidays beg end))
+      (setq holidays-hash (cl-loop
+                           with table = (make-hash-table :test #'eql)
+                           for holiday in holidays
+                           for holiday-date = (car holiday)
+                           for holiday-abs = (calendar-absolute-from-gregorian holiday-date)
+                           do (puthash holiday-abs t table)
+                           finally return table))
+      (cl-loop
+       for day-number from beg-abs to end-abs
+       do (unless (gethash day-number holidays-hash)
+            (setq days (1+ days))))
+      (message "Region [%s]--[%s] has %d business days (inclusive)"
                (my/calendar-gregorian-to-org-string beg)
                (my/calendar-gregorian-to-org-string end)
                days))))

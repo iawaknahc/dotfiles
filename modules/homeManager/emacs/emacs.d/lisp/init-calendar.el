@@ -84,6 +84,13 @@
                                   nil)))
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
+(with-eval-after-load 'my-calendar
+  (setq my/calendar-business-day-holidays (append
+                                           '((my/holiday-saturday))
+                                           '((my/holiday-sunday))
+                                           my/holiday-other-holidays-hong-kong-public-holidays
+                                           nil)))
+
 (with-eval-after-load 'calendar
   (keymap-set calendar-mode-map "M-=" #'my/calendar-count-days-region))
 
