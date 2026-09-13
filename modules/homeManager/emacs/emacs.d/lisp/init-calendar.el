@@ -82,8 +82,10 @@
                                   my/holiday-other-holidays-chinese-festivals
                                   my/holiday-other-holidays-hong-kong-public-holidays
                                   nil)))
-
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
+
+(with-eval-after-load 'calendar
+  (keymap-set calendar-mode-map "M-=" #'my/calendar-count-days-region))
 
 (provide 'init-calendar)
 ;;; init-calendar.el ends here

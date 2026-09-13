@@ -413,5 +413,38 @@ The algorithm used here is the one used by 八字."
 The algorithm used here is the one used by 八字."
   (format "%s%s" (my/sexagenary-month-string date) (my/sexagenary-day-string date)))
 
+(defun my/calendar-gregorian-to-decode-time (date)
+  "Convert Gregorian date DATE to `decode-time'."
+  (list
+   0 0 0
+   (calendar-extract-day date) (calendar-extract-month date) (calendar-extract-year date)
+   (calendar-day-of-week date) nil 0))
+
+(defun my/calendar-gregorian-to-org-string (date)
+  "Format Gregorian date DATE to a Org timestamp string."
+  (format-time-string "%Y-%m-%d %a" (encode-time (my/calendar-gregorian-to-decode-time date))))
+
+(defun my/calendar-count-days-region ()
+  "A variant of `calendar-count-days-region' that prints mark and point."
+  (interactive)
+  (when-let* ((mark (car calendar-mark-ring))
+              (cursor (calendar-cursor-to-date))
+              (mark-abs (calendar-absolute-from-gregorian mark))
+              (cursor-abs (calendar-absolute-from-gregorian cursor))
+              (days (- cursor-abs mark-abs)))
+    (let* (beg end)
+      (if (< days 0)
+          (progn
+            (setq days (abs days))
+            (setq beg cursor)
+            (setq end mark))
+        (setq beg mark)
+        (setq end cursor))
+      (setq days (1+ days))
+      (message "Region [%s]--[%s] has %d days (inclusive)"
+               (my/calendar-gregorian-to-org-string beg)
+               (my/calendar-gregorian-to-org-string end)
+               days))))
+
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
