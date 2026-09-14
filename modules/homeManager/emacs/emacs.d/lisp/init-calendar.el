@@ -67,6 +67,10 @@
   "Add my holidays to `holiday-other-holidays'."
   (require 'my-calendar)
 
+  ;; General holidays is for the United States.
+  (setopt holiday-general-holidays nil)
+  (setopt holiday-christian-holidays nil)
+
   ;; I do not know these calendars.
   (setopt holiday-hebrew-holidays nil)
   (setopt holiday-islamic-holidays nil)
