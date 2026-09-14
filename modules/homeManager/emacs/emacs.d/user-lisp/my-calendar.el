@@ -544,10 +544,10 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
                                                                      chinese-month
                                                                      chinese-day)))))
 
-(defun my/holiday-hong-kong-general-holidays-of-year-from-2011 (year)
-  "Return a list of Hong Kong General Holidays in YEAR equal to or greater than 2011."
-  (when (< year 2011)
-    (error "Hong Kong General Holidays is only defined for year >= 2011: %d" year))
+(defun my/holiday-hong-kong-general-holidays-of-year-from-1999 (year)
+  "Return a list of Hong Kong General Holidays in YEAR equal to or greater than 1999."
+  (when (< year 1999)
+    (error "Hong Kong General Holidays is only defined for year >= 1999: %d" year))
   (let* ((table (make-hash-table :test #'eql))
          (easter-abs (holiday-easter-etc-abs year))
          holidays)
@@ -569,9 +569,15 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
       ;; Cap. 149 General Holidays Ordinance Schedule (b) the first day of January
       (observe `(1 1 ,year) "一月一日")
       ;; Cap. 149 General Holidays Ordinance Schedule (c), (d), (e) the first three days of Lunar New year
-      (observe (my/calendar-chinese-month-day-of-year year 1 1) "農曆年初一" 3 "農曆年初四")
-      (observe (my/calendar-chinese-month-day-of-year year 1 2) "農曆年初二" 2 "農曆年初四")
-      (observe (my/calendar-chinese-month-day-of-year year 1 3) "農曆年初三" 1 "農曆年初四")
+      (cond
+       ((>= year 2011)
+        (observe (my/calendar-chinese-month-day-of-year year 1 1) "農曆年初一" 3 "農曆年初四")
+        (observe (my/calendar-chinese-month-day-of-year year 1 2) "農曆年初二" 2 "農曆年初四")
+        (observe (my/calendar-chinese-month-day-of-year year 1 3) "農曆年初三" 1 "農曆年初四"))
+       (t
+        (observe (my/calendar-chinese-month-day-of-year year 1 1) "農曆年初一" -1 "農曆年初一的前一日")
+        (observe (my/calendar-chinese-month-day-of-year year 1 2) "農曆年初二" -2 "農曆年初一的前一日")
+        (observe (my/calendar-chinese-month-day-of-year year 1 3) "農曆年初三" -3 "農曆年初一的前一日")))
       ;; Cap. 149 General Holidays Ordinance Schedule (f) Ching Ming Festival
       (observe (car (my/solar-term "清明" year)) "清明節")
       ;; Cap. 149 General Holidays Ordinance Schedule (g) Good Friday
@@ -591,18 +597,30 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
       ;; Cap. 149 General Holidays Ordinance Schedule (n) National Day
       (observe `(10 1 ,year) "國慶日")
       ;; Cap. 149 General Holidays Ordinance Schedule (o) the day following the Chinese Mid-Autumn Festival
-      (observe (my/calendar-chinese-month-day-of-year year 8 16) "中秋節翌日" 1 "中秋節後第二日")
+      (cond
+       ((>= year 2011)
+        (observe (my/calendar-chinese-month-day-of-year year 8 16) "中秋節翌日" 1 "中秋節後第二日"))
+       (t
+        (observe (my/calendar-chinese-month-day-of-year year 8 16) "中秋節翌日" -1 "中秋節")))
       ;; Cap. 149 General Holidays Ordinance Schedule (p) Chung Yeung Festival
       (observe (my/calendar-chinese-month-day-of-year year 9 9) "重陽節")
       ;; Cap. 149 General Holidays Ordinance Schedule (q) Christmas Day
       ;; Cap. 149 General Holidays Ordinance Schedule (r) the first weekday after Christmas Day
-      ;; each, if it falls on a Sunday, is observed instead on the second weekday after Christmas Day
+      ;; If Christmas Day is a Sunday, then 12-27 is a Tuesday,
+      ;; so the in-lieu description is the second weekday after Christmas Day.
       (observe `(12 25 ,year) "聖誕節" 2 "聖誕節後第二個周日")
-      (observe `(12 26 ,year) "聖誕節後第一個周日" 1 "聖誕節後第二個周日")
+      ;; If 12-26 is a Sunday, then 12-27 is a Monday,
+      ;; so in either case, the description is still the first weekday after Christmas Day.
+      (observe `(12 26 ,year) "聖誕節後第一個周日" 1 "聖誕節後第一個周日")
       ;; Special Holiday (3 September 2015) Ordinance
       (when (eql year 2015)
         (push (list '(9 3 2015) "[香港公眾假期] 抗日戰爭勝利七十周年紀念日") holidays)
-        (puthash (calendar-absolute-from-gregorian '(9 3 2015)) t table)))
+        (puthash (calendar-absolute-from-gregorian '(9 3 2015)) t table))
+      ;; 1999年第191號法律公告
+      ;; https://www.elegislation.gov.hk/hk/1999/ln191
+      (when (eql year 1999)
+        (push (list '(12 31 1999) "[香港公眾假期] 1999年第191號法律公告所定的公眾假期") holidays)
+        (puthash (calendar-absolute-from-gregorian '(12 31 1999)) t table)))
     (sort holidays :key #'car :lessp #'my/calendar-date<)))
 
 ;;;###autoload
@@ -611,14 +629,14 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
 
 When STRICT is non-nil, error if holidays cannot be derived."
   (pcase-let* ((`(,_ ,y1 ,_ ,y2) (calendar-get-month-range)))
-    (when (and strict (or (< y1 2011) (< y2 2011)))
+    (when (and strict (or (< y1 1999) (< y2 1999)))
       (error "Hong Kong General Holidays cannot be derived for %d or %d" y1 y2))
     (holiday-filter-visible-calendar
      (append
-      (when (>= y1 2011)
-        (my/holiday-hong-kong-general-holidays-of-year-from-2011 y1))
-      (when (and (>= y2 2011) (/= y1 y2))
-        (my/holiday-hong-kong-general-holidays-of-year-from-2011 y2))
+      (when (>= y1 1999)
+        (my/holiday-hong-kong-general-holidays-of-year-from-1999 y1))
+      (when (and (>= y2 1999) (/= y1 y2))
+        (my/holiday-hong-kong-general-holidays-of-year-from-1999 y2))
       nil))))
 
 (provide 'my-calendar)
