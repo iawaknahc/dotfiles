@@ -544,10 +544,10 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
                                                                      chinese-month
                                                                      chinese-day)))))
 
-(defun my/holiday-hong-kong-general-holidays-of-year-from-1998 (year)
-  "Return a list of Hong Kong General Holidays in YEAR equal to or greater than 1998."
-  (when (< year 1998)
-    (error "Hong Kong General Holidays is only defined for year >= 1998: %d" year))
+(defun my/holiday-hong-kong-general-holidays-of-year-from-1997 (year)
+  "Return a list of Hong Kong General Holidays in YEAR equal to or greater than 1997."
+  (when (< year 1997)
+    (error "Hong Kong General Holidays is only defined for year >= 1997: %d" year))
   (let* ((table (make-hash-table :test #'eql))
          (easter-abs (holiday-easter-etc-abs year))
          holidays)
@@ -594,17 +594,35 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
         (observe (my/calendar-chinese-month-day-of-year year 4 8) "佛誕"))
       ;; Cap. 149 General Holidays Ordinance Schedule (l) Tuen Ng Festival
       (observe (my/calendar-chinese-month-day-of-year year 5 5) "端午節")
+      (when (eql year 1997)
+        ;; 1996年第294號法律公告
+        ;; https://www.elegislation.gov.hk/hk/1996/ln294!en
+        (observe '(6 28 1997) "英女皇壽辰")
+        ;; Cap. 149 General Holidays Ordinance Schedule (l) the Monday following the birthday of Her Majesty The Queen (1997)
+        (observe '(6 30 1997) "英女皇壽辰後第一個星期一"))
       ;; Cap. 149 General Holidays Ordinance Schedule (m) Hong Kong Special Administrative Region Establishment Day
       (observe `(7 1 ,year) "香港特別行政區成立紀念日")
+      ;; Cap. 534 Holidays (1997 and 1998) Ordinance Schedule 2
+      ;; https://www.elegislation.gov.hk/hk/cap534!zh-Hant-HK
+      (when (eql year 1997)
+        (observe '(7 2 1997) "香港特別行政區成立日翌日"))
       ;; Cap. 534 Holidays (1997 and 1998) Ordinance Schedule 3
       ;; https://www.elegislation.gov.hk/hk/cap534!zh-Hant-HK
       (when (eql year 1998)
         (observe '(8 17 1998) "抗日戰爭勝利紀念日"))
+      ;; Cap. 534 Holidays (1997 and 1998) Ordinance Schedule 2
+      ;; https://www.elegislation.gov.hk/hk/cap534!zh-Hant-HK
+      (when (eql year 1997)
+        (observe '(8 18 1997) "抗日戰爭勝利紀念日"))
       ;; Special Holiday (3 September 2015) Ordinance
       (when (eql year 2015)
         (observe '(9 3 2015) "抗日戰爭勝利七十周年紀念日"))
       ;; Cap. 149 General Holidays Ordinance Schedule (n) National Day
       (observe `(10 1 ,year) "國慶日")
+      ;; Cap. 534 Holidays (1997 and 1998) Ordinance Schedule 2
+      ;; https://www.elegislation.gov.hk/hk/cap534!zh-Hant-HK
+      (when (eql year 1997)
+        (observe '(10 2 1997) "國慶日翌日"))
       ;; Cap. 534 Holidays (1997 and 1998) Ordinance Schedule 3
       ;; https://www.elegislation.gov.hk/hk/cap534!zh-Hant-HK
       (when (eql year 1998)
@@ -637,14 +655,14 @@ Holidays are defined by variable `my/calendar-business-day-holidays'."
 
 When STRICT is non-nil, error if holidays cannot be derived."
   (pcase-let* ((`(,_ ,y1 ,_ ,y2) (calendar-get-month-range)))
-    (when (and strict (or (< y1 1998) (< y2 1998)))
+    (when (and strict (or (< y1 1997) (< y2 1997)))
       (error "Hong Kong General Holidays cannot be derived for %d or %d" y1 y2))
     (holiday-filter-visible-calendar
      (append
-      (when (>= y1 1998)
-        (my/holiday-hong-kong-general-holidays-of-year-from-1998 y1))
-      (when (and (>= y2 1998) (/= y1 y2))
-        (my/holiday-hong-kong-general-holidays-of-year-from-1998 y2))
+      (when (>= y1 1997)
+        (my/holiday-hong-kong-general-holidays-of-year-from-1997 y1))
+      (when (and (>= y2 1997) (/= y1 y2))
+        (my/holiday-hong-kong-general-holidays-of-year-from-1997 y2))
       nil))))
 
 (provide 'my-calendar)
