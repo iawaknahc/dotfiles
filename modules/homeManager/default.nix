@@ -129,7 +129,6 @@ _: {
     ./tailscale.nix
     ./timg.nix
     ./jq.nix
-    ./numbat
     ./syncthing.nix
     ./smb.nix
     ./obsidian.nix

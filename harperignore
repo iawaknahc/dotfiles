@@ -7,7 +7,6 @@
 *.fish
 *.hy
 *.json
-*.nbt
 *.nu
 *.plist
 *.vim

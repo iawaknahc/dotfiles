@@ -1,6 +1,5 @@
 *.conf
 *.hy
-*.nbt
 *.nix
 *.plist
 *.sh

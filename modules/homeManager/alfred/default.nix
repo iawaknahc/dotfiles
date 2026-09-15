@@ -104,10 +104,6 @@
     (pkgs.writeShellScriptBin "alfred-workflow-yue.py" ''
       ${config.mypython.package}/bin/python3 ${./yue.py} "$@"
     '')
-    (pkgs.writeShellScriptBin "alfred-workflow-nbt.py" ''
-      export NUMBAT=${pkgs.numbat}/bin/numbat
-      ${config.mypython.package}/bin/python3 ${./nbt.py} "$@"
-    '')
   ];
   # uuid
   alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
@@ -133,7 +129,4 @@
   # yue
   alfred.sourceFile."workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.74EF11C7-1F21-4FAA-89A0-9E32669B7A30/info.plist;
-  # nbt
-  alfred.sourceFile."workflows/user.workflow.892C4836-4E6A-4EEE-999D-8E162CF7ED62/info.plist".source =
-    ./alfred/Alfred.alfredpreferences/workflows/user.workflow.892C4836-4E6A-4EEE-999D-8E162CF7ED62/info.plist;
 }
