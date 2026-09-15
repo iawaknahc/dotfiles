@@ -158,6 +158,8 @@ _: {
 
     ./ascii
 
+    ./emulators.nix
+
     # Flutter is now installed per project with flake.nix
   ];
 }
