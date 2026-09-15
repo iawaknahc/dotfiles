@@ -303,6 +303,7 @@ nounihan
 nowinfixheight
 npx
 nreverse
+ntd
 nufmt
 nukta
 numberwidth
@@ -434,6 +435,7 @@ treewalker
 tsgo
 tts
 tuen
+twd
 txn
 tzinfo
 uax
