@@ -89,9 +89,6 @@
       export FZF=${pkgs.fzf}/bin/fzf
       ${config.mypython.package}/bin/python3 ${./tz.py} "$@"
     '')
-    (pkgs.writeShellScriptBin "alfred-workflow-u.py" ''
-      ${config.mypython.package}/bin/python3 ${./u.py} "$@"
-    '')
     (pkgs.writeShellScriptBin "alfred-workflow-cj.py" ''
       ${config.mypython.package}/bin/python3 ${./cj.py} "$@"
     '')
@@ -114,9 +111,6 @@
   # tz
   alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
-  # u
-  alfred.sourceFile."workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist".source =
-    ./alfred/Alfred.alfredpreferences/workflows/user.workflow.9CCC68D8-1EA4-4F54-AA4A-8A945A276500/info.plist;
   # cj
   alfred.sourceFile."workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist;
