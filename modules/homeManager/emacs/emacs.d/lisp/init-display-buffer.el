@@ -8,8 +8,8 @@
 ;; In that case, we use `display-buffer-in-direction'
 (setq
  display-buffer-base-action
- ;; Reuse a window already showing the buffer.
  `((
+    ;; Reuse a window already showing the buffer.
     display-buffer-reuse-window
     ;; Reuse a window whose major mode is the same as that of the buffer about to being displayed.
     display-buffer-reuse-mode-window
@@ -44,14 +44,17 @@
  'display-buffer-alist
  ;; When the *scratch* buffer is displayed,
  `(,(rx string-start "*scratch*" string-end) .
-   ;; display it in a tab
-   ((display-buffer-in-tab) .
-    ;; named "*scratch*"
-    ((tab-name . "*scratch*")
-     ;; in the tab group "EMACS"
-     (tab-group . "EMACS")
-     ;; in the selected frame.
-     (reusable-frames . the-selected-frame)))))
+   ((
+     ;; Reuse a window already showing the buffer.
+     display-buffer-reuse-window
+     ;; display it in a tab
+     display-buffer-in-tab) .
+     ;; named "*scratch*"
+     ((tab-name . "*scratch*")
+      ;; in the tab group "EMACS"
+      (tab-group . "EMACS")
+      ;; in the selected frame.
+      (reusable-frames . the-selected-frame)))))
 (defun my/window-setup-hook-display-buffer-scratch ()
   "Make our `display-buffer' configuration on *scratch* applied once."
   (if-let* ((messages-buf (get-buffer "*Messages*"))
@@ -70,14 +73,17 @@
  'display-buffer-alist
  ;; When the command `mu4e' is invoked,
  `(,(rx string-start "*mu4e-main*" string-end) .
-   ;; display the mu4e main buffer in a tab
-   ((display-buffer-in-tab) .
-    ;; named "mu4e"
-    ((tab-name . "mu4e")
-     ;; in the tab group "EMAIL"
-     (tab-group . "EMAIL")
-     ;; in the selected frame.
-     (reusable-frames . the-selected-frame)))))
+   ((
+     ;; Reuse a window already showing the buffer.
+     display-buffer-reuse-window
+     ;; display the mu4e main buffer in a tab
+     display-buffer-in-tab) .
+     ;; named "mu4e"
+     ((tab-name . "mu4e")
+      ;; in the tab group "EMAIL"
+      (tab-group . "EMAIL")
+      ;; in the selected frame.
+      (reusable-frames . the-selected-frame)))))
 
 ;; Buffers that I prefer displaying in the bottom side window.
 (add-to-list
@@ -167,33 +173,39 @@ Otherwise, return nil to signify we want to create a tab without explicit name."
  'display-buffer-alist
  ;; When a project file is displayed,
  `(,(function my/display-buffer-alist-project-file-match-project-file) .
-   ;; display it in a tab
-   ((display-buffer-in-tab) .
-    ;; in which the current tab is preferred
-    ((tab-name . ,(function my/display-buffer-alist-project-file-tab-name))
-     ;; with the project being the tab group
-     (tab-group . ,(function my/display-buffer-alist-project-file-tab-group))
-     ;; in the selected frame.
-     (reusable-frames . the-selected-frame)))))
+   ((
+     ;; Reuse a window already showing the buffer.
+     display-buffer-reuse-window
+     ;; display it in a tab
+     display-buffer-in-tab) .
+     ;; in which the current tab is preferred
+     ((tab-name . ,(function my/display-buffer-alist-project-file-tab-name))
+      ;; with the project being the tab group
+      (tab-group . ,(function my/display-buffer-alist-project-file-tab-group))
+      ;; in the selected frame.
+      (reusable-frames . the-selected-frame)))))
 
 
 ;; Org
 ;; *Org Agenda*
-;; Make Org close the tab when `org-agenda-quit' runs.
-(setq org-agenda-window-setup 'other-tab)
-(add-to-list
- 'display-buffer-alist
- ;; I tried using (derived-mode . org-agenda-mode) but it does not work.
- `((or ,(rx string-start "*Org Agenda*" string-end)
-       ;; The buffer name has a preceding space in it.
-       ,(rx string-start " *Agenda Commands*" string-end))
-   . ((display-buffer-in-tab) .
-      ((tab-name . "*Org Agenda*")
-       (tab-group . "PROJECT:org")
-       ;; Make the window dedicated,
-       ;; so hitting RET in the agenda buffer will split window.
-       (dedicated . t)
-       (reusable-frames . the-selected-frame)))))
+;;
+;; I used to set `org-agenda-window-setup' to other-tab,
+;; but that would always create new tabs in the following case:
+;; 1. Hit c in the agenda to open calendar
+;; 2. Hit c in calendar to open agenda. This will create a new tab.
+;; 3. Hit c in the agenda to open calendar
+;; 4. Hit c in calendar to open agenda. This will create yet another tab.
+;;
+;; The default value is reorganize-frame, which shows at most 2 windows.
+;; Setting to current-window will cause Org to use `pop-to-buffer-same-window'.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3928
+;;
+;; Before displaying *Org Agenda*, *Agenda Commands* is displayed.
+;; That buffer is hard-coded to be displayed with `org-display-buffer-split'.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3132
+;; And `org-display-buffer-split' uses `display-buffer-in-direction' internally.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-macs.el#L1846
+(setq org-agenda-window-setup 'current-window)
 
 ;; *Org Select*
 (add-to-list
