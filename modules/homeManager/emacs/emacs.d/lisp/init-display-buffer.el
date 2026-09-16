@@ -39,34 +39,11 @@
  ;; The diff is already included in the commit buffer.
  magit-commit-show-diff nil)
 
+
 ;; *scratch*
-(add-to-list
- 'display-buffer-alist
- ;; When the *scratch* buffer is displayed,
- `(,(rx string-start "*scratch*" string-end) .
-   ((
-     ;; Reuse a window already showing the buffer.
-     display-buffer-reuse-window
-     ;; display it in a tab
-     display-buffer-in-tab) .
-     ;; named "*scratch*"
-     ((tab-name . "*scratch*")
-      ;; in the tab group "EMACS"
-      (tab-group . "EMACS")
-      ;; in the selected frame.
-      (reusable-frames . the-selected-frame)))))
-(defun my/window-setup-hook-display-buffer-scratch ()
-  "Make our `display-buffer' configuration on *scratch* applied once."
-  (if-let* ((messages-buf (get-buffer "*Messages*"))
-            ;; Ungrouped tab 1 contains a single window displaying *Messages*
-            (_ (display-buffer messages-buf `((display-buffer-same-window . ()))))
-            (scratch-buf (get-buffer "*scratch*"))
-            ;; Grouped tab 2 contains a single window displaying *scratch*
-            (_ (display-buffer scratch-buf)))
-      ;; Close tab 1, thus tab 2 becomes tab 1.
-      (tab-bar-close-tab 1)))
-;; Ensure the tab group is created.
-(add-hook 'window-setup-hook #'my/window-setup-hook-display-buffer-scratch)
+;; By default, even if we do nothing,
+;; the scratch buffer is contained by a tab called *scratch* without tab group on launch.
+
 
 ;; Buffers that I prefer displaying in the bottom side window.
 (add-to-list
@@ -115,6 +92,7 @@
             (current-proj (with-current-buffer selected-buf (project-current)))
             (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
       t))
+
 
 ;; Project file
 (defun my/display-buffer-alist-project-file-match-project-file (buffer-or-name &rest _args)
