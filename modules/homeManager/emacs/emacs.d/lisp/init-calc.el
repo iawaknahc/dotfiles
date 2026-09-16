@@ -9,7 +9,6 @@
   "Compute XIRR for DATES and AMOUNTS, using pyxirr.py which is backed by pyxirr.
 DATES is a Calc vector containing dates.
 AMOUNTS is a Calc vector containing numbers."
-  (require 'my-lib)
   (let* ((date-list (cdr dates))
          (amt-list  (cdr amounts))
          (calc-date-format '(YYYY "-" MM "-" DD))
@@ -30,7 +29,6 @@ AMOUNTS is a Calc vector containing numbers."
 RATE is a Calc number, like (float 3 -2).
 DATES is a Calc vector containing dates.
 AMOUNTS is a Calc vector containing numbers."
-  (require 'my-lib)
   (let* ((date-list (cdr dates))
          (amt-list  (cdr amounts))
          (calc-date-format '(YYYY "-" MM "-" DD))

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+;;;###autoload
 (cl-defun my/call-process (&key
                            (working-directory default-directory)
                            stdin
@@ -20,6 +21,7 @@ ARGS is nil by default."
   (let ((default-directory working-directory))
     (apply #'call-process program stdin (list stdout stderr) nil args)))
 
+;;;###autoload
 (cl-defun my/call-command (&key
                            (working-directory default-directory)
                            stdin
