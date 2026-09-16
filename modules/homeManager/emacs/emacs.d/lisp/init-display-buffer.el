@@ -68,23 +68,6 @@
 ;; Ensure the tab group is created.
 (add-hook 'window-setup-hook #'my/window-setup-hook-display-buffer-scratch)
 
-;; mu4e
-(add-to-list
- 'display-buffer-alist
- ;; When the command `mu4e' is invoked,
- `(,(rx string-start "*mu4e-main*" string-end) .
-   ((
-     ;; Reuse a window already showing the buffer.
-     display-buffer-reuse-window
-     ;; display the mu4e main buffer in a tab
-     display-buffer-in-tab) .
-     ;; named "mu4e"
-     ((tab-name . "mu4e")
-      ;; in the tab group "EMAIL"
-      (tab-group . "EMAIL")
-      ;; in the selected frame.
-      (reusable-frames . the-selected-frame)))))
-
 ;; Buffers that I prefer displaying in the bottom side window.
 (add-to-list
  'display-buffer-alist

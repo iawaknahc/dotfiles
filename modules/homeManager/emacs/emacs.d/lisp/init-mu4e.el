@@ -3,6 +3,7 @@
 ;;; Code:
 
 (setq
+ mu4e-confirm-quit nil
  mu4e-get-mail-command "mbsync --all"
  mu4e-context-policy 'pick-first
  mu4e-compose-context-policy 'ask-if-none
