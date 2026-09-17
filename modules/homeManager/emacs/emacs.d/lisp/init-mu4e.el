@@ -67,6 +67,18 @@
     :query "flag:trashed"
     :key ?t)))
 
+(defun my/mu4e-headers-found-hook ()
+  "Fix the alignment of the header in the headers view.
+This is required because we set `left-margin-width' to 2 globally,
+which mu4e does not account for.
+
+Although the documentation says we should add a hook to `mu4e-headers-mode-hook',
+`header-line-format' was actually set before `mu4e-headers-found-hook' is run.
+See https://github.com/djcb/mu/blob/v1.14.3/mu4e/mu4e.texi#L4996
+and https://github.com/djcb/mu/blob/v1.14.3/mu4e/mu4e-headers.el#L888"
+  (push '(:eval (make-string left-margin-width ?\s)) header-line-format))
+(add-hook 'mu4e-headers-found-hook #'my/mu4e-headers-found-hook)
+
 (defun my/mu4e-view-in-xwidget-action ()
   "Call `mu4e-action-view-in-xwidget' with the message at point.
 It is literally a shortcut to `a x`.
