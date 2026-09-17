@@ -36,6 +36,11 @@
     evil = self.melpaPackages.evil;
     just-ts-mode = self.melpaPackages.just-ts-mode;
     nushell-ts-mode = self.melpaPackages.nushell-ts-mode;
+    # diff-hl has a serious bug that always set left-margin-width to 1.
+    # See https://github.com/dgutov/diff-hl/issues/289
+    # As of 2026-09-18, the latest release was 1.10.0 on 2024-08-03
+    # So we have to use the version on MELPA.
+    diff-hl = self.melpaPackages.diff-hl;
 
     # melpaStablePackages
     apheleia = self.melpaStablePackages.apheleia;
@@ -69,7 +74,6 @@
     compat = self.elpaPackages.compat;
     consult = self.elpaPackages.consult;
     corfu = self.elpaPackages.corfu;
-    diff-hl = self.elpaPackages.diff-hl;
     # dash is a dependency of vulpea.
     dash = self.elpaPackages.dash;
     eglot = self.elpaPackages.eglot;
