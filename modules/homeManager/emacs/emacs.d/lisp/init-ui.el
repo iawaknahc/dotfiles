@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(menu-bar-mode -1)
 (when (display-graphic-p)
   (tool-bar-mode -1))
 
