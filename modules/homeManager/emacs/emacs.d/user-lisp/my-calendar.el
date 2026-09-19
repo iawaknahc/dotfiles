@@ -330,13 +330,15 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
          (day-of-month (calendar-extract-day date))
          (iso-date (calendar-iso-from-absolute (calendar-absolute-from-gregorian date)))
          (week-number (calendar-extract-month iso-date))
-         (day-of-week (calendar-extract-day iso-date))
+         (day-of-week (pcase (calendar-extract-day iso-date)
+                        (0 7)
+                        (a a)))
          (day-of-year (calendar-day-number date))
          (days-in-year (if (calendar-leap-year-p year) 366 365))
          (elapsed-percent (* 100 (/ (float day-of-year) (float days-in-year)))))
     ;; It is observed that the string will be formatted again,
     ;; so the percent sign has to be quoted twice.
-    (format "%04d-%02d-%02d W%2d-%d [%d/%d](%.0f%%%%)" year month day-of-month week-number day-of-week day-of-year days-in-year elapsed-percent)))
+    (format "(%04d-%02d-%02d W%2d-%d %d/%d %.0f%%%%)" year month day-of-month week-number day-of-week day-of-year days-in-year elapsed-percent)))
 
 (defun my/sexagenary-day (date)
   "Return the numeric sexagenary day of Gregorian date DATE.
