@@ -3,15 +3,11 @@
 ;;; Code:
 
 (setq
- ;; The default lighter is " Apheleia".
- ;; It is not informative so hide it.
- apheleia-mode-lighter nil
- ;; The default lighter is " ARev".
- ;; It is not informative so hide it.
- auto-revert-mode-text nil
- ;; The default lighter is " ElDoc".
- ;; It is not informative so hide it.
- eldoc-minor-mode-string nil
+ ;; Collapse minor modes that do not report additional information in the mode line.
+ mode-line-collapse-minor-modes '(apheleia-mode
+                                  auto-revert-mode
+                                  eldoc-mode
+                                  whitespace-mode)
  ;; Place the evil state tag at the beginning of the mode line.
  ;; The default value of `before' really means after mode-line-position.
  ;; See https://github.com/emacs-evil/evil/blob/1.14.2/evil-core.el#L405
@@ -29,12 +25,6 @@
 ;; Turn on `size-indication-mode'.
 ;; This causes `mode-line-position' to show " of %I" after percentage.
 (add-hook 'after-init-hook #'size-indication-mode)
-
-(with-eval-after-load 'whitespace
-  ;; The default lighter is " ws".
-  ;; Since we have visible glyphs for whitespace when `whitespace-mode' is enabled,
-  ;; the lighter is not informative.
-  (setf (alist-get 'whitespace-mode minor-mode-alist) (list "")))
 
 (defun my/mode-line-buffer-identification ()
   "Replace `mode-line-buffer-identification'.
