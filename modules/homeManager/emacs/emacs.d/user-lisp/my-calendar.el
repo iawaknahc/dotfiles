@@ -322,18 +322,20 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
      (my/calendar-chinese-month-name month)
      (my/calendar-chinese-day-name day))))
 
-(defun my/calendar-iso-ordinal-date-string (date)
-  "Return the string for ISO8601 ordinal date of Gregorian date DATE."
-  (let* ((day-of-year (calendar-day-number date)))
-    (format "%.4d-%.3d" (calendar-extract-year date) day-of-year)))
-
-(defun my/calendar-iso-week-date-string (date)
-  "Return string for ISO8601 week date of Gregorian date DATE."
-  (let* ((iso-date (calendar-iso-from-absolute (calendar-absolute-from-gregorian date)))
-         (year (calendar-extract-year iso-date))
+(defun my/calendar-date-string (date)
+  "Return a string intended to be used in `calendar-mode-line-format' for DATE."
+  (let* ((year (calendar-extract-year date))
+         (month (calendar-extract-month date))
+         (day-of-month (calendar-extract-day date))
+         (iso-date (calendar-iso-from-absolute (calendar-absolute-from-gregorian date)))
          (week-number (calendar-extract-month iso-date))
-         (day-number (calendar-extract-day iso-date)))
-    (format "%.4d-W%.2d-%d" year week-number day-number)))
+         (day-of-week (calendar-extract-day iso-date))
+         (day-of-year (calendar-day-number date))
+         (days-in-year (if (calendar-leap-year-p year) 366 365))
+         (elapsed-percent (* 100 (/ (float day-of-year) (float days-in-year)))))
+    ;; It is observed that the string will be formatted again,
+    ;; so the percent sign has to be quoted twice.
+    (format "%04d-%02d-%02d W%2d-%d [%d/%d](%.0f%%%%)" year month day-of-month week-number day-of-week day-of-year days-in-year elapsed-percent)))
 
 (defun my/sexagenary-day (date)
   "Return the numeric sexagenary day of Gregorian date DATE.

@@ -7,8 +7,8 @@
  calendar-week-start-day 1
 
  ;; Display ISO week number.
- calendar-left-margin 8
- calendar-intermonth-spacing 8
+ calendar-left-margin (+ 2 (length "W01"))
+ calendar-intermonth-spacing (+ 5 (length "W01"))
  calendar-intermonth-text
  '(propertize
    (format "W%.2d"
@@ -46,9 +46,7 @@
 
  ;; Display today in various forms.
  calendar-mode-line-format
- '((calendar-date-string date)
-   (my/calendar-iso-week-date-string date)
-   (my/calendar-iso-ordinal-date-string date)
+ '((my/calendar-date-string date)
    (my/calendar-chinese-date-string-from-gregorian date)
    (my/sexagenary-month-day-string date)
    (my/astrological-sign-string date))
