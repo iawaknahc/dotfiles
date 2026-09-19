@@ -47,11 +47,12 @@
  ;; Display today in various forms.
  calendar-mode-line-format
  '((my/calendar-date-string date)
+   (my/lunar-phase-date-string date)
    (my/calendar-chinese-date-string-from-gregorian date)
    (my/sexagenary-month-day-string date)
    (my/astrological-sign-string date))
  ;; Increase the right margin to allow more room for mode line.
- calendar-right-margin 120)
+ calendar-right-margin 140)
 
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
 ;; This marks today with face `calendar-today', which is underline.
