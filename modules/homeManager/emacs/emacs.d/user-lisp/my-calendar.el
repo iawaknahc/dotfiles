@@ -672,14 +672,15 @@ When STRICT is non-nil, error if holidays cannot be derived."
 
 
 (defconst my/lunar-phase-names
-  '(("New Moon" "朔月" "🌑")
-    ("Waxing Crescent" "眉月" "🌒")
-    ("First Quarter" "上弦" "🌓")
-    ("Waxing Gibbous" "盈凸" "🌔")
-    ("Full Moon" "望月" "🌕")
-    ("Waning Gibbous" "虧凸" "🌖")
-    ("Last Quarter" "下弦" "🌗")
-    ("Waning Crescent" "殘月" "🌘"))
+  '(("New Moon" "朔月" "🌑")         ;; 0
+    ("Waxing Crescent" "眉月" "🌒")  ;; 0.125
+    ("First Quarter" "上弦" "🌓")    ;; 0.25
+    ("Waxing Gibbous" "盈凸" "🌔")   ;; 0.375
+    ("Full Moon" "望月" "🌕")        ;; 0.5
+    ("Waning Gibbous" "虧凸" "🌖")   ;; 0.625
+    ("Last Quarter" "下弦" "🌗")     ;; 0.75
+    ("Waning Crescent" "殘月" "🌘")  ;; 0.875
+    ("New Moon" "晦月" "🌑"))        ;; 1
   "A list of lunar phase names.
 The first element is the English name.
 The second element is the Chinese name.
@@ -692,7 +693,7 @@ The third element is the emoji.")
 The return value is a list.
 The first element is the length of the lunar cycle, in Julian day number.
 The second element is the elapsed time in this cycle, in Julian day number.
-The third element is the lunar phase, ranged from 0 to 7, where 0 means New Moon, and 4 means Full Moon."
+The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 4 means 望月, and 8 means 晦月"
   (let* ((abs-date (calendar-absolute-from-gregorian date))
          (astro-date (calendar-astro-from-absolute abs-date))
          (next-new-moon (lunar-new-moon-on-or-after astro-date))
@@ -700,16 +701,18 @@ The third element is the lunar phase, ranged from 0 to 7, where 0 means New Moon
          (lunar-cycle-length (- next-new-moon prev-new-moon))
          (elapsed (- astro-date prev-new-moon))
          (elapsed-percent (/ elapsed lunar-cycle-length))
-         (phase (mod (round (* (length my/lunar-phase-names) elapsed-percent)) (length my/lunar-phase-names))))
+         (phase (round (* 8 elapsed-percent))))
     (cl-assert (and (> lunar-cycle-length 29) (< lunar-cycle-length 30)))
+    (cl-assert (and (>= phase 0) (<= phase 8)))
     (list lunar-cycle-length elapsed phase)))
 
 ;;;###autoload
 (defun my/lunar-phase-date-string (date)
   "Return a string intended to be used in `calendar-mode-line-format' for DATE."
   (pcase-let* ((`(,lunar-cycle-length ,elapsed ,phase) (my/lunar-phase-of-date date))
-               (`(,english ,chinese ,emoji) (nth phase my/lunar-phase-names)))
-    (format "%.2f/%.2f [%d/8] (%s %s)" elapsed lunar-cycle-length phase chinese emoji)))
+               (`(,english ,chinese ,emoji) (nth phase my/lunar-phase-names))
+               (percent (* 100 (/ elapsed lunar-cycle-length))))
+    (format "(%.2f/%.2f %.0f%%%% %s %s)" elapsed lunar-cycle-length percent chinese emoji)))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
