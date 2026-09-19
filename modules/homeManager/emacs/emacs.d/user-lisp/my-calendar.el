@@ -77,7 +77,7 @@ The fourth element is the Chinese name.")
          (longitude (my/solar-longitude-local julian-day-number))
          (sign (my/astrological-sign-of-solar-longitude longitude))
          (name (my/astrological-sign-chinese-name sign)))
-    (format "%s %.1f°" name longitude)))
+    (format "%s %5.1f°" name longitude)))
 
 (defconst my/solar-terms
   '(("春分" 0 (3 21))
@@ -314,7 +314,7 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
          (month (nth 2 chinese-date))
          (day (nth 3 chinese-date)))
     (format
-     "(循環%d %d年 始於%.4d年 肖%s) %s年%s%s"
+     "(循環%d %2d年 始於%04d年 肖%s) %s年%s%s"
      cycle
      year
      (my/calendar-chinese-start-year-of-cycle date)
@@ -338,7 +338,7 @@ Return ((MONTH DAY YEAR) DESCRIPTION)"
          (elapsed-percent (* 100 (/ (float day-of-year) (float days-in-year)))))
     ;; It is observed that the string will be formatted again,
     ;; so the percent sign has to be quoted twice.
-    (format "(%04d-%02d-%02d W%2d-%d %d/%d %.0f%%%%)" year month day-of-month week-number day-of-week day-of-year days-in-year elapsed-percent)))
+    (format "(%04d-%02d-%02d W%2d-%1d %3d/%3d %3.0f%%%%)" year month day-of-month week-number day-of-week day-of-year days-in-year elapsed-percent)))
 
 (defun my/sexagenary-day (date)
   "Return the numeric sexagenary day of Gregorian date DATE.
@@ -712,7 +712,7 @@ The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 
   (pcase-let* ((`(,lunar-cycle-length ,elapsed ,phase) (my/lunar-phase-of-date date))
                (`(,english ,chinese ,emoji) (nth phase my/lunar-phase-names))
                (percent (* 100 (/ elapsed lunar-cycle-length))))
-    (format "(%.2f/%.2f %.0f%%%% %s %s)" elapsed lunar-cycle-length percent chinese emoji)))
+    (format "(%5.2f/%5.2f %3.0f%%%% %s %s)" elapsed lunar-cycle-length percent chinese emoji)))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
