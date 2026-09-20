@@ -687,6 +687,34 @@ The second element is the Chinese name.
 The third element is the emoji.")
 
 ;;;###autoload
+(defun my/lunar-phase-of-astro (astro-date)
+  "Return the lunar phase of calendar-astro date ASTRO-DATE.
+
+The return value is a list.
+The first element is the length of the lunar cycle, in Julian day number.
+The second element is the elapsed time in this cycle, in Julian day number.
+The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 4 means 望月, and 8 means 晦月"
+  (let* ((next-new-moon (lunar-new-moon-on-or-after astro-date))
+         prev-new-moon
+         lunar-cycle-length
+         elapsed
+         elapsed-percent
+         phase)
+    (cond
+     ((eql next-new-moon astro-date)
+      (setq prev-new-moon next-new-moon)
+      (setq next-new-moon (lunar-new-moon-on-or-after (+ astro-date 1))))
+     (t
+      (setq prev-new-moon (lunar-new-moon-on-or-after (- next-new-moon 30)))))
+    (setq lunar-cycle-length (- next-new-moon prev-new-moon))
+    (setq elapsed (- astro-date prev-new-moon))
+    (setq elapsed-percent (/ elapsed lunar-cycle-length))
+    (setq phase (round (* 8 elapsed-percent)))
+    (cl-assert (and (> lunar-cycle-length 29) (< lunar-cycle-length 30)))
+    (cl-assert (and (>= phase 0) (<= phase 8)))
+    (list lunar-cycle-length elapsed phase)))
+
+;;;###autoload
 (defun my/lunar-phase-of-date (date)
   "Return the lunar phase of Gregorian date DATE.
 
@@ -695,16 +723,8 @@ The first element is the length of the lunar cycle, in Julian day number.
 The second element is the elapsed time in this cycle, in Julian day number.
 The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 4 means 望月, and 8 means 晦月"
   (let* ((abs-date (calendar-absolute-from-gregorian date))
-         (astro-date (calendar-astro-from-absolute abs-date))
-         (next-new-moon (lunar-new-moon-on-or-after astro-date))
-         (prev-new-moon (lunar-new-moon-on-or-after (- next-new-moon 30)))
-         (lunar-cycle-length (- next-new-moon prev-new-moon))
-         (elapsed (- astro-date prev-new-moon))
-         (elapsed-percent (/ elapsed lunar-cycle-length))
-         (phase (round (* 8 elapsed-percent))))
-    (cl-assert (and (> lunar-cycle-length 29) (< lunar-cycle-length 30)))
-    (cl-assert (and (>= phase 0) (<= phase 8)))
-    (list lunar-cycle-length elapsed phase)))
+         (astro-date (calendar-astro-from-absolute abs-date)))
+    (my/lunar-phase-of-astro astro-date)))
 
 ;;;###autoload
 (defun my/lunar-phase-date-string (date)
