@@ -252,7 +252,6 @@
       (provide 'init-exec-path-from-shell)
       ;;; init-exec-path-from-shell.el ends here
     '';
-  home.file.".emacs.d/templates".source = ./emacs.d/templates.el;
 
   mypython.packages = [
     (
