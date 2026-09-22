@@ -372,6 +372,7 @@ reedline
 remf
 rgi
 ripgrep
+ropey
 rustfmt
 screenpos
 scrolloff

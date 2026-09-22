@@ -34,13 +34,23 @@
 -- })
 --
 
+-- It was observed that when a LuaSnip snippet is expanded,
+-- the beancount-language-server will crash with
+-- panicked at beancount-language-server-1.9.2-vendor/source-registry-0/ropey-1.6.1/src/rope.rs:764:41:
+-- called `Result::unwrap()` on an `Err` value: Line index out of bounds
+vim.lsp.config("beancount", {
+  flags = {
+    allow_incremental_sync = false,
+  },
+})
+vim.lsp.enable("beancount")
+
 -- Language servers that should always run.
 vim.lsp.enable("codebook")
 vim.lsp.enable("harper_ls")
 vim.lsp.enable("typos_lsp")
 
 -- Language servers that correspond to a specific filetype.
-vim.lsp.enable("beancount")
 vim.lsp.enable("cssls")
 vim.lsp.enable("dartls")
 vim.lsp.enable("emmylua_ls")
