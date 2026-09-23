@@ -146,5 +146,8 @@
 ;; Configure osm.el
 (require 'init-osm)
 
+;; Configure beancount.
+(require 'init-beancount)
+
 (provide 'init)
 ;;; init.el ends here
