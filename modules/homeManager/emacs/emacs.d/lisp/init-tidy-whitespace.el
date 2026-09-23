@@ -8,12 +8,19 @@
  ;; Make `delete-trailing-whitespace' delete blank lines at the end of buffer.
  delete-trailing-lines t)
 
+(defun my/delete-trailing-whitespace ()
+  "Invoke `delete-trailing-whitespace' if buffer is not read-only.
+
+This is crucial when opening a package source file with trailing whitespace."
+  (unless buffer-read-only
+    (delete-trailing-whitespace)))
+
 (defun my/add-delete-trailing-whitespace-hook ()
   "Add `delete-trailing-whitespace' to `before-save-hook' and make it local.
 Also run `delete-trailing-whitespace' now.
 This matches the behavior of `visit-save' of `mode-require-final-newline'."
-  (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)
-  (delete-trailing-whitespace))
+  (add-hook 'before-save-hook #'my/delete-trailing-whitespace nil t)
+  (my/delete-trailing-whitespace))
 
 (add-hook 'conf-mode-hook #'my/add-delete-trailing-whitespace-hook)
 (add-hook 'prog-mode-hook #'my/add-delete-trailing-whitespace-hook)
