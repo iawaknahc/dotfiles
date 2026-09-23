@@ -131,6 +131,7 @@
 
 ;; Configure email client.
 (require 'init-mu4e)
+(require 'init-org-mime)
 
 (require 'init-launcher)
 

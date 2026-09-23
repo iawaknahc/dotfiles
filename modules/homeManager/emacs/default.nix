@@ -41,6 +41,7 @@
     # As of 2026-09-18, the latest release was 1.10.0 on 2024-08-03
     # So we have to use the version on MELPA.
     diff-hl = self.melpaPackages.diff-hl;
+    org-mime = self.melpaPackages.org-mime;
 
     # melpaStablePackages
     apheleia = self.melpaStablePackages.apheleia;
@@ -120,6 +121,7 @@
 
       # Email
       mu4e
+      org-mime
 
       # Evil
       evil
