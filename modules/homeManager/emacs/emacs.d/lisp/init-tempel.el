@@ -2,55 +2,57 @@
 ;;; Commentary:
 ;;; Code:
 
-(defconst my/tempel-templates-global
-  '((today
-     (my/call-command :program "snippet.py" :args '("today"))
-     :ann "Date"
-     :doc "Today in ISO 8601 format")
+(require 'calendar)
 
-    (yesterday
-     (my/call-command :program "snippet.py" :args '("yesterday"))
-     :ann "Date"
-     :doc "Yesterday in ISO 8601 format")
+(defun my/tempel-templates-global ()
+  "Return a list of global Tempel templates."
+  (let* ((date (calendar-current-date))
+         (today (my/calendar-gregorian-iso8601-date-string date))
+         (yesterday (my/calendar-gregorian-iso8601-date-string (my/calendar-gregorian-add date :days -1)))
+         (tomorrow (my/calendar-gregorian-iso8601-date-string (my/calendar-gregorian-add date :days 1)))
+         (thisweek (my/calendar-gregorian-iso8601-week-string date))
+         (lastweek (my/calendar-gregorian-iso8601-week-string (my/calendar-gregorian-add date :weeks -1)))
+         (nextweek (my/calendar-gregorian-iso8601-week-string (my/calendar-gregorian-add date :weeks 1))))
+    `((today
+       ,today
+       :ann ,today
+       :doc ,today)
+      (yesterday
+       ,yesterday
+       :ann ,yesterday
+       :doc ,yesterday)
+      (tomorrow
+       ,tomorrow
+       :ann ,tomorrow
+       :doc ,tomorrow)
+      (thisweek
+       ,thisweek
+       :ann ,thisweek
+       :doc ,thisweek)
+      (lastweek
+       ,lastweek
+       :ann ,lastweek
+       :doc ,lastweek)
+      (nextweek
+       ,nextweek
+       :ann ,nextweek
+       :doc ,nextweek))))
 
-    (tomorrow
-     (my/call-command :program "snippet.py" :args '("tomorrow"))
-     :ann "Date"
-     :doc "Tomorrow in ISO 8601 format")
-
-    (thisweek
-     (my/call-command :program "snippet.py" :args '("thisweek"))
-     :ann "Date"
-     :doc "This week in ISO week format")
-
-    (lastweek
-     (my/call-command :program "snippet.py" :args '("lastweek"))
-     :ann "Date"
-     :doc "Last week in ISO week format")
-
-    (nextweek
-     (my/call-command :program "snippet.py" :args '("nextweek"))
-     :ann "Date"
-     :doc "Next week in ISO week format"))
-  "A list of global Tempel templates.")
-
-(defconst my/tempel-templates-elisp
-  '((elispfeature
-     (l
-      ";;; " (p (file-name-base (buffer-file-name)) file) ".el --- " (s file) ".el -*- lexical-binding: t -*-" n
-      ";;; Commentary:" n
-      ";;; Code:" n
-      n
-      r
-      n
-      n
-      "(provide '" (s file) ")" n
-      ";;; " (s file) ".el ends here" n
-      )
-     :ann "Elisp"
-     :doc "Elisp package template")
-    )
-  "A list of Elisp Tempel templates.")
+(defun my/tempel-templates-elisp ()
+  "Return a list of Elisp Tempel templates."
+  (let* ((file (file-name-base (buffer-file-name))))
+    `((elispfeature
+       ";;; " ,file ".el --- " ,file ".el -*- lexical-binding: t -*-" n
+       ";;; Commentary:" n
+       ";;; Code:" n
+       n
+       q
+       n
+       n
+       "(provide '" ,file ")" n
+       ";;; " ,file ".el ends here" n
+       :ann "Elisp file header"
+       :doc "Elisp file header"))))
 
 (setq
  tempel-template-sources

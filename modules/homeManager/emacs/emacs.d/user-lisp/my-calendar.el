@@ -426,9 +426,20 @@ The algorithm used here is the one used by 八字."
    (calendar-extract-day date) (calendar-extract-month date) (calendar-extract-year date)
    (calendar-day-of-week date) nil 0))
 
+;;;###autoload
 (defun my/calendar-gregorian-to-org-string (date)
   "Format Gregorian date DATE to a Org timestamp string."
   (format-time-string "%Y-%m-%d %a" (encode-time (my/calendar-gregorian-to-decode-time date))))
+
+;;;###autoload
+(defun my/calendar-gregorian-iso8601-date-string (date)
+  "Format Gregorian date DATE to a ISO8601 date string."
+  (format-time-string "%Y-%m-%d" (encode-time (my/calendar-gregorian-to-decode-time date))))
+
+;;;###autoload
+(defun my/calendar-gregorian-iso8601-week-string (date)
+  "Format Gregorian date DATE to a ISO8601 week string."
+  (format-time-string "%G-W%V" (encode-time (my/calendar-gregorian-to-decode-time date))))
 
 (defun my/calendar-count-days-region ()
   "A variant of `calendar-count-days-region' that prints mark and point."
@@ -733,6 +744,29 @@ The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 
                (`(,english ,chinese ,emoji) (nth phase my/lunar-phase-names))
                (percent (* 100 (/ elapsed lunar-cycle-length))))
     (format "(%5.2f/%5.2f %3.0f%%%% %s %s)" elapsed lunar-cycle-length percent chinese emoji)))
+
+;;;###autoload
+(cl-defun my/calendar-gregorian-add (date &key (years 0) (months 0) (weeks 0) (days 0))
+  "Add YEARS, MONTHS, WEEKS, DAYS, in that order, to Gregorian date DATE.
+
+YEARS, MONTHS, WEEKS, and DAYS must be integers.
+They can be negative, positive or zero."
+  (let* ((year (calendar-extract-year date))
+         (month (calendar-extract-month date))
+         (day (calendar-extract-day date)))
+
+    ;; Handle :years and :months
+    (setq months (+ months (* 12 years)))
+    (setq month (+ (1- month) months))
+    (setq year (+ year (floor month 12)))
+    (setq month (1+ (mod month 12)))
+    ;; Clamp day to ensure date is valid.
+    (setq day (min (calendar-last-day-of-month month year) day))
+    (setq date (list month day year))
+
+    ;; Handle :weeks and :days
+    (setq days (+ days (* 7 weeks)))
+    (calendar-gregorian-from-absolute (+ days (calendar-absolute-from-gregorian date)))))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
