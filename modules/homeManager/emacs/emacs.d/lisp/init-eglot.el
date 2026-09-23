@@ -42,10 +42,9 @@
   "Disable inlay hints and semantic tokens by default."
   (eglot-inlay-hints-mode -1)
   (eglot-semantic-tokens-mode -1)
-  ;; But when the major-mode is beancount-mode, we want inlay hints to be enabled by default.
-  ;; The inlay hints show the omitted balance of the posting, which is very useful.
-  (when (derived-mode-p 'beancount-mode)
-    (eglot-inlay-hints-mode 1)))
+  ;; It was used to enable inlay hint mode for in beancount-mode,
+  ;; but the inlay hints may interfere with editing.
+  )
 
 (with-eval-after-load 'eglot
   (setf (alist-get 'beancount-mode eglot-server-programs) '("rass" "beancount"))
