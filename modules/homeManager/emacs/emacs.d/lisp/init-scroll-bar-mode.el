@@ -1,4 +1,4 @@
-;;; init-scrolling.el --- init-scrolling.el -*- lexical-binding: t -*-
+;;; init-scroll-bar-mode.el --- init-scroll-bar-mode.el -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -8,5 +8,5 @@
   ;; So just hide it.
   (set-scroll-bar-mode nil))
 
-(provide 'init-scrolling)
-;;; init-scrolling.el ends here
+(provide 'init-scroll-bar-mode)
+;;; init-scroll-bar-mode.el ends here

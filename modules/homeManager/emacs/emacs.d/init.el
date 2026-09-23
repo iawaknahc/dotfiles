@@ -63,7 +63,8 @@
 (require 'init-interlocking)
 (require 'init-macos)
 (require 'init-bell)
-(require 'init-ui)
+(require 'init-tool-bar-mode)
+(require 'init-startup-screen)
 (require 'init-tab-bar)
 (require 'init-echo-area)
 (require 'init-display-line-numbers-mode)
@@ -97,6 +98,7 @@
 (require 'init-visual-line-mode)
 (require 'init-outline-minor-mode)
 (require 'init-calendar)
+(require 'init-scroll-bar-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
@@ -114,9 +116,6 @@
 
 ;; Configure treesitter.
 (require 'init-treesitter)
-
-;; Configure scrolling.
-(require 'init-scrolling)
 
 ;; Configure modal editing.
 (require 'init-evil)
