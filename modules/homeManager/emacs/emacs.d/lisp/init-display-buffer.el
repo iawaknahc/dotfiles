@@ -94,59 +94,6 @@
       t))
 
 
-;; Project file
-(defun my/display-buffer-alist-project-file-match-project-file (buffer-or-name &rest _args)
-  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME belongs to a project."
-  (with-current-buffer buffer-or-name
-    ;; It is a project file if all of the following holds:
-    ;; 1. `project-current' returns non-nil such that the buffer belongs to some project.
-    ;; 2. `buffer-file-name' returns non-nil so that the buffer is really backed by a file.
-    ;;     This condition is consistently with our advice on `project-buffers'.
-    (and (project-current) (buffer-file-name))))
-
-(defun my/display-buffer-alist-project-file-tab-name (buffer-or-name alist)
-  "The tab-name function to select a tab name for BUFFER-OR-NAME AND ALIST.
-
-In particular, if the current tab is in the same tab group,
-then the current tab is used to display the buffer.
-Otherwise, return nil to signify we want to create a tab without explicit name."
-  (or (if-let* ((current-tab (tab-bar--current-tab-find))
-                (current-tab-name (alist-get 'name current-tab))
-                (current-group (alist-get 'group current-tab))
-                (this-group (my/display-buffer-alist-project-file-tab-group buffer-or-name alist))
-                (_ (string= current-group this-group)))
-          current-tab-name)
-      ;; Return nil to signify we want to create a new tab without explicit name.
-      nil))
-
-(defun my/display-buffer-alist-project-file-tab-group (buffer-or-name _alist)
-  "The `tab-group' function to derive `tab-group' from BUFFER-OR-NAME."
-  (with-current-buffer buffer-or-name
-    (or (if-let* ((proj (project-current))
-                  (proj-name (project-name proj))
-                  (t-group (format "PROJECT:%s" proj-name)))
-            t-group
-          )
-        ;; This is actually unreachable.
-        "ERROR")))
-
-(add-to-list
- 'display-buffer-alist
- ;; When a project file is displayed,
- `(,(function my/display-buffer-alist-project-file-match-project-file) .
-   ((
-     ;; Reuse a window already showing the buffer.
-     display-buffer-reuse-window
-     ;; display it in a tab
-     display-buffer-in-tab) .
-     ;; in which the current tab is preferred
-     ((tab-name . ,(function my/display-buffer-alist-project-file-tab-name))
-      ;; with the project being the tab group
-      (tab-group . ,(function my/display-buffer-alist-project-file-tab-group))
-      ;; in the selected frame.
-      (reusable-frames . the-selected-frame)))))
-
-
 ;; Org
 ;; *Org Agenda*
 ;;
