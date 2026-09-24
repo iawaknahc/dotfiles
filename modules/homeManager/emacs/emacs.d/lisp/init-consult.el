@@ -10,10 +10,6 @@
 (keymap-global-set "<remap> <switch-to-buffer>" #'consult-buffer)
 ;; C-x 4 b
 (keymap-global-set "<remap> <switch-to-buffer-other-window>" #'consult-buffer-other-window)
-;; C-x 5 b
-(keymap-global-set "<remap> <switch-to-buffer-other-frame>" #'consult-buffer-other-frame)
-;; C-x t b
-(keymap-global-set "<remap> <switch-to-buffer-other-tab>" #'consult-buffer-other-tab)
 ;; C-x r b
 (keymap-global-set "<remap> <bookmark-jump>" #'consult-bookmark)
 ;; M-y
