@@ -99,6 +99,7 @@
 (require 'init-outline-minor-mode)
 (require 'init-calendar)
 (require 'init-scroll-bar-mode)
+(require 'init-search)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
