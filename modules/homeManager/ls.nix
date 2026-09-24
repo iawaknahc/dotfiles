@@ -18,9 +18,8 @@
   # - name
   # See https://github.com/eza-community/eza/issues/148
   programs.eza.extraOptions = [
-    # Though the manpage says --classify=automatic by default,
-    # `ls` does not classify at all.
-    "--classify=automatic"
+    # Though the manpage says automatic is a valid value, it is not.
+    "--classify=auto"
 
     # These two flags make the output match closer to `ls -l`
     "--links"
