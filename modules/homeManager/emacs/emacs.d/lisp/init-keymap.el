@@ -41,9 +41,10 @@
 (keymap-set key-translation-map "RET" [control-m])
 (keymap-set key-translation-map "<return>" [13])
 
-;; Rebind C-x C-b to buffer-menu.
-;; This is a recommendation in eintr section 16.7.
-(keymap-global-set "<remap> <list-buffers>" #'buffer-menu)
+;; Rebind C-x C-b to `ibuffer'.
+;; In eintr section 16.7, it is recommended to bind the key sequence to `buffer-menu'.
+;; `ibuffer' is a successor to `buffer-menu', so we use it instead.
+(keymap-global-set "<remap> <list-buffers>" #'ibuffer)
 
 (provide 'init-keymap)
 ;;; init-keymap.el ends here

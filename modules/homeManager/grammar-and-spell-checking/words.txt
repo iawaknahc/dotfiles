@@ -201,6 +201,7 @@ hlsearch
 hostnames
 hpath
 hspace
+ibuffer
 icalendar
 ignorecase
 impp
