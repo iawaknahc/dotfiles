@@ -49,7 +49,9 @@ Apply F with ARGS."
  ;; C-x 3 is split-window-right
  evil-vsplit-window-right t
  ;; Make CTRL-r work.
- evil-undo-system 'undo-redo)
+ evil-undo-system 'undo-redo
+ ;; Make * and # search for the symbol at point.
+ evil-symbol-word-search t)
 
 (add-hook
  'after-init-hook
