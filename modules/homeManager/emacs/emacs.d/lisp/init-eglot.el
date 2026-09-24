@@ -46,8 +46,19 @@
   ;; but the inlay hints may interfere with editing.
   )
 
+(defun my/eglot-beancount-language-server-contact (_interactive project)
+  "Return a configuration for PROJECT."
+  (let* (init-options)
+    (when-let* ((_ project)
+                (proj-root (project-root project))
+                (main (expand-file-name "./main.beancount" proj-root))
+                (_ (file-readable-p main)))
+      (setq init-options `(:initializationOptions (:journal_file ,main))))
+    (message "init-options: %S" init-options)
+    `("rass" "beancount" ,@init-options)))
+
 (with-eval-after-load 'eglot
-  (setf (alist-get 'beancount-mode eglot-server-programs) '("rass" "beancount"))
+  (setf (alist-get 'beancount-mode eglot-server-programs) #'my/eglot-beancount-language-server-contact)
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
   (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
   ;; tsgo supports pull diagnostics only.
