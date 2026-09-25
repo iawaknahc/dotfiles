@@ -100,6 +100,7 @@
 (require 'init-calendar)
 (require 'init-scroll-bar-mode)
 (require 'init-search)
+(require 'init-repeat-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
