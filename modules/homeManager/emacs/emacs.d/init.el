@@ -135,6 +135,9 @@
 (require 'init-mu4e)
 (require 'init-org-mime)
 
+;; Configure terminal emulator.
+(require 'init-ghostel)
+
 (require 'init-launcher)
 
 ;; Configure input method.

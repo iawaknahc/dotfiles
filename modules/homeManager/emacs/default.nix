@@ -28,6 +28,7 @@
   programs.emacs.overrides = self: super: {
     # manualPackages
     mu4e = self.manualPackages.mu4e;
+    ghostel = self.manualPackages.ghostel;
 
     # melpaPackages
     catppuccin-theme = self.melpaPackages.catppuccin-theme;
@@ -118,6 +119,9 @@
 
       # Theme
       catppuccin-theme
+
+      # Terminal emulator
+      ghostel
 
       # Email
       mu4e
