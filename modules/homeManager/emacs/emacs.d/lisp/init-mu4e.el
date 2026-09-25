@@ -49,6 +49,13 @@
  ;; %s is the subject.
  mu4e-headers-eldoc-format "%F %s"
 
+ ;; By default, when `mu4e-search-include-related' is t,
+ ;; forwarded messages in another maildir (for example, Sent Mail) appears in Inbox.
+ ;; This is very confusing.
+ ;; If we really want to see the thread of a particular message,
+ ;; we should invoke `mu4e-action-show-thread', which is bound to "a s" in the headers view.
+ mu4e-search-include-related nil
+
  mu4e-bookmarks
  '((:name
     "Unread non-trashed non-junk messages"
