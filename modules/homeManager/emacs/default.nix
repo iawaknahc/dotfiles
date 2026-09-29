@@ -98,7 +98,6 @@
     transient = self.elpaPackages.transient;
 
     # nongnuPackages
-    beancount = self.nongnuPackages.beancount;
     exec-path-from-shell = self.nongnuPackages.exec-path-from-shell;
     # emacsql is a dependency of vulpea.
     emacsql = self.nongnuPackages.emacsql;
@@ -218,7 +217,6 @@
       (emacsPackages.callPackage (import ../../../packages/emacs-ecard.nix) { })
 
       # Modes
-      beancount
       fennel-mode
       fish-mode
       just-ts-mode

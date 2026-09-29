@@ -10,6 +10,7 @@ apheleia
 aref
 aset
 astro
+atat
 atuin
 augroup
 autocmd
@@ -33,6 +34,7 @@ blinkoff
 blinkon
 blinkwait
 bonjour
+bos
 boundp
 breakindent
 bufhidden
@@ -338,6 +340,8 @@ pkeyopt
 pkgs
 pnl
 pns
+popmeta
+poptag
 popupinfo
 posframe
 preedit
@@ -357,6 +361,8 @@ pubout
 pumheight
 punct
 punctuator
+pushmeta
+pushtag
 puthash
 pyrefly
 pyright

@@ -8,8 +8,7 @@
 
 ;; `eglot' can only be run in major modes that have a configured language server.
 ;; Therefore, we do not use `prog-mode-hook'.
-(dolist (hook '(beancount-mode-hook
-                go-ts-mode-hook
+(dolist (hook '(go-ts-mode-hook
                 python-mode-hook
                 python-ts-mode-hook
                 typescript-ts-mode-hook
@@ -17,6 +16,12 @@
                 nushell-ts-mode-hook
                 nix-ts-mode-hook))
   (add-hook hook #'eglot-ensure))
+
+(defun my/eglot-beancount-ts-mode-hook ()
+  "Disable imenu."
+  (setq-local eglot-stay-out-of '(imenu))
+  (eglot-ensure))
+(add-hook 'beancount-ts-mode-hook #'my/eglot-beancount-ts-mode-hook)
 
 ;; For these major modes, ask the language server to format the buffer.
 (dolist (hook '(go-ts-mode-hook fish-mode-hook nix-ts-mode-hook))
@@ -58,7 +63,7 @@
     `("rass" "beancount" ,@init-options)))
 
 (with-eval-after-load 'eglot
-  (setf (alist-get 'beancount-mode eglot-server-programs) #'my/eglot-beancount-language-server-contact)
+  (setf (alist-get 'beancount-ts-mode eglot-server-programs) #'my/eglot-beancount-language-server-contact)
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
   (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
   ;; tsgo supports pull diagnostics only.

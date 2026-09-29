@@ -100,7 +100,7 @@ Format SCRATCH, and then invoke CALLBACK."
      ;; Fennel
      (fennel-mode . fnlfmt)
      ;; Beancount
-     (beancount-mode . bean-format)
+     (beancount-ts-mode . bean-format)
      ;; Lua
      (lua-mode . stylua)
      (lua-ts-mode . stylua)

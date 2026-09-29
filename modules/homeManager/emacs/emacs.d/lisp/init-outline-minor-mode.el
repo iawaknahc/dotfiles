@@ -14,7 +14,7 @@
 
 ;; Enable `outline-minor-mode' in beancount buffers because
 ;; these buffers typically have many lines.
-(add-hook 'beancount-mode-hook #'outline-minor-mode)
+(add-hook 'beancount-ts-mode-hook #'outline-minor-mode)
 
 (provide 'init-outline-minor-mode)
 ;;; init-outline-minor-mode.el ends here
