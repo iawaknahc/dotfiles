@@ -54,6 +54,7 @@ cfile
 checkdoc
 checkhealth
 chistory
+cjk
 cjson
 cldr
 cli

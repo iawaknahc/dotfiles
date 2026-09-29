@@ -73,5 +73,10 @@ Point is placed at the end of the output."
   "<up>"   #'my/ghostel-select-previous-output
   "<down>" #'my/ghostel-select-next-output)
 
+(setq-default
+ ;; Render CJK glyphs at natural size.
+ ;; See https://github.com/dakra/ghostel/issues/298
+ ghostel-glyph-scale-floor 1.0)
+
 (provide 'init-ghostel)
 ;;; init-ghostel.el ends here
