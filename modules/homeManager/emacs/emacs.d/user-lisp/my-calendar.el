@@ -419,6 +419,17 @@ The algorithm used here is the one used by 八字."
 The algorithm used here is the one used by 八字."
   (format "%s%s" (my/sexagenary-month-string date) (my/sexagenary-day-string date)))
 
+;;;###autoload
+(defun my/calendar-gregorian-from-decode-time (date)
+  "Convert `decode-time' DATE to Gregorian date.
+
+Day, month, and year are extracted from DATE directly without any processing."
+  (let* ((day (nth 3 date))
+         (month (nth 4 date))
+         (year (nth 5 date)))
+    (list month day year)))
+
+;;;###autoload
 (defun my/calendar-gregorian-to-decode-time (date)
   "Convert Gregorian date DATE to `decode-time'."
   (list
