@@ -206,6 +206,7 @@ hspace
 ibuffer
 icalendar
 ignorecase
+imenu
 impp
 inplace
 integerp

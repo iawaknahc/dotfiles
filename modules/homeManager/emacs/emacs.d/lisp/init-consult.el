@@ -18,6 +18,8 @@
 (keymap-global-set "<remap> <goto-line>" #'consult-goto-line)
 ;; C-x p b
 (keymap-global-set "<remap> <project-switch-to-buffer>" #'consult-project-buffer)
+;; M-g i
+(keymap-global-set "<remap> <imenu>" #'consult-imenu)
 
 (defun my/consult-source-project-buffer-items-around (f &rest args)
   "The :around of my/consult-source-project-buffer-items.
