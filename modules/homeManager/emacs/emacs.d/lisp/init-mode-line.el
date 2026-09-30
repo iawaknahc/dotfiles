@@ -11,13 +11,7 @@
  ;; Place the evil state tag at the beginning of the mode line.
  ;; The default value of `before' really means after mode-line-position.
  ;; See https://github.com/emacs-evil/evil/blob/1.14.2/evil-core.el#L405
- evil-mode-line-format '(after . mode-line-buffer-identification)
- ;; mode-line-position has 3 parts,
- ;; namely modeline-percent-position, size-indication-mode, and mode-line-position-column-line-format.
- ;; Customize the first part and the last part to add the brackets.
- ;; This makes the parts of mode-line-position visually grouped.
- mode-line-percent-position '(-5 " [%p")
- mode-line-position-column-line-format '(" %l:%c]"))
+ evil-mode-line-format '(after . mode-line-buffer-identification))
 
 ;; Turn on `column-number-mode'.
 ;; This causes `mode-line-position' to use `mode-line-position-column-line-format'.
@@ -56,6 +50,7 @@ So we customize `mode-line-buffer-identification' to keep the basename only."
    mode-line-modified
    mode-line-remote
    mode-line-window-dedicated
+   (:eval (format " %d/%d " (point) (point-max)))
    mode-line-position
    mode-line-modes
    mode-line-misc-info
