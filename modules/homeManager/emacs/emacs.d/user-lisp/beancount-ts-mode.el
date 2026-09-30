@@ -487,11 +487,31 @@ BOL is unused."
                                          (treesit-node-text custom-value-list 'no-property)
                                          )) " ")))
 
+(defconst beancount-ts--syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\; "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    (modify-syntax-entry ?\" "\"" table)
+    table)
+  "Syntax table for `beancount-ts-mode'.")
+
 ;;;###autoload
 (define-derived-mode beancount-ts-mode prog-mode "Beancount"
+  :syntax-table beancount-ts--syntax-table
   (when (treesit-ready-p 'beancount)
     ;; Initialize the parser.
     (setq-local treesit-primary-parser (treesit-parser-create 'beancount))
+
+    ;; Comment
+    (setq-local comment-use-syntax t)
+    (setq-local comment-start ";")
+    (setq-local comment-start-skip ";+ *")
+    (setq-local comment-end "")
+    ;; `comment-add' and `comment-padding' together make `comment-region' to insert
+    ;; ";; " for new comment.
+    (setq-local comment-add 1)
+    (setq-local comment-padding " ")
+    (setq-local comment-style 'plain)
 
     ;; Font lock
     (setq-local treesit-font-lock-feature-list beancount-ts--font-lock-feature-list)
