@@ -198,23 +198,47 @@
 
 ;;;###autoload
 (defun beancount-ts--node-on-prev-line (bol)
-  "Return the furthest node on the previous line of position BOL."
-  (save-excursion
-    ;; Go to the previous line.
-    (goto-char bol)
-    (forward-line -1)
+  "Return the furthest node on the previous line of position BOL.
 
-    (let* ((line (line-number-at-pos (point)))
-           node)
-      ;; Go to the end of line just before the newline.
-      (end-of-line)
-      (goto-char (1- (point)))
+Return nil if there is no previous line, or there is no node on the previous line."
+  (cl-block block
+    (let* (line)
+      (save-excursion
+        ;; Position point at BOL.
+        (goto-char bol)
+        (setq line (line-number-at-pos (point)))
 
-      ;; Find the furthest parent on the same line.
-      (setq node (treesit-node-at (point)))
-      (setq node (treesit-parent-while node (lambda (node)
-                                              (eql line (line-number-at-pos (treesit-node-start node))))))
-      node)))
+        ;; Go to the previous line.
+        (forward-line -1)
+        ;; If there is no previous line, return nil.
+        (when (eql (line-number-at-pos (point)) line)
+          (cl-return-from block nil))
+        (setq line (1- line))
+
+        ;; Go to the end of line just before the newline.
+        (end-of-line)
+        (when (> (point) (point-min))
+          (goto-char (1- (point))))
+        ;; If the previous line is empty, return nil.
+        (unless (eql (line-number-at-pos (point)) line)
+          (cl-return-from block nil))
+
+        ;; Find the furthest parent on the same line.
+        (treesit-parent-while
+         ;; Start with the leaf node at the end of the line.
+         ;;
+         ;; You may wonder why don't we start with the leaf node at the beginning of the line.
+         ;; It is because when `treesit-node-at' is invoked at point where
+         ;; it is at the end of the file just after the very last posting,
+         ;; `treesit-node-at' will return the second last posting.
+         ;; That is, it returns a node whose start is not on the same line.
+         ;; This is ridiculous.
+         ;;
+         ;; By observation, a workaround of this issue is to start with the leaf node
+         ;; at the end of the line.
+         (treesit-node-at (point))
+         (lambda (node)
+           (eql line (line-number-at-pos (treesit-node-start node)))))))))
 
 ;;;###autoload
 (defun beancount-ts--matcher-node-is-unnamed (node _parent _bol)
