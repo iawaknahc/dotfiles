@@ -143,6 +143,114 @@
     ("Custom"       ,(rx bos "custom" eos)      treesit-node-named  beancount-ts--imenu-name-custom))
   "`treesit-simple-imenu-settings' for `beancount-ts-mode'.")
 
+(defconst beancount-ts--simple-indent-rules
+  `((beancount
+     ;; All key-value pair before any posting should indent 2 spaces.
+     ((and
+       (node-is "key_value")
+       beancount-ts--matcher-parent-is-entry
+       (not beancount-ts--matcher-some-posting-before-node)) column-0 2)
+
+     ;; All posting should indent 2 spaces.
+     ((node-is "posting") parent 2)
+     ((and (node-is "account") (parent-is "posting")) column-0 2)
+
+     ;; An empty line in an entry should indent 2 spaces.
+     ((and
+       no-node
+       beancount-ts--matcher-parent-is-entry) column-0 2)
+
+     ;; All key-value pair after some posting should indent 4 spaces.
+     ((and
+       (node-is "key_value")
+       beancount-ts--matcher-parent-is-entry
+       beancount-ts--matcher-some-posting-before-node) column-0 4)
+
+     ;; Opening a newline just after an entry should indent 2 spaces.
+     ((and
+       beancount-ts--matcher-node-is-unnamed
+       (parent-is "file")
+       beancount-ts--matcher-prev-line-is-entry) column-0 2)
+
+     ;; Opening a newline just after a key-value should follow the indentation.
+     ((and
+       beancount-ts--matcher-node-is-unnamed
+       (parent-is "file")
+       beancount-ts--matcher-prev-line-is-key-value) prev-line 0)
+
+     ;; Opening a newline just after a posting should follow the indentation.
+     ((and
+       beancount-ts--matcher-node-is-unnamed
+       (parent-is "file")
+       beancount-ts--matcher-prev-line-is-posting) prev-line 0)
+
+     ;; Fallback to no indentation because most Beancount constructs begin at the first column.
+     (catch-all column-0 0)))
+  "`treesit-simple-indent-rules' for `beancount-ts-mode'.")
+
+;;;###autoload
+(defun beancount-ts--node-is-entry (node)
+  "Return non-nil if NODE is an entry."
+  (member
+   (treesit-node-type node)
+   '("transaction" "balance" "open" "close" "pad" "document"
+     "note" "event" "price" "commodity" "query" "custom")))
+
+;;;###autoload
+(defun beancount-ts--node-on-prev-line (bol)
+  "Return the furthest node on the previous line of position BOL."
+  (save-excursion
+    ;; Go to the previous line.
+    (goto-char bol)
+    (forward-line -1)
+
+    (let* ((line (line-number-at-pos (point)))
+           node)
+      ;; Go to the end of line just before the newline.
+      (end-of-line)
+      (goto-char (1- (point)))
+
+      ;; Find the furthest parent on the same line.
+      (setq node (treesit-node-at (point)))
+      (setq node (treesit-parent-while node (lambda (node)
+                                              (eql line (line-number-at-pos (treesit-node-start node))))))
+      node)))
+
+;;;###autoload
+(defun beancount-ts--matcher-node-is-unnamed (node _parent _bol)
+  "Return non-nil if NODE is unnamed."
+  (not (treesit-node-named node)))
+
+;;;###autoload
+(defun beancount-ts--matcher-parent-is-entry (_node parent _bol)
+  "Return non-nil if PARENT is an entry."
+  (beancount-ts--node-is-entry parent))
+
+;;;###autoload
+(defun beancount-ts--matcher-prev-line-is-entry (_node _parent bol)
+  "Return non-nil if the previous line of BOL is an entry."
+  (beancount-ts--node-is-entry (beancount-ts--node-on-prev-line bol)))
+
+;;;###autoload
+(defun beancount-ts--matcher-prev-line-is-key-value (_node _parent bol)
+  "Return non-nil if the previous line of BOL is a key-value."
+  (string= "key_value" (treesit-node-type (beancount-ts--node-on-prev-line bol))))
+
+;;;###autoload
+(defun beancount-ts--matcher-prev-line-is-posting (_node _parent bol)
+  "Return non-nil if the previous line of BOL is a posting."
+  (string= "posting" (treesit-node-type (beancount-ts--node-on-prev-line bol))))
+
+;;;###autoload
+(defun beancount-ts--matcher-some-posting-before-node (node parent _bol)
+  "Return non-nil if there is some posting before NODE in PARENT."
+  (let* ((node-index (treesit-node-index node)))
+    (cl-loop
+     for child in (treesit-node-children parent 'named)
+     for child-index = (treesit-node-index child)
+     if (and (string= "posting" (treesit-node-type child)) (< child-index node-index))
+     return t)))
+
 ;;;###autoload
 (defun beancount-ts--outline-level ()
   "Function `outline-level' for `beancount-ts-mode'."
@@ -361,7 +469,9 @@
     ;; Imenu
     (setq-local treesit-simple-imenu-settings beancount-ts--simple-imenu-settings)
 
-    ;; TODO: support treesit-simple-indent-rules
+    ;; Indentation
+    (setq-local treesit-simple-indent-rules beancount-ts--simple-indent-rules)
+
     (treesit-major-mode-setup)))
 
 ;;;###autoload
