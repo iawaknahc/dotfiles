@@ -143,42 +143,45 @@
     ("Custom"       ,(rx bos "custom" eos)      treesit-node-named  beancount-ts--imenu-name-custom))
   "`treesit-simple-imenu-settings' for `beancount-ts-mode'.")
 
+(defconst beancount-ts-indent-offset 2
+  "Number of spaces for each indentation in `beancount-ts-mode'.")
+
 (defconst beancount-ts--simple-indent-rules
   `((beancount
-     ;; All key-value pair before any posting should indent 2 spaces.
+     ;; All key-value pair before any posting should have 1 level of indentation.
      ((and
        (node-is "key_value")
        beancount-ts--matcher-parent-is-entry
-       (not beancount-ts--matcher-some-posting-before-node)) column-0 2)
+       (not beancount-ts--matcher-closest-posting-before-node)) parent beancount-ts-indent-offset)
 
-     ;; All posting should indent 2 spaces.
-     ((node-is "posting") parent 2)
-     ((and (node-is "account") (parent-is "posting")) column-0 2)
+     ;; All posting should have 1 level of indentation.
+     ((node-is "posting") parent beancount-ts-indent-offset)
+     ((and (node-is "account") (parent-is "posting")) grand-parent beancount-ts-indent-offset)
 
-     ;; An empty line in an entry should indent 2 spaces.
+     ;; An empty line in an entry should 1 level of indentation.
      ((and
        no-node
-       beancount-ts--matcher-parent-is-entry) column-0 2)
+       beancount-ts--matcher-parent-is-entry) parent beancount-ts-indent-offset)
 
-     ;; All key-value pair after some posting should indent 4 spaces.
+     ;; All key-value pair after some posting should 2 level of indentation.
      ((and
        (node-is "key_value")
        beancount-ts--matcher-parent-is-entry
-       beancount-ts--matcher-some-posting-before-node) column-0 4)
+       beancount-ts--matcher-closest-posting-before-node) beancount-ts--anchor-closest-posting-before-node beancount-ts-indent-offset)
 
-     ;; Opening a newline just after an entry should indent 2 spaces.
+     ;; Opening a newline just after an entry should have 1 level of indentation.
      ((and
        beancount-ts--matcher-node-is-unnamed
        (parent-is "file")
-       beancount-ts--matcher-prev-line-is-entry) column-0 2)
+       beancount-ts--matcher-prev-line-is-entry) column-0 beancount-ts-indent-offset)
 
-     ;; Opening a newline just after a key-value should follow the indentation.
+     ;; Opening a newline just after a key-value should have indentation following the previous line.
      ((and
        beancount-ts--matcher-node-is-unnamed
        (parent-is "file")
        beancount-ts--matcher-prev-line-is-key-value) prev-line 0)
 
-     ;; Opening a newline just after a posting should follow the indentation.
+     ;; Opening a newline just after a posting should have indentation following the previous line.
      ((and
        beancount-ts--matcher-node-is-unnamed
        (parent-is "file")
@@ -266,14 +269,31 @@ Return nil if there is no previous line, or there is no node on the previous lin
   (string= "posting" (treesit-node-type (beancount-ts--node-on-prev-line bol))))
 
 ;;;###autoload
-(defun beancount-ts--matcher-some-posting-before-node (node parent _bol)
-  "Return non-nil if there is some posting before NODE in PARENT."
-  (let* ((node-index (treesit-node-index node)))
+(defun beancount-ts--matcher-closest-posting-before-node (node parent _bol)
+  "Return the node of the closest posting before NODE in PARENT.
+
+Return nil if there is no posting in PARENT."
+  (let* ((node-index (treesit-node-index node))
+         (seen-min-diff most-positive-fixnum)
+         (posting nil))
     (cl-loop
      for child in (treesit-node-children parent 'named)
      for child-index = (treesit-node-index child)
-     if (and (string= "posting" (treesit-node-type child)) (< child-index node-index))
-     return t)))
+     for diff = (- node-index child-index)
+     if (and (string= "posting" (treesit-node-type child)) (< child-index node-index) (< diff seen-min-diff))
+     do (progn
+          (setq seen-min-diff diff)
+          (setq posting child)))
+    posting))
+
+;;;###autoload
+(defun beancount-ts--anchor-closest-posting-before-node (node parent bol)
+  "Return the point of the start of the account of the closest posting before NODE in PARENT.
+
+BOL is unused."
+  (let* ((posting (beancount-ts--matcher-closest-posting-before-node node parent bol))
+         (account (treesit-node-child-by-field-name posting "account")))
+    (treesit-node-start account)))
 
 ;;;###autoload
 (defun beancount-ts--outline-level ()

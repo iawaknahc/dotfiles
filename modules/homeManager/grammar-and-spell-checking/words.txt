@@ -142,6 +142,7 @@ fileformat
 filesize
 filetags
 fixendofline
+fixnum
 flycheck
 flydiff
 flymake
