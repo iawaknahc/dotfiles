@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'my-solar)
+(require 'my-lunar)
+(require 'my-cal-china)
+(require 'my-holidays)
+
 (setopt
  ;; ISO calendar starts on Monday.
  calendar-week-start-day 1
@@ -64,8 +69,6 @@
 
 (defun my/holiday-other-holidays-add ()
   "Add my holidays to `holiday-other-holidays'."
-  (require 'my-calendar)
-
   ;; General holidays is for the United States.
   (setopt holiday-general-holidays nil)
   (setopt holiday-christian-holidays nil)
