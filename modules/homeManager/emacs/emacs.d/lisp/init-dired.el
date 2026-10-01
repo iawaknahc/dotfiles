@@ -5,6 +5,8 @@
 (setq
  insert-directory-program "gls"
  dired-listing-switches "--all --format=long --human-readable --group-directories-first"
+ ;; Stop Dired from keeping too many buffers.
+ dired-kill-when-opening-new-dired-buffer t
  ;; Revert the buffer when the buffer is revisited.
  dired-auto-revert-buffer t
  ;; When open two Dired buffers side by side,
