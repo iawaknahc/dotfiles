@@ -159,11 +159,13 @@ This is used in `solar-date-next-longitude' because the function computes the ne
     (format "%s %5.1f°" name longitude)))
 
 ;;;###autoload
-(defun my/solar-term (solar-term year)
+(defun my/solar-term (solar-term year &optional description)
   "Compute SOLAR-TERM in Gregorian YEAR.
 No daylight saving is considered and the timezone is fixed to be Asia/Hong_Kong (UTC+08:00)
 
-Return ((month day year) STRING).
+If DESCRIPTION is nil, a suitable description is generated.
+
+Return ((month day year) DESCRIPTION).
 The return value can be used directly as a holiday."
   ;; Return nil if solar-term is invalid
   (when-let* ((val (alist-get solar-term my/solar-terms nil nil #'string=)))
@@ -198,18 +200,18 @@ The return value can be used directly as a holiday."
            (result-gregorian-date (calendar-gregorian-from-absolute result-abs-integral))
            (time-string (solar-time-string result-gregorian-num-hours "HKT"))
            (holiday-description (format "%s %s" solar-term time-string)))
-      (list result-gregorian-date holiday-description))))
+      (list result-gregorian-date (or description holiday-description)))))
 
 ;;;###autoload
-(defun my/holiday-solar-term (solar-term)
+(defun my/holiday-solar-term (solar-term &optional description)
   "An s-expression intended to be added to `holiday-other-holidays'.
-Compute the holiday for SOLAR-TERM."
+Compute the holiday for SOLAR-TERM and DESCRIPTION."
   (pcase-let* ((`(,_ ,y1 ,_ ,y2) (calendar-get-month-range)))
     (holiday-filter-visible-calendar
      (list
-      (my/solar-term solar-term y1)
+      (my/solar-term solar-term y1 description)
       (when (/= y1 y2)
-        (my/solar-term solar-term y2))))))
+        (my/solar-term solar-term y2 description))))))
 
 (provide 'my-solar)
 ;;; my-solar.el ends here
