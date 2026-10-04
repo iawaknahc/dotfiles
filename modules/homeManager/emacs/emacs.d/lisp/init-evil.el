@@ -17,7 +17,7 @@ Apply F with ARGS."
   (let ((isearch-forward t))
     (apply f args)))
 
-;; Set these before (require 'evil) because some variables have to be set before evil-mode is enabled.
+;; Set these before loading evil because some variables have to be set before evil-mode is enabled.
 (setq
  ;; The default state is emacs state.
  evil-default-state 'emacs
@@ -53,32 +53,28 @@ Apply F with ARGS."
  ;; Make * and # search for the symbol at point.
  evil-symbol-word-search t)
 
-(add-hook
- 'after-init-hook
- (lambda ()
-   (require 'goto-chg)
-   (require 'evil)
+(with-eval-after-load 'evil
+  ;; Rebind `evil-jump-forward' to `<control-i>'.
+  ;; This only makes sense if the physical control-i and the physical tab are made separate,
+  ;; otherwise, it is a no-op because `<tab>' is mapped to `[9]' in `function-key-map'.
+  ;; The separation is done in `init-keymap.el'.
+  ;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
+  ;; In addition, it is very nice to have `<control-i>' to jump forward, and
+  ;; `C-o' to jump backward.
+  (keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
 
-   ;; Rebind `evil-jump-forward' to `<control-i>'.
-   ;; This only makes sense if the physical control-i and the physical tab are made separate,
-   ;; otherwise, it is a no-op because `<tab>' is mapped to `[9]' in `function-key-map'.
-   ;; The separation is done in `init-keymap.el'.
-   ;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
-   ;; In addition, it is very nice to have `<control-i>' to jump forward, and
-   ;; `C-o' to jump backward.
-   (keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
+  ;; I do not use `evil-scroll-page-down' or `evil-scroll-page-up',
+  ;; so replace their bindings to scroll half page.
+  (keymap-set evil-motion-state-map "C-f" #'evil-scroll-down)
+  (keymap-set evil-motion-state-map "C-b" #'evil-scroll-up)
+  ;; We have to bind C-d to `ignore', otherwise, `delete-char' is invoked.
+  (keymap-set evil-motion-state-map "C-d" #'ignore)
 
-   ;; I do not use `evil-scroll-page-down' or `evil-scroll-page-up',
-   ;; so replace their bindings to scroll half page.
-   (keymap-set evil-motion-state-map "C-f" #'evil-scroll-down)
-   (keymap-set evil-motion-state-map "C-b" #'evil-scroll-up)
-   ;; We have to bind C-d to `ignore', otherwise, `delete-char' is invoked.
-   (keymap-set evil-motion-state-map "C-d" #'ignore)
+  ;; Make n and N have deterministic direction.
+  (advice-add 'evil-search-next :around #'my/evil-search-next)
+  (advice-add 'evil-search-previous :around #'my/evil-search-previous))
 
-   ;; Make n and N have deterministic direction.
-   (advice-add 'evil-search-next :around #'my/evil-search-next)
-   (advice-add 'evil-search-previous :around #'my/evil-search-previous)
-   (evil-mode 1)))
+(add-hook 'after-init-hook #'evil-mode)
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
