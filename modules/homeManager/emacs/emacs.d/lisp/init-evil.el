@@ -88,7 +88,22 @@ Apply F with ARGS."
     (dotimes (_ (or count 1))
       (diff-hl-previous-hunk)))
   (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "]h") #'my/evil-diff-hl-next-hunk)
-  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "[h") #'my/evil-diff-hl-prev-hunk))
+  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "[h") #'my/evil-diff-hl-prev-hunk)
+
+  ;; Navigate between Flymake errors.
+  ;; The choice of "d" is inspired by Neovim ":help ]d-default"
+  (evil-define-motion my/evil-flymake-next-error (count)
+    "Move point to the beginning of next Flymake error."
+    :type inclusive
+    :jump t
+    (flymake-goto-next-error count))
+  (evil-define-motion my/evil-flymake-prev-error (count)
+    "Move point to the beginning of previous Flymake error."
+    :type inclusive
+    :jump t
+    (flymake-goto-prev-error count))
+  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-diff-hl-next-hunk)
+  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-diff-hl-prev-hunk))
 
 (add-hook 'after-init-hook #'evil-mode)
 
