@@ -72,7 +72,23 @@ Apply F with ARGS."
 
   ;; Make n and N have deterministic direction.
   (advice-add 'evil-search-next :around #'my/evil-search-next)
-  (advice-add 'evil-search-previous :around #'my/evil-search-previous))
+  (advice-add 'evil-search-previous :around #'my/evil-search-previous)
+
+  ;; Navigate between hunks.
+  (evil-define-motion my/evil-diff-hl-next-hunk (count)
+    "Move point to the beginning of next hunk."
+    :type inclusive
+    :jump t
+    (dotimes (_ (or count 1))
+      (diff-hl-next-hunk)))
+  (evil-define-motion my/evil-diff-hl-prev-hunk (count)
+    "Move point to the beginning of previous hunk."
+    :type inclusive
+    :jump t
+    (dotimes (_ (or count 1))
+      (diff-hl-previous-hunk)))
+  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "]h") #'my/evil-diff-hl-next-hunk)
+  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "[h") #'my/evil-diff-hl-prev-hunk))
 
 (add-hook 'after-init-hook #'evil-mode)
 
