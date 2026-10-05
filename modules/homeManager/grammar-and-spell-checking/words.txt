@@ -386,6 +386,7 @@ rgi
 ripgrep
 ropey
 rustfmt
+savehist
 screenpos
 scrolloff
 searchforward

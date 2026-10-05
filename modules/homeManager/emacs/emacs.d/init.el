@@ -101,6 +101,7 @@
 (require 'init-scroll-bar-mode)
 (require 'init-search)
 (require 'init-repeat-mode)
+(require 'init-savehist-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
