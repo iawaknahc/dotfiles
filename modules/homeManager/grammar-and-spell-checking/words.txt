@@ -146,6 +146,7 @@ fixnum
 flycheck
 flydiff
 flymake
+flyspell
 fmqd
 fnl
 fnlfmt

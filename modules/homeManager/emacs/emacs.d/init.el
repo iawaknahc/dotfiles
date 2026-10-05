@@ -103,6 +103,7 @@
 (require 'init-repeat-mode)
 (require 'init-savehist-mode)
 (require 'init-save-place-mode)
+(require 'init-flyspell)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
