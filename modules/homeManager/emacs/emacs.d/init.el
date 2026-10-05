@@ -102,6 +102,7 @@
 (require 'init-search)
 (require 'init-repeat-mode)
 (require 'init-savehist-mode)
+(require 'init-save-place-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
