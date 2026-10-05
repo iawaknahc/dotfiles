@@ -104,6 +104,7 @@
 (require 'init-savehist-mode)
 (require 'init-save-place-mode)
 (require 'init-flyspell)
+(require 'init-thingatpt)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
