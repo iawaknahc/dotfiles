@@ -146,9 +146,11 @@ Therefore, point does not move."
            (octal-integer (non-decimal-integer octal-prefix octal-digit))
            (hexadecimal-integer (non-decimal-integer hexadecimal-prefix hexadecimal-digit)))
     (rx
-     ;; We should put word-start here.
-     ;; But if we place it, a minus sign will never be included in the match.
+     ;; The reason to put word-start after sign is to reject matches like
+     ;; 1. Matching "102" in "0b102"
+     ;; 2. Matching "86" in "x86"
      sign
+     word-start
      (or
       binary-integer
       octal-integer
