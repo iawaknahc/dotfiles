@@ -15,6 +15,9 @@
 ;; Enable `outline-minor-mode' in beancount buffers because
 ;; these buffers typically have many lines.
 (add-hook 'beancount-ts-mode-hook #'outline-minor-mode)
+;; Enable `outline-minor-mode' in Elisp buffers because
+;; most Elisp files contain outlines.
+(add-hook 'emacs-lisp-mode-hook #'outline-minor-mode)
 
 (provide 'init-outline-minor-mode)
 ;;; init-outline-minor-mode.el ends here
