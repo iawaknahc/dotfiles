@@ -183,5 +183,17 @@ They can be negative, positive or zero."
     (setq days (+ days (* 7 weeks)))
     (calendar-gregorian-from-absolute (+ days (calendar-absolute-from-gregorian date)))))
 
+;;;###autoload
+(defun my/calendar-gregorian-from-absolute--before (date)
+  "`calendar-gregorian-from-absolute' is documented not supporting dates in BC.
+
+This function checks if DATE is in BC, in other words, DATE is less than or equal to 0.
+Raise an error if so."
+  (when (<= date 0)
+    (error "Dates in BC are not supported by calendar-gregorian-from-absolute")))
+
+;;;###autoload
+(advice-add #'calendar-gregorian-from-absolute :before #'my/calendar-gregorian-from-absolute--before)
+
 (provide 'my-calendar)
 ;;; my-calendar.el ends here
