@@ -131,9 +131,9 @@ Therefore, point does not move."
 ;;;; Integer
 (defconst my/thingatpt-integer-regexp
   (rx-let ((sign (group-n 3 (? (in "-+"))))
-           (binary-prefix (group-n 2 (or "0b" "0B")))
-           (octal-prefix (group-n 2 (or "0o" "0O")))
-           (hexadecimal-prefix (group-n 2 (or "0x" "0X")))
+           (binary-prefix (group-n 2 (or "0b" "0B" "#b" "#B")))
+           (octal-prefix (group-n 2 (or "0o" "0O" "#o" "#O")))
+           (hexadecimal-prefix (group-n 2 (or "0x" "0X" "#x" "#X")))
            (binary-digit (in "01"))
            (octal-digit (in "01234567"))
            (decimal-digit (in "0123456789"))
@@ -181,14 +181,14 @@ Always move point after the integer."
            (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
            (digits (string-replace "_" "" digits-with-underscore))
            (base (pcase prefix
-                   ((or "0b" "0B") 2)
-                   ((or "0o" "0O") 8)
-                   ((or "0x" "0X") 16)
+                   ((or "0b" "0B" "#b" "#B") 2)
+                   ((or "0o" "0O" "#o" "#O") 8)
+                   ((or "0x" "0X" "#x" "#X") 16)
                    (_ 10)))
            (specifier (pcase prefix
-                        ((or "0b" "0B") "%b")
-                        ((or "0o" "0O") "%o")
-                        ((or "0x" "0X") "%x")
+                        ((or "0b" "0B" "#b" "#B") "%b")
+                        ((or "0o" "0O" "#o" "#O") "%o")
+                        ((or "0x" "0X" "#x" "#X") "%x")
                         (_ "%d")))
            (unsigned-value (string-to-number digits base))
            (signed-value (if (string= sign "-")
