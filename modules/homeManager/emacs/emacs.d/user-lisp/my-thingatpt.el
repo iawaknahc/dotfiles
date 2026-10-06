@@ -17,7 +17,13 @@
    " "
    (group-n 4 (or "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"))
    word-end)
-  "A regular expression matching a Org date such as '2006-01-02 Mon'.")
+  "A regular expression matching an Org date such as '2006-01-02 Mon'.")
+
+;;;###autoload
+(defun my/thingatpt-org-date-match ()
+  "Return non-nil if point is in or after an Org date."
+  (interactive)
+  (my/thingatpt-point-in-or-after-regexp my/thingatpt-org-date-regexp))
 
 ;;;###autoload
 (defun my/thingatpt-org-date-increment (count)
@@ -26,32 +32,33 @@
 Only year from 0001 to 9999 are supported.
 Therefore, point does not move."
   (interactive "p")
-  (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
-         (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
-         (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
-         (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
-         (date (list month day year))
-         (point (point))
-         new-date)
-    (unwind-protect
-        (progn
-          ;; Handle 0000-mm-dd
-          (unless (calendar-date-is-valid-p date)
-            (error "Date %s is not supported" original))
-          (cond
-           ((>= point (match-beginning 3))
-            (setq new-date (my/calendar-gregorian-add date :days count)))
-           ((>= point (match-beginning 2))
-            (setq new-date (my/calendar-gregorian-add date :months count)))
-           (t
-            (setq new-date (my/calendar-gregorian-add date :years count))))
-          (when (> (calendar-extract-year new-date) 9999)
-            (error "Year must be <= 9999"))
-          (replace-region-contents
-           (match-beginning 0)
-           (match-end 0)
-           (my/calendar-gregorian-to-org-string new-date))
-          (goto-char point)))))
+  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-org-date-regexp)
+    (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
+           (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
+           (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
+           (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
+           (date (list month day year))
+           (point (point))
+           new-date)
+      (unwind-protect
+          (progn
+            ;; Handle 0000-mm-dd
+            (unless (calendar-date-is-valid-p date)
+              (error "Date %s is not supported" original))
+            (cond
+             ((>= point (match-beginning 3))
+              (setq new-date (my/calendar-gregorian-add date :days count)))
+             ((>= point (match-beginning 2))
+              (setq new-date (my/calendar-gregorian-add date :months count)))
+             (t
+              (setq new-date (my/calendar-gregorian-add date :years count))))
+            (when (> (calendar-extract-year new-date) 9999)
+              (error "Year must be <= 9999"))
+            (replace-region-contents
+             (match-beginning 0)
+             (match-end 0)
+             (my/calendar-gregorian-to-org-string new-date))
+            (goto-char point))))))
 
 ;;;###autoload
 (defun my/thingatpt-org-date-decrement (count)
@@ -78,35 +85,42 @@ Therefore, point does not move."
   "A regular expression matching a ISO8601 date such as '2006-01-02'.")
 
 ;;;###autoload
+(defun my/thingatpt-iso8601-date-match ()
+  "Return non-nil if point is in or after a ISO8601 date."
+  (interactive)
+  (my/thingatpt-point-in-or-after-regexp my/thingatpt-iso8601-date-regexp))
+
+;;;###autoload
 (defun my/thingatpt-iso8601-date-increment (count)
   "Increment the ISO8601 date at point with COUNT."
   (interactive "p")
-  (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
-         (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
-         (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
-         (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
-         (date (list month day year))
-         (point (point))
-         new-date)
-    (unwind-protect
-        (progn
-          ;; Handle 0000-mm-dd
-          (unless (calendar-date-is-valid-p date)
-            (error "Date %s is not supported" original))
-          (cond
-           ((>= point (match-beginning 3))
-            (setq new-date (my/calendar-gregorian-add date :days count)))
-           ((>= point (match-beginning 2))
-            (setq new-date (my/calendar-gregorian-add date :months count)))
-           (t
-            (setq new-date (my/calendar-gregorian-add date :years count))))
-          (when (> (calendar-extract-year new-date) 9999)
-            (error "Year must be <= 9999"))
-          (replace-region-contents
-           (match-beginning 0)
-           (match-end 0)
-           (my/calendar-gregorian-iso8601-date-string new-date))
-          (goto-char point)))))
+  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-iso8601-date-regexp)
+    (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
+           (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
+           (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
+           (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
+           (date (list month day year))
+           (point (point))
+           new-date)
+      (unwind-protect
+          (progn
+            ;; Handle 0000-mm-dd
+            (unless (calendar-date-is-valid-p date)
+              (error "Date %s is not supported" original))
+            (cond
+             ((>= point (match-beginning 3))
+              (setq new-date (my/calendar-gregorian-add date :days count)))
+             ((>= point (match-beginning 2))
+              (setq new-date (my/calendar-gregorian-add date :months count)))
+             (t
+              (setq new-date (my/calendar-gregorian-add date :years count))))
+            (when (> (calendar-extract-year new-date) 9999)
+              (error "Year must be <= 9999"))
+            (replace-region-contents
+             (match-beginning 0)
+             (match-end 0)
+             (my/calendar-gregorian-iso8601-date-string new-date))
+            (goto-char point))))))
 
 ;;;###autoload
 (defun my/thingatpt-iso8601-date-decrement (count)
@@ -144,50 +158,57 @@ Therefore, point does not move."
   "A regular expression for integers.")
 
 ;;;###autoload
+(defun my/thingatpt-integer-match ()
+  "Return non-nil if point is in or after an integer."
+  (interactive)
+  (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp))
+
+;;;###autoload
 (defun my/thingatpt-integer-increment (count)
   "Increment integer at point with COUNT.
 
 Always move point after the integer."
   (interactive "p")
-  (let* ((sign (or (when-let* ((beg (match-beginning 3))
-                               (end (match-end 3)))
-                     (buffer-substring-no-properties beg end))
-                   ""))
-         (prefix (or (when-let* ((beg (match-beginning 2))
-                                 (end (match-end 2)))
+  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
+    (let* ((sign (or (when-let* ((beg (match-beginning 3))
+                                 (end (match-end 3)))
                        (buffer-substring-no-properties beg end))
                      ""))
-         (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
-         (digits (string-replace "_" "" digits-with-underscore))
-         (base (pcase prefix
-                 ((or "0b" "0B") 2)
-                 ((or "0o" "0O") 8)
-                 ((or "0x" "0X") 16)
-                 (_ 10)))
-         (specifier (pcase prefix
-                      ((or "0b" "0B") "%b")
-                      ((or "0o" "0O") "%o")
-                      ((or "0x" "0X") "%x")
-                      (_ "%d")))
-         (unsigned-value (string-to-number digits base))
-         (signed-value (if (string= sign "-")
-                           (- unsigned-value)
-                         unsigned-value))
-         (incremented-value (+ signed-value count))
-         (sign (cond
-                ((and (< signed-value 0) (>= incremented-value 0))
-                 "")
-                ((and (>= signed-value 0) (< incremented-value 0))
-                 "-")
-                (t
-                 sign)))
-         (abs-value (abs incremented-value))
-         (formatted (format (concat "%s%s" specifier) sign prefix abs-value)))
-    (replace-region-contents
-     (match-beginning 0)
-     (match-end 0)
-     formatted)
-    (goto-char (+ (match-beginning 0) (length formatted)))))
+           (prefix (or (when-let* ((beg (match-beginning 2))
+                                   (end (match-end 2)))
+                         (buffer-substring-no-properties beg end))
+                       ""))
+           (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
+           (digits (string-replace "_" "" digits-with-underscore))
+           (base (pcase prefix
+                   ((or "0b" "0B") 2)
+                   ((or "0o" "0O") 8)
+                   ((or "0x" "0X") 16)
+                   (_ 10)))
+           (specifier (pcase prefix
+                        ((or "0b" "0B") "%b")
+                        ((or "0o" "0O") "%o")
+                        ((or "0x" "0X") "%x")
+                        (_ "%d")))
+           (unsigned-value (string-to-number digits base))
+           (signed-value (if (string= sign "-")
+                             (- unsigned-value)
+                           unsigned-value))
+           (incremented-value (+ signed-value count))
+           (sign (cond
+                  ((and (< signed-value 0) (>= incremented-value 0))
+                   "")
+                  ((and (>= signed-value 0) (< incremented-value 0))
+                   "-")
+                  (t
+                   sign)))
+           (abs-value (abs incremented-value))
+           (formatted (format (concat "%s%s" specifier) sign prefix abs-value)))
+      (replace-region-contents
+       (match-beginning 0)
+       (match-end 0)
+       formatted)
+      (goto-char (+ (match-beginning 0) (length formatted))))))
 
 ;;;###autoload
 (defun my/thingatpt-integer-decrement (count)
@@ -197,23 +218,66 @@ Always move point after the integer."
   (interactive "p")
   (my/thingatpt-integer-increment (- count)))
 
+;;;; Helpers
+
+(defun my/thingatpt-point-in-or-after-regexp (regexp)
+  "Return non-nil if point is in or after a match for REGEXP.
+Different from `thing-at-point-looking-at', only the current line is searched.
+
+Point is not moved.
+Match data is set."
+  (save-excursion
+    (let* ((point (point))
+           (beg (progn
+                  (move-beginning-of-line nil)
+                  (point)))
+           (end (progn
+                  (move-end-of-line nil)
+                  (point)))
+           match-end
+           match-beginning)
+      (goto-char beg)
+      (cl-block loop
+        ;; Limit the search to current line.
+        (while (<= (point) end)
+          (setq match-end (re-search-forward regexp end t))
+          ;; No match in current line.
+          (unless match-end
+            (cl-return-from loop nil))
+          (setq match-beginning (match-beginning 0))
+          ;; The match begins after point.
+          ;; That means no match.
+          (when (> match-beginning point)
+            (cl-return-from loop nil))
+          ;; match-beginning <= point and match-end >= point
+          ;; That means a match.
+          (when (>= match-end point)
+            (cl-return-from loop match-end))
+          ;; match-beginning <= point and match-end < point
+          ;; Let the loop run again.
+          ;; Normally we can just do nothing and let the loop run again,
+          ;; but if the regexp matches an empty string and thus stick at point,
+          ;; we move point 1 character forward.
+          (when (eql match-beginning match-end)
+            (forward-char)))))))
+
 ;;;; Configuration
 
 (defcustom my/thingatpt-things
-  `((:regexp
-     ,my/thingatpt-org-date-regexp
+  `((:match
+     my/thingatpt-org-date-match
      :increment
      my/thingatpt-org-date-increment
      :decrement
      my/thingatpt-org-date-decrement)
-    (:regexp
-     ,my/thingatpt-iso8601-date-regexp
+    (:match
+     my/thingatpt-iso8601-date-match
      :increment
      my/thingatpt-iso8601-date-increment
      :decrement
      my/thingatpt-iso8601-date-decrement)
-    (:regexp
-     ,my/thingatpt-integer-regexp
+    (:match
+     my/thingatpt-integer-match
      :increment
      my/thingatpt-integer-increment
      :decrement
@@ -254,8 +318,8 @@ Therefore, it should be safe to enable this minor mode globally."
   (interactive)
   (when-let* ((thing (cl-loop
                       for thing in my/thingatpt-things
-                      for regexp = (plist-get thing :regexp)
-                      if (and regexp (thing-at-point-looking-at regexp))
+                      for match = (plist-get thing :match)
+                      if (and match (funcall match))
                       return thing))
               (increment (plist-get thing :increment)))
     t))
@@ -266,8 +330,8 @@ Therefore, it should be safe to enable this minor mode globally."
   (interactive "P")
   (when-let* ((thing (cl-loop
                       for thing in my/thingatpt-things
-                      for regexp = (plist-get thing :regexp)
-                      if (and regexp (thing-at-point-looking-at regexp))
+                      for match = (plist-get thing :match)
+                      if (and match (funcall match))
                       return thing))
               (increment (plist-get thing :increment)))
     (call-interactively increment)))
@@ -278,8 +342,8 @@ Therefore, it should be safe to enable this minor mode globally."
   (interactive)
   (when-let* ((thing (cl-loop
                       for thing in my/thingatpt-things
-                      for regexp = (plist-get thing :regexp)
-                      if (and regexp (thing-at-point-looking-at regexp))
+                      for match = (plist-get thing :match)
+                      if (and match (funcall match))
                       return thing))
               (decrement (plist-get thing :decrement)))
     t))
@@ -290,8 +354,8 @@ Therefore, it should be safe to enable this minor mode globally."
   (interactive "P")
   (when-let* ((thing (cl-loop
                       for thing in my/thingatpt-things
-                      for regexp = (plist-get thing :regexp)
-                      if (and regexp (thing-at-point-looking-at regexp))
+                      for match = (plist-get thing :match)
+                      if (and match (funcall match))
                       return thing))
               (decrement (plist-get thing :decrement)))
     (call-interactively decrement)))
