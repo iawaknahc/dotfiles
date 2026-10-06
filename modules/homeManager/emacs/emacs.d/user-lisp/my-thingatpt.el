@@ -114,6 +114,89 @@ Therefore, point does not move."
   (interactive "p")
   (my/thingatpt-iso8601-date-increment (- count)))
 
+;;;; Integer
+(defconst my/thingatpt-integer-regexp
+  (rx-let ((sign (group-n 3 (? (in "-+"))))
+           (binary-prefix (group-n 2 (or "0b" "0B")))
+           (octal-prefix (group-n 2 (or "0o" "0O")))
+           (hexadecimal-prefix (group-n 2 (or "0x" "0X")))
+           (binary-digit (in "01"))
+           (octal-digit (in "01234567"))
+           (decimal-digit (in "0123456789"))
+           (hexadecimal-digit (in "0123456789abcdefABCDEF"))
+           (underscore-digit (d) (seq "_" d))
+           (underscore-digit-or-digit (d) (or (underscore-digit d) d))
+           (non-decimal-integer (prefix d) (seq prefix (group-n 1 d (* (underscore-digit-or-digit d)))))
+           (decimal-integer (group-n 1 decimal-digit (* (underscore-digit-or-digit decimal-digit))))
+           (binary-integer (non-decimal-integer binary-prefix binary-digit))
+           (octal-integer (non-decimal-integer octal-prefix octal-digit))
+           (hexadecimal-integer (non-decimal-integer hexadecimal-prefix hexadecimal-digit)))
+    (rx
+     ;; We should put word-start here.
+     ;; But if we place it, a minus sign will never be included in the match.
+     sign
+     (or
+      binary-integer
+      octal-integer
+      decimal-integer
+      hexadecimal-integer)
+     word-end))
+  "A regular expression for integers.")
+
+;;;###autoload
+(defun my/thingatpt-integer-increment (count)
+  "Increment integer at point with COUNT.
+
+Always move point after the integer."
+  (interactive "p")
+  (let* ((sign (or (when-let* ((beg (match-beginning 3))
+                               (end (match-end 3)))
+                     (buffer-substring-no-properties beg end))
+                   ""))
+         (prefix (or (when-let* ((beg (match-beginning 2))
+                                 (end (match-end 2)))
+                       (buffer-substring-no-properties beg end))
+                     ""))
+         (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
+         (digits (string-replace "_" "" digits-with-underscore))
+         (base (pcase prefix
+                 ((or "0b" "0B") 2)
+                 ((or "0o" "0O") 8)
+                 ((or "0x" "0X") 16)
+                 (_ 10)))
+         (specifier (pcase prefix
+                      ((or "0b" "0B") "%b")
+                      ((or "0o" "0O") "%o")
+                      ((or "0x" "0X") "%x")
+                      (_ "%d")))
+         (unsigned-value (string-to-number digits base))
+         (signed-value (if (string= sign "-")
+                           (- unsigned-value)
+                         unsigned-value))
+         (incremented-value (+ signed-value count))
+         (sign (cond
+                ((and (< signed-value 0) (>= incremented-value 0))
+                 "")
+                ((and (>= signed-value 0) (< incremented-value 0))
+                 "-")
+                (t
+                 sign)))
+         (abs-value (abs incremented-value))
+         (formatted (format (concat "%s%s" specifier) sign prefix abs-value)))
+    (replace-region-contents
+     (match-beginning 0)
+     (match-end 0)
+     formatted)
+    (goto-char (+ (match-beginning 0) (length formatted)))))
+
+;;;###autoload
+(defun my/thingatpt-integer-decrement (count)
+  "Decrement integer at point with COUNT.
+
+Always move point after the integer."
+  (interactive "p")
+  (my/thingatpt-integer-increment (- count)))
+
 ;;;; Configuration
 
 (defcustom my/thingatpt-things
@@ -128,7 +211,13 @@ Therefore, point does not move."
      :increment
      my/thingatpt-iso8601-date-increment
      :decrement
-     my/thingatpt-iso8601-date-decrement))
+     my/thingatpt-iso8601-date-decrement)
+    (:regexp
+     ,my/thingatpt-integer-regexp
+     :increment
+     my/thingatpt-integer-increment
+     :decrement
+     my/thingatpt-integer-decrement))
   "A list of things that support increment and decrement.
 
 The first thing that matches thing at point is used.
