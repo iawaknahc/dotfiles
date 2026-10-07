@@ -207,26 +207,5 @@ The algorithm used here is the one used by 八字."
 The algorithm used here is the one used by 八字."
   (format "%s%s" (my/sexagenary-month-string date) (my/sexagenary-day-string date)))
 
-;;;###autoload
-(defun my/calendar-chinese-month-day-of-year (year chinese-month chinese-day)
-  "Return the Gregorian date representing CHINESE-MONTH and CHINESE-DAY in Gregorian year YEAR."
-  (let* ((start-of-year (list 1 1 year))
-         (start-of-year-abs (calendar-absolute-from-gregorian start-of-year))
-         (start-of-year-chinese (calendar-chinese-from-absolute start-of-year-abs))
-         (start-of-year-cycle (nth 0 start-of-year-chinese))
-         (start-of-year-chinese-year (nth 1 start-of-year-chinese))
-         (start-of-year-chinese-month (nth 2 start-of-year-chinese)))
-    (setq start-of-year-chinese-year (cond
-                                      ((>= start-of-year-chinese-month 7) (1+ start-of-year-chinese-year))
-                                      (t start-of-year-chinese-year)))
-    (when (> start-of-year-chinese-year 60)
-      (setq start-of-year-chinese-year 1)
-      (setq start-of-year-cycle (1+ start-of-year-cycle)))
-    (calendar-gregorian-from-absolute (calendar-chinese-to-absolute (list
-                                                                     start-of-year-cycle
-                                                                     start-of-year-chinese-year
-                                                                     chinese-month
-                                                                     chinese-day)))))
-
 (provide 'my-cal-china)
 ;;; my-cal-china.el ends here
