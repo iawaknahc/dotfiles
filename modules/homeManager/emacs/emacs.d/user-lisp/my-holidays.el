@@ -8,6 +8,14 @@
 ;; `calendar-day-of-week'
 (require 'calendar)
 
+(require 'cl-lib)
+
+;; `my/calendar-date<'
+(require 'my-calendar)
+
+;; `my/holiday-solar-term'
+(require 'my-solar)
+
 ;;;###autoload
 (defun my/holiday-get-years ()
   "Return a singleton list or a 2-element list."
