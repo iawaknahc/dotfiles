@@ -102,9 +102,20 @@ alfred-rsync:
 alfred-clean:
     git clean -fx ./modules/homeManager/alfred/alfred
 
+# Run all tests
+test: nix-test emacs-test
+
 # Run Nix unit tests
-test:
+nix-test:
     nix-unit --flake '.#tests'
+
+# Run Emacs ERT test
+emacs-test:
+    emacs --quick --batch \
+      --load ert \
+      --directory modules/homeManager/emacs/emacs.d/user-lisp \
+      $(fd --type file --glob '*-tests.el' modules/homeManager/emacs/emacs.d/test | sort | sed 's/^/--load /') \
+      --funcall ert-run-tests-batch-and-exit
 
 # Generate `./modules/homeManager/neovim/config/nvim/.emmyrc.json`
 generate-emmyrc-json:

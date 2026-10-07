@@ -315,6 +315,7 @@ nreverse
 ntd
 nufmt
 nukta
+numberp
 numberwidth
 numtide
 nushell

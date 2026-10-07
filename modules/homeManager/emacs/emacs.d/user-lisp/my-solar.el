@@ -20,6 +20,7 @@
 (require 'holidays)
 ;; `solar-longitude'
 ;; `solar-date-next-longitude'
+;; `solar-time-string'
 (require 'solar)
 
 (defconst my/astrological-signs
@@ -104,6 +105,17 @@ This is used in `solar-date-next-longitude' because the function computes the ne
     (my/holiday-solar-term "雨水")
     (my/holiday-solar-term "驚蟄"))
   "A list of solar terms intended to be added to `holiday-other-holidays'.")
+
+;;;###autoload
+(defun my/solar-time-string (time timezone)
+  "Invoke `solar-time-string' with `calendar-time-display-form' bound to 24-hour.
+
+Forward TIME and TIMEZONE."
+  (let* ((calendar-time-display-form '(24-hours
+                                       ":"
+                                       minutes
+                                       (if time-zone " (") time-zone (if time-zone ")"))))
+    (solar-time-string time timezone)))
 
 ;;;###autoload
 (defun my/solar-longitude-local (date)
@@ -191,14 +203,14 @@ The return value can be used directly as a holiday."
            ;; The fractional part depend on the dynamically bound variables we bind above.
            ;; So the fractional part is in the UTC time standard.
            ;;
-           ;; We multiply the fractional part by 24 and pass it to `solar-time-string'
+           ;; We multiply the fractional part by 24 and pass it to `my/solar-time-string'
            ;; to get a formatted time string.
            ;; We borrow this idea from the source code of `solar-equinoxes-solstices-1'.
            (result-abs-integral (floor result-abs))
            (result-gregorian-fractional (- result-abs result-abs-integral))
            (result-gregorian-num-hours (* 24 result-gregorian-fractional))
            (result-gregorian-date (calendar-gregorian-from-absolute result-abs-integral))
-           (time-string (solar-time-string result-gregorian-num-hours "HKT"))
+           (time-string (my/solar-time-string result-gregorian-num-hours "HKT"))
            (holiday-description (format "%s %s" solar-term time-string)))
       (list result-gregorian-date (or description holiday-description)))))
 
