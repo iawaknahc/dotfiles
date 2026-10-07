@@ -131,20 +131,34 @@ Therefore, point does not move."
 ;;;; Integer
 (defconst my/thingatpt-integer-regexp
   (rx-let ((sign (group-n 3 (? (in "-+"))))
-           (binary-prefix (group-n 2 (or "0b" "0B" "#b" "#B")))
-           (octal-prefix (group-n 2 (or "0o" "0O" "#o" "#O")))
-           (hexadecimal-prefix (group-n 2 (or "0x" "0X" "#x" "#X")))
+
+           (binary-prefix (or "0b" "0B" "#b" "#B"))
+           (octal-prefix (or "0o" "0O" "#o" "#O"))
+           (hexadecimal-prefix (or "0x" "0X" "#x" "#X"))
+
            (binary-digit (in "01"))
            (octal-digit (in "01234567"))
            (decimal-digit (in "0123456789"))
            (hexadecimal-digit (in "0123456789abcdefABCDEF"))
+
            (underscore-digit (d) (seq "_" d))
            (underscore-digit-or-digit (d) (or (underscore-digit d) d))
-           (non-decimal-integer (prefix d) (seq prefix (group-n 1 d (* (underscore-digit-or-digit d)))))
-           (decimal-integer (group-n 1 decimal-digit (* (underscore-digit-or-digit decimal-digit))))
-           (binary-integer (non-decimal-integer binary-prefix binary-digit))
-           (octal-integer (non-decimal-integer octal-prefix octal-digit))
-           (hexadecimal-integer (non-decimal-integer hexadecimal-prefix hexadecimal-digit)))
+           (digits (d) (seq d (* (underscore-digit-or-digit d))))
+
+           (binary-digits (digits binary-digit))
+           (octal-digits (digits octal-digit))
+           (decimal-digits (digits decimal-digit))
+           (hexadecimal-digits (digits hexadecimal-digit))
+
+           (exponent-indicator (group-n 4 (or "e" "E")))
+           (signed-decimal-integer (group-n 5 (or decimal-digits (seq "+" decimal-digits) (seq "-" decimal-digits))))
+           (exponent-part (seq exponent-indicator signed-decimal-integer))
+
+           (non-decimal-integer (prefix ds) (seq (group-n 2 prefix) (group-n 1 ds)))
+           (decimal-integer (seq (group-n 1 decimal-digits) (? exponent-part)))
+           (binary-integer (non-decimal-integer binary-prefix binary-digits))
+           (octal-integer (non-decimal-integer octal-prefix octal-digits))
+           (hexadecimal-integer (non-decimal-integer hexadecimal-prefix hexadecimal-digits)))
     (rx
      ;; The reason to put word-start after sign is to reject matches like
      ;; 1. Matching "102" in "0b102"
@@ -172,22 +186,20 @@ Therefore, point does not move."
 Always move point after the integer."
   (interactive "p")
   (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
-    (let* ((sign (or (when-let* ((beg (match-beginning 3))
-                                 (end (match-end 3)))
-                       (buffer-substring-no-properties beg end))
-                     ""))
-           (prefix (or (when-let* ((beg (match-beginning 2))
-                                   (end (match-end 2)))
-                         (buffer-substring-no-properties beg end))
-                       ""))
+    (let* ((match-beginning (match-beginning 0))
+           (sign  (my/thingatpt--buffer-substring-no-properties-of-match 3))
+           (base-prefix (my/thingatpt--buffer-substring-no-properties-of-match 2))
+           (exponent-end (match-end 4))
+           (exponent-indicator (my/thingatpt--buffer-substring-no-properties-of-match 4))
+           (exponent (my/thingatpt--buffer-substring-no-properties-of-match 5))
            (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
            (digits (string-replace "_" "" digits-with-underscore))
-           (base (pcase prefix
+           (base (pcase base-prefix
                    ((or "0b" "0B" "#b" "#B") 2)
                    ((or "0o" "0O" "#o" "#O") 8)
                    ((or "0x" "0X" "#x" "#X") 16)
                    (_ 10)))
-           (specifier (pcase prefix
+           (specifier (pcase base-prefix
                         ((or "0b" "0B" "#b" "#B") "%b")
                         ((or "0o" "0O" "#o" "#O") "%o")
                         ((or "0x" "0X" "#x" "#X") "%x")
@@ -196,21 +208,48 @@ Always move point after the integer."
            (signed-value (if (string= sign "-")
                              (- unsigned-value)
                            unsigned-value))
-           (incremented-value (+ signed-value count))
-           (sign (cond
-                  ((and (< signed-value 0) (>= incremented-value 0))
-                   "")
-                  ((and (>= signed-value 0) (< incremented-value 0))
-                   "-")
-                  (t
-                   sign)))
-           (abs-value (abs incremented-value))
-           (formatted (format (concat "%s%s" specifier) sign prefix abs-value)))
-      (replace-region-contents
-       (match-beginning 0)
-       (match-end 0)
-       formatted)
-      (goto-char (+ (match-beginning 0) (length formatted))))))
+           move-point-to)
+
+      ;; Increment either the integral part or the exponent part,
+      ;; depending on where point is.
+      (cond
+       ((and exponent-end (>= (point) exponent-end))
+        (let* ((exponent-value (string-to-number exponent 10))
+               (incremented-exponent-value (+ exponent-value count))
+               (formatted (format "%s%s%s%s%d" sign base-prefix digits-with-underscore exponent-indicator incremented-exponent-value)))
+          (replace-region-contents
+           (match-beginning 0)
+           (match-end 0)
+           formatted))
+        (setq move-point-to 'end-of-exponent-indicator))
+       (t
+        (let* ((incremented-value (+ signed-value count))
+               (sign (cond
+                      ((and (< signed-value 0) (>= incremented-value 0))
+                       "")
+                      ((and (>= signed-value 0) (< incremented-value 0))
+                       "-")
+                      (t
+                       sign)))
+               (abs-value (abs incremented-value))
+               (formatted (format (concat "%s%s" specifier "%s%s") sign base-prefix abs-value exponent-indicator exponent)))
+          (replace-region-contents
+           (match-beginning 0)
+           (match-end 0)
+           formatted)
+          (setq move-point-to 'beginning-of-exponent-indicator-or-end-of-match))))
+
+      ;; Use the stored match-beginning because `replace-region-contents' may invalidate the positions.
+      (goto-char match-beginning)
+      ;; Simply match again to find out the new position of the exponent indicator.
+      (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
+        (pcase move-point-to
+          ('end-of-exponent-indicator
+           (goto-char (match-end 4)))
+          ('beginning-of-exponent-indicator-or-end-of-match
+           (if (match-beginning 4)
+               (goto-char (match-beginning 4))
+             (goto-char (match-end 0)))))))))
 
 ;;;###autoload
 (defun my/thingatpt-integer-decrement (count)
@@ -222,6 +261,15 @@ Always move point after the integer."
 
 ;;;; Helpers
 
+;;;###autoload
+(defun my/thingatpt--buffer-substring-no-properties-of-match (group)
+  "Return the substring of match group GROUP, or an empty string."
+  (or (when-let* ((beg (match-beginning group))
+                  (end (match-end group)))
+        (buffer-substring-no-properties beg end))
+      ""))
+
+;;;###autoload
 (defun my/thingatpt-point-in-or-after-regexp (regexp)
   "Return non-nil if point is in or after a match for REGEXP.
 Different from `thing-at-point-looking-at', only the current line is searched.
