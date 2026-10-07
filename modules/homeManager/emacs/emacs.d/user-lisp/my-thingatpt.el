@@ -4,6 +4,15 @@
 
 (require 'cl-lib)
 
+;; `calendar-date-is-valid-p'
+;; `calendar-extract-year'
+(require 'calendar)
+
+;; `my/calendar-gregorian-add'
+;; `my/calendar-gregorian-to-org-string'
+;; `my/calendar-gregorian-iso8601-date-string'
+(require 'my-calendar)
+
 ;;;; Org date
 
 (defconst my/thingatpt-org-date-regexp
@@ -339,7 +348,8 @@ The underscores are kept if possible."
 
       ;; Use a loop to copy the preceding underscores.
       (cl-block loop
-        (while t
+        ;; No need to run this loop if we have copied all digits.
+        (while (>= result-idx 0)
           (cond
            ;; digits exhausted. No need to look at it anymore.
            ((< digits-idx 0)

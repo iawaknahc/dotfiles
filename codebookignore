@@ -1,3 +1,4 @@
+*-tests.el
 *.conf
 *.hy
 *.nix
