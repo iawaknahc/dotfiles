@@ -1,7 +1,10 @@
 {
   inputs = {
-    # Using channel has a higher possibility that the packages are available at https://cache.nixos.org
-    nixpkgs-mine.url = "https://nixos.org/channels/nixpkgs-unstable/nixexprs.tar.xz";
+    # Visit https://nixos.org/channels/nixos-unstable
+    # The URL will resolve to something like https://releases.nixos.org/nixos/unstable/nixos-26.11pre1086391.151fa4e8ddfd
+    # 151fa4e8ddfd is a Git commit hash https://github.com/NixOS/nixpkgs/commits/151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4
+    # The release appearing on https://releases.nixos.org has a higher possibility that the packages are cached on https://cache.nixos.org
+    nixpkgs-mine.url = "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 

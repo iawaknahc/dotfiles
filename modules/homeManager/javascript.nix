@@ -10,6 +10,6 @@
     nodejs_26
     yarn
     prettier
-    typescript-go
+    typescript
   ];
 }

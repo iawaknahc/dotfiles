@@ -14,7 +14,7 @@ npm-install:
 setup: clean generate-emmyrc-json npm-install
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty tsgo-check
+check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty tsc-check
 
 # Run checker `elisp-checkdoc`
 elisp-checkdoc:
@@ -72,8 +72,8 @@ pyrefly:
 ty:
     ty check
 
-tsgo-check:
-    tsgo --noEmit
+tsc-check:
+    tsc --noEmit
 
 # Run all formatters
 format: shfmt stylua-fmt nufmt ruff-format
