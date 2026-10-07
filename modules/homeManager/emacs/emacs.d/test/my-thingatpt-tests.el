@@ -7,7 +7,7 @@
 
 ;;;; Helpers
 
-(defvar my-thingatpt-tests--time-zone "UTC0"
+(defvar my-thingatpt-tests--time-zone "UTC"
   "The time zone rule in effect when running the tests.")
 
 (defun my-thingatpt-tests--call (text fn &rest args)
@@ -256,12 +256,7 @@ Use TEXT FN ARGS."
     (my-thingatpt-tests--edit "2006-01-|02 Mon" #'my/thingatpt-org-date-decrement -1)
     "2006-01-|03 Tue")))
 
-;; FIXME: The date is off by one day in time zones behind UTC,
-;; because `my/calendar-gregorian-to-org-string' and
-;; `my/calendar-gregorian-iso8601-date-string' encode the date in UTC,
-;; and then format it in the local time zone.
 (ert-deftest my-thingatpt-tests-my/thingatpt-date-increment-time-zone-behind-utc ()
-  :expected-result :failed
   (let ((my-thingatpt-tests--time-zone "XXX8"))
     (should
      (equal
