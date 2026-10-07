@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 ;;;; Org date
 
 (defconst my/thingatpt-org-date-regexp
@@ -130,8 +132,7 @@ Therefore, point does not move."
 
 ;;;; Integer
 (defconst my/thingatpt-integer-regexp
-  (rx-let ((sign (group-n 3 (? (in "-+"))))
-
+  (rx-let ((sign (in "-+"))
            (binary-prefix (or "0b" "0B" "#b" "#B"))
            (octal-prefix (or "0o" "0O" "#o" "#O"))
            (hexadecimal-prefix (or "0x" "0X" "#x" "#X"))
@@ -144,32 +145,38 @@ Therefore, point does not move."
            (underscore-digit (d) (seq "_" d))
            (underscore-digit-or-digit (d) (or (underscore-digit d) d))
            (digits (d) (seq d (* (underscore-digit-or-digit d))))
-
            (binary-digits (digits binary-digit))
            (octal-digits (digits octal-digit))
            (decimal-digits (digits decimal-digit))
            (hexadecimal-digits (digits hexadecimal-digit))
 
-           (exponent-indicator (group-n 4 (or "e" "E")))
-           (signed-decimal-integer (group-n 5 (or decimal-digits (seq "+" decimal-digits) (seq "-" decimal-digits))))
-           (exponent-part (seq exponent-indicator signed-decimal-integer))
+           (exponent-indicator (or "e" "E"))
 
-           (non-decimal-integer (prefix ds) (seq (group-n 2 prefix) (group-n 1 ds)))
-           (decimal-integer (seq (group-n 1 decimal-digits) (? exponent-part)))
-           (binary-integer (non-decimal-integer binary-prefix binary-digits))
-           (octal-integer (non-decimal-integer octal-prefix octal-digits))
-           (hexadecimal-integer (non-decimal-integer hexadecimal-prefix hexadecimal-digits)))
+           (decimal-integer (seq
+                             (group-n 1
+                               (group-n 2 (? sign))
+                               (group-n 4 decimal-digits))
+                             (? exponent-indicator (group-n 5
+                                                     (group-n 6 (? sign))
+                                                     (group-n 7 decimal-digits)))))
+           (binary-integer (group-n 1
+                             (group-n 2 (? sign))
+                             (group-n 3 binary-prefix)
+                             (group-n 4 binary-digits)))
+           (octal-integer (group-n 1
+                            (group-n 2 (? sign))
+                            (group-n 3 octal-prefix)
+                            (group-n 4 octal-digits)))
+           (hexadecimal-integer (group-n 1
+                                  (group-n 2 (? sign))
+                                  (group-n 3 hexadecimal-prefix)
+                                  (group-n 4 hexadecimal-digits))))
     (rx
-     ;; The reason to put word-start after sign is to reject matches like
-     ;; 1. Matching "102" in "0b102"
-     ;; 2. Matching "86" in "x86"
-     sign
-     word-start
      (or
       binary-integer
       octal-integer
-      decimal-integer
-      hexadecimal-integer)
+      hexadecimal-integer
+      decimal-integer)
      word-end))
   "A regular expression for integers.")
 
@@ -186,70 +193,35 @@ Therefore, point does not move."
 Always move point after the integer."
   (interactive "p")
   (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
-    (let* ((match-beginning (match-beginning 0))
-           (sign  (my/thingatpt--buffer-substring-no-properties-of-match 3))
-           (base-prefix (my/thingatpt--buffer-substring-no-properties-of-match 2))
-           (exponent-end (match-end 4))
-           (exponent-indicator (my/thingatpt--buffer-substring-no-properties-of-match 4))
-           (exponent (my/thingatpt--buffer-substring-no-properties-of-match 5))
-           (digits-with-underscore (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
-           (digits (string-replace "_" "" digits-with-underscore))
-           (base (pcase base-prefix
-                   ((or "0b" "0B" "#b" "#B") 2)
-                   ((or "0o" "0O" "#o" "#O") 8)
-                   ((or "0x" "0X" "#x" "#X") 16)
-                   (_ 10)))
-           (specifier (pcase base-prefix
-                        ((or "0b" "0B" "#b" "#B") "%b")
-                        ((or "0o" "0O" "#o" "#O") "%o")
-                        ((or "0x" "0X" "#x" "#X") "%x")
-                        (_ "%d")))
-           (unsigned-value (string-to-number digits base))
-           (signed-value (if (string= sign "-")
-                             (- unsigned-value)
-                           unsigned-value))
-           move-point-to)
-
+    (let* ((integral-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 4))
+           (base-prefix (my/thingatpt--buffer-substring-no-properties-of-match 3))
+           (integral-sign (my/thingatpt--buffer-substring-no-properties-of-match 2))
+           (exponent-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 7))
+           (exponent-sign (my/thingatpt--buffer-substring-no-properties-of-match 6)))
       ;; Increment either the integral part or the exponent part,
       ;; depending on where point is.
       (cond
-       ((and exponent-end (>= (point) exponent-end))
-        (let* ((exponent-value (string-to-number exponent 10))
-               (incremented-exponent-value (+ exponent-value count))
-               (formatted (format "%s%s%s%s%d" sign base-prefix digits-with-underscore exponent-indicator incremented-exponent-value)))
+       ;; The exponent part exists and the point is in the exponent part.
+       ;; Increment the exponent part.
+       ((and (match-beginning 5) (>= (point) (match-beginning 5)))
+        (let* ((result (my/thingatpt--increment exponent-sign "" exponent-digits-with-underscore count))
+               (exponent-beg (match-beginning 5)))
           (replace-region-contents
-           (match-beginning 0)
-           (match-end 0)
-           formatted))
-        (setq move-point-to 'end-of-exponent-indicator))
+           (match-beginning 5)
+           (match-end 5)
+           result)
+          ;; Move point to the end of the exponent part.
+          (goto-char (+ exponent-beg (length result)))))
+       ;; Otherwise, increment the integral part.
        (t
-        (let* ((incremented-value (+ signed-value count))
-               (sign (cond
-                      ((and (< signed-value 0) (>= incremented-value 0))
-                       "")
-                      ((and (>= signed-value 0) (< incremented-value 0))
-                       "-")
-                      (t
-                       sign)))
-               (abs-value (abs incremented-value))
-               (formatted (format (concat "%s%s" specifier "%s%s") sign base-prefix abs-value exponent-indicator exponent)))
+        (let* ((result (my/thingatpt--increment integral-sign base-prefix integral-digits-with-underscore count))
+               (integral-beg (match-beginning 1)))
           (replace-region-contents
-           (match-beginning 0)
-           (match-end 0)
-           formatted)
-          (setq move-point-to 'beginning-of-exponent-indicator-or-end-of-match))))
-
-      ;; Use the stored match-beginning because `replace-region-contents' may invalidate the positions.
-      (goto-char match-beginning)
-      ;; Simply match again to find out the new position of the exponent indicator.
-      (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
-        (pcase move-point-to
-          ('end-of-exponent-indicator
-           (goto-char (match-end 4)))
-          ('beginning-of-exponent-indicator-or-end-of-match
-           (if (match-beginning 4)
-               (goto-char (match-beginning 4))
-             (goto-char (match-end 0)))))))))
+           (match-beginning 1)
+           (match-end 1)
+           result)
+          ;; Move point to the end of the integral part.
+          (goto-char (+ integral-beg (length result)))))))))
 
 ;;;###autoload
 (defun my/thingatpt-integer-decrement (count)
@@ -310,6 +282,76 @@ Match data is set."
           ;; we move point 1 character forward.
           (when (eql match-beginning match-end)
             (forward-char)))))))
+
+;;;###autoload
+(defun my/thingatpt--base-prefix-to-base (base-prefix)
+  "Convert BASE-PREFIX to its numeric value."
+  (pcase base-prefix
+    ((or "0b" "0B" "#b" "#B") 2)
+    ((or "0o" "0O" "#o" "#O") 8)
+    ((or "0x" "0X" "#x" "#X") 16)
+    (_ 10)))
+
+;;;###autoload
+(defun my/thingatpt--preferred-sign (sign sign-value)
+  "Return - if SIGN-VALUE is negative.
+
+Otherwise, if SIGN is +, return +.
+Otherwise return an empty string."
+  (cond
+   ((< sign-value 0) "-")
+   ((string= sign "+") "+")
+   (t "")))
+
+;;;###autoload
+(defun my/thingatpt--increment (sign base-prefix digits-with-underscore count)
+  "Increment DIGITS-WITH-UNDERSCORE whose sign is SIGN in base indicated by BASE-PREFIX with COUNT.
+
+BASE-PREFIX is a string accepted by `my/thingatpt--base-prefix-to-base'.
+DIGITS-WITH-UNDERSCORE is a string whose characters must be valid with respect to BASE-PREFIX, or underscores.
+SIGN is a string either an empty string, -, or +.
+COUNT is an integer.
+
+Return a string representing the incremented value.
+The underscores are kept if possible."
+  (let* ((sign-value (if (string= sign "-") -1 1))
+         (digits (string-replace "_" "" digits-with-underscore))
+         (base (my/thingatpt--base-prefix-to-base base-prefix))
+         (digits-value (string-to-number digits base))
+         (value (* sign-value digits-value))
+         (result-value (+ value count))
+         (result-sign (my/thingatpt--preferred-sign sign result-value))
+         (format-specifier (pcase base
+                             (2 "%b")
+                             (8 "%o")
+                             (16 "%x")
+                             (_ "%d")))
+         (result-digits (format format-specifier (abs result-value)))
+         (result-idx (1- (length result-digits)))
+         (digits-idx (1- (length digits-with-underscore)))
+         list)
+    (while (>= result-idx 0)
+      ;; Copy the digit and adjust index.
+      (setq list (cons (aref result-digits result-idx) list))
+      (setq result-idx (1- result-idx))
+      ;; Assume the position of digits-idx is also a digit.
+      (setq digits-idx (1- digits-idx))
+
+      ;; Use a loop to copy the preceding underscores.
+      (cl-block loop
+        (while t
+          (cond
+           ;; digits exhausted. No need to look at it anymore.
+           ((< digits-idx 0)
+            (cl-return-from loop))
+           ;; Copy the underscore.
+           ((eql ?_ (aref digits-with-underscore digits-idx))
+            (setq list (cons ?_ list))
+            (setq digits-idx (1- digits-idx)))
+           ;; It is not an underscore.
+           (t
+            (cl-return-from loop))))))
+    (format "%s%s%s" result-sign base-prefix (concat list))))
 
 ;;;; Configuration
 
