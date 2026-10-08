@@ -17,24 +17,35 @@
 
 (defconst my/thingatpt-org-date-regexp
   (rx
-   word-start
-   (group-n 1 (repeat 4 digit))
-   "-"
-   (group-n 2 (or (seq "0" digit)
-                  (seq "1" (in "012"))))
-   "-"
-   (group-n 3 (or (seq (in "012") digit)
-                  (seq "3" (in "01"))))
-   " "
-   (group-n 4 (or "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"))
-   word-end)
-  "A regular expression matching an Org date such as '2006-01-02 Mon'.")
+   (group-n 5 (* digit))
+   (group-n 6
+     (group-n 1 (repeat 4 digit))
+     "-"
+     (group-n 2 (or (seq "0" digit)
+                    (seq "1" (in "012"))))
+     "-"
+     (group-n 3 (or (seq (in "012") digit)
+                    (seq "3" (in "01"))))
+     " "
+     (group-n 4 (or "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun")))
+   (group-n 7 (* (in "a-zA-Z"))))
+  "A regular expression matching an Org date such as '2006-01-02 Mon'.
+
+Group 6 is the date.
+Group 5 is the digits before the date, and group 7 is the letters after it.
+If either of them is not empty, the date is a part of something longer,
+and the match must be rejected.
+See `my/thingatpt-org-date-match'.")
 
 ;;;###autoload
 (defun my/thingatpt-org-date-match ()
-  "Return non-nil if point is in or after an Org date."
+  "Return non-nil if point is in or after an Org date.
+
+Match data is set according to `my/thingatpt-org-date-regexp'."
   (interactive)
-  (my/thingatpt-point-in-or-after-regexp my/thingatpt-org-date-regexp))
+  (and (my/thingatpt-point-in-or-after-regexp my/thingatpt-org-date-regexp)
+       (my/thingatpt--match-empty-p 5)
+       (my/thingatpt--match-empty-p 7)))
 
 ;;;###autoload
 (defun my/thingatpt-org-date-increment (count)
@@ -43,8 +54,8 @@
 Only year from 0001 to 9999 are supported.
 Therefore, point does not move."
   (interactive "p")
-  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-org-date-regexp)
-    (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
+  (when (my/thingatpt-org-date-match)
+    (let* ((original (buffer-substring-no-properties (match-beginning 6) (match-end 6)))
            (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
            (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
            (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
@@ -66,8 +77,8 @@ Therefore, point does not move."
             (when (> (calendar-extract-year new-date) 9999)
               (error "Year must be <= 9999"))
             (replace-region-contents
-             (match-beginning 0)
-             (match-end 0)
+             (match-beginning 6)
+             (match-end 6)
              (my/calendar-gregorian-to-org-string new-date))
             (goto-char point))))))
 
@@ -84,29 +95,40 @@ Therefore, point does not move."
 
 (defconst my/thingatpt-iso8601-date-regexp
   (rx
-   word-start
-   (group-n 1 (repeat 4 digit))
-   "-"
-   (group-n 2 (or (seq "0" digit)
-                  (seq "1" (in "012"))))
-   "-"
-   (group-n 3 (or (seq (in "012") digit)
-                  (seq "3" (in "01"))))
-   word-end)
-  "A regular expression matching a ISO8601 date such as '2006-01-02'.")
+   (group-n 5 (* digit))
+   (group-n 6
+     (group-n 1 (repeat 4 digit))
+     "-"
+     (group-n 2 (or (seq "0" digit)
+                    (seq "1" (in "012"))))
+     "-"
+     (group-n 3 (or (seq (in "012") digit)
+                    (seq "3" (in "01")))))
+   (group-n 7 (* digit)))
+  "A regular expression matching a ISO8601 date such as '2006-01-02'.
+
+Group 6 is the date.
+Group 5 is the digits before the date, and group 7 is the digits after it.
+If either of them is not empty, the date is a part of something longer,
+and the match must be rejected.
+See `my/thingatpt-iso8601-date-match'.")
 
 ;;;###autoload
 (defun my/thingatpt-iso8601-date-match ()
-  "Return non-nil if point is in or after a ISO8601 date."
+  "Return non-nil if point is in or after a ISO8601 date.
+
+Match data is set according to `my/thingatpt-iso8601-date-regexp'."
   (interactive)
-  (my/thingatpt-point-in-or-after-regexp my/thingatpt-iso8601-date-regexp))
+  (and (my/thingatpt-point-in-or-after-regexp my/thingatpt-iso8601-date-regexp)
+       (my/thingatpt--match-empty-p 5)
+       (my/thingatpt--match-empty-p 7)))
 
 ;;;###autoload
 (defun my/thingatpt-iso8601-date-increment (count)
   "Increment the ISO8601 date at point with COUNT."
   (interactive "p")
-  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-iso8601-date-regexp)
-    (let* ((original (buffer-substring-no-properties (match-beginning 0) (match-end 0)))
+  (when (my/thingatpt-iso8601-date-match)
+    (let* ((original (buffer-substring-no-properties (match-beginning 6) (match-end 6)))
            (year (string-to-number (buffer-substring-no-properties (match-beginning 1) (match-end 1))))
            (month (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2))))
            (day (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3))))
@@ -128,8 +150,8 @@ Therefore, point does not move."
             (when (> (calendar-extract-year new-date) 9999)
               (error "Year must be <= 9999"))
             (replace-region-contents
-             (match-beginning 0)
-             (match-end 0)
+             (match-beginning 6)
+             (match-end 6)
              (my/calendar-gregorian-iso8601-date-string new-date))
             (goto-char point))))))
 
@@ -249,6 +271,11 @@ Always move point after the integer."
                   (end (match-end group)))
         (buffer-substring-no-properties beg end))
       ""))
+
+;;;###autoload
+(defun my/thingatpt--match-empty-p (group)
+  "Return non-nil if match group GROUP is empty, or did not match."
+  (eql (match-beginning group) (match-end group)))
 
 ;;;###autoload
 (defun my/thingatpt-point-in-or-after-regexp (regexp)

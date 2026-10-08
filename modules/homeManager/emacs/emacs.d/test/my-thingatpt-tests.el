@@ -66,6 +66,27 @@ Use TEXT FN ARGS."
   (should-not (my-thingatpt-tests--value "|2006-01-32 Mon" #'my/thingatpt-org-date-match))
   (should-not (my-thingatpt-tests--value "|12006-01-02 Mon" #'my/thingatpt-org-date-match)))
 
+(ert-deftest my-thingatpt-tests-my/thingatpt-org-date-match-neighbor ()
+  ;; A digit before the date rejects it.
+  (should-not (my-thingatpt-tests--value "1|2006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should-not (my-thingatpt-tests--value "12006-01-02 Mon|" #'my/thingatpt-org-date-match))
+  ;; A letter after the date rejects it.
+  (should-not (my-thingatpt-tests--value "2|006-01-02 Monday" #'my/thingatpt-org-date-match))
+  (should-not (my-thingatpt-tests--value "2006-01-02 Mon|day" #'my/thingatpt-org-date-match))
+  ;; Any other neighbor does not.
+  (should (my-thingatpt-tests--value "+2|006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "-2|006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "<2|006-01-02 Mon>" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "[2|006-01-02 Mon]" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "a2|006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "log_2|006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02 Mon1" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02 Mon_" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02 Mon." #'my/thingatpt-org-date-match))
+  ;; The search continues after a rejected date.
+  (should (my-thingatpt-tests--value "12006-01-02 Mon 2|006-01-02 Mon" #'my/thingatpt-org-date-match))
+  (should (my-thingatpt-tests--value "2006-01-02 Monday 2|006-01-02 Mon" #'my/thingatpt-org-date-match)))
+
 (ert-deftest my-thingatpt-tests-my/thingatpt-org-date-increment-day ()
   (should
    (equal
@@ -210,7 +231,16 @@ Use TEXT FN ARGS."
   (should
    (equal
     (my-thingatpt-tests--call "2006-01-|02" #'my/thingatpt-org-date-increment 1)
-    '(nil . "2006-01-|02"))))
+    '(nil . "2006-01-|02")))
+  ;; The date is rejected because of its neighbor.
+  (should
+   (equal
+    (my-thingatpt-tests--call "1|2006-01-02 Mon" #'my/thingatpt-org-date-increment 1)
+    '(nil . "1|2006-01-02 Mon")))
+  (should
+   (equal
+    (my-thingatpt-tests--call "2006-01-|02 Monday" #'my/thingatpt-org-date-increment 1)
+    '(nil . "2006-01-|02 Monday"))))
 
 (ert-deftest my-thingatpt-tests-my/thingatpt-org-date-increment-error ()
   ;; Year 0000 is not supported.
@@ -293,8 +323,6 @@ Use TEXT FN ARGS."
   (should-not (my-thingatpt-tests--value "| 2006-01-02" #'my/thingatpt-iso8601-date-match))
   (should-not (my-thingatpt-tests--value "2006-01-02 |" #'my/thingatpt-iso8601-date-match))
   (should-not (my-thingatpt-tests--value "2006-01-02 M|on" #'my/thingatpt-iso8601-date-match))
-  ;; The date must end at a word boundary.
-  (should-not (my-thingatpt-tests--value "2006-01-|02T15:04:05Z" #'my/thingatpt-iso8601-date-match))
   ;; Not a ISO8601 date.
   (should-not (my-thingatpt-tests--value "|2006-1-2" #'my/thingatpt-iso8601-date-match))
   (should-not (my-thingatpt-tests--value "|2006-13-02" #'my/thingatpt-iso8601-date-match))
@@ -302,6 +330,31 @@ Use TEXT FN ARGS."
   (should-not (my-thingatpt-tests--value "|12006-01-02" #'my/thingatpt-iso8601-date-match))
   (should-not (my-thingatpt-tests--value "|2006-01-021" #'my/thingatpt-iso8601-date-match))
   (should-not (my-thingatpt-tests--value "|20060102" #'my/thingatpt-iso8601-date-match)))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-iso8601-date-match-neighbor ()
+  ;; A digit before the date rejects it.
+  (should-not (my-thingatpt-tests--value "1|2006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should-not (my-thingatpt-tests--value "12006-01-02|" #'my/thingatpt-iso8601-date-match))
+  ;; A digit after the date rejects it.
+  (should-not (my-thingatpt-tests--value "2|006-01-023" #'my/thingatpt-iso8601-date-match))
+  (should-not (my-thingatpt-tests--value "2006-01-02|3" #'my/thingatpt-iso8601-date-match))
+  ;; Any other neighbor does not.
+  (should (my-thingatpt-tests--value "+2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "-2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "<2|006-01-02>" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "a2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "log_2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2006-01-|02T15:04:05Z" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02_notes.md" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02-draft" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02+08:00" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2|006-01-02." #'my/thingatpt-iso8601-date-match))
+  ;; The search continues after a rejected date.
+  (should (my-thingatpt-tests--value "12006-01-02 2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  (should (my-thingatpt-tests--value "2006-01-023 2|006-01-02" #'my/thingatpt-iso8601-date-match))
+  ;; A rejected date is consumed as a whole.
+  ;; 0203-04-05 is not a date because 2006-01-0203 is consumed.
+  (should-not (my-thingatpt-tests--value "2006-01-0203-04-|05" #'my/thingatpt-iso8601-date-match)))
 
 (ert-deftest my-thingatpt-tests-my/thingatpt-iso8601-date-increment-day ()
   (should
@@ -427,6 +480,11 @@ Use TEXT FN ARGS."
    (equal
     (my-thingatpt-tests--edit "2006-01-|02 Mon" #'my/thingatpt-iso8601-date-increment 1)
     "2006-01-|03 Mon"))
+  ;; The time of a timestamp is left as is.
+  (should
+   (equal
+    (my-thingatpt-tests--edit "2006-01-|02T15:04:05Z" #'my/thingatpt-iso8601-date-increment 1)
+    "2006-01-|03T15:04:05Z"))
   ;; Only the date at point is edited.
   (should
    (equal
@@ -446,7 +504,16 @@ Use TEXT FN ARGS."
   (should
    (equal
     (my-thingatpt-tests--call "2006-1-|2" #'my/thingatpt-iso8601-date-increment 1)
-    '(nil . "2006-1-|2"))))
+    '(nil . "2006-1-|2")))
+  ;; The date is rejected because of its neighbor.
+  (should
+   (equal
+    (my-thingatpt-tests--call "1|2006-01-02" #'my/thingatpt-iso8601-date-increment 1)
+    '(nil . "1|2006-01-02")))
+  (should
+   (equal
+    (my-thingatpt-tests--call "2006-01-|023" #'my/thingatpt-iso8601-date-increment 1)
+    '(nil . "2006-01-|023"))))
 
 (ert-deftest my-thingatpt-tests-my/thingatpt-iso8601-date-increment-error ()
   ;; Year 0000 is not supported.
