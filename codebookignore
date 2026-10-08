@@ -2,6 +2,7 @@
 *.conf
 *.hy
 *.nix
+*.patch
 *.plist
 *.sh
 **/firefox/*.json

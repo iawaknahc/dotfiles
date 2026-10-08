@@ -8,6 +8,7 @@
 *.hy
 *.json
 *.nu
+*.patch
 *.plist
 *.vim
 *.yaml

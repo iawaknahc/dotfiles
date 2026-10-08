@@ -1,0 +1,19 @@
+evil-search: respect lazy-highlight-cleanup in evil-flash-hook
+
+isearch-done respects the variable lazy-highlight-cleanup,
+but evil-flash-hook always forces the cleanup.
+Make evil-flash-hook respect the variable too,
+so that the search results stay highlighted when it is nil.
+
+--- a/evil-search.el
++++ b/evil-search.el
+@@ -171,7 +171,8 @@
+     (evil-echo-area-restore)
+     (isearch-dehighlight)
+     (setq isearch-lazy-highlight-last-string nil)
+-    (lazy-highlight-cleanup t)
++    (when lazy-highlight-cleanup
++      (lazy-highlight-cleanup t))
+     (when evil-flash-timer
+       (cancel-timer evil-flash-timer)))
+   (remove-hook 'pre-command-hook #'evil-flash-hook t)

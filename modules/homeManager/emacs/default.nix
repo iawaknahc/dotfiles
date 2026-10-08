@@ -34,7 +34,16 @@
     catppuccin-theme = self.melpaPackages.catppuccin-theme;
     # The latest release on NonGNU ELPA is 1.15.0 which was released in 2024.
     # The latest release on MELPA stable is 1.14.2 which is even older.
-    evil = self.melpaPackages.evil;
+    evil = self.melpaPackages.evil.overrideAttrs (prev: {
+      patches = (prev.patches or [ ]) ++ [
+        # evil-search: show match count when using isearch
+        # See https://github.com/emacs-evil/evil/pull/1992
+        ./evil-pr-1992.patch
+        # evil-search: respect lazy-highlight-cleanup in evil-flash-hook
+        # This keeps the search results highlighted when lazy-highlight-cleanup is nil.
+        ./evil-respect-lazy-highlight-cleanup.patch
+      ];
+    });
     just-ts-mode = self.melpaPackages.just-ts-mode;
     nushell-ts-mode = self.melpaPackages.nushell-ts-mode;
     # diff-hl has a serious bug that always set left-margin-width to 1.
