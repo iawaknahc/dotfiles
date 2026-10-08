@@ -1,5 +1,157 @@
 ;;; my-thingatpt.el --- my-thingatpt.el -*- lexical-binding: t -*-
 ;;; Commentary:
+
+;; This library increments and decrements the thing at point.
+;; The supported things are Org dates, ISO8601 dates, and integers.
+;;
+;; In the examples below, | denotes the position of point.
+;;
+;; 1. Overview
+;;
+;; Each thing is an entry in `my/thingatpt-things', which has a match
+;; function, an increment command, and a decrement command.  The first
+;; thing whose match function returns non-nil is used, so a more
+;; specific thing must come first.  For example, 2006-01-|02 is an
+;; ISO8601 date, and also three integers.
+;;
+;; A match function answers whether point is in or right after the
+;; thing.  Only the current line is searched.
+;;
+;; 2. Where a thing begins and ends
+;;
+;; The regexps do not use word-start and word-end.  Whether a thing
+;; matches is decided by what is right before it, and what is right
+;; after it.  The neighbors considered are the line edges, whitespace,
+;; digits, letters, and each ASCII symbol on its own.
+;;
+;; The symbols are not grouped into classes such as closing brackets.
+;; A symbol can play more than one role.  For example, > closes
+;; <2006-01-02 Mon>, and it is also an operator in x>-1.
+;;
+;; A line is scanned from left to right.  A rejected match is consumed
+;; as a whole, and the scan resumes at its end.  For example, in
+;; 2006-01-0203-04-05, 2006-01-0203 is rejected and consumed, so
+;; 0203-04-05 is never tried.
+;;
+;; 3. Verdicts for dates
+;;
+;; A date is rejected only by a neighbor that could extend it, which is
+;; a neighbor of the same kind as the character at its edge.
+;;
+;; - A digit before an Org date or an ISO8601 date.
+;;   12006-01-02 does not match.
+;; - A digit after an ISO8601 date.
+;;   2006-01-023 does not match.
+;; - A letter after an Org date.
+;;   2006-01-02 Monday does not match.
+;;
+;; Every other neighbor matches.  In particular, these match:
+;;
+;;   +2006-01-02   -2006-01-02   <2006-01-02>   log_2006-01-02
+;;   a2006-01-02   2006-01-02T15:04:05Z   2006-01-02_notes.md
+;;
+;; 4. Verdicts for integers
+;;
+;; An integer is either a decimal, or a non-decimal with the C-style
+;; base prefix 0b, 0o, or 0x.
+;;
+;; 4.1. Before the integer
+;;
+;; Nothing before the integer rejects it.  a|1 and _|1 match 1.
+;;
+;; 4.2. The sign
+;;
+;; A + or - right before the integer is its sign, unless it is demoted
+;; by the character before it.  The demoting characters are the digits,
+;; the letters, and _ + - ) ] }.  See
+;; `my/thingatpt-sign-demoting-regexp'.
+;;
+;;   1-|2      matches 2     a-|1      matches 1     --|1   matches 1
+;;   f(x)-|1   matches 1     a[0]-|1   matches 1     x_-|1  matches 1
+;;   (-|1      matches -1    x=-|1     matches -1    x>-|1  matches -1
+;;   "-|1"     matches -1    '-|1'     matches -1
+;;
+;; A demoted + or - is not part of the match, so a|-1 matches nothing,
+;; and 1|-2 matches 1.
+;;
+;; Some symbols are ambiguous, and the verdict is a judgement call.
+;; There is an asymmetry which is used as the tie-breaker.  Wrongly
+;; keeping a sign can delete an operator, since f(x)-|1 would become
+;; f(x)0.  Wrongly demoting a sign only reverses the direction.
+;;
+;; - ) demotes.  The cost is that the C cast (size_t)-1 is incremented
+;;   in the wrong direction.
+;; - " and ' do not demote, because a quoted -1 is more common than a
+;;   subtraction from a string.  The cost is that 'a'-|1 becomes 'a'0.
+;;
+;; The sign of the exponent part is never demoted, because it is inside
+;; the integer.
+;;
+;; 4.3. After a decimal
+;;
+;; Nothing after a decimal rejects it.  What follows is a suffix, and it
+;; is not part of the match.
+;;
+;;   1|px   1|km   1|UL   1|f32   all match 1
+;;
+;; - e or E is an exponent indicator only if it is followed by an
+;;   optional sign, and at least one digit.  1|e and 1|e+ match 1.
+;; - 0 followed by b, o, or x is a base prefix, and it is never the
+;;   decimal 0.  It applies only if the digits are exactly 0, so 10|b
+;;   matches 10.
+;; - The digits in a suffix are an integer of their own.  1f3|2 matches
+;;   32.  It follows from 4.1.
+;;
+;; 4.4. After a non-decimal
+;;
+;; Some letters are digits in some bases, so digits and letters are read
+;; relative to the base.  A foreign digit is a decimal digit which is
+;; not a digit of the base, such as 2 in binary, and 8 in octal.
+;; Hexadecimal has no foreign digits.
+;;
+;; - The base prefix must be followed by at least one digit of the base.
+;;   0|x, 0|xg, and 0|b2 match nothing.
+;; - The digits are the longest run of the digits of the base.
+;; - If the digits are followed by a foreign digit, nothing matches.
+;;   0b1|2 matches nothing, because no language writes it, and matching
+;;   0b1 would turn it into 0b102.
+;; - Anything else that follows is a suffix.  0x1|23m matches 0x123, and
+;;   0b1|u8 matches 0b1.
+;; - A rejected non-decimal also consumes the letters, digits, and
+;;   underscores that follow.  Otherwise, 2 in 0b2 would match as a
+;;   decimal.
+;;
+;; The longest run settles the ambiguities.
+;;
+;;   0x1e3       e is a digit, not an exponent indicator.
+;;   0x10em      e is a digit, so the suffix is m.
+;;   0x0b1       b is a digit, not a base prefix.
+;;   0b1e5       0b1 with the suffix e5.  Only decimals have exponent.
+;;   1920x1080   1920 and 1080.  1920 is taken first, so 0x1080 is
+;;               never tried.
+;;
+;; 4.5. Going below zero
+;;
+;; If the + or - before the integer is demoted, the integer cannot
+;; become negative.  1-|2 decremented by 3 would be 1--1, and that
+;; would be read back as 1.  A `user-error' is signaled instead.
+;;
+;; If there is no + or - before the integer, nothing is demoted, and the
+;; integer can become negative.  a|1 decremented by 2 is a-1, although
+;; it is read back as 1.
+;;
+;; 4.6. Not supported
+;;
+;; - The Lisp-style base prefixes #b, #o, and #x.  Their order is base
+;;   prefix, sign, and digits, such as #x-10, while the order of the
+;;   C-style is sign, base prefix, and digits, such as -0x10.  A separate
+;;   regexp and a separate way to write the sign are needed.  For now,
+;;   # is an ordinary symbol, and #b101 is read as the decimal 101.
+;; - An underscore right after the base prefix, such as 0x_ff, which is
+;;   accepted by Python and Rust.  It matches nothing.
+;; - A hexadecimal can swallow the beginning of a suffix which is made
+;;   of a to f.  There is no way around that.
+
 ;;; Code:
 
 (require 'cl-lib)
@@ -162,68 +314,137 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
   (my/thingatpt-iso8601-date-increment (- count)))
 
 ;;;; Integer
+
+(rx-define my/thingatpt-rx-sign (in "-+"))
+
+;; A run of digits, with underscores allowed between digits.
+(rx-define my/thingatpt-rx-digits (digit)
+  (seq digit (* (or (seq "_" digit) digit))))
+
+;; The letters, digits, and underscores following an invalid integer.
+(rx-define my/thingatpt-rx-tail (* (in "0-9a-zA-Z_")))
+
+;; The integer regexps share the same groups.
+;;
+;; Group 1 is the integral part, which consists of group 2, 3, and 4.
+;; Group 2 is the sign of the integral part.
+;; Group 3 is the base prefix.
+;; Group 4 is the digits of the integral part.
+;; Group 5 is the exponent part, which consists of group 6, and 7.
+;; Group 6 is the sign of the exponent part.
+;; Group 7 is the digits of the exponent part.
+;; Group 8 is the part that makes the match invalid.
+;; If it is not empty, the match must be rejected.
+
+(defconst my/thingatpt-binary-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 3 (or "0b" "0B"))
+     (group-n 4 (my/thingatpt-rx-digits (in "01"))))
+   (group-n 8 (? (in "2-9") my/thingatpt-rx-tail)))
+  "A regular expression for binary integers such as 0b101.
+
+It is invalid if it is followed by a digit that is not a binary digit.")
+
+(defconst my/thingatpt-octal-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 3 (or "0o" "0O"))
+     (group-n 4 (my/thingatpt-rx-digits (in "0-7"))))
+   (group-n 8 (? (in "89") my/thingatpt-rx-tail)))
+  "A regular expression for octal integers such as 0o17.
+
+It is invalid if it is followed by a digit that is not an octal digit.")
+
+(defconst my/thingatpt-hexadecimal-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 3 (or "0x" "0X"))
+     (group-n 4 (my/thingatpt-rx-digits (in "0-9a-fA-F")))))
+  "A regular expression for hexadecimal integers such as 0xff.")
+
+(defconst my/thingatpt-bare-base-prefix-regexp
+  (rx
+   (? my/thingatpt-rx-sign)
+   (group-n 8 (or "0b" "0B" "0o" "0O" "0x" "0X") my/thingatpt-rx-tail))
+  "A regular expression for a base prefix that is not followed by a valid digit.
+
+It is always invalid.")
+
+(defconst my/thingatpt-decimal-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 4 (my/thingatpt-rx-digits (in "0-9"))))
+   (? (in "eE") (group-n 5
+                  (group-n 6 (? my/thingatpt-rx-sign))
+                  (group-n 7 (my/thingatpt-rx-digits (in "0-9"))))))
+  "A regular expression for decimal integers such as 42, or 1e10.")
+
 (defconst my/thingatpt-integer-regexp
-  (rx-let ((sign (in "-+"))
-           (binary-prefix (or "0b" "0B"))
-           (octal-prefix (or "0o" "0O"))
-           (hexadecimal-prefix (or "0x" "0X"))
+  (rx
+   (or
+    (regexp my/thingatpt-binary-integer-regexp)
+    (regexp my/thingatpt-octal-integer-regexp)
+    (regexp my/thingatpt-hexadecimal-integer-regexp)
+    ;; This must be after the above ones,
+    ;; so that it matches only if there is no valid digit.
+    ;; This must be before the decimal one,
+    ;; so that 0x is not treated as the decimal integer 0.
+    (regexp my/thingatpt-bare-base-prefix-regexp)
+    (regexp my/thingatpt-decimal-integer-regexp)))
+  "A regular expression for integers.
 
-           (binary-digit (in "01"))
-           (octal-digit (in "01234567"))
-           (decimal-digit (in "0123456789"))
-           (hexadecimal-digit (in "0123456789abcdefABCDEF"))
+If group 8 is not empty, the match must be rejected.
+See `my/thingatpt-integer-match'.")
 
-           (underscore-digit (d) (seq "_" d))
-           (underscore-digit-or-digit (d) (or (underscore-digit d) d))
-           (digits (d) (seq d (* (underscore-digit-or-digit d))))
-           (binary-digits (digits binary-digit))
-           (octal-digits (digits octal-digit))
-           (decimal-digits (digits decimal-digit))
-           (hexadecimal-digits (digits hexadecimal-digit))
+(defconst my/thingatpt-sign-demoting-regexp
+  (rx (in "0-9a-zA-Z_)]}+-"))
+  "A regular expression for a character that demotes the + or - after it.
 
-           (exponent-indicator (or "e" "E"))
-
-           (decimal-integer (seq
-                             (group-n 1
-                               (group-n 2 (? sign))
-                               (group-n 4 decimal-digits))
-                             (? exponent-indicator (group-n 5
-                                                     (group-n 6 (? sign))
-                                                     (group-n 7 decimal-digits)))))
-           (binary-integer (group-n 1
-                             (group-n 2 (? sign))
-                             (group-n 3 binary-prefix)
-                             (group-n 4 binary-digits)))
-           (octal-integer (group-n 1
-                            (group-n 2 (? sign))
-                            (group-n 3 octal-prefix)
-                            (group-n 4 octal-digits)))
-           (hexadecimal-integer (group-n 1
-                                  (group-n 2 (? sign))
-                                  (group-n 3 hexadecimal-prefix)
-                                  (group-n 4 hexadecimal-digits))))
-    (rx
-     (or
-      binary-integer
-      octal-integer
-      hexadecimal-integer
-      decimal-integer)
-     word-end))
-  "A regular expression for integers.")
+A demoted + or - is not the sign of the integer after it.
+For example, the - in 1-2 is not the sign of 2.")
 
 ;;;###autoload
 (defun my/thingatpt-integer-match ()
-  "Return non-nil if point is in or after an integer."
+  "Return non-nil if point is in or after an integer.
+
+Return the symbol `demoted' if the + or - before the integer is demoted,
+according to `my/thingatpt-sign-demoting-regexp'.
+In that case, the + or - is not part of the match.
+
+Match data is set according to `my/thingatpt-integer-regexp'."
   (interactive)
-  (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp))
+  (when (and (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
+             (my/thingatpt--match-empty-p 8))
+    (let* ((char-before-sign (char-before (match-beginning 2)))
+           (demoted (and (not (my/thingatpt--match-empty-p 2))
+                         char-before-sign
+                         (string-match-p my/thingatpt-sign-demoting-regexp
+                                         (char-to-string char-before-sign)))))
+      ;; Match again without the sign.
+      (when demoted
+        (save-excursion
+          (goto-char (match-end 2))
+          (looking-at my/thingatpt-integer-regexp)))
+      ;; After demotion, the integer may begin after point.
+      (when (>= (point) (match-beginning 0))
+        (if demoted 'demoted t)))))
 
 ;;;###autoload
 (defun my/thingatpt-integer-increment (count)
   "Increment integer at point with COUNT.
 
-Always move point after the integer."
+Always move point after the integer.
+
+Signal an error if the result is negative,
+and the + or - before the integer is demoted.
+It is because the sign of the result would be demoted as well."
   (interactive "p")
-  (when (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
+  (when-let* ((match (my/thingatpt-integer-match)))
     (let* ((integral-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 4))
            (base-prefix (my/thingatpt--buffer-substring-no-properties-of-match 3))
            (integral-sign (my/thingatpt--buffer-substring-no-properties-of-match 2))
@@ -247,6 +468,8 @@ Always move point after the integer."
        (t
         (let* ((result (my/thingatpt--increment integral-sign base-prefix integral-digits-with-underscore count))
                (integral-beg (match-beginning 1)))
+          (when (and (eq match 'demoted) (string-prefix-p "-" result))
+            (user-error "Decrementing this sign-demoted integer to negative will introduce a superfluous sign"))
           (replace-region-contents
            (match-beginning 1)
            (match-end 1)

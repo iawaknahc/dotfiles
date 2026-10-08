@@ -46,6 +46,11 @@ Use TEXT FN ARGS."
 Use TEXT FN ARGS."
   (car (apply #'my-thingatpt-tests--call text fn args)))
 
+(defun my-thingatpt-tests--match-string (regexp string group)
+  "Return match group GROUP if REGEXP matches at the beginning of STRING."
+  (when (string-match (rx string-start (regexp regexp)) string)
+    (match-string group string)))
+
 ;;;; Org date
 
 (ert-deftest my-thingatpt-tests-my/thingatpt-org-date-match ()
@@ -590,6 +595,156 @@ Use TEXT FN ARGS."
   ;; Only the current line is searched.
   (should-not (my-thingatpt-tests--value "42\n|\n42" #'my/thingatpt-integer-match)))
 
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-return-value ()
+  (should (eq (my-thingatpt-tests--value "|foo" #'my/thingatpt-integer-match) nil))
+  (should (eq (my-thingatpt-tests--value "|42" #'my/thingatpt-integer-match) t))
+  (should (eq (my-thingatpt-tests--value "|-42" #'my/thingatpt-integer-match) t))
+  (should (eq (my-thingatpt-tests--value "1-|2" #'my/thingatpt-integer-match) 'demoted)))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-sign-demoted ()
+  ;; A digit.
+  (should (eq (my-thingatpt-tests--value "1-|2" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "1+|2" #'my/thingatpt-integer-match) 'demoted))
+  ;; A letter.
+  (should (eq (my-thingatpt-tests--value "a-|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "a+|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "Z-|1" #'my/thingatpt-integer-match) 'demoted))
+  ;; An underscore.
+  (should (eq (my-thingatpt-tests--value "x_-|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "_+|1" #'my/thingatpt-integer-match) 'demoted))
+  ;; Another + or -.
+  (should (eq (my-thingatpt-tests--value "++|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "+-|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "-+|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "--|1" #'my/thingatpt-integer-match) 'demoted))
+  ;; A closing bracket.
+  (should (eq (my-thingatpt-tests--value "f(x)-|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "a[0]-|1" #'my/thingatpt-integer-match) 'demoted))
+  (should (eq (my-thingatpt-tests--value "${name}-|1" #'my/thingatpt-integer-match) 'demoted))
+  ;; The demoted sign is not part of the match.
+  (should (equal (my-thingatpt-tests--edit "1-|2" #'my/thingatpt-integer-increment 1) "1-3|"))
+  (should (equal (my-thingatpt-tests--edit "a-|1" #'my/thingatpt-integer-increment 1) "a-2|"))
+  (should (equal (my-thingatpt-tests--edit "--|1" #'my/thingatpt-integer-increment 1) "--2|"))
+  (should (equal (my-thingatpt-tests--edit "f(x)-|1" #'my/thingatpt-integer-increment 1) "f(x)-2|"))
+  (should (equal (my-thingatpt-tests--edit "2006-01-|02" #'my/thingatpt-integer-increment 1) "2006-01-3|"))
+  ;; Point is before the demoted sign.
+  (should-not (my-thingatpt-tests--value "a|-1" #'my/thingatpt-integer-match))
+  (should (eq (my-thingatpt-tests--value "1|-2" #'my/thingatpt-integer-match) t))
+  (should (equal (my-thingatpt-tests--edit "1|-2" #'my/thingatpt-integer-increment 1) "2|-2"))
+  ;; The sign of a non-decimal integer.
+  (should (equal (my-thingatpt-tests--edit "1-|0x10" #'my/thingatpt-integer-increment 1) "1-0x11|"))
+  ;; e in a hexadecimal integer is a letter.
+  (should (eq (my-thingatpt-tests--value "0x1e-|3" #'my/thingatpt-integer-match) 'demoted))
+  (should (equal (my-thingatpt-tests--edit "0x1e-|3" #'my/thingatpt-integer-increment 1) "0x1e-4|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-sign-kept ()
+  (should (eq (my-thingatpt-tests--value " -|1" #'my/thingatpt-integer-match) t))
+  (should (eq (my-thingatpt-tests--value "\t-|1" #'my/thingatpt-integer-match) t))
+  (should (eq (my-thingatpt-tests--value "(+|1" #'my/thingatpt-integer-match) t))
+  (should (eq (my-thingatpt-tests--value "(-|1" #'my/thingatpt-integer-match) t))
+  (should (equal (my-thingatpt-tests--edit "(-|1" #'my/thingatpt-integer-increment 1) "(0|"))
+  (should (equal (my-thingatpt-tests--edit "a[-|1]" #'my/thingatpt-integer-increment 1) "a[0|]"))
+  (should (equal (my-thingatpt-tests--edit "{-|1, 1}" #'my/thingatpt-integer-increment 1) "{0|, 1}"))
+  (should (equal (my-thingatpt-tests--edit "x=-|1" #'my/thingatpt-integer-increment 1) "x=0|"))
+  (should (equal (my-thingatpt-tests--edit "x>-|1" #'my/thingatpt-integer-increment 1) "x>0|"))
+  (should (equal (my-thingatpt-tests--edit "x<-|1" #'my/thingatpt-integer-increment 1) "x<0|"))
+  (should (equal (my-thingatpt-tests--edit "(1,-|1)" #'my/thingatpt-integer-increment 1) "(1,0|)"))
+  (should (equal (my-thingatpt-tests--edit "a[1:-|1]" #'my/thingatpt-integer-increment 1) "a[1:0|]"))
+  (should (equal (my-thingatpt-tests--edit "2*-|1" #'my/thingatpt-integer-increment 1) "2*0|"))
+  (should (equal (my-thingatpt-tests--edit "10^-|3" #'my/thingatpt-integer-increment 1) "10^-2|"))
+  (should (equal (my-thingatpt-tests--edit "a[0..-|1]" #'my/thingatpt-integer-increment 1) "a[0..0|]"))
+  (should (equal (my-thingatpt-tests--edit "\"-|1\"" #'my/thingatpt-integer-increment 1) "\"0|\""))
+  (should (equal (my-thingatpt-tests--edit "'-|1'" #'my/thingatpt-integer-increment 1) "'0|'")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-decimal-suffix ()
+  (should (equal (my-thingatpt-tests--edit "1|e" #'my/thingatpt-integer-increment 1) "2|e"))
+  (should (equal (my-thingatpt-tests--edit "1|px" #'my/thingatpt-integer-increment 1) "2|px"))
+  (should (equal (my-thingatpt-tests--edit "1|km" #'my/thingatpt-integer-increment 1) "2|km"))
+  (should (equal (my-thingatpt-tests--edit "1|UL" #'my/thingatpt-integer-increment 1) "2|UL"))
+  (should (equal (my-thingatpt-tests--edit "1|f32" #'my/thingatpt-integer-increment 1) "2|f32"))
+  (should (equal (my-thingatpt-tests--edit "1|_" #'my/thingatpt-integer-increment 1) "2|_"))
+  ;; e is an exponent indicator only if it is followed by digits.
+  (should (equal (my-thingatpt-tests--edit "1|e+" #'my/thingatpt-integer-increment 1) "2|e+"))
+  (should (equal (my-thingatpt-tests--edit "1|e-x" #'my/thingatpt-integer-increment 1) "2|e-x"))
+  (should (equal (my-thingatpt-tests--edit "1|em" #'my/thingatpt-integer-increment 1) "2|em"))
+  ;; b, o, and x are suffixes unless the digits are exactly 0.
+  (should (equal (my-thingatpt-tests--edit "10|b" #'my/thingatpt-integer-increment 1) "11|b"))
+  (should (equal (my-thingatpt-tests--edit "10|o" #'my/thingatpt-integer-increment 1) "11|o"))
+  (should (equal (my-thingatpt-tests--edit "10|x" #'my/thingatpt-integer-increment 1) "11|x"))
+  ;; The suffix is not part of the match.
+  (should-not (my-thingatpt-tests--value "1p|x" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "1px|" #'my/thingatpt-integer-match))
+  ;; The digits in the suffix is an integer of its own.
+  (should (equal (my-thingatpt-tests--edit "1f3|2" #'my/thingatpt-integer-increment 1) "1f33|"))
+  ;; A letter before the integer.
+  (should (equal (my-thingatpt-tests--edit "a|1" #'my/thingatpt-integer-increment 1) "a2|"))
+  (should (equal (my-thingatpt-tests--edit "_|1" #'my/thingatpt-integer-increment 1) "_2|"))
+  (should (equal (my-thingatpt-tests--edit "#|1" #'my/thingatpt-integer-increment 1) "#2|"))
+  ;; Each side of a decimal point is an integer of its own.
+  (should (equal (my-thingatpt-tests--edit "1|.5" #'my/thingatpt-integer-increment 1) "2|.5"))
+  (should (equal (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-integer-increment 1) "1.6|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-bare-base-prefix ()
+  (should-not (my-thingatpt-tests--value "|0x" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|x" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0x|" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|b" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|o" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|X" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "(0|x)" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "-0|x" #'my/thingatpt-integer-match))
+  ;; The base prefix is followed by something that is not a valid digit.
+  (should-not (my-thingatpt-tests--value "0|xg" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|b2" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|o8" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0|x_ff" #'my/thingatpt-integer-match))
+  ;; The letters, digits, and underscores that follow are consumed.
+  (should-not (my-thingatpt-tests--value "0b|2" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0b2|" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0xg|1" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0xg_1|" #'my/thingatpt-integer-match))
+  ;; The search continues after it.
+  (should (equal (my-thingatpt-tests--edit "0x 4|2" #'my/thingatpt-integer-increment 1) "0x 43|"))
+  (should (equal (my-thingatpt-tests--edit "0b2 4|2" #'my/thingatpt-integer-increment 1) "0b2 43|"))
+  ;; The base prefix is followed by a valid digit.
+  (should (equal (my-thingatpt-tests--edit "0|x123" #'my/thingatpt-integer-increment 1) "0x124|"))
+  (should (equal (my-thingatpt-tests--edit "0|x123deadbeef" #'my/thingatpt-integer-increment 1) "0x123deadbef0|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-non-decimal-suffix ()
+  ;; A letter that is not a digit is a suffix.
+  (should (equal (my-thingatpt-tests--edit "0x1|23m" #'my/thingatpt-integer-increment 1) "0x124|m"))
+  (should (equal (my-thingatpt-tests--edit "0xdead|beefg" #'my/thingatpt-integer-increment 1) "0xdeadbef0|g"))
+  (should (equal (my-thingatpt-tests--edit "0b1|u8" #'my/thingatpt-integer-increment 1) "0b10|u8"))
+  (should (equal (my-thingatpt-tests--edit "0o7|i32" #'my/thingatpt-integer-increment 1) "0o10|i32"))
+  (should (equal (my-thingatpt-tests--edit "(0xf|f)" #'my/thingatpt-integer-increment 1) "(0x100|)"))
+  ;; A digit that is not a digit of the base makes the integer invalid.
+  (should-not (my-thingatpt-tests--value "0b1|2" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "|0b12" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0b1|02" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0o1|9" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0o17|8" #'my/thingatpt-integer-match))
+  ;; The letters, digits, and underscores that follow are consumed.
+  (should-not (my-thingatpt-tests--value "0b12|" #'my/thingatpt-integer-match))
+  (should-not (my-thingatpt-tests--value "0b12a_|3" #'my/thingatpt-integer-match))
+  ;; The search continues after it.
+  (should (equal (my-thingatpt-tests--edit "0b12 4|2" #'my/thingatpt-integer-increment 1) "0b12 43|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-match-longest-digits ()
+  ;; e is a digit, not an exponent indicator.
+  (should (equal (my-thingatpt-tests--edit "|0x1e3" #'my/thingatpt-integer-increment 1) "0x1e4|"))
+  ;; e is a digit, so the suffix is m, not em.
+  (should (equal (my-thingatpt-tests--edit "|0x10em" #'my/thingatpt-integer-increment 1) "0x10f|m"))
+  ;; f32 is not a suffix.
+  (should (equal (my-thingatpt-tests--edit "|0x1f32" #'my/thingatpt-integer-increment 1) "0x1f33|"))
+  ;; b is a digit, not a base prefix.
+  (should (equal (my-thingatpt-tests--edit "|0x0b1" #'my/thingatpt-integer-increment 1) "0xb2|"))
+  ;; Only decimal integers have exponent part.
+  (should (equal (my-thingatpt-tests--edit "|0b1e5" #'my/thingatpt-integer-increment 1) "0b10|e5"))
+  ;; 0x1080 is not tried because 1920 is taken first.
+  (should (equal (my-thingatpt-tests--edit "1920|x1080" #'my/thingatpt-integer-increment 1) "1921|x1080"))
+  (should (equal (my-thingatpt-tests--edit "1920x|1080" #'my/thingatpt-integer-increment 1) "1920x1081|"))
+  (should (equal (my-thingatpt-tests--edit "1|0x10" #'my/thingatpt-integer-increment 1) "11|x10")))
+
 (ert-deftest my-thingatpt-tests-my/thingatpt-integer-increment-decimal ()
   (should (equal (my-thingatpt-tests--edit "|0" #'my/thingatpt-integer-increment 1) "1|"))
   (should (equal (my-thingatpt-tests--edit "|42" #'my/thingatpt-integer-increment 1) "43|"))
@@ -727,6 +882,28 @@ Use TEXT FN ARGS."
     (my-thingatpt-tests--call "some|thing" #'my/thingatpt-integer-increment 1)
     '(nil . "some|thing"))))
 
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-increment-demoted-sign ()
+  ;; The result is not negative.
+  (should (equal (my-thingatpt-tests--edit "1-|2" #'my/thingatpt-integer-increment -2) "1-0|"))
+  (should (equal (my-thingatpt-tests--edit "1+|2" #'my/thingatpt-integer-increment -2) "1+0|"))
+  (should (equal (my-thingatpt-tests--edit "1-|2" #'my/thingatpt-integer-increment 10) "1-12|"))
+  ;; The result is negative.
+  (should-error (my-thingatpt-tests--edit "1-|2" #'my/thingatpt-integer-increment -3) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1+|2" #'my/thingatpt-integer-increment -3) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1-|0" #'my/thingatpt-integer-decrement 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "a-|0x1" #'my/thingatpt-integer-decrement 2) :type 'user-error)
+  ;; The buffer is not changed on error.
+  (with-temp-buffer
+    (insert "1-2")
+    (goto-char 3)
+    (should-error (my/thingatpt-integer-increment -3) :type 'user-error)
+    (should (equal (buffer-string) "1-2"))
+    (should (equal (point) 3)))
+  ;; The exponent part can be negative.
+  (should (equal (my-thingatpt-tests--edit "1-2e|1" #'my/thingatpt-integer-increment -3) "1-2e-2|"))
+  ;; Nothing is demoted if there is no + or -, so the result can be negative.
+  (should (equal (my-thingatpt-tests--edit "a|1" #'my/thingatpt-integer-increment -2) "a-1|")))
+
 (ert-deftest my-thingatpt-tests-my/thingatpt-integer-increment-repeat ()
   ;; The command can be repeated because point is moved after the integer.
   (with-temp-buffer
@@ -749,6 +926,123 @@ Use TEXT FN ARGS."
   (should (equal (my-thingatpt-tests--edit "1e|10" #'my/thingatpt-integer-decrement 1) "1e9|"))
   ;; Negative count.
   (should (equal (my-thingatpt-tests--edit "|42" #'my/thingatpt-integer-decrement -1) "43|")))
+
+;;;; Integer regexps
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-binary-integer-regexp ()
+  (let ((regexp my/thingatpt-binary-integer-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b101" 0) "0b101"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0B1_0" 0) "-0B1_0"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0b101" 2) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0b101" 3) "0b"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0b101" 4) "101"))
+    ;; The suffix is not part of the match.
+    (should (equal (my-thingatpt-tests--match-string regexp "0b101u8" 0) "0b101"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b101u8" 8) ""))
+    ;; An underscore must be between digits.
+    (should (equal (my-thingatpt-tests--match-string regexp "0b1_" 0) "0b1"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b1__0" 0) "0b1"))
+    ;; Invalid.
+    (should (equal (my-thingatpt-tests--match-string regexp "0b12" 8) "2"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b1029a_ b" 8) "29a_"))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "0b" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "0b2" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "0b_1" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "101" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-octal-integer-regexp ()
+  (let ((regexp my/thingatpt-octal-integer-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "0o17" 0) "0o17"))
+    (should (equal (my-thingatpt-tests--match-string regexp "+0O7_7" 0) "+0O7_7"))
+    (should (equal (my-thingatpt-tests--match-string regexp "+0o17" 2) "+"))
+    (should (equal (my-thingatpt-tests--match-string regexp "+0o17" 3) "0o"))
+    (should (equal (my-thingatpt-tests--match-string regexp "+0o17" 4) "17"))
+    ;; The suffix is not part of the match.
+    (should (equal (my-thingatpt-tests--match-string regexp "0o17i32" 0) "0o17"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0o17i32" 8) ""))
+    ;; Invalid.
+    (should (equal (my-thingatpt-tests--match-string regexp "0o19" 8) "9"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0o178z)" 8) "8z"))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "0o" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "0o8" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "17" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-hexadecimal-integer-regexp ()
+  (let ((regexp my/thingatpt-hexadecimal-integer-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "0xff" 0) "0xff"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0XFF_ff" 0) "-0XFF_ff"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0xff" 2) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0xff" 3) "0x"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-0xff" 4) "ff"))
+    ;; The suffix is not part of the match.
+    (should (equal (my-thingatpt-tests--match-string regexp "0xffg" 0) "0xff"))
+    ;; It is never invalid.
+    (should-not (my-thingatpt-tests--match-string regexp "0xffg" 8))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "0x" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "0xg" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "ff" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-bare-base-prefix-regexp ()
+  (let ((regexp my/thingatpt-bare-base-prefix-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "0x" 8) "0x"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0B" 8) "0B"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0o)" 8) "0o"))
+    ;; The letters, digits, and underscores that follow are consumed.
+    (should (equal (my-thingatpt-tests--match-string regexp "0b2" 8) "0b2"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0xg_1 2" 8) "0xg_1"))
+    ;; The sign is consumed.
+    (should (equal (my-thingatpt-tests--match-string regexp "-0x" 0) "-0x"))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "0" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "10x" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-decimal-integer-regexp ()
+  (let ((regexp my/thingatpt-decimal-integer-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "42" 0) "42"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_000" 0) "-1_000"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_000" 2) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_000" 4) "1_000"))
+    (should-not (my-thingatpt-tests--match-string regexp "-1_000" 3))
+    ;; Exponent.
+    (should (equal (my-thingatpt-tests--match-string regexp "1e10" 0) "1e10"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1E-1_0" 0) "1E-1_0"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-2e-10" 1) "-2"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-2e-10" 5) "-10"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-2e-10" 6) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-2e-10" 7) "10"))
+    ;; e is an exponent indicator only if it is followed by digits.
+    (should (equal (my-thingatpt-tests--match-string regexp "1e" 0) "1"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1e+" 0) "1"))
+    (should-not (my-thingatpt-tests--match-string regexp "1e" 5))
+    ;; The suffix is not part of the match.
+    (should (equal (my-thingatpt-tests--match-string regexp "1px" 0) "1"))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "px" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "-" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-integer-regexp ()
+  (let ((regexp my/thingatpt-integer-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b101" 0) "0b101"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0o17" 0) "0o17"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0xff" 0) "0xff"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1e10" 0) "1e10"))
+    ;; A bare base prefix is not the decimal integer 0.
+    (should (equal (my-thingatpt-tests--match-string regexp "0x" 8) "0x"))
+    (should (equal (my-thingatpt-tests--match-string regexp "0b2" 8) "0b2"))
+    ;; The groups of the other alternatives do not match.
+    (should-not (my-thingatpt-tests--match-string regexp "42" 3))
+    (should-not (my-thingatpt-tests--match-string regexp "42" 8))
+    (should-not (my-thingatpt-tests--match-string regexp "0x" 4))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-sign-demoting-regexp ()
+  (dolist (string '("0" "9" "a" "z" "A" "Z" "_" ")" "]" "}" "+" "-"))
+    (should (string-match-p my/thingatpt-sign-demoting-regexp string)))
+  (dolist (string '(" " "!" "\"" "#" "$" "%" "&" "'" "(" "*" "," "." "/" ":" ";" "<" "="
+                    ">" "?" "@" "[" "\\" "^" "`" "{" "|" "~"))
+    (should-not (string-match-p my/thingatpt-sign-demoting-regexp string))))
 
 ;;;; Helpers
 

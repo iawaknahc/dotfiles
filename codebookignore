@@ -13,6 +13,7 @@ init-font.el
 json.lua
 justfile
 Makefile
+my-thingatpt.el
 parse_ucd.zig
 secrets/secrets.yaml
 vimrc.vim

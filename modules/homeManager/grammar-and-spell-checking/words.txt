@@ -502,6 +502,7 @@ wrapscan
 writebackup
 wshada
 xdg
+xff
 xform
 xirr
 xlit
