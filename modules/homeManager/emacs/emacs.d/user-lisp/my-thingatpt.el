@@ -2,7 +2,8 @@
 ;;; Commentary:
 
 ;; This library increments and decrements the thing at point.
-;; The supported things are Org dates, ISO8601 dates, and integers.
+;; The supported things are Org dates, ISO8601 dates, floats, and
+;; integers.
 ;;
 ;; In the examples below, | denotes the position of point.
 ;;
@@ -179,6 +180,123 @@
 ;;   accepted by Python and Rust.  It matches nothing.
 ;; - A hexadecimal can swallow the beginning of a suffix which is made
 ;;   of a to f.  There is no way around that.
+;;
+;; 5. Verdicts for floats
+;;
+;; A float is a decimal with a decimal point, in one of the forms 1.5,
+;; .5, and 1. with an optional sign, and an optional exponent part, such
+;; as -1.5e-3.  Underscores are allowed between digits.
+;;
+;; A float is a thing of its own, and it comes before the integer.  If a
+;; float is rejected, the integer takes over, and the digits are
+;; integers of their own.  For example, some.|5 is the integer 5.
+;;
+;; The sign follows 4.2.  What follows a float is a suffix, and e or E
+;; is an exponent indicator under the same condition as in 4.3.
+;;
+;; 5.1. Before the integral part
+;;
+;; This is about the character right before the digits of 1.5 and 1.
+;;
+;;   A letter         rejected   a|1.5   v|1.9   0x|1.5
+;;   _                rejected   _|1.5
+;;   + -              the sign   -|1.5   x-|1.5
+;;   Anything else    float      (|1.5   =|1.5
+;;
+;; A float never begins in the middle of a word, so that 0x1.5 is the
+;; hexadecimal 0x1 and the integer 5, and v1.9 is a version whose 9
+;; becomes 10.
+;;
+;; 5.2. The decimal point of .5
+;;
+;; The dot of .5 is a decimal point, unless it is demoted by the
+;; character before it.  A demoted dot rejects the float.  See
+;; `my/thingatpt-leading-decimal-point-demoting-regexp'.
+;;
+;;   The line start, whitespace   float     | .5
+;;   A digit                      demoted   0x1|.5   1.2|.3
+;;   A letter                     demoted   some|.5   pair|.0   ls|.1
+;;   _                            demoted   x_|.5
+;;   ) ] }                        demoted   f(x)|.0   a[0]|.1   ${name}|.1
+;;   .                            demoted   0.|.5
+;;   \                            demoted   1\|.5
+;;   + -                          the sign  -|.5
+;;   ( [ {                        float     (|.5
+;;   " ' `                        float     "|.5"
+;;   = < > , : ;                  float     x=|.5   (1,|.5)
+;;   * / % ^ & | ! ~ ?            float     2*|.5
+;;   # $ @                        float     $|.5
+;;
+;; A digit can be right before the dot only if it is not the integral
+;; part, such as the 1 of 0x1.5, and the 2 of 1.2.3.
+;;
+;; Some symbols are ambiguous, and the verdict is a judgement call.
+;;
+;; - " and ' do not demote, because a quoted .5 is more common than a
+;;   member access on a string.
+;; - * does not demote.  The cost is the glob *.5.
+;; - \ demotes, because an escaped dot is a literal dot in a regexp.
+;;
+;; 5.3. The decimal point of 1.
+;;
+;; The dot of 1. is a decimal point, unless it is demoted by the
+;; character after it.  A demoted dot rejects the float.  See
+;; `my/thingatpt-trailing-decimal-point-demoting-regexp'.
+;;
+;;   The line end, whitespace   float          x = 1|.
+;;   A digit                    the fraction   1|.5
+;;   e or E, sign, digits       the exponent   1|.e5
+;;   Any other letter           demoted        1|.times   1|.toString()
+;;   _                          demoted        1|._x
+;;   .                          demoted        1|..5
+;;   Any other symbol           float          (1|.)   [1|., 2.]   1|.+2
+;;
+;; Little depends on this verdict, because 1. and the integer 1 are
+;; incremented in the same way.  The cost is the C suffix in 1.f, and
+;; that the period after a number at the end of a sentence is taken.
+;;
+;; 5.4. Which digit is incremented
+;;
+;; If point is in the exponent part, the exponent part is incremented,
+;; as for integers.
+;;
+;; Otherwise, the character before point decides.
+;;
+;; - A digit of the fraction.  That digit is incremented, with carry.
+;;   1.2|5 becomes 1.3|5, and 1.9|5 becomes 2.0|5.
+;; - The decimal point.  A `user-error' is signaled.  1.|5 and 1.| are
+;;   errors.
+;; - An underscore in the fraction.  A `user-error' is signaled.
+;;   0.000_|1 is an error.
+;; - Anything else.  The integral part is incremented by 1, as for
+;;   integers.  1|.5 becomes 2|.5, and 1_|000.5 becomes 1_001|.5.
+;;
+;; In Evil normal state, the cursor is a block on the character after
+;; point.  So the character after point decides instead, as long as it
+;; is in the float.  1.|25 becomes 1.|35, and 1|.5 is an error.  If
+;; point is right after the float, the character before point decides.
+;;
+;; The number of digits of the fraction never changes.  Point stays at
+;; the same distance from the decimal point, so that the command can be
+;; repeated on the same digit.
+;;
+;; If the fraction is incremented, an empty integral part stays empty
+;; as long as it is zero.  .9| becomes 1.0|, and .5| becomes .4|.
+;;
+;; If the integral part is incremented, it is always written, even if
+;; it is empty and becomes zero.  |-.5 becomes 0|.5.
+;;
+;; 5.5. Not supported
+;;
+;; - A dotted run, such as 1.2.3, and 192.168.1.1.  It is read from left
+;;   to right, so 1.2.3 is the float 1.2, and the integer 3.  It is to
+;;   be solved by more specific things, such as a semantic version, and
+;;   an IPv4 address.
+;; - A version with two components, such as 31.1.  There is no way to
+;;   tell it apart from a float.
+;; - The hexadecimal floats, such as 0x1.8p3.
+;; - The leading zeros of the integral part are not kept.  05.1|23
+;;   becomes 5.2|23.
 
 ;;; Code:
 
@@ -341,7 +459,7 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
   (interactive "p")
   (my/thingatpt-iso8601-date-increment (- count)))
 
-;;;; Integer
+;;;; Float
 
 (rx-define my/thingatpt-rx-sign (in "-+"))
 
@@ -351,6 +469,182 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
 
 ;; The letters, digits, and underscores following an invalid integer.
 (rx-define my/thingatpt-rx-tail (* (in "0-9a-zA-Z_")))
+
+(defconst my/thingatpt-float-regexp
+  (rx
+   (group-n 1
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (or
+      (seq
+       (group-n 4 (my/thingatpt-rx-digits-with-underscore (in "0-9")))
+       (group-n 9 ".")
+       (group-n 10 (? (my/thingatpt-rx-digits-with-underscore (in "0-9")))))
+      (seq
+       (group-n 9 ".")
+       (group-n 10 (my/thingatpt-rx-digits-with-underscore (in "0-9"))))))
+   (? (in "eE") (group-n 5
+                  (group-n 6 (? my/thingatpt-rx-sign))
+                  (group-n 7 (my/thingatpt-rx-digits-with-underscore (in "0-9"))))))
+  "A regular expression for floats such as 1.5, .5, 1., or 1.5e10.
+
+Group 1 is the significand, which consists of group 2, 4, 9, and 10.
+Group 2 is the sign of the significand.
+Group 4 is the digits of the integral part.  It does not match in .5.
+Group 9 is the decimal point.
+Group 10 is the digits of the fraction.  It is empty in 1.
+Group 5 is the exponent part, which consists of group 6, and 7.
+Group 6 is the sign of the exponent part.
+Group 7 is the digits of the exponent part.
+
+The numbering follows the integer regexps.
+See `my/thingatpt-float-match' for the matches that must be rejected.")
+
+(defconst my/thingatpt-float-integral-rejecting-regexp
+  (rx (in "0-9a-zA-Z_"))
+  "A regular expression for a character that rejects the float after it.
+
+For example, the a in a1.5 rejects 1.5.")
+
+(defconst my/thingatpt-leading-decimal-point-demoting-regexp
+  (rx (in "0-9a-zA-Z_)]}.\\"))
+  "A regular expression for a character that demotes the dot after it.
+
+It applies only if the float has no integral part.
+A demoted dot is not a decimal point.
+For example, the dot in some.5 is not the decimal point of .5.")
+
+(defconst my/thingatpt-trailing-decimal-point-demoting-regexp
+  (rx (in "a-zA-Z_."))
+  "A regular expression for a character that demotes the dot before it.
+
+It applies only if the float has no fraction, and no exponent part.
+A demoted dot is not a decimal point.
+For example, the dot in 1.times is not the decimal point of 1.")
+
+;;;###autoload
+(defun my/thingatpt-float-match ()
+  "Return non-nil if point is in or after a float.
+
+The return value is a plist with the following property.
+
+:demoted is t if the + or - before the float is demoted,
+according to `my/thingatpt-sign-demoting-regexp'.
+In that case, the + or - is not part of the match.
+
+Match data is set according to `my/thingatpt-float-regexp'."
+  (interactive)
+  (when (and (my/thingatpt-point-in-or-after-regexp my/thingatpt-float-regexp)
+             (not (my/thingatpt--float-rejected-p)))
+    (let ((demoted (my/thingatpt--sign-demoted-p)))
+      ;; Match again without the sign.
+      (when demoted
+        (save-excursion
+          (goto-char (match-end 2))
+          (looking-at my/thingatpt-float-regexp)))
+      ;; After demotion, the float may begin after point.
+      (when (>= (point) (match-beginning 0))
+        (list :demoted demoted)))))
+
+;;;###autoload
+(defun my/thingatpt-float-increment (count)
+  "Increment float at point with COUNT.
+
+If point is in the exponent part, increment the exponent part,
+and move point after it.
+
+Otherwise, the character before point decides what to increment.
+In Evil normal state, the character after point decides instead,
+as long as it is in the float.
+
+If it is a digit of the fraction, increment that digit.
+Point stays at the same distance from the decimal point.
+
+If it is the decimal point, or an underscore in the fraction,
+signal an error.
+
+Otherwise, increment the integral part, and move point after it.
+In Evil normal state, move point to its last digit instead.
+
+Signal an error if the result is negative,
+and the + or - before the float is demoted."
+  (interactive "p")
+  (when-let* ((match (my/thingatpt-float-match)))
+    (cond
+     ;; The exponent part exists and the point is in the exponent part.
+     ;; Increment the exponent part.
+     ((and (match-beginning 5) (>= (point) (match-beginning 5)))
+      (let* ((exponent-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 7))
+             (exponent-sign (my/thingatpt--buffer-substring-no-properties-of-match 6))
+             (result (my/thingatpt--increment 'c exponent-sign "" exponent-digits-with-underscore count))
+             (exponent-beg (match-beginning 5)))
+        (replace-region-contents
+         (match-beginning 5)
+         (match-end 5)
+         result)
+        ;; Move point to the end of the exponent part.
+        (goto-char (+ exponent-beg (length result)))))
+     ;; Otherwise, increment the significand.
+     (t
+      (let* ((demoted (plist-get match :demoted))
+             (evil-normal-state (my/thingatpt--evil-normal-state-p))
+             (point (point))
+             (beg (match-beginning 1))
+             (end (match-end 1))
+             (decimal-point (match-beginning 9))
+             (fraction-beg (match-beginning 10))
+             (sign (my/thingatpt--buffer-substring-no-properties-of-match 2))
+             (integral-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 4))
+             (fraction-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 10))
+             ;; The position of the character that decides what to increment.
+             (position (if (and evil-normal-state (< point end))
+                           point
+                         (1- point)))
+             ;; 0 is the integral part.
+             ;; N is the N-th digit of the fraction.
+             (place (cond
+                     ((< position decimal-point)
+                      0)
+                     ((eql position decimal-point)
+                      (user-error "Cannot increment or decrement the decimal point"))
+                     ((eql (char-after position) ?_)
+                      (user-error "Cannot increment or decrement a numeric separator"))
+                     (t
+                      (length (string-replace
+                               "_"
+                               ""
+                               (substring fraction-digits-with-underscore 0 (1+ (- position fraction-beg))))))))
+             (result (my/thingatpt--float-increment sign integral-digits-with-underscore fraction-digits-with-underscore count place))
+             (result-sign (nth 0 result))
+             (result-integral (nth 1 result))
+             (result-fraction (nth 2 result))
+             (result-decimal-point (+ beg (length result-sign) (length result-integral))))
+        (when (and demoted (string= result-sign "-"))
+          (user-error "Decrementing this sign-demoted float to negative will introduce a superfluous sign"))
+        (replace-region-contents
+         beg
+         end
+         (concat result-sign result-integral "." result-fraction))
+        (goto-char
+         (cond
+          ;; Stay at the same distance from the decimal point.
+          ((> place 0)
+           (+ result-decimal-point (- point decimal-point)))
+          ;; Move point to the last digit of the integral part.
+          (evil-normal-state
+           (1- result-decimal-point))
+          ;; Move point to the end of the integral part.
+          (t
+           result-decimal-point))))))))
+
+;;;###autoload
+(defun my/thingatpt-float-decrement (count)
+  "Decrement float at point with COUNT.
+
+See `my/thingatpt-float-increment'."
+  (interactive "p")
+  (my/thingatpt-float-increment (- count)))
+
+;;;; Integer
 
 ;; The integer regexps share the same groups.
 ;;
@@ -516,12 +810,7 @@ Match data is set according to `my/thingatpt-integer-regexp'."
       ('elisp
        (list :style 'elisp :demoted nil))
       ('c
-       (let* ((char-before-sign (char-before (match-beginning 2)))
-              (demoted (and (not (my/thingatpt--match-empty-p 2))
-                            char-before-sign
-                            (string-match-p my/thingatpt-sign-demoting-regexp
-                                            (char-to-string char-before-sign))
-                            t)))
+       (let ((demoted (my/thingatpt--sign-demoted-p)))
          ;; Match again without the sign.
          (when demoted
            (save-excursion
@@ -598,6 +887,60 @@ Always move point after the integer."
 (defun my/thingatpt--match-empty-p (group)
   "Return non-nil if match group GROUP is empty, or did not match."
   (eql (match-beginning group) (match-end group)))
+
+;;;###autoload
+(defun my/thingatpt--sign-demoted-p ()
+  "Return t if match group 2, the + or - before a number, is demoted.
+
+It is demoted by the character before it,
+according to `my/thingatpt-sign-demoting-regexp'."
+  (when-let* ((beg (match-beginning 2))
+              (_ (not (my/thingatpt--match-empty-p 2)))
+              (char-before-sign (char-before beg))
+              (char-before-sign-string (char-to-string char-before-sign))
+              (_ (string-match-p my/thingatpt-sign-demoting-regexp char-before-sign-string)))
+    t))
+
+;;;###autoload
+(defun my/thingatpt--float-rejected-p ()
+  "Return non-nil if the match of `my/thingatpt-float-regexp' must be rejected.
+
+See `my/thingatpt-float-integral-rejecting-regexp',
+`my/thingatpt-leading-decimal-point-demoting-regexp', and
+`my/thingatpt-trailing-decimal-point-demoting-regexp'."
+  (let* ((signed (not (my/thingatpt--match-empty-p 2)))
+         (has-integral (not (my/thingatpt--match-empty-p 4)))
+         (has-fraction (not (my/thingatpt--match-empty-p 10)))
+         (has-exponent (not (my/thingatpt--match-empty-p 5)))
+         ;; The sign is neither a rejecting nor a demoting character.
+         (char-before (unless signed
+                        (char-before (match-beginning 1))))
+         (char-after-decimal-point (char-after (match-end 9))))
+    (or
+     (and has-integral
+          char-before
+          (string-match-p my/thingatpt-float-integral-rejecting-regexp
+                          (char-to-string char-before)))
+     (and (not has-integral)
+          char-before
+          (string-match-p my/thingatpt-leading-decimal-point-demoting-regexp
+                          (char-to-string char-before)))
+     (and (not has-fraction)
+          (not has-exponent)
+          char-after-decimal-point
+          (string-match-p my/thingatpt-trailing-decimal-point-demoting-regexp
+                          (char-to-string char-after-decimal-point))))))
+
+(defvar evil-local-mode)
+(defvar evil-state)
+
+;;;###autoload
+(defun my/thingatpt--evil-normal-state-p ()
+  "Return non-nil if the current buffer is in Evil normal state.
+
+In that state, the cursor is a block on the character after point."
+  (and (bound-and-true-p evil-local-mode)
+       (eq (bound-and-true-p evil-state) 'normal)))
 
 ;;;###autoload
 (defun my/thingatpt-point-in-or-after-regexp (regexp)
@@ -701,7 +1044,18 @@ The underscores are kept if possible."
                              (16 "%x")
                              (_ "%d")))
          (result-digits (format format-specifier (abs result-value)))
-         (result-idx (1- (length result-digits)))
+         (result-digits-with-underscore (my/thingatpt--copy-underscores result-digits digits-with-underscore)))
+    (pcase style
+      ('c (format "%s%s%s" result-sign base-prefix result-digits-with-underscore))
+      ('elisp (format "%s%s%s" base-prefix result-sign result-digits-with-underscore))
+      (_ (error "Unknown style: %S" style)))))
+
+;;;###autoload
+(defun my/thingatpt--copy-underscores (result-digits digits-with-underscore)
+  "Return RESULT-DIGITS with the underscores of DIGITS-WITH-UNDERSCORE.
+
+The underscores are aligned from the right, and they are kept if possible."
+  (let* ((result-idx (1- (length result-digits)))
          (digits-idx (1- (length digits-with-underscore)))
          list)
     (while (>= result-idx 0)
@@ -726,10 +1080,62 @@ The underscores are kept if possible."
            ;; It is not an underscore.
            (t
             (cl-return-from loop))))))
-    (pcase style
-      ('c (format "%s%s%s" result-sign base-prefix (concat list)))
-      ('elisp (format "%s%s%s" base-prefix result-sign (concat list)))
-      (_ (error "Unknown style: %S" style)))))
+    (concat list)))
+
+;;;###autoload
+(defun my/thingatpt--float-increment (sign integral-digits-with-underscore fraction-digits-with-underscore count place)
+  "Increment the float made of SIGN, INTEGRAL-DIGITS-WITH-UNDERSCORE, and FRACTION-DIGITS-WITH-UNDERSCORE.
+
+SIGN is a string either an empty string, -, or +.
+INTEGRAL-DIGITS-WITH-UNDERSCORE and FRACTION-DIGITS-WITH-UNDERSCORE
+are strings of decimal digits, and underscores.  Either can be empty.
+COUNT is an integer.
+PLACE is the digit to increment with COUNT.
+0 is the last digit of the integral part,
+and N is the N-th digit of the fraction.
+
+The arithmetic is exact, because it is done on integers.
+
+Return a list of the sign, the integral part, and the fraction.
+The number of digits of the fraction does not change.
+An empty integral part stays empty if it is zero, and PLACE is not 0.
+The underscores are kept if possible."
+  (let* ((sign-value (if (string= sign "-") -1 1))
+         (integral-digits (string-replace "_" "" integral-digits-with-underscore))
+         (fraction-digits (string-replace "_" "" fraction-digits-with-underscore))
+         (fraction-length (length fraction-digits))
+         ;; Example
+         ;; 123.45|6
+         ;; place      = 2
+         ;; scale      = 10 ** 3          = 1000
+         ;; value      = 123 * 1000 + 456 = 123456
+         ;; multiplier = 10 ** (3 - 2)    = 10
+         (scale (expt 10 fraction-length))
+         (value (* sign-value
+                   (+ (* (string-to-number integral-digits) scale)
+                      (string-to-number fraction-digits))))
+         (multiplier (expt 10 (- fraction-length place)))
+         (result-value (+ value (* count multiplier)))
+         (result-sign (my/thingatpt--preferred-sign sign result-value))
+         ;; / perform integer division when both arguments are integers.
+         (result-integral-value (/ (abs result-value) scale))
+         (result-fraction-value (mod (abs result-value) scale))
+         (result-integral (if (and (string-empty-p integral-digits-with-underscore)
+                                   (zerop result-integral-value)
+                                   (> place 0))
+                              ""
+                            (my/thingatpt--copy-underscores
+                             (number-to-string result-integral-value)
+                             integral-digits-with-underscore)))
+         (result-fraction-digits (if (zerop fraction-length)
+                                     ""
+                                   ;; Example
+                                   ;; (format "%%0%dd" 3) => "%03d"
+                                   (format (format "%%0%dd" fraction-length) result-fraction-value)))
+         (result-fraction (my/thingatpt--copy-underscores
+                           result-fraction-digits
+                           fraction-digits-with-underscore)))
+    (list result-sign result-integral result-fraction)))
 
 ;;;; Configuration
 
@@ -746,6 +1152,12 @@ The underscores are kept if possible."
      my/thingatpt-iso8601-date-increment
      :decrement
      my/thingatpt-iso8601-date-decrement)
+    (:match
+     my/thingatpt-float-match
+     :increment
+     my/thingatpt-float-increment
+     :decrement
+     my/thingatpt-float-decrement)
     (:match
      my/thingatpt-integer-match
      :increment

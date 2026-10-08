@@ -7,6 +7,10 @@
 
 ;;;; Helpers
 
+;; They are bound in the tests to simulate Evil.
+(defvar evil-local-mode)
+(defvar evil-state)
+
 (defvar my-thingatpt-tests--time-zone "UTC"
   "The time zone rule in effect when running the tests.")
 
@@ -564,6 +568,571 @@ Use TEXT FN ARGS."
    (equal
     (my-thingatpt-tests--edit "2006-01-|02" #'my/thingatpt-iso8601-date-decrement -1)
     "2006-01-|03")))
+
+;;;; Float
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match ()
+  ;; Point is in the float.
+  (should (my-thingatpt-tests--value "|1.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1|.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "|-1.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "-|1.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.5e|10" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1_000.000_|1" #'my/thingatpt-float-match))
+  ;; Point is right after the float.
+  (should (my-thingatpt-tests--value "1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(1.5|)" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.5e10|" #'my/thingatpt-float-match))
+  ;; No integral part.
+  (should (my-thingatpt-tests--value "|.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ".|5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ".5|" #'my/thingatpt-float-match))
+  ;; No fraction.
+  (should (my-thingatpt-tests--value "|1." #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1|." #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|" #'my/thingatpt-float-match))
+  ;; Point is outside of the float.
+  (should-not (my-thingatpt-tests--value "| 1.5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.5 |" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.5p|x" #'my/thingatpt-float-match))
+  ;; Not a float.
+  (should-not (my-thingatpt-tests--value "|42" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "42|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "|1e10" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "|foo" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "|." #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "|" #'my/thingatpt-float-match))
+  ;; Only the current line is searched.
+  (should-not (my-thingatpt-tests--value "1.5
+|
+1.5" #'my/thingatpt-float-match)))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match-return-value ()
+  (should (equal (my-thingatpt-tests--value "|foo" #'my/thingatpt-float-match) nil))
+  (should (equal (my-thingatpt-tests--value "1.5|" #'my/thingatpt-float-match) '(:demoted nil)))
+  (should (equal (my-thingatpt-tests--value " -1.5|" #'my/thingatpt-float-match) '(:demoted nil)))
+  (should (equal (my-thingatpt-tests--value "(-.5|" #'my/thingatpt-float-match) '(:demoted nil)))
+  (should (equal (my-thingatpt-tests--value "x-1.5|" #'my/thingatpt-float-match) '(:demoted t)))
+  (should (equal (my-thingatpt-tests--value "1-.5|" #'my/thingatpt-float-match) '(:demoted t)))
+  (should (equal (my-thingatpt-tests--value "f(x)+1.|" #'my/thingatpt-float-match) '(:demoted t)))
+  ;; The demoted sign is not part of the match.
+  (should-not (my-thingatpt-tests--value "x|-1.5" #'my/thingatpt-float-match))
+  (should (equal (my-thingatpt-tests--edit "x-1.5|" #'my/thingatpt-float-increment 1) "x-1.6|"))
+  ;; The sign of the exponent part is never demoted.
+  (should (equal (my-thingatpt-tests--edit "1.5e-1|" #'my/thingatpt-float-increment 1) "1.5e0|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match-before-integral-part ()
+  ;; A letter, or an underscore rejects the float.
+  (should-not (my-thingatpt-tests--value "a|1.5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "a1.|5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "a1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "v1.9|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "Z1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "_1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "x_1.|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "0x1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "0x1|.5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "#x1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "0b1.0|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1e5.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1__0.5|" #'my/thingatpt-float-match))
+  ;; Anything else does not.
+  (should (my-thingatpt-tests--value " 1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "[1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "=1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "<1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ",1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ":1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "\"1.5|\"" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "'1.5|'" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "$1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "#1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "*1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "/1.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ")1.5|" #'my/thingatpt-float-match))
+  ;; The integer takes over a rejected float.
+  (should (equal (my-thingatpt-tests--edit "v1.9|" #'my/thingatpt-increment nil) "v1.10|"))
+  (should (equal (my-thingatpt-tests--edit "0x1.5|" #'my/thingatpt-increment nil) "0x1.6|"))
+  (should (equal (my-thingatpt-tests--edit "0x1|.5" #'my/thingatpt-increment nil) "0x2|.5"))
+  ;; The search continues after a rejected float.
+  (should (equal (my-thingatpt-tests--edit "a1.5 2.5|" #'my/thingatpt-float-increment 1) "a1.5 2.6|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match-leading-decimal-point ()
+  ;; The dot is a decimal point.
+  (should (my-thingatpt-tests--value "|.5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value " .5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "	.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "[.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "{.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "\".5|\"" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "'.5|'" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "`.5|`" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "x=.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "x<.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "x>.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(1,.5|)" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "x:.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value ";.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "2*.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1/.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1%.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "2^.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "a&.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "!.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "~.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "a?.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "#.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "$.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "@.5|" #'my/thingatpt-float-match))
+  ;; + and - are the sign.
+  (should (my-thingatpt-tests--value "-.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "+.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(-.5|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "a-.5|" #'my/thingatpt-float-match))
+  (should (equal (my-thingatpt-tests--edit "-.5|" #'my/thingatpt-float-increment 1) "-.4|"))
+  (should (equal (my-thingatpt-tests--edit "a-.5|" #'my/thingatpt-float-increment 1) "a-.6|"))
+  ;; The dot is demoted by a digit.
+  (should-not (my-thingatpt-tests--value "0x1.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.2.3|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.2.|3" #'my/thingatpt-float-match))
+  ;; The dot is demoted by a letter.
+  (should-not (my-thingatpt-tests--value "some.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "some.|5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "some|.5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "pair.0|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "ls.1|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "Z.5|" #'my/thingatpt-float-match))
+  ;; The dot is demoted by an underscore.
+  (should-not (my-thingatpt-tests--value "x_.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "_.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1_.5|" #'my/thingatpt-float-match))
+  ;; The dot is demoted by a closing bracket.
+  (should-not (my-thingatpt-tests--value "f(x).0|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "a[0].1|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "${name}.1|" #'my/thingatpt-float-match))
+  ;; The dot is demoted by another dot.
+  (should-not (my-thingatpt-tests--value "0..5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "...5|" #'my/thingatpt-float-match))
+  ;; The dot is demoted by a backslash.
+  (should-not (my-thingatpt-tests--value "1\\.5|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "\\.5|" #'my/thingatpt-float-match))
+  ;; The integer takes over a rejected float.
+  (should (equal (my-thingatpt-tests--edit "some.9|" #'my/thingatpt-increment nil) "some.10|"))
+  (should (equal (my-thingatpt-tests--edit "pair.0|" #'my/thingatpt-increment nil) "pair.1|"))
+  (should (equal (my-thingatpt-tests--edit "0..9|" #'my/thingatpt-increment nil) "0..10|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match-trailing-decimal-point ()
+  ;; The dot is a decimal point.
+  (should (my-thingatpt-tests--value "1.|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "x = 1.|" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.| " #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "(1.|)" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "[1.|, 2.]" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|+2" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|-2" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|*2" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "\"1.|\"" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|;" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|," #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|:" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.|(" #'my/thingatpt-float-match))
+  ;; e is an exponent indicator if it is followed by digits.
+  (should (my-thingatpt-tests--value "1.|e5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.e|5" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.E-|5" #'my/thingatpt-float-match))
+  (should (equal (my-thingatpt-tests--edit "1.e|5" #'my/thingatpt-float-increment 1) "1.e6|"))
+  ;; The dot is demoted by a letter.
+  (should-not (my-thingatpt-tests--value "1.|times" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1|.toString()" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|f" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|e" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|em" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|e+" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|Z" #'my/thingatpt-float-match))
+  ;; The dot is demoted by an underscore.
+  (should-not (my-thingatpt-tests--value "1.|_x" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1|._" #'my/thingatpt-float-match))
+  ;; The dot is demoted by another dot.
+  (should-not (my-thingatpt-tests--value "1.|.5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1|..5" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.|.." #'my/thingatpt-float-match))
+  ;; The integer takes over a rejected float.
+  (should (equal (my-thingatpt-tests--edit "1|.times" #'my/thingatpt-increment nil) "2|.times"))
+  (should (equal (my-thingatpt-tests--edit "1|..5" #'my/thingatpt-increment nil) "2|..5"))
+  ;; A fraction is never a demoting character.
+  (should (my-thingatpt-tests--value "1.|5px" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.5|." #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1.5|.x" #'my/thingatpt-float-match)))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-match-dotted-run ()
+  ;; A dotted run is read from left to right.
+  (should (my-thingatpt-tests--value "1.2|.3" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "1|.2.3" #'my/thingatpt-float-match))
+  (should (my-thingatpt-tests--value "192.168|.1.1" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.2.3|" #'my/thingatpt-float-match))
+  (should-not (my-thingatpt-tests--value "1.2.|3" #'my/thingatpt-float-match))
+  (should (equal (my-thingatpt-tests--edit "1.2.3|" #'my/thingatpt-increment nil) "1.2.4|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-fraction ()
+  ;; The digit before point is incremented.
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment 1) "1.6|"))
+  (should (equal (my-thingatpt-tests--edit "1.25|" #'my/thingatpt-float-increment 1) "1.26|"))
+  (should (equal (my-thingatpt-tests--edit "1.2|5" #'my/thingatpt-float-increment 1) "1.3|5"))
+  (should (equal (my-thingatpt-tests--edit "1.234|5" #'my/thingatpt-float-increment 1) "1.235|5"))
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment 3) "1.8|"))
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment 0) "1.5|"))
+  ;; Carry.
+  (should (equal (my-thingatpt-tests--edit "1.9|5" #'my/thingatpt-float-increment 1) "2.0|5"))
+  (should (equal (my-thingatpt-tests--edit "1.99|" #'my/thingatpt-float-increment 1) "2.00|"))
+  (should (equal (my-thingatpt-tests--edit "9.9|" #'my/thingatpt-float-increment 1) "10.0|"))
+  (should (equal (my-thingatpt-tests--edit "99.9|9" #'my/thingatpt-float-increment 1) "100.0|9"))
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment 10) "2.5|"))
+  (should (equal (my-thingatpt-tests--edit "1.05|" #'my/thingatpt-float-increment 1) "1.06|"))
+  ;; Borrow.
+  (should (equal (my-thingatpt-tests--edit "2.0|5" #'my/thingatpt-float-increment -1) "1.9|5"))
+  (should (equal (my-thingatpt-tests--edit "10.0|" #'my/thingatpt-float-increment -1) "9.9|"))
+  (should (equal (my-thingatpt-tests--edit "1.00|" #'my/thingatpt-float-increment -1) "0.99|"))
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment -6) "0.9|"))
+  ;; The number of digits of the fraction does not change.
+  (should (equal (my-thingatpt-tests--edit "1.005|" #'my/thingatpt-float-increment 1) "1.006|"))
+  (should (equal (my-thingatpt-tests--edit "1.10|" #'my/thingatpt-float-increment -1) "1.09|"))
+  (should (equal (my-thingatpt-tests--edit "1.50|" #'my/thingatpt-float-increment -50) "1.00|"))
+  (should (equal (my-thingatpt-tests--edit "0.001|" #'my/thingatpt-float-increment -1) "0.000|"))
+  ;; Bignum.
+  (should (equal (my-thingatpt-tests--edit "99999999999999999999.9|" #'my/thingatpt-float-increment 1) "100000000000000000000.0|"))
+  (should (equal (my-thingatpt-tests--edit "0.00000000000000000000000000000009|" #'my/thingatpt-float-increment 1) "0.00000000000000000000000000000010|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-integral-part ()
+  (should (equal (my-thingatpt-tests--edit "1|.5" #'my/thingatpt-float-increment 1) "2|.5"))
+  (should (equal (my-thingatpt-tests--edit "|1.5" #'my/thingatpt-float-increment 1) "2|.5"))
+  (should (equal (my-thingatpt-tests--edit "1|2.5" #'my/thingatpt-float-increment 1) "13|.5"))
+  (should (equal (my-thingatpt-tests--edit "12|.5" #'my/thingatpt-float-increment 10) "22|.5"))
+  (should (equal (my-thingatpt-tests--edit "9|.5" #'my/thingatpt-float-increment 1) "10|.5"))
+  (should (equal (my-thingatpt-tests--edit "10|.5" #'my/thingatpt-float-increment -1) "9|.5"))
+  (should (equal (my-thingatpt-tests--edit "1|.5" #'my/thingatpt-float-increment 0) "1|.5"))
+  ;; Point is in the sign.
+  (should (equal (my-thingatpt-tests--edit "|-1.5" #'my/thingatpt-float-increment 1) "-0|.5"))
+  (should (equal (my-thingatpt-tests--edit "-|1.5" #'my/thingatpt-float-increment -1) "-2|.5"))
+  ;; The leading zeros are not kept.
+  (should (equal (my-thingatpt-tests--edit "007|.5" #'my/thingatpt-float-increment 1) "8|.5"))
+  (should (equal (my-thingatpt-tests--edit "05.1|23" #'my/thingatpt-float-increment 1) "5.2|23")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-decimal-point ()
+  (should-error (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-float-increment -1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1.|" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit ".|5" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "-.|5" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1.|5e10" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1.|e5" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should
+   (equal
+    (should-error (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-float-increment 1) :type 'user-error)
+    '(user-error "Cannot increment or decrement the decimal point")))
+  (should
+   (equal
+    (should-error (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-float-decrement 1) :type 'user-error)
+    '(user-error "Cannot increment or decrement the decimal point")))
+  ;; The float still matches, so the integer does not take over.
+  (should (my-thingatpt-tests--value "1.|5" #'my/thingatpt-increment-p))
+  (should-error (my-thingatpt-tests--edit "1.|5" #'my/thingatpt-increment nil) :type 'user-error)
+  ;; The buffer is not changed on error.
+  (with-temp-buffer
+    (insert "1.5")
+    (goto-char 3)
+    (should-error (my/thingatpt-float-increment 1) :type 'user-error)
+    (should (equal (buffer-string) "1.5"))
+    (should (equal (point) 3))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-sign ()
+  ;; The result becomes negative.
+  (should (equal (my-thingatpt-tests--edit "0.0|" #'my/thingatpt-float-increment -1) "-0.1|"))
+  (should (equal (my-thingatpt-tests--edit "0.5|" #'my/thingatpt-float-increment -6) "-0.1|"))
+  (should (equal (my-thingatpt-tests--edit "0|.5" #'my/thingatpt-float-increment -1) "-0|.5"))
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment -20) "-0.5|"))
+  ;; The result becomes non-negative.
+  (should (equal (my-thingatpt-tests--edit "-0.1|" #'my/thingatpt-float-increment 1) "0.0|"))
+  (should (equal (my-thingatpt-tests--edit "-0.1|" #'my/thingatpt-float-increment 3) "0.2|"))
+  (should (equal (my-thingatpt-tests--edit "-0|.5" #'my/thingatpt-float-increment 1) "0|.5"))
+  (should (equal (my-thingatpt-tests--edit "-1|.5" #'my/thingatpt-float-increment 2) "0|.5"))
+  ;; The result stays negative.
+  (should (equal (my-thingatpt-tests--edit "-1.5|" #'my/thingatpt-float-increment 1) "-1.4|"))
+  (should (equal (my-thingatpt-tests--edit "-1.5|" #'my/thingatpt-float-increment -1) "-1.6|"))
+  (should (equal (my-thingatpt-tests--edit "-1|.5" #'my/thingatpt-float-increment 1) "-0|.5"))
+  (should (equal (my-thingatpt-tests--edit "-1.0|" #'my/thingatpt-float-increment 1) "-0.9|"))
+  ;; The plus sign is kept unless the result is negative.
+  (should (equal (my-thingatpt-tests--edit "+1.5|" #'my/thingatpt-float-increment 1) "+1.6|"))
+  (should (equal (my-thingatpt-tests--edit "+0.1|" #'my/thingatpt-float-increment -1) "+0.0|"))
+  (should (equal (my-thingatpt-tests--edit "+0.1|" #'my/thingatpt-float-increment -2) "-0.1|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-no-integral-part ()
+  (should (equal (my-thingatpt-tests--edit ".5|" #'my/thingatpt-float-increment 1) ".6|"))
+  (should (equal (my-thingatpt-tests--edit ".5|" #'my/thingatpt-float-increment -1) ".4|"))
+  (should (equal (my-thingatpt-tests--edit ".2|5" #'my/thingatpt-float-increment 1) ".3|5"))
+  ;; The integral part stays empty as long as it is zero.
+  (should (equal (my-thingatpt-tests--edit ".9|" #'my/thingatpt-float-increment 1) "1.0|"))
+  (should (equal (my-thingatpt-tests--edit ".0|" #'my/thingatpt-float-increment -1) "-.1|"))
+  (should (equal (my-thingatpt-tests--edit "-.1|" #'my/thingatpt-float-increment 1) ".0|"))
+  (should (equal (my-thingatpt-tests--edit "-.5|" #'my/thingatpt-float-increment 1) "-.4|"))
+  (should (equal (my-thingatpt-tests--edit "+.5|" #'my/thingatpt-float-increment 1) "+.6|"))
+  ;; Point is before the decimal point.
+  (should (equal (my-thingatpt-tests--edit "|.5" #'my/thingatpt-float-increment 1) "1|.5"))
+  (should (equal (my-thingatpt-tests--edit "|.5" #'my/thingatpt-float-increment 0) "0|.5"))
+  ;; The integral part is written even if it is zero.
+  (should (equal (my-thingatpt-tests--edit "|.5" #'my/thingatpt-float-increment -1) "-0|.5"))
+  (should (equal (my-thingatpt-tests--edit "|-.5" #'my/thingatpt-float-increment 1) "0|.5"))
+  (should (equal (my-thingatpt-tests--edit "|-.5" #'my/thingatpt-float-increment -1) "-1|.5")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-no-fraction ()
+  (should (equal (my-thingatpt-tests--edit "1|." #'my/thingatpt-float-increment 1) "2|."))
+  (should (equal (my-thingatpt-tests--edit "|1." #'my/thingatpt-float-increment 1) "2|."))
+  (should (equal (my-thingatpt-tests--edit "9|." #'my/thingatpt-float-increment 1) "10|."))
+  (should (equal (my-thingatpt-tests--edit "0|." #'my/thingatpt-float-increment -1) "-1|."))
+  (should (equal (my-thingatpt-tests--edit "(1|.)" #'my/thingatpt-float-increment 1) "(2|.)"))
+  (should (equal (my-thingatpt-tests--edit "1|.e5" #'my/thingatpt-float-increment 1) "2|.e5")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-exponent ()
+  ;; Point is in the exponent part.
+  (should (equal (my-thingatpt-tests--edit "1.5e|10" #'my/thingatpt-float-increment 1) "1.5e11|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e1|0" #'my/thingatpt-float-increment 1) "1.5e11|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e10|" #'my/thingatpt-float-increment 1) "1.5e11|"))
+  (should (equal (my-thingatpt-tests--edit "1.5E|10" #'my/thingatpt-float-increment 1) "1.5E11|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e|-10" #'my/thingatpt-float-increment 1) "1.5e-9|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e|+10" #'my/thingatpt-float-increment 1) "1.5e+11|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e|0" #'my/thingatpt-float-increment -1) "1.5e-1|"))
+  (should (equal (my-thingatpt-tests--edit ".5e|3" #'my/thingatpt-float-increment 1) ".5e4|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e|1_000" #'my/thingatpt-float-increment 1) "1.5e1_001|"))
+  ;; Point is before the exponent indicator.
+  (should (equal (my-thingatpt-tests--edit "1.5|e10" #'my/thingatpt-float-increment 1) "1.6|e10"))
+  (should (equal (my-thingatpt-tests--edit "1|.5e10" #'my/thingatpt-float-increment 1) "2|.5e10"))
+  (should (equal (my-thingatpt-tests--edit "9.9|e10" #'my/thingatpt-float-increment 1) "10.0|e10"))
+  ;; e is an exponent indicator only if it is followed by digits.
+  (should (equal (my-thingatpt-tests--edit "1.5|e" #'my/thingatpt-float-increment 1) "1.6|e"))
+  (should (equal (my-thingatpt-tests--edit "1.5|em" #'my/thingatpt-float-increment 1) "1.6|em"))
+  (should (equal (my-thingatpt-tests--edit "1.5|e+" #'my/thingatpt-float-increment 1) "1.6|e+")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-underscore ()
+  (should (equal (my-thingatpt-tests--edit "1_000.000_1|" #'my/thingatpt-float-increment 1) "1_000.000_2|"))
+  (should (equal (my-thingatpt-tests--edit "0.999_999|" #'my/thingatpt-float-increment 1) "1.000_000|"))
+  (should (equal (my-thingatpt-tests--edit "0.000_1|" #'my/thingatpt-float-increment -1) "0.000_0|"))
+  (should (equal (my-thingatpt-tests--edit "9_999.9|" #'my/thingatpt-float-increment 1) "10_000.0|"))
+  (should (equal (my-thingatpt-tests--edit "1_000|.5" #'my/thingatpt-float-increment -1) "999|.5"))
+  (should (equal (my-thingatpt-tests--edit "1_000.0|" #'my/thingatpt-float-increment -1) "999.9|"))
+  ;; The underscores before the digit are not counted.
+  (should (equal (my-thingatpt-tests--edit "0.000_1|23" #'my/thingatpt-float-increment 1) "0.000_2|23"))
+  (should (equal (my-thingatpt-tests--edit "0.0_0_9|" #'my/thingatpt-float-increment 1) "0.0_1_0|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-numeric-separator ()
+  ;; The underscore is before point.
+  (should-error (my-thingatpt-tests--edit "0.000_|1" #'my/thingatpt-float-increment 1) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "0.000_|1" #'my/thingatpt-float-increment -1) :type 'user-error)
+  (should
+   (equal
+    (should-error (my-thingatpt-tests--edit "0.000_|1" #'my/thingatpt-float-increment 1) :type 'user-error)
+    '(user-error "Cannot increment or decrement a numeric separator")))
+  (should
+   (equal
+    (should-error (my-thingatpt-tests--edit "0.000_|1" #'my/thingatpt-float-decrement 1) :type 'user-error)
+    '(user-error "Cannot increment or decrement a numeric separator")))
+  ;; The underscore is after point.
+  (should (equal (my-thingatpt-tests--edit "0.000|_1" #'my/thingatpt-float-increment 1) "0.001|_1"))
+  ;; An underscore in the integral part is not an error.
+  (should (equal (my-thingatpt-tests--edit "1_|000.5" #'my/thingatpt-float-increment 1) "1_001|.5"))
+  (should (equal (my-thingatpt-tests--edit "1|_000.5" #'my/thingatpt-float-increment 1) "1_001|.5"))
+  (should (equal (my-thingatpt-tests--edit "-1_|000.5" #'my/thingatpt-float-increment 1) "-999|.5"))
+  ;; The exponent part is incremented as a whole.
+  (should (equal (my-thingatpt-tests--edit "1.5e1_|000" #'my/thingatpt-float-increment 1) "1.5e1_001|"))
+  ;; The buffer is not changed on error.
+  (with-temp-buffer
+    (insert "0.000_1")
+    (goto-char 7)
+    (should-error (my/thingatpt-float-increment 1) :type 'user-error)
+    (should (equal (buffer-string) "0.000_1"))
+    (should (equal (point) 7))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-surrounding-text ()
+  (should (equal (my-thingatpt-tests--edit "x = 1.5|;" #'my/thingatpt-float-increment 1) "x = 1.6|;"))
+  (should (equal (my-thingatpt-tests--edit "(1.5|)" #'my/thingatpt-float-increment 1) "(1.6|)"))
+  (should (equal (my-thingatpt-tests--edit "1.5|px" #'my/thingatpt-float-increment 1) "1.6|px"))
+  (should (equal (my-thingatpt-tests--edit "1.5|f" #'my/thingatpt-float-increment 1) "1.6|f"))
+  (should (equal (my-thingatpt-tests--edit "$9.9|9" #'my/thingatpt-float-increment 1) "$10.0|9"))
+  ;; Only the float at point is edited.
+  (should (equal (my-thingatpt-tests--edit "1.5 2.5| 3.5" #'my/thingatpt-float-increment 1) "1.5 2.6| 3.5"))
+  (should (equal (my-thingatpt-tests--edit "[1.5|, 2.5]" #'my/thingatpt-float-increment 1) "[1.6|, 2.5]"))
+  ;; Only the current line is searched.
+  (should (equal (my-thingatpt-tests--edit "1.5
+2.5|
+3.5" #'my/thingatpt-float-increment 1) "1.5
+2.6|
+3.5")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-no-match ()
+  (should (equal (my-thingatpt-tests--call "| 1.5" #'my/thingatpt-float-increment 1) '(nil . "| 1.5")))
+  (should (equal (my-thingatpt-tests--call "42|" #'my/thingatpt-float-increment 1) '(nil . "42|")))
+  (should (equal (my-thingatpt-tests--call "some.5|" #'my/thingatpt-float-increment 1) '(nil . "some.5|")))
+  (should (equal (my-thingatpt-tests--call "1.|times" #'my/thingatpt-float-increment 1) '(nil . "1.|times"))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-demoted-sign ()
+  ;; The result is not negative.
+  (should (equal (my-thingatpt-tests--edit "1-2.5|" #'my/thingatpt-float-increment -25) "1-0.0|"))
+  (should (equal (my-thingatpt-tests--edit "1+2.5|" #'my/thingatpt-float-increment -25) "1+0.0|"))
+  (should (equal (my-thingatpt-tests--edit "1-2.5|" #'my/thingatpt-float-increment 10) "1-3.5|"))
+  ;; The result is negative.
+  (should-error (my-thingatpt-tests--edit "1-2.5|" #'my/thingatpt-float-increment -26) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "1+2|.5" #'my/thingatpt-float-increment -3) :type 'user-error)
+  (should-error (my-thingatpt-tests--edit "a-.5|" #'my/thingatpt-float-increment -6) :type 'user-error)
+  ;; The buffer is not changed on error.
+  (with-temp-buffer
+    (insert "1-2.5")
+    (goto-char (point-max))
+    (should-error (my/thingatpt-float-increment -26) :type 'user-error)
+    (should (equal (buffer-string) "1-2.5"))
+    (should (equal (point) (point-max))))
+  ;; The exponent part can be negative.
+  (should (equal (my-thingatpt-tests--edit "1-2.5e|1" #'my/thingatpt-float-increment -3) "1-2.5e-2|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-repeat ()
+  ;; The command can be repeated on the same digit.
+  (with-temp-buffer
+    (insert "x = 9.85;")
+    (goto-char 8)
+    (dotimes (_ 3)
+      (my/thingatpt-float-increment 1))
+    (should (equal (buffer-string) "x = 10.15;"))
+    (should (equal (point) 9))
+    (dotimes (_ 105)
+      (my/thingatpt-float-decrement 1))
+    (should (equal (buffer-string) "x = -0.35;"))
+    (should (equal (point) 9))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-evil-normal-state ()
+  (let ((evil-local-mode t)
+        (evil-state 'normal))
+    ;; The digit after point is incremented.
+    (should (equal (my-thingatpt-tests--edit "1.|25" #'my/thingatpt-float-increment 1) "1.|35"))
+    (should (equal (my-thingatpt-tests--edit "1.2|5" #'my/thingatpt-float-increment 1) "1.2|6"))
+    (should (equal (my-thingatpt-tests--edit "1.|95" #'my/thingatpt-float-increment 1) "2.|05"))
+    (should (equal (my-thingatpt-tests--edit "9.|9" #'my/thingatpt-float-increment 1) "10.|0"))
+    (should (equal (my-thingatpt-tests--edit "-1.|5" #'my/thingatpt-float-increment 1) "-1.|4"))
+    (should (equal (my-thingatpt-tests--edit ".|5" #'my/thingatpt-float-increment 1) ".|6"))
+    (should (equal (my-thingatpt-tests--edit ".|9" #'my/thingatpt-float-increment 1) "1.|0"))
+    ;; The underscore is after point.
+    (should-error (my-thingatpt-tests--edit "0.000|_1" #'my/thingatpt-float-increment 1) :type 'user-error)
+    ;; An underscore in the integral part is not an error.
+    (should (equal (my-thingatpt-tests--edit "1|_000.5" #'my/thingatpt-float-increment 1) "1_00|1.5"))
+    ;; The underscore is before point.
+    (should (equal (my-thingatpt-tests--edit "0.000_|1" #'my/thingatpt-float-increment 1) "0.000_|2"))
+    (should (equal (my-thingatpt-tests--edit "1_|000.5" #'my/thingatpt-float-increment 1) "1_00|1.5"))
+    ;; Point is on the decimal point.
+    (should-error (my-thingatpt-tests--edit "1|.5" #'my/thingatpt-float-increment 1) :type 'user-error)
+    (should-error (my-thingatpt-tests--edit "|.5" #'my/thingatpt-float-increment 1) :type 'user-error)
+    (should-error (my-thingatpt-tests--edit "1|." #'my/thingatpt-float-increment 1) :type 'user-error)
+    (should-error (my-thingatpt-tests--edit "-|.5" #'my/thingatpt-float-increment 1) :type 'user-error)
+    ;; Point is in the integral part.
+    (should (equal (my-thingatpt-tests--edit "|1.5" #'my/thingatpt-float-increment 1) "|2.5"))
+    (should (equal (my-thingatpt-tests--edit "1|2.5" #'my/thingatpt-float-increment 1) "1|3.5"))
+    (should (equal (my-thingatpt-tests--edit "|9.5" #'my/thingatpt-float-increment 1) "1|0.5"))
+    (should (equal (my-thingatpt-tests--edit "|10.5" #'my/thingatpt-float-increment -1) "|9.5"))
+    (should (equal (my-thingatpt-tests--edit "|1." #'my/thingatpt-float-increment 1) "|2."))
+    (should (equal (my-thingatpt-tests--edit "|-1.5" #'my/thingatpt-float-increment 1) "-|0.5"))
+    ;; Point is in the sign, and there is no integral part.
+    (should (equal (my-thingatpt-tests--edit "x |-.5" #'my/thingatpt-float-increment 1) "x |0.5"))
+    (should (equal (my-thingatpt-tests--edit "x |-.5" #'my/thingatpt-float-increment -1) "x -|1.5"))
+    ;; Point is right after the float.
+    (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-increment 1) "1.6|"))
+    (should (equal (my-thingatpt-tests--edit "(1.5|)" #'my/thingatpt-float-increment 1) "(1.6|)"))
+    (should (equal (my-thingatpt-tests--edit "1.5|e10" #'my/thingatpt-float-increment 1) "1.6|e10"))
+    (should-error (my-thingatpt-tests--edit "1.|" #'my/thingatpt-float-increment 1) :type 'user-error)
+    (should-error (my-thingatpt-tests--edit "(1.|)" #'my/thingatpt-float-increment 1) :type 'user-error)
+    ;; Point is in the exponent part.
+    (should (equal (my-thingatpt-tests--edit "1.5e|10" #'my/thingatpt-float-increment 1) "1.5e11|"))
+    ;; The command can be repeated on the same digit.
+    (with-temp-buffer
+      (insert "x = 9.85;")
+      (goto-char 7)
+      (dotimes (_ 3)
+        (my/thingatpt-float-increment 1))
+      (should (equal (buffer-string) "x = 10.15;"))
+      (should (equal (point) 8))
+      (goto-char 5)
+      (dotimes (_ 12)
+        (my/thingatpt-float-decrement 1))
+      (should (equal (buffer-string) "x = -1.85;"))
+      (should (equal (char-after) ?1)))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-increment-evil-other-state ()
+  ;; The digit before point is incremented.
+  (let ((evil-local-mode t)
+        (evil-state 'insert))
+    (should (equal (my-thingatpt-tests--edit "1.2|5" #'my/thingatpt-float-increment 1) "1.3|5"))
+    (should-error (my-thingatpt-tests--edit "1.|25" #'my/thingatpt-float-increment 1) :type 'user-error))
+  (let ((evil-local-mode t)
+        (evil-state 'emacs))
+    (should (equal (my-thingatpt-tests--edit "1.2|5" #'my/thingatpt-float-increment 1) "1.3|5")))
+  (let ((evil-local-mode nil)
+        (evil-state 'normal))
+    (should (equal (my-thingatpt-tests--edit "1.2|5" #'my/thingatpt-float-increment 1) "1.3|5"))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-decrement ()
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-decrement 1) "1.4|"))
+  (should (equal (my-thingatpt-tests--edit "1.0|" #'my/thingatpt-float-decrement 1) "0.9|"))
+  (should (equal (my-thingatpt-tests--edit "1|.5" #'my/thingatpt-float-decrement 1) "0|.5"))
+  (should (equal (my-thingatpt-tests--edit "0.0|" #'my/thingatpt-float-decrement 1) "-0.1|"))
+  (should (equal (my-thingatpt-tests--edit "1.5e|10" #'my/thingatpt-float-decrement 1) "1.5e9|"))
+  ;; Negative count.
+  (should (equal (my-thingatpt-tests--edit "1.5|" #'my/thingatpt-float-decrement -1) "1.6|")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-regexp ()
+  (let ((regexp my/thingatpt-float-regexp))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 0) "-1_0.5_0e-3"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 1) "-1_0.5_0"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 2) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 4) "1_0"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 9) "."))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 10) "5_0"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 5) "-3"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 6) "-"))
+    (should (equal (my-thingatpt-tests--match-string regexp "-1_0.5_0e-3" 7) "3"))
+    ;; No integral part.
+    (should (equal (my-thingatpt-tests--match-string regexp "+.5" 0) "+.5"))
+    (should (equal (my-thingatpt-tests--match-string regexp ".5" 10) "5"))
+    (should-not (my-thingatpt-tests--match-string regexp ".5" 4))
+    ;; No fraction.
+    (should (equal (my-thingatpt-tests--match-string regexp "1." 0) "1."))
+    (should (equal (my-thingatpt-tests--match-string regexp "1." 10) ""))
+    (should (equal (my-thingatpt-tests--match-string regexp "1.e5" 0) "1.e5"))
+    ;; e is an exponent indicator only if it is followed by digits.
+    (should (equal (my-thingatpt-tests--match-string regexp "1.5e" 0) "1.5"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1.5e+" 0) "1.5"))
+    (should-not (my-thingatpt-tests--match-string regexp "1.5e" 5))
+    ;; The suffix is not part of the match.
+    (should (equal (my-thingatpt-tests--match-string regexp "1.5px" 0) "1.5"))
+    ;; Only one decimal point.
+    (should (equal (my-thingatpt-tests--match-string regexp "1.2.3" 0) "1.2"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1..5" 0) "1."))
+    ;; An underscore must be between digits.
+    (should (equal (my-thingatpt-tests--match-string regexp "1.5_" 0) "1.5"))
+    (should (equal (my-thingatpt-tests--match-string regexp "1._5" 0) "1."))
+    ;; No match.
+    (should-not (my-thingatpt-tests--match-string regexp "1" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "1e5" 0))
+    (should-not (my-thingatpt-tests--match-string regexp "." 0))
+    (should-not (my-thingatpt-tests--match-string regexp "-." 0))
+    (should-not (my-thingatpt-tests--match-string regexp "1_.5" 0))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt-float-demoting-regexps ()
+  (let ((symbols '(" " "!" "\"" "#" "$" "%" "&" "'" "(" ")" "*" "+" "," "-" "." "/" ":" ";" "<" "="
+                   ">" "?" "@" "[" "\\" "]" "^" "_" "`" "{" "|" "}" "~")))
+    (dolist (string (append '("0" "9" "a" "z" "A" "Z") symbols))
+      (should (eq (and (string-match-p my/thingatpt-float-integral-rejecting-regexp string) t)
+                  (and (member string '("0" "9" "a" "z" "A" "Z" "_")) t)))
+      (should (eq (and (string-match-p my/thingatpt-leading-decimal-point-demoting-regexp string) t)
+                  (and (member string '("0" "9" "a" "z" "A" "Z" "_" ")" "]" "}" "." "\\")) t)))
+      (should (eq (and (string-match-p my/thingatpt-trailing-decimal-point-demoting-regexp string) t)
+                  (and (member string '("a" "z" "A" "Z" "_" ".")) t))))))
 
 ;;;; Integer
 
@@ -1338,6 +1907,63 @@ Use TEXT FN ARGS."
   (dolist (base-prefix '("0x" "0X" "#x" "#X"))
     (should (eql (my/thingatpt--base-prefix-to-base base-prefix) 16)))
   (should (eql (my/thingatpt--base-prefix-to-base "") 10)))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt--evil-normal-state-p ()
+  (let ((evil-local-mode t)
+        (evil-state 'normal))
+    (should (my/thingatpt--evil-normal-state-p)))
+  (let ((evil-local-mode t)
+        (evil-state 'insert))
+    (should-not (my/thingatpt--evil-normal-state-p)))
+  (let ((evil-local-mode nil)
+        (evil-state 'normal))
+    (should-not (my/thingatpt--evil-normal-state-p))))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt--copy-underscores ()
+  (should (equal (my/thingatpt--copy-underscores "1001" "1_000") "1_001"))
+  (should (equal (my/thingatpt--copy-underscores "999" "1_000") "999"))
+  (should (equal (my/thingatpt--copy-underscores "10000" "9_999") "10_000"))
+  (should (equal (my/thingatpt--copy-underscores "1001" "1_0_0_0") "1_0_0_1"))
+  (should (equal (my/thingatpt--copy-underscores "42" "41") "42"))
+  (should (equal (my/thingatpt--copy-underscores "5" "") "5")))
+
+(ert-deftest my-thingatpt-tests-my/thingatpt--float-increment ()
+  ;; The fraction.
+  (should (equal (my/thingatpt--float-increment "" "1" "5" 1 1) '("" "1" "6")))
+  (should (equal (my/thingatpt--float-increment "" "1" "25" 1 1) '("" "1" "35")))
+  (should (equal (my/thingatpt--float-increment "" "1" "25" 1 2) '("" "1" "26")))
+  (should (equal (my/thingatpt--float-increment "" "1" "95" 1 1) '("" "2" "05")))
+  (should (equal (my/thingatpt--float-increment "" "9" "99" 1 2) '("" "10" "00")))
+  (should (equal (my/thingatpt--float-increment "" "1" "00" -1 2) '("" "0" "99")))
+  (should (equal (my/thingatpt--float-increment "" "1" "5" 0 1) '("" "1" "5")))
+  ;; The integral part.
+  (should (equal (my/thingatpt--float-increment "" "1" "5" 1 0) '("" "2" "5")))
+  (should (equal (my/thingatpt--float-increment "" "9" "5" 1 0) '("" "10" "5")))
+  (should (equal (my/thingatpt--float-increment "" "1" "" 1 0) '("" "2" "")))
+  ;; Sign.
+  (should (equal (my/thingatpt--float-increment "-" "1" "5" 1 1) '("-" "1" "4")))
+  (should (equal (my/thingatpt--float-increment "-" "0" "1" 1 1) '("" "0" "0")))
+  (should (equal (my/thingatpt--float-increment "" "0" "0" -1 1) '("-" "0" "1")))
+  (should (equal (my/thingatpt--float-increment "" "0" "5" -1 0) '("-" "0" "5")))
+  (should (equal (my/thingatpt--float-increment "-" "0" "5" 1 0) '("" "0" "5")))
+  (should (equal (my/thingatpt--float-increment "+" "0" "1" -1 1) '("+" "0" "0")))
+  (should (equal (my/thingatpt--float-increment "+" "0" "1" -2 1) '("-" "0" "1")))
+  ;; An empty integral part stays empty if it is zero.
+  (should (equal (my/thingatpt--float-increment "" "" "5" 1 1) '("" "" "6")))
+  (should (equal (my/thingatpt--float-increment "" "" "9" 1 1) '("" "1" "0")))
+  (should (equal (my/thingatpt--float-increment "" "" "0" -1 1) '("-" "" "1")))
+  (should (equal (my/thingatpt--float-increment "" "" "5" 1 0) '("" "1" "5")))
+  ;; Unless the integral part is incremented.
+  (should (equal (my/thingatpt--float-increment "-" "" "5" 1 0) '("" "0" "5")))
+  (should (equal (my/thingatpt--float-increment "" "" "5" -1 0) '("-" "0" "5")))
+  (should (equal (my/thingatpt--float-increment "" "" "5" 0 0) '("" "0" "5")))
+  ;; Leading zeros of the integral part are not kept.
+  (should (equal (my/thingatpt--float-increment "" "007" "5" 1 0) '("" "8" "5")))
+  ;; Underscore.
+  (should (equal (my/thingatpt--float-increment "" "1_000" "000_1" 1 4) '("" "1_000" "000_2")))
+  (should (equal (my/thingatpt--float-increment "" "1_000" "5" -1 0) '("" "999" "5")))
+  (should (equal (my/thingatpt--float-increment "" "0" "999_999" 1 6) '("" "1" "000_000")))
+  (should (equal (my/thingatpt--float-increment "" "9_999" "9" 1 1) '("" "10_000" "0"))))
 
 (ert-deftest my-thingatpt-tests-my/thingatpt--increment ()
   ;; Decimal.
