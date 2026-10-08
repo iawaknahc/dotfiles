@@ -52,8 +52,9 @@
 ;;
 ;; 4. Verdicts for integers
 ;;
-;; An integer is either a decimal, or a non-decimal with the C-style
-;; base prefix 0b, 0o, or 0x.
+;; An integer is either a decimal, or a non-decimal.  A non-decimal has
+;; either the C-style base prefix 0b, 0o, or 0x, or the Elisp-style base
+;; prefix #b, #o, or #x.
 ;;
 ;; 4.1. Before the integer
 ;;
@@ -85,7 +86,8 @@
 ;;   subtraction from a string.  The cost is that 'a'-|1 becomes 'a'0.
 ;;
 ;; The sign of the exponent part is never demoted, because it is inside
-;; the integer.
+;; the integer.  The same goes for the sign of an Elisp-style
+;; non-decimal.  See 4.5.
 ;;
 ;; 4.3. After a decimal
 ;;
@@ -102,7 +104,7 @@
 ;; - The digits in a suffix are an integer of their own.  1f3|2 matches
 ;;   32.  It follows from 4.1.
 ;;
-;; 4.4. After a non-decimal
+;; 4.4. After a C-style non-decimal
 ;;
 ;; Some letters are digits in some bases, so digits and letters are read
 ;; relative to the base.  A foreign digit is a decimal digit which is
@@ -130,7 +132,33 @@
 ;;   1920x1080   1920 and 1080.  1920 is taken first, so 0x1080 is
 ;;               never tried.
 ;;
-;; 4.5. Going below zero
+;; 4.5. Elisp-style non-decimal
+;;
+;; The order is base prefix, sign, and digits, such as #x-10, while the
+;; order of the C-style is sign, base prefix, and digits, such as -0x10.
+;;
+;; - The sign is inside the integer, so it is never demoted.  A + or -
+;;   before # is not part of the match.  -#x1|0 matches #x10.
+;; - Underscores are not allowed between digits.  #b1|_0 matches #b1.
+;; - The digits are the longest run of the digits of the base.
+;; - There is no suffix, as in the Elisp reader.  If the digits are
+;;   followed by a letter, or a foreign digit, nothing matches.  #b1|2,
+;;   #b1|e5, and #xf|g match nothing.  The letters, digits, and
+;;   underscores that follow are consumed.
+;; - Anything else that follows is not part of the match.  #xf|_g
+;;   matches #xf, because the Elisp reader reads it as 15.
+;; - If the base prefix, and the sign if any, is followed by a foreign
+;;   digit, nothing matches.  The letters, digits, and underscores that
+;;   follow are consumed.  #b|2, #b-|2, and #b2|1 match nothing.
+;; - Otherwise, if the base prefix is not followed by a digit of the
+;;   base, # is an ordinary symbol, and the rest is read as if # is not
+;;   there.  #box|2 matches 2, and #xg|1 matches 1.
+;;
+;; The last rule differs from the C-style, in which 0xg|1 matches
+;; nothing.  It is because # followed by letters is common outside of
+;; Lisp, such as #box2 in CSS, and page.html#xref1 in a URL.
+;;
+;; 4.6. Going below zero
 ;;
 ;; If the + or - before the integer is demoted, the integer cannot
 ;; become negative.  1-|2 decremented by 3 would be 1--1, and that
@@ -140,13 +168,13 @@
 ;; integer can become negative.  a|1 decremented by 2 is a-1, although
 ;; it is read back as 1.
 ;;
-;; 4.6. Not supported
+;; The sign of an Elisp-style non-decimal is never demoted, so it can
+;; always become negative.  a#x|1 decremented by 2 is a#x-1.
 ;;
-;; - The Lisp-style base prefixes #b, #o, and #x.  Their order is base
-;;   prefix, sign, and digits, such as #x-10, while the order of the
-;;   C-style is sign, base prefix, and digits, such as -0x10.  A separate
-;;   regexp and a separate way to write the sign are needed.  For now,
-;;   # is an ordinary symbol, and #b101 is read as the decimal 101.
+;; 4.7. Not supported
+;;
+;; - The Elisp-style radix prefix, such as #24r1k.  # is an ordinary
+;;   symbol, and #24r1k is read as the decimals 24 and 1.
 ;; - An underscore right after the base prefix, such as 0x_ff, which is
 ;;   accepted by Python and Rust.  It matches nothing.
 ;; - A hexadecimal can swallow the beginning of a suffix which is made
@@ -318,7 +346,7 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
 (rx-define my/thingatpt-rx-sign (in "-+"))
 
 ;; A run of digits, with underscores allowed between digits.
-(rx-define my/thingatpt-rx-digits (digit)
+(rx-define my/thingatpt-rx-digits-with-underscore (digit)
   (seq digit (* (or (seq "_" digit) digit))))
 
 ;; The letters, digits, and underscores following an invalid integer.
@@ -327,6 +355,8 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
 ;; The integer regexps share the same groups.
 ;;
 ;; Group 1 is the integral part, which consists of group 2, 3, and 4.
+;; In the C style, the order is group 2, 3, and 4.
+;; In the Elisp style, the order is group 3, 2, and 4.
 ;; Group 2 is the sign of the integral part.
 ;; Group 3 is the base prefix.
 ;; Group 4 is the digits of the integral part.
@@ -341,7 +371,7 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
    (group-n 1
      (group-n 2 (? my/thingatpt-rx-sign))
      (group-n 3 (or "0b" "0B"))
-     (group-n 4 (my/thingatpt-rx-digits (in "01"))))
+     (group-n 4 (my/thingatpt-rx-digits-with-underscore (in "01"))))
    (group-n 8 (? (in "2-9") my/thingatpt-rx-tail)))
   "A regular expression for binary integers such as 0b101.
 
@@ -352,7 +382,7 @@ It is invalid if it is followed by a digit that is not a binary digit.")
    (group-n 1
      (group-n 2 (? my/thingatpt-rx-sign))
      (group-n 3 (or "0o" "0O"))
-     (group-n 4 (my/thingatpt-rx-digits (in "0-7"))))
+     (group-n 4 (my/thingatpt-rx-digits-with-underscore (in "0-7"))))
    (group-n 8 (? (in "89") my/thingatpt-rx-tail)))
   "A regular expression for octal integers such as 0o17.
 
@@ -363,7 +393,7 @@ It is invalid if it is followed by a digit that is not an octal digit.")
    (group-n 1
      (group-n 2 (? my/thingatpt-rx-sign))
      (group-n 3 (or "0x" "0X"))
-     (group-n 4 (my/thingatpt-rx-digits (in "0-9a-fA-F")))))
+     (group-n 4 (my/thingatpt-rx-digits-with-underscore (in "0-9a-fA-F")))))
   "A regular expression for hexadecimal integers such as 0xff.")
 
 (defconst my/thingatpt-bare-base-prefix-regexp
@@ -374,14 +404,62 @@ It is invalid if it is followed by a digit that is not an octal digit.")
 
 It is always invalid.")
 
+(defconst my/thingatpt-elisp-binary-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 3 (or "#b" "#B"))
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 4 (+ (in "01"))))
+   (group-n 8 (? (in "2-9a-zA-Z") my/thingatpt-rx-tail)))
+  "A regular expression for Elisp-style binary integers such as #b101.
+
+It is invalid if it is followed by a letter,
+or a digit that is not a binary digit.")
+
+(defconst my/thingatpt-elisp-octal-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 3 (or "#o" "#O"))
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 4 (+ (in "0-7"))))
+   (group-n 8 (? (in "89a-zA-Z") my/thingatpt-rx-tail)))
+  "A regular expression for Elisp-style octal integers such as #o17.
+
+It is invalid if it is followed by a letter,
+or a digit that is not an octal digit.")
+
+(defconst my/thingatpt-elisp-hexadecimal-integer-regexp
+  (rx
+   (group-n 1
+     (group-n 3 (or "#x" "#X"))
+     (group-n 2 (? my/thingatpt-rx-sign))
+     (group-n 4 (+ (in "0-9a-fA-F"))))
+   (group-n 8 (? (in "g-zG-Z") my/thingatpt-rx-tail)))
+  "A regular expression for Elisp-style hexadecimal integers such as #xff.
+
+It is invalid if it is followed by a letter that is not a hexadecimal digit.")
+
+(defconst my/thingatpt-elisp-foreign-digit-regexp
+  (rx
+   (or
+    (seq (or "#b" "#B")
+         (? my/thingatpt-rx-sign)
+         (group-n 8 (in "2-9") my/thingatpt-rx-tail))
+    (seq (or "#o" "#O")
+         (? my/thingatpt-rx-sign)
+         (group-n 8 (in "89") my/thingatpt-rx-tail))))
+  "A regular expression for an Elisp-style base prefix that is followed by a foreign digit.
+
+It is always invalid.")
+
 (defconst my/thingatpt-decimal-integer-regexp
   (rx
    (group-n 1
      (group-n 2 (? my/thingatpt-rx-sign))
-     (group-n 4 (my/thingatpt-rx-digits (in "0-9"))))
+     (group-n 4 (my/thingatpt-rx-digits-with-underscore (in "0-9"))))
    (? (in "eE") (group-n 5
                   (group-n 6 (? my/thingatpt-rx-sign))
-                  (group-n 7 (my/thingatpt-rx-digits (in "0-9"))))))
+                  (group-n 7 (my/thingatpt-rx-digits-with-underscore (in "0-9"))))))
   "A regular expression for decimal integers such as 42, or 1e10.")
 
 (defconst my/thingatpt-integer-regexp
@@ -395,6 +473,12 @@ It is always invalid.")
     ;; This must be before the decimal one,
     ;; so that 0x is not treated as the decimal integer 0.
     (regexp my/thingatpt-bare-base-prefix-regexp)
+    (regexp my/thingatpt-elisp-binary-integer-regexp)
+    (regexp my/thingatpt-elisp-octal-integer-regexp)
+    (regexp my/thingatpt-elisp-hexadecimal-integer-regexp)
+    ;; This must be after the above ones,
+    ;; so that it matches only if there is no valid digit.
+    (regexp my/thingatpt-elisp-foreign-digit-regexp)
     (regexp my/thingatpt-decimal-integer-regexp)))
   "A regular expression for integers.
 
@@ -412,27 +496,40 @@ For example, the - in 1-2 is not the sign of 2.")
 (defun my/thingatpt-integer-match ()
   "Return non-nil if point is in or after an integer.
 
-Return the symbol `demoted' if the + or - before the integer is demoted,
+The return value is a plist with the following properties.
+
+:style is the style of the integer, which is either the symbol `c',
+or the symbol `elisp'.  See `my/thingatpt--base-prefix-to-style'.
+
+:demoted is t if the + or - before the integer is demoted,
 according to `my/thingatpt-sign-demoting-regexp'.
 In that case, the + or - is not part of the match.
+Only the sign of a C-style integer can be demoted.
 
 Match data is set according to `my/thingatpt-integer-regexp'."
   (interactive)
   (when (and (my/thingatpt-point-in-or-after-regexp my/thingatpt-integer-regexp)
              (my/thingatpt--match-empty-p 8))
-    (let* ((char-before-sign (char-before (match-beginning 2)))
-           (demoted (and (not (my/thingatpt--match-empty-p 2))
-                         char-before-sign
-                         (string-match-p my/thingatpt-sign-demoting-regexp
-                                         (char-to-string char-before-sign)))))
-      ;; Match again without the sign.
-      (when demoted
-        (save-excursion
-          (goto-char (match-end 2))
-          (looking-at my/thingatpt-integer-regexp)))
-      ;; After demotion, the integer may begin after point.
-      (when (>= (point) (match-beginning 0))
-        (if demoted 'demoted t)))))
+    (pcase (my/thingatpt--base-prefix-to-style
+            (my/thingatpt--buffer-substring-no-properties-of-match 3))
+      ;; The sign is after the base prefix, so it is never demoted.
+      ('elisp
+       (list :style 'elisp :demoted nil))
+      ('c
+       (let* ((char-before-sign (char-before (match-beginning 2)))
+              (demoted (and (not (my/thingatpt--match-empty-p 2))
+                            char-before-sign
+                            (string-match-p my/thingatpt-sign-demoting-regexp
+                                            (char-to-string char-before-sign))
+                            t)))
+         ;; Match again without the sign.
+         (when demoted
+           (save-excursion
+             (goto-char (match-end 2))
+             (looking-at my/thingatpt-integer-regexp)))
+         ;; After demotion, the integer may begin after point.
+         (when (>= (point) (match-beginning 0))
+           (list :style 'c :demoted demoted)))))))
 
 ;;;###autoload
 (defun my/thingatpt-integer-increment (count)
@@ -445,7 +542,9 @@ and the + or - before the integer is demoted.
 It is because the sign of the result would be demoted as well."
   (interactive "p")
   (when-let* ((match (my/thingatpt-integer-match)))
-    (let* ((integral-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 4))
+    (let* ((style (plist-get match :style))
+           (demoted (plist-get match :demoted))
+           (integral-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 4))
            (base-prefix (my/thingatpt--buffer-substring-no-properties-of-match 3))
            (integral-sign (my/thingatpt--buffer-substring-no-properties-of-match 2))
            (exponent-digits-with-underscore (my/thingatpt--buffer-substring-no-properties-of-match 7))
@@ -456,7 +555,7 @@ It is because the sign of the result would be demoted as well."
        ;; The exponent part exists and the point is in the exponent part.
        ;; Increment the exponent part.
        ((and (match-beginning 5) (>= (point) (match-beginning 5)))
-        (let* ((result (my/thingatpt--increment exponent-sign "" exponent-digits-with-underscore count))
+        (let* ((result (my/thingatpt--increment style exponent-sign "" exponent-digits-with-underscore count))
                (exponent-beg (match-beginning 5)))
           (replace-region-contents
            (match-beginning 5)
@@ -466,9 +565,9 @@ It is because the sign of the result would be demoted as well."
           (goto-char (+ exponent-beg (length result)))))
        ;; Otherwise, increment the integral part.
        (t
-        (let* ((result (my/thingatpt--increment integral-sign base-prefix integral-digits-with-underscore count))
+        (let* ((result (my/thingatpt--increment style integral-sign base-prefix integral-digits-with-underscore count))
                (integral-beg (match-beginning 1)))
-          (when (and (eq match 'demoted) (string-prefix-p "-" result))
+          (when (and demoted (string-prefix-p "-" result))
             (user-error "Decrementing this sign-demoted integer to negative will introduce a superfluous sign"))
           (replace-region-contents
            (match-beginning 1)
@@ -546,10 +645,24 @@ Match data is set."
 (defun my/thingatpt--base-prefix-to-base (base-prefix)
   "Convert BASE-PREFIX to its numeric value."
   (pcase base-prefix
-    ((or "0b" "0B") 2)
-    ((or "0o" "0O") 8)
-    ((or "0x" "0X") 16)
+    ((or "0b" "0B" "#b" "#B") 2)
+    ((or "0o" "0O" "#o" "#O") 8)
+    ((or "0x" "0X" "#x" "#X") 16)
     (_ 10)))
+
+;;;###autoload
+(defun my/thingatpt--base-prefix-to-style (base-prefix)
+  "Convert BASE-PREFIX to the style of the integer.
+
+Return the symbol `elisp' if BASE-PREFIX is an Elisp-style base prefix.
+The order is base prefix, sign, and digits, such as #x-10.
+
+Otherwise, return the symbol `c'.
+The order is sign, base prefix, and digits, such as -0x10.
+A decimal integer has no base prefix, and it is in the C style."
+  (pcase base-prefix
+    ((or "#b" "#B" "#o" "#O" "#x" "#X") 'elisp)
+    (_ 'c)))
 
 ;;;###autoload
 (defun my/thingatpt--preferred-sign (sign sign-value)
@@ -563,9 +676,11 @@ Otherwise return an empty string."
    (t "")))
 
 ;;;###autoload
-(defun my/thingatpt--increment (sign base-prefix digits-with-underscore count)
+(defun my/thingatpt--increment (style sign base-prefix digits-with-underscore count)
   "Increment DIGITS-WITH-UNDERSCORE whose sign is SIGN in base indicated by BASE-PREFIX with COUNT.
 
+STYLE is a symbol returned by `my/thingatpt--base-prefix-to-style'.
+It decides the order of the sign and the base prefix in the result.
 BASE-PREFIX is a string accepted by `my/thingatpt--base-prefix-to-base'.
 DIGITS-WITH-UNDERSCORE is a string whose characters must be valid with respect to BASE-PREFIX, or underscores.
 SIGN is a string either an empty string, -, or +.
@@ -611,7 +726,10 @@ The underscores are kept if possible."
            ;; It is not an underscore.
            (t
             (cl-return-from loop))))))
-    (format "%s%s%s" result-sign base-prefix (concat list))))
+    (pcase style
+      ('c (format "%s%s%s" result-sign base-prefix (concat list)))
+      ('elisp (format "%s%s%s" base-prefix result-sign (concat list)))
+      (_ (error "Unknown style: %S" style)))))
 
 ;;;; Configuration
 
