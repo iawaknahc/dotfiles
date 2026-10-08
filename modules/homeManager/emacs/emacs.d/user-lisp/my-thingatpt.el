@@ -164,9 +164,9 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
 ;;;; Integer
 (defconst my/thingatpt-integer-regexp
   (rx-let ((sign (in "-+"))
-           (binary-prefix (or "0b" "0B" "#b" "#B"))
-           (octal-prefix (or "0o" "0O" "#o" "#O"))
-           (hexadecimal-prefix (or "0x" "0X" "#x" "#X"))
+           (binary-prefix (or "0b" "0B"))
+           (octal-prefix (or "0o" "0O"))
+           (hexadecimal-prefix (or "0x" "0X"))
 
            (binary-digit (in "01"))
            (octal-digit (in "01234567"))
@@ -323,9 +323,9 @@ Match data is set."
 (defun my/thingatpt--base-prefix-to-base (base-prefix)
   "Convert BASE-PREFIX to its numeric value."
   (pcase base-prefix
-    ((or "0b" "0B" "#b" "#B") 2)
-    ((or "0o" "0O" "#o" "#O") 8)
-    ((or "0x" "0X" "#x" "#X") 16)
+    ((or "0b" "0B") 2)
+    ((or "0o" "0O") 8)
+    ((or "0x" "0X") 16)
     (_ 10)))
 
 ;;;###autoload
