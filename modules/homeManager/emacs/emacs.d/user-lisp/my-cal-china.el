@@ -57,7 +57,7 @@
     (holiday-chinese 4 8 "長洲太平清醮")
     (holiday-chinese 4 8 "譚公誕")
     (holiday-chinese 5 5 "端午節")
-    (holiday-chinese 6 24 "關帝誔")
+    (holiday-chinese 6 24 "關帝誕")
     (holiday-chinese 7 7 "七夕")
     (holiday-chinese 7 14 "七月十四")
     (holiday-chinese 7 15 "盂蘭節")
@@ -206,6 +206,81 @@ The algorithm used here is the one used by 八字."
 
 The algorithm used here is the one used by 八字."
   (format "%s%s" (my/sexagenary-month-string date) (my/sexagenary-day-string date)))
+
+;;;###autoload
+(defun my/calendar-chinese-year-with-month-length (year)
+  "Return a list 3-element list like `calendar-chinese-year' in YEAR.
+
+The first two elements are from `calendar-chinese-year'.
+The third element is the month length, either 29 or 30."
+  (let* ((two-element-list (calendar-chinese-year year))
+         ;; We need the first month of the next year to compute the month length of the last month of this year.
+         (two-element-list (append two-element-list (list (car (calendar-chinese-year (1+ year))))))
+         result)
+    (dotimes (idx (1- (length two-element-list)))
+      (let* ((a (nth idx two-element-list))
+             (b (nth (1+ idx) two-element-list))
+             (a-abs (nth 1 a))
+             (b-abs (nth 1 b))
+             (a-month-length (- b-abs a-abs)))
+        (push (list (nth 0 a) (nth 1 a) a-month-length) result)))
+    (nreverse result)))
+
+;;;###autoload
+(defun my/calendar-chinese-anniversary (date year)
+  "Compute the order of the anniversary of DATE in YEAR.
+
+DATE is a Gregorian date, and YEAR is a Gregorian year.
+
+DATE is first converted to a chinese date.
+If the chinese month of DATE is a leap month,
+the same day in the previous month is used to compute anniversary.
+
+YEAR is then used to derive a list of chinese months in that year.
+If the chinese day of DATE is 三十, and the chinese month is of length 29 days,
+then 廿九 is considered as the anniversary.
+
+The absolute order is computed by the formula: 60 * cycle + year.
+The order is, therefore, the absolute order of the anniversary minus the absolute order of the original date.
+
+Return a plist.
+:order is the order.
+:date-gregorian is DATE.
+:date-chinese is the chinese date of DATE.
+:anniversary-gregorian is the anniversary date matching order.  It is a Gregorian date.
+:anniversary-chinese is :anniversary-gregorian converted to a chinese date.
+Note that :anniversary-gregorian may not be always in YEAR.
+When :order is zero, :anniversary-gregorian is always DATE, thus :anniversary-chinese may be in a leap month.
+When :order is non-zero, :anniversary-chinese is never in a leap month."
+  (let* ((date-abs (calendar-absolute-from-gregorian date))
+         (date-chinese (calendar-chinese-from-absolute date-abs))
+         (date-cycle (nth 0 date-chinese))
+         (date-year (nth 1 date-chinese))
+         (date-order (+ (* 60 date-cycle) date-year))
+         ;; For example, 閏二月 is 2.5
+         (anniversary-month (floor (nth 2 date-chinese)))
+         (anniversary-day (nth 3 date-chinese))
+         (day-30 (eql anniversary-day 30))
+         (three-element-list (my/calendar-chinese-year-with-month-length year))
+         (three-element (assoc anniversary-month three-element-list))
+         (month-length (nth 2 three-element))
+         (short-month (< month-length 30))
+         (start-of-anniversary-month (calendar-chinese-from-absolute (nth 1 three-element)))
+         (anniversary-cycle (nth 0 start-of-anniversary-month))
+         (anniversary-year (nth 1 start-of-anniversary-month))
+         (anniversary-day (if (and day-30 short-month) 29 anniversary-day))
+         (anniversary (list anniversary-cycle anniversary-year anniversary-month anniversary-day))
+         (anniversary-order (+ (* 60 anniversary-cycle) anniversary-year))
+         (order (- anniversary-order date-order))
+         (anniversary-abs (calendar-chinese-to-absolute anniversary))
+         (anniversary-gregorian (calendar-gregorian-from-absolute anniversary-abs))
+         (anniversary-gregorian (if (eql order 0) date anniversary-gregorian))
+         (anniversary-chinese (calendar-chinese-from-absolute (calendar-absolute-from-gregorian anniversary-gregorian))))
+    (list :order order
+          :date-gregorian date
+          :date-chinese date-chinese
+          :anniversary-gregorian anniversary-gregorian
+          :anniversary-chinese anniversary-chinese)))
 
 (provide 'my-cal-china)
 ;;; my-cal-china.el ends here

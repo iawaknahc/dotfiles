@@ -13,6 +13,9 @@
 ;; `my/calendar-date<'
 (require 'my-calendar)
 
+;; `my/calendar-chinese-anniversary'
+(require 'my-cal-china)
+
 ;; `my/holiday-solar-term'
 (require 'my-solar)
 
@@ -23,6 +26,16 @@
     (if (eql y1 y2)
         (list y1)
       (list y1 y2))))
+
+;;;###autoload
+(defun my/holiday--pad-years (years)
+  "Add two more years to YEARS."
+  (let* ((a (1- (car years)))
+         (b (1+ (car (last years)))))
+    (append (list a)
+            years
+            (list b)
+            nil)))
 
 ;;;###autoload
 (cl-defmacro my/holiday-bind (expr &key year month)
@@ -50,6 +63,24 @@ resulting in `calendar-get-month-range' reporting all months in YEAR."
                 (setq displayed-year year)
                 (setq displayed-month month)
                 ,expr))))
+
+;;;###autoload
+(defmacro my/holiday-diary (expr)
+  "Use holiday expression EXPR as a diary sexp.
+
+Functions like `holiday-fixed' need `displayed-year' and `displayed-month',
+but they are not bound when a diary sexp is evaluated.
+A diary sexp is evaluated with `date' bound instead, and is expected to return a string or nil."
+  `(progn
+     (with-no-warnings (defvar date))
+     (let* ((year (calendar-extract-year date))
+            (month (calendar-extract-month date))
+            (holidays (my/holiday-bind ,expr :year year :month month))
+            (holidays (seq-filter (lambda (holiday)
+                                    (calendar-date-equal (car holiday) date))
+                                  holidays)))
+       (when holidays
+         (mapconcat #'cadr holidays "; ")))))
 
 ;;;###autoload
 (defun my/holiday-anniversary (year month day description)
@@ -343,6 +374,105 @@ The function `my/holiday-substitution' is used to define such holiday."
                    (push holiday result))))
               (_ (error "Expected an empty list or a singleton list or a 2-element list: %S" holiday-and-substitution)))))))
     (holiday-filter-visible-calendar (sort result :key #'car :lessp #'my/calendar-date<))))
+
+(defun my/holiday-chinese--birth (name birth)
+  "NAME BIRTH."
+  (let* ((years (my/holiday-get-years))
+         (years (my/holiday--pad-years years))
+         (anniversaries (seq-map (lambda (year)
+                                   (my/calendar-chinese-anniversary birth year))
+                                 years))
+         (anniversaries (seq-filter (lambda (plist)
+                                      (>= (plist-get plist :order) 0))
+                                    anniversaries))
+         (anniversaries (seq-map (lambda (plist)
+                                   (let* ((date (plist-get plist :anniversary-gregorian))
+                                          (order (plist-get plist :order))
+                                          (description (cond
+                                                        ((eql order 0)
+                                                         (format "%s 農曆出世" name))
+                                                        (t
+                                                         (format "%s %d歲農曆生日" name order)))))
+                                     (list date description)))
+                                 anniversaries)))
+    (holiday-filter-visible-calendar anniversaries)))
+
+(defun my/holiday-chinese--birth-and-death (name birth death)
+  "NAME BIRTH DEATH."
+  (let* ((years (my/holiday-get-years))
+         (years (my/holiday--pad-years years))
+         (death-abs (calendar-absolute-from-gregorian death))
+         (ref (lambda (_year) death-abs))
+         (birth-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-chinese-anniversary birth year))
+                                       years))
+         (death-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-chinese-anniversary death year))
+                                       years))
+         (birth-anniversaries (seq-filter (lambda (plist)
+                                            (>= (plist-get plist :order) 0))
+                                          birth-anniversaries))
+         (death-anniversaries (seq-filter (lambda (plist)
+                                            (>= (plist-get plist :order) 0))
+                                          death-anniversaries))
+         (birth-anniversaries (seq-map (lambda (plist)
+                                         (let* ((date (plist-get plist :anniversary-gregorian))
+                                                (anniversary-abs (calendar-absolute-from-gregorian date))
+                                                (order (plist-get plist :order))
+                                                (description (cond
+                                                              ((> anniversary-abs death-abs)
+                                                               (format "%s %d歲農曆生忌" name order))
+                                                              ((eql order 0)
+                                                               (format "%s 農曆出世" name))
+                                                              (t
+                                                               (format "%s %d歲農曆生日" name order)))))
+                                           (list date description)))
+                                       birth-anniversaries))
+         (death-anniversaries (seq-map (lambda (plist)
+                                         (let* ((date (plist-get plist :anniversary-gregorian))
+                                                (order (plist-get plist :order))
+                                                (description (if (eql order 0)
+                                                                 (format "%s 農曆逝世" name)
+                                                               (format "%s 第%d個農曆死忌" name order))))
+                                           (list date description)))
+                                       death-anniversaries)))
+    (holiday-filter-visible-calendar
+     (sort (append
+            birth-anniversaries
+            death-anniversaries
+            ;; The date of death is counted as the first day.
+            (holiday-after ref (1- (* 7 1)) (format "%s 頭七" name))
+            (holiday-after ref (1- (* 7 2)) (format "%s 二七" name))
+            (holiday-after ref (1- (* 7 3)) (format "%s 三七" name))
+            (holiday-after ref (1- (* 7 4)) (format "%s 四七" name))
+            (holiday-after ref (1- (* 7 5)) (format "%s 五七" name))
+            (holiday-after ref (1- (* 7 6)) (format "%s 六七" name))
+            (holiday-after ref (1- (* 7 7)) (format "%s 尾七" name))
+            (holiday-after ref (1- 100) (format "%s 百日" name))
+            nil)
+           :key #'car
+           :lessp #'my/calendar-date<))))
+
+;;;###autoload
+(cl-defun my/holiday-chinese-birth-and-death (name &key birth death)
+  "Compute various anniversaries according to BIRTH and DEATH for NAME.
+
+BIRTH must be a non-nil Gregorian date.
+
+DEATH can be nil.
+If it is non-nil, then it must be a Gregorian date.
+
+When DEATH is nil, compute 農曆生日。
+Otherwise, in addition to 農曆生日, also compute 農曆生忌, 農曆死忌, 七, 及百日.
+
+If BIRTH or DEATH is on a day in a leap month,
+then the same day in the previous month is the anniversary.
+
+If BIRTH or DEATH is on 三十,
+then it will be taken to be 廿九 in months lacking 三十."
+  (if death
+      (my/holiday-chinese--birth-and-death name birth death)
+    (my/holiday-chinese--birth name birth)))
 
 (provide 'my-holidays)
 ;;; my-holidays.el ends here
