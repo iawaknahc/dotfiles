@@ -265,6 +265,10 @@
       (provide 'init-exec-path-from-shell)
       ;;; init-exec-path-from-shell.el ends here
     '';
+  # Show Org agenda items in calendar buffers.
+  home.file.".emacs.d/diary".text = ''
+    %%(org-diary)
+  '';
 
   mypython.packages = [
     (

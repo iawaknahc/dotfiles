@@ -127,6 +127,8 @@ Only Project or Area file-level notes are targets of agenda."
 ;; Just-in-time set variable `org-agenda-files' before `org-agenda-list' runs.
 ;; The advice is added to `org-agenda-list' so that `org-agenda' and `org-calendar-goto-agenda' can benefit.
 (advice-add #'org-agenda-list :before #'my/org-agenda-before--set-org-agenda-files)
+(advice-add #'diary-mark-entries :before #'my/org-agenda-before--set-org-agenda-files)
+(advice-add #'diary-view-entries :before #'my/org-agenda-before--set-org-agenda-files)
 
 (setq
  ;; Include holidays in the agenda view.

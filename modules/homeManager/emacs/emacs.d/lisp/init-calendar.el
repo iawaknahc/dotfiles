@@ -60,10 +60,12 @@
  calendar-right-margin 140)
 
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
-;; This marks today with face `calendar-today', which is underline.
+;; This marks today with face `calendar-today'.
 (add-hook 'calendar-today-visible-hook #'calendar-mark-today)
 ;; Mark holidays when calendar is opened.
 (add-hook 'calendar-initial-window-hook #'calendar-mark-holidays)
+;; Mark diary entries (which include Org agenda items) when calendar is opened.
+(add-hook 'calendar-initial-window-hook #'diary-mark-entries)
 ;; Redraw the mode line as point moves.
 (add-hook 'calendar-move-hook #'calendar-update-mode-line)
 
