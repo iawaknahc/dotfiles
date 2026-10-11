@@ -3,14 +3,14 @@
 ;;; Code:
 
 
-;; Make sure Org-mode only read and write in ~/org
+;;;; Make sure Org-mode only read and write in ~/org
 (setq
  org-directory "~/org"
  org-default-notes-file "~/org/inbox.org"
  org-attach-id-dir "~/org/attachments/")
 
 
-;; Source blocks
+;;;; Source blocks
 (setq
  ;; To work around a very annoying bug.
  ;; 1. It is in org-mode.
@@ -24,7 +24,7 @@
  org-src-content-indentation 0)
 
 
-;; Startup visibility
+;;;; Startup visibility
 (setq
  ;; This is equivalent to having =#+startup: content= in every file.
  ;; This is particularly useful since every file now has a top-level properties drawer
@@ -34,7 +34,7 @@
  org-hide-block-startup t)
 
 
-;; Timestamps
+;;;; Timestamps
 (setq
  ;; Org-mode timestamp format cannot be customized.
  ;; Attempt to modify `org-timestamp-formats' will cause Org-mode unable to parse the timestamp correctly.
@@ -44,7 +44,7 @@
  org-timestamp-rounding-minutes '(0 5))
 
 
-;; Links and IDs
+;;;; Links and IDs
 (setq
  ;; Do not conceal links.
  org-link-descriptive nil
@@ -68,7 +68,7 @@
  org-id-ts-format "org_%Y%m%d_%H%M%S_%N")
 
 
-;; TODO and clock
+;;;; TODO and clock
 (setq
  ;; Log timestamp when a TODO is DONE.
  org-log-done 'time
@@ -101,6 +101,7 @@
 (org-clock-persistence-insinuate)
 
 
+;;;; Activation
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c c" #'org-capture)
@@ -111,7 +112,7 @@
   (keymap-set org-mode-map "C-c C-x <control-i>" #'org-clock-in))
 
 
-;; Agenda
+;;;; Agenda
 (defun my/org-agenda-before--set-org-agenda-files (&rest _args)
   "Set the variable `org-agenda-files'.
 
@@ -149,6 +150,7 @@ Only Project or Area file-level notes are targets of agenda."
            (point))))))))
 
 
+;;;; Column view
 (defun my/org-ctrl-c-ctrl-c-column-view ()
   "Turn on column view when we are at the buffer global COLUMNS property line.
 When column view is on, \\[org-ctrl-c-ctrl-c] already turns it off.
@@ -163,7 +165,7 @@ And in fact, it has a higher priority than us."
 (add-hook 'org-ctrl-c-ctrl-c-hook #'my/org-ctrl-c-ctrl-c-column-view)
 
 
-;; Capture
+;;;; Capture
 (cl-defun my/org-capture-template
     (&rest args &key key description type target template &allow-other-keys)
   "A helper to create a capture template.
@@ -192,7 +194,7 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
         :clock-resume t)))
 
 
-;; Refile
+;;;; Refile
 (defun my/org-refile-targets-with-vulpea ()
   "Return a list of filepaths suitable for `org-refile-targets'."
   (let* ((file-notes (vulpea-db-query (lambda (note)
@@ -215,7 +217,7 @@ ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted accor
  org-outline-path-complete-in-steps nil)
 
 
-;; Integrate `org-lint' with `flymake'.
+;;;; Integrate `org-lint' with `flymake'.
 (defun my/flymake-org-lint (report-fn &rest _args)
   "A flymake backend for `org-lint'.
 REPORT-FN is respected."
