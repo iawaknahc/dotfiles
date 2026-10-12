@@ -275,6 +275,7 @@ mapconcat
 mapn
 maptiler
 mbsync
+memq
 menuone
 minibuffer
 minibuffers

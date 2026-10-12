@@ -235,6 +235,86 @@ REPORT-FN is respected."
 (add-hook 'org-mode-hook (lambda ()
                            (add-hook 'flymake-diagnostic-functions #'my/flymake-org-lint nil t)))
 
+;;;; Archive
+(defun my/org-event--timestamp ()
+  "Return the timestamp object of the event at point, or nil.
+SCHEDULED takes precedence over DEADLINE, which takes precedence
+over the first active timestamp in the entry."
+  (when-let* ((s (or (org-entry-get nil "SCHEDULED")
+                     (org-entry-get nil "DEADLINE")
+                     (org-entry-get nil "TIMESTAMP"))))
+    (org-timestamp-from-string s)))
+
+(defun my/org-event--past-p (timestamp)
+  "Return non-nil if TIMESTAMP ended before today.
+Repeating and diary timestamps are never considered past."
+  (and (memq (org-element-property :type timestamp) '(active active-range))
+       (not (org-element-property :repeater-type timestamp))
+       (< (time-to-days (org-timestamp-to-time timestamp t)) (org-today))))
+
+;;;###autoload
+(defun my/org-archive-past-events ()
+  "Refile past top-level events into a datetree under `org-archive-sibling-heading'.
+An event is a top-level headline with a planning or an active timestamp.
+The datetree entry is taken from the start of that timestamp."
+  (interactive)
+  ;; Make `org-archive-sibling-heading' available.
+  (require 'org-archive)
+  (org-with-wide-buffer
+   (let* ((file (buffer-file-name))
+          (archive (org-find-olp (list org-archive-sibling-heading) t))
+          (events nil))
+     ;; Collect first, because refiling moves headlines around.
+     (org-map-entries
+      (lambda ()
+        (when-let* ((timestamp (my/org-event--timestamp))
+                    (_ (/= (point) archive))
+                    (_ (my/org-event--past-p timestamp)))
+          (push (cons (point-marker) timestamp) events)))
+      "LEVEL=1")
+     (pcase-dolist (`(,marker . ,timestamp) (reverse events))
+       (let* ((date (list (org-element-property :month-start timestamp)
+                          (org-element-property :day-start timestamp)
+                          (org-element-property :year-start timestamp)))
+              (target (save-excursion
+                        (save-restriction
+                          (goto-char archive)
+                          (org-datetree-find-date-create date 'subtree-at-point)
+                          (point)))))
+         (goto-char marker)
+         (org-refile nil nil (list org-archive-sibling-heading file nil target))
+         (set-marker marker nil)))
+     (set-marker archive nil)
+     (message "Archived %d past event(s)" (length events)))))
+
+(defun my/org-event--sort-key ()
+  "Return the sort key of the top-level headline at point.
+`org-archive-sibling-heading' sorts last.  Headlines without a usable
+timestamp sort just before it, after all dated events."
+  ;; Make `org-archive-sibling-heading' available.
+  (require 'org-archive)
+  (let* ((timestamp (my/org-event--timestamp)))
+    (cond
+     ((equal (org-get-heading t t t t) org-archive-sibling-heading)
+      most-positive-fixnum)
+     ((memq (org-element-property :type timestamp) '(active active-range))
+      (float-time (org-timestamp-to-time timestamp)))
+     (t
+      most-positive-fixnum))))
+
+;;;###autoload
+(defun my/org-sort-events ()
+  "Sort top-level events by timestamp.
+`org-archive-sibling-heading' is kept last."
+  (interactive)
+  (org-with-wide-buffer
+   ;; Sort the whole buffer as a region, so that it works regardless of
+   ;; where point is and whether the buffer starts with a headline.
+   (save-mark-and-excursion
+     (let* ((transient-mark-mode t))
+       (goto-char (point-min))
+       (set-mark (point-max))
+       (org-sort-entries nil ?f #'my/org-event--sort-key #'<)))))
 
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
