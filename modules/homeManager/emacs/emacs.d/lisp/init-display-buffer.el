@@ -111,7 +111,11 @@
 
 (add-to-list
  'display-buffer-alist
- `((or (derived-mode . help-mode)
+ `((or (and (derived-mode . help-mode)
+            ;; The buffer displayed by `org-agenda-convert-date' in agenda view is
+            ;; built with `with-output-to-temp-buffer', which is a help-mode buffer.
+            ;; But I do not want it to be displayed in a side window.
+            (not ,(rx string-start "*Dates*" string-end)))
        ;; The buffer displayed by `org-capture'.
        ,(rx string-start "*Org Select*" string-end)
        ,(function my/display-buffer-alist-from-help-to-info-match)
