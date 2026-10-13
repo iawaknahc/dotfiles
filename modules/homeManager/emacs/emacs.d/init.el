@@ -105,6 +105,7 @@
 (require 'init-save-place-mode)
 (require 'init-flyspell)
 (require 'init-thingatpt)
+(require 'init-world-clock-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)

@@ -11,6 +11,7 @@ currencies.py
 flake.lock
 harperignore
 init-font.el
+init-world-clock-mode.el
 json.lua
 justfile
 Makefile
