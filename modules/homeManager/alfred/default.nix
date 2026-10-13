@@ -17,11 +17,6 @@
         opencc
         pyperclip
 
-        # Timezone handling
-        tzdata
-        pytz
-        tzlocal
-
         # The merge request was merged.
         # https://gitlab.freedesktop.org/cangjie/pycangjie/-/merge_requests/60
         (pycangjie.overrideAttrs (prev: {
@@ -82,13 +77,6 @@
       export HS_SCRIPT=${./get_browser_url.lua}
       ${config.mypython.package}/bin/python3 ${./godoc.py} "$@"
     '')
-    (pkgs.writeShellScriptBin "alfred-workflow-tz.py" ''
-      # Force zoneinfo to use tzdata
-      # https://docs.python.org/3/library/zoneinfo.html#envvar-PYTHONTZPATH
-      export PYTHONTZPATH=""
-      export FZF=${pkgs.fzf}/bin/fzf
-      ${config.mypython.package}/bin/python3 ${./tz.py} "$@"
-    '')
     (pkgs.writeShellScriptBin "alfred-workflow-cj.py" ''
       ${config.mypython.package}/bin/python3 ${./cj.py} "$@"
     '')
@@ -108,9 +96,6 @@
   # godoc
   alfred.sourceFile."workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist;
-  # tz
-  alfred.sourceFile."workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist".source =
-    ./alfred/Alfred.alfredpreferences/workflows/user.workflow.B942CA66-01AB-46C7-8F96-07F485960CC8/info.plist;
   # cj
   alfred.sourceFile."workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.AFD896F9-B242-44CB-8211-4F4A5A70090F/info.plist;
