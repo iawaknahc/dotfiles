@@ -8,5 +8,7 @@
     unzip
     zip
     xz
+    lzip
+    zstd
   ];
 }
