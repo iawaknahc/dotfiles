@@ -8,7 +8,6 @@ let
   ucdxml-ucd-nounihan-flat =
     { callPackage }: callPackage ../../packages/ucdxml-ucd-nounihan-flat.nix { };
 
-  cldr-common = { callPackage }: callPackage ../../packages/cldr-common.nix { };
   cldr-json = { callPackage }: callPackage ../../packages/cldr-json.nix { };
 
   nu_plugin_dt = { callPackage }: callPackage ../../packages/nu_plugin_dt.nix { };
@@ -46,7 +45,6 @@ in
         UTS58-linkification = UTS58-linkification { callPackage = pkgs.callPackage; };
         ucdxml-ucd-nounihan-flat = ucdxml-ucd-nounihan-flat { callPackage = pkgs.callPackage; };
 
-        cldr-common = cldr-common { callPackage = pkgs.callPackage; };
         cldr-json = cldr-json { callPackage = pkgs.callPackage; };
 
         nu_plugin_dt = nu_plugin_dt { callPackage = pkgs.callPackage; };
@@ -111,7 +109,6 @@ in
         UTS58-linkification = config.packages.UTS58-linkification;
         ucdxml-ucd-nounihan-flat = config.packages.ucdxml-ucd-nounihan-flat;
 
-        cldr-common = config.packages.cldr-common;
         cldr-json = config.packages.cldr-json;
 
         nu_plugin_dt = config.packages.nu_plugin_dt;

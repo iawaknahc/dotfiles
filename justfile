@@ -134,10 +134,6 @@ update-unicode *FLAGS:
     just update-UTS58-linkification {{FLAGS}}
     just update-ucdxml-ucd-nounihan-flat {{FLAGS}}
 
-# Update the Nix pkacage `cldr-common`
-update-cldr-common *FLAGS:
-    nix-update cldr-common --flake --version {{FLAGS}}
-
 # Update the Nix pkacage `cldr-json`
 update-cldr-json *FLAGS:
     nix-update cldr-json --flake --version {{FLAGS}}
