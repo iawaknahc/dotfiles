@@ -9,6 +9,7 @@
     ucdxml-ucd-nounihan-flat
 
     cldr-common
+    cldr-json
 
     (stdenvNoCC.mkDerivation {
       name = "unicode.sqlite3";

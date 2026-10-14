@@ -138,6 +138,10 @@ update-unicode *FLAGS:
 update-cldr-common *FLAGS:
     nix-update cldr-common --flake --version {{FLAGS}}
 
+# Update the Nix pkacage `cldr-json`
+update-cldr-json *FLAGS:
+    nix-update cldr-json --flake --version {{FLAGS}}
+
 # Update the Nix package `UAX44-ucd`
 update-UAX44-ucd *FLAGS:
     nix-update UAX44-ucd --flake --version {{FLAGS}}
