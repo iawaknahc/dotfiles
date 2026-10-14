@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import sqlite3
 import sys
@@ -8,6 +9,7 @@ from collections.abc import Callable
 from contextlib import closing
 from dataclasses import dataclass
 from functools import cached_property
+from typing import TypedDict
 
 
 @dataclass
@@ -53,12 +55,6 @@ def get_standardized_variants(
     return els
 
 
-def get_annotations(tree: ET.ElementTree[ET.Element[str]]) -> list[ET.Element[str]]:
-    els = tree.findall(".//annotation[@type='tts']")
-    assert len(els) > 100
-    return els
-
-
 def notation_to_codepoint(notation: str) -> int:
     return int(notation, base=16)
 
@@ -73,6 +69,10 @@ def codepoints_to_cps(codepoints: list[int]) -> str:
 
 def cps_to_codepoints(cps: str) -> list[int]:
     return [int(cp, base=16) for cp in cps.strip().split(" ")]
+
+
+def str_to_codepoints(s: str) -> list[int]:
+    return [ord(a) for a in s]
 
 
 def get_codepoint_name(codepoint: int, el: ET.Element[str]) -> str:
@@ -280,14 +280,44 @@ def process_standardized_variants(
     return standardized_variants
 
 
-def process_annotations(
-    els: list[ET.Element[str]],
-) -> list[Annotation]:
+class AnnotationsJSON_annotations_annotation(TypedDict):
+    tts: list[str]
+
+
+class AnnotationsJSON_annotations(TypedDict):
+    annotations: dict[str, AnnotationsJSON_annotations_annotation]
+
+
+class AnnotationsJSON(TypedDict):
+    annotations: AnnotationsJSON_annotations
+
+
+def process_annotations(input: AnnotationsJSON) -> list[Annotation]:
     annotations: list[Annotation] = []
-    for el in els:
-        cp_str = el.attrib["cp"]
-        tts = el.text or ""
-        codepoints = [ord(cp) for cp in cp_str]
+    for key, annotation in input["annotations"]["annotations"].items():
+        codepoints = str_to_codepoints(key)
+        tts = annotation["tts"][0]
+        annotations.append(Annotation(codepoints=codepoints, tts=tts))
+    return annotations
+
+
+class AnnotationsDerivedJSON_annotationsDerived_annotation(TypedDict):
+    tts: list[str]
+
+
+class AnnotationsDerivedJSON_annotationsDerived(TypedDict):
+    annotations: dict[str, AnnotationsDerivedJSON_annotationsDerived_annotation]
+
+
+class AnnotationsDerivedJSON(TypedDict):
+    annotationsDerived: AnnotationsDerivedJSON_annotationsDerived
+
+
+def process_annotationsDerived(input: AnnotationsDerivedJSON) -> list[Annotation]:
+    annotations: list[Annotation] = []
+    for key, annotation in input["annotationsDerived"]["annotations"].items():
+        codepoints = str_to_codepoints(key)
+        tts = annotation["tts"][0]
         annotations.append(Annotation(codepoints=codepoints, tts=tts))
     return annotations
 
@@ -404,7 +434,7 @@ def main():
     ucdxml_directory = sys.argv[1]
     uax44_directory = sys.argv[2]
     uts51_directory = sys.argv[3]
-    cldr_directory = sys.argv[4]
+    cldr_json_directory = sys.argv[4]
     sqlite3_database_file = sys.argv[5]
 
     ucd_nounihan_flat_xml = os.path.join(
@@ -421,19 +451,19 @@ def main():
         uts51_directory, "./emoji/emoji-zwj-sequences.txt"
     )
 
-    cldr_common_annotations_en_xml = os.path.join(
-        cldr_directory, "./common/annotations/en.xml"
+    cldr_json_annotations_en_json = os.path.join(
+        cldr_json_directory, "./cldr-annotations-full/annotations/en/annotations.json"
     )
-    cldr_common_annotationsDerived_en_xml = os.path.join(
-        cldr_directory, "./common/annotationsDerived/en.xml"
+    cldr_json_annotationsDerived_en_json = os.path.join(
+        cldr_json_directory,
+        "./cldr-annotations-derived-full/annotationsDerived/en/annotations.json",
     )
 
-    annotations_0 = process_annotations(
-        get_annotations(ET.parse(cldr_common_annotations_en_xml))
-    )
-    annotations_1 = process_annotations(
-        get_annotations(ET.parse(cldr_common_annotationsDerived_en_xml))
-    )
+    with open(cldr_json_annotations_en_json) as f:
+        annotations_0 = process_annotations(json.load(f))
+
+    with open(cldr_json_annotationsDerived_en_json) as f:
+        annotations_1 = process_annotationsDerived(json.load(f))
     annotations = annotations_0 + annotations_1
     get_tts = make_get_tts(annotations)
 

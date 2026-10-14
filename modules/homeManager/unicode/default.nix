@@ -8,7 +8,6 @@
     UTS58-linkification
     ucdxml-ucd-nounihan-flat
 
-    cldr-common
     cldr-json
 
     (stdenvNoCC.mkDerivation {
@@ -17,7 +16,7 @@
         ucdxml-ucd-nounihan-flat
         UAX44-ucd
         UTS51-emoji
-        cldr-common
+        cldr-json
         python3
       ];
       src = ./.;
@@ -28,7 +27,7 @@
           ${ucdxml-ucd-nounihan-flat}/share/unicode/${ucdxml-ucd-nounihan-flat.version} \
           ${UAX44-ucd}/share/unicode/${UAX44-ucd.version} \
           ${UTS51-emoji}/share/unicode/${UTS51-emoji.version} \
-          ${cldr-common}/share/cldr/${cldr-common.version} \
+          ${cldr-json}/share/cldr-json/${cldr-json.version} \
           $out/share/unicode/unicode.sqlite3
       '';
     })
