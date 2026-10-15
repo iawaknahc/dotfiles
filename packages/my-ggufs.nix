@@ -7,10 +7,10 @@ let
   outDir = "share/ggufs";
   models = [
     {
-      name = "Qwen3.6-35B-A3B";
+      name = "Qwen3.8-27B";
       model = stdenvNoCC.mkDerivation rec {
         hf_owner = "unsloth";
-        hf_model = "Qwen3.6-35B-A3B";
+        hf_model = "Qwen3.8-27B";
         hf_repo = "${hf_model}-GGUF";
         hf_quant = "UD-Q4_K_XL";
         hf_filename = "${hf_model}-${hf_quant}.gguf";
@@ -19,7 +19,7 @@ let
         dontUnpack = true;
         src = fetchurl {
           url = "https://huggingface.co/${hf_owner}/${hf_repo}/resolve/main/${hf_filename}";
-          hash = "sha256-cHpVqKQ5fs3kTeDEmdPmjBrR0kDR2mWCa0lJ0QQ/RFA=";
+          hash = "sha256-PyJweQA63SURQ35bHpSBLjYzhSJb9qm0ewBUpyvIsB4=";
         };
         installPhase = ''
           mkdir -p $out/${outDir}
@@ -28,7 +28,7 @@ let
       };
       mmproj = stdenvNoCC.mkDerivation rec {
         hf_owner = "unsloth";
-        hf_model = "Qwen3.6-35B-A3B";
+        hf_model = "Qwen3.8-27B";
         hf_repo = "${hf_model}-GGUF";
         hf_filename = "mmproj-F16.gguf";
 
@@ -36,7 +36,7 @@ let
         dontUnpack = true;
         src = fetchurl {
           url = "https://huggingface.co/${hf_owner}/${hf_repo}/resolve/main/${hf_filename}";
-          hash = "sha256-iXHuTzMf8KTGCTdPMphLPU5twIbAqjXx1jf60YKeiH8=";
+          hash = "sha256-y7hBqe4GNrLsFy9buN8uqN/rAekP58YSZYHWYqC05D4=";
         };
 
         installPhase = ''
