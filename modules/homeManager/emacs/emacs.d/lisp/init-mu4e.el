@@ -3,14 +3,16 @@
 ;;; Code:
 
 (setq
- ;; Teach mu4e to retrieve emails.
- mu4e-get-mail-command "mbsync --all"
- ;; Use the executable `sendmail` in PATH to send emails.
- message-send-mail-function 'message-send-mail-with-sendmail
+ ;; Use `sendmail-program' to send emails.
+ ;; `report-emacs-bug' use this function to send emails.
+ send-mail-function #'sendmail-send-it
  ;; Use mu4e in `compose-mail' (C-x m).
  mail-user-agent 'mu4e-user-agent
  ;; This configures the command that the menu item Tools -> Read Mail executes.
  read-mail-command #'mu4e
+
+ ;; Teach mu4e to retrieve emails.
+ mu4e-get-mail-command "mbsync --all"
  ;; Do not ask when quitting mu4e.
  mu4e-confirm-quit nil
  ;; Do not echo messages to echo area.
