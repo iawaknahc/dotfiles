@@ -17,6 +17,11 @@ in
   programs.firefox.package = pkgs.firefox-bin;
 
   programs.firefox.profiles.default.extensions.packages = [
+    # On 2026-10-17, I found 1Password browser extension failed
+    # to start with a Database initialization error.
+    # I tried installing it outside Nix, and it works.
+    # So it is no longer managed by Nix.
+    #
     # 1Password requires signed browser apps.
     # https://support.1password.com/additional-browsers/?mac
     #
@@ -26,7 +31,7 @@ in
     # Thus, the best we can have to just use home-manager to manage
     # the Firefox profile.
     # Firefox itself has to be installed with .dmg.
-    pkgs.nur.repos.rycee.firefox-addons.onepassword-password-manager
+    # pkgs.nur.repos.rycee.firefox-addons.onepassword-password-manager
     pkgs.nur.repos.rycee.firefox-addons.web-clipper-obsidian
     pkgs.nur.repos.rycee.firefox-addons.violentmonkey
     pkgs.nur.repos.rycee.firefox-addons.stylus
@@ -51,8 +56,6 @@ in
   programs.firefox.profiles.default.extensions.force = true;
   programs.firefox.profiles.default.extensions.settings."adguardadblocker@adguard.com".settings =
     builtins.fromJSON (builtins.readFile ./adguard.json);
-  programs.firefox.profiles.default.extensions.settings."{${_1password}}".settings =
-    builtins.fromJSON (builtins.readFile ./1password.json);
   programs.firefox.profiles.default.extensions.settings."{${stylus}}".settings =
     libstylus.mkSettings (listdir ./stylus);
   programs.firefox.profiles.default.extensions.settings."{${violentmonkey}}".settings =
