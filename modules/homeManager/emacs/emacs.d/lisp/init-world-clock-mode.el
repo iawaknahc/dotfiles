@@ -259,6 +259,9 @@ If only :to is non-nil, the membership is in effect if TIME < :to.")
 (defvar-local my/world-clock--min-max-utc-offsets-cache nil
   "See `my/world-clock--min-max-utc-offsets'.")
 
+(defvar-local my/world-clock--solar-sunrise-sunset-cache nil
+  "See `my/world-clock--solar-sunrise-sunset'.")
+
 ;; In `world-clock', `world-clock-display' is called before `world-clock-mode',
 ;; erasing all non-permanent buffer-local variables.
 (put 'my/world-clock-time 'permanent-local t)
@@ -1379,7 +1382,10 @@ The DST field is nil and the zone field is 0, regardless of the actual zone."
   (decode-time (time-add time utc-offset) t))
 
 (defun my/world-clock--solar-sunrise-sunset (time timezone)
-  "Invoke `solar-sunrise-sunset' at TIME in TIMEZONE."
+  "Invoke `solar-sunrise-sunset' at TIME in TIMEZONE.
+
+This function caches its result with `my/world-clock--solar-sunrise-sunset-cache'
+by (TIMEZONE local-date utc-offset-in-minutes)."
   (when-let* ((plist (my/world-clock--get-plist timezone))
               (latitude (plist-get plist :latitude))
               (longitude (plist-get plist :longitude))
@@ -1390,14 +1396,22 @@ The DST field is nil and the zone field is 0, regardless of the actual zone."
               (month (decoded-time-month decoded-time))
               (day (decoded-time-day decoded-time))
               (date (list month day year)))
-    (let* ((calendar-latitude latitude)
-           (calendar-longitude longitude)
-           (calendar-time-zone offset-in-minutes)
-           (calendar-standard-time-zone-name "")
-           (calendar-daylight-savings-starts nil)
-           (calendar-daylight-savings-ends nil)
-           (result (solar-sunrise-sunset date)))
-      result)))
+    (unless my/world-clock--solar-sunrise-sunset-cache
+      (setq-local my/world-clock--solar-sunrise-sunset-cache (make-hash-table :test #'equal)))
+    ;; Construct a cache key that include all inputs.
+    ;; calendar-latitude and calendar-longitude are determined by TIMEZONE.
+    ;; calendar-time-zone is determined by offset-in-minutes.
+    ;; date is determined by date.
+    (with-memoization (gethash (list timezone date offset-in-minutes)
+                               my/world-clock--solar-sunrise-sunset-cache)
+      (let* ((calendar-latitude latitude)
+             (calendar-longitude longitude)
+             (calendar-time-zone offset-in-minutes)
+             (calendar-standard-time-zone-name "")
+             (calendar-daylight-savings-starts nil)
+             (calendar-daylight-savings-ends nil)
+             (result (solar-sunrise-sunset date)))
+        result))))
 
 (defun my/world-clock--decoded-time-to-hms (decoded-time)
   "Return a float representing the local time of DECODED-TIME."
