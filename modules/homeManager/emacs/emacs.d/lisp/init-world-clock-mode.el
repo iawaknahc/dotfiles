@@ -1815,6 +1815,8 @@ Return an element in STRINGS or nil."
  world-clock-timer-enable nil
  ;; 2006-01-02 Mon 15:04
  world-clock-time-format "%F %a %H:%M"
+ ;; The timezones already sorted.
+ world-clock-sort-order nil
  my/world-clock-cldr-json-directory "~/.nix-profile/share/cldr-json/48.2.3"
  my/world-clock-zoneinfo-list
  '("Asia/Hong_Kong"
