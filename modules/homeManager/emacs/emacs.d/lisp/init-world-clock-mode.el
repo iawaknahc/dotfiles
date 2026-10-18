@@ -374,6 +374,17 @@ If only :to is non-nil, the membership is in effect if TIME < :to.")
                 (my/world-clock--timezones-to-zoneinfo-style-world-list timezones home-timezone)))
   (my/world-clock--update))
 
+(defun my/world-clock-display-timezones-all ()
+  "Display the list of all timezones."
+  (interactive)
+  (let* ((home-timezone (my/world-clock--home-timezone))
+         (timezones (seq-map (lambda (plist) (plist-get plist :name)) my/world-clock--timezones))
+         (timezones (my/world-clock--sort-timezones timezones my/world-clock-time home-timezone))
+         (timezones (my/world-clock--add-home-to-list home-timezone timezones)))
+    (setq-local zoneinfo-style-world-list
+                (my/world-clock--timezones-to-zoneinfo-style-world-list timezones home-timezone)))
+  (my/world-clock--update))
+
 ;;;; Internal functions
 (defun my/world-clock--home-timezone ()
   "Resolve `my/world-clock-home-timezone'."
