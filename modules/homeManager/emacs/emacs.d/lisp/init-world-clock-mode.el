@@ -1559,49 +1559,43 @@ Return a time value if found, otherwise nil."
 The first line is TIMEZONE.
 The next line is the last DST change if it has any.
 The next line is the next DST change if it has any."
-  (let* ((previous-change-tooltip (when-let* ((previous-change-at (my/world-clock--dst-previous-change time timezone))
-                                              (current-offset (my/world-clock--utc-offset time timezone))
-                                              (previous-offset (car (current-time-zone (time-add previous-change-at -1) timezone)))
-                                              (time-with-current-offset (format-time-string "%H:%M" previous-change-at current-offset))
-                                              (time-with-previous-offset (format-time-string "%H:%M" previous-change-at previous-offset))
-                                              (date-with-current-offset (format-time-string "%F %a" previous-change-at current-offset))
-                                              (date-with-previous-offset (format-time-string "%F %a" previous-change-at previous-offset)))
-                                    (if (string= date-with-current-offset date-with-previous-offset)
-                                        (format "Last DST change: %s %s -> %s"
-                                                date-with-previous-offset
-                                                time-with-previous-offset
-                                                time-with-current-offset)
-                                      (format "Last DST change: %s %s -> %s %s"
-                                              date-with-previous-offset
-                                              time-with-previous-offset
-                                              date-with-current-offset
-                                              time-with-current-offset))))
-         (next-change-tooltip (when-let* ((next-change-at (my/world-clock--dst-next-change time timezone))
-                                          (current-offset (my/world-clock--utc-offset time timezone))
-                                          (next-offset (car (current-time-zone next-change-at timezone)))
-                                          (time-with-current-offset (format-time-string "%H:%M" next-change-at current-offset))
-                                          (time-with-next-offset (format-time-string "%H:%M" next-change-at next-offset))
-                                          (date-with-current-offset (format-time-string "%F %a" next-change-at current-offset))
-                                          (date-with-next-offset (format-time-string "%F %a" next-change-at next-offset)))
-                                (if (string= date-with-current-offset date-with-next-offset)
-                                    (format "Next DST change: %s %s -> %s"
-                                            date-with-current-offset
-                                            time-with-current-offset
-                                            time-with-next-offset)
-                                  (format "Next DST change: %s %s -> %s %s"
-                                          date-with-current-offset
-                                          time-with-current-offset
-                                          date-with-next-offset
-                                          time-with-next-offset)))))
-    (cond
-     ((and previous-change-tooltip next-change-tooltip)
-      (concat timezone "\n" previous-change-tooltip "\n" next-change-tooltip))
-     (previous-change-tooltip
-      (concat timezone "\n" previous-change-tooltip))
-     (next-change-tooltip
-      (concat timezone "\n" next-change-tooltip))
-     (t
-      timezone))))
+  ;; Do not use %Z because it does not support formatting
+  ;; a time with the previous offset.
+  ;; For example, in "2026-03-08 Sun 02:00 PST -> 03:00 PDT",
+  ;; we cannot ask format-time-string to give "02:00 PST"
+  ;; because at the moment, it is actually "PDT" instead of "PST".
+  (cl-labels ((format-time (time offset-and-label)
+                (let* ((offset (car offset-and-label))
+                       (label (cadr offset-and-label))
+                       (hh-mm (format-time-string "%H:%M" time offset)))
+                  (if label
+                      (format "%s %s" hh-mm label)
+                    (format-time-string "%H:%M" time offset))))
+              (format-date (time offset-and-label)
+                (format-time-string "%F %a" time (car offset-and-label)))
+              (format-tooltip (format-string time from-offset-and-label to-offset-and-label)
+                (when time
+                  (let* ((time-from (format-time time from-offset-and-label))
+                         (time-to (format-time time to-offset-and-label))
+                         (date-from (format-date time from-offset-and-label))
+                         (date-to (format-date time to-offset-and-label))
+                         (change (if (string= date-from date-to)
+                                     (format "%s %s -> %s" date-from time-from time-to)
+                                   (format "%s %s -> %s %s" date-from time-from date-to time-to))))
+                    (format format-string change)))))
+    (let* ((previous-change-tooltip (when-let* ((previous-change-at (my/world-clock--dst-previous-change time timezone))
+                                                (current-offset-and-label (current-time-zone time timezone))
+                                                (previous-offset-and-label (current-time-zone (time-add previous-change-at -1) timezone)))
+                                      (format-tooltip "Last DST change: %s" previous-change-at previous-offset-and-label current-offset-and-label)))
+           (next-change-tooltip (when-let* ((next-change-at (my/world-clock--dst-next-change time timezone))
+                                            (current-offset-and-label (current-time-zone time timezone))
+                                            (next-offset-and-label (current-time-zone next-change-at timezone)))
+                                  (format-tooltip "Next DST change: %s" next-change-at current-offset-and-label next-offset-and-label))))
+      (string-join (remq nil
+                         (list timezone
+                               previous-change-tooltip
+                               next-change-tooltip))
+                   "\n"))))
 
 (defun my/world-clock--dst-label-for-state (dst-state)
   "Return a label for DST-STATE.
