@@ -27,8 +27,8 @@ Apply F with ARGS."
  evil-motion-state-modes nil
  ;; The default is emacs state already.
  evil-emacs-state-modes nil
- ;; Start in normal state if we are editing source code or text.
- evil-normal-state-modes '(conf-mode prog-mode text-mode)
+ ;; Use `after-change-major-mode-hook' to start in normal state.
+ evil-normal-state-modes nil
  ;; Make insert state just like emacs state.
  evil-disable-insert-state-bindings t
  ;; I used to set `evil-want-C-u-scroll' to t.
@@ -106,6 +106,14 @@ Apply F with ARGS."
   (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-diff-hl-prev-hunk))
 
 (add-hook 'after-init-hook #'evil-mode)
+
+(defun my/evil-after-change-major-mode-hook ()
+  "Enable Evil-Mode normal state."
+  (when (and (my/evil-normal-p)
+             (not (evil-normal-state-p)))
+    (evil-normal-state)))
+
+(add-hook 'after-change-major-mode-hook #'my/evil-after-change-major-mode-hook)
 
 (provide 'init-evil)
 ;;; init-evil.el ends here

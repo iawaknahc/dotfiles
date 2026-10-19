@@ -2,6 +2,17 @@
 ;;; Commentary:
 ;;; Code:
 
+(defun my/evil-normal-p ()
+  "Return non-nil if Evil-Mode normal state should be the default."
+  (cond
+   ((derived-mode-p 'conf-mode) t)
+   ((derived-mode-p 'prog-mode) t)
+   ((derived-mode-p 'text-mode) t)
+   ((derived-mode-p 'diff-mode) nil)
+   ((derived-mode-p 'special-mode) nil)
+   ((buffer-file-name) t)
+   (t nil)))
+
 ;; Security
 (setq
  ;; No directories are safe.
