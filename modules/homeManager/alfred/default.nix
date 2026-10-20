@@ -69,9 +69,6 @@
     pkgs.alfred-workflow-switch-appearance;
 
   home.packages = [
-    (pkgs.writeShellScriptBin "alfred-workflow-uuid.py" ''
-      ${config.mypython.package}/bin/python3 ${./uuid.py} "$@"
-    '')
     (pkgs.writeShellScriptBin "alfred-workflow-godoc.py" ''
       export HS=${pkgs.hammerspoon}/bin/hs
       export HS_SCRIPT=${./get_browser_url.lua}
@@ -90,9 +87,6 @@
       ${config.mypython.package}/bin/python3 ${./yue.py} "$@"
     '')
   ];
-  # uuid
-  alfred.sourceFile."workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist".source =
-    ./alfred/Alfred.alfredpreferences/workflows/user.workflow.7268443B-96A6-42D5-A0D4-9826610CCEF7/info.plist;
   # godoc
   alfred.sourceFile."workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist".source =
     ./alfred/Alfred.alfredpreferences/workflows/user.workflow.5351E82E-6439-4799-B082-F811E01191DE/info.plist;
