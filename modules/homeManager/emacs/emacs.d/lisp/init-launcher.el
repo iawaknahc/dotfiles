@@ -14,6 +14,13 @@
         (when (stringp result)
           (list result))))))
 
+(defun my/launcher-source--uuid (input)
+  "Generate UUID with INPUT is \"uuid\"."
+  (when (string= (string-trim input) "uuid")
+    (let* ((uuid-downcase (my/uuid-to-string (my/uuid4-bytes)))
+           (uuid-upcase (upcase uuid-downcase)))
+      (list uuid-downcase uuid-upcase))))
+
 (defun my/launcher-source--fan-out (&rest funs)
   "Call each function in FUNS and combine the results."
   (lambda (input)
@@ -57,7 +64,9 @@
   (interactive)
   (require 'consult)
   (let* ((frame (my/launcher-make-frame))
-         (collection (my/launcher-make-sync-collection (my/launcher-source--fan-out #'my/launcher-source--calc-eval))))
+         (collection (my/launcher-make-sync-collection (my/launcher-source--fan-out
+                                                        #'my/launcher-source--calc-eval
+                                                        #'my/launcher-source--uuid))))
     (select-frame frame)
     (select-frame-set-input-focus frame)
     (unwind-protect

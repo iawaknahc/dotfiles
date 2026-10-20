@@ -256,6 +256,8 @@ lnum
 localleader
 lockfiles
 loclist
+logand
+logior
 louischan
 lsof
 lsp
@@ -288,11 +290,13 @@ modelines
 mousepos
 moze
 mru
+multibyte
 multiclient
 mylauncher
 myvimrc
 nargs
 natively
+natnump
 neovim
 netrw
 nextweek
