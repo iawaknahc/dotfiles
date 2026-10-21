@@ -4,7 +4,7 @@ let
 in
 {
   home.packages = with pkgs; [
-    librime-lua
+    librime-lua-typedef
     rime-cangjie
     rime-cantonese
   ];

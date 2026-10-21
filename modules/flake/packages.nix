@@ -19,7 +19,7 @@ let
   nvim-colors = { callPackage }: callPackage ../../packages/nvim-colors.nix { };
   my-ggufs = { callPackage }: callPackage ../../packages/my-ggufs.nix { };
 
-  librime-lua = { callPackage }: callPackage ../../packages/librime-lua.nix { };
+  librime-lua-typedef = { callPackage }: callPackage ../../packages/librime-lua-typedef.nix { };
   rime-cangjie = { callPackage }: callPackage ../../packages/rime-cangjie.nix { };
   rime-cantonese = { callPackage }: callPackage ../../packages/rime-cantonese.nix { };
 
@@ -57,7 +57,7 @@ in
         nvim-colors = nvim-colors { callPackage = pkgs.callPackage; };
         my-ggufs = my-ggufs { callPackage = pkgs.callPackage; };
 
-        librime-lua = librime-lua { callPackage = pkgs.callPackage; };
+        librime-lua-typedef = librime-lua-typedef { callPackage = pkgs.callPackage; };
         rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
         rime-cantonese = rime-cantonese { callPackage = pkgs.callPackage; };
 
@@ -124,7 +124,7 @@ in
 
         my-ggufs = config.packages.my-ggufs;
 
-        librime-lua = config.packages.librime-lua;
+        librime-lua-typedef = config.packages.librime-lua-typedef;
         rime-cangjie = config.packages.rime-cangjie;
         rime-cantonese = config.packages.rime-cantonese;
 
