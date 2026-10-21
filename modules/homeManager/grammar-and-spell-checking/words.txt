@@ -304,6 +304,7 @@ netrw
 nextweek
 nixd
 nixfmt
+nixos
 nixpkgs
 nocrypt
 noenc
@@ -311,6 +312,7 @@ noeol
 nohlsearch
 noncharacter
 nondirectory
+noogle
 noout
 nop
 noquery
@@ -375,6 +377,7 @@ punctuator
 pushmeta
 pushtag
 puthash
+pypi
 pyrefly
 pyright
 python3

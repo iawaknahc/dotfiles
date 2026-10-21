@@ -48,12 +48,13 @@
                  (format "%s %s" (nth 0 composition) (nth 2 composition)))
                result))))
 
-(defun my/launcher-source--jyut (input)
-  "Search the Cantonese pronunciation of INPUT."
-  (let* ((query (string-trim input))
-         (url (format "https://jyut.net/query?%s"
-                      (url-build-query-string (list (list "q" query))))))
-    (list (propertize url 'multi-category `(url . ,url)))))
+(defun my/launcher-source--web-search-by-query (format-string query-name)
+  "Build a query WITH QUERY-NAME and build a URL with FORMAT-STRING."
+  (lambda (input)
+    (let* ((query (string-trim input))
+           (url (format format-string
+                        (url-build-query-string (list (list query-name query))))))
+      (list (propertize url 'multi-category `(url . ,url))))))
 
 (defun my/launcher-source--fan-out (&rest funs)
   "Call each function in FUNS and combine the results."
@@ -98,12 +99,21 @@
   (interactive)
   (require 'consult)
   (let* ((frame (my/launcher-make-frame))
-         (collection (my/launcher-make-sync-collection (my/launcher-source--fan-out
-                                                        #'my/launcher-source--calc-eval
-                                                        (my/launcher-source--by-keyword
-                                                         "uuid" #'my/launcher-source--uuid
-                                                         "cj" #'my/launcher-source--cj
-                                                         "jyut" #'my/launcher-source--jyut)))))
+         (collection (my/launcher-make-sync-collection
+                      (my/launcher-source--fan-out
+                       #'my/launcher-source--calc-eval
+                       (my/launcher-source--by-keyword
+                        "uuid" #'my/launcher-source--uuid
+                        "cj" #'my/launcher-source--cj
+                        "jyut" (my/launcher-source--web-search-by-query "https://jyut.net/query?%s" "q")
+                        "jwt" (my/launcher-source--web-search-by-query "https://jwt.io/#%s" "id_token")
+                        "pypi" (my/launcher-source--web-search-by-query "https://pypi.org/search/?%s" "q")
+                        "python" (my/launcher-source--web-search-by-query "https://docs.python.org/3/search.html?%s" "q")
+                        "hm" (my/launcher-source--web-search-by-query "https://home-manager-options.extranix.com/?%s" "query")
+                        "pkgs" (my/launcher-source--web-search-by-query "https://search.nixos.org/packages?channel=unstable&%s" "query")
+                        "nixos" (my/launcher-source--web-search-by-query "https://search.nixos.org/options?channel=unstable&%s" "query")
+                        "noogle" (my/launcher-source--web-search-by-query "https://noogle.dev/q/?limit=100&%s" "term")
+                        "npm" (my/launcher-source--web-search-by-query "https://www.npmjs.com/search?%s" "q"))))))
     (select-frame frame)
     (select-frame-set-input-focus frame)
     (unwind-protect
