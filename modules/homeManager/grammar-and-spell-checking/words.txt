@@ -6,6 +6,7 @@ akey
 alacritty
 alist
 alpheleia
+anychar
 apheleia
 aref
 aset
@@ -52,6 +53,7 @@ caml
 cangjie
 capf
 catppuccin
+cddr
 cfile
 checkdoc
 checkhealth
