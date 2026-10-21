@@ -5,12 +5,12 @@
 }:
 buildPythonPackage rec {
   pname = "rassumfrassum";
-  version = "0.3.4";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P7c2j3Pax+8rSsywCSc46rQY+j0hI0Fg5jgzlVD41YI=";
+    hash = "sha256-tozGhfDLTBaZgVxVi2cSjakUtp5Odb+UB0zrKWXRrO0=";
   };
 
   # Rass is a program written in Python.
