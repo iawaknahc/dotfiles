@@ -2,6 +2,17 @@
 ;;; Commentary:
 ;;; Code:
 
+(defun my/launcher--calc-no-unbound-vars (expr)
+  "Return non-nil if EXPR contains no unbound variables."
+  (if (null expr)
+      t
+    (if (eq (car-safe expr) 'var)
+        ;; inf is a bound var.
+        (or (math-const-var expr) (math-check-unit-name expr))
+      (and
+       (my/launcher--calc-no-unbound-vars (car-safe expr))
+       (my/launcher--calc-no-unbound-vars (cdr-safe expr))))))
+
 (defun my/launcher-source--calc-eval (input)
   "Invoke `calc-eval' with INPUT and simplify units."
   (require 'calc)
@@ -10,9 +21,15 @@
     (calc-load-everything))
   (let* ((prompt (string-trim input)))
     (when (not (string-empty-p prompt))
-      (let* ((result (calc-eval (format "usimplify(%s)" prompt))))
-        (when (stringp result)
-          (list result))))))
+      (let* ((raw (calc-eval (format "usimplify(%s)" prompt) 'raw)))
+        (pcase raw
+          ;; (calc-eval "..." 'raw) returns (error-code "error-message")
+          (`(,(pred integerp) ,(pred stringp))
+           nil)
+          ((pred my/launcher--calc-no-unbound-vars)
+           (list (math-format-value raw)))
+          (_
+           nil))))))
 
 (defun my/launcher-source--by-keyword (&rest args)
   "Invoke source by keywords in ARGS."
