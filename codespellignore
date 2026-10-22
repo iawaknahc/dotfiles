@@ -1,3 +1,4 @@
 **/firefox/*.json
 init-font.el
 parse_ucd.zig
+blocky.nix

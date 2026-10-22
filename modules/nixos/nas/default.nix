@@ -29,5 +29,6 @@
     ./syncthing.nix
     ./tls.nix
     ./radicale.nix
+    ./blocky.nix
   ];
 }
