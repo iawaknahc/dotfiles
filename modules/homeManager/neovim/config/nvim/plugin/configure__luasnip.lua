@@ -23,17 +23,12 @@ require("luasnip").config.setup({
   },
 })
 
-vim.keymap.set({ "i", "s" }, "<C-K>", function()
-  local ls = require("luasnip")
-  if ls.expandable() then
-    ls.expand()
-  end
-end)
-
 vim.keymap.set({ "i", "s" }, "<Tab>", function()
   local ls = require("luasnip")
   if ls.jumpable(1) then
     ls.jump(1)
+  elseif ls.expandable() then
+    ls.expand()
   else
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
   end

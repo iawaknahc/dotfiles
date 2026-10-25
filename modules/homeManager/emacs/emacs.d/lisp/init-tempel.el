@@ -61,7 +61,8 @@
 (add-hook 'emacs-lisp-mode-hook (lambda ()
                                   (add-hook 'tempel-template-sources 'my/tempel-templates-elisp nil t)))
 
-(keymap-global-set "C-c k" #'tempel-expand)
+;; We have configured the integration between tempel and `completion-at-point-functions'.
+;; tempel has configured `exit-function' so we do not need to bind `tempel-complete' or `tempel-expand'.
 (with-eval-after-load 'tempel
   (keymap-set tempel-map "TAB" #'tempel-next)
   (keymap-set tempel-map "<backtab>" #'tempel-previous)

@@ -97,8 +97,6 @@
     ## Text editing
     # Snippets
     luasnip
-    # Edit surroundings.
-    nvim-surround
     # Motion
     flash-nvim
     # Completion

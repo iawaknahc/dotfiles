@@ -83,8 +83,28 @@ require("blink.cmp").setup({
     -- :h c_CTRL-Z is used to trigger :h 'wildmode'
     -- So we borrow that concept to Insert mode.
     ["<C-z>"] = { "show", "show_documentation", "hide_documentation" },
-    ["<C-e>"] = { "hide", "fallback" },
-    ["<C-y>"] = { "select_and_accept", "fallback" },
+    ["<C-g>"] = {
+      --- @param cmp blink.cmp.API
+      function(cmp)
+        if cmp.is_visible() then
+          cmp.cancel()
+          return true
+        end
+        -- Implicitly return nil to fallback.
+      end,
+      "fallback",
+    },
+    ["<TAB>"] = {
+      --- @param cmp blink.cmp.API
+      function(cmp)
+        if cmp.is_visible() then
+          cmp.accept()
+          return true
+        end
+        -- Implicitly return nil to fallback.
+      end,
+      "fallback",
+    },
     -- :h i_CTRL-P triggers the builtin completion.
     ["<C-p>"] = { "select_prev", "fallback_to_mappings" },
     -- :h i_CTRL-N triggers the builtin completion.

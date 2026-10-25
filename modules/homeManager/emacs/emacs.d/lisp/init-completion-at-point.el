@@ -14,8 +14,15 @@
  corfu-sort-override-function #'corfu-sort-length-alpha)
 
 (with-eval-after-load 'corfu
-  (keymap-unset corfu-map "TAB") ; TAB should be self-inserting.
-  (keymap-unset corfu-map "RET") ; RET should be self-inserting.
+  ;; By default, <TAB> is bound to `corfu-complete'.
+  ;; When no candidate is selected, `corfu-complete' calls `corfu-expand'.
+  ;; When no candidate is selected, `corfu-expand' expands the common prefix of all candidates.
+  ;; When a candidate is selected, `corfu-expand' calls `corfu-complete'.
+  ;; When a candidate is selected, `corfu-complete' calls `corfu-insert'.
+  ;; When a candidate is selected, `corfu-insert' inserts the candidate.
+  ;; Therefore, <TAB> does the following
+  ;; 1. When no candidate is selected, expands the common prefix of all candidates.
+  ;; 2. Otherwise, inserts the selected candidate.
   (keymap-unset corfu-map "<up>") ; <up> is an alias of C-p.
   (keymap-unset corfu-map "<down>") ; <down> is an alias of C-n.
   (keymap-unset corfu-map "M-n") ; M-n is an alias of C-n.
