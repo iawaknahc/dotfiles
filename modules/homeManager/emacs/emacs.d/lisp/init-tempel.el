@@ -40,7 +40,8 @@
 
 (defun my/tempel-templates-elisp ()
   "Return a list of Elisp Tempel templates."
-  (let* ((file (file-name-base (buffer-file-name))))
+  (let* ((file-name (buffer-file-name))
+         (file (if file-name (file-name-base file-name) "NO_FILE")))
     `((elispfeature
        ";;; " ,file ".el --- " ,file ".el -*- lexical-binding: t -*-" n
        ";;; Commentary:" n
