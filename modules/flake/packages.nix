@@ -20,6 +20,8 @@ let
   my-ggufs = { callPackage }: callPackage ../../packages/my-ggufs.nix { };
 
   librime-lua-typedef = { callPackage }: callPackage ../../packages/librime-lua-typedef.nix { };
+  busted-typedef = { callPackage }: callPackage ../../packages/busted-typedef.nix { };
+  luassert-typedef = { callPackage }: callPackage ../../packages/luassert-typedef.nix { };
   rime-cangjie = { callPackage }: callPackage ../../packages/rime-cangjie.nix { };
   rime-cantonese = { callPackage }: callPackage ../../packages/rime-cantonese.nix { };
 
@@ -58,6 +60,8 @@ in
         my-ggufs = my-ggufs { callPackage = pkgs.callPackage; };
 
         librime-lua-typedef = librime-lua-typedef { callPackage = pkgs.callPackage; };
+        busted-typedef = busted-typedef { callPackage = pkgs.callPackage; };
+        luassert-typedef = luassert-typedef { callPackage = pkgs.callPackage; };
         rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
         rime-cantonese = rime-cantonese { callPackage = pkgs.callPackage; };
 
@@ -125,6 +129,8 @@ in
         my-ggufs = config.packages.my-ggufs;
 
         librime-lua-typedef = config.packages.librime-lua-typedef;
+        busted-typedef = config.packages.busted-typedef;
+        luassert-typedef = config.packages.luassert-typedef;
         rime-cangjie = config.packages.rime-cangjie;
         rime-cantonese = config.packages.rime-cantonese;
 
