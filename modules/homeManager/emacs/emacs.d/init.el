@@ -171,5 +171,8 @@
 ;; Configure beancount.
 (require 'init-beancount)
 
+;; Configure valign
+(require 'init-valign)
+
 (provide 'init)
 ;;; init.el ends here
