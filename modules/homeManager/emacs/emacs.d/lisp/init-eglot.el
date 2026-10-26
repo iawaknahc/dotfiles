@@ -62,10 +62,39 @@
     (message "init-options: %S" init-options)
     `("rass" "beancount" ,@init-options)))
 
+(defconst my/eglot-root-markers
+  '(((lua-mode lua-ts-mode) . (".emmyrc.json")))
+  "Alist of (MODES . MARKERS).")
+
+(defun my/eglot-project-root-marker (dir)
+  "Search upward from DIR to find a directory with a root marker.
+
+The root markers are defined in `my/eglot-root-markers'."
+  (when-let* (
+              ;; `eglot-lsp-context' is bound to non-nil when `project-current' is invoked by eglot
+              ;; to find a suitable root for launching a LSP server.
+              (_ (bound-and-true-p eglot-lsp-context))
+              ;; See if the current major mode has any markers defined.
+              (markers (cdr-safe (seq-find
+                                  (lambda (entry)
+                                    (derived-mode-p (car entry)))
+                                  my/eglot-root-markers)))
+              ;; Search upward from DIR to find a directory containing one of the markers.
+              (root (locate-dominating-file
+                     dir
+                     (lambda (dir)
+                       (seq-some (lambda (marker)
+                                   (file-readable-p (expand-file-name marker dir)))
+                                 markers)))))
+    ;; transient is a special kind of project instance.
+    ;; See `project-current' for details.
+    (cons 'transient root)))
+
 (with-eval-after-load 'eglot
   (setf (alist-get 'beancount-ts-mode eglot-server-programs) #'my/eglot-beancount-language-server-contact)
   (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
   (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
+  (setf (alist-get '(lua-mode lua-ts-mode) eglot-server-programs) '("emmylua_ls"))
   ;; tsgo supports pull diagnostics only.
   ;; Eglot has support for pull diagnostics since 1.20
   ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.0.91/etc/EGLOT-NEWS#L137
@@ -79,6 +108,9 @@
   (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix"))
 
   (add-hook 'eglot-managed-mode-hook #'my/eglot-managed-mode-hook))
+
+(with-eval-after-load 'project
+  (add-hook 'project-find-functions #'my/eglot-project-root-marker))
 
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
