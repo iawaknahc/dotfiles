@@ -33,6 +33,8 @@ in
 
         llscheck # llscheck requires lua-language-server on PATH.
         luaprompt # luap provides a better REPL experience than lua(1).
+
+        busted
       ]
     ))
   ];
