@@ -41,7 +41,8 @@
  ;; The default is '(eldoc-hint margin)
  ;; We already have the indicator in the margin,
  ;; the indicator of eldoc is just redundant and takes up precious space.
- eglot-code-action-indications '(margin))
+ eglot-code-action-indications '(margin)
+ eglot-documentation-renderer #'markdown-ts-view-mode)
 
 (defun my/eglot-managed-mode-hook ()
   "Disable inlay hints and semantic tokens by default."

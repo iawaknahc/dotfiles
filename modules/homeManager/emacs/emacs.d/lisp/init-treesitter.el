@@ -15,6 +15,8 @@
 
 ;; FIXME: As of Emacs 31.1, `markdown-ts-mode' does not autoload itself.
 (autoload 'markdown-ts-mode "markdown-ts-mode")
+;; FIXME: As of Emacs 31.1, `markdown-ts-view-mode' does not autoload itself.
+(autoload 'markdown-ts-view-mode "markdown-ts-mode")
 ;; FIXME: `markdown-ts-mode' does not hook into `treesit-enabled-modes'.
 (add-to-list 'auto-mode-alist `(,(rx ".md" string-end) . markdown-ts-mode))
 
