@@ -261,11 +261,13 @@ loclist
 logand
 logior
 louischan
+lpath
 lsof
 lsp
 lspconfig
 lua
 luasnip
+luassert
 lvimgrep
 lwindow
 macism

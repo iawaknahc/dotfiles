@@ -5,6 +5,8 @@ in
 {
   home.packages = with pkgs; [
     librime-lua-typedef
+    busted-typedef
+    luassert-typedef
     rime-cangjie
     rime-cantonese
   ];

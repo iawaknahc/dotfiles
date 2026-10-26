@@ -103,11 +103,15 @@ alfred-clean:
     git clean -fx ./modules/homeManager/alfred/alfred
 
 # Run all tests
-test: nix-test emacs-test
+test: nix-test lua-test emacs-test
 
 # Run Nix unit tests
 nix-test:
     nix-unit --flake '.#tests'
+
+# Run Lua unit tests
+lua-test:
+    cd ./modules/homeManager/rime/ && busted
 
 # Run Emacs ERT test
 emacs-test:

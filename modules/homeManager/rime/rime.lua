@@ -1,4 +1,5 @@
 local json = require("json")
+local numeral = require("my_numeral")
 
 ---@param str string
 ---@param prefix string
@@ -129,5 +130,24 @@ function unicode_translator(input, segment)
     local str = string.sub(input, 2)
     local query = prepare_fts5_query(str)
     search_by_fts5_query(query, segment)
+  end
+end
+
+---@param input string
+---@param segment Segment
+function numeral_translator(input, segment)
+  if not segment:has_tag("numeral") then
+    return
+  end
+
+  -- Strip the prefix D.
+  input = string.sub(input, 2)
+  input = numeral.sanitize_input(input)
+  if input == "" then
+    return
+  end
+
+  for _, result in ipairs(numeral.format_numerals(input)) do
+    yield(Candidate("numeral", segment.start, segment._end, result.candidate, result.comment))
   end
 end

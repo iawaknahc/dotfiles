@@ -236,6 +236,7 @@ engine:
   # Other table_translator or script_translator must be named.
   - script_translator@translator_jyut6ping3
   - lua_translator@unicode_translator
+  - lua_translator@numeral_translator
   filters:
   # simplifier reads configuration rooted at "simplifier"
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L172
@@ -326,3 +327,4 @@ recognizer:
   import_preset: default
   patterns:
     unicode: "^U.*$"
+    numeral: "^D.*$"

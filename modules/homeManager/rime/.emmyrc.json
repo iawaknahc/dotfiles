@@ -11,7 +11,9 @@
   },
   "workspace": {
     "library": [
-      "~/.nix-profile/share/librime-lua"
+      "~/.nix-profile/share/librime-lua",
+      "~/.nix-profile/share/busted-typedef",
+      "~/.nix-profile/share/luassert-typedef"
     ]
   }
 }
