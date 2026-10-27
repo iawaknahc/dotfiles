@@ -59,6 +59,7 @@ checkdoc
 checkhealth
 chistory
 cjk
+cjs
 cjson
 cldr
 cli
@@ -279,11 +280,13 @@ magit
 maildir
 mapcat
 mapconcat
+maplibregl
 mapn
 maptiler
 mbsync
 memq
 menuone
+mhtml
 minibuffer
 minibuffers
 minwid

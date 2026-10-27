@@ -13,6 +13,11 @@
 (add-to-list 'interpreter-mode-alist `(,(rx "node" string-end) . typescript-ts-mode))
 (add-to-list 'interpreter-mode-alist `(,(rx "nodejs" string-end) . typescript-ts-mode))
 
+;; FIXME: As of Emacs 31.1, .mjs is not recognized.
+(add-to-list 'auto-mode-alist `(,(rx ".mjs" string-end) . js-ts-mode))
+;; FIXME: As of Emacs 31.1, .cjs is not recognized.
+(add-to-list 'auto-mode-alist `(,(rx ".cjs" string-end) . js-ts-mode))
+
 ;; FIXME: As of Emacs 31.1, `markdown-ts-mode' does not autoload itself.
 (autoload 'markdown-ts-mode "markdown-ts-mode")
 ;; FIXME: As of Emacs 31.1, `markdown-ts-view-mode' does not autoload itself.

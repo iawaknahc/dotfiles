@@ -65,7 +65,7 @@
      (nushell-ts-mode)
      :contact ("rass" "nushell"))
     (:major-modes
-     (typescript-ts-mode)
+     (typescript-ts-mode js-ts-mode)
      ;; tsc supports pull diagnostics only.
      ;; Eglot has support for pull diagnostics since 1.20
      ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.0.91/etc/EGLOT-NEWS#L137
