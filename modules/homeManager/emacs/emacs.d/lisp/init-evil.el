@@ -102,8 +102,8 @@ Apply F with ARGS."
     :type inclusive
     :jump t
     (flymake-goto-prev-error count))
-  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-diff-hl-next-hunk)
-  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-diff-hl-prev-hunk))
+  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-flymake-next-error)
+  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-flymake-prev-error))
 
 (add-hook 'after-init-hook #'evil-mode)
 
