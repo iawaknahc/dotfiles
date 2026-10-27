@@ -2,31 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(defun my/add-before-save-hook-for-eglot-format-buffer ()
-  "Invoke `eglot-format-buffer' in `before-save-hook' in a buffer-local fashion."
-  (add-hook 'before-save-hook #'eglot-format-buffer nil t))
-
-;; `eglot' can only be run in major modes that have a configured language server.
-;; Therefore, we do not use `prog-mode-hook'.
-(dolist (hook '(go-ts-mode-hook
-                python-mode-hook
-                python-ts-mode-hook
-                typescript-ts-mode-hook
-                fish-mode-hook
-                nushell-ts-mode-hook
-                nix-ts-mode-hook))
-  (add-hook hook #'eglot-ensure))
-
-(defun my/eglot-beancount-ts-mode-hook ()
-  "Disable imenu."
-  (setq-local eglot-stay-out-of '(imenu))
-  (eglot-ensure))
-(add-hook 'beancount-ts-mode-hook #'my/eglot-beancount-ts-mode-hook)
-
-;; For these major modes, ask the language server to format the buffer.
-(dolist (hook '(go-ts-mode-hook fish-mode-hook nix-ts-mode-hook))
-  (add-hook hook #'my/add-before-save-hook-for-eglot-format-buffer))
-
 ;; In beancount file, beancount-language-server reported aligned balance as inlay hint.
 ;; The default face has :height 0.8 which breaks the alignment.
 ;; Therefore, we reset the face to have unspecified :height.
@@ -51,6 +26,8 @@
   ;; It was used to enable inlay hint mode for in beancount-mode,
   ;; but the inlay hints may interfere with editing.
   )
+(with-eval-after-load 'eglot
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-managed-mode-hook))
 
 (defun my/eglot-beancount-language-server-contact (_interactive project)
   "Return a configuration for PROJECT."
@@ -63,23 +40,91 @@
     (message "init-options: %S" init-options)
     `("rass" "beancount" ,@init-options)))
 
-(defconst my/eglot-root-markers
-  '(((lua-mode lua-ts-mode) . (".emmyrc.json")))
-  "Alist of (MODES . MARKERS).")
+(defconst my/eglot-configurations
+  '(
+    (:major-modes
+     (lua-ts-mode)
+     :contact ("emmylua_ls")
+     :root-markers (".emmyrc.json"))
+    (:major-modes
+     (beancount-ts-mode)
+     :contact my/eglot-beancount-language-server-contact
+     :eglot-stay-out-of (imenu))
+    (:major-modes
+     (go-ts-mode)
+     :contact ("rass" "go")
+     :format-buffer-in-before-save-hook t)
+    (:major-modes
+     (python-ts-mode)
+     :contact ("rass" "python"))
+    (:major-modes
+     (fish-mode)
+     :contact ("rass" "fish")
+     :format-buffer-in-before-save-hook t)
+    (:major-modes
+     (nushell-ts-mode)
+     :contact ("rass" "nushell"))
+    (:major-modes
+     (typescript-ts-mode)
+     ;; tsc supports pull diagnostics only.
+     ;; Eglot has support for pull diagnostics since 1.20
+     ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.0.91/etc/EGLOT-NEWS#L137
+     ;;
+     ;; When rass is used, it becomes broken.
+     ;; I guess rass needs to support pull diagnostics as well.
+     :contact ("tsc" "--lsp" "--stdio"))
+    (:major-modes
+     (nix-ts-mode)
+     :contact ("rass" "nix")
+     :format-buffer-in-before-save-hook t))
+  "A list of configurations.
+
+Each configuration is a plist with the following properties:
+- :major-modes a list of major modes.
+- :contact See `eglot-server-programs'.
+- :root-markers a list of root markers.
+- :eglot-stay-out-of `eglot-stay-out-of' to be set as buffer-local variable.
+- :format-buffer-in-before-save-hook whether to run `eglot-format-buffer' in `before-save-hook'.
+
+:major-modes and :contact are required, others are optional.")
+
+(setq eglot-server-programs nil)
+(dolist (plist my/eglot-configurations)
+  (let* ((major-modes (plist-get plist :major-modes))
+         (contact (plist-get plist :contact))
+         (stay-out-of (plist-get plist :eglot-stay-out-of))
+         (format-buffer-in-before-save-hook (plist-get plist :format-buffer-in-before-save-hook)))
+
+    ;; Teach eglot how to launch the LSP server.
+    (push (cons major-modes contact) eglot-server-programs)
+
+    (dolist (major-mode major-modes)
+      (let* ((major-mode-hook (intern (format "%S-hook" major-mode))))
+        (add-hook major-mode-hook (lambda ()
+                                    ;; Respect :eglot-stay-out-of
+                                    (when stay-out-of
+                                      (setq-local eglot-stay-out-of stay-out-of))
+                                    ;; Respect :format-buffer-in-before-save-hook
+                                    (when format-buffer-in-before-save-hook
+                                      (add-hook 'before-save-hook #'eglot-format-buffer nil t))
+                                    ;; Auto-start eglot.
+                                    (eglot-ensure)))))))
 
 (defun my/eglot-project-root-marker (dir)
   "Search upward from DIR to find a directory with a root marker.
 
-The root markers are defined in `my/eglot-root-markers'."
+The root markers are defined in `my/eglot-configurations'."
   (when-let* (
               ;; `eglot-lsp-context' is bound to non-nil when `project-current' is invoked by eglot
               ;; to find a suitable root for launching a LSP server.
               (_ (bound-and-true-p eglot-lsp-context))
               ;; See if the current major mode has any markers defined.
-              (markers (cdr-safe (seq-find
-                                  (lambda (entry)
-                                    (derived-mode-p (car entry)))
-                                  my/eglot-root-markers)))
+              (markers (plist-get (seq-find
+                                   (lambda (plist)
+                                     (let* ((major-modes (plist-get plist :major-modes)))
+                                       (derived-mode-p major-modes)))
+                                   my/eglot-configurations)
+                                  :root-markers))
               ;; Search upward from DIR to find a directory containing one of the markers.
               (root (locate-dominating-file
                      dir
@@ -90,26 +135,6 @@ The root markers are defined in `my/eglot-root-markers'."
     ;; transient is a special kind of project instance.
     ;; See `project-current' for details.
     (cons 'transient root)))
-
-(with-eval-after-load 'eglot
-  (setf (alist-get 'beancount-ts-mode eglot-server-programs) #'my/eglot-beancount-language-server-contact)
-  (setf (alist-get 'go-ts-mode eglot-server-programs) '("rass" "go"))
-  (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs) '("rass" "python"))
-  (setf (alist-get '(lua-mode lua-ts-mode) eglot-server-programs) '("emmylua_ls"))
-  ;; tsgo supports pull diagnostics only.
-  ;; Eglot has support for pull diagnostics since 1.20
-  ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.0.91/etc/EGLOT-NEWS#L137
-  ;;
-  ;; When rass is used, it becomes broken.
-  ;; I guess rass needs to support pull diagnostics as well.
-  ;; (setf (alist-get 'typescript-ts-mode eglot-server-programs) '("rass" "typescript"))
-  (setf (alist-get 'typescript-ts-mode eglot-server-programs) '("tsgo" "--lsp" "--stdio"))
-  (setf (alist-get 'fish-mode eglot-server-programs) '("rass" "fish"))
-  (setf (alist-get 'nushell-ts-mode eglot-server-programs) '("rass" "nushell"))
-  (setf (alist-get 'nix-ts-mode eglot-server-programs) '("rass" "nix"))
-
-  (add-hook 'eglot-managed-mode-hook #'my/eglot-managed-mode-hook))
-
 (with-eval-after-load 'project
   (add-hook 'project-find-functions #'my/eglot-project-root-marker))
 
