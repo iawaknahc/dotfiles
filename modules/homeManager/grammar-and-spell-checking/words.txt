@@ -123,6 +123,7 @@ elispfeature
 emacsclient
 emmylua
 emmyrc
+endx
 env
 eof
 eql

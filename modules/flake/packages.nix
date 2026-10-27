@@ -100,6 +100,16 @@ in
             rm -r ./docs
           '';
         };
+
+        # The Yahoo source converts timestamps to dates with meta.gmtoffset,
+        # which is the exchange's UTC offset at the time of the request.
+        # See https://github.com/chrisberkhout/pricehist/blob/1.4.16/src/pricehist/sources/yahoo.py#L75
+        # Historical timestamps may not share the same offset.
+        # For example, `pricehist fetch yahoo HKD=X --start 2026-06-09` run on 2026-10-27 outputs 2026-06-08.
+        # It is because 2026-06-09 is in Bristish Summer Time (UTC+1), while 2026-10-27 is in Greenwich Mean Time (UTC+0).
+        pricehist = pyprev.pricehist.overrideAttrs (prev: {
+          patches = (prev.patches or [ ]) ++ [ ../../packages/pricehist-yahoo-dst.patch ];
+        });
       };
     in
     final: prev:

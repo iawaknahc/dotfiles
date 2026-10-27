@@ -128,7 +128,7 @@ def main():
     )
     _ = parser.add_argument(
         "--end",
-        help="The end date. The default is tomorrow",
+        help="The exclusive end date. The default is today.",
         type=datetime.date.fromisoformat,
     )
     args = parser.parse_args()
@@ -138,7 +138,7 @@ def main():
     conn = beanquery.connect(None)
     conn.attach(f"beancount:{filename}")
 
-    end_date_default = datetime.date.today() + datetime.timedelta(days=1)
+    end_date_default = datetime.date.today()
     global_end_date = cast(datetime.date | None, args.end) or end_date_default
 
     history = build_price_history(conn)
@@ -161,7 +161,7 @@ def main():
             invocation.quote,
             "--start",
             invocation.start_date.isoformat(),
-            "--end",
+            "--endx",
             invocation.end_date.isoformat(),
         ]
         print(" ".join(command), file=sys.stderr)

@@ -1,0 +1,41 @@
+--- a/src/pricehist/sources/yahoo.py	2026-10-27 15:32:04.799530454 +0800
++++ b/src/pricehist/sources/yahoo.py	2026-10-27 15:32:04.828375953 +0800
+@@ -3,6 +3,7 @@
+ import logging
+ from datetime import datetime, timezone
+ from decimal import Decimal
++from zoneinfo import ZoneInfo
+ 
+ import requests
+ 
+@@ -72,7 +73,9 @@
+ 
+         data = self._data(series)
+         quote = data["chart"]["result"][0]["meta"]["currency"]
+-        offset = data["chart"]["result"][0]["meta"]["gmtoffset"]
++        # meta.gmtoffset is the exchange's UTC offset at the time of the request,
++        # which may be incorrect for historical timestamps.
++        tz = ZoneInfo(data["chart"]["result"][0]["meta"]["exchangeTimezoneName"])
+ 
+         timestamps = data["chart"]["result"][0]["timestamp"]
+         adjclose_data = data["chart"]["result"][0]["indicators"]["adjclose"][0]
+@@ -81,7 +84,7 @@
+ 
+         prices_by_date = {}
+         for i in range(len(timestamps)):
+-            date = self._ts_to_date(timestamps[i] + offset)
++            date = self._ts_to_date(timestamps[i], tz)
+             if date > series.end or date in prices_by_date:
+                 continue
+ 
+@@ -93,8 +96,8 @@
+ 
+         return dataclasses.replace(series, quote=quote, prices=prices)
+ 
+-    def _ts_to_date(self, ts) -> str:
+-        return datetime.fromtimestamp(ts, tz=timezone.utc).date().isoformat()
++    def _ts_to_date(self, ts, tz) -> str:
++        return datetime.fromtimestamp(ts, tz=tz).date().isoformat()
+ 
+     def _amount(self, amounts, type, i):
+         if (
