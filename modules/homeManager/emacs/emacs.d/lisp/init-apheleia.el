@@ -43,8 +43,7 @@ Format SCRATCH, and then invoke CALLBACK."
   ;; Here we select I001.
   ;; See https://docs.astral.sh/ruff/rules/#isort-i
   (setf (alist-get 'ruff-sort apheleia-formatters)
-        '(
-          "ruff"
+        '("ruff"
           "check"
           "--fix"
           "--fix-only"
@@ -58,22 +57,24 @@ Format SCRATCH, and then invoke CALLBACK."
   ;; The built-in prettier formatters pass --use-tabs conditionally.
   ;; We do not want that.
   (setf (alist-get 'prettier-javascript apheleia-formatters)
-        '(
-          "apheleia-npx"
+        '("apheleia-npx"
           "prettier"
           "--parser=babel"
           "--stdin-filepath" filepath))
   (setf (alist-get 'prettier-typescript apheleia-formatters)
-        '(
-          "apheleia-npx"
+        '("apheleia-npx"
           "prettier"
           "--parser=typescript"
           "--stdin-filepath" filepath))
   (setf (alist-get 'prettier-css apheleia-formatters)
-        '(
-          "apheleia-npx"
+        '("apheleia-npx"
           "prettier"
           "--parser=css"
+          "--stdin-filepath" filepath))
+  (setf (alist-get 'prettier-html apheleia-formatters)
+        '("apheleia-npx"
+          "prettier"
+          "--parser=html"
           "--stdin-filepath" filepath))
 
   ;; The built-in bean-format formatter uses input.
@@ -118,7 +119,9 @@ Format SCRATCH, and then invoke CALLBACK."
      (js-jsx-mode . prettier-javascript)
      (typescript-mode . prettier-typescript)
      (typescript-ts-mode . prettier-typescript)
-     (tsx-ts-mode . prettier-typescript))))
+     (tsx-ts-mode . prettier-typescript)
+     (html-ts-mode . prettier-html)
+     (mhtml-ts-mode . prettier-html))))
 
 
 (provide 'init-apheleia)

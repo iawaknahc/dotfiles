@@ -74,6 +74,9 @@
      ;; I guess rass needs to support pull diagnostics as well.
      :contact ("tsc" "--lsp" "--stdio"))
     (:major-modes
+     (html-ts-mode mhtml-ts-mode)
+     :contact ("vscode-html-language-server" "--stdio"))
+    (:major-modes
      (nix-ts-mode)
      :contact ("rass" "nix")
      :format-buffer-in-before-save-hook t))
