@@ -72,6 +72,7 @@
     rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
     # `s` is a dependency of vulpea.
     s = self.melpaStablePackages.s;
+    simple-httpd = self.melpaStablePackages.simple-httpd;
     ultra-scroll = self.melpaStablePackages.ultra-scroll;
     vertico-prescient = self.melpaStablePackages.vertico-prescient;
     vui = self.melpaStablePackages.vui;
@@ -224,6 +225,9 @@
       vulpea
       vulpea-ui
 
+      # HTTP server
+      simple-httpd
+
       # vCard
       (emacsPackages.callPackage (import ../../../packages/emacs-ecard.nix) { })
 
@@ -249,6 +253,7 @@
     # recursive is needed because .emacs.d/lisp may contain generated files.
     recursive = true;
   };
+  home.file.".emacs.d/maplibre".source = ./emacs.d/maplibre;
   home.file.".emacs.d/lisp/init-exec-path-from-shell.el".text =
     let
       pairs = (lib.attrsets.attrsToList config.home.sessionVariables);

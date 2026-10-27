@@ -280,6 +280,7 @@ magit
 maildir
 mapcat
 mapconcat
+maplibre
 maplibregl
 mapn
 maptiler
