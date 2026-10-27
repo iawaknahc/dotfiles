@@ -68,7 +68,6 @@
     goto-chg = self.melpaStablePackages.goto-chg;
     nix-ts-mode = self.melpaStablePackages.nix-ts-mode;
     olivetti = self.melpaStablePackages.olivetti;
-    osm = self.melpaStablePackages.osm;
     prescient = self.melpaStablePackages.prescient;
     rainbow-delimiters = self.melpaStablePackages.rainbow-delimiters;
     # `s` is a dependency of vulpea.
@@ -224,7 +223,6 @@
       # Notes
       vulpea
       vulpea-ui
-      osm
 
       # vCard
       (emacsPackages.callPackage (import ../../../packages/emacs-ecard.nix) { })

@@ -165,9 +165,6 @@
 ;; Configure Magit
 (require 'init-magit)
 
-;; Configure osm.el
-(require 'init-osm)
-
 ;; Configure beancount.
 (require 'init-beancount)
 
