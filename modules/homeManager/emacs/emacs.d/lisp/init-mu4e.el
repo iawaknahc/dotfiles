@@ -21,6 +21,10 @@
  ;; This is particular important when mbsync is used.
  ;; See https://github.com/djcb/mu/issues/1136#issuecomment-2543938870
  mu4e-trash-without-flag t
+ ;; Gmail represents labels as directories.
+ ;; So the same mail can appear in multiple directories.
+ ;; Accept that face and show them all.
+ mu4e-search-skip-duplicates nil
  ;; Do not ask when quitting mu4e.
  mu4e-confirm-quit nil
  ;; Do not echo messages to echo area.
