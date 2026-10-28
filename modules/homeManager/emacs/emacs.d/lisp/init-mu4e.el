@@ -16,6 +16,11 @@
  ;; mbsync puts UID in the filename.
  ;; Moving a mail without changing filename may retain a stale UID.
  mu4e-change-filenames-when-moving t
+ ;; When trash a mail, just move it to the trash directory without
+ ;; setting the T flag.
+ ;; This is particular important when mbsync is used.
+ ;; See https://github.com/djcb/mu/issues/1136#issuecomment-2543938870
+ mu4e-trash-without-flag t
  ;; Do not ask when quitting mu4e.
  mu4e-confirm-quit nil
  ;; Do not echo messages to echo area.
