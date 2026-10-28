@@ -97,8 +97,19 @@ so we need this wrapper."
   (let ((msg (mu4e-message-at-point)))
     (mu4e-action-view-in-xwidget msg)))
 
+(defun my/mu4e-quit (&optional quit)
+  "`mu4e-quit' with the meaning of prefix argument swapped.
+
+If QUIT is non-nil, quit mu4e.
+Otherwise, bury the buffer."
+  (interactive "P")
+  (mu4e-quit (not quit)))
+
 (with-eval-after-load 'mu4e
   (keymap-set mu4e-view-mode-map "X" #'my/mu4e-view-in-xwidget-action)
+  ;; Rebind q to `my/mu4e-quit' so that q without prefix argument
+  ;; just bury the buffer, keep the update timer running.
+  (keymap-set mu4e-main-mode-map "q" #'my/mu4e-quit)
 
   (add-to-list
    'mu4e-header-info-custom
@@ -121,6 +132,10 @@ so we need this wrapper."
                    (format-time-string "%F %T" encoded-time)))))
 
   (require 'init-mu4e-contexts))
+
+;; Start mu4e in background so that the update timer starts
+;; running along with Emacs.
+(add-hook 'emacs-startup-hook (lambda () (mu4e t)))
 
 (provide 'init-mu4e)
 ;;; init-mu4e.el ends here
