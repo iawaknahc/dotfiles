@@ -73,7 +73,7 @@
  mu4e-bookmarks
  '((:name
     "Unread non-trashed non-junk messages"
-    :query "flag:unread AND NOT flag:trashed AND NOT maildir:/junk/ AND NOT maildir:/Junk/ AND NOT maildir:/[sS]pam/"
+    :query "flag:unread AND NOT maildir:/[tT]rash/ AND NOT maildir:/Deleted.Items/ AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
     :key ?u
     ;; Make this favorite.
     ;; This will be used in the global modeline.
@@ -81,11 +81,11 @@
     :favorite t)
    (:name
     "Junk messages"
-    :query "maildir:/junk/ OR maildir:/Junk/ OR maildir:/[sS]pam/"
+    :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
     :key ?j)
    (:name
     "Trashed messages"
-    :query "flag:trashed"
+    :query "maildir:/[tT]rash/ OR maildir:/Deleted.Items/"
     :key ?t)))
 
 (defun my/mu4e-headers-found-hook ()
