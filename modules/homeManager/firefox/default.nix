@@ -4,7 +4,7 @@ let
   stylus = "7a7a4a92-a2a0-41d1-9fd7-1e92480d612d";
   violentmonkey = "aecec67f-0d10-4fa7-b7c7-609a2db280cf";
   libstylus = import ./libstylus.nix { inherit lib; };
-  libviolentmonkey = import ./libviolentmonkey.nix { inherit lib; };
+  libviolentmonkey = import ./libviolentmonkey.nix { inherit pkgs lib; };
 
   listdir = path: builtins.map (s: path + ("/" + s)) (builtins.attrNames (builtins.readDir path));
 in

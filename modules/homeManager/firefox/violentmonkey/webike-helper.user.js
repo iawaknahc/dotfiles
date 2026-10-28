@@ -8,8 +8,9 @@
 // @grant       GM_setValue
 // @grant       window.close
 // @run-at      document-idle
-// @require     https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@2,npm/@violentmonkey/ui@0.7
-// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2.2.1
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/ui@0.7.9
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1.4.4
 // ==/UserScript==
 
 function buildInputWidget() {

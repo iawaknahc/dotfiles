@@ -2,7 +2,7 @@
 // @name        amazon-rewrite-url
 // @match       https://www.amazon.com/*
 // @run-at      document-idle
-// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
+// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2.2.1
 // ==/UserScript==
 
 VM.observe(document.body, () => {
