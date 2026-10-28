@@ -86,6 +86,9 @@ let
     else
       throw "unknown flavor";
 
+  # See https://www.djcbsoftware.nl/code/mu/mu4e/Sending-mail.html#Dealing-with-sent-messages
+  sentMessagesBehavior = flavor: if flavor == "gmail.com" then "delete" else "sent";
+
   mkMu4eContext = (
     account:
     let
@@ -100,7 +103,9 @@ let
                 (mu4e-drafts-folder . "${f "drafts"}")
                 (mu4e-trash-folder . "${f "trash"}")
                 (mu4e-refile-folder . "${f "refile"}")
-                (mu4e-maildir-shortcuts . (${mkMaildirShortcuts account.flavor account.address}))))
+                (mu4e-maildir-shortcuts . (${mkMaildirShortcuts account.flavor account.address}))
+                (mu4e-sent-messages-behavior . ${sentMessagesBehavior account.flavor})
+                ))
     ''
   );
 in
