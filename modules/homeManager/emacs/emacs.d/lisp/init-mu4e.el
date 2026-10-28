@@ -13,6 +13,9 @@
 
  ;; Teach mu4e to retrieve emails.
  mu4e-get-mail-command "mbsync --all"
+ ;; mbsync puts UID in the filename.
+ ;; Moving a mail without changing filename may retain a stale UID.
+ mu4e-change-filenames-when-moving t
  ;; Do not ask when quitting mu4e.
  mu4e-confirm-quit nil
  ;; Do not echo messages to echo area.
