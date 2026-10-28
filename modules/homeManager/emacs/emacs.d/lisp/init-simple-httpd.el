@@ -29,6 +29,9 @@
                             :longitude ,calendar-longitude
                             :zoom 11))))
 
+(httpd-servlet maplibre/geojson.json "application/json" ()
+  (insert (my/vulpea-geojson)))
+
 ;; This macro defines `httpd/maplibre'.
 (httpd-file-servlet maplibre (expand-file-name "maplibre/" user-emacs-directory))
 

@@ -87,5 +87,34 @@
                             (delete-char (- (length candidate)))
                             (insert note-id "][" note-title))))))))
 
+;;;; Integration with MapLibre GL
+(defun my/vulpea-location-to-geojson-feature (note)
+  "Convert NOTE into a GeoJSON Feature."
+  `(:type
+    "Feature"
+    :geometry
+    (:type
+     "Point"
+     :coordinates
+     [,(vulpea-note-meta-get note "longitude" 'number)
+      ,(vulpea-note-meta-get note "latitude" 'number)])
+    :properties
+    (:title
+     ,(vulpea-note-title note)
+     :kind
+     ,(vulpea-note-meta-get note "location_kind"))))
+
+(defun my/vulpea-geojson ()
+  "Convert notes into a GeoJSON FeatureCollection."
+  (let* ((notes (vulpea-db-query (lambda (note)
+                                   (vulpea-schema-applies-p note 'location))))
+         (features (seq-map #'my/vulpea-location-to-geojson-feature notes))
+         (features (seq-into features 'vector))
+         (feature-collection `(:type
+                               "FeatureCollection"
+                               :features
+                               ,features)))
+    (json-serialize feature-collection)))
+
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here

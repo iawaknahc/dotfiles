@@ -252,6 +252,7 @@ lessp
 lgrep
 lhelpgrep
 lhistory
+libre
 linematch
 linters
 listchars
@@ -445,6 +446,7 @@ statusline
 strftime
 stringp
 strptime
+styleimagemissing
 stylua
 subshell
 surrogatepass

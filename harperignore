@@ -19,5 +19,6 @@ harperignore
 infokey
 json.lua
 justfile
+main.mjs
 Makefile
 words.txt
