@@ -7,6 +7,7 @@
 ;;
 ;;; Code:
 
+;;;; Options
 (setq
  vulpea-db-sync-directories (list "~/org/")
  vulpea-default-notes-directory "~/org/"
@@ -20,6 +21,9 @@
  ;; Skip `org-mode-hook' while indexing.
  ;; See also `vulpea-ui-fast-parse'.
  vulpea-db-parse-method 'single-temp-buffer
+ ;; Skip `org-mode-hook' while parsing.
+ ;; See also `vulpea-db-parse-method'.
+ vulpea-ui-fast-parse t
 
  vulpea-create-default-template `(
                                   :file-name "${title}.org"
@@ -31,14 +35,26 @@
  ;; Show "Filename -> Parent Heading -> Note Title" for heading notes.
  vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
 
-;; Turn on auto sync
+;;;; Turn on auto sync
 (vulpea-db-autosync-mode 1)
-;; Validate notes against schema.
+
+;;;; Validate notes against schema via flymake.
 (add-hook 'org-mode-hook #'vulpea-schema-flymake-mode)
 
+(defun my/vulpea-load-schema-in-org-directory ()
+  "Use `load-file' to load the file local-schemas.el in `org-directory'."
+  (when-let* ((_ org-directory)
+              (schema-file (expand-file-name "local-schemas.el" org-directory))
+              (_ (file-readable-p schema-file)))
+    (load-file schema-file)
+    (message "Loaded schema file %S in org-directory %S" schema-file org-directory)))
+(add-hook 'after-init-hook #'my/vulpea-load-schema-in-org-directory)
+
+;;;; Keymap
 ;; `vulpea-find' is used to open notes or create a new note.
 (keymap-global-set "M-o" #'vulpea-find)
 
+;;;; CAPF
 ;; Re-implement `vulpea-insert' as a custom CAPF.
 (defconst my/vulpea-insert-capf--re (rx "[[id:" (group-n 1 (* (not (in "][")))) "]]")
   "The regexp to define BEG and END.")
@@ -70,23 +86,6 @@
                                       (note-title (vulpea-note-title note)))
                             (delete-char (- (length candidate)))
                             (insert note-id "][" note-title))))))))
-
-
-(setq
- ;; Skip `org-mode-hook' while parsing.
- ;; See also `vulpea-db-parse-method'.
- vulpea-ui-fast-parse t)
-
-
-(defun my/vulpea-load-schema-in-org-directory ()
-  "Use `load-file' to load the file local-schemas.el in `org-directory'."
-  (when-let* ((_ org-directory)
-              (schema-file (expand-file-name "local-schemas.el" org-directory))
-              (_ (file-readable-p schema-file)))
-    (load-file schema-file)
-    (message "Loaded schema file %S in org-directory %S" schema-file org-directory)))
-(add-hook 'after-init-hook #'my/vulpea-load-schema-in-org-directory)
-
 
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here
