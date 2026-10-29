@@ -49,6 +49,7 @@
       "" # Reset instead of appending to the default.
       "JetBrains Mono NL"
       "Symbols Nerd Font Mono"
+      "JuliaMono"
     ];
     # Use font-font-codepoint-map to force Ghostty to use Nerd Font
     # We can verify if it is working by running `ghostty +show-face --cp=0x2665`.

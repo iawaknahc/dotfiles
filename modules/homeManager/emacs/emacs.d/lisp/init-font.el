@@ -10,11 +10,8 @@
  ;; 4. An emoji.
  ;; 5. A Nerd Font symbol.
  list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 😀 ♥ "
- ;; Ask Emacs to respect fontset for script `symbol'.
- ;; However, it does not seem to work as intended.
- ;; For example, JetBrains Mono has glyph for U+2208 whose script is `symbol'.
- ;; I expect Noto Sans Symbols 2 should be used, but it is not the case.
- use-default-font-for-symbols nil)
+ ;; Use the default font if it has the glyph.
+ use-default-font-for-symbols t)
 
 (defconst my/noto-font-mapping '((latin . "Noto Sans")
                                  (phonetic . "Noto Sans")
@@ -183,12 +180,23 @@ As of Emacs 30.2, they all start with `mathematical-'."
     (dolist (entry my/noto-font-mapping)
       (set-fontset-font fontset (car entry) (font-spec :family (cdr entry) :weight 'regular) for-all-frames 'prepend))))
 
-(defun my/configure-math-font (fontset)
-  "Configure FONTSET so that all Mathematics scripts are configured to use a appropriate font."
+(defun my/configure-julia-mono (fontset)
+  "Configure FONTSET so that JuliaMono is used for symbols."
   (let* ((for-all-frames nil))
-    ;; Reference the block by the codepoint range.
-    ;; See https://github.com/emacs-mirror/emacs/blob/emacs-30.2/lisp/international/fontset.el#L883
-    (set-fontset-font fontset '(#x1D400 . #x1D7FF) (font-spec :family "Latin Modern Math" :weight 'regular) for-all-frames 'prepend)))
+    (dolist (chars '(symbol
+                     braille
+                     kaktovik-numeral
+                     tai-xuan-jing-symbol
+                     counting-rod-numeral
+                     domino-tile
+                     chess-symbol))
+      (set-fontset-font fontset chars (font-spec :family "JuliaMono" :weight 'regular) for-all-frames 'prepend))))
+
+(defun my/configure-fairfax-hd (fontset)
+  "Configure FONTSET so that Fairfax HD is used for symbols."
+  (let* ((for-all-frames nil))
+    (dolist (chars '(mahjong-tile))
+      (set-fontset-font fontset chars (font-spec :family "Fairfax HD" :weight 'medium) for-all-frames 'prepend))))
 
 (defun my/configure-nerd-font (fontset)
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
@@ -208,7 +216,8 @@ As of Emacs 30.2, they all start with `mathematical-'."
     (set-fontset-font fontset '(#xF0000 . #xFFFFD) nerd-font for-all-frames 'prepend)))
 
 (my/configure-noto-font "fontset-default")
-(my/configure-math-font "fontset-default")
+(my/configure-fairfax-hd "fontset-default")
+(my/configure-julia-mono "fontset-default")
 (my/configure-nerd-font "fontset-default")
 
 ;; Create a new fontset "fontset-monospace" to be used by the face `default'.
@@ -216,7 +225,7 @@ As of Emacs 30.2, they all start with `mathematical-'."
 (let* ((for-all-frames nil)
        (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13)))
   ;; Use JetBrains Mono.
-  (set-fontset-font "fontset-monospace" 'latin jetbrains-mono for-all-frames 'prepend))
+  (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff) jetbrains-mono for-all-frames 'prepend))
 
 ;; Cause all frames to use the fontset "fontset-monospace" by default.
 ;; This is necessary because calling `set-face-attribute' on face `default' only works for `latin'.

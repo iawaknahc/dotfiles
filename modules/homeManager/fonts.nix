@@ -19,12 +19,10 @@
     # It is also used in Ghostty because Ghostty has `font-codepoint-map`.
     nerd-fonts.symbols-only
 
-    # Fonts for Mathematics
-    # Latin Modern Math
-    lmmath
-    # STIX Two Math and STIX Two Text.
-    # This is actually bundled with macOS.
-    stix-two
+    # JuliaMono contains a lot of glyphs for symbols.
+    julia-mono
+    # Fairfax fills the gap of JuliaMono.
+    fairfax-hd
 
     # Fonts by Google.
     # This package contains a lot of fonts.
