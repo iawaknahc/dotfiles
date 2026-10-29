@@ -15,6 +15,7 @@ in
   #
   # See the below comment on pkgs.firefox and pkgs.firefox-bin.
   programs.firefox.package = pkgs.firefox-bin;
+  programs.firefox.configPath = "Library/Application Support/Firefox";
 
   programs.firefox.profiles.default.extensions.packages = [
     # On 2026-10-17, I found 1Password browser extension failed

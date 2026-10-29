@@ -5,7 +5,7 @@ _: {
     # See https://nix-community.github.io/home-manager/options.xhtml#opt-targets.darwin.copyApps.enable
     # You will likely encounter weird error in the switch that involves stateVersion change.
     # In that case, you delete $HOME/Applications/Home Manager*
-    home.stateVersion = "26.05";
+    home.stateVersion = "26.11";
     programs.home-manager.enable = true;
 
     # It may be tempting to set XDG_*_HOME, in order to "correct"
