@@ -81,7 +81,12 @@ Point is placed at the end of the output."
 (setq
  ;; Use fish as the interactive shell.
  ghostel-macos-login-shell nil
- ghostel-shell (list "~/.nix-profile/bin/fish" "--login" "--interactive"))
+ ghostel-shell (list "~/.nix-profile/bin/fish" "--login" "--interactive")
+
+ ;; Name buffer by `default-directory'.
+ ghostel-buffer-name-function #'ghostel-buffer-name-by-directory
+ ;; Just show the buffer name.
+ ghostel-buffer-identification-format "%b")
 
 (provide 'init-ghostel)
 ;;; init-ghostel.el ends here
