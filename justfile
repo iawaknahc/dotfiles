@@ -7,6 +7,7 @@ clean:
     rm -rf ./node_modules/
     rm -f ./modules/homeManager/neovim/config/nvim/.emmyrc.json
 
+# Run `npm install`
 npm-install:
     npm install
 
@@ -72,6 +73,7 @@ pyrefly:
 ty:
     ty check
 
+# Run checker `tsc --noEmit`
 tsc-check:
     tsc --noEmit
 
