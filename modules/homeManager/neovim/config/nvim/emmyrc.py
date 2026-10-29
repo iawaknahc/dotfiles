@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import json
 import pathlib
-from typing import TypedDict, cast
-
 import tomllib
+from typing import TypedDict, cast
 
 
 class EmmyRC(TypedDict):

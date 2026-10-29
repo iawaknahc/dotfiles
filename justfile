@@ -76,7 +76,7 @@ tsc-check:
     tsc --noEmit
 
 # Run all formatters
-format: shfmt stylua-fmt nufmt ruff-format
+format: shfmt stylua-fmt nufmt ruff-format ruff-isort
 
 # Run formatter `shfmt --write --list`
 shfmt:
@@ -93,6 +93,10 @@ nufmt:
 # Run formatter `ruff format`.
 ruff-format:
     ruff format
+
+# Run formatter ruff-isort.
+ruff-isort:
+    ruff check --fix --fix-only --select=I001 --no-cache --exit-zero
 
 # Copy the current config of Alfred to here for git-diff
 alfred-rsync:
