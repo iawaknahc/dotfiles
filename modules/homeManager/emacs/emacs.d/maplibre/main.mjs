@@ -108,6 +108,8 @@ map.on("load", () => {
         "emoji:🏠",
         "university",
         "emoji:🏫",
+        "restaurant",
+        "emoji:🍽️",
         // fallback
         "emoji:📍",
       ],
