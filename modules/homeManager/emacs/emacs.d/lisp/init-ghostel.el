@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+;;;; Custom commands
 (defun my/text-property-search-backward (property &optional value predicate not-current)
   "Call (text-property-search-backward PROPERTY VALUE PREDICATE NOT-CURRENT) and return point."
   (when (text-property-search-backward property value predicate not-current)
@@ -63,6 +64,7 @@ Point is placed at the end of the output."
           (push-mark (car bounds) nil t))
       (error "No more next output regions"))))
 
+;;;; Keymap
 (with-eval-after-load 'ghostel
   (keymap-set ghostel-mode-map "C-c <up>" #'my/ghostel-select-previous-output)
   (keymap-set ghostel-mode-map "C-c <down>" #'my/ghostel-select-next-output))
@@ -73,6 +75,13 @@ Point is placed at the end of the output."
   "<up>"   #'my/ghostel-select-previous-output
   "<down>" #'my/ghostel-select-next-output)
 
+(with-eval-after-load 'project
+  (keymap-set project-prefix-map "m" #'ghostel-project)
+  (keymap-set project-prefix-map "M" #'ghostel-project-list-buffers)
+  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel"))
+  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers")))
+
+;;;; Options
 (setq-default
  ;; Render CJK glyphs at natural size.
  ;; See https://github.com/dakra/ghostel/issues/298
