@@ -1,0 +1,6 @@
+root = true
+
+# We need this because js-indent-level is 4 by default in Emacs.
+[*.{js,mjs,cjs,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2

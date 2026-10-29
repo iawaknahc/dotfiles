@@ -123,6 +123,7 @@
 (require 'init-flyspell)
 (require 'init-thingatpt)
 (require 'init-world-clock-mode)
+(require 'init-editorconfig-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)

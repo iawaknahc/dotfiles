@@ -1,4 +1,5 @@
 .codespellrc
+.editorconfig
 .gitignore
 .styluaignore
 *.conf

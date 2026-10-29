@@ -116,6 +116,7 @@ dwim
 ecard
 ecards
 ediff
+editorconfig
 eglot
 eldoc
 elec
