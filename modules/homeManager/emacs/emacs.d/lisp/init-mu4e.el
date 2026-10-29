@@ -70,6 +70,21 @@
  ;; we should invoke `mu4e-action-show-thread', which is bound to "a s" in the headers view.
  mu4e-search-include-related nil
 
+ mu4e-view-fields
+ `(:from
+   :to
+   :cc
+   :bcc
+   :subject
+   :mailing-list
+   :date
+   :flags
+   :tags
+   :labels
+   :message-id
+   :maildir
+   :path-abbreviated)
+
  mu4e-bookmarks
  '((:name
     "Unread non-trashed non-junk messages"
@@ -126,7 +141,7 @@ Otherwise, bury the buffer."
   (add-to-list
    'mu4e-header-info-custom
    '(:maildir-first-component
-     :name "The first path component of :maildir"
+     :name "Mailbox"
      :shortname "Mailbox"
      :help "The first path component of :maildir"
      :function (lambda (msg)
@@ -136,12 +151,22 @@ Otherwise, bury the buffer."
   (add-to-list
    'mu4e-header-info-custom
    '(:datetime-local
-     :name "Datetime local"
+     :name "Date"
      :shortname "Date"
-     :help "Datetime without UTC offset because the offset is always local"
+     :help "The date of the message in local timezone"
      :function (lambda (msg)
                  (let* ((encoded-time (mu4e-message-field msg :date)))
                    (format-time-string "%F %T" encoded-time)))))
+
+  (add-to-list
+   'mu4e-header-info-custom
+   '(:path-abbreviated
+     :name "Path"
+     :shortname "Path"
+     :help "Abbreviated path to the message on the filesystem"
+     :function (lambda (msg)
+                 (let* ((path (mu4e-message-field msg :path)))
+                   (abbreviate-file-name path)))))
 
   (require 'init-mu4e-contexts))
 
