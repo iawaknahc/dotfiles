@@ -6,7 +6,9 @@
     # See https://emudhra.we-have-a-problem.com/
     security.pki.caCertificateBlacklist = [
       "Comodo AAA Services root"
-      "emSign ECC Root CA - G3"
+      # As of nss-cacert-3.131.1, the following certificates were removed from the store.
+      # And blocking a non-existent certificate is an error in Nix.
+      # "emSign ECC Root CA - G3"
     ];
   };
 
