@@ -5,6 +5,11 @@
   ...
 }:
 {
+  home.sessionVariables = {
+    # FIXME: Claude Code TLS is broken. See https://github.com/NixOS/nixpkgs/issues/579204
+    CLAUDE_CODE_CERT_STORE = "bundled,system";
+  };
+
   programs.git.ignores = [
     ".claude/settings.local.json" # https://code.claude.com/docs/en/settings#available-scopes
   ];
