@@ -136,10 +136,9 @@ in
 
     codespell
 
-    (hunspellWithDicts [
-      hunspellDicts.en_US
-    ])
-
+    (hunspell.withDicts (dicts: [
+      dicts.en_US
+    ]))
     # The following tools are not very practical.
     # They consume 1GB, even without the n-gram data.
     # Even if I start a languagetool HTTP server, and ask ltex-ls-plus to connect to it.
