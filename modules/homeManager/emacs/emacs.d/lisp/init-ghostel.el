@@ -78,5 +78,10 @@ Point is placed at the end of the output."
  ;; See https://github.com/dakra/ghostel/issues/298
  ghostel-glyph-scale-floor 1.0)
 
+(setq
+ ;; Use fish as the interactive shell.
+ ghostel-macos-login-shell nil
+ ghostel-shell (list "~/.nix-profile/bin/fish" "--login" "--interactive"))
+
 (provide 'init-ghostel)
 ;;; init-ghostel.el ends here
