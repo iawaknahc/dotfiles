@@ -38,11 +38,10 @@ let
       lib.strings.concatLines [
         ''(:maildir "/${address}/Inbox" :name "${address} - Inbox" :key ?i)''
         ''(:maildir "/${address}/Archive" :name "${address} - Archive" :key ?a)''
-        ''(:maildir "/${address}/Sent Items" :name "${address} - Sent" :key ?s)''
+        ''(:maildir "/${address}/Sent" :name "${address} - Sent" :key ?s)''
         ''(:maildir "/${address}/Drafts" :name "${address} - Drafts" :key ?d)''
-        ''(:maildir "/${address}/Deleted Items" :name "${address} - Trash" :key ?t)''
-        ''(:maildir "/${address}/Junk Email" :name "${address} - Junk" :key ?j)''
-        ''(:maildir "/${address}/Outbox" :name "${address} - Outbox" :key ?o)''
+        ''(:maildir "/${address}/Trash" :name "${address} - Trash" :key ?t)''
+        ''(:maildir "/${address}/Junk" :name "${address} - Junk" :key ?j)''
         ''(:maildir "/${address}/Conversation History" :name "${address} - Conversation History" :key ?h)''
       ]
     else
@@ -74,11 +73,11 @@ let
         throw "unknown folder"
     else if flavor == "davmail" then
       if folder == "sent" then
-        "/${address}/Sent Items"
+        "/${address}/Sent"
       else if folder == "drafts" then
         "/${address}/Drafts"
       else if folder == "trash" then
-        "/${address}/Deleted Items"
+        "/${address}/Trash"
       else if folder == "refile" then
         "/${address}/Archive"
       else
@@ -251,6 +250,8 @@ in
 
               mode = "0700";
               path = "${config.xdg.configHome}/davmail/${name}/davmail.properties";
+              # Since davmail 7.1.0, more special mailbox uses short name.
+              # See https://github.com/mguessan/davmail/commit/87e37819648f1d9e210762d3c4c635887338e5ed
               content = ''
                 davmail.server=true
                 davmail.disableUpdateCheck=true
