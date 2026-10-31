@@ -12,8 +12,7 @@ Return the filepath if found, otherwise nil."
                          (in "`\"'")
                          (group-n 1
                            (| "/" "~/" "./" "../")
-                           (* (in "- !#$%&()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~")))
-                         (in "`\"'"))
+                           (* (in "- !#$%&()*+,./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~"))))
                         (seq
                          (| line-start space)
                          (group-n 1
@@ -28,19 +27,26 @@ Return the filepath if found, otherwise nil."
 
 (defun my/expand-filepath-before-point ()
   "Expand the filepath before point to an absolute path.
-The filepath may or may not exist."
-  (let* ((filepath (my/get-filepath-before-point))
-         (base-directory (or (and buffer-file-name (file-name-directory buffer-file-name)) default-directory)))
-    (when filepath
-      (expand-file-name filepath base-directory))))
+The filepath may or may not exist.
+
+Return nil if the string before point is not a filepath."
+  (when-let* ((non-essential t)
+              (filepath (my/get-filepath-before-point))
+              (base-directory (or (and buffer-file-name (file-name-directory buffer-file-name))
+                                  default-directory)))
+    (expand-file-name filepath base-directory)))
 
 (defun my/resolve-directory-before-point ()
-  "Resolve the filepath representing a directory before point.
-Return /homeless-shelter if no directory is found."
-  (let* ((filepath (my/expand-filepath-before-point)))
-    (or (and filepath (file-directory-p filepath) filepath)
-        (and filepath (file-directory-p (file-name-directory filepath)) (file-name-directory filepath))
-        "/homeless-shelter")))
+  "Return the existing directory containing the filepath before point.
+
+The returned path ends in a slash.
+Return /homeless-shelter if there is no such directory."
+  (let* ((non-essential t)
+         (filepath (my/expand-filepath-before-point))
+         (directory (and filepath (file-name-directory filepath))))
+    (if (and directory (file-directory-p directory))
+        directory
+      "/homeless-shelter")))
 
 (defun my/cape-after-change-major-mode-hook ()
   "Add `cape-dabbrev' to `completion-at-point-functions'.
