@@ -52,6 +52,7 @@ caluri
 caml
 cangjie
 capf
+capfs
 catppuccin
 cddr
 cfile

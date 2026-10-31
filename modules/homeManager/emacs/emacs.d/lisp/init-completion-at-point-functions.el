@@ -48,56 +48,55 @@ Return /homeless-shelter if there is no such directory."
         directory
       "/homeless-shelter")))
 
+(defun my/tempel-capf ()
+  "`tempel-complete' triggered by @."
+  (cape-wrap-trigger #'tempel-complete ?@))
+
+(defun my/org-pcomplete-capf ()
+  "`pcomplete-completions-at-point' in `org-mode' only.
+
+Calling it in all major modes makes Emacs lag on every keystroke.
+
+We want to trigger auto completion when the string before point is #+
+To do so, we use :company-prefix-length to override `corfu-auto-prefix'."
+  (when (derived-mode-p 'org-mode)
+    (cape-wrap-properties #'pcomplete-completions-at-point :company-prefix-length t)))
+
+(defun my/rest-capfs ()
+  "Wrap the remaining CAPFs in `completion-at-point-functions'.
+
+The remaining CAPFs are symbols that is not `my/capf'.
+The remaining CAPFs and `cape-dabbrev' are wrapped with `cape-wrap-super'.
+
+CAPFs like `elisp-completion-at-point' and `eglot-completion-at-point'
+return a lot of candidates.
+`cape-dabbrev' must be combined with these CAPFs so that it has a chance
+to return candidates."
+  (let* ((rest-capfs (seq-filter (lambda (capf)
+                                   ;; Skip `my/capf'.
+                                   (and (not (eq capf #'my/capf))
+                                        ;; And skip t, which is added by `add-hook'.
+                                        (not (eq capf t))))
+                                 completion-at-point-functions))
+         (with-dabbrev (append rest-capfs (list #'cape-dabbrev) nil)))
+    (apply #'cape-wrap-super with-dabbrev)))
+
+(defun my/capf ()
+  "Return the first of these CAPFs that has a candidate at point."
+  ;; We want it to trigger when the string before point is "[[id:"
+  (cape-wrap-choose (cape-capf-properties #'my/vulpea-insert-capf :company-prefix-length t)
+                    #'my/tempel-capf
+                    #'cape-file
+                    #'my/org-pcomplete-capf
+                    #'my/rest-capfs))
+
 (defun my/cape-after-change-major-mode-hook ()
-  "Add `cape-dabbrev' to `completion-at-point-functions'.
-
-It should be compatible with the existing capf, in terms of beginning position.
-`cape-wrap-super' can only merge capf that have the same beginning position.
-
-See https://github.com/minad/cape/blob/2.7/cape.el#L941"
-  ;; It is important to check the major mode, otherwise all minibuffers will have `completion-at-point-functions' set, and
+  "Add `my/capf' ahead of the CAPFs of the major mode and minor modes."
+  ;; It is important to check the major mode,
+  ;; otherwise all minibuffers will have `completion-at-point-functions' set, and
   ;; Corfu will interfere with Vertico.
   (when (derived-mode-p '(conf-mode prog-mode text-mode))
-    ;; add-hook takes care of making completion-at-point-functions a buffer-local variable, and add t at the end.
-    (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
-    ;; Then we merge whatever appears in completion-at-point-functions except the last element (which is t).
-    (let* ((without-t (remove t completion-at-point-functions))
-           (merged (apply #'cape-capf-super without-t))
-           ;; It is important that this CAPF has a prefix-length larger than cape-file.
-           ;; Otherwise, this CAPF will be triggered in the following case.
-           ;;
-           ;; Suppose you type `.`, since `.` is a wildcard character recognized by Orderless,
-           ;; this CAPF will be chosen.
-           ;; cape-file will not be chosen because `.` is not one of the trigger prefixes.
-           ;; By the time you type `/` to make it `./`, it is too late.
-           (prefix-length-enforced (cape-capf-prefix-length merged 3)))
-
-      ;; `add-hook' adds to the front when DEPTH is the same.
-      ;; So the one we want to be at the front, has to be added last.
-      ;; First of all, we reset `completion-at-point-functions' to a list containing t.
-      (setq-local completion-at-point-functions '(t))
-
-      ;; Trigger by prefix length of 3
-      (add-hook 'completion-at-point-functions prefix-length-enforced nil t)
-
-      ;; Trigger prefix is `cape-file-prefix'.
-      (add-hook 'completion-at-point-functions #'cape-file nil t)
-
-      ;; Trigger prefix is @
-      (add-hook 'completion-at-point-functions (cape-capf-trigger #'tempel-complete ?@) nil t)
-
-      ;; `org-mode' derives from `text-mode' and it uses pcomplete to do completion.
-      ;; Therefore, we have to add the bridge `pcomplete-completions-at-point'.
-      ;; We place it at the front of the list with the assumption that
-      ;; there is no major modes other than `org-mode' using pcomplete.
-      ;; It is very important that `pcomplete-completions-at-point' is added only for buffers in `org-mode'.
-      ;; I observed that in Emacs 31.0.91 with Org 9.8, adding `pcomplete-completions-at-point' unconditionally
-      ;; will make Emacs lags on every keystroke.
-      (when (derived-mode-p 'org-mode)
-        (add-hook 'completion-at-point-functions #'pcomplete-completions-at-point nil t))
-
-      ;; Always allow completing =[[id:]]=
-      (add-hook 'completion-at-point-functions #'my/vulpea-insert-capf))))
+    (add-hook 'completion-at-point-functions #'my/capf -1 t)))
 
 (setq
  cape-file-directory #'my/resolve-directory-before-point

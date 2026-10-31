@@ -43,14 +43,17 @@
 
 (setq
  corfu-auto t
- corfu-auto-delay 0.1
-
- ;; It is unnecessary to configure corfu-auto-prefix because
- ;; corfu respects :company-prefix-length advertised by the CAPF.
- ;; (corfu-auto-prefix 3)
-
- ;; Printable ASCII characters from 33 to 126 inclusive.
- corfu-auto-trigger "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~")
+ ;; FIXME: corfu-auto-delay seems to have timing issue.
+ ;; If I set corfu-auto-delay to 0.1, in the scratch buffer.
+ ;; 1. I type ., see the candidates from `elisp-completion-at-point'.
+ ;; 2. I type /, see nothing, while I expect to see candidates from `cape-file'.
+ ;;
+ ;; If corfu-auto-delay is 0 or 0.2, or 0.3, this issue does not appear.
+ corfu-auto-delay 0.2
+ ;; Start auto completion when there is 1 character before point.
+ corfu-auto-prefix 1
+ ;; No characters can override `corfu-auto-prefix'.
+ corfu-auto-trigger "")
 
 (setq corfu-popupinfo-delay '(0.1 . 0.1))
 (add-hook 'after-init-hook #'corfu-popupinfo-mode)
