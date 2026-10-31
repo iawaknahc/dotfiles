@@ -81,7 +81,7 @@ Point is placed at the end of the output."
  ;; See https://github.com/dakra/ghostel/issues/298
  ghostel-glyph-scale-floor 1.0)
 
-(setq
+(setopt
  ;; Use fish as the interactive shell.
  ghostel-macos-login-shell nil
  ghostel-shell (list "~/.nix-profile/bin/fish" "--login" "--interactive")
@@ -89,7 +89,11 @@ Point is placed at the end of the output."
  ;; Name buffer by `default-directory'.
  ghostel-buffer-name-function #'ghostel-buffer-name-by-directory
  ;; Just show the buffer name.
- ghostel-buffer-identification-format "%b")
+ ghostel-buffer-identification-format "%b"
+
+ ;; Add M-o to `ghostel-keymap-exceptions'.
+ ;; M-o is bound in the global keymap to `vulpea-find'.
+ ghostel-keymap-exceptions (list "C-c" "C-x" "C-u" "C-h" "M-x" "M-:" "C-\\" "M-o"))
 
 (provide 'init-ghostel)
 ;;; init-ghostel.el ends here
