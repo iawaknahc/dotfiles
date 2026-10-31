@@ -75,12 +75,6 @@ Point is placed at the end of the output."
   "<up>"   #'my/ghostel-select-previous-output
   "<down>" #'my/ghostel-select-next-output)
 
-(with-eval-after-load 'project
-  (keymap-set project-prefix-map "m" #'ghostel-project)
-  (keymap-set project-prefix-map "M" #'ghostel-project-list-buffers)
-  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel"))
-  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers")))
-
 ;;;; Options
 (setq-default
  ;; Render CJK glyphs at natural size.
