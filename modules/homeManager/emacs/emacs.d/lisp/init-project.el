@@ -19,17 +19,18 @@ and ensures it is non-nil."
 
 (with-eval-after-load 'project
   (advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return)
+  (keymap-set project-prefix-map "g" #'my/lgrep-project)
   (keymap-set project-prefix-map "m" #'ghostel-project)
   (keymap-set project-prefix-map "M" #'ghostel-project-list-buffers)
   (keymap-set project-prefix-map "v" #'magit-project-status)
   (keymap-set project-prefix-map "V" #'project-vc-dir)
-  ;; FIXME: `project-find-regexp' was omitted. Bring it back.
   (setq
    project-switch-commands
    '((ghostel-project-list-buffers "Ghostel buffers")
      (ghostel-project "Ghostel")
      (project-find-file "Find file")
      (project-find-dir "Find directory")
+     (my/lgrep-project "Grep")
      (magit-project-status "Magit")
      (project-vc-dir "VC-Dir")
      ;; project-any-command was omitted.

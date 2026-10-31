@@ -71,23 +71,6 @@
  ;; `grep-command' is used by `grep'.
  grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
 
-(defun my/grep-override (command-args)
-  "An :override advice of `grep'.
-COMMAND-ARGS is prompted.
-
-`default-directory' always dynamically bound to `project-root'."
-  (interactive
-   (progn
-     (let* ((proj (or (project-current) (error "Running lgrep without a project is unsupported")))
-            (proj-root (project-root proj))
-            (command-args (read-shell-command "Run Ripgrep: " grep-command 'grep-history)))
-       (list command-args))))
-  (let* ((proj (or (project-current) (error "Running grep without a project is unsupported")))
-         (proj-root (project-root proj))
-         (default-directory (expand-file-name proj-root)))
-    (compilation-start command-args #'grep-mode)))
-(advice-add 'grep :override #'my/grep-override)
-
 (defun my/lgrep-parse-files (files)
   "Implement the algorithm documented in `my/lgrep-override'.
 FILES is parsed and a string is returned."
@@ -95,13 +78,19 @@ FILES is parsed and a string is returned."
          (transformed (mapconcat
                        (lambda (component)
                          (pcase component
-                           ((pred (string-prefix-p "!" _)) (format "--type-not=%s" (substring component 1)))
-                           (_ (format "--type=%s" component)))
-                         ) components " ")))
+                           ((pred (string-prefix-p "!" _))
+                            (format "--type-not=%s" (substring component 1)))
+                           (_
+                            (format "--type=%s" component))))
+                       components
+                       " ")))
     transformed))
 
-(defun my/lgrep-override (regexp &optional files dir confirm)
-  "An :override advice of `lgrep'.
+(defun my/lgrep-project (regexp &optional files dir)
+  "Run a modified version of `lgrep' in project.
+
+First, prompt for project if there is none contextually.
+The root of the project is then used as DIR.
 
 REGEXP is prompted and quoted for shell.
 
@@ -112,24 +101,20 @@ then it will be passed as --type-not COMPONENT.
 For example, suppose FILES is 'json yaml',
 it will be translated to '--type json --type yaml'.
 For example, suppose FILES is '!lua',
-it will be translated to '--type-not lua'.
-
-DIR is not prompted, and instead is always set to `project-root'.
-
-CONFIRM is ignored.
-It is kept solely for maintaining the original function signature."
+it will be translated to '--type-not lua'."
   (interactive
-   (progn
-     (let* ((proj (or (project-current) (error "Running lgrep without a project is unsupported")))
-            (proj-root (project-root proj))
-            (regexp (read-regexp "Enter a Ripgrep regexp to search: " 'grep-tag-default 'grep-regexp-history))
-            (files (read-from-minibuffer "[Optional] space-separated list of Ripgrep types (e.g. sh !zsh): ")))
-       (list regexp files proj-root nil))))
+   (let* ((proj (project-current t))
+          (proj-root (project-root proj))
+          (regexp (read-regexp "Enter a Ripgrep regexp to search: " 'grep-tag-default 'grep-regexp-history))
+          (files (read-from-minibuffer "[Optional] space-separated list of Ripgrep types (e.g. sh !zsh): ")))
+     (list regexp files proj-root)))
   (let* ((types (my/lgrep-parse-files files))
          (command (grep-expand-template grep-template regexp types))
          (default-directory (expand-file-name dir)))
     (compilation-start command #'grep-mode)))
-(advice-add 'lgrep :override #'my/lgrep-override)
+;; `grep-expand-template' is used in the above function, but
+;; it is not autoloaded.
+(autoload 'grep-expand-template "grep")
 
 (provide 'init-grep-mode)
 ;;; init-grep-mode.el ends here
