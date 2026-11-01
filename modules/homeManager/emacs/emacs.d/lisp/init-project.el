@@ -37,5 +37,20 @@ and ensures it is non-nil."
      ;; I haven't figured the use case of it.
      )))
 
+(defun my/project-list-buffers-ibuffer (project &optional files-only)
+  "A modified version of `project-list-buffers-ibuffer' that use the same window.
+
+PROJECT and FILES-ONLY are treated the same as in `project-list-buffers-ibuffer'."
+  (ibuffer
+   nil
+   (format "*Ibuffer-%s" (project-name project))
+   `((predicate . (and
+                   (or ,(not files-only) buffer-file-name)
+                   (member (current-buffer)
+                           (project-buffers ',project)))))))
+
+(setq
+ project-buffers-viewer #'my/project-list-buffers-ibuffer)
+
 (provide 'init-project)
 ;;; init-project.el ends here
