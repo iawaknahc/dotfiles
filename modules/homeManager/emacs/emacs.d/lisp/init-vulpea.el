@@ -52,7 +52,7 @@
 
 ;;;; Keymap
 ;; `vulpea-find' is used to open notes or create a new note.
-(keymap-global-set "M-o" #'vulpea-find)
+(keymap-global-set "C-c o" #'vulpea-find)
 
 ;;;; CAPF
 ;; Re-implement `vulpea-insert' as a custom CAPF.

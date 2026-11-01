@@ -8,8 +8,8 @@
 ;;
 ;; Similarly, embark-prefix-help-command is provided for us to set to prefix-help-command.
 ;; embark-prefix-help-command and embark-bindings share the same UI.
-(keymap-global-set "C-." #'embark-act)
-(keymap-global-set "C-;" #'embark-dwim)
+(keymap-global-set "C-c ." #'embark-act)
+(keymap-global-set "C-c ;" #'embark-dwim)
 
 (setq embark-auto-prefix-help-delay 0)
 
