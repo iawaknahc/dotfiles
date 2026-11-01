@@ -178,12 +178,12 @@ and they are not really valid recognized script.
 As of Emacs 30.2, they all start with `mathematical-'."
   (let* ((for-all-frames nil))
     (dolist (entry my/noto-font-mapping)
-      (set-fontset-font fontset (car entry) (font-spec :family (cdr entry) :weight 'regular) for-all-frames 'prepend))))
+      (set-fontset-font fontset (car entry) (font-spec :family (cdr entry)) for-all-frames 'prepend))))
 
 (defun my/configure-nerd-font (fontset)
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
   (let* ((for-all-frames nil)
-         (nerd-font (font-spec :family "Symbols Nerd Font Mono" :weight 'regular)))
+         (nerd-font (font-spec :family "Symbols Nerd Font Mono")))
     (set-fontset-font fontset '(#x23FB . #x23FE) nerd-font for-all-frames 'prepend)
     (set-fontset-font fontset '(#x2500 . #x259F) nerd-font for-all-frames 'prepend)
     (set-fontset-font fontset #x2630 nerd-font for-all-frames 'prepend)
@@ -197,51 +197,57 @@ As of Emacs 30.2, they all start with `mathematical-'."
     ;; U+F0000 to U+FFFFD is Supplementary Private Use Area-A
     (set-fontset-font fontset '(#xF0000 . #xFFFFD) nerd-font for-all-frames 'prepend)))
 
+;; Create a new fontset for face `variable-pitch'.
+(new-fontset "-*-*-*-*-*-*-*-*-*-*-*-*-fontset-proportional" '())
+(my/configure-noto-font "fontset-proportional")
+(my/configure-nerd-font "fontset-proportional")
+
 (my/configure-noto-font "fontset-default")
+(let* ((for-all-frames nil)
+       (jetbrains-mono (font-spec :family "JetBrains Mono NL"))
+       (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK"))
+       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP"))
+       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR"))
+       (julia-mono (font-spec :family "JuliaMono"))
+       (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC")))
+  (set-fontset-font "fontset-default" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'cjk-misc                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'kana                     noto-sans-mono-cjk-jp  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'bopomofo                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'kanbun                   noto-sans-mono-cjk-jp  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'han                      noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'symbol                   julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'braille                  julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'kaktovik-numeral         julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'tai-xuan-jing-symbol     julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'counting-rod-numeral     julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'domino-tile              julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'chess-symbol             julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-default" 'mahjong-tile             lxgw-wenkai-mono-tc    for-all-frames 'prepend))
 (my/configure-nerd-font "fontset-default")
 
-;; Create a new fontset "fontset-monospace" to be used by the face `default'.
-(new-fontset "-*-*-*-*-*-*-*-*-*-*-*-*-fontset-monospace" '())
-(let* ((for-all-frames nil)
-       (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13))
-       (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK" :weight 'regular :size 13))
-       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP" :weight 'regular :size 13))
-       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR" :weight 'regular :size 13))
-       (julia-mono (font-spec :family "JuliaMono" :weight 'regular :size 13))
-       (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC" :weight 'light :size 13)))
-  ;; Use JetBrains Mono.
-  (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'kana                     noto-sans-mono-cjk-jp  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'bopomofo                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'kanbun                   noto-sans-mono-cjk-jp  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'han                      noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'symbol                   julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'braille                  julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'kaktovik-numeral         julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'tai-xuan-jing-symbol     julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'counting-rod-numeral     julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'domino-tile              julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'chess-symbol             julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'mahjong-tile             lxgw-wenkai-mono-tc    for-all-frames 'prepend))
-
-;; Cause all frames to use the fontset "fontset-monospace" by default.
-;; This is necessary because calling `set-face-attribute' on face `default' only works for `latin'.
-;; I did not dig into why.
-(add-to-list 'default-frame-alist '(font . "fontset-monospace"))
 ;; Assign the faces to their fontsets.
 (let* ((for-all-frames nil))
   (set-face-attribute
    'default
    for-all-frames
-   :font "fontset-monospace"
-   :height 130)
+   :font "fontset-default"
+   ;; :fontset is an undocumented feature.
+   :fontset "fontset-default"
+   :height 130
+   ;; Emacs does not support per-font normal and bold weight selection.
+   ;; So we pick use the weight of the latin font as the main weight.
+   :weight 'light)
   (set-face-attribute
    'variable-pitch
    for-all-frames
-   :font "fontset-default"
-   :height 160))
+   :font "fontset-proportional"
+   ;; :fontset is an undocumented feature.
+   :fontset "fontset-proportional"
+   :height 160
+   :weight 'light))
 
 (provide 'init-font)
 ;;; init-font.el ends here
