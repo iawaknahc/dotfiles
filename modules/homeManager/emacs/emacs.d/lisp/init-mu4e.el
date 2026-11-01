@@ -10,6 +10,9 @@
  mail-user-agent 'mu4e-user-agent
  ;; This configures the command that the menu item Tools -> Read Mail executes.
  read-mail-command #'mu4e
+ ;; Set `default-directory' in Gnus buffers.
+ ;; So these buffers do not inherit `default-directory' from current buffer.
+ gnus-default-directory "~/Maildir/"
 
  ;; Teach mu4e to retrieve emails.
  mu4e-get-mail-command "mbsync --all"
@@ -169,6 +172,17 @@ Otherwise, bury the buffer."
                    (abbreviate-file-name path)))))
 
   (require 'init-mu4e-contexts))
+
+;; Set `default-directory' in mu4e buffers.
+;; So these buffers do not inherit `default-directory' from current buffer.
+(defun my/mu4e-set-default-directory ()
+  "Set `default-directory' to `gnus-default-directory'."
+  (setq default-directory gnus-default-directory))
+(add-hook 'mu4e-main-mode-hook #'my/mu4e-set-default-directory)
+(add-hook 'mu4e-view-mode-hook #'my/mu4e-set-default-directory)
+(add-hook 'mu4e-headers-mode-hook #'my/mu4e-set-default-directory)
+;; `mu4e-compose-mode' has `default-directory' set to `mu4e-attachment-dir'.
+;; See https://github.com/emacsmirror/mu4e/blob/v1.14.4/mu4e/mu4e-draft.el#L671
 
 ;; Start mu4e in background so that the update timer starts
 ;; running along with Emacs.
