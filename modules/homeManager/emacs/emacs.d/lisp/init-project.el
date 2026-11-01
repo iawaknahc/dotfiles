@@ -6,18 +6,18 @@
 (with-eval-after-load 'project
   (keymap-set project-prefix-map "g" #'my/lgrep-project)
   (keymap-set project-prefix-map "m" #'ghostel-project)
-  (keymap-set project-prefix-map "M" #'ghostel-project-list-buffers)
+  (keymap-set project-prefix-map "M" #'ghostel-project-new)
   (keymap-set project-prefix-map "v" #'magit-project-status)
   (keymap-set project-prefix-map "V" #'project-vc-dir)
+  ;; Commands that I want to run on project A while I am at project B.
   (setq
    project-switch-commands
-   '((ghostel-project-list-buffers "Ghostel buffers")
-     (ghostel-project "Ghostel")
+   '((ghostel-project "Ghostel")
+     (ghostel-project-new "New Ghostel")
      (project-find-file "Find file")
      (project-find-dir "Find directory")
      (my/lgrep-project "Grep")
      (magit-project-status "Magit")
-     (project-vc-dir "VC-Dir")
      ;; project-any-command was omitted.
      ;; I haven't figured the use case of it.
      )))
