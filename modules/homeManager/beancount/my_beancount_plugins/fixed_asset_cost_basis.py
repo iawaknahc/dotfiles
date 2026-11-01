@@ -194,7 +194,7 @@ def plugin(
                                             "",
                                             0,
                                             {
-                                                "is_cash_flow": True,
+                                                "xirr_cash_flow": True,
                                             },
                                         ),
                                     ),
