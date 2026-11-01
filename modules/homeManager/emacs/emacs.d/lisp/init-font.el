@@ -180,24 +180,6 @@ As of Emacs 30.2, they all start with `mathematical-'."
     (dolist (entry my/noto-font-mapping)
       (set-fontset-font fontset (car entry) (font-spec :family (cdr entry) :weight 'regular) for-all-frames 'prepend))))
 
-(defun my/configure-julia-mono (fontset)
-  "Configure FONTSET so that JuliaMono is used for symbols."
-  (let* ((for-all-frames nil))
-    (dolist (chars '(symbol
-                     braille
-                     kaktovik-numeral
-                     tai-xuan-jing-symbol
-                     counting-rod-numeral
-                     domino-tile
-                     chess-symbol))
-      (set-fontset-font fontset chars (font-spec :family "JuliaMono" :weight 'regular) for-all-frames 'prepend))))
-
-(defun my/configure-fairfax-hd (fontset)
-  "Configure FONTSET so that Fairfax HD is used for symbols."
-  (let* ((for-all-frames nil))
-    (dolist (chars '(mahjong-tile))
-      (set-fontset-font fontset chars (font-spec :family "Fairfax HD" :weight 'medium) for-all-frames 'prepend))))
-
 (defun my/configure-nerd-font (fontset)
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
   (let* ((for-all-frames nil)
@@ -216,8 +198,6 @@ As of Emacs 30.2, they all start with `mathematical-'."
     (set-fontset-font fontset '(#xF0000 . #xFFFFD) nerd-font for-all-frames 'prepend)))
 
 (my/configure-noto-font "fontset-default")
-(my/configure-fairfax-hd "fontset-default")
-(my/configure-julia-mono "fontset-default")
 (my/configure-nerd-font "fontset-default")
 
 ;; Create a new fontset "fontset-monospace" to be used by the face `default'.
@@ -226,7 +206,9 @@ As of Emacs 30.2, they all start with `mathematical-'."
        (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13))
        (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK" :weight 'regular :size 13))
        (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP" :weight 'regular :size 13))
-       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR" :weight 'regular :size 13)))
+       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR" :weight 'regular :size 13))
+       (julia-mono (font-spec :family "JuliaMono" :weight 'regular :size 13))
+       (fairfax-hd (font-spec :family "Fairfax HD" :weight 'medium :size 13)))
   ;; Use JetBrains Mono.
   (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
@@ -234,7 +216,15 @@ As of Emacs 30.2, they all start with `mathematical-'."
   (set-fontset-font "fontset-monospace" 'bopomofo                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'kanbun                   noto-sans-mono-cjk-jp  for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'han                      noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend))
+  (set-fontset-font "fontset-monospace" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'symbol                   julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'braille                  julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'kaktovik-numeral         julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'tai-xuan-jing-symbol     julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'counting-rod-numeral     julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'domino-tile              julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'chess-symbol             julia-mono             for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'mahjong-tile             fairfax-hd             for-all-frames 'prepend))
 
 ;; Cause all frames to use the fontset "fontset-monospace" by default.
 ;; This is necessary because calling `set-face-attribute' on face `default' only works for `latin'.
