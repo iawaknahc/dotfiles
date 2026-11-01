@@ -86,8 +86,13 @@ Point is placed at the end of the output."
  ghostel-macos-login-shell nil
  ghostel-shell (list "~/.nix-profile/bin/fish" "--login" "--interactive")
 
- ;; Name buffer by `default-directory'.
- ghostel-buffer-name-function #'ghostel-buffer-name-by-directory
+ ;; Name buffer by title reported by the shell.
+ ;; The default implementation of fish shell is fish_title.
+ ;; 1. When there is an SSH connection, the remote host is returned.
+ ;; 2. When there is running command, the running command and the working directory are returned.
+ ;; 3. Otherwise the working directory is returned.
+ ;; See https://github.com/fish-shell/fish-shell/blob/4.9.3/share/functions/fish_title.fish#L1
+ ghostel-buffer-name-function #'ghostel-buffer-name-by-title
  ;; Just show the buffer name.
  ghostel-buffer-identification-format "%b")
 
