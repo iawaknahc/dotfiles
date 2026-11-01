@@ -1,24 +1,9 @@
 ;;; init-project.el --- init-project.el -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
-;; The default implementation of project-buffers looks at `default-directory' of the buffer.
-;; If the value of `default-directory' matches `project-root', then it is considered as a project buffer.
-;; This behavior is not desirable because when we hit C-x C-b the buffer list inherits the default-directory of the current buffer.
-;; This makes the buffer list a project buffer of the current project.
-;;
-;; Given that special buffers like the buffer list, scratch has no file associated with them,
-;; a simple heuristic is to also check buffer-file-name of the buffer.
-;;
 ;;; Code:
 
-(defun my/project-buffers-filter-return (buffers)
-  "An :filter-return advice to `project-buffers'.
-It calls function `buffer-file-name' for each buffer in BUFFERS,
-and ensures it is non-nil."
-  (seq-filter (lambda (b) (buffer-file-name b)) buffers))
-
 (with-eval-after-load 'project
-  (advice-add 'project-buffers :filter-return #'my/project-buffers-filter-return)
   (keymap-set project-prefix-map "g" #'my/lgrep-project)
   (keymap-set project-prefix-map "m" #'ghostel-project)
   (keymap-set project-prefix-map "M" #'ghostel-project-list-buffers)
@@ -50,6 +35,10 @@ PROJECT and FILES-ONLY are treated the same as in `project-list-buffers-ibuffer'
                            (project-buffers ',project)))))))
 
 (setq
+ ;; The default implementation of `project-buffers' uses `default-directory' to
+ ;; determine whether a buffer belongs to a project.
+ ;; Non-file-visiting buffers like Ibuffer inherit `default-directory' from current buffer.
+ ;; Use C-u C-x p C-b to list only file-visiting buffers.
  project-buffers-viewer #'my/project-list-buffers-ibuffer)
 
 (provide 'init-project)

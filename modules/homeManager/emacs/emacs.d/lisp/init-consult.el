@@ -1,9 +1,6 @@
 ;;; init-consult.el --- init-consult.el -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
-;; The :items of `consult-source-project-buffer' is replaced by
-;; a version to use `project-buffers'.
-;;
 ;;; Code:
 
 ;; C-x b
@@ -20,20 +17,6 @@
 (keymap-global-set "<remap> <project-switch-to-buffer>" #'consult-project-buffer)
 ;; M-g i
 (keymap-global-set "<remap> <imenu>" #'consult-imenu)
-
-(defun my/consult-source-project-buffer-items-around (f &rest args)
-  "The :around of my/consult-source-project-buffer-items.
-Dynamically bind `consult-buffer-list-function' to use `project-buffers'.
-`apply' F with ARGS as usual."
-  (let ((consult-buffer-list-function (lambda () (project-buffers (project-current)))))
-    (apply f args)))
-
-(with-eval-after-load 'consult
-  (unless (fboundp #'my/consult-source-project-buffer-items)
-    (let ((f (plist-get consult-source-project-buffer :items)))
-      (defalias 'my/consult-source-project-buffer-items f)
-      (advice-add 'my/consult-source-project-buffer-items :around #'my/consult-source-project-buffer-items-around)
-      (plist-put consult-source-project-buffer :items #'my/consult-source-project-buffer-items))))
 
 (provide 'init-consult)
 ;;; init-consult.el ends here
