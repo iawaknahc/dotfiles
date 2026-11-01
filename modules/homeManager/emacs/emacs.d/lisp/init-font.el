@@ -223,9 +223,18 @@ As of Emacs 30.2, they all start with `mathematical-'."
 ;; Create a new fontset "fontset-monospace" to be used by the face `default'.
 (new-fontset "-*-*-*-*-*-*-*-*-*-*-*-*-fontset-monospace" '())
 (let* ((for-all-frames nil)
-       (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13)))
+       (jetbrains-mono (font-spec :family "JetBrains Mono NL" :weight 'light :size 13))
+       (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK" :weight 'regular :size 13))
+       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP" :weight 'regular :size 13))
+       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR" :weight 'regular :size 13)))
   ;; Use JetBrains Mono.
-  (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff) jetbrains-mono for-all-frames 'prepend))
+  (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'kana                     noto-sans-mono-cjk-jp  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'bopomofo                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'kanbun                   noto-sans-mono-cjk-jp  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'han                      noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (set-fontset-font "fontset-monospace" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend))
 
 ;; Cause all frames to use the fontset "fontset-monospace" by default.
 ;; This is necessary because calling `set-face-attribute' on face `default' only works for `latin'.
