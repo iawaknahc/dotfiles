@@ -24,6 +24,9 @@
     # This font has monospace and mahjong tiles coverage.
     # https://github.com/lxgw/lxgwwenkaitc
     lxgw-wenkai-tc
+    # This font has very high CJK coverage.
+    # https://kamichikoichi.github.io/jigmo/
+    jigmo
 
     # Fonts by Google.
     # This package contains a lot of fonts.
