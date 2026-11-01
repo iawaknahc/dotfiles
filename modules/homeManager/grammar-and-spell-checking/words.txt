@@ -113,6 +113,7 @@ dotimes
 dtstart
 dtz
 duckdb
+dvisvgm
 dwim
 ecard
 ecards

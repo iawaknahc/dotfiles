@@ -135,6 +135,7 @@ _: {
     ./jupyter.nix
     ./pdf.nix
     ./yt-dlp.nix
+    ./texlive.nix
 
     # Plaintext accounting
     ./beancount

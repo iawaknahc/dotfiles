@@ -316,5 +316,10 @@ timestamp sort just before it, after all dated events."
        (set-mark (point-max))
        (org-sort-entries nil ?f #'my/org-event--sort-key #'<)))))
 
+;;;; Latex
+(setq
+ org-preview-latex-default-process 'dvisvgm
+ org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
+
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
