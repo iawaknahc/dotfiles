@@ -208,7 +208,7 @@ As of Emacs 30.2, they all start with `mathematical-'."
        (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP" :weight 'regular :size 13))
        (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR" :weight 'regular :size 13))
        (julia-mono (font-spec :family "JuliaMono" :weight 'regular :size 13))
-       (fairfax-hd (font-spec :family "Fairfax HD" :weight 'medium :size 13)))
+       (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC" :weight 'light :size 13)))
   ;; Use JetBrains Mono.
   (set-fontset-font "fontset-monospace" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
@@ -224,7 +224,7 @@ As of Emacs 30.2, they all start with `mathematical-'."
   (set-fontset-font "fontset-monospace" 'counting-rod-numeral     julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'domino-tile              julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-monospace" 'chess-symbol             julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-monospace" 'mahjong-tile             fairfax-hd             for-all-frames 'prepend))
+  (set-fontset-font "fontset-monospace" 'mahjong-tile             lxgw-wenkai-mono-tc    for-all-frames 'prepend))
 
 ;; Cause all frames to use the fontset "fontset-monospace" by default.
 ;; This is necessary because calling `set-face-attribute' on face `default' only works for `latin'.

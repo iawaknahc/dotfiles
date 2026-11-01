@@ -21,8 +21,9 @@
 
     # JuliaMono contains a lot of glyphs for symbols.
     julia-mono
-    # Fairfax fills the gap of JuliaMono.
-    fairfax-hd
+    # This font has monospace and mahjong tiles coverage.
+    # https://github.com/lxgw/lxgwwenkaitc
+    lxgw-wenkai-tc
 
     # Fonts by Google.
     # This package contains a lot of fonts.
