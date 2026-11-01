@@ -124,6 +124,7 @@
 (require 'init-thingatpt)
 (require 'init-world-clock-mode)
 (require 'init-editorconfig-mode)
+(require 'init-goto-address-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
