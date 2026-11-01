@@ -164,7 +164,9 @@
                                  (adlam . "Noto Sans Adlam")
                                  (indic-siyaq-number . "Noto Sans Indic Siyaq Numbers")
                                  (ottoman-siyaq-number . "Noto Serif Ottoman Siyaq")
-                                 (mahjong-tile . "Noto Sans Symbols 2")
+                                 ;; This range is `mahjong-tile'.
+                                 ;; See another comment in this file for details.
+                                 ((#x1F000 . #x1F02F) . "Noto Sans Symbols 2")
                                  (domino-tile . "Noto Sans Symbols 2")
                                  (chess-symbol . "Noto Sans Symbols 2")))
 
@@ -231,7 +233,13 @@ As of Emacs 30.2, they all start with `mathematical-'."
   (set-fontset-font "fontset-default" 'counting-rod-numeral     julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'domino-tile              julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'chess-symbol             julia-mono             for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'mahjong-tile             lxgw-wenkai-mono-tc    for-all-frames 'prepend))
+  ;; We use explicit range instead of `mahjong-tile' because U+1F004 (紅中) is considered as `emoji' by Emacs.
+  ;; Without the explicit range, Emacs will a font for `emoji'.
+  ;; For some reason, when the emoji font is picked, the codepoint sequence U+1F004 U+FE0E (text-style) is always
+  ;; displayed as an emoji even the text-style variant selector is after the codepoint.
+  ;; However, if U+1F004 is classified as a `mahjong-tile' in the first place,
+  ;; The codepoint sequence U+1F004 U+FE0F (emoji-style) will be displayed as an emoji.
+  (set-fontset-font "fontset-default" '(#x1F000 . #x1F02F)      lxgw-wenkai-mono-tc    for-all-frames 'prepend))
 (my/configure-nerd-font "fontset-default")
 
 ;; Assign the faces to their fontsets.
