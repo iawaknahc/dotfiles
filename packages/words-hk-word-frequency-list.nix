@@ -23,13 +23,12 @@ stdenvNoCC.mkDerivation {
   buildPhase = ''
     runHook preBuild
     tail -n +2 <$src >./words-hk-word-frequency-list.csv
-    tr ',' "\t" <./words-hk-word-frequency-list.csv >./words-hk-word-frequency-list.tsv
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/words-hk-word-frequency-list
-    cp ./words-hk-word-frequency-list.* $out/share/words-hk-word-frequency-list/
+    cp ./words-hk-word-frequency-list.csv $out/share/words-hk-word-frequency-list/
     runHook postInstall
   '';
 }
