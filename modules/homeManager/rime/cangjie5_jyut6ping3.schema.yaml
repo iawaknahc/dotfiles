@@ -17,7 +17,7 @@ switches:
   states: ["關閉預測", "開啓預測"]
   reset: 1
 - name: extended_charset
-  states: ["常用漢字", "擴展漢字"]
+  states: ["常用香港字", "所有漢字"]
   reset: 0
 
 engine:
@@ -43,11 +43,12 @@ engine:
   - lua_translator@numeral_translator
   - predict_translator
   filters:
+  - lua_filter@prediction_preedit_filter
+  - lua_filter@unicode_cjk_extension_filter
   - simplifier
   - uniquifier
   - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
   - reverse_lookup_filter@reverse_lookup_filter_cangjie5
-  - lua_filter@prediction_preedit_filter
 
 speller:
   alphabet: abcdefghijklmnopqrstuvwxyz
@@ -66,9 +67,8 @@ abc_segmentor:
   - translator_jyut6ping3
 
 translator:
-  enable_charset_filter: true
   tag: translator_cangjie5
-  dictionary: cangjie5_char
+  dictionary: cangjie5_hk
   prism: cangjie5_jyut6ping3
   preedit_format:
   - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符|"
@@ -99,7 +99,7 @@ reverse_lookup_filter_jyut6ping3:
 reverse_lookup_filter_cangjie5:
   tags:
   - translator_jyut6ping3
-  dictionary: cangjie5_char
+  dictionary: cangjie5_hk
   comment_format:
   - "xlit|abcdefghijklmnopqrstuvwxyz~|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符～|"
   append_comment: true

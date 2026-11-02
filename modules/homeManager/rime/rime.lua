@@ -1,5 +1,7 @@
 local json = require("json")
 local numeral = require("my_numeral")
+--- @type { common_in_hong_kong: string[], unicode_cjk_extension_ranges: [integer, integer][] }
+local unicode_cjk_extension_filter_data = require("unicode_cjk_extension_filter_data")
 
 ---@param str string
 ---@param prefix string
@@ -179,5 +181,52 @@ function prediction_preedit_filter(input)
       candidate.preedit = "_"
     end
     yield(candidate)
+  end
+end
+
+---@param text string
+---@return boolean
+local function is_in_unicode_cjk_extension(text)
+  for _, codepoint in utf8.codes(text) do
+    for _, r in ipairs(unicode_cjk_extension_filter_data.unicode_cjk_extension_ranges) do
+      local lower = r[1]
+      local upper = r[2]
+      if codepoint >= lower and codepoint <= upper then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+---@param text string
+---@return boolean
+local function is_common_in_hong_kong(text)
+  for _, codepoint in utf8.codes(text) do
+    local str = utf8.char(codepoint)
+    for _, s in ipairs(unicode_cjk_extension_filter_data.common_in_hong_kong) do
+      if s == str then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+---@param input Translation
+---@param env Env
+function unicode_cjk_extension_filter(input, env)
+  local extended_charset = env.engine.context:get_option("extended_charset")
+  for candidate in input:iter() do
+    -- Always allow the Unicode translator to output anything.
+    if candidate.type == "unicode" then
+      yield(candidate)
+    elseif extended_charset then
+      yield(candidate)
+    elseif not is_in_unicode_cjk_extension(candidate.text) then
+      yield(candidate)
+    elseif is_common_in_hong_kong(candidate.text) then
+      yield(candidate)
+    end
   end
 end

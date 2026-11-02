@@ -23,6 +23,25 @@ let
       runHook postInstall
     '';
   };
+  rime-unicode-cjk-extension-filter-lua = pkgs.stdenvNoCC.mkDerivation {
+    pname = "rime-unicode-cjk-extension-filter-lua";
+    version = pkgs.words-hk-character-frequency-list.version;
+    src = pkgs.words-hk-character-frequency-list;
+    nativeBuildInputs = [
+      pkgs.python3
+    ];
+    buildPhase = ''
+      runHook preBuild
+      python3 ${../my-scripts/bin/rime-unicode-cjk-extension-filter-prepare.py} <$src/share/words-hk-character-frequency-list/words-hk-character-frequency-list.csv >./rime_unicode_cjk_extension_filter.lua
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/rime-unicode-cjk-extension-filter-lua
+      cp ./rime_unicode_cjk_extension_filter.lua $out/share/rime-unicode-cjk-extension-filter-lua/
+      runHook postInstall
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
@@ -35,6 +54,7 @@ in
     words-hk-word-frequency-list
     words-hk-character-frequency-list
     predict-db
+    rime-unicode-cjk-extension-filter-lua
     cangjie5-rime
   ];
 
@@ -74,4 +94,6 @@ in
     source = ./lua;
     recursive = true;
   };
+  home.file."${rimeUserDirectory}/lua/unicode_cjk_extension_filter_data.lua".source =
+    "${rime-unicode-cjk-extension-filter-lua}/share/rime-unicode-cjk-extension-filter-lua/rime_unicode_cjk_extension_filter.lua";
 }
