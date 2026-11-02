@@ -23,6 +23,8 @@ let
   librime-predict = { callPackage }: callPackage ../../packages/librime-predict.nix { };
   rime-cangjie = { callPackage }: callPackage ../../packages/rime-cangjie.nix { };
   rime-cantonese = { callPackage }: callPackage ../../packages/rime-cantonese.nix { };
+  words-hk-word-frequency-list =
+    { callPackage }: callPackage ../../packages/words-hk-word-frequency-list.nix { };
 
   busted-typedef = { callPackage }: callPackage ../../packages/busted-typedef.nix { };
   luassert-typedef = { callPackage }: callPackage ../../packages/luassert-typedef.nix { };
@@ -65,6 +67,7 @@ in
         librime-predict = librime-predict { callPackage = pkgs.callPackage; };
         rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
         rime-cantonese = rime-cantonese { callPackage = pkgs.callPackage; };
+        words-hk-word-frequency-list = words-hk-word-frequency-list { callPackage = pkgs.callPackage; };
 
         busted-typedef = busted-typedef { callPackage = pkgs.callPackage; };
         luassert-typedef = luassert-typedef { callPackage = pkgs.callPackage; };
@@ -146,6 +149,7 @@ in
         librime-predict = config.packages.librime-predict;
         rime-cangjie = config.packages.rime-cangjie;
         rime-cantonese = config.packages.rime-cantonese;
+        words-hk-word-frequency-list = config.packages.words-hk-word-frequency-list;
         librime-octagram = (
           prev.librime-octagram.overrideAttrs (prev: {
             # Patch CMakeLists.txt to install the built executable.
