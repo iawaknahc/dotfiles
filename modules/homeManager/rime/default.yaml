@@ -19,6 +19,11 @@ key_binder:
   - {accept: "Control+g", send: Escape, when: composing}
   - {accept: "Control+n", send: Down, when: has_menu}
   - {accept: "Control+p", send: Up, when: has_menu}
+  # The default is Control+Shift+Return.
+  # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/editor.cc#L212
+  # But it is not effective in Firefox.app.
+  # Tested Control+e works fine in Firefox.app and Emacs.app.
+  - {accept: "Control+e", send: "Control+Shift+Return", when: has_menu}
 
 # Many schemas are written as
 #
