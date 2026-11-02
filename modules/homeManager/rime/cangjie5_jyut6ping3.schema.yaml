@@ -46,7 +46,9 @@ engine:
   - lua_filter@prediction_preedit_filter
   - lua_filter@unicode_cjk_extension_filter
   - simplifier
-  - uniquifier
+  # numeral_translator output the same candidate with different comments very often.
+  # To avoid confusion, we no longer remove duplicates in candidates.
+  #- uniquifier
   - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
   - reverse_lookup_filter@reverse_lookup_filter_cangjie5
 
