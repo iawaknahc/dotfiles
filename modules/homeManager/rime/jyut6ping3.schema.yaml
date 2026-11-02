@@ -37,17 +37,13 @@ speller:
   alphabet: abcdefghijklmnopqrstuvwxyz
   delimiter: " "
   algebra:
-  # 將碼表中的編碼複製一份，然後將數字刪去。
-  # 由於只有粵拼的編碼有數字，所以此行作用為忽略聲調。
   - derive/\d//
-  # 然後，將碼表中有數字的編碼更換成英文字。
-  # 原因是數字會和選字鍵相衝。
-  - xform/1/v/                  # 陰平
-  - xform/4/vv/                 # 陽平
-  - xform/2/x/                  # 陰上
-  - xform/5/xx/                 # 陽上
-  - xform/3/q/                  # 陰去
-  - xform/6/qq/                 # 陽去
+  - xform/1/v/
+  - xform/4/vv/
+  - xform/2/x/
+  - xform/5/xx/
+  - xform/3/q/
+  - xform/6/qq/
 
 abc_segmentor:
   extra_tags:
@@ -58,7 +54,6 @@ translator:
   dictionary: jyut6ping3
   prism: jyut6ping3
   preedit_format:
-  # 最後，在顯示時，還原聲調。
   - xform/([aeiouymngptk])vv/${1}4/
   - xform/([aeiouymngptk])xx/${1}5/
   - xform/([aeiouymngptk])qq/${1}6/

@@ -2,33 +2,6 @@ config_version: 0.50
 
 switcher:
   abbreviate_options: false
-  # When the following conditions hold:
-  # 1. fold_options is false
-  # 2. There are two schemas, namely schema_1, and schema_2.
-  # 3. There are two switches, namely a toggle option named simplification, and a radio group with option1, option2, option3.
-  # The switcher displays a menu like this
-  # 1. schema_1
-  #    Selecting this switches to this schema.
-  # 2. simplification
-  #    Selecting this toggles the toggle option simplification.
-  # 3. option1
-  # 4. option2
-  # 5. option3
-  # 6. schema_2
-  #    Selecting this switches to this schema.
-  #
-  # When the following conditions hold:
-  # 1. fold_options is true
-  # 2. There are two schemas, namely schema_1, and schema_2.
-  # 3. There are two switches, namely a toggle option named simplification, and a radio group with option1, option2, option3.
-  # The switcher displays a menu like this
-  # 1. schema_1
-  #    Selecting this switches to this schema.
-  # 2. 繁/option1
-  #    Selecting this expands the menu. See below.
-  # 3. schema_2
-  #    Selecting this switches to this schema.
-  # When 2 is selected, the switcher displays a menu as if fold_options is false.
   fold_options: true
   caption: "〔方案選單〕"
   hotkeys:
@@ -56,14 +29,6 @@ key_binder:
 recognizer:
   patterns: {}
 
-# In my testing, when the toggle option full_shape is 0,
-# half_shape is used, and the value is respected.
-# That means if we specify a half width character, then it will be committed.
-#
-# When the toggle option full_shape is 1,
-# full_shape is used.
-# But in my observation, the value is not respected.
-# In particular, if we specify a half width character, then it will be converted to its full width equivalent.
 punctuator:
   full_shape:
     " ": "　"
