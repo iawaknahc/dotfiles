@@ -9,6 +9,7 @@ in
     luassert-typedef
     rime-cangjie
     rime-cantonese
+    librime
   ];
 
   home.file."${rimeUserDirectory}/cangjie5.base.dict.yaml".source =
