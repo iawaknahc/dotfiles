@@ -12,11 +12,13 @@ switches:
   reset: 0
 - name: simplification
   states: ["繁", "简"]
-  abbrev: ["繁", "简"]
   reset: 0
 - name: prediction
   states: ["關閉預測", "開啓預測"]
   reset: 1
+- name: extended_charset
+  states: ["常用漢字", "擴展漢字"]
+  reset: 0
 
 engine:
   processors:
