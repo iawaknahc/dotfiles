@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
   # This package does not built itself.
   # This package is supposed to be built along with librime.
   # So the only thing to do in install phase is to copy the source files.
-  # This handling is taken from the existing packaged librime plugin librime-octagram.
+  # This handling is taken from the existing packaged librime plug-in librime-octagram.
   # See https://github.com/NixOS/nixpkgs/blob/nixos-26.05/pkgs/by-name/li/librime-octagram/package.nix#L19
   installPhase = ''
     runHook preInstall

@@ -34,6 +34,9 @@ switches:
   # Like radio group in general sense, only one option is selected at a time.
 - options: ["option1", "option2", "option3"]
   states: ["option1", "option2", "option3"]
+- name: prediction
+  states: ["關閉預測", "開啓預測"]
+  reset: 1
 
 # engine defines the pipeline of the schema.
 # It has four types of components.
@@ -83,6 +86,9 @@ engine:
   # The key of patterns is the name of the tag assigned to the segment if regexp matches.
   # regexp is a regular expression in Perl flavor.
   - recognizer
+
+  - predictor
+
   # key_binder handle defined key bindings.
   # It reads configuration rooted at "key_binder".
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/key_binder.cc#L305
@@ -237,6 +243,7 @@ engine:
   - script_translator@translator_jyut6ping3
   - lua_translator@unicode_translator
   - lua_translator@numeral_translator
+  - predict_translator
   filters:
   # simplifier reads configuration rooted at "simplifier"
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/simplifier.cc#L172
@@ -253,6 +260,7 @@ engine:
   # reverse lookup the candidate in another dictionary.
   - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
   - reverse_lookup_filter@reverse_lookup_filter_cangjie5
+  - lua_filter@prediction_preedit_filter
 
 speller:
   alphabet: abcdefghijklmnopqrstuvwxyz
@@ -328,3 +336,8 @@ recognizer:
   patterns:
     unicode: "^U.*$"
     numeral: "^D.*$"
+
+predictor:
+  db: predict.db
+  max_candidates: 0
+  max_iterations: 1

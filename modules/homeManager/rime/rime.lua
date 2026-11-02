@@ -151,3 +151,33 @@ function numeral_translator(input, segment)
     yield(Candidate("numeral", segment.start, segment._end, result.candidate, result.comment))
   end
 end
+
+-- This filter is an important UX improvement for librime-predict.
+-- Without this filter, the candidates populated by librime-predict has no preedit.
+-- After committing a candidate, the prediction menu is shown automatically.
+-- But without preedit, the underlying application will not consider the input method is doing its job.
+-- Key events such as C-n will select the next candidate in the prediction menu AND be handled by the application.
+-- This will result in a mess.
+--
+-- What this filter does is very simple,
+-- when the candidate is a prediction candidate,
+-- set the preedit to a non-empty string.
+-- This will cause Rime appear to the application that it is composing.
+--
+-- It is not a good idea to set preedit to candidate.text,
+-- as you will see the first prediction candidate being filled in the application.
+--
+-- I also tried setting preedit to U+200B (ZERO WIDTH SPACE).
+-- But that will cause the prediction menu to be misplaced by the application.
+--
+-- So we need a character that is printable and non-intrusive.
+-- The underscore character is a good choice here.
+---@param input Translation
+function prediction_preedit_filter(input)
+  for candidate in input:iter() do
+    if candidate.type == "prediction" then
+      candidate.preedit = "_"
+    end
+    yield(candidate)
+  end
+end

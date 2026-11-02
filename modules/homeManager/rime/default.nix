@@ -1,6 +1,28 @@
 { pkgs, ... }:
 let
   rimeUserDirectory = "Library/Rime";
+  predict-db = pkgs.stdenvNoCC.mkDerivation {
+    pname = "rime-predict-db-words-hk-word-frequency-list";
+    version = pkgs.words-hk-word-frequency-list.version;
+    src = pkgs.words-hk-word-frequency-list;
+    nativeBuildInputs = [
+      pkgs.python3
+      pkgs.librime
+    ];
+    buildPhase = ''
+      runHook preBuild
+      python3 ${../my-scripts/bin/rime-predict-prepare-words-hk.py} <$src/share/words-hk-word-frequency-list/words-hk-word-frequency-list.csv >./predict.tsv
+      rime_build_predict <./predict.tsv
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/rime-predict-db-words-hk-word-frequency-list
+      cp ./predict.tsv $out/share/rime-predict-db-words-hk-word-frequency-list/
+      cp ./predict.db $out/share/rime-predict-db-words-hk-word-frequency-list/
+      runHook postInstall
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
@@ -10,6 +32,8 @@ in
     rime-cangjie
     rime-cantonese
     librime
+    words-hk-word-frequency-list
+    predict-db
   ];
 
   home.file."${rimeUserDirectory}/cangjie5.base.dict.yaml".source =
@@ -31,6 +55,9 @@ in
     "${pkgs.rime-cantonese}/share/rime-cantonese/jyut6ping3.maps.dict.yaml";
   home.file."${rimeUserDirectory}/jyut6ping3.dict.yaml".source =
     "${pkgs.rime-cantonese}/share/rime-cantonese/jyut6ping3.dict.yaml";
+
+  home.file."${rimeUserDirectory}/predict.db".source =
+    "${predict-db}/share/rime-predict-db-words-hk-word-frequency-list/predict.db";
 
   home.file."${rimeUserDirectory}/default.yaml".source = ./default.yaml;
   home.file."${rimeUserDirectory}/squirrel.custom.yaml".source = ./squirrel.custom.yaml;
