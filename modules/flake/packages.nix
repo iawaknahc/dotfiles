@@ -146,6 +146,14 @@ in
         librime-predict = config.packages.librime-predict;
         rime-cangjie = config.packages.rime-cangjie;
         rime-cantonese = config.packages.rime-cantonese;
+        librime-octagram = (
+          prev.librime-octagram.overrideAttrs (prev: {
+            # Patch CMakeLists.txt to install the built executable.
+            postPatch = (prev.postPatch or "") + ''
+              printf 'install(TARGETS build_grammar DESTINATION ''${BIN_INSTALL_DIR})\n' >> ./tools/CMakeLists.txt
+            '';
+          })
+        );
         librime = (
           (prev.librime.override {
             plugins = [
@@ -156,6 +164,7 @@ in
           }).overrideAttrs
             (prev: {
               postInstall = (prev.postInstall or "") + ''
+                mv $out/bin/build_grammar $out/bin/rime_build_grammar
                 mv $out/bin/build_predict $out/bin/rime_build_predict
               '';
             })
