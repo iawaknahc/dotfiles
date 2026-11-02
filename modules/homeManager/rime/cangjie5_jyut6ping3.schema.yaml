@@ -1,5 +1,6 @@
 schema:
   schema_id: cangjie5_jyut6ping3
+  name: "五代倉頡 粵拼"
   version: "2026.08.31"
   dependencies:
   # Must include this line to refer to jyut6ping3.schema.yaml
