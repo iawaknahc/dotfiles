@@ -25,6 +25,8 @@ let
   rime-cantonese = { callPackage }: callPackage ../../packages/rime-cantonese.nix { };
   words-hk-word-frequency-list =
     { callPackage }: callPackage ../../packages/words-hk-word-frequency-list.nix { };
+  words-hk-character-frequency-list =
+    { callPackage }: callPackage ../../packages/words-hk-character-frequency-list.nix { };
   cangjie5-rime = { callPackage }: callPackage ../../packages/cangjie5-rime.nix { };
 
   busted-typedef = { callPackage }: callPackage ../../packages/busted-typedef.nix { };
@@ -69,6 +71,9 @@ in
         rime-cangjie = rime-cangjie { callPackage = pkgs.callPackage; };
         rime-cantonese = rime-cantonese { callPackage = pkgs.callPackage; };
         words-hk-word-frequency-list = words-hk-word-frequency-list { callPackage = pkgs.callPackage; };
+        words-hk-character-frequency-list = words-hk-character-frequency-list {
+          callPackage = pkgs.callPackage;
+        };
         cangjie5-rime = cangjie5-rime { callPackage = pkgs.callPackage; };
 
         busted-typedef = busted-typedef { callPackage = pkgs.callPackage; };
@@ -152,6 +157,7 @@ in
         rime-cangjie = config.packages.rime-cangjie;
         rime-cantonese = config.packages.rime-cantonese;
         words-hk-word-frequency-list = config.packages.words-hk-word-frequency-list;
+        words-hk-character-frequency-list = config.packages.words-hk-character-frequency-list;
         cangjie5-rime = config.packages.cangjie5-rime;
         librime-octagram = (
           prev.librime-octagram.overrideAttrs (prev: {

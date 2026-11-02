@@ -33,6 +33,7 @@ in
     rime-cantonese
     librime
     words-hk-word-frequency-list
+    words-hk-character-frequency-list
     predict-db
     cangjie5-rime
   ];

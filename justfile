@@ -203,6 +203,7 @@ update-trivial-packages:
     nix-update librime-lua-typedef --flake --version branch=master
     nix-update librime-predict --flake --version branch=master
     nix-update words-hk-word-frequency-list --flake --version=2026-03-10
+    nix-update words-hk-character-frequency-list --flake --version=2026-03-10
     nix-update busted-typedef --flake --version branch=main
     nix-update luassert-typedef --flake --version branch=main
     nix-update rime-cangjie --flake --version branch=master
