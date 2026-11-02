@@ -48,7 +48,6 @@ in
     librime-lua-typedef
     busted-typedef
     luassert-typedef
-    rime-cangjie
     rime-cantonese
     librime
     words-hk-word-frequency-list
@@ -58,10 +57,6 @@ in
     cangjie5-rime
   ];
 
-  home.file."${rimeUserDirectory}/cangjie5.base.dict.yaml".source =
-    "${pkgs.rime-cangjie}/share/rime-cangjie/cangjie5.base.dict.yaml";
-  home.file."${rimeUserDirectory}/cangjie5_char.dict.yaml".source =
-    "${pkgs.rime-cangjie}/share/rime-cangjie/cangjie5_char.dict.yaml";
   home.file."${rimeUserDirectory}/cangjie5_hk.dict.yaml".source =
     "${pkgs.cangjie5-rime}/share/cangjie5-rime/cangjie5_hk.dict.yaml";
 
