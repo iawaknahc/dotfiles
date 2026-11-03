@@ -13,16 +13,16 @@
  ;; So we revert to use the default sort function.
  corfu-sort-override-function #'corfu-sort-length-alpha)
 
+(defun corfu-complete-or-tempel-next ()
+  "Invoke either `corfu-complete' or `tempel-next'.
+
+The name of this command must start with corfu-.
+See https://github.com/minad/corfu/blob/2.16/corfu.el#L1143"
+  (interactive)
+  (or (corfu-complete)
+      (and tempel--active (tempel-next 1))))
+
 (with-eval-after-load 'corfu
-  ;; By default, <TAB> is bound to `corfu-complete'.
-  ;; When no candidate is selected, `corfu-complete' calls `corfu-expand'.
-  ;; When no candidate is selected, `corfu-expand' expands the common prefix of all candidates.
-  ;; When a candidate is selected, `corfu-expand' calls `corfu-complete'.
-  ;; When a candidate is selected, `corfu-complete' calls `corfu-insert'.
-  ;; When a candidate is selected, `corfu-insert' inserts the candidate.
-  ;; Therefore, <TAB> does the following
-  ;; 1. When no candidate is selected, expands the common prefix of all candidates.
-  ;; 2. Otherwise, inserts the selected candidate.
   (keymap-unset corfu-map "<up>") ; <up> is an alias of C-p.
   (keymap-unset corfu-map "<down>") ; <down> is an alias of C-n.
   (keymap-unset corfu-map "M-n") ; M-n is an alias of C-n.
@@ -32,7 +32,24 @@
   (keymap-unset corfu-map "M-g") ; M-g is corfu-info-location, which I do not use.
   (keymap-unset corfu-map "M-h") ; M-g is corfu-info-documentation, which I do not use.
   (keymap-unset corfu-map "<remap> <move-beginning-of-line>")
-  (keymap-unset corfu-map "<remap> <move-end-of-line>"))
+  (keymap-unset corfu-map "<remap> <move-end-of-line>")
+  ;; By default, <TAB> is bound to `corfu-complete'.
+  ;; When no candidate is selected, `corfu-complete' calls `corfu-expand'.
+  ;; When no candidate is selected, `corfu-expand' expands the common prefix of all candidates.
+  ;; When a candidate is selected, `corfu-expand' calls `corfu-complete'.
+  ;; When a candidate is selected, `corfu-complete' calls `corfu-insert'.
+  ;; When a candidate is selected, `corfu-insert' inserts the candidate.
+  ;; `corfu-complete' return non-nil if it has done something noticeable.
+  ;;
+  ;; Therefore, <TAB> does the following
+  ;; 1. When no candidate is selected, expands the common prefix of all candidates.
+  ;;    If no common prefix can be expanded, nothing is done and nil is returned.
+  ;; 2. Otherwise, inserts the selected candidate.
+  ;;
+  ;; TAB is also bound in `tempel-map'.
+  ;; When no candidate is selected, and no common prefix can be expanded,
+  ;; I want to fall back to `tempel-next'.
+  (keymap-set corfu-map "TAB" #'corfu-complete-or-tempel-next))
 
 ;; Enable Corfu mode in minibuffer where completion-at-point-functions is set, and in all buffers.
 ;; Previously I just enabled it in text-mode and prog-mode.
