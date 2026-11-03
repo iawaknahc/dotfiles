@@ -11,18 +11,26 @@
 
 (defun my/calendar-date-to-org-timestamp (date)
   "Format calendar-gregorian DATE to a Org timestamp."
-  (let ((time (encode-time 0 0 0 (nth 1 date) (nth 0 date) (nth 2 date))))
-    (format-time-string "%Y-%m-%d %a" time)))
+  (let* ((time (encode-time (list 0 0 0
+                                  (calendar-extract-day date)
+                                  (calendar-extract-month date)
+                                  (calendar-extract-year date)
+                                  nil -1 t))))
+    (format-time-string "%Y-%m-%d %a" time t)))
 
 (defun my/calendar-date-to-bday (date)
   "Format calendar-gregorian DATE to a vCard BDAY.
 
 If the year is 1583, then year is omitted."
-  (let* ((year (nth 2 date))
-         (time (encode-time 0 0 0 (nth 1 date) (nth 0 date) year)))
+  (let* ((year (calendar-extract-year date))
+         (time (encode-time (list 0 0 0
+                                  (calendar-extract-day date)
+                                  (calendar-extract-month date)
+                                  (calendar-extract-year date)
+                                  nil -1 t))))
     (if (equal year 1583)
-        (format-time-string "--%m%d" time)
-      (format-time-string "%Y%m%d" time))))
+        (format-time-string "--%m%d" time t)
+      (format-time-string "%Y%m%d" time t))))
 
 (defun my/ecard-to-vulpea-note (ecard)
   "Convert ecard ECARD into a string representing a vulpea headline note."

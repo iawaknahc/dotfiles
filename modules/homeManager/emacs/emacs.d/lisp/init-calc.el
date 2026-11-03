@@ -112,7 +112,7 @@ See the homepage https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_
                                        (rate-str (plist-get obj :NTD_USD)))
                                   (list (list 'TWD (format "(1/%s) USD" rate-str) "TWD" nil (format "1 USD = %s %s" rate-str "TWD"))))))
          (units (append ecb cbc nil))
-         (terms `((defconst my/calc-currency-written-at ,(format-time-string "%FT%T%z"))
+         (terms `((defconst my/calc-currency-written-at ,(format-time-string "%FT%T%z" nil))
                   (defconst my/math-additional-units ',units))))
     (with-current-buffer (find-file-noselect my/calc-currency-file-path)
       (erase-buffer)

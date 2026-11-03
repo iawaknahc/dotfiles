@@ -45,22 +45,22 @@ The return value is in UTC and no DTS is in effect."
   (list
    0 0 0
    (calendar-extract-day date) (calendar-extract-month date) (calendar-extract-year date)
-   (calendar-day-of-week date) nil 0))
+   (calendar-day-of-week date) nil t))
 
 ;;;###autoload
 (defun my/calendar-gregorian-to-org-string (date)
   "Format Gregorian date DATE to a Org timestamp string."
-  (format-time-string "%Y-%m-%d %a" (encode-time (my/calendar-gregorian-to-decode-time date)) "UTC"))
+  (format-time-string "%Y-%m-%d %a" (encode-time (my/calendar-gregorian-to-decode-time date)) t))
 
 ;;;###autoload
 (defun my/calendar-gregorian-iso8601-date-string (date)
   "Format Gregorian date DATE to a ISO8601 date string."
-  (format-time-string "%Y-%m-%d" (encode-time (my/calendar-gregorian-to-decode-time date)) "UTC"))
+  (format-time-string "%Y-%m-%d" (encode-time (my/calendar-gregorian-to-decode-time date)) t))
 
 ;;;###autoload
 (defun my/calendar-gregorian-iso8601-week-string (date)
   "Format Gregorian date DATE to a ISO8601 week string."
-  (format-time-string "%G-W%V" (encode-time (my/calendar-gregorian-to-decode-time date)) "UTC"))
+  (format-time-string "%G-W%V" (encode-time (my/calendar-gregorian-to-decode-time date)) t))
 
 ;;;###autoload
 (defun my/calendar-count-days-region ()
