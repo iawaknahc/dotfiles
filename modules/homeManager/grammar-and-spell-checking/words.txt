@@ -90,6 +90,7 @@ dartls
 datetree
 dbui
 deadgrep
+deathdate
 debugpy
 defalias
 defconst
@@ -311,6 +312,7 @@ myvimrc
 nargs
 natively
 natnump
+nconc
 neovim
 netrw
 nextweek
@@ -421,6 +423,7 @@ segmentors
 semicoloncomma
 sendmail
 sessionoptions
+setcdr
 setf
 setlocal
 setloclist

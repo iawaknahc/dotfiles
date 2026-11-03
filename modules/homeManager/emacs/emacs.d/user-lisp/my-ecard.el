@@ -40,6 +40,8 @@ If the year is 1583, then year is omitted."
          (email-props (reverse (ecard-email ecard)))
          (adr-props (reverse (ecard-adr ecard)))
          (bday-value (ecard-get-property-value ecard 'bday))
+         (x-deathdate-prop (car-safe (cdr-safe (assoc "X-DEATHDATE" (ecard-extended ecard)))))
+         (x-deathdate-value (and x-deathdate-prop (ecard-property-value x-deathdate-prop)))
          (note-value (ecard-get-property-value ecard 'note))
          (output ""))
 
@@ -106,6 +108,17 @@ If the year is 1583, then year is omitted."
            (setq output (concat output (format "- birthday :: [%s]
 " (my/calendar-date-to-org-timestamp (list month day year)))))))))
 
+    ;; X-DEATHDATE
+    (when x-deathdate-value
+      (let* ((parsed (iso8601-parse x-deathdate-value)))
+        (pcase parsed
+          (`(nil nil nil ,day ,month nil nil -1 nil)
+           (setq output (concat output (format "- death_date :: [%s]
+" (my/calendar-date-to-org-timestamp (list month day 1583))))))
+          (`(nil nil nil ,day ,month ,year nil -1 nil)
+           (setq output (concat output (format "- death_date :: [%s]
+" (my/calendar-date-to-org-timestamp (list month day year)))))))))
+
     ;; NOTE
     (when note-value
       (setq output (concat output (format "- note :: %s
@@ -119,6 +132,21 @@ If the year is 1583, then year is omitted."
     (cl-loop
      for ecard in ecards
      concat (my/ecard-to-vulpea-note ecard))))
+
+(defun my/ecard-add-extended-property-value (ecard name value)
+  "Add extended property NAME to value on ECARD."
+  (let* ((property (ecard-property
+                    :name name
+                    :value value
+                    :parameters nil
+                    :group nil))
+         (extended (ecard-extended ecard))
+         (existing (assoc name extended)))
+    (cond
+     (existing
+      (setcdr existing (nconc (cdr existing) (list property))))
+     (t
+      (setf (ecard-extended ecard) (cons (cons name (list property)) extended))))))
 
 ;;;###autoload
 (defun my/vcard-to-org ()
@@ -170,6 +198,14 @@ If the year is 1583, then year is omitted."
                          (`(0 0 0 ,day ,month ,year nil -1 nil) (my/calendar-date-to-bday (list month day year)))
                          (_ (user-error "Unsupported birthday: %S" bday)))))
       (ecard-set-property ecard 'bday value))
+
+    (when-let* ((x-deathdate (vulpea-note-meta-get note "death_date"))
+                (decode-time (org-parse-time-string x-deathdate))
+                (value (pcase decode-time
+                         (`(0 0 0 ,day ,month ,year nil -1 nil) (my/calendar-date-to-bday (list month day year)))
+                         (_ (user-error "Unsupported death_date: %S" x-deathdate))))
+                )
+      (my/ecard-add-extended-property-value ecard "X-DEATHDATE" value))
 
     (when-let* ((value (vulpea-note-meta-get note "note")))
       (ecard-set-property ecard 'note value))
