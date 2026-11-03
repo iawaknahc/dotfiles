@@ -64,13 +64,7 @@ speller:
   - xform/3/q/
   - xform/6/qq/
 
-abc_segmentor:
-  extra_tags:
-  - translator_cangjie5
-  - translator_jyut6ping3
-
 translator:
-  tag: translator_cangjie5
   dictionary: cangjie5_hk
   prism: cangjie5_jyut6ping3
   # enable_sentence is true by default.
@@ -84,7 +78,6 @@ translator:
 
 translator_jyut6ping3:
   dictionary: jyut6ping3
-  tag: translator_jyut6ping3
   spelling_hints: 99
   always_show_comments: false
   preedit_format:
@@ -97,14 +90,10 @@ translator_jyut6ping3:
   initial_quality: 0.0
 
 reverse_lookup_filter_jyut6ping3:
-  tags:
-  - translator_cangjie5
   dictionary: jyut6ping3
   append_comment: true
 
 reverse_lookup_filter_cangjie5:
-  tags:
-  - translator_jyut6ping3
   dictionary: cangjie5_hk
   comment_format:
   - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜重|"
