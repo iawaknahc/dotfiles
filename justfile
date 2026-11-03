@@ -1,6 +1,16 @@
+set positional-arguments
+
 # List all recipes
 default:
     just --list --unsorted
+
+# List tracked files. Additional arguments are forwarded to fd.
+list-tracked *fd_arguments:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    comm -12 \
+      <(git ls-files | sort) \
+      <(fd --hidden --type file --strip-cwd-prefix "$@" | sort)
 
 # Clean up any generated files
 clean:
@@ -19,11 +29,11 @@ check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruf
 
 # Run checker `elisp-checkdoc`
 elisp-checkdoc:
-    fd --hidden --type file --ignore-file elisp-checkdoc-ignore --extension el | xargs elisp-checkdoc.el
+    just list-tracked --ignore-file elisp-checkdoc-ignore --extension el | xargs elisp-checkdoc.el
 
 # Run checker `shellcheck`
 shellcheck:
-    fd --hidden --type file --extension sh | xargs shellcheck
+    just list-tracked --extension sh | xargs shellcheck
 
 # Run checker `shfmt --list`
 shfmt-check:
@@ -43,19 +53,19 @@ ruff-format-check:
 
 # Run checker `nufmt --dry-run`
 nufmt-check:
-    fd --hidden --type file --extension nu | xargs nufmt --dry-run
+    just list-tracked --extension nu | xargs nufmt --dry-run
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
-    fd --hidden --type file --ignore-file harperignore | xargs harper-cli-lint --format compact {{FLAGS}}
+    just list-tracked --ignore-file harperignore | xargs harper-cli-lint --format compact {{FLAGS}}
 
 # Run checker `codebook-lsp lint` with respect to codebookignore
 codebook *FLAGS:
-    fd --hidden --type file --ignore-file codebookignore | xargs codebook-lsp lint {{FLAGS}}
+    just list-tracked --ignore-file codebookignore | xargs codebook-lsp lint {{FLAGS}}
 
 # Run checker `codespell` with respect to codespellignore
 codespell *FLAGS:
-    fd --hidden --type file --ignore-file codespellignore | xargs codespell {{FLAGS}}
+    just list-tracked --ignore-file codespellignore | xargs codespell {{FLAGS}}
 
 # Run checker `pyright`
 pyright:
@@ -90,7 +100,7 @@ stylua-fmt:
 
 # Run formatter `nufmt`.
 nufmt:
-    fd --hidden --type file --extension nu | xargs nufmt
+    just list-tracked --extension nu | xargs nufmt
 
 # Run formatter `ruff format`.
 ruff-format:
