@@ -87,6 +87,8 @@ translator:
 translator_jyut6ping3:
   dictionary: jyut6ping3
   tag: translator_jyut6ping3
+  spelling_hints: 99
+  always_show_comments: false
   preedit_format:
   - xform/([aeiouymngptk])vv/${1}4/
   - xform/([aeiouymngptk])xx/${1}5/
