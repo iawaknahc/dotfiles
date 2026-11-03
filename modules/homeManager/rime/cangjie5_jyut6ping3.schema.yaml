@@ -76,10 +76,8 @@ translator:
   # enable_sentence is true by default.
   # Typically Cangjie input methods expect the user to type character by character.
   enable_sentence: false
-  preedit_format:
-  - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符|"
   comment_format:
-  - "xlit|abcdefghijklmnopqrstuvwxyz~|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符～|"
+  - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜重|"
   # Based on my testing, I need to set this to 2.0 and jyut6ping3 to 0.0
   # in order for 水 and 人 appear as the first candidate.
   initial_quality: 2.0
@@ -109,7 +107,7 @@ reverse_lookup_filter_cangjie5:
   - translator_jyut6ping3
   dictionary: cangjie5_hk
   comment_format:
-  - "xlit|abcdefghijklmnopqrstuvwxyz~|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符～|"
+  - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜重|"
   append_comment: true
 
 simplifier:
