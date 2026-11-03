@@ -132,8 +132,11 @@ Only Project or Area file-level notes are targets of agenda."
 (advice-add #'diary-view-entries :before #'my/org-agenda-before--set-org-agenda-files)
 
 (setq
- ;; Include holidays in the agenda view.
- org-agenda-include-diary t
+ ;; According to the manual
+ ;; https://orgmode.org/manual/Weekly_002fdaily-agenda.html#Calendar_002fDiary-integration-1
+ ;; it is faster to use `org-calendar-holiday' to show holidays in the agenda view.
+ org-agenda-include-diary nil
+
  org-agenda-custom-commands
  `(("w" "Worklog entries" agenda ""
     ((org-agenda-files (list "~/org/worklog.org"))
