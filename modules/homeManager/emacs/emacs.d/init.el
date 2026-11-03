@@ -125,6 +125,7 @@
 (require 'init-world-clock-mode)
 (require 'init-editorconfig-mode)
 (require 'init-goto-address-mode)
+(require 'init-dabbrev)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
