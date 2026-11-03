@@ -92,10 +92,10 @@ If the year is 1583, then year is omitted."
       (let* ((parsed (iso8601-parse bday-value)))
         (pcase parsed
           (`(nil nil nil ,day ,month nil nil -1 nil)
-           (setq output (concat output (format "- birthday :: <%s +1y>
+           (setq output (concat output (format "- birthday :: [%s]
 " (my/calendar-date-to-org-timestamp (list month day 1583))))))
           (`(nil nil nil ,day ,month ,year nil -1 nil)
-           (setq output (concat output (format "- birthday :: <%s +1y>
+           (setq output (concat output (format "- birthday :: [%s]
 " (my/calendar-date-to-org-timestamp (list month day year)))))))))
 
     ;; NOTE
