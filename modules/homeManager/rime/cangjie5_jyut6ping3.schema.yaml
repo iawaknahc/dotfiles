@@ -73,6 +73,9 @@ translator:
   tag: translator_cangjie5
   dictionary: cangjie5_hk
   prism: cangjie5_jyut6ping3
+  # enable_sentence is true by default.
+  # Typically Cangjie input methods expect the user to type character by character.
+  enable_sentence: false
   preedit_format:
   - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜符|"
   comment_format:
