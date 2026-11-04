@@ -65,6 +65,11 @@ resulting in `calendar-get-month-range' reporting all months in YEAR."
                 ,expr))))
 
 ;;;###autoload
+(defun my/holiday-sort (holidays)
+  "Sort HOLIDAYS."
+  (sort holidays :key #'car :lessp #'my/calendar-date<))
+
+;;;###autoload
 (defmacro my/holiday-diary (expr)
   "Use holiday expression EXPR as a diary sexp.
 
@@ -373,7 +378,7 @@ The function `my/holiday-substitution' is used to define such holiday."
                    (puthash holiday-abs t table)
                    (push holiday result))))
               (_ (error "Expected an empty list or a singleton list or a 2-element list: %S" holiday-and-substitution)))))))
-    (holiday-filter-visible-calendar (sort result :key #'car :lessp #'my/calendar-date<))))
+    (holiday-filter-visible-calendar (my/holiday-sort result))))
 
 (defun my/holiday-chinese--birth (name birth)
   "NAME BIRTH."
@@ -437,21 +442,19 @@ The function `my/holiday-substitution' is used to define such holiday."
                                            (list date description)))
                                        death-anniversaries)))
     (holiday-filter-visible-calendar
-     (sort (append
-            birth-anniversaries
-            death-anniversaries
-            ;; The date of death is counted as the first day.
-            (holiday-after ref (1- (* 7 1)) (format "%s 頭七" name))
-            (holiday-after ref (1- (* 7 2)) (format "%s 二七" name))
-            (holiday-after ref (1- (* 7 3)) (format "%s 三七" name))
-            (holiday-after ref (1- (* 7 4)) (format "%s 四七" name))
-            (holiday-after ref (1- (* 7 5)) (format "%s 五七" name))
-            (holiday-after ref (1- (* 7 6)) (format "%s 六七" name))
-            (holiday-after ref (1- (* 7 7)) (format "%s 尾七" name))
-            (holiday-after ref (1- 100) (format "%s 百日" name))
-            nil)
-           :key #'car
-           :lessp #'my/calendar-date<))))
+     (my/holiday-sort (append
+                       birth-anniversaries
+                       death-anniversaries
+                       ;; The date of death is counted as the first day.
+                       (holiday-after ref (1- (* 7 1)) (format "%s 頭七" name))
+                       (holiday-after ref (1- (* 7 2)) (format "%s 二七" name))
+                       (holiday-after ref (1- (* 7 3)) (format "%s 三七" name))
+                       (holiday-after ref (1- (* 7 4)) (format "%s 四七" name))
+                       (holiday-after ref (1- (* 7 5)) (format "%s 五七" name))
+                       (holiday-after ref (1- (* 7 6)) (format "%s 六七" name))
+                       (holiday-after ref (1- (* 7 7)) (format "%s 尾七" name))
+                       (holiday-after ref (1- 100) (format "%s 百日" name))
+                       nil)))))
 
 ;;;###autoload
 (cl-defun my/holiday-chinese-birth-and-death (name &key birth death)
@@ -473,6 +476,134 @@ then it will be taken to be 廿九 in months lacking 三十."
   (if death
       (my/holiday-chinese--birth-and-death name birth death)
     (my/holiday-chinese--birth name birth)))
+
+;;;###autoload
+(defun my/holiday-birthdate (name birth death)
+  "Return birthdays for NAME and Gregorian date BIRTH.
+
+DEATH can be nil, t, or a Gregorian date."
+  (let* ((years (my/holiday-get-years))
+         (birth-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-anniversary birth year))
+                                       years))
+         (birth-anniversaries (seq-filter (lambda (plist)
+                                            (>= (plist-get plist :order) 0))
+                                          birth-anniversaries))
+         (birthdays (seq-map (lambda (plist)
+                               (let* ((order (plist-get plist :order))
+                                      (date (plist-get plist :anniversary))
+                                      (description (cond
+                                                    ((consp death)
+                                                     (if (my/calendar-date> date death)
+                                                         (format "%s %d歲生忌" name order)
+                                                       (if (eql order 0)
+                                                           (format "%s 出世" name)
+                                                         (format "%s %d歲生日" name order))))
+                                                    ((eql order 0)
+                                                     (format "%s 出世" name))
+                                                    (death
+                                                     (format "%s %d歲生忌" name order))
+                                                    (t
+                                                     (format "%s %d歲生日" name order)))))
+                                 (list date description)))
+                             birth-anniversaries)))
+    (holiday-filter-visible-calendar birthdays)))
+
+;;;###autoload
+(defun my/holiday-birthday (name birth-month birth-day death)
+  "Return birthdays for NAME with BIRTH-MONTH and BIRTH-DAY.
+
+DEATH can either be nil, t, or a Gregorian date."
+  (let* ((years (my/holiday-get-years))
+         (birth-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-anniversary (list birth-month birth-day nil) year))
+                                       years))
+         (birthdays (seq-map (lambda (plist)
+                               (let* ((date (plist-get plist :anniversary))
+                                      (description (cond
+                                                    ((consp death)
+                                                     (if (my/calendar-date> date death)
+                                                         (format "%s 生忌" name)
+                                                       (format "%s 生日" name)))
+                                                    (death
+                                                     (format "%s 生忌" name))
+                                                    (t
+                                                     (format "%s 生日" name)))))
+                                 (list date description)))
+                             birth-anniversaries)))
+    (holiday-filter-visible-calendar birthdays)))
+
+;;;###autoload
+(defun my/holiday-deathday (name death-month death-day)
+  "Return anniversaries of NAME with DEATH-MONTH and DEATH-DAY."
+  (let* ((years (my/holiday-get-years))
+         (death-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-anniversary (list death-month death-day nil) year))
+                                       years))
+         (output (seq-map (lambda (plist)
+                            (let* ((date (plist-get plist :anniversary))
+                                   (description (format "%s 死忌" name)))
+                              (list date description)))
+                          death-anniversaries)))
+    (holiday-filter-visible-calendar output)))
+
+;;;###autoload
+(defun my/holiday-deathdate (name death)
+  "Return anniversaries of NAME and Gregorian date DEATH."
+  (let* ((years (my/holiday-get-years))
+         (death-anniversaries (seq-map (lambda (year)
+                                         (my/calendar-anniversary death year))
+                                       years))
+         (death-anniversaries (seq-filter (lambda (plist)
+                                            (>= (plist-get plist :order) 0))
+                                          death-anniversaries))
+         (output (seq-map (lambda (plist)
+                            (let* ((order (plist-get plist :order))
+                                   (date (plist-get plist :anniversary))
+                                   (description (cond
+                                                 ((eql order 0)
+                                                  (format "%s 逝世" name))
+                                                 (t
+                                                  (format "%s 第%d個死忌" name order)))))
+                              (list date description)))
+                          death-anniversaries)))
+    (holiday-filter-visible-calendar output)))
+
+;;;###autoload
+(defun my/holiday-birth-and-death (name birth death)
+  "Compute various anniversaries according to BIRTH and DEATH for NAME.
+
+If both BIRTH and DEATH are nil, return nil.
+The year component in BIRTH and DEATH can be nil."
+  (pcase (list birth death)
+    (`((,birth-month ,birth-day nil) nil)
+     (my/holiday-birthday name birth-month birth-day nil))
+    (`((,birth-month ,birth-day ,birth-year) nil)
+     (my/holiday-birthdate name birth nil))
+    (`(nil (,death-month ,death-day nil))
+     (my/holiday-deathday name death-month death-day))
+    (`(nil (,death-month ,death-day ,death-year))
+     (my/holiday-deathdate name death))
+    (`((,birth-month ,birth-day nil) (,death-month ,death-day nil))
+     (my/holiday-sort (append
+                       (my/holiday-birthday name birth-month birth-day t)
+                       (my/holiday-deathday name death-month death-day)
+                       nil)))
+    (`((,birth-month ,birth-day ,birth-year) (,death-month ,death-day nil))
+     (my/holiday-birthdate name birth t))
+    (`((,birth-month ,birth-day nil) (,death-month ,death-day ,death-year))
+     (my/holiday-sort (append
+                       (my/holiday-birthday name birth-month birth-day death)
+                       (my/holiday-deathdate name death)
+                       nil)))
+    (`((,birth-month ,birth-day ,birth-year) (,death-month ,death-day ,death-year))
+     (my/holiday-sort (append
+                       (my/holiday-birthdate name birth death)
+                       (my/holiday-deathdate name death)
+                       (my/holiday-chinese-birth-and-death name :birth birth :death death)
+                       nil)))
+    (_
+     nil)))
 
 (provide 'my-holidays)
 ;;; my-holidays.el ends here

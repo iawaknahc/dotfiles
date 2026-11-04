@@ -91,6 +91,16 @@ The return value is in UTC and no DTS is in effect."
   (< (calendar-absolute-from-gregorian date1) (calendar-absolute-from-gregorian date2)))
 
 ;;;###autoload
+(defun my/calendar-date>= (date1 date2)
+  "Return non-nil if DATE1 >= DATE2."
+  (>= (calendar-absolute-from-gregorian date1) (calendar-absolute-from-gregorian date2)))
+
+;;;###autoload
+(defun my/calendar-date> (date1 date2)
+  "Return non-nil if DATE1 > DATE2."
+  (> (calendar-absolute-from-gregorian date1) (calendar-absolute-from-gregorian date2)))
+
+;;;###autoload
 (defun my/calendar-date-within (beg end date)
   "Return non-nil if DATE >= BEG and DATE <= END."
   (cond
@@ -196,6 +206,33 @@ Raise an error if so."
 
 ;;;###autoload
 (advice-add #'calendar-gregorian-from-absolute :before #'my/calendar-gregorian-from-absolute--before)
+
+;;;###autoload
+(defun my/calendar-anniversary (date year)
+  "Compute the order of the anniversary of DATE in YEAR.
+
+DATE is a Gregorian date, its year component can be nil.
+YEAR is a Gregorian year.
+
+If DATE is 29 February and YEAR is not a leap year,
+then 28 February is taken to be the anniversary date.
+
+Return a plist.
+:order is the order, or nil if the year component of DATE is nil.
+:date is DATE.
+:anniversary is a Gregorian matching :order."
+  (let* ((month (calendar-extract-month date))
+         (day (calendar-extract-day date))
+         (day (if (and (eql day 29) (eql month 2) (not (calendar-leap-year-p year)))
+                  28
+                day))
+         (maybe-year (calendar-extract-year date))
+         (order (and maybe-year (- year maybe-year)))
+         (anniversary (list month day year)))
+    (list
+     :order order
+     :date date
+     :anniversary anniversary)))
 
 (provide 'my-calendar)
 ;;; my-calendar.el ends here

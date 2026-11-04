@@ -89,37 +89,39 @@
                             (delete-char (- (length candidate)))
                             (insert note-id "][" note-title))))))))
 
-;;;; Integration with Org
-(defvar org-agenda-current-date)
-(defun my/vulpea-org-birthday ()
-  "Return a list of birthdays.
+;;;; Integration with calendar
+(defun my/vulpea--note-get-date (note name)
+  "Get a Gregorian date from NOTE at meta NAME.
 
-Each birthday is a string describing the person's birthday."
-  (when org-agenda-current-date
-    (let* ((agenda-month (calendar-extract-month org-agenda-current-date))
-           (agenda-day (calendar-extract-day org-agenda-current-date))
-           (notes (vulpea-db-query (lambda (note)
-                                     (and (vulpea-note-tagged-any-p note "contact")
-                                          (vulpea-note-meta-get note "birthday")))))
-           (birthdays (seq-map (lambda (note)
-                                 (let* ((name (vulpea-note-title note))
-                                        (decoded-time (org-parse-time-string (vulpea-note-meta-get note "birthday")))
-                                        (year (nth 5 decoded-time))
-                                        (month (nth 4 decoded-time))
-                                        (day (nth 3 decoded-time))
-                                        (date (list month day year)))
-                                   (message "%S %S" name date)
-                                   (when (and (eql agenda-month month) (eql agenda-day day))
-                                     (if (eql year 1583)
-                                         (format "%s - 生日" name)
-                                       (let* ((diff (- (calendar-extract-year org-agenda-current-date) year)))
-                                         (when (>= diff 0)
-                                           (if (eql diff 0)
-                                               (format "%s - 出世" name diff)
-                                             (format "%s - %d歲生日" name diff))))))))
-                               notes))
-           (birthdays (seq-filter #'identity birthdays)))
-      birthdays)))
+Return nil if NAME is unavailable.
+Return (MONTH DAY nil) if YEAR is 1583.
+Return (MONTH DAY YEAR) otherwise."
+  (when-let* ((value (vulpea-note-meta-get note name))
+              (decoded-time (org-parse-time-string value))
+              (year (nth 5 decoded-time))
+              (month (nth 4 decoded-time))
+              (day (nth 3 decoded-time)))
+    (list month day (if (eql year 1583) nil year))))
+
+(defun my/vulpea-holiday-birth-and-death ()
+  "A holiday expression that fetches contacts from the vulpea database."
+  (let* ((notes (vulpea-db-query (lambda (note)
+                                   (and (vulpea-note-tagged-any-p note "contact")
+                                        (or (vulpea-note-meta-get note "birthday")
+                                            (vulpea-note-meta-get note "death_date"))))))
+         (persons (seq-map (lambda (note)
+                             (let* ((name (vulpea-note-title note))
+                                    (birthday (my/vulpea--note-get-date note "birthday"))
+                                    (death-date (my/vulpea--note-get-date note "death_date")))
+                               (list :name name :birthday birthday :death-date death-date)))
+                           notes))
+         (holidays (seq-mapcat (lambda (person)
+                                 (my/holiday-birth-and-death
+                                  (plist-get person :name)
+                                  (plist-get person :birthday)
+                                  (plist-get person :death-date)))
+                               persons)))
+    (my/holiday-sort holidays)))
 
 ;;;; Integration with MapLibre GL
 (defun my/vulpea-location-to-geojson-feature (note)

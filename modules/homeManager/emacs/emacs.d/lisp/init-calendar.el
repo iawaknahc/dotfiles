@@ -64,8 +64,8 @@
 (add-hook 'calendar-today-visible-hook #'calendar-mark-today)
 ;; Mark holidays when calendar is opened.
 (add-hook 'calendar-initial-window-hook #'calendar-mark-holidays)
-;; Mark diary entries (which include Org agenda items) when calendar is opened.
-(add-hook 'calendar-initial-window-hook #'diary-mark-entries)
+;; Marking diary entries (which include Org agenda items) will slow down Emacs greatly.
+;;(add-hook 'calendar-initial-window-hook #'diary-mark-entries)
 ;; Redraw the mode line as point moves.
 (add-hook 'calendar-move-hook #'calendar-update-mode-line)
 
@@ -92,6 +92,7 @@
                                   '((my/holiday-prefix "[香港法定假期] " (my/holiday-hong-kong my/holiday-hong-kong-statutory-holidays)))
                                   '((my/holiday-anniversary 1997 7 1 "香港特別行政區成立")
                                     (my/holiday-anniversary 1949 10 1 "中華人民共和國成立"))
+                                  '((my/vulpea-holiday-birth-and-death))
                                   nil)))
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
