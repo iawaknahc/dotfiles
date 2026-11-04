@@ -48,4 +48,24 @@ function M.last_week()
   return os.date("%G-W%V", time)
 end
 
+function M.shebang_python()
+  return "#!/usr/bin/env python3"
+end
+
+function M.shebang_nushell()
+  return "#!/usr/bin/env nu"
+end
+
+function M.shebang_neovim()
+  return "#!/usr/bin/env -S nvim -l"
+end
+
+function M.shebang_sh()
+  return "#!/bin/sh"
+end
+
+function M.shebang_emacs()
+  return "#!/usr/bin/env -S emacs --quick --batch --funcall eshell-batch-file"
+end
+
 return M

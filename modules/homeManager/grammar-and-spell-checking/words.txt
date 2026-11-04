@@ -432,6 +432,11 @@ setq
 setuptools
 sexp
 shada
+shebangemacs
+shebangneovim
+shebangnushell
+shebangpython
+shebangsh
 shellcheck
 shellcmdline
 shfmt

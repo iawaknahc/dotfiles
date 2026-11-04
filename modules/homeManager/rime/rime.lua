@@ -162,6 +162,11 @@ local snippets = {
   { keyword = "thisweek", text = snippet.this_week, comment = "今星期" },
   { keyword = "nextweek", text = snippet.next_week, comment = "下星期" },
   { keyword = "lastweek", text = snippet.last_week, comment = "上星期" },
+  { keyword = "shebangpython", text = snippet.shebang_python, comment = "Python" },
+  { keyword = "shebangnushell", text = snippet.shebang_nushell, comment = "Nushell" },
+  { keyword = "shebangneovim", text = snippet.shebang_neovim, comment = "Neovim" },
+  { keyword = "shebangsh", text = snippet.shebang_sh, comment = "sh" },
+  { keyword = "shebangemacs", text = snippet.shebang_emacs, comment = "Emacs" },
 }
 
 ---@param input string
