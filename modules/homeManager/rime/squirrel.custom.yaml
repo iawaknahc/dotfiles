@@ -1,3 +1,5 @@
 patch:
   "style/candidate_list_layout": "vertical"
+  # The arrows are rendered outside the menu to the left, very subtle.
+  #"style/show_paging": true
   "app_options": {}
