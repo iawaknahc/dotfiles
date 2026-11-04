@@ -263,3 +263,124 @@ function unicode_cjk_extension_filter(input, env)
     end
   end
 end
+
+reverse_lookup_filter_jyut6ping3 = {
+  init = function(env)
+    env.jyut6ping3_reverse_lookup_db = ReverseDb("build/jyut6ping3.reverse.bin")
+  end,
+  ---@param input Translation
+  ---@param env Env
+  func = function(input, env)
+    ---@type ReverseDb
+    local jyut6ping3_reverse_lookup_db = env.jyut6ping3_reverse_lookup_db
+    for candidate in input:iter() do
+      local candidate_type = candidate:get_genuine().type
+      local is_prediction = candidate_type == "prediction"
+      local is_from_user_input = candidate_type == "table"
+        or candidate_type == "user_table"
+        or candidate_type == "completion"
+        or candidate_type == "phrase"
+
+      local is_from_jyut6ping3 = false
+      if is_from_user_input then
+        local phrase = candidate:to_phrase()
+        is_from_jyut6ping3 = phrase.lang_name == "jyut6ping3"
+      end
+
+      if is_prediction or not is_from_jyut6ping3 then
+        -- Note that we look up the whole phrase.
+        -- When the phrase has more than one character,
+        -- the lookup will fail and return an empty string.
+        -- We settle with this behavior because
+        -- many characters have more than one pronunciations.
+        -- Looking up character by character will yield many results.
+        -- The comment will be very long and unreadable.
+        local result = jyut6ping3_reverse_lookup_db:lookup(candidate:get_genuine().text)
+        if result ~= "" then
+          candidate.comment = candidate.comment .. " " .. result
+        end
+      end
+      yield(candidate)
+    end
+  end,
+}
+
+---@param cangjie5_code string
+---@return string
+function humanize_cangjie5_code(cangjie5_code)
+  cangjie5_code = string.gsub(cangjie5_code, "a", "日")
+  cangjie5_code = string.gsub(cangjie5_code, "b", "月")
+  cangjie5_code = string.gsub(cangjie5_code, "c", "金")
+  cangjie5_code = string.gsub(cangjie5_code, "d", "木")
+  cangjie5_code = string.gsub(cangjie5_code, "e", "水")
+  cangjie5_code = string.gsub(cangjie5_code, "f", "火")
+  cangjie5_code = string.gsub(cangjie5_code, "g", "土")
+  cangjie5_code = string.gsub(cangjie5_code, "h", "竹")
+  cangjie5_code = string.gsub(cangjie5_code, "i", "戈")
+  cangjie5_code = string.gsub(cangjie5_code, "j", "十")
+  cangjie5_code = string.gsub(cangjie5_code, "k", "大")
+  cangjie5_code = string.gsub(cangjie5_code, "l", "中")
+  cangjie5_code = string.gsub(cangjie5_code, "m", "一")
+  cangjie5_code = string.gsub(cangjie5_code, "n", "弓")
+  cangjie5_code = string.gsub(cangjie5_code, "o", "人")
+  cangjie5_code = string.gsub(cangjie5_code, "p", "心")
+  cangjie5_code = string.gsub(cangjie5_code, "q", "手")
+  cangjie5_code = string.gsub(cangjie5_code, "r", "口")
+  cangjie5_code = string.gsub(cangjie5_code, "s", "尸")
+  cangjie5_code = string.gsub(cangjie5_code, "t", "廿")
+  cangjie5_code = string.gsub(cangjie5_code, "u", "山")
+  cangjie5_code = string.gsub(cangjie5_code, "v", "女")
+  cangjie5_code = string.gsub(cangjie5_code, "w", "田")
+  cangjie5_code = string.gsub(cangjie5_code, "x", "難")
+  cangjie5_code = string.gsub(cangjie5_code, "y", "卜")
+  cangjie5_code = string.gsub(cangjie5_code, "z", "重")
+  -- For characters with more than one code,
+  -- group them with parenthesis.
+  if cangjie5_code:find(" ", 1, true) then
+    cangjie5_code = "(" .. cangjie5_code .. ")"
+  end
+  return cangjie5_code
+end
+
+reverse_lookup_filter_cangjie5 = {
+  init = function(env)
+    env.cangjie5_reverse_lookup_db = ReverseDb("build/cangjie5_hk.reverse.bin")
+  end,
+  ---@param input Translation
+  ---@param env Env
+  func = function(input, env)
+    ---@type ReverseDb
+    local cangjie5_reverse_lookup_db = env.cangjie5_reverse_lookup_db
+    for candidate in input:iter() do
+      local candidate_type = candidate:get_genuine().type
+      local is_prediction = candidate_type == "prediction"
+      local is_from_user_input = candidate_type == "table"
+        or candidate_type == "user_table"
+        or candidate_type == "completion"
+        or candidate_type == "phrase"
+
+      local is_from_cangjie5 = false
+      if is_from_user_input then
+        local phrase = candidate:to_phrase()
+        is_from_cangjie5 = phrase.lang_name == "cangjie5_hk"
+      end
+
+      if is_prediction or not is_from_cangjie5 then
+        -- We lookup character by character because
+        -- in Cangjie, most characters have only one code.
+        -- A phrase having more than one character most of the time
+        -- have the same number of reverse lookup codes.
+        for _, codepoint in utf8.codes(candidate:get_genuine().text) do
+          local character = utf8.char(codepoint)
+          local code = cangjie5_reverse_lookup_db:lookup(character)
+          if code ~= "" then
+            candidate.comment = candidate.comment .. " " .. humanize_cangjie5_code(code)
+          else
+            candidate.comment = candidate.comment .. " " .. "NULL"
+          end
+        end
+      end
+      yield(candidate)
+    end
+  end,
+}

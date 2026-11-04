@@ -51,8 +51,8 @@ engine:
   # numeral_translator output the same candidate with different comments very often.
   # To avoid confusion, we no longer remove duplicates in candidates.
   #- uniquifier
-  - reverse_lookup_filter@reverse_lookup_filter_jyut6ping3
-  - reverse_lookup_filter@reverse_lookup_filter_cangjie5
+  - lua_filter@reverse_lookup_filter_cangjie5
+  - lua_filter@reverse_lookup_filter_jyut6ping3
 
 speller:
   alphabet: abcdefghijklmnopqrstuvwxyz
@@ -89,16 +89,6 @@ translator_jyut6ping3:
   - xform/([aeiouymngptk])x/${1}2/
   - xform/([aeiouymngptk])q/${1}3/
   initial_quality: 0.0
-
-reverse_lookup_filter_jyut6ping3:
-  dictionary: jyut6ping3
-  append_comment: true
-
-reverse_lookup_filter_cangjie5:
-  dictionary: cangjie5_hk
-  comment_format:
-  - "xlit|abcdefghijklmnopqrstuvwxyz|日月金木水火土竹戈十大中一弓人心手口尸廿山女田難卜重|"
-  append_comment: true
 
 simplifier:
   tips: all
