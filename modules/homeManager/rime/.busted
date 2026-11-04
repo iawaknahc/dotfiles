@@ -1,6 +1,6 @@
 return {
   _all = {
-    lpath = "lua/?.lua;?.lua",
+    lpath = "runtime/lua/?.lua;?.lua",
   },
   default = {
     ROOT = { "spec" },
