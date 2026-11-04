@@ -16,6 +16,11 @@ menu:
 
 key_binder:
   bindings:
+  # When there is no candidate, press space means escape.
+  # This is useful when typing in Cangjie.
+  # https://github.com/rime/home/wiki/CustomizationGuide#%E7%A9%BA%E7%A2%BC%E6%99%82%E6%8C%89%E7%A9%BA%E6%A0%BC%E9%8D%B5%E6%B8%85%E7%A9%BA%E8%BC%B8%E5%85%A5%E7%A2%BC
+  - { when: has_menu, accept: space, send: space }
+  - { when: composing, accept: space, send: Escape }
   # The following are Emacs-like key bindings.
   # They work in Firefox.app.
   # C-g, C-n, C-p work in Emacs.app.
