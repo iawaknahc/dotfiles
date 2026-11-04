@@ -287,7 +287,7 @@ reverse_lookup_filter_jyut6ping3 = {
         is_from_jyut6ping3 = phrase.lang_name == "jyut6ping3"
       end
 
-      if is_prediction or not is_from_jyut6ping3 then
+      if is_prediction or (is_from_user_input and not is_from_jyut6ping3) then
         -- Note that we look up the whole phrase.
         -- When the phrase has more than one character,
         -- the lookup will fail and return an empty string.
@@ -365,7 +365,7 @@ reverse_lookup_filter_cangjie5 = {
         is_from_cangjie5 = phrase.lang_name == "cangjie5_hk"
       end
 
-      if is_prediction or not is_from_cangjie5 then
+      if is_prediction or (is_from_user_input and not is_from_cangjie5) then
         -- We lookup character by character because
         -- in Cangjie, most characters have only one code.
         -- A phrase having more than one character most of the time
