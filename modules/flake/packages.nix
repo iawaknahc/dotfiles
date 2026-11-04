@@ -40,11 +40,20 @@ let
   rassumfrassum = { callPackage }: callPackage ../../packages/rassumfrassum.nix { };
 
   emacs-ecard = { callPackage }: callPackage ../../packages/emacs-ecard.nix { };
+
+  firefox-addon-inject-jyutping =
+    { callPackage, buildFirefoxXpiAddon }:
+    callPackage ../../packages/firefox-addon-inject-jyutping.nix { inherit buildFirefoxXpiAddon; };
 in
 {
   # Add packages to this flake.
   perSystem =
     { pkgs, ... }:
+    let
+      buildFirefoxXpiAddon = pkgs.nur.repos.rycee.lib.mozilla.mkBuildMozillaXpiAddon {
+        inherit (pkgs) fetchurl stdenv;
+      };
+    in
     {
       packages = {
         UAX44-ucd = UAX44-ucd { callPackage = pkgs.callPackage; };
@@ -87,6 +96,11 @@ in
         rassumfrassum = rassumfrassum { callPackage = pkgs.python3Packages.callPackage; };
 
         emacs-ecard = emacs-ecard { callPackage = pkgs.emacsPackages.callPackage; };
+
+        firefox-addon-inject-jyutping = firefox-addon-inject-jyutping {
+          inherit buildFirefoxXpiAddon;
+          callPackage = pkgs.callPackage;
+        };
       };
     };
 
@@ -225,6 +239,8 @@ in
         python315 = prev.python315.override {
           inherit packageOverrides;
         };
+
+        firefox-addon-inject-jyutping = config.packages.firefox-addon-inject-jyutping;
       }
     );
 }

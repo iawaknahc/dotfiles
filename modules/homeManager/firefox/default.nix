@@ -1,5 +1,6 @@
 { pkgs, lib, ... }:
 let
+  inject-jyutping = "6fbd51fa-0351-444c-ad29-4347c038650f";
   _1password = "d634138d-c276-4fc8-924b-40a0ea21d284";
   stylus = "7a7a4a92-a2a0-41d1-9fd7-1e92480d612d";
   violentmonkey = "aecec67f-0d10-4fa7-b7c7-609a2db280cf";
@@ -38,6 +39,7 @@ in
     pkgs.nur.repos.rycee.firefox-addons.stylus
     pkgs.nur.repos.rycee.firefox-addons.brandon1024-find # Hit CTRL+SHIFT+F to open the search box
     pkgs.nur.repos.natsukium.my-firefox-addons.adguard-adblocker
+    pkgs.firefox-addon-inject-jyutping
   ];
 
   # How does this work?
@@ -103,6 +105,7 @@ in
           "vertical-spacer"
           "urlbar-container"
           "downloads-button"
+          "_${inject-jyutping}_-browser-action"
           "_${_1password}_-browser-action"
           "adguardadblocker_adguard_com-browser-action"
           "clipper_obsidian_md-browser-action"
@@ -124,6 +127,7 @@ in
         "screenshot-button"
         "adguardadblocker_adguard_com-browser-action"
         "clipper_obsidian_md-browser-action"
+        "_${inject-jyutping}_-browser-action"
         "_${_1password}_-browser-action"
         "_${violentmonkey}_-browser-action"
         "_${stylus}_-browser-action"
