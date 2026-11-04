@@ -210,8 +210,8 @@ end
 ---@param input Translation
 function prediction_preedit_filter(input)
   for candidate in input:iter() do
-    if candidate.type == "prediction" then
-      candidate.preedit = "_"
+    if candidate:get_genuine().type == "prediction" then
+      candidate:get_genuine().preedit = "_"
     end
     yield(candidate)
   end
@@ -252,7 +252,7 @@ function unicode_cjk_extension_filter(input, env)
   local extended_charset = env.engine.context:get_option("extended_charset")
   for candidate in input:iter() do
     -- Always allow the Unicode translator to output anything.
-    if candidate.type == "unicode" then
+    if candidate:get_genuine().type == "unicode" then
       yield(candidate)
     elseif extended_charset then
       yield(candidate)
