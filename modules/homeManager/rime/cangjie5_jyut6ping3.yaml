@@ -1,0 +1,66 @@
+root:
+  switches:
+  - name: full_shape
+    states: ["半", "全"]
+    reset: 0
+  - name: simplification
+    states: ["繁", "简"]
+    reset: 0
+  - name: prediction
+    states: ["關閉預測", "開啓預測"]
+    reset: 1
+  - name: extended_charset
+    states: ["常用香港字", "所有漢字"]
+    reset: 0
+
+  speller:
+    alphabet: abcdefghijklmnopqrstuvwxyz
+    algebra:
+    - derive/\d//
+    - xform/1/v/
+    - xform/4/vv/
+    - xform/2/x/
+    - xform/5/xx/
+    - xform/3/q/
+    - xform/6/qq/
+
+  simplifier:
+    tips: all
+
+  punctuator:
+    import_preset: default
+
+  key_binder:
+    import_preset: default
+
+  predictor:
+    db: predict.db
+    max_candidates: 0
+    max_iterations: 1
+
+translator_jyut6ping3:
+  dictionary: jyut6ping3
+  prism: jyut6ping3
+  preedit_format:
+  - xform/([aeiouymngptk])vv/${1}4/
+  - xform/([aeiouymngptk])xx/${1}5/
+  - xform/([aeiouymngptk])qq/${1}6/
+  - xform/([aeiouymngptk])v/${1}1/
+  - xform/([aeiouymngptk])x/${1}2/
+  - xform/([aeiouymngptk])q/${1}3/
+
+engine:
+  processors:
+  - recognizer
+  - predictor
+  - key_binder
+  - speller
+  - punctuator
+  - selector
+  - navigator
+  - express_editor
+  segmentors:
+  - matcher
+  - abc_segmentor
+  - punct_segmentor
+  - fallback_segmentor

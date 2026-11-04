@@ -110,6 +110,7 @@ in
 
   home.file."${rimeUserDirectory}/default.yaml".source = ./default.yaml;
   home.file."${rimeUserDirectory}/squirrel.custom.yaml".source = ./squirrel.custom.yaml;
+  home.file."${rimeUserDirectory}/cangjie5_jyut6ping3.yaml".source = ./cangjie5_jyut6ping3.yaml;
   home.file."${rimeUserDirectory}/cangjie5_jyut6ping3.schema.yaml".source =
     ./cangjie5_jyut6ping3.schema.yaml;
   home.file."${rimeUserDirectory}/jyut6ping3.schema.yaml".source = ./jyut6ping3.schema.yaml;
