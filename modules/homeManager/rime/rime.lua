@@ -1,5 +1,6 @@
 local json = require("json")
 local numeral = require("my_numeral")
+local snippet = require("my_snippet")
 --- @type { common_in_hong_kong: string[], unicode_cjk_extension_ranges: [integer, integer][] }
 local unicode_cjk_extension_filter_data = require("unicode_cjk_extension_filter_data")
 
@@ -151,6 +152,33 @@ function numeral_translator(input, segment)
 
   for _, result in ipairs(numeral.format_numerals(input)) do
     yield(Candidate("numeral", segment.start, segment._end, result.candidate, result.comment))
+  end
+end
+
+local snippets = {
+  { keyword = "today", text = snippet.today, comment = "今日" },
+  { keyword = "tomorrow", text = snippet.tomorrow, comment = "聽日" },
+  { keyword = "yesterday", text = snippet.yesterday, comment = "尋日" },
+  { keyword = "thisweek", text = snippet.this_week, comment = "今星期" },
+  { keyword = "nextweek", text = snippet.next_week, comment = "下星期" },
+  { keyword = "lastweek", text = snippet.last_week, comment = "上星期" },
+}
+
+---@param input string
+---@param segment Segment
+function snippet_translator(input, segment)
+  if not segment:has_tag("abc") then
+    return
+  end
+
+  if #input < 3 then
+    return
+  end
+
+  for _, s in ipairs(snippets) do
+    if s.keyword:find(input, 1, true) then
+      yield(Candidate("snippet", segment.start, segment._end, s.text(), s.comment))
+    end
   end
 end
 

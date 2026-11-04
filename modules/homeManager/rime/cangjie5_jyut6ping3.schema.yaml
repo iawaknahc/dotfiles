@@ -40,6 +40,7 @@ engine:
   - punct_translator
   - table_translator
   - script_translator@translator_jyut6ping3
+  - lua_translator@snippet_translator
   - lua_translator@unicode_translator
   - lua_translator@numeral_translator
   - predict_translator
