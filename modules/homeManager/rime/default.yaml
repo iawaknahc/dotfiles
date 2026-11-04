@@ -16,14 +16,25 @@ menu:
 
 key_binder:
   bindings:
-  - {accept: "Control+g", send: Escape, when: composing}
-  - {accept: "Control+n", send: Down, when: has_menu}
-  - {accept: "Control+p", send: Up, when: has_menu}
+  # The following are Emacs-like key bindings.
+  # They work in Firefox.app.
+  # C-g, C-n, C-p work in Emacs.app.
+  - { when: composing, accept: "Control+g", send: Escape }
+  - { when: composing, accept: "Control+n", send: Down }
+  - { when: composing, accept: "Control+p", send: Up }
+  # The rest does not work in Emacs.app.
+  - { when: composing, accept: "Control+b", send: Left }
+  - { when: composing, accept: "Control+f", send: Right }
+  - { when: composing, accept: "Control+a", send: Home }
+  - { when: composing, accept: "Control+e", send: End }
+  - { when: composing, accept: "Control+d", send: Delete }
+  - { when: composing, accept: "Control+k", send: Shift+Delete }
   # The default is Control+Shift+Return.
   # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/editor.cc#L212
   # But it is not effective in Firefox.app.
-  # Tested Control+e works fine in Firefox.app and Emacs.app.
-  - {accept: "Control+e", send: "Control+Shift+Return", when: has_menu}
+  # Tested Control+i works fine in Firefox.app.
+  # In Emacs, Control+i is Tab, so Emacs has to be configured to distinguish between C-i and Tab.
+  - { when: composing, accept: "Control+i", send: Control+Shift+Return }
 
 # Many schemas are written as
 #
