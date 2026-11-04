@@ -2,46 +2,8 @@ local ls = require("luasnip")
 local s = ls.snippet
 local sn = ls.snippet_node
 local t = ls.text_node
-local f = ls.function_node
 local c = ls.choice_node
 local d = ls.dynamic_node
-
----@param subcommand string
----@return string
-local function snippet(subcommand)
-  local result = vim.system({ "snippet.py", subcommand }, { text = true }):wait()
-  return vim.trim(result.stdout)
-end
-
----@return string
-local function today()
-  return snippet("today")
-end
-
----@return string
-local function yesterday()
-  return snippet("yesterday")
-end
-
----@return string
-local function tomorrow()
-  return snippet("tomorrow")
-end
-
----@return string
-local function thisweek()
-  return snippet("thisweek")
-end
-
----@return string
-local function lastweek()
-  return snippet("lastweek")
-end
-
----@return string
-local function nextweek()
-  return snippet("nextweek")
-end
 
 return {
   s("#!py", t("#!/usr/bin/env python3")),
@@ -49,12 +11,6 @@ return {
   s("#!nvim", t("#!/usr/bin/env -S nvim -l")),
   s("#!sh", t("#!/bin/sh")),
   s("#!eshell", t("#!/usr/bin/env -S emacs --quick --batch --funcall eshell-batch-file")),
-  s("today", f(today)),
-  s("yesterday", f(yesterday)),
-  s("tomorrow", f(tomorrow)),
-  s("thisweek", f(thisweek)),
-  s("lastweek", f(lastweek)),
-  s("nextweek", f(nextweek)),
   s(
     "path",
     d(1, function()

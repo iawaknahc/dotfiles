@@ -4,40 +4,6 @@
 
 (require 'calendar)
 
-(defun my/tempel-templates-global ()
-  "Return a list of global Tempel templates."
-  (let* ((date (calendar-current-date))
-         (today (my/calendar-gregorian-iso8601-date-string date))
-         (yesterday (my/calendar-gregorian-iso8601-date-string (my/calendar-gregorian-add date :days -1)))
-         (tomorrow (my/calendar-gregorian-iso8601-date-string (my/calendar-gregorian-add date :days 1)))
-         (thisweek (my/calendar-gregorian-iso8601-week-string date))
-         (lastweek (my/calendar-gregorian-iso8601-week-string (my/calendar-gregorian-add date :weeks -1)))
-         (nextweek (my/calendar-gregorian-iso8601-week-string (my/calendar-gregorian-add date :weeks 1))))
-    `((today
-       ,today
-       :ann ,today
-       :doc ,today)
-      (yesterday
-       ,yesterday
-       :ann ,yesterday
-       :doc ,yesterday)
-      (tomorrow
-       ,tomorrow
-       :ann ,tomorrow
-       :doc ,tomorrow)
-      (thisweek
-       ,thisweek
-       :ann ,thisweek
-       :doc ,thisweek)
-      (lastweek
-       ,lastweek
-       :ann ,lastweek
-       :doc ,lastweek)
-      (nextweek
-       ,nextweek
-       :ann ,nextweek
-       :doc ,nextweek))))
-
 (defun my/tempel-templates-elisp ()
   "Return a list of Elisp Tempel templates."
   (let* ((file-name (buffer-file-name))
@@ -57,7 +23,7 @@
 
 (setq
  tempel-template-sources
- '(my/tempel-templates-global))
+ nil)
 (add-hook 'emacs-lisp-mode-hook (lambda ()
                                   (add-hook 'tempel-template-sources 'my/tempel-templates-elisp nil t)))
 
