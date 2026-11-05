@@ -201,12 +201,44 @@ local function format_numerals(input)
   return out
 end
 
+-- Transform the first row of QWERTY keyboard into digits.
+-- This is necessary because in 倉輸入法, entering digits commit immediately.
+-- Even I have turned on 鍵盤設定 -> 數字九宮格 -> 數字鍵由 RIME 處理.
+-- As a workaround in 倉輸入法, the first row of the QWERTY keyboard can be used as digit keys in
+-- this particular translator.
+---@param input string
+---@return string
+local function get_preedit(input)
+  input = string.gsub(input, "q", "1")
+  input = string.gsub(input, "w", "2")
+  input = string.gsub(input, "e", "3")
+  input = string.gsub(input, "r", "4")
+  input = string.gsub(input, "t", "5")
+  input = string.gsub(input, "y", "6")
+  input = string.gsub(input, "u", "7")
+  input = string.gsub(input, "i", "8")
+  input = string.gsub(input, "o", "9")
+  input = string.gsub(input, "p", "0")
+  input = string.gsub(input, "Q", "1")
+  input = string.gsub(input, "W", "2")
+  input = string.gsub(input, "E", "3")
+  input = string.gsub(input, "R", "4")
+  input = string.gsub(input, "T", "5")
+  input = string.gsub(input, "Y", "6")
+  input = string.gsub(input, "U", "7")
+  input = string.gsub(input, "I", "8")
+  input = string.gsub(input, "O", "9")
+  input = string.gsub(input, "P", "0")
+  return input
+end
+
 ---@param input string
 ---@return string
 local function sanitize_input(input)
   -- Strip the decimal point and trailing digits.
   input = string.gsub(input, "%.%d*$", "")
-  -- Strip all non-digits.
+  input = get_preedit(input)
+  -- Strip remaining non-digits.
   input = string.gsub(input, "[^%d]", "")
   -- Strip leading zeros, and pay attention to keep "0".
   input = string.gsub(string.sub(input, 1, -2), "^0+", "") .. string.sub(input, -1, -1)
@@ -216,4 +248,5 @@ end
 local M = {}
 M.format_numerals = format_numerals
 M.sanitize_input = sanitize_input
+M.get_preedit = get_preedit
 return M

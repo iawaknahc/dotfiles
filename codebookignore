@@ -1,3 +1,4 @@
+**/firefox/*.json
 *-tests.el
 *.conf
 *.hy
@@ -5,7 +6,7 @@
 *.patch
 *.plist
 *.sh
-**/firefox/*.json
+Makefile
 codebookignore
 currencies.py
 flake.lock
@@ -15,8 +16,8 @@ init-mu4e.el
 init-world-clock-mode.el
 json.lua
 justfile
-Makefile
 my-thingatpt.el
+my_numeral_spec.lua
 parse_ucd.zig
 secrets/secrets.yaml
 vimrc.vim

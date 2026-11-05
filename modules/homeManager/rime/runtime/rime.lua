@@ -145,13 +145,17 @@ function numeral_translator(input, segment)
 
   -- Strip the prefix D.
   input = string.sub(input, 2)
+  local raw_input_without_prefix = input
   input = numeral.sanitize_input(input)
   if input == "" then
     return
   end
 
   for _, result in ipairs(numeral.format_numerals(input)) do
-    yield(Candidate("numeral", segment.start, segment._end, result.candidate, result.comment))
+    local candidate = Candidate("numeral", segment.start, segment._end, result.candidate, result.comment)
+    local preedit = "D" .. numeral.get_preedit(raw_input_without_prefix)
+    candidate.preedit = preedit
+    yield(candidate)
   end
 end
 
