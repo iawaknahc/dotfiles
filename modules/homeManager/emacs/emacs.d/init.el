@@ -138,6 +138,9 @@
 (require 'init-embark)
 (require 'init-consult)
 
+;; Configure Very Large File
+(require 'init-vlf)
+
 ;; Configure snippet.
 (require 'init-tempel)
 

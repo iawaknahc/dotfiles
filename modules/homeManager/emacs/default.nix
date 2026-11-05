@@ -106,6 +106,7 @@
     xref = self.elpaPackages.xref;
     # transient is a dependency of magit.
     transient = self.elpaPackages.transient;
+    vlf = self.elpaPackages.vlf;
 
     # nongnuPackages
     exec-path-from-shell = self.nongnuPackages.exec-path-from-shell;
@@ -220,6 +221,9 @@
       track-changes
       tramp
       xref
+
+      # Very Large File
+      vlf
 
       # Notes
       vulpea
