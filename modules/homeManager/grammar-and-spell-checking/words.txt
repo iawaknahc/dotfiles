@@ -346,6 +346,7 @@ numtide
 nushell
 nvim
 nvimcolors
+nxml
 ocaml
 occ
 olp

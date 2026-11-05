@@ -126,6 +126,7 @@
 (require 'init-editorconfig-mode)
 (require 'init-goto-address-mode)
 (require 'init-dabbrev)
+(require 'init-so-long-mode)
 
 ;; Configure completion.
 (require 'init-completion-at-point)
