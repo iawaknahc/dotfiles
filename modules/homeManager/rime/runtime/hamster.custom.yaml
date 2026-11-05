@@ -1,0 +1,443 @@
+patch:
+  "keyboard/useKeyboardType": "MyCangjieKeyboardPrimary"
+  "keyboard/lockShiftState": false
+  "toolbar/displayCommentOfCandidate": true
+  "keyboard/symbolsOfReturnToMainKeyboard":
+  - "。"
+  - "，"
+  - "、"
+  - "？"
+  - "！"
+  keyboards:
+  - name: "MyCangjieKeyboardPrimary"
+    isPrimary: true
+    rows:
+    # First row
+    - keys:
+      - action: {character: {char: q}}
+        label: "手"
+        swipe:
+        - direction: up
+          action: {character: {char: "1"}}
+          display: true
+      - action: {character: {char: w}}
+        label: "田"
+        swipe:
+        - direction: up
+          action: {character: {char: "2"}}
+          display: true
+      - action: {character: {char: e}}
+        label: "水"
+        swipe:
+        - direction: up
+          action: {character: {char: "3"}}
+          display: true
+      - action: {character: {char: "r"}}
+        label: "口"
+        swipe:
+        - direction: up
+          action: {character: {char: "4"}}
+          display: true
+      - action: {character: {char: "t"}}
+        label: "廿"
+        swipe:
+        - direction: up
+          action: {character: {char: "5"}}
+          display: true
+      - action: {character: {char: "y"}}
+        label: "卜"
+        swipe:
+        - direction: up
+          action: {character: {char: "6"}}
+          display: true
+      - action: {character: {char: "u"}}
+        label: "山"
+        swipe:
+        - direction: up
+          action: {character: {char: "7"}}
+          display: true
+      - action: {character: {char: "i"}}
+        label: "戈"
+        swipe:
+        - direction: up
+          action: {character: {char: "8"}}
+          display: true
+      - action: {character: {char: "o"}}
+        label: "人"
+        swipe:
+        - direction: up
+          action: {character: {char: "9"}}
+          display: true
+      - action: {character: {char: "p"}}
+        label: "心"
+        swipe:
+        - direction: up
+          action: {character: {char: "0"}}
+          display: true
+    # Second row
+    - keys:
+      - action: {characterMargin: {char: "a"}}
+        width: available
+      - action: {character: {char: "a"}}
+        label: "日"
+      - action: {character: {char: "s"}}
+        label: "尸"
+      - action: {character: {char: "d"}}
+        label: "木"
+      - action: {character: {char: "f"}}
+        label: "火"
+      - action: {character: {char: "g"}}
+        label: "土"
+      - action: {character: {char: "h"}}
+        label: "竹"
+      - action: {character: {char: "j"}}
+        label: "十"
+      - action: {character: {char: "k"}}
+        label: "大"
+      - action: {character: {char: "l"}}
+        label: "中"
+      - action: {characterMargin: {char: "l"}}
+        width: available
+    # Third row
+    - keys:
+      - action: shift
+        width: {inputPercentage: 1.5}
+      - action: {characterMargin: {char: "z"}}
+        width: available
+      - action: {character: {char: "z"}}
+        label: "重"
+      - action: {character: {char: "x"}}
+        label: "難"
+      - action: {character: {char: "c"}}
+        label: "金"
+      - action: {character: {char: "v"}}
+        label: "女"
+      - action: {character: {char: "b"}}
+        label: "月"
+      - action: {character: {char: "n"}}
+        label: "弓"
+      - action: {character: {char: "m"}}
+        label: "一"
+      - action: {characterMargin: {char: "m"}}
+        width: available
+      - action: backspace
+        width: {inputPercentage: 1.5}
+    # Forth row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboard123"}
+        width: {inputPercentage: 1.5}
+        label: "123"
+      - action: {symbol: {char: "。"}}
+        label: "。"
+      - action: {symbol: {char: "，"}}
+        label: "，"
+      - action: space
+        width: available
+        label:
+          loadingText: "Loading"
+          text: " "
+      - action: {keyboardType: "MyCangjieKeyboardEnglish"}
+        width: {inputPercentage: 1.5}
+        label: "粵"
+      - action: enter
+        width: {inputPercentage: 1.5}
+  - name: "MyCangjieKeyboardEnglish"
+    isPrimary: false
+    rows:
+    # First row
+    - keys:
+      - action: {character: {char: q}}
+        label: "q"
+        swipe:
+        - direction: up
+          action: {character: {char: "1"}}
+          display: true
+      - action: {character: {char: w}}
+        label: "w"
+        swipe:
+        - direction: up
+          action: {character: {char: "2"}}
+          display: true
+      - action: {character: {char: e}}
+        label: "e"
+        swipe:
+        - direction: up
+          action: {character: {char: "3"}}
+          display: true
+      - action: {character: {char: "r"}}
+        label: "r"
+        swipe:
+        - direction: up
+          action: {character: {char: "4"}}
+          display: true
+      - action: {character: {char: "t"}}
+        label: "t"
+        swipe:
+        - direction: up
+          action: {character: {char: "5"}}
+          display: true
+      - action: {character: {char: "y"}}
+        label: "y"
+        swipe:
+        - direction: up
+          action: {character: {char: "6"}}
+          display: true
+      - action: {character: {char: "u"}}
+        label: "u"
+        swipe:
+        - direction: up
+          action: {character: {char: "7"}}
+          display: true
+      - action: {character: {char: "i"}}
+        label: "i"
+        swipe:
+        - direction: up
+          action: {character: {char: "8"}}
+          display: true
+      - action: {character: {char: "o"}}
+        label: "o"
+        swipe:
+        - direction: up
+          action: {character: {char: "9"}}
+          display: true
+      - action: {character: {char: "p"}}
+        label: "p"
+        swipe:
+        - direction: up
+          action: {character: {char: "0"}}
+          display: true
+    # Second row
+    - keys:
+      - action: {characterMargin: {char: "a"}}
+        width: available
+      - action: {character: {char: "a"}}
+        label: "a"
+      - action: {character: {char: "s"}}
+        label: "s"
+      - action: {character: {char: "d"}}
+        label: "d"
+      - action: {character: {char: "f"}}
+        label: "f"
+      - action: {character: {char: "g"}}
+        label: "g"
+      - action: {character: {char: "h"}}
+        label: "h"
+      - action: {character: {char: "j"}}
+        label: "j"
+      - action: {character: {char: "k"}}
+        label: "k"
+      - action: {character: {char: "l"}}
+        label: "l"
+      - action: {characterMargin: {char: "l"}}
+        width: available
+    # Third row
+    - keys:
+      - action: shift
+        width: {inputPercentage: 1.5}
+      - action: {characterMargin: {char: "z"}}
+        width: available
+      - action: {character: {char: "z"}}
+        label: "z"
+      - action: {character: {char: "x"}}
+        label: "x"
+      - action: {character: {char: "c"}}
+        label: "c"
+      - action: {character: {char: "v"}}
+        label: "v"
+      - action: {character: {char: "b"}}
+        label: "b"
+      - action: {character: {char: "n"}}
+        label: "n"
+      - action: {character: {char: "m"}}
+        label: "m"
+      - action: {characterMargin: {char: "m"}}
+        width: available
+      - action: backspace
+        width: {inputPercentage: 1.5}
+    # Forth row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboard123"}
+        width: {inputPercentage: 1.5}
+        label: "123"
+      - action: {symbol: {char: "。"}}
+        label: "。"
+      - action: {symbol: {char: "，"}}
+        label: "，"
+      - action: space
+        width: available
+        label:
+          loadingText: "Loading"
+          text: " "
+      - action: {keyboardType: "MyCangjieKeyboardPrimary"}
+        width: {inputPercentage: 1.5}
+        label: "倉"
+      - action: enter
+        width: {inputPercentage: 1.5}
+  - name: "MyCangjieKeyboard123"
+    isPrimary: false
+    rows:
+    # First row
+    - keys:
+      - action: {character: {char: "1"}}
+        label: "1"
+      - action: {character: {char: "2"}}
+        label: "2"
+      - action: {character: {char: "3"}}
+        label: "3"
+      - action: {character: {char: "4"}}
+        label: "4"
+      - action: {character: {char: "5"}}
+        label: "5"
+      - action: {character: {char: "6"}}
+        label: "6"
+      - action: {character: {char: "7"}}
+        label: "7"
+      - action: {character: {char: "8"}}
+        label: "8"
+      - action: {character: {char: "9"}}
+        label: "9"
+      - action: {character: {char: "0"}}
+        label: "0"
+    # Second row
+    - keys:
+      - action: {symbol: {char: "-"}}
+        label: "-"
+      - action: {symbol: {char: "/"}}
+        label: "/"
+      - action: {symbol: {char: "："}}
+        label: "："
+      - action: {symbol: {char: "；"}}
+        label: "；"
+      - action: {symbol: {char: "（"}}
+        label: "（"
+      - action: {symbol: {char: "）"}}
+        label: "）"
+      - action: {symbol: {char: "$"}}
+        label: "$"
+      - action: {symbol: {char: "@"}}
+        label: "@"
+      - action: {symbol: {char: "「"}}
+        label: "「"
+      - action: {symbol: {char: "」"}}
+        label: "」"
+    # Third row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboard#+="}
+        label: "#+="
+        width: available
+      - action: {symbol: {char: "。"}}
+        label: "。"
+        width: available
+      - action: {symbol: {char: "，"}}
+        label: "，"
+        width: available
+      - action: {symbol: {char: "、"}}
+        label: "、"
+        width: available
+      - action: {symbol: {char: "？"}}
+        label: "？"
+        width: available
+      - action: {symbol: {char: "！"}}
+        label: "！"
+        width: available
+      - action: {symbol: {char: "."}}
+        label: "."
+        width: available
+      - action: backspace
+        width: available
+    # Forth row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboardPrimary"}
+        width: {inputPercentage: 1.5}
+        label: "倉"
+      - action: space
+        width: available
+        label:
+          loadingText: "Loading"
+          text: " "
+      - action: enter
+        width: {inputPercentage: 1.5}
+  - name: "MyCangjieKeyboard#+="
+    isPrimary: false
+    rows:
+    # First row
+    - keys:
+      - action: {symbol: {char: "["}}
+        label: "["
+      - action: {symbol: {char: "]"}}
+        label: "]"
+      - action: {symbol: {char: "{"}}
+        label: "{"
+      - action: {symbol: {char: "}"}}
+        label: "}"
+      - action: {symbol: {char: "#"}}
+        label: "#"
+      - action: {symbol: {char: "%"}}
+        label: "%"
+      - action: {symbol: {char: "^"}}
+        label: "^"
+      - action: {symbol: {char: "*"}}
+        label: "*"
+      - action: {symbol: {char: "+"}}
+        label: "+"
+      - action: {symbol: {char: "="}}
+        label: "="
+    # Second row
+    - keys:
+      - action: {symbol: {char: "_"}}
+        label: "_"
+      - action: {symbol: {char: "—"}}
+        label: "—"
+      - action: {symbol: {char: "\\"}}
+        label: "\\"
+      - action: {symbol: {char: "|"}}
+        label: "|"
+      - action: {symbol: {char: "~"}}
+        label: "~"
+      - action: {symbol: {char: "<"}}
+        label: "<"
+      - action: {symbol: {char: ">"}}
+        label: ">"
+      - action: {symbol: {char: "`"}}
+        label: "`"
+      - action: {symbol: {char: "&"}}
+        label: "&"
+      - action: {symbol: {char: "·"}}
+        label: "·"
+    # Third row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboard123"}
+        width: available
+        label: "123"
+      - action: {symbol: {char: "。"}}
+        label: "。"
+        width: available
+      - action: {symbol: {char: "，"}}
+        label: "，"
+        width: available
+      - action: {symbol: {char: "、"}}
+        label: "、"
+        width: available
+      - action: {symbol: {char: "？"}}
+        label: "？"
+        width: available
+      - action: {symbol: {char: "！"}}
+        label: "！"
+        width: available
+      - action: {symbol: {char: "."}}
+        label: "."
+        width: available
+      - action: backspace
+        width: available
+    # Forth row
+    - keys:
+      - action: {keyboardType: "MyCangjieKeyboardPrimary"}
+        width: {inputPercentage: 1.5}
+        label: "倉"
+      - action: space
+        width: available
+        label:
+          loadingText: "Loading"
+          text: " "
+      - action: enter
+        width: {inputPercentage: 1.5}
