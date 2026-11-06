@@ -388,3 +388,18 @@ reverse_lookup_filter_cangjie5 = {
     end
   end,
 }
+
+-- Get the path to the Rime user directory.
+-- Tested it works on macOS and Hamster.
+---@return string|nil
+local function get_rime_home()
+  ---@type string|nil
+  local home = nil
+  for path in string.gmatch(package.path, "([^;]+)") do
+    local suffix = "/Rime/lua/?.lua"
+    if string.sub(path, -#suffix) == suffix then
+      home = string.sub(path, 1, -#suffix - 1) .. "/Rime"
+    end
+  end
+  return home
+end
