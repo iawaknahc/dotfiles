@@ -16,9 +16,13 @@ engine:
   - lua_translator@snippet_translator
   - lua_translator@unicode_translator
   - lua_translator@numeral_translator
-  - predict_translator
+  # librime-predict does not work quite well in Hamster.
+  # When the prediction is showing, pressing any other key will commit the prediction.
+  # This is certainly not what we want.
+  # We have to disable prediction, otherwise, prediction will stay in the way we type.
+  #- predict_translator
   filters:
-  - lua_filter@prediction_preedit_filter
+  #- lua_filter@prediction_preedit_filter
   - lua_filter@unicode_cjk_extension_filter
   - simplifier
   # numeral_translator output the same candidate with different comments very often.

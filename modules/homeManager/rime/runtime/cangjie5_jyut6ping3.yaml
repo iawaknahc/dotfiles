@@ -88,7 +88,7 @@ translator_jyut6ping3:
 engine:
   processors:
   - recognizer
-  - predictor
+  #- predictor
   - key_binder
   - speller
   - punctuator
