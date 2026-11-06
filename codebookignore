@@ -17,6 +17,7 @@ init-world-clock-mode.el
 json.lua
 justfile
 my-thingatpt.el
+my_full_text_search_spec.lua
 my_numeral_spec.lua
 my_porter.lua
 my_porter_output.txt
