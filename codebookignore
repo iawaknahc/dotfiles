@@ -18,6 +18,10 @@ json.lua
 justfile
 my-thingatpt.el
 my_numeral_spec.lua
+my_porter.lua
+my_porter_output.txt
+my_porter_spec.lua
+my_porter_voc.txt
 parse_ucd.zig
 secrets/secrets.yaml
 vimrc.vim

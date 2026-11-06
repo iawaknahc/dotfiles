@@ -1,7 +1,3 @@
-.codespellrc
-.editorconfig
-.gitignore
-.styluaignore
 *.conf
 *.css
 *.el
@@ -13,6 +9,11 @@
 *.plist
 *.vim
 *.yaml
+.codespellrc
+.editorconfig
+.gitignore
+.styluaignore
+Makefile
 codebookignore
 codespellignore
 flake.lock
@@ -21,5 +22,6 @@ infokey
 json.lua
 justfile
 main.mjs
-Makefile
+my_porter_output.txt
+my_porter_voc.txt
 words.txt
