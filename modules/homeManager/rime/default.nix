@@ -61,6 +61,30 @@ let
       runHook postInstall
     '';
   };
+  unicode-tsv = (
+    pkgs.stdenvNoCC.mkDerivation {
+      name = "unicode.sqlite3";
+      nativeBuildInputs = with pkgs; [
+        ucdxml-ucd-nounihan-flat
+        UAX44-ucd
+        UTS51-emoji
+        cldr-json
+        python3
+      ];
+      src = ../unicode;
+
+      installPhase = ''
+        mkdir -p $out/share/unicode
+        python3 ./build_sqlite.py \
+          ${pkgs.ucdxml-ucd-nounihan-flat}/share/unicode/${pkgs.ucdxml-ucd-nounihan-flat.version} \
+          ${pkgs.UAX44-ucd}/share/unicode/${pkgs.UAX44-ucd.version} \
+          ${pkgs.UTS51-emoji}/share/unicode/${pkgs.UTS51-emoji.version} \
+          ${pkgs.cldr-json}/share/cldr-json/${pkgs.cldr-json.version} \
+          $out/share/unicode/unicode.sqlite3 \
+          $out/share/unicode/unicode.tsv
+      '';
+    }
+  );
 in
 {
   home.packages = with pkgs; [
@@ -74,6 +98,7 @@ in
     predict-db
     rime-unicode-cjk-extension-filter-lua
     cangjie5-rime
+    unicode-tsv
   ];
 
   home.file."${rimeUserDirectory}" = {
@@ -112,4 +137,5 @@ in
     "${predict-db}/share/rime-predict-db-words-hk-word-frequency-list/predict.db";
   home.file."${rimeUserDirectory}/lua/unicode_cjk_extension_filter_data.lua".source =
     "${rime-unicode-cjk-extension-filter-lua}/share/rime-unicode-cjk-extension-filter-lua/rime_unicode_cjk_extension_filter.lua";
+  home.file."${rimeUserDirectory}/unicode.tsv".source = "${unicode-tsv}/share/unicode/unicode.tsv";
 }
