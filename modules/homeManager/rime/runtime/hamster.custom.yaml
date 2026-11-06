@@ -127,10 +127,6 @@ patch:
       - action: {keyboardType: "MyCangjieKeyboard123"}
         width: {inputPercentage: 1.5}
         label: "123"
-      - action: {symbol: {char: "。"}}
-        label: "。"
-      - action: {symbol: {char: "，"}}
-        label: "，"
       - action: space
         width: available
         label:
@@ -259,10 +255,6 @@ patch:
       - action: {keyboardType: "MyCangjieKeyboard123"}
         width: {inputPercentage: 1.5}
         label: "123"
-      - action: {symbol: {char: "。"}}
-        label: "。"
-      - action: {symbol: {char: "，"}}
-        label: "，"
       - action: space
         width: available
         label:
