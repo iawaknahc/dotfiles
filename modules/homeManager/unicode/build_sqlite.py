@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import json
 import os
 import sqlite3
@@ -11,6 +12,31 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TypedDict
 
+CJK_IDEOGRAPH_RANGES = [
+    (0x4E00, 0x9FFF),  # CJK Unified Ideographs
+    (0x3400, 0x4DBF),  # CJK Unified Ideographs Extension A
+    (0xF900, 0xFAFF),  # CJK Compatibility Ideographs
+    (0x20000, 0x2A6DF),  # CJK Unified Ideographs Extension B
+    (0x2A700, 0x2B73F),  # CJK Unified Ideographs Extension C
+    (0x2B740, 0x2B81F),  # CJK Unified Ideographs Extension D
+    (0x2B820, 0x2CEAF),  # CJK Unified Ideographs Extension E
+    (0x2CEB0, 0x2EBEF),  # CJK Unified Ideographs Extension F
+    (0x2F800, 0x2FA1F),  # CJK Compatibility Ideographs Supplement
+    (0x30000, 0x3134F),  # CJK Unified Ideographs Extension G
+    (0x31350, 0x323AF),  # CJK Unified Ideographs Extension H
+    (0x2EBF0, 0x2EE5F),  # CJK Unified Ideographs Extension I
+    (0x323B0, 0x3347F),  # CJK Unified Ideographs Extension J
+]
+
+NAME_DERIVED_RANGES = [
+    (0xE000, 0xF8FF, "Private Use Area-#"),
+    (0xF0000, 0xFFFFD, "Plane 15 Private Use Area-#"),
+    (0x100000, 0x10FFFD, "Plane 16 Private Use Area-#"),
+    (0xD800, 0xDB7F, "High Surrogate-#"),
+    (0xDB80, 0xDBFF, "Private Use High Surrogate-#"),
+    (0xDC00, 0xDFFF, "Low Surrogate-#"),
+]
+
 
 @dataclass
 class CodepointSequence:
@@ -21,6 +47,18 @@ class CodepointSequence:
     @cached_property
     def cps(self) -> str:
         return codepoints_to_cps(self.codepoints)
+
+    def should_skip(self) -> bool:
+        if len(self.codepoints) > 1:
+            return False
+        codepoint = self.codepoints[0]
+        for r in CJK_IDEOGRAPH_RANGES:
+            if codepoint >= r[0] and codepoint <= r[1]:
+                return True
+        for r in NAME_DERIVED_RANGES:
+            if codepoint >= r[0] and codepoint <= r[1]:
+                return True
+        return False
 
 
 @dataclass
@@ -88,20 +126,12 @@ def get_codepoint_name(codepoint: int, el: ET.Element[str]) -> str:
         return na1.replace("#", notation)
     elif name_alias is not None:
         return name_alias.attrib["alias"].replace("#", notation)
-    elif codepoint >= 0xE000 and codepoint <= 0xF8FF:
-        return "Private Use Area-#".replace("#", notation)
-    elif codepoint >= 0xF0000 and codepoint <= 0xFFFFD:
-        return "Plane 15 Private Use Area-#".replace("#", notation)
-    elif codepoint >= 0x100000 and codepoint <= 0x10FFFD:
-        return "Plane 16 Private Use Area-#".replace("#", notation)
-    elif codepoint >= 0xD800 and codepoint <= 0xDB7F:
-        return "High Surrogate-#".replace("#", notation)
-    elif codepoint >= 0xDB80 and codepoint <= 0xDBFF:
-        return "Private Use High Surrogate-#".replace("#", notation)
-    elif codepoint >= 0xDC00 and codepoint <= 0xDFFF:
-        return "Low Surrogate-#".replace("#", notation)
-    else:
-        raise ValueError(f"no idea how to handle {notation}")
+
+    for r in NAME_DERIVED_RANGES:
+        if codepoint >= r[0] and codepoint <= r[1]:
+            return r[2].replace("#", notation)
+
+    raise ValueError(f"no idea how to handle {notation}")
 
 
 def parse_ucd_line(line: str) -> list[str] | None:
@@ -436,6 +466,7 @@ def main():
     uts51_directory = sys.argv[3]
     cldr_json_directory = sys.argv[4]
     sqlite3_database_file = sys.argv[5]
+    tsv_file = sys.argv[6]
 
     ucd_nounihan_flat_xml = os.path.join(
         ucdxml_directory, "./ucdxml/ucd.nounihan.flat.xml"
@@ -491,9 +522,20 @@ def main():
         + emoji_variant_sequences
         + emoji_zwj_sequences
     )
+    codepoint_sequences = [a for a in codepoint_sequences if not a.should_skip()]
 
     with closing(sqlite3.connect(sqlite3_database_file, autocommit=False)) as conn:
         insert_codepoint_sequences(conn, codepoint_sequences)
+
+    with open(tsv_file, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, delimiter="\t", lineterminator="\n")
+        for codepoint_sequence in codepoint_sequences:
+            writer.writerow(
+                [
+                    codepoint_sequence.cps,
+                    codepoint_sequence.name + " " + (codepoint_sequence.tts or ""),
+                ]
+            )
 
 
 if __name__ == "__main__":

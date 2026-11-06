@@ -28,7 +28,8 @@
           ${UAX44-ucd}/share/unicode/${UAX44-ucd.version} \
           ${UTS51-emoji}/share/unicode/${UTS51-emoji.version} \
           ${cldr-json}/share/cldr-json/${cldr-json.version} \
-          $out/share/unicode/unicode.sqlite3
+          $out/share/unicode/unicode.sqlite3 \
+          $out/share/unicode/unicode.tsv
       '';
     })
   ];
