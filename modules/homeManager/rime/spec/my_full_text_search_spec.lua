@@ -20,7 +20,7 @@ describe("FTSIndex", function()
   end)
 
   it("matches a single token", function()
-    assert.are.same({ "1", "2" }, titles("cats"))
+    assert.are.same({ "2", "1" }, titles("cats"))
   end)
 
   it("requires every token to match", function()
@@ -35,18 +35,18 @@ describe("FTSIndex", function()
   end)
 
   it("ignores case", function()
-    assert.are.same({ "1", "2" }, titles("CATS"))
+    assert.are.same({ "2", "1" }, titles("CATS"))
     assert.are.same({ "4" }, titles("smiling face"))
   end)
 
   it("ignores non alphanumeric characters", function()
     assert.are.same({ "2" }, titles("sleep,"))
-    assert.are.same({ "1", "2" }, titles("(cats)"))
+    assert.are.same({ "2", "1" }, titles("(cats)"))
   end)
 
   it("matches different forms of a word by stemming", function()
     assert.are.same({ "1", "3" }, titles("running"))
-    assert.are.same({ "1", "2" }, titles("cat"))
+    assert.are.same({ "2", "1" }, titles("cat"))
     assert.are.same({ "4" }, titles("smile"))
   end)
 
@@ -57,24 +57,40 @@ describe("FTSIndex", function()
   end)
 
   it("ignores punctuation-only tokens in the query", function()
-    assert.are.same({ "1", "2" }, titles("cats --"))
+    assert.are.same({ "2", "1" }, titles("cats --"))
   end)
 
   it("returns a document once even if a token repeats", function()
     -- Document 2 contains cats twice; document 4 contains smiling twice.
-    assert.are.same({ "1", "2" }, titles("cats cats"))
+    assert.are.same({ "2", "1" }, titles("cats cats"))
     assert.are.same({ "4" }, titles("smiling"))
   end)
 
+  describe("ranking", function()
+    it("ranks a document higher when the token occurs more often", function()
+      -- Document 2 contains cats twice; document 1 contains it once.
+      assert.are.same({ "2", "1" }, titles("cats"))
+    end)
+
+    it("ranks a shorter document higher when the token occurs equally often", function()
+      -- Documents 1 and 3 contain run once; document 1 is shorter.
+      assert.are.same({ "1", "3" }, titles("run"))
+    end)
+
+    it("breaks ties by file order", function()
+      assert.are.same({ "5", "6" }, titles("tied"))
+    end)
+  end)
+
   describe("limit", function()
-    it("returns at most limit documents in file order", function()
+    it("returns at most limit documents in ranked order", function()
       assert.are.same({}, titles("cats", 0))
-      assert.are.same({ "1" }, titles("cats", 1))
-      assert.are.same({ "1", "2" }, titles("cats", 2))
+      assert.are.same({ "2" }, titles("cats", 1))
+      assert.are.same({ "2", "1" }, titles("cats", 2))
     end)
 
     it("returns every match when limit exceeds the matches", function()
-      assert.are.same({ "1", "2" }, titles("cats", 10))
+      assert.are.same({ "2", "1" }, titles("cats", 10))
     end)
   end)
 end)

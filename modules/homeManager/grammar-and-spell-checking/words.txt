@@ -21,6 +21,7 @@ autoresize
 autorevert
 autosync
 autotrigger
+avgdl
 axdom
 backtab
 basedpyright
@@ -220,6 +221,8 @@ hpath
 hspace
 ibuffer
 icalendar
+idf
+idfs
 ignorecase
 imenu
 impp
