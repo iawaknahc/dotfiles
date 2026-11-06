@@ -1,4 +1,4 @@
-root:
+schema_root:
   switches:
   - name: full_shape
     states: ["半", "全"]
@@ -24,6 +24,11 @@ root:
     - xform/3/q/
     - xform/6/qq/
 
+  editor:
+    bindings:
+      # See the comment on "recognizer/use_space".
+      "KP_Space": confirm
+
   simplifier:
     tips: all
 
@@ -32,6 +37,37 @@ root:
 
   key_binder:
     import_preset: default
+
+  recognizer:
+    import_preset: default
+    # The dot in the patterns usually means printable ASCII ranges.
+    # In particular it DOES NOT include space by default.
+    # Note that the range does not include Return.
+    #
+    # When use_space is true, then space is included.
+    # Having use_space is true implies the following:
+    #
+    # 1. Space is included in the input, so it will not be processed by
+    #    express_editor anymore.
+    # 2. Space is bound to confirm in express_editor.
+    #    If space is no longer available, there is no key to confirm.
+    # 3. To restore confirm, we have to assign another key for it.
+    #    This can be done in "editor/bindings".
+    # 4. In "editor/bindings", we assign the key "KP_Space" to confirm.
+    #    This key does not appear on my physical keyboard though.
+    # 5. We somehow need a way to type "KP_Space".
+    #    This can be done with "key_binder/bindings".
+    #    We can assign a key that appears on the physical keyboard
+    #    that when pressed, send "KP_Space" instead.
+    # 6. For an intuitive user experience, we choose this key to be Return.
+    #    So space and Return behave the same.
+    # 7. Since Return is now bound to "KP_Space",
+    #    its original action commit_raw_input is lost.
+    #    That is not a problem for now since I do not commit raw input.
+    use_space: true
+    patterns:
+      unicode: "^U.*$"
+      numeral: "^D.*$"
 
   predictor:
     db: predict.db
@@ -64,3 +100,33 @@ engine:
   - abc_segmentor
   - punct_segmentor
   - fallback_segmentor
+
+default_root:
+  key_binder:
+    bindings:
+    # See the comment on "recognizer/use_space".
+    - { when: composing, accept: "Return", send: "KP_Space" }
+    # When there is no candidate, press space means escape.
+    # This is useful when typing in Cangjie.
+    # https://github.com/rime/home/wiki/CustomizationGuide#%E7%A9%BA%E7%A2%BC%E6%99%82%E6%8C%89%E7%A9%BA%E6%A0%BC%E9%8D%B5%E6%B8%85%E7%A9%BA%E8%BC%B8%E5%85%A5%E7%A2%BC
+    - { when: has_menu, accept: space, send: space }
+    - { when: composing, accept: space, send: Escape }
+    # The following are Emacs-like key bindings.
+    # They work in Firefox.app.
+    # C-g, C-n, C-p work in Emacs.app.
+    - { when: composing, accept: "Control+g", send: Escape }
+    - { when: composing, accept: "Control+n", send: Down }
+    - { when: composing, accept: "Control+p", send: Up }
+    # The rest does not work in Emacs.app.
+    - { when: composing, accept: "Control+b", send: Left }
+    - { when: composing, accept: "Control+f", send: Right }
+    - { when: composing, accept: "Control+a", send: Home }
+    - { when: composing, accept: "Control+e", send: End }
+    - { when: composing, accept: "Control+d", send: Delete }
+    - { when: composing, accept: "Control+k", send: Shift+Delete }
+    # The default is Control+Shift+Return.
+    # See https://github.com/rime/librime/blob/1.17.0/src/rime/gear/editor.cc#L212
+    # But it is not effective in Firefox.app.
+    # Tested Control+i works fine in Firefox.app.
+    # In Emacs, Control+i is Tab, so Emacs has to be configured to distinguish between C-i and Tab.
+    - { when: composing, accept: "Control+i", send: Control+Shift+Return }

@@ -45,10 +45,4 @@ translator_jyut6ping3:
   initial_quality: 0.0
   __include: cangjie5_jyut6ping3.yaml:/translator_jyut6ping3
 
-recognizer:
-  import_preset: default
-  patterns:
-    unicode: "^U.*$"
-    numeral: "^D.*$"
-
-__include: cangjie5_jyut6ping3.yaml:/root
+__include: cangjie5_jyut6ping3.yaml:/schema_root
