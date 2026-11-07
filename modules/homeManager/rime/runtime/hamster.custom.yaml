@@ -2,6 +2,7 @@ patch:
   "keyboard/useKeyboardType": "MyCangjieKeyboardPrimary"
   "keyboard/lockShiftState": false
   "toolbar/displayCommentOfCandidate": true
+  "keyboard/enableEmbeddedInputMode": true
   "keyboard/symbolsOfReturnToMainKeyboard":
   - "。"
   - "，"
