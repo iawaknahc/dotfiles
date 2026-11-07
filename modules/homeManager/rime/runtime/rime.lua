@@ -3,6 +3,7 @@ local snippet = require("my_snippet")
 --- @type { common_in_hong_kong: string[], unicode_cjk_extension_ranges: [integer, integer][] }
 local unicode_cjk_extension_filter_data = require("unicode_cjk_extension_filter_data")
 local FTSIndex = require("my_full_text_search")
+local UnicodeCodepointIndex = require("my_unicode_codepoint_index")
 
 -- Get the path to the Rime user directory.
 -- Tested it works on macOS and Hamster.
@@ -49,6 +50,8 @@ end
 -- The index contains many tables, adding more workload to the garbage collector.
 ---@type FTSIndex|nil
 UNICODE_TRANSLATOR_FTS_INDEX = nil
+---@type UnicodeCodepointIndex|nil
+UNICODE_CODEPOINT_INDEX = nil
 
 ---@param path string
 ---@return fun(): FTSDocument|nil
@@ -81,13 +84,15 @@ end
 
 unicode_translator = {
   init = function()
-    if UNICODE_TRANSLATOR_FTS_INDEX == nil then
+    if UNICODE_TRANSLATOR_FTS_INDEX == nil or UNICODE_CODEPOINT_INDEX == nil then
       local home = get_rime_home()
       if home ~= nil then
         local iter = iterate_unicode_tsv(home .. "/unicode.tsv")
         UNICODE_TRANSLATOR_FTS_INDEX = FTSIndex.new()
+        UNICODE_CODEPOINT_INDEX = UnicodeCodepointIndex.new()
         for document in iter do
           UNICODE_TRANSLATOR_FTS_INDEX:add_document(document)
+          UNICODE_CODEPOINT_INDEX:add_document(document)
         end
         UNICODE_TRANSLATOR_FTS_INDEX:finish_indexing()
       end
@@ -96,13 +101,14 @@ unicode_translator = {
   ---@param input string
   ---@param segment Segment
   func = function(input, segment)
-    if UNICODE_TRANSLATOR_FTS_INDEX == nil then
+    if UNICODE_TRANSLATOR_FTS_INDEX == nil or UNICODE_CODEPOINT_INDEX == nil then
       return
     end
 
     if not segment:has_tag("unicode") then
       return
     end
+
     ---@type integer|nil
     local base = nil
     if has_prefix(input, "U+") or has_prefix(input, "Ux") then
@@ -113,6 +119,22 @@ unicode_translator = {
       base = 2
     elseif has_prefix(input, "Uo") then
       base = 8
+    end
+
+    if base ~= nil then
+      local codepoint_str = string.sub(input, 3)
+      local codepoint = tonumber(codepoint_str, base)
+      if codepoint ~= nil then
+        local documents = UNICODE_CODEPOINT_INDEX:search(codepoint)
+        for _, document in ipairs(documents) do
+          local text = cps_to_string(document.title)
+          local comment = document.content
+          yield(Candidate("unicode", segment.start, segment._end, text, comment))
+        end
+
+        -- Always end here if the number can be parsed.
+        return
+      end
     end
 
     local query = string.gsub(string.sub(input, 2), "_", " ")
