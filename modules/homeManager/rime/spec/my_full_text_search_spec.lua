@@ -11,16 +11,11 @@ local documents = {
   { title = "6", content = "Tied pair" },
 }
 
--- Returns an iterator over the given documents.
-local function iterate(list)
-  local i = 0
-  return function()
-    i = i + 1
-    return list[i]
-  end
+local index = FTSIndex.new()
+for _, document in ipairs(documents) do
+  index:add_document(document)
 end
-
-local index = FTSIndex.new(iterate(documents))
+index:finish_indexing()
 
 -- Returns the titles of the matched documents, in result order.
 local function titles(query, limit)
@@ -98,6 +93,27 @@ describe("FTSIndex", function()
 
     it("breaks ties by file order", function()
       assert.are.same({ "5", "6" }, titles("tied"))
+    end)
+  end)
+
+  describe("finish_indexing", function()
+    it("keeps the index searchable", function()
+      local unfinished = FTSIndex.new()
+      for _, document in ipairs(documents) do
+        unfinished:add_document(document)
+      end
+      local before = unfinished:search("cats", math.huge)
+      unfinished:finish_indexing()
+      assert.are.same(before, unfinished:search("cats", math.huge))
+    end)
+
+    it("rejects documents added afterwards", function()
+      local finished = FTSIndex.new()
+      finished:add_document({ title = "1", content = "The cats run" })
+      finished:finish_indexing()
+      assert.error_matches(function()
+        finished:add_document({ title = "2", content = "Cats sleep" })
+      end, "The index is frozen")
     end)
   end)
 

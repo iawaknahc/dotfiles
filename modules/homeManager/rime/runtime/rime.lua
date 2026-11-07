@@ -84,7 +84,12 @@ unicode_translator = {
     if UNICODE_TRANSLATOR_FTS_INDEX == nil then
       local home = get_rime_home()
       if home ~= nil then
-        UNICODE_TRANSLATOR_FTS_INDEX = FTSIndex.new(iterate_unicode_tsv(home .. "/unicode.tsv"))
+        local iter = iterate_unicode_tsv(home .. "/unicode.tsv")
+        UNICODE_TRANSLATOR_FTS_INDEX = FTSIndex.new()
+        for document in iter do
+          UNICODE_TRANSLATOR_FTS_INDEX:add_document(document)
+        end
+        UNICODE_TRANSLATOR_FTS_INDEX:finish_indexing()
       end
     end
   end,

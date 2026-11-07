@@ -11,12 +11,11 @@ local porter = require("my_porter")
 ---@field private _documents FTSDocument[]
 ---@field private _document_length_in_number_of_tokens integer[]
 ---@field private _total_number_of_tokens_across_all_documents integer
----@field private _average_number_of_tokens_across_all_documents number
+---@field private _porter_cache table<string, string>|nil
 local FTSIndex = {}
 
----@param iter fun(): FTSDocument|nil
 ---@return FTSIndex
-function FTSIndex.new(iter)
+function FTSIndex.new()
   local instance = setmetatable({
     _document_id = 1,
     _postings_list = {},
@@ -24,9 +23,8 @@ function FTSIndex.new(iter)
     _documents = {},
     _document_length_in_number_of_tokens = {},
     _total_number_of_tokens_across_all_documents = 0,
-    _average_number_of_tokens_across_all_documents = 0,
+    _porter_cache = {},
   }, { __index = FTSIndex })
-  instance:_prepare(iter)
   return instance
 end
 
@@ -108,7 +106,7 @@ end
 
 ---@param document FTSDocument
 ---@return integer
-function FTSIndex:_add_document(document)
+function FTSIndex:_assign_id_to_document(document)
   local document_id = self._document_id
   self._document_id = self._document_id + 1
   self._documents[document_id] = document
@@ -136,29 +134,33 @@ function FTSIndex:_add_document_id_to_token(token, document_id)
   end
 end
 
----@param iter fun(): FTSDocument|nil
-function FTSIndex:_prepare(iter)
-  ---@type number
-  local average_number_of_tokens_across_all_documents = 0
-  local total_number_of_tokens_across_all_documents = 0
-  local porter_cache = {}
-  for document in iter do
-    local length_in_number_of_tokens = 0
-    local document_id = self:_add_document(document)
-    for token in tokenize(document.content, porter_cache) do
-      self:_add_document_id_to_token(token, document_id)
-      length_in_number_of_tokens = length_in_number_of_tokens + 1
-    end
-    self._document_length_in_number_of_tokens[document_id] = length_in_number_of_tokens
-    total_number_of_tokens_across_all_documents = total_number_of_tokens_across_all_documents
-      + length_in_number_of_tokens
+function FTSIndex:finish_indexing()
+  self._porter_cache = nil
+end
+
+---@param document FTSDocument
+function FTSIndex:add_document(document)
+  if self._porter_cache == nil then
+    error("The index is frozen")
   end
 
-  if #self._documents ~= 0 then
-    average_number_of_tokens_across_all_documents = total_number_of_tokens_across_all_documents / #self._documents
+  local length_in_number_of_tokens = 0
+  local document_id = self:_assign_id_to_document(document)
+  for token in tokenize(document.content, self._porter_cache) do
+    self:_add_document_id_to_token(token, document_id)
+    length_in_number_of_tokens = length_in_number_of_tokens + 1
   end
-  self._total_number_of_tokens_across_all_documents = total_number_of_tokens_across_all_documents
-  self._average_number_of_tokens_across_all_documents = average_number_of_tokens_across_all_documents
+  self._document_length_in_number_of_tokens[document_id] = length_in_number_of_tokens
+  self._total_number_of_tokens_across_all_documents = self._total_number_of_tokens_across_all_documents
+    + length_in_number_of_tokens
+end
+
+---@return number|nil
+function FTSIndex:_get_average_number_of_tokens_across_all_documents()
+  if #self._documents ~= 0 then
+    return self._total_number_of_tokens_across_all_documents / #self._documents
+  end
+  return nil
 end
 
 ---@param tokens string[]
@@ -179,21 +181,24 @@ function FTSIndex:_calculate_bm25_scores(tokens, matched_postings)
   local document_ids_with_bm25_score = {}
   local k1 = 1.2
   local b = 0.75
-  local avgdl = self._average_number_of_tokens_across_all_documents
+  local avgdl = self:_get_average_number_of_tokens_across_all_documents()
   for _, document_id in ipairs(matched_postings) do
     ---@type number
     local bm25_score = 0
     local D = self._document_length_in_number_of_tokens[document_id] --[[@as integer]]
-    for idx_token, token in ipairs(tokens) do
-      local postings = self._postings_list[token]
-      local frequency = self._frequency_list[token]
-      local index = binary_search(postings, document_id)
-      if index ~= nil then
-        local idf = idfs[idx_token] --[[@as number]]
-        local f = frequency[index] --[[@as integer]]
-        bm25_score = bm25_score + idf * ((f * (k1 + 1)) / (f + k1 * (1 - b + b * (D / avgdl))))
+    if avgdl ~= nil then
+      for idx_token, token in ipairs(tokens) do
+        local postings = self._postings_list[token]
+        local frequency = self._frequency_list[token]
+        local index = binary_search(postings, document_id)
+        if index ~= nil then
+          local idf = idfs[idx_token] --[[@as number]]
+          local f = frequency[index] --[[@as integer]]
+          bm25_score = bm25_score + idf * ((f * (k1 + 1)) / (f + k1 * (1 - b + b * (D / avgdl))))
+        end
       end
     end
+
     table.insert(document_ids_with_bm25_score, {
       document_id = document_id,
       bm25_score = bm25_score,
