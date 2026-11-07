@@ -50,12 +50,41 @@ end
 ---@type FTSIndex|nil
 UNICODE_TRANSLATOR_FTS_INDEX = nil
 
+---@param path string
+---@return fun(): FTSDocument|nil
+local function iterate_unicode_tsv(path)
+  local iter = io.lines(path)
+  return function()
+    for line in iter do
+      ---@type string|nil
+      local title
+      ---@type string|nil
+      local content
+      local num_fields = 0
+      for field in string.gmatch(line, "[^\t]+") do
+        if num_fields == 0 then
+          title = field
+        elseif num_fields == 1 then
+          content = field
+        else
+          error("Expected only 2 fields per line")
+        end
+        num_fields = num_fields + 1
+      end
+      if title == nil or content == nil then
+        error("Less than 2 fields")
+      end
+      return { title = title, content = content }
+    end
+  end
+end
+
 unicode_translator = {
   init = function()
     if UNICODE_TRANSLATOR_FTS_INDEX == nil then
       local home = get_rime_home()
       if home ~= nil then
-        UNICODE_TRANSLATOR_FTS_INDEX = FTSIndex.new(home .. "/unicode.tsv")
+        UNICODE_TRANSLATOR_FTS_INDEX = FTSIndex.new(iterate_unicode_tsv(home .. "/unicode.tsv"))
       end
     end
   end,

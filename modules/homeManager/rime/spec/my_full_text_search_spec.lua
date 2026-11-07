@@ -1,7 +1,26 @@
 local FTSIndex = require("my_full_text_search")
 local assert = require("luassert")
 
-local index = FTSIndex.new("spec/my_full_text_search_documents.tsv")
+---@type FTSDocument[]
+local documents = {
+  { title = "1", content = "The cats run" },
+  { title = "2", content = "Cats sleep, cats eat" },
+  { title = "3", content = "A dog is running" },
+  { title = "4", content = "SMILING FACE -- WITH SMILING EYES" },
+  { title = "5", content = "Tied pair" },
+  { title = "6", content = "Tied pair" },
+}
+
+-- Returns an iterator over the given documents.
+local function iterate(list)
+  local i = 0
+  return function()
+    i = i + 1
+    return list[i]
+  end
+end
+
+local index = FTSIndex.new(iterate(documents))
 
 -- Returns the titles of the matched documents, in result order.
 local function titles(query, limit)

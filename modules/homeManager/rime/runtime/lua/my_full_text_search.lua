@@ -5,7 +5,6 @@ local porter = require("my_porter")
 ---@field content string
 
 ---@class FTSIndex
----@field path string
 ---@field private _document_id integer
 ---@field private _postings_list { [string]: integer[] }
 ---@field private _frequency_list { [string]: integer[] }
@@ -15,11 +14,10 @@ local porter = require("my_porter")
 ---@field private _average_number_of_tokens_across_all_documents number
 local FTSIndex = {}
 
----@param path string
+---@param iter fun(): FTSDocument|nil
 ---@return FTSIndex
-function FTSIndex.new(path)
+function FTSIndex.new(iter)
   local instance = setmetatable({
-    path = path,
     _document_id = 1,
     _postings_list = {},
     _frequency_list = {},
@@ -28,7 +26,7 @@ function FTSIndex.new(path)
     _total_number_of_tokens_across_all_documents = 0,
     _average_number_of_tokens_across_all_documents = 0,
   }, { __index = FTSIndex })
-  instance:_prepare()
+  instance:_prepare(iter)
   return instance
 end
 
@@ -138,38 +136,16 @@ function FTSIndex:_add_document_id_to_token(token, document_id)
   end
 end
 
-function FTSIndex:_prepare()
+---@param iter fun(): FTSDocument|nil
+function FTSIndex:_prepare(iter)
   ---@type number
   local average_number_of_tokens_across_all_documents = 0
   local total_number_of_tokens_across_all_documents = 0
   local porter_cache = {}
-  for line in io.lines(self.path) do
-    ---@type string|nil
-    local title
-    ---@type string|nil
-    local content
-    local num_fields = 0
-    for field in string.gmatch(line, "[^\t]+") do
-      if num_fields == 0 then
-        title = field
-      elseif num_fields == 1 then
-        content = field
-      else
-        error("Expected only 2 fields per line")
-      end
-      num_fields = num_fields + 1
-    end
-    if title == nil or content == nil then
-      error("Less than 2 fields")
-    end
-
+  for document in iter do
     local length_in_number_of_tokens = 0
-    local document = {
-      title = title,
-      content = content,
-    }
     local document_id = self:_add_document(document)
-    for token in tokenize(content, porter_cache) do
+    for token in tokenize(document.content, porter_cache) do
       self:_add_document_id_to_token(token, document_id)
       length_in_number_of_tokens = length_in_number_of_tokens + 1
     end
@@ -177,6 +153,7 @@ function FTSIndex:_prepare()
     total_number_of_tokens_across_all_documents = total_number_of_tokens_across_all_documents
       + length_in_number_of_tokens
   end
+
   if #self._documents ~= 0 then
     average_number_of_tokens_across_all_documents = total_number_of_tokens_across_all_documents / #self._documents
   end
