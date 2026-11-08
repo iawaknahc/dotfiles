@@ -86,15 +86,15 @@
   (setopt holiday-solar-holidays nil)
 
   (setopt holiday-other-holidays (append
-                                  '((my/holiday-prefix "[廿十四節氣]   " (my/holiday-forms-to-hlist my/holiday-other-holidays-solar-term)))
-                                  '((my/holiday-prefix "[香港傳統節日] " (my/holiday-forms-to-hlist my/holiday-other-holidays-chinese-festivals)))
-                                  '((my/holiday-prefix "[紐交所休市日] " (my/holiday-forms-to-hlist my/holiday-nyse-holidays)))
-                                  '((my/holiday-prefix "[香港公眾假期] " (my/holiday-hong-kong my/holiday-hong-kong-general-holidays)))
-                                  '((my/holiday-prefix "[香港法定假期] " (my/holiday-hong-kong my/holiday-hong-kong-statutory-holidays)))
-                                  '((my/holiday-prefix "[香港週年紀念] " (my/holiday-forms-to-hlist
-                                                                          '((my/holiday-anniversary 1997 7 1 "香港特別行政區成立")
-                                                                            (my/holiday-anniversary 1949 10 1 "中華人民共和國成立")))))
-                                  '((my/holiday-prefix "[生日與忌日]   " (my/vulpea-holiday-birth-and-death)))
+                                  '((my/holiday-prefix "[廿十四節氣]\t" (my/holiday-forms-to-hlist my/holiday-other-holidays-solar-term)))
+                                  '((my/holiday-prefix "[香港傳統節日]\t" (my/holiday-forms-to-hlist my/holiday-other-holidays-chinese-festivals)))
+                                  '((my/holiday-prefix "[NYSE Holidays]\t" (my/holiday-forms-to-hlist my/holiday-nyse-holidays)))
+                                  '((my/holiday-prefix "[香港公眾假期]\t" (my/holiday-hong-kong my/holiday-hong-kong-general-holidays)))
+                                  '((my/holiday-prefix "[香港法定假期]\t" (my/holiday-hong-kong my/holiday-hong-kong-statutory-holidays)))
+                                  '((my/holiday-prefix "[香港週年紀念]\t" (my/holiday-forms-to-hlist
+                                                                           '((my/holiday-anniversary 1997 7 1 "香港特別行政區成立")
+                                                                             (my/holiday-anniversary 1949 10 1 "中華人民共和國成立")))))
+                                  '((my/holiday-prefix "[生日與忌日]\t" (my/vulpea-holiday-birth-and-death)))
                                   nil)))
 (add-hook 'after-init-hook #'my/holiday-other-holidays-add)
 
