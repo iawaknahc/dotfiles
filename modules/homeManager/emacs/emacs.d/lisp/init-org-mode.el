@@ -324,5 +324,19 @@ timestamp sort just before it, after all dated events."
  org-preview-latex-default-process 'dvisvgm
  org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
 
+;;;; Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((awk . t)
+   (shell . t)
+   (clojure . t)
+   (emacs-lisp . t)
+   (fennel . t)
+   (sed . t)
+   (lua . t)
+   (js . t)
+   (python . t)
+   (ruby . t)))
+
 (provide 'init-org-mode)
 ;;; init-org-mode.el ends here
