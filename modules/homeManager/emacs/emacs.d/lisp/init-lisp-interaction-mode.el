@@ -5,7 +5,10 @@
 (defun my/eval-print-last-sexp ()
   "Replace `eval-print-last-sexp' with `pp-eval-last-sexp'."
   (interactive)
-  (pp-eval-last-sexp t))
+  (let ((standard-output (current-buffer)))
+    (terpri)
+    (pp-eval-last-sexp t)
+    (terpri)))
 
 (with-eval-after-load 'elisp-mode
   (keymap-set lisp-interaction-mode-map "<remap> <eval-print-last-sexp>" #'my/eval-print-last-sexp))
