@@ -88,6 +88,7 @@
   (setopt holiday-other-holidays (append
                                   my/holiday-other-holidays-solar-term
                                   my/holiday-other-holidays-chinese-festivals
+                                  '((my/holiday-prefix "[NYSE Holidays] " (my/holiday-forms-to-hlist my/holiday-nyse-holidays)))
                                   '((my/holiday-prefix "[香港公眾假期] " (my/holiday-hong-kong my/holiday-hong-kong-general-holidays)))
                                   '((my/holiday-prefix "[香港法定假期] " (my/holiday-hong-kong my/holiday-hong-kong-statutory-holidays)))
                                   '((my/holiday-anniversary 1997 7 1 "香港特別行政區成立")

@@ -242,6 +242,7 @@ jit
 jks
 json
 jsonls
+juneteenth
 jyut
 karabiner
 keycap

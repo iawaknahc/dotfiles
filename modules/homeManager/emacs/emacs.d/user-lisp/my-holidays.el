@@ -65,6 +65,11 @@ resulting in `calendar-get-month-range' reporting all months in YEAR."
                 ,expr))))
 
 ;;;###autoload
+(defun my/holiday-forms-to-hlist (forms)
+  "Evaluate FORMS and concatenate the result into a single holiday list."
+  (seq-mapcat (lambda (form) (eval form t)) forms))
+
+;;;###autoload
 (defun my/holiday-sort (holidays)
   "Sort HOLIDAYS."
   (sort holidays :key #'car :lessp #'my/calendar-date<))
@@ -604,6 +609,40 @@ The year component in BIRTH and DEATH can be nil."
                        nil)))
     (_
      nil)))
+
+;;;###autoload
+(defun my/holiday-nyse-observed (month day year)
+  "Shift the holiday on YEAR MONTH DAY to either Friday or Monday.
+
+If the date is on Saturday, shift to the previous day, Friday.
+If the date is on Sunday, shift to the next day, Monday.
+
+One exception is that if the shifted holiday is in a different year,
+then nil is returned."
+  (let* ((date (list month day year))
+         (abs (calendar-absolute-from-gregorian date))
+         (shifted (pcase (calendar-day-of-week date)
+                    (6 (calendar-gregorian-from-absolute (1- abs)))
+                    (0 (calendar-gregorian-from-absolute (1+ abs)))
+                    (_ date))))
+    (and (eql year (calendar-extract-year shifted)) shifted)))
+
+(defconst my/holiday-nyse-holidays
+  '((holiday-sexp '(my/holiday-nyse-observed 1 1 year) "New Year's Day")
+    (holiday-float 1 1 3 "Martin Luther King Jr. Day")
+    (holiday-float 2 1 3 "Washington's Birthday")
+    (my/holiday-easter -2 "Good Friday")
+    (holiday-float 5 1 -1 "Memorial Day")
+    (holiday-sexp '(when (>= year 2022) (my/holiday-nyse-observed 6 19 year))
+                  "Juneteenth National Independence Day")
+    (holiday-sexp '(my/holiday-nyse-observed 7 4 year) "Independence Day")
+    (holiday-float 9 1 1 "Labor Day")
+    (holiday-float 11 4 4 "Thanksgiving Day")
+    (holiday-sexp '(my/holiday-nyse-observed 12 25 year) "Christmas Day"))
+  "The list of holidays in NYSE.
+
+Translated from https://nyseguide.srorules.com/rules/52dd09f87d461000b2ad005056883b3a08
+with version September 30, 2021 (NYSE-2021-56).")
 
 (provide 'my-holidays)
 ;;; my-holidays.el ends here
