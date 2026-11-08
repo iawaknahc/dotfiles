@@ -48,22 +48,11 @@
     font-family = [
       "" # Reset instead of appending to the default.
       "JetBrains Mono NL"
-      "Symbols Nerd Font Mono"
       "JuliaMono"
+      "Symbols Nerd Font Mono"
     ];
     # Use font-font-codepoint-map to force Ghostty to use Nerd Font
-    # We can verify if it is working by running `ghostty +show-face --cp=0x2665`.
-    # If it works, it should print something like
-    #   U+2665 « ♥ » found in face “Symbols Nerd Font Mono”.
     font-codepoint-map = [
-      "U+23FB-U+23FE=Symbols Nerd Font Mono"
-      "U+2500-U+259F=Symbols Nerd Font Mono"
-      "U+2630=Symbols Nerd Font Mono"
-      "U+2665=Symbols Nerd Font Mono"
-      "U+26A1=Symbols Nerd Font Mono"
-      "U+276C-U+2771=Symbols Nerd Font Mono"
-      "U+2800-U+28FF=Symbols Nerd Font Mono"
-      "U+2B58=Symbols Nerd Font Mono"
       "U+E000-U+F8FF=Symbols Nerd Font Mono"
       "U+F0000-U+FFFFD=Symbols Nerd Font Mono"
     ];

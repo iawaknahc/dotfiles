@@ -186,14 +186,6 @@ As of Emacs 30.2, they all start with `mathematical-'."
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
   (let* ((for-all-frames nil)
          (nerd-font (font-spec :family "Symbols Nerd Font Mono")))
-    (set-fontset-font fontset '(#x23FB . #x23FE) nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset '(#x2500 . #x259F) nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset #x2630 nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset #x2665 nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset #x26A1 nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset '(#x276C . #x2771) nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset '(#x2800 . #x28FF) nerd-font for-all-frames 'prepend)
-    (set-fontset-font fontset #x2B58 nerd-font for-all-frames 'prepend)
     ;; U+E000 to U+F8FF is Private Use Area in Basic Multilingual Plane.
     (set-fontset-font fontset '(#xE000 . #xF8FF) nerd-font for-all-frames 'prepend)
     ;; U+F0000 to U+FFFFD is Supplementary Private Use Area-A
