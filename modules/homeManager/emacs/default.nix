@@ -101,7 +101,6 @@
     tempel = self.elpaPackages.tempel;
     track-changes = self.elpaPackages.track-changes;
     tramp = self.elpaPackages.tramp;
-    valign = self.elpaPackages.valign;
     vertico = self.elpaPackages.vertico;
     xref = self.elpaPackages.xref;
     # transient is a dependency of magit.
@@ -145,9 +144,6 @@
 
       # Reading
       olivetti
-
-      # Org
-      valign
 
       # Completion
       corfu

@@ -181,9 +181,6 @@
 ;; Configure beancount.
 (require 'init-beancount)
 
-;; Configure valign
-(require 'init-valign)
-
 ;; Configure HTTP server
 (require 'init-simple-httpd)
 

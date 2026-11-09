@@ -199,14 +199,14 @@ As of Emacs 30.2, they all start with `mathematical-'."
 (my/configure-noto-font "fontset-default")
 (let* ((for-all-frames nil)
        (jetbrains-mono (font-spec :family "JetBrains Mono NL"))
-       (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK"))
-       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP"))
-       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR"))
+       (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK RealMono"))
+       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP RealMono"))
+       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR RealMono"))
        (julia-mono (font-spec :family "JuliaMono"))
        (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC"))
-       (jigmo1 (font-spec :family "Jigmo"))
-       (jigmo2 (font-spec :family "Jigmo2"))
-       (jigmo3 (font-spec :family "Jigmo3")))
+       (jigmo1 (font-spec :family "Jigmo RealMono"))
+       (jigmo2 (font-spec :family "Jigmo2 RealMono"))
+       (jigmo3 (font-spec :family "Jigmo3 RealMono")))
   (set-fontset-font "fontset-default" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'han                      jigmo1                 for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'han                      jigmo2                 for-all-frames 'prepend)
@@ -233,6 +233,12 @@ As of Emacs 30.2, they all start with `mathematical-'."
   ;; The codepoint sequence U+1F004 U+FE0F (emoji-style) will be displayed as an emoji.
   (set-fontset-font "fontset-default" '(#x1F000 . #x1F02F)      lxgw-wenkai-mono-tc    for-all-frames 'prepend))
 (my/configure-nerd-font "fontset-default")
+(setq face-font-rescale-alist
+      '(("-cdac$" . 1.3)
+        ("Noto Sans Mono CJK .* RealMono" . 1.2)
+        ("LXGW WenKai Mono" . 1.2)
+        ("Jigmo.* RealMono" . 1.2)
+        ("Apple Color Emoji" . 0.94117647)))
 
 ;; Assign the faces to their fontsets.
 (let* ((for-all-frames nil))
