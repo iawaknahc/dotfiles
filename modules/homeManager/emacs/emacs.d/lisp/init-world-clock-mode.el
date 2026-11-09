@@ -25,7 +25,29 @@ See `my/world-clock-business-hours'."
 No locale negotiation is performed,
 thus, the value must match one of the supported values."
   :type 'string
-  :group 'my/world-clock)
+  :group 'my/world-clock
+  :set (lambda (name value &optional where)
+         (pcase where
+           ('buffer-local
+            (when-let* ((buf (get-buffer "*wclock*")))
+              (with-current-buffer buf
+                (set-local name value)
+                (setq-local my/world-clock--cldr-json-territory-names nil)
+                (setq-local my/world-clock--cldr-json-territory-names-index nil)
+                (setq-local my/world-clock--cldr-json-timezone-localization nil)
+                (setq-local my/world-clock--cldr-json-timezone-localization-timezones-index nil)
+                (setq-local my/world-clock--cldr-json-timezone-localization-metazones-index nil)
+                (my/world-clock--update))))
+           (_
+            (set-default name value)
+            (setq-default my/world-clock--cldr-json-territory-names nil)
+            (setq-default my/world-clock--cldr-json-territory-names-index nil)
+            (setq-default my/world-clock--cldr-json-timezone-localization nil)
+            (setq-default my/world-clock--cldr-json-timezone-localization-timezones-index nil)
+            (setq-default my/world-clock--cldr-json-timezone-localization-metazones-index nil)
+            (when-let* ((buf (get-buffer "*wclock*")))
+              (with-current-buffer buf
+                (my/world-clock--update)))))))
 
 (defcustom my/world-clock-home-timezone nil
   "The home timezone.
