@@ -24,4 +24,5 @@ justfile
 main.mjs
 my_porter_output.txt
 my_porter_voc.txt
+patch_fixed_pitch.py
 words.txt

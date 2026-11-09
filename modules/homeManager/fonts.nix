@@ -1,10 +1,45 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+let
+  # Copies of Noto Sans Mono CJK and Jigmo that CoreText reports as monospace.
+  # In Emacs (NS build), a monospace font draws a glyph that is N times the space width
+  # exactly N space widths wide.
+  # Together with a rescale ratio of 1.2, this keeps CJK glyphs aligned to 2 columns
+  # of JetBrains Mono at every font size, including after text-scale-adjust.
+  #
+  # The fonts are renamed with the suffix RealMono, e.g. "Noto Sans Mono CJK HK RealMono",
+  # so that the original fonts are still installed and usable.
+  # See ./fonts/patch_fixed_pitch.py for details.
+  realmono-fonts =
+    pkgs.runCommand "realmono-fonts"
+      {
+        nativeBuildInputs = [
+          (pkgs."python${config.mypython.version}".withPackages (python-pkgs: [ python-pkgs.fonttools ]))
+        ];
+      }
+      ''
+        mkdir -p $out/share/fonts/opentype $out/share/fonts/truetype
+        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+          ${pkgs.noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansMonoCJK-VF.otf.ttc \
+          $out/share/fonts/opentype/NotoSansMonoCJKRealMono-VF.otf.ttc
+        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+          ${pkgs.jigmo}/share/fonts/truetype/Jigmo.ttf \
+          $out/share/fonts/truetype/JigmoRealMono.ttf
+        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+          ${pkgs.jigmo}/share/fonts/truetype/Jigmo2.ttf \
+          $out/share/fonts/truetype/Jigmo2RealMono.ttf
+        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+          ${pkgs.jigmo}/share/fonts/truetype/Jigmo3.ttf \
+          $out/share/fonts/truetype/Jigmo3RealMono.ttf
+      '';
+in
 {
   mypython.packages = [
     (python-pkgs: with python-pkgs; [ fonttools ])
   ];
 
   home.packages = with pkgs; [
+    realmono-fonts
+
     # A variant of Courier
     courier-prime
     # Replacement of Arial, Times New Roman, and Courier New.
