@@ -441,7 +441,8 @@ IF DELTA is zero, this function does nothing."
          (timezones (my/world-clock--add-home-to-list home-timezone timezones)))
     (setq-local zoneinfo-style-world-list
                 (my/world-clock--timezones-to-zoneinfo-style-world-list timezones home-timezone)))
-  (world-clock-update))
+  (world-clock-update)
+  nil)
 
 (defun my/world-clock--add-home-to-list (home-timezone timezones)
   "Add HOME-TIMEZONE to the head of TIMEZONES.
