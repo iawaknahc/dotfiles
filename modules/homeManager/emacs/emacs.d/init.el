@@ -113,7 +113,6 @@
 (require 'init-ediff)
 (require 'init-mode-line)
 (require 'init-visual-line-mode)
-(require 'init-outline-minor-mode)
 (require 'init-calendar)
 (require 'init-scroll-bar-mode)
 (require 'init-search)
@@ -127,6 +126,10 @@
 (require 'init-goto-address-mode)
 (require 'init-dabbrev)
 (require 'init-so-long-mode)
+
+;; Configure folding
+(require 'init-outline-minor-mode)
+(require 'init-hideshow)
 
 ;; Configure completion.
 (require 'init-completion-at-point)

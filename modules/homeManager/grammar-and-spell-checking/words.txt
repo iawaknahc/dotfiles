@@ -211,6 +211,7 @@ headerline
 healthcheck
 helpgrep
 hexkey
+hideshow
 hkt
 hledger
 hlgroup
