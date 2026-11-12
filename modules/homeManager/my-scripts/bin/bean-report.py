@@ -37,7 +37,11 @@ class CustomsTable(Table):
 
 
 Subcommand = Literal[
-    "income-statement", "balance-sheet", "unrealized-gains-and-losses", "xirr"
+    "income-statement",
+    "balance-sheet",
+    "cash-flow-statement",
+    "unrealized-gains-and-losses",
+    "xirr",
 ]
 
 Period = Literal["daily", "weekly", "monthly", "quarterly", "yearly", "hong-kong"]
@@ -249,8 +253,8 @@ class InputWithPeriodStartEnd:
 
     @classmethod
     def from_namespace(cls, command: str, namespace: argparse.Namespace) -> Self:
-        account_level = cast(int | None, namespace.account_level)
-        where_clause = cast(str | None, namespace.where_clause)
+        account_level = cast(int | None, vars(namespace).get("account_level"))
+        where_clause = cast(str | None, vars(namespace).get("where_clause"))
         filepath = cast(str, namespace.filepath)
         conn = beanquery.connect(None)
         conn.attach(f"beancount:{filepath}")
@@ -837,6 +841,183 @@ def cmd_balance_sheet(input: InputWithPeriodStartEnd):
     print_table(table)
 
 
+def cash_flow_is_relevant_transaction(
+    accounts_set: set[str], cash_accounts_set: set[str]
+) -> bool:
+    cash_accounts_in_accounts: list[str] = [
+        a for a in accounts_set if a in cash_accounts_set
+    ]
+    non_cash_accounts_in_accounts: list[str] = [
+        a for a in accounts_set if a not in cash_accounts_set
+    ]
+    return len(cash_accounts_in_accounts) > 0 and len(non_cash_accounts_in_accounts) > 0
+
+
+CashFlowCategory = Literal["operating", "financing", "investing"]
+
+
+class CashFlowInventories:
+    by_category_by_account: dict[CashFlowCategory, dict[str, Inventory]]
+    by_category: dict[CashFlowCategory, Inventory]
+    total: Inventory
+
+    def __init__(self):
+        self.by_category_by_account = {}
+        self.by_category = {}
+        self.total = Inventory()
+
+    def add(self, category: CashFlowCategory, account: str, amount: Amount):
+        # Invert the sign.
+        # Positive sign represents inflow into cash account, an increase in cash.
+        # Negative sign represents outflow from cash account, a decrease in cash.
+        amount = -amount
+        by_account = self.by_category_by_account.setdefault(category, {})
+        by_account.setdefault(account, Inventory()).add_amount(amount)
+        self.by_category.setdefault(category, Inventory()).add_amount(amount)
+        self.total.add_amount(amount)
+
+    def add_to_data_points(self, range: Range, data_points: list[DataPoint]):
+        def append(account: str, inventory: Inventory):
+            for position_ in iter(inventory):
+                position = cast(Position, position_)
+                data_points.append(
+                    DataPoint(account=account, position=position, range=range)
+                )
+
+        for category, by_account in self.by_category_by_account.items():
+            label = category.capitalize()
+            for account, inventory in by_account.items():
+                append(f"{label}:{account}", inventory)
+            append(label, self.by_category[category])
+        append("", self.total)
+
+
+def cash_flow_add_transaction_to_inventories(
+    transaction: data.Transaction,
+    *,
+    inventories: CashFlowInventories,
+    cash_accounts_set: set[str],
+    account_level_category: dict[str, CashFlowCategory],
+):
+    for posting in transaction.postings:
+        account = posting.account
+        if account in cash_accounts_set:
+            # We are only interested in the counter accounts.
+            continue
+
+        category: CashFlowCategory | None = None
+        # Respect posting-level category.
+        if posting.meta is not None:
+            category = posting.meta.get("cash_flow_category")
+            match category:
+                case "operating":
+                    pass
+                case "financing":
+                    pass
+                case "investing":
+                    pass
+                case None:
+                    pass
+                case _:
+                    raise ValueError(f"Invalid cash_flow_category: {posting}")
+        # Respect account-level category
+        if category is None and account in account_level_category:
+            category = account_level_category[account]
+        # Respect default heuristics
+        if category is None and account.startswith(("Income:", "Expenses:")):
+            category = "operating"
+        # Error if we still cannot determine the category
+        if category is None:
+            raise TypeError(f"Unspecified category: {posting}")
+
+        weight: Amount = convert.get_weight(posting)
+        inventories.add(category, account, weight)
+
+
+def cmd_cash_flow_statement(input: InputWithPeriodStartEnd):
+    data_points: list[DataPoint] = []
+    operating_accounts: list[str] = []
+    financing_accounts: list[str] = []
+    investing_accounts: list[str] = []
+    cash_accounts: list[str] = []
+    query = """
+        SELECT open
+        FROM #accounts
+    """
+    for row in cast(list[tuple[data.Open]], input.conn.execute(query).fetchall()):
+        open_directive = row[0]
+        category: str | None = open_directive.meta.get("cash_flow_category")
+        is_cash_account: bool | None = open_directive.meta.get(
+            "cash_flow_is_cash_account"
+        )
+        if is_cash_account:
+            if category:
+                raise TypeError(
+                    f"cash_flow_category cannot be specified: {open_directive.account}"
+                )
+            if not open_directive.account.startswith("Assets:"):
+                raise TypeError(
+                    f"cash account must be Assets account: {open_directive.account}"
+                )
+            cash_accounts.append(open_directive.account)
+
+        match category:
+            case "operating":
+                operating_accounts.append(open_directive.account)
+            case "financing":
+                financing_accounts.append(open_directive.account)
+            case "investing":
+                investing_accounts.append(open_directive.account)
+            case None:
+                pass
+            case _:
+                raise ValueError(
+                    f"Invalid cash_flow_category: {open_directive.account}"
+                )
+
+    if len(cash_accounts) <= 0:
+        raise TypeError("No account with cash_flow_is_cash_account being TRUE is found")
+
+    cash_account_regex = "|".join([f"^{a}$" for a in cash_accounts])
+    cash_accounts_set = set(cash_accounts)
+
+    account_level_category: dict[str, CashFlowCategory] = {}
+    for account in operating_accounts:
+        account_level_category[account] = "operating"
+    for account in financing_accounts:
+        account_level_category[account] = "financing"
+    for account in investing_accounts:
+        account_level_category[account] = "investing"
+
+    seen_ids = set()
+    for range in input.ranges:
+        cash_flow_inventories = CashFlowInventories()
+        query = f"""
+            SELECT id, accounts, entry
+            FROM account ~ '{cash_account_regex}'
+            AND date >= {range.start}
+            AND date < {range.end}
+        """
+        for row in cast(
+            list[tuple[str, set[str], data.Transaction]],
+            input.conn.execute(query).fetchall(),
+        ):
+            id_ = row[0]
+            if id_ not in seen_ids:
+                accounts = row[1]
+                if cash_flow_is_relevant_transaction(accounts, cash_accounts_set):
+                    cash_flow_add_transaction_to_inventories(
+                        row[2],
+                        inventories=cash_flow_inventories,
+                        cash_accounts_set=cash_accounts_set,
+                        account_level_category=account_level_category,
+                    )
+                seen_ids.add(id_)
+        cash_flow_inventories.add_to_data_points(range, data_points)
+    table = pivot(input.ranges, data_points)
+    print_table(table)
+
+
 def format_amount(conn: beanquery.Connection, amount: Amount) -> Amount:
     for currency, d in cast(
         dict[str, Decimal], conn.options["display_precision"]
@@ -1066,9 +1247,17 @@ def get_ranges(
 
 
 def sort_account_lots(account_lots: list[AccountLot]) -> list[AccountLot]:
-    net_income = sorted([a for a in account_lots if a.account == ""])
     total_expenses = sorted([a for a in account_lots if a.account == "Expenses"])
     total_income = sorted([a for a in account_lots if a.account == "Income"])
+    total_operating = sorted([a for a in account_lots if a.account == "Operating"])
+    total_financing = sorted([a for a in account_lots if a.account == "Financing"])
+    total_investing = sorted([a for a in account_lots if a.account == "Investing"])
+    total = sorted([a for a in account_lots if a.account == ""])
+
+    operating = sorted([a for a in account_lots if a.account.startswith("Operating:")])
+    financing = sorted([a for a in account_lots if a.account.startswith("Financing:")])
+    investing = sorted([a for a in account_lots if a.account.startswith("Investing:")])
+
     expenses = sorted([a for a in account_lots if a.account.startswith("Expenses:")])
     income = sorted([a for a in account_lots if a.account.startswith("Income:")])
     assets = sorted([a for a in account_lots if a.account.startswith("Assets:")])
@@ -1082,7 +1271,13 @@ def sort_account_lots(account_lots: list[AccountLot]) -> list[AccountLot]:
         + total_expenses
         + income
         + total_income
-        + net_income
+        + operating
+        + total_operating
+        + financing
+        + total_financing
+        + investing
+        + total_investing
+        + total
     )
 
 
@@ -1152,6 +1347,11 @@ def main():
         help="Generate a balance sheet",
     )
     _ = balance_sheet.set_defaults(command="balance-sheet")
+    cash_flow_statement = subcommand.add_parser(
+        "cash-flow-statement",
+        help="Generate a cash flow statement in terms of posting weight. Do not expect the figures to reconcile with other statements.",
+    )
+    _ = cash_flow_statement.set_defaults(command="cash-flow-statement")
     unrealized_gains_and_losses = subcommand.add_parser(
         "unrealized-gains-and-losses",
         aliases=["upnl"],
@@ -1164,7 +1364,7 @@ def main():
     )
     _ = xirr.set_defaults(command="xirr")
 
-    for p in [income_statement, balance_sheet]:
+    for p in [income_statement, balance_sheet, cash_flow_statement]:
         _ = p.add_argument(
             "--period",
             choices=["daily", "weekly", "monthly", "quarterly", "yearly", "hong-kong"],
@@ -1179,6 +1379,8 @@ def main():
             "--end",
             help="The end of the report, e.g. 2026-01-01, 2026-W1, 2026-01, 2026-Q1, 2026",
         )
+
+    for p in [income_statement, balance_sheet]:
         _ = p.add_argument(
             "--account-level",
             type=parse_account_level,
@@ -1195,7 +1397,13 @@ def main():
             help="The date of the report, e.g. 2026-01-01",
         )
 
-    for p in [balance_sheet, income_statement, unrealized_gains_and_losses, xirr]:
+    for p in [
+        balance_sheet,
+        income_statement,
+        cash_flow_statement,
+        unrealized_gains_and_losses,
+        xirr,
+    ]:
         _ = p.add_argument("filepath", help="Path to the Beancount file")
 
     for p in [xirr]:
@@ -1212,6 +1420,10 @@ def main():
         case "balance-sheet":
             cmd_balance_sheet(
                 InputWithPeriodStartEnd.from_namespace("balance-sheet", args)
+            )
+        case "cash-flow-statement":
+            cmd_cash_flow_statement(
+                InputWithPeriodStartEnd.from_namespace("cash-flow-statement", args)
             )
         case "unrealized-gains-and-losses":
             cmd_unrealized_gains_and_losses(InputWithAsOf.from_namespace(args))
