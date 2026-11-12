@@ -6,6 +6,6 @@ indent_style = space
 indent_size = 2
 
 # We need this because lua-ts-indent-offset is 4 by default in Emacs.
-[*.{lua}]
+[*.lua]
 indent_style = space
 indent_size = 2
