@@ -152,5 +152,45 @@ Return (MONTH DAY YEAR) otherwise."
                                ,features)))
     (json-serialize feature-collection)))
 
+(defun my/vulpea-google-map-json-to-location ()
+  "Convert the region into a location.
+
+The region must be a JSON object with the following properties
+- title
+- formattedAddress
+- url
+
+The URL must be a Google Map place URL, in this format
+'https://www.google.com/maps/place/TITLE/@LATITUDE,LONGITUDE,ZOOMz/...'."
+  (interactive)
+  (unless (region-active-p)
+    (user-error "This command must work on an active region"))
+  (when (region-noncontiguous-p)
+    (user-error "This command must work on a contiguous region"))
+  (let* ((beg (region-beginning))
+         (region-text (buffer-substring-no-properties (region-beginning) (region-end)))
+         (plist (json-parse-string region-text :object-type 'plist))
+         (title (plist-get plist :title))
+         (location (plist-get plist :formattedAddress))
+         (url (plist-get plist :url))
+         (url-struct (url-generic-parse-url url))
+         (path-and-query (url-path-and-query url-struct))
+         (path (car path-and-query))
+         (components (file-name-split path))
+         (latitude-longitude-zoom (string-split (substring (nth 4 components) 1 -1) ","))
+         (latitude (nth 0 latitude-longitude-zoom))
+         (longitude (nth 1 latitude-longitude-zoom)))
+    (replace-region-contents
+     (region-beginning)
+     (region-end)
+     (format "* %s :location:
+- location :: %s
+- url :: %s
+- latitude :: %s
+- longitude :: %s
+- location_kind :: landmark" title location url latitude longitude))
+    (goto-char beg)
+    (org-id-get-create)))
+
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here
