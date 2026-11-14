@@ -102,9 +102,9 @@ A diary sexp is evaluated with `date' bound instead, and is expected to return a
            (y2-instance-nth (- y2 year))
            result)
       (when (>= y1-instance-nth 0)
-        (setq result (append result (list (list y1-instance (format "%s %d周年" description y1-instance-nth))) nil)))
+        (setq result (append result (list (list y1-instance (format "%s %d 周年" description y1-instance-nth))) nil)))
       (when (and (>= y2-instance-nth 0) (/= y1-instance-nth y2-instance-nth))
-        (setq result (append result (list (list y2-instance (format "%s %d周年" description y1-instance-nth))) nil)))
+        (setq result (append result (list (list y2-instance (format "%s %d 周年" description y1-instance-nth))) nil)))
       (holiday-filter-visible-calendar result))))
 
 ;;;###autoload
@@ -406,9 +406,9 @@ DEATH is either t or nil."
                                                         ((eql order 0)
                                                          (format "%s 農曆出世" name))
                                                         (death
-                                                         (format "%s %d歲農曆生忌" name order))
+                                                         (format "%s %d 歲農曆生忌" name order))
                                                         (t
-                                                         (format "%s %d歲農曆生日" name order)))))
+                                                         (format "%s %d 歲農曆生日" name order)))))
                                      (list date description)))
                                  anniversaries)))
     (holiday-filter-visible-calendar anniversaries)))
@@ -441,11 +441,11 @@ DEATH must be a Gregorian date."
                                                 (order (plist-get plist :order))
                                                 (description (cond
                                                               ((> anniversary-abs death-abs)
-                                                               (format "%s %d歲農曆生忌" name order))
+                                                               (format "%s %d 歲農曆生忌" name order))
                                                               ((eql order 0)
                                                                (format "%s 農曆出世" name))
                                                               (t
-                                                               (format "%s %d歲農曆生日" name order)))))
+                                                               (format "%s %d 歲農曆生日" name order)))))
                                            (list date description)))
                                        birth-anniversaries))
          (death-anniversaries (seq-map (lambda (plist)
@@ -453,7 +453,7 @@ DEATH must be a Gregorian date."
                                                 (order (plist-get plist :order))
                                                 (description (if (eql order 0)
                                                                  (format "%s 農曆逝世" name)
-                                                               (format "%s 第%d個農曆死忌" name order))))
+                                                               (format "%s 第 %d 個農曆死忌" name order))))
                                            (list date description)))
                                        death-anniversaries)))
     (holiday-filter-visible-calendar
@@ -513,16 +513,16 @@ DEATH can be nil, t, or a Gregorian date."
                                       (description (cond
                                                     ((consp death)
                                                      (if (my/calendar-date> date death)
-                                                         (format "%s %d歲生忌" name order)
+                                                         (format "%s %d 歲生忌" name order)
                                                        (if (eql order 0)
                                                            (format "%s 出世" name)
-                                                         (format "%s %d歲生日" name order))))
+                                                         (format "%s %d 歲生日" name order))))
                                                     ((eql order 0)
                                                      (format "%s 出世" name))
                                                     (death
-                                                     (format "%s %d歲生忌" name order))
+                                                     (format "%s %d 歲生忌" name order))
                                                     (t
-                                                     (format "%s %d歲生日" name order)))))
+                                                     (format "%s %d 歲生日" name order)))))
                                  (list date description)))
                              birth-anniversaries)))
     (holiday-filter-visible-calendar birthdays)))
@@ -582,7 +582,7 @@ DEATH can either be nil, t, or a Gregorian date."
                                                  ((eql order 0)
                                                   (format "%s 逝世" name))
                                                  (t
-                                                  (format "%s 第%d個死忌" name order)))))
+                                                  (format "%s 第 %d 個死忌" name order)))))
                               (list date description)))
                           death-anniversaries)))
     (holiday-filter-visible-calendar output)))
