@@ -385,8 +385,12 @@ The function `my/holiday-substitution' is used to define such holiday."
               (_ (error "Expected an empty list or a singleton list or a 2-element list: %S" holiday-and-substitution)))))))
     (holiday-filter-visible-calendar (my/holiday-sort result))))
 
-(defun my/holiday-chinese--birth (name birth)
-  "NAME BIRTH."
+(defun my/holiday-chinese--birth (name birth death)
+  "See `my/holiday-chinese-birth-and-death'.
+
+NAME is a string.
+BIRTH must be a Gregorian date.
+DEATH is either t or nil."
   (let* ((years (my/holiday-get-years))
          (years (my/holiday--pad-years years))
          (anniversaries (seq-map (lambda (year)
@@ -401,6 +405,8 @@ The function `my/holiday-substitution' is used to define such holiday."
                                           (description (cond
                                                         ((eql order 0)
                                                          (format "%s 農曆出世" name))
+                                                        (death
+                                                         (format "%s %d歲農曆生忌" name order))
                                                         (t
                                                          (format "%s %d歲農曆生日" name order)))))
                                      (list date description)))
@@ -408,7 +414,11 @@ The function `my/holiday-substitution' is used to define such holiday."
     (holiday-filter-visible-calendar anniversaries)))
 
 (defun my/holiday-chinese--birth-and-death (name birth death)
-  "NAME BIRTH DEATH."
+  "See `my/holiday-chinese-birth-and-death'.
+
+NAME is a string.
+BIRTH must be a Gregorian date.
+DEATH must be a Gregorian date."
   (let* ((years (my/holiday-get-years))
          (years (my/holiday--pad-years years))
          (death-abs (calendar-absolute-from-gregorian death))
@@ -462,25 +472,28 @@ The function `my/holiday-substitution' is used to define such holiday."
                        nil)))))
 
 ;;;###autoload
-(cl-defun my/holiday-chinese-birth-and-death (name &key birth death)
+(defun my/holiday-chinese-birth-and-death (name birth death)
   "Compute various anniversaries according to BIRTH and DEATH for NAME.
 
 BIRTH must be a non-nil Gregorian date.
 
-DEATH can be nil.
-If it is non-nil, then it must be a Gregorian date.
-
-When DEATH is nil, compute 農曆生日。
-Otherwise, in addition to 農曆生日, also compute 農曆生忌, 農曆死忌, 七, 及百日.
+DEATH can be nil, t, or a Gregorian date.
+If DEATH is nil, compute 農曆生日。
+If DEATH is t, compute 農曆生忌。
+If DEATH is a Gregorian date, compute 農曆生日, 農曆生忌, 農曆死忌, 七, and 百日.
 
 If BIRTH or DEATH is on a day in a leap month,
 then the same day in the previous month is the anniversary.
 
 If BIRTH or DEATH is on 三十,
 then it will be taken to be 廿九 in months lacking 三十."
-  (if death
-      (my/holiday-chinese--birth-and-death name birth death)
-    (my/holiday-chinese--birth name birth)))
+  (cond
+   ((consp death)
+    (my/holiday-chinese--birth-and-death name birth death))
+   (death
+    (my/holiday-chinese--birth name birth t))
+   (t
+    (my/holiday-chinese--birth name birth nil))))
 
 ;;;###autoload
 (defun my/holiday-birthdate (name birth death)
@@ -584,7 +597,10 @@ The year component in BIRTH and DEATH can be nil."
     (`((,birth-month ,birth-day nil) nil)
      (my/holiday-birthday name birth-month birth-day nil))
     (`((,birth-month ,birth-day ,birth-year) nil)
-     (my/holiday-birthdate name birth nil))
+     (my/holiday-sort (append
+                       (my/holiday-birthdate name birth nil)
+                       (my/holiday-chinese-birth-and-death name birth nil)
+                       nil)))
     (`(nil (,death-month ,death-day nil))
      (my/holiday-deathday name death-month death-day))
     (`(nil (,death-month ,death-day ,death-year))
@@ -595,7 +611,10 @@ The year component in BIRTH and DEATH can be nil."
                        (my/holiday-deathday name death-month death-day)
                        nil)))
     (`((,birth-month ,birth-day ,birth-year) (,death-month ,death-day nil))
-     (my/holiday-birthdate name birth t))
+     (my/holiday-sort (append
+                       (my/holiday-birthdate name birth t)
+                       (my/holiday-chinese-birth-and-death name birth t)
+                       nil)))
     (`((,birth-month ,birth-day nil) (,death-month ,death-day ,death-year))
      (my/holiday-sort (append
                        (my/holiday-birthday name birth-month birth-day death)
@@ -605,7 +624,7 @@ The year component in BIRTH and DEATH can be nil."
      (my/holiday-sort (append
                        (my/holiday-birthdate name birth death)
                        (my/holiday-deathdate name death)
-                       (my/holiday-chinese-birth-and-death name :birth birth :death death)
+                       (my/holiday-chinese-birth-and-death name birth death)
                        nil)))
     (_
      nil)))

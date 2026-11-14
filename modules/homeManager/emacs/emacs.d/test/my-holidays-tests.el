@@ -281,31 +281,51 @@
   ;; No anniversary before the birth.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000)) :year 1999)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) nil) :year 1999)
     nil))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000)) :year 2000)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) nil) :year 2000)
     '(((2 5 2000) "某人 農曆出世"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000)) :year 2001)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) nil) :year 2001)
     '(((1 24 2001) "某人 1歲農曆生日"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) nil) :year 2024)
     '(((2 10 2024) "某人 24歲農曆生日")))))
+
+;; 庚辰年正月初一
+(ert-deftest my-holidays-tests-chinese-birth-and-death-birth-and-unknown-death ()
+  ;; The date of the death is unknown, so every birthday is 農曆生忌.
+  (should
+   (equal
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) t) :year 1999)
+    nil))
+  (should
+   (equal
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) t) :year 2000)
+    '(((2 5 2000) "某人 農曆出世"))))
+  (should
+   (equal
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) t) :year 2001)
+    '(((1 24 2001) "某人 1歲農曆生忌"))))
+  (should
+   (equal
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) t) :year 2024)
+    '(((2 10 2024) "某人 24歲農曆生忌")))))
 
 (ert-deftest my-holidays-tests-chinese-birth-and-death-birth-in-leap-month ()
   ;; 癸卯年閏二月初一
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(3 22 2023)) :year 2023)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(3 22 2023) nil) :year 2023)
     '(((3 22 2023) "某人 農曆出世"))))
   ;; 甲辰年二月初一
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(3 22 2023)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(3 22 2023) nil) :year 2024)
     '(((3 10 2024) "某人 1歲農曆生日")))))
 
 (ert-deftest my-holidays-tests-chinese-birth-and-death-birth-on-day-30 ()
@@ -313,7 +333,7 @@
   ;; 乙巳年二月 does not have 三十, so 廿九 is used.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(4 8 2024)) :year 2025)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(4 8 2024) nil) :year 2025)
     '(((3 28 2025) "某人 1歲農曆生日")))))
 
 (ert-deftest my-holidays-tests-chinese-birth-and-death-birth-across-gregorian-years ()
@@ -321,30 +341,30 @@
   ;; 甲辰年臘月初一 is also in 2024, and 乙巳年臘月初一 is in 2026.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 11 2024)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 11 2024) nil) :year 2024)
     '(((1 11 2024) "某人 農曆出世")
       ((12 31 2024) "某人 1歲農曆生日"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 11 2024)) :year 2025)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 11 2024) nil) :year 2025)
     nil))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 11 2024)) :year 2026)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 11 2024) nil) :year 2026)
     '(((1 19 2026) "某人 2歲農曆生日"))))
   ;; 癸卯年冬月廿一
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 2 2024)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 2 2024) nil) :year 2024)
     '(((1 2 2024) "某人 農曆出世")
       ((12 21 2024) "某人 1歲農曆生日"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 2 2024)) :year 2025)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 2 2024) nil) :year 2025)
     nil))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(1 2 2024)) :year 2026)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(1 2 2024) nil) :year 2026)
     '(((1 9 2026) "某人 2歲農曆生日")
       ((12 29 2026) "某人 3歲農曆生日")))))
 
@@ -353,17 +373,17 @@
   ;; The year of the birth.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2000)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2000)
     '(((2 5 2000) "某人 農曆出世"))))
   ;; The year before the death.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2023)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2023)
     '(((1 22 2023) "某人 23歲農曆生日"))))
   ;; The year of the death.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2024)
     '(((2 10 2024) "某人 24歲農曆生日")
       ((4 8 2024) "某人 農曆逝世")
       ((4 14 2024) "某人 頭七")
@@ -377,19 +397,19 @@
   ;; 乙巳年二月 does not have 三十, so 廿九 is used.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2025)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2025)
     '(((1 29 2025) "某人 25歲農曆生忌")
       ((3 28 2025) "某人 第1個農曆死忌"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2026)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2026)
     '(((2 17 2026) "某人 26歲農曆生忌")
       ((4 16 2026) "某人 第2個農曆死忌")))))
 
 (ert-deftest my-holidays-tests-chinese-birth-and-death-visible-months ()
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2024 :month 4)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2024 :month 4)
     '(((4 8 2024) "某人 農曆逝世")
       ((4 14 2024) "某人 頭七")
       ((4 21 2024) "某人 二七")
@@ -400,7 +420,7 @@
       ((5 26 2024) "某人 尾七"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024)) :year 2024 :month 7)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024)) :year 2024 :month 7)
     '(((7 16 2024) "某人 百日")))))
 
 (ert-deftest my-holidays-tests-chinese-birth-and-death-death-before-birthday ()
@@ -408,7 +428,7 @@
   ;; The birthday in the year of the death is after the death, so it is 生忌.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(6 1 2000) :death '(4 8 2024)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(6 1 2000) '(4 8 2024)) :year 2024)
     '(((4 8 2024) "某人 農曆逝世")
       ((4 14 2024) "某人 頭七")
       ((4 21 2024) "某人 二七")
@@ -424,7 +444,7 @@
   ;; The birthday on the date of the death is still 生日.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(2 10 2024)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(2 10 2024)) :year 2024)
     '(((2 10 2024) "某人 24歲農曆生日")
       ((2 10 2024) "某人 農曆逝世")
       ((2 16 2024) "某人 頭七")
@@ -440,13 +460,13 @@
   ;; 七 and 百日 continue into the next Gregorian year.
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(12 20 2023)) :year 2023)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(12 20 2023)) :year 2023)
     '(((1 22 2023) "某人 23歲農曆生日")
       ((12 20 2023) "某人 農曆逝世")
       ((12 26 2023) "某人 頭七"))))
   (should
    (equal
-    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(12 20 2023)) :year 2024)
+    (my/holiday-bind (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(12 20 2023)) :year 2024)
     '(((1 2 2024) "某人 二七")
       ((1 9 2024) "某人 三七")
       ((1 16 2024) "某人 四七")
@@ -472,11 +492,13 @@
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 5 2000) nil) :year 2000)
-    '(((2 5 2000) "某人 出世"))))
+    '(((2 5 2000) "某人 出世")
+      ((2 5 2000) "某人 農曆出世"))))
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 5 2000) nil) :year 2024)
-    '(((2 5 2024) "某人 24歲生日")))))
+    '(((2 5 2024) "某人 24歲生日")
+      ((2 10 2024) "某人 24歲農曆生日")))))
 
 (ert-deftest my-holidays-tests-birth-and-death-deathday-only ()
   (should
@@ -515,7 +537,8 @@
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 5 2000) '(4 8 nil)) :year 2024)
-    '(((2 5 2024) "某人 24歲生忌")))))
+    '(((2 5 2024) "某人 24歲生忌")
+      ((2 10 2024) "某人 24歲農曆生忌")))))
 
 (ert-deftest my-holidays-tests-birth-and-death-birthday-and-deathdate ()
   ;; The year before the death.
@@ -674,15 +697,18 @@
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 2000) nil) :year 2000)
-    '(((2 29 2000) "某人 出世"))))
+    '(((2 29 2000) "某人 出世")
+      ((2 29 2000) "某人 農曆出世"))))
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 2000) nil) :year 2001)
-    '(((2 28 2001) "某人 1歲生日"))))
+    '(((2 17 2001) "某人 1歲農曆生日")
+      ((2 28 2001) "某人 1歲生日"))))
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 2000) nil) :year 2004)
-    '(((2 29 2004) "某人 4歲生日"))))
+    '(((2 15 2004) "某人 4歲農曆生日")
+      ((2 29 2004) "某人 4歲生日"))))
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 nil) nil) :year 2001)
@@ -711,7 +737,8 @@
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 2000) '(4 8 nil)) :year 2025)
-    '(((2 28 2025) "某人 25歲生忌"))))
+    '(((2 22 2025) "某人 25歲農曆生忌")
+      ((2 28 2025) "某人 25歲生忌"))))
   (should
    (equal
     (my/holiday-bind (my/holiday-birth-and-death "某人" '(2 29 nil) '(4 8 2024)) :year 2025)
@@ -782,24 +809,24 @@
   (should
    (equal
     (let* ((date '(4 9 2024)))
-      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024))))
+      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024))))
     nil))
   (should
    (equal
     (let* ((date '(4 14 2024)))
-      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(4 8 2024))))
+      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(4 8 2024))))
     "某人 頭七"))
   ;; More than one holiday on the date.
   (should
    (equal
     (let* ((date '(2 10 2024)))
-      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" :birth '(2 5 2000) :death '(2 10 2024))))
+      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" '(2 5 2000) '(2 10 2024))))
     "某人 24歲農曆生日; 某人 農曆逝世"))
   ;; `displayed-year' and `displayed-month' follow the date.
   (should
    (equal
     (let* ((date '(12 31 2024)))
-      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" :birth '(1 11 2024))))
+      (my/holiday-diary (my/holiday-chinese-birth-and-death "某人" '(1 11 2024) nil)))
     "某人 1歲農曆生日"))
   (should
    (equal
