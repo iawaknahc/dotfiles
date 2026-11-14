@@ -113,18 +113,29 @@
 
 
 ;;;; Agenda
-(defun my/org-agenda-before--set-org-agenda-files (&rest _args)
-  "Set the variable `org-agenda-files'.
+(defvar my/org-agenda-files-last nil
+  "Last value of variable `org-agenda-files'.")
 
-Only Project or Area file-level notes are targets of agenda."
-  (let* ((file-notes (vulpea-db-query (lambda (note)
-                                        (let* ((tags (vulpea-note-tags note))
-                                               (level (vulpea-note-level note)))
-                                          (and (equal 0 level)
-                                               (or (seq-contains-p tags "project")
-                                                   (seq-contains-p tags "area")))))))
-         (filepaths (seq-map #'vulpea-note-path file-notes)))
-    (setq org-agenda-files filepaths)))
+(defun my/org-agenda-before--set-org-agenda-files (&rest _args)
+  "Set variable `org-agenda-files' if it is not bound already.
+
+A custom agenda command may specify variable `org-agenda-files' and make it bound."
+  ;; If variable `org-agenda-files' is unbound, for example,
+  ;; invoking the ordinary agenda.
+  (when (or (null org-agenda-files)
+            ;; Or the value of variable `org-agenda-files' did not change.
+            (eq org-agenda-files my/org-agenda-files-last))
+    (let* ((file-notes
+            (vulpea-db-query
+             (lambda (note)
+               (let ((tags (vulpea-note-tags note))
+                     (level (vulpea-note-level note)))
+                 (and (equal 0 level)
+                      (or (seq-contains-p tags "project")
+                          (seq-contains-p tags "area")))))))
+           (filepaths (seq-map #'vulpea-note-path file-notes)))
+      (setq my/org-agenda-files-last filepaths
+            org-agenda-files filepaths))))
 ;; Just-in-time set variable `org-agenda-files' before `org-agenda-list' runs.
 ;; The advice is added to `org-agenda-list' so that `org-agenda' and `org-calendar-goto-agenda' can benefit.
 (advice-add #'org-agenda-list :before #'my/org-agenda-before--set-org-agenda-files)
@@ -138,19 +149,10 @@ Only Project or Area file-level notes are targets of agenda."
  org-agenda-include-diary nil
 
  org-agenda-custom-commands
- `(("w" "Worklog entries" agenda ""
-    ((org-agenda-files (list "~/org/worklog.org"))
-     (org-agenda-skip-function
-      '(let* ((tags (org-get-tags)))
-         (unless (seq-contains-p tags "worklog")
-           (point))))))
-   ("y" "Yearly agenda of services" agenda ""
-    ((org-agenda-span ,(* 7 53))
-     (org-agenda-show-all-dates nil)
-     (org-agenda-skip-function
-      '(let* ((tags (org-get-tags)))
-         (unless (seq-contains-p tags "service")
-           (point))))))))
+ `(("c" "Yearly agenda of calendar" agenda ""
+    ((org-agenda-files (list "~/org/diary-integration.org"))
+     (org-agenda-span 'year)
+     (org-agenda-show-all-dates nil)))))
 
 
 ;;;; Column view
