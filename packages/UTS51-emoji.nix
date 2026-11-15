@@ -6,7 +6,7 @@
 }:
 symlinkJoin rec {
   pname = "UTS51-emoji";
-  version = "17.0.0";
+  version = "18.0.0";
 
   emoji-sequences_txt = stdenvNoCC.mkDerivation rec {
     inherit version;
@@ -20,7 +20,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/emoji/${pname}"
         else
           "https://www.unicode.org/Public/emoji/${version}/${pname}";
-      hash = "sha256-EsyCZ9wzy9Ee0yvPb8XcKtnHp3uuG9+6L0GxubPq2N0=";
+      hash = "sha256-GCPc5x892csK0Zdnl7ruT/vcGQl1b0OvjOTFf3MoQ6Q=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/emoji
@@ -40,7 +40,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/emoji/${pname}"
         else
           "https://www.unicode.org/Public/emoji/${version}/${pname}";
-      hash = "sha256-HYqUT4jXlS9+98UWf+88Z5lbyuJFQ5SXECMbA6IBrNo=";
+      hash = "sha256-jzc1zaH5KnedeK9nz4YGa7HwcUPcIvKsKTlNm8V6sho=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/emoji
@@ -60,7 +60,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/emoji/${pname}"
         else
           "https://www.unicode.org/Public/emoji/${version}/${pname}";
-      hash = "sha256-WyVEHa7SMisGjF5wzaUilGpPAnTfhkRFoZZakuX8XK0=";
+      hash = "sha256-9htSE734Wld0Gp+QPLONDzmj0Tvm/0rKOzmFfoWakZE=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/emoji

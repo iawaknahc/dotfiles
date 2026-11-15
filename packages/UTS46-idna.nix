@@ -6,7 +6,7 @@
 }:
 symlinkJoin rec {
   pname = "UTS46-idna";
-  version = "17.0.0";
+  version = "18.0.0";
 
   Idna2008_txt = stdenvNoCC.mkDerivation rec {
     inherit version;
@@ -20,7 +20,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/idna/${pname}"
         else
           "https://www.unicode.org/Public/idna/idna2008derived/Idna2008-${version}.txt";
-      hash = "sha256-5KdSaoo3U5wN76TaJfXb930CEqFNR2LUVcrepgiokhw=";
+      hash = "sha256-2Zy6myxMtBj2jPouQ0R82/8b/YtkIJq47sg/OxMdKE0=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/idna
@@ -40,7 +40,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/idna/${pname}"
         else
           "https://www.unicode.org/Public/idna/${version}/${pname}";
-      hash = "sha256-h/BVBdwCb9sr/xYTK9xoqAFGdYNogqmisYRFQK0744I=";
+      hash = "sha256-oDses4AyJoxpZAaoPwly1qgVrNLI1BUdQuwP2nD/ztE=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/idna
@@ -60,7 +60,7 @@ symlinkJoin rec {
           "https://www.unicode.org/Public/${version}/idna/${pname}"
         else
           "https://www.unicode.org/Public/idna/${version}/${pname}";
-      hash = "sha256-vrXQviDolhibAyCagv3DTwY1FQK71LjiUjWD/ClU2c8=";
+      hash = "sha256-Aja3XFsg39hXs7XPdVCYh5WdarANbHvam33D31GMH94=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/idna

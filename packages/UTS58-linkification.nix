@@ -6,7 +6,7 @@
 }:
 symlinkJoin rec {
   pname = "UTS58-linkification";
-  version = "17.0.0";
+  version = "18.0.0";
 
   _ = lib.asserts.assertMsg (
     lib.strings.compareVersions version "17.0.0" >= 0
@@ -18,7 +18,7 @@ symlinkJoin rec {
     dontUnpack = true;
     src = fetchurl {
       url = "https://www.unicode.org/Public/${version}/linkification/${pname}";
-      hash = "sha256-0JXYFWrVzklSf9aiDbtR3wXHWFyggePHRYCdTMqp1bw=";
+      hash = "sha256-4GKuMXH7QGMsKPcRZZcUTr8C/NOanWfPCopGpYtSYQM=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/linkification
@@ -32,7 +32,7 @@ symlinkJoin rec {
     dontUnpack = true;
     src = fetchurl {
       url = "https://www.unicode.org/Public/${version}/linkification/${pname}";
-      hash = "sha256-tX6n4pe1/EuObpMyKleNiiWsRMv68Pkx1a1oK+SIfds=";
+      hash = "sha256-nzkkC/jidFU3t7pJC3p43fD9xb2szDomwJilK0tdjv4=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/linkification
@@ -46,7 +46,7 @@ symlinkJoin rec {
     dontUnpack = true;
     src = fetchurl {
       url = "https://www.unicode.org/Public/${version}/linkification/${pname}";
-      hash = "sha256-urLYR2+3P6Yolac+3T2HxeSelmQDXM9NhBoXpEux67k=";
+      hash = "sha256-q51OC+pEdkRavDYv8dreEv5YsF5YXWg1rHZDQIY99EY=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/linkification
@@ -60,7 +60,7 @@ symlinkJoin rec {
     dontUnpack = true;
     src = fetchurl {
       url = "https://www.unicode.org/Public/${version}/linkification/${pname}";
-      hash = "sha256-yQ44gtjc7avAthW2XhteRDAshmLFE2yyW6KLPLQIHdE=";
+      hash = "sha256-/lV0zHdiqm/Yc0TXu+j6y2RLlxGyG6a7DOn6KA1SgBM=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/linkification
@@ -74,7 +74,7 @@ symlinkJoin rec {
     dontUnpack = true;
     src = fetchurl {
       url = "https://www.unicode.org/Public/${version}/linkification/${pname}";
-      hash = "sha256-tcO3gJknjPbC3MnjcwxmOLYPRGTzXFiU4IM5kC57ETg=";
+      hash = "sha256-gVFQQC+vEfnCxLaSwIoe1hM7/ShvDenKQcXUagCawKs=";
     };
     installPhase = ''
       mkdir -p $out/share/unicode/${version}/linkification
