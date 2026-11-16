@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 import dataclasses
+import fractions
 import io
+import math
 import pathlib
-from typing import Self
+from typing import Self, cast
 
 import fontTools.ttLib
 import fontTools.ttLib.tables
@@ -310,6 +312,280 @@ def cmd_inspect_font_coverage(args: argparse.Namespace):
             )
 
 
+def load_font_faces(
+    path: pathlib.Path,
+) -> tuple[fontTools.ttLib.TTCollection | None, list[fontTools.ttLib.TTFont]]:
+    # recalcBBoxes=False keeps the stored bounding boxes.
+    # Otherwise, save() decompiles every glyph to recompute them, which takes minutes for CJK fonts.
+    # patch_cjk_font_face does not change any coordinate, so the stored bounding boxes stay valid.
+    with open(path, "rb") as f:
+        magic = f.read(4)
+    if magic == b"ttcf":
+        # Do not use shareTables=True. Faces sharing a table object break in subtle ways.
+        # For example, faces may share a post table without names, yet have different glyph orders,
+        # because the glyph names are then derived from the cmap of each face.
+        # Each face gets its own table objects, and TTCollection.save() shares identical tables again.
+        collection = fontTools.ttLib.TTCollection(str(path), recalcBBoxes=False)
+        return collection, list(collection.fonts)
+    return None, [fontTools.ttLib.TTFont(str(path), recalcBBoxes=False)]
+
+
+@dataclasses.dataclass
+class ReferenceMetrics:
+    """The metrics of the reference font, in em. descender is positive."""
+
+    half_width: fractions.Fraction
+    ascender: fractions.Fraction
+    descender: fractions.Fraction
+    line_gap: fractions.Fraction
+
+
+def read_reference_metrics(path: pathlib.Path) -> ReferenceMetrics:
+    _, fonts = load_font_faces(path)
+    font = fonts[0]
+    upm = font["head"].unitsPerEm  # ty: ignore[unresolved-attribute]
+    cmap = font.getBestCmap()
+    if cmap is None:
+        raise ValueError(f"{path}: no Unicode cmap")
+    space = cmap[0x20]
+    hhea = font["hhea"]
+    return ReferenceMetrics(
+        half_width=fractions.Fraction(font["hmtx"][space][0], upm),
+        ascender=fractions.Fraction(hhea.ascent, upm),
+        descender=fractions.Fraction(-hhea.descent, upm),
+        line_gap=fractions.Fraction(hhea.lineGap, upm),  # ty: ignore[unresolved-attribute]
+    )
+
+
+# Fonts built by Apple carry these private entries in the `meta` table.
+# CoreText trusts the attributes cached in them over isFixedPitch.
+APPLE_METADATA_TAGS = ("appl", "bild")
+
+
+def check_cjk_font_face(path: pathlib.Path, index: int, font: fontTools.ttLib.TTFont):
+    where = f"{path}: face {index} ({font['name'].getDebugName(4)})"
+    has_glyf = "glyf" in font
+    has_cff = "CFF " in font
+    has_cff2 = "CFF2" in font
+    is_variable = "fvar" in font
+    # These are the formats where CoreText was verified to report the font as monospace
+    # after setting isFixedPitch.
+    # CoreText ignores isFixedPitch in CID-keyed CFF, and in some variable TrueType fonts.
+    # For CFF2, CoreText was also verified to scale glyphs by head.unitsPerEm, not by FontMatrix.
+    is_static_truetype = has_glyf and not has_cff and not has_cff2 and not is_variable
+    is_variable_cff2 = has_cff2 and not has_glyf and not has_cff and is_variable
+    if not (is_static_truetype or is_variable_cff2):
+        raise ValueError(
+            f"{where}: only static TrueType (glyf) and variable CFF2 fonts are supported"
+        )
+    if "MVAR" in font:
+        raise ValueError(
+            f"{where}: MVAR is not supported because it may vary the vertical metrics"
+        )
+    if "meta" in font and any(
+        tag in cast(dict[str, object], font["meta"].data) for tag in APPLE_METADATA_TAGS
+    ):
+        raise ValueError(f"{where}: fonts with Apple metadata are not supported")
+
+
+# The range of head.unitsPerEm allowed by the OpenType spec.
+MIN_UNITS_PER_EM = 16
+MAX_UNITS_PER_EM = 16384
+
+
+def patch_cjk_font_face(
+    path: pathlib.Path,
+    index: int,
+    font: fontTools.ttLib.TTFont,
+    reference: ReferenceMetrics,
+):
+    """
+    patch_cjk_font_face enlarges FONT so that a full-width glyph is as wide as 2 half-width glyphs
+    of the reference font, and copies the vertical metrics of the reference font.
+
+    It enlarges the font by lowering head.unitsPerEm, so that no coordinate has to change.
+    Units per em is an integer, so the full-width glyph is only approximately as wide as intended.
+    e.g. 1000 units per em becomes 833 instead of 1000/1.2, so a full-width glyph is 1.2005em.
+    Emacs (NS build) draws a glyph of a monospace font N space widths wide, in whole pixels.
+    The rounding error is too small to change the space width in pixels at any practical size.
+    """
+    where = f"{path}: face {index} ({font['name'].getDebugName(4)})"
+    upm = font["head"].unitsPerEm  # ty: ignore[unresolved-attribute]
+    cmap = font.getBestCmap()
+    if cmap is None:
+        raise ValueError(f"{where}: no Unicode cmap")
+    hmtx = font["hmtx"]
+    half = hmtx[cmap[0x20]][0]
+    full = hmtx[cmap[0x4E00]][0]
+    if full != 2 * half:
+        raise ValueError(
+            f"{where}: U+4E00 is {full} wide, which is not 2 times the width of U+0020 ({half})"
+        )
+
+    new_upm = round(full / (2 * reference.half_width))
+    if not (MIN_UNITS_PER_EM <= new_upm <= MAX_UNITS_PER_EM):
+        raise ValueError(f"{where}: the new units per em {new_upm} is out of range")
+    font["head"].unitsPerEm = new_upm  # ty: ignore[unresolved-attribute]
+
+    # Round down, so that this font never makes a line taller than the reference font does.
+    ascender = math.floor(reference.ascender * new_upm)
+    descender = math.floor(reference.descender * new_upm)
+    line_gap = math.floor(reference.line_gap * new_upm)
+    hhea = font["hhea"]
+    hhea.ascent = ascender
+    hhea.descent = -descender
+    hhea.lineGap = line_gap  # ty: ignore[unresolved-attribute]
+    os2 = font["OS/2"]
+    os2.sTypoAscender = ascender  # ty: ignore[unresolved-attribute]
+    os2.sTypoDescender = -descender  # ty: ignore[unresolved-attribute]
+    os2.sTypoLineGap = line_gap  # ty: ignore[unresolved-attribute]
+    os2.usWinAscent = ascender  # ty: ignore[unresolved-attribute]
+    os2.usWinDescent = descender  # ty: ignore[unresolved-attribute]
+
+    # CoreText reports the font as monospace with this flag.
+    # Emacs (NS build) then draws a glyph whose advance is N times the space width
+    # exactly N space widths wide.
+    font["post"].isFixedPitch = 1  # ty: ignore[unresolved-attribute]
+
+    print(f"face {index} ({font['name'].getDebugName(4)}):")
+    print(
+        f"  unitsPerEm {upm} -> {new_upm}, so U+4E00 is {float(fractions.Fraction(full, new_upm)):.4f}em wide"
+    )
+    print(f"  ascender={ascender} descender={-descender} lineGap={line_gap}")
+
+
+# name table IDs, see https://learn.microsoft.com/typography/opentype/spec/name
+NAME_ID_UNIQUE = 3
+NAME_ID_FULL = 4
+NAME_ID_POSTSCRIPT = 6
+NAME_ID_MAC_FULL = 18
+NAME_ID_VARIATIONS_POSTSCRIPT_PREFIX = 25
+FAMILY_NAME_IDS = (1, 16, 21)  # family, typographic family, WWS family
+FULL_NAME_IDS = (NAME_ID_FULL, NAME_ID_MAC_FULL)
+POSTSCRIPT_NAME_MAX_LENGTH = 63
+NO_NAME_ID = 0xFFFF
+
+
+def rename_postscript(name: str, suffix: str) -> str:
+    """Insert SUFFIX after the family part: Family-Style -> FamilySUFFIX-Style."""
+    family, dash, style = name.partition("-")
+    return f"{family}{suffix}{dash}{style}"
+
+
+def rename_font_face(
+    path: pathlib.Path,
+    index: int,
+    font: fontTools.ttLib.TTFont,
+    suffix: str,
+) -> dict[str, str]:
+    """
+    rename_font_face gives FONT new family and PostScript names.
+    It returns a dict from old PostScript names to new PostScript names.
+    """
+    where = f"{path}: face {index} ({font['name'].getDebugName(4)})"
+    name_table = font["name"]
+
+    postscript_name_ids = {NAME_ID_POSTSCRIPT, NAME_ID_VARIATIONS_POSTSCRIPT_PREFIX}
+    if "fvar" in font:
+        # Each named instance of a variable font (e.g. Medium, Bold) has its own PostScript name.
+        for instance in font["fvar"].instances:
+            if instance.postscriptNameID != NO_NAME_ID:
+                postscript_name_ids.add(instance.postscriptNameID)
+
+    def family_of(record) -> str | None:
+        # The family that a full name starts with, from the same platform and language.
+        for name_id in (16, 1):
+            family = name_table.getName(
+                name_id, record.platformID, record.platEncID, record.langID
+            )
+            if family is not None:
+                return family.toUnicode()
+        return None
+
+    old_postscript_names = {
+        (r.platformID, r.platEncID, r.langID): r.toUnicode()
+        for r in name_table.names
+        if r.nameID == NAME_ID_POSTSCRIPT
+    }
+    # Compute every new string before changing anything,
+    # because full names are derived from the old family names.
+    renamed: dict[str, str] = {}
+    updates = []
+    for record in name_table.names:
+        old = record.toUnicode()
+        if record.nameID in FAMILY_NAME_IDS:
+            new = f"{old} {suffix}"
+        elif record.nameID in FULL_NAME_IDS:
+            family = family_of(record)
+            # Compare case-insensitively, because some fonts differ only in case,
+            # e.g. D2Coding has the family 'D2Coding ligature' and the full name 'D2Coding Ligature'.
+            if family is None or not old.lower().startswith(family.lower()):
+                raise ValueError(
+                    f"{where}: full name {old!r} does not start with its family name {family!r}"
+                )
+            new = f"{old[: len(family)]} {suffix}{old[len(family) :]}"
+        elif record.nameID in postscript_name_ids:
+            new = rename_postscript(old, suffix)
+            if len(new) > POSTSCRIPT_NAME_MAX_LENGTH:
+                raise ValueError(
+                    f"{where}: PostScript name {new!r} is longer than {POSTSCRIPT_NAME_MAX_LENGTH} characters"
+                )
+            renamed[old] = new
+        elif record.nameID == NAME_ID_UNIQUE:
+            # The unique ID usually embeds the PostScript name. Make it unique too.
+            old_postscript_name = old_postscript_names.get(
+                (record.platformID, record.platEncID, record.langID)
+            )
+            if old_postscript_name is not None and old_postscript_name in old:
+                new = old.replace(
+                    old_postscript_name, rename_postscript(old_postscript_name, suffix)
+                )
+            else:
+                new = f"{old};{suffix}"
+        else:
+            continue
+        updates.append((record, new))
+    for record, new in updates:
+        record.string = new
+    return renamed
+
+
+def cmd_patch_cjk_font(args: argparse.Namespace):
+    suffix: str = args.family_suffix
+    if not (suffix.isascii() and suffix.isalnum()):
+        # It goes into PostScript names, which allow neither spaces nor hyphens here.
+        raise ValueError("--family-suffix must contain only ASCII letters and digits")
+    input_path = pathlib.Path(args.input).expanduser()
+    output_path = pathlib.Path(args.output).expanduser()
+    if input_path.resolve() == output_path.resolve():
+        raise ValueError("OUTPUT must be different from INPUT")
+
+    reference = read_reference_metrics(pathlib.Path(args.reference).expanduser())
+    collection, fonts = load_font_faces(input_path)
+    for index, font in enumerate(fonts):
+        check_cjk_font_face(input_path, index, font)
+
+    for index, font in enumerate(fonts):
+        patch_cjk_font_face(input_path, index, font, reference)
+
+    renamed: dict[str, str] = {}
+    for index, font in enumerate(fonts):
+        renamed |= rename_font_face(input_path, index, font, suffix)
+    for new in renamed.values():
+        if new in renamed:
+            raise ValueError(
+                f"{input_path}: the new PostScript name {new!r} already exists in the font"
+            )
+    for old, new in renamed.items():
+        print(f"renamed {old} -> {new}")
+
+    if collection is not None:
+        collection.save(str(output_path), shareTables=True)
+    else:
+        fonts[0].save(str(output_path))
+    print(f"wrote {output_path}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Some utilities on fonts",
@@ -344,6 +620,29 @@ def main():
         help="The path to the font file",
     )
 
+    patch_cjk_font = subcommand.add_parser(
+        "patch-cjk-font",
+        help=(
+            "Enlarge a CJK font so that a full-width glyph is as wide as "
+            "2 half-width glyphs of the reference font, "
+            "copy the line height of the reference font, "
+            "and mark the font as fixed-pitch"
+        ),
+    )
+    patch_cjk_font.set_defaults(command="patch-cjk-font")
+    patch_cjk_font.add_argument(
+        "--reference",
+        required=True,
+        help="The path to the reference font, e.g. JetBrains Mono",
+    )
+    patch_cjk_font.add_argument(
+        "--family-suffix",
+        required=True,
+        help="The suffix of the new family name, e.g. 'Jigmo' -> 'Jigmo RealMono'",
+    )
+    patch_cjk_font.add_argument("input", help="The path to the CJK font")
+    patch_cjk_font.add_argument("output", help="The path to the patched font")
+
     args = parser.parse_args()
     match args.command:
         case "list-unicode-blocks":
@@ -352,6 +651,8 @@ def main():
             cmd_list_unicode_scripts(args)
         case "inspect-font-coverage":
             cmd_inspect_font_coverage(args)
+        case "patch-cjk-font":
+            cmd_patch_cjk_font(args)
 
 
 main()

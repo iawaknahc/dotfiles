@@ -10,6 +10,7 @@ Makefile
 codebookignore
 currencies.py
 flake.lock
+font-utils.py
 harperignore
 init-font.el
 init-mu4e.el
@@ -24,6 +25,5 @@ my_porter_output.txt
 my_porter_spec.lua
 my_porter_voc.txt
 parse_ucd.zig
-patch_fixed_pitch.py
 secrets/secrets.yaml
 vimrc.vim

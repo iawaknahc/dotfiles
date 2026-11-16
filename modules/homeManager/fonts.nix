@@ -1,14 +1,17 @@
 { pkgs, config, ... }:
 let
-  # Copies of Noto Sans Mono CJK and Jigmo that CoreText reports as monospace.
-  # In Emacs (NS build), a monospace font draws a glyph that is N times the space width
-  # exactly N space widths wide.
-  # Together with a rescale ratio of 1.2, this keeps CJK glyphs aligned to 2 columns
-  # of JetBrains Mono at every font size, including after text-scale-adjust.
+  # Copies of the CJK fonts used in Emacs, patched to match JetBrains Mono NL:
+  # 1. A full-width glyph is as wide as 2 glyphs of JetBrains Mono NL (1.2em).
+  # 2. The line height is the same as JetBrains Mono NL.
+  # 3. CoreText reports the font as monospace.
+  #    In Emacs (NS build), a monospace font draws a glyph that is N times the space width
+  #    exactly N space widths wide.
+  # This keeps CJK glyphs aligned to 2 columns of JetBrains Mono NL at every font size,
+  # including after text-scale-adjust, without face-font-rescale-alist.
   #
   # The fonts are renamed with the suffix RealMono, e.g. "Noto Sans Mono CJK HK RealMono",
   # so that the original fonts are still installed and usable.
-  # See ./fonts/patch_fixed_pitch.py for details.
+  # See the subcommand patch-cjk-font in ./my-scripts/bin/font-utils.py for details.
   realmono-fonts =
     pkgs.runCommand "realmono-fonts"
       {
@@ -18,18 +21,46 @@ let
       }
       ''
         mkdir -p $out/share/fonts/opentype $out/share/fonts/truetype
-        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
           ${pkgs.noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansMonoCJK-VF.otf.ttc \
           $out/share/fonts/opentype/NotoSansMonoCJKRealMono-VF.otf.ttc
-        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
           ${pkgs.jigmo}/share/fonts/truetype/Jigmo.ttf \
           $out/share/fonts/truetype/JigmoRealMono.ttf
-        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
           ${pkgs.jigmo}/share/fonts/truetype/Jigmo2.ttf \
           $out/share/fonts/truetype/Jigmo2RealMono.ttf
-        python ${./fonts/patch_fixed_pitch.py} --family-suffix RealMono \
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
           ${pkgs.jigmo}/share/fonts/truetype/Jigmo3.ttf \
           $out/share/fonts/truetype/Jigmo3RealMono.ttf
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
+          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Light.ttf \
+          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Light.ttf
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
+          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Regular.ttf \
+          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Regular.ttf
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
+          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Medium.ttf \
+          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Medium.ttf
+        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
+          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
+          --family-suffix RealMono \
+          ${pkgs.d2coding}/share/fonts/truetype/D2Coding-Ver1.4.0-20261003-all.ttc \
+          $out/share/fonts/truetype/D2CodingRealMono-Ver1.4.0-20261003-all.ttc
       '';
 in
 {
