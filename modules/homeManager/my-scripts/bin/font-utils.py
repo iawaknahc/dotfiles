@@ -81,7 +81,7 @@ class UnicodeBlock:
         )
         for script in self.scripts:
             print(
-                f"  {script.script_name} {script.count}/{script.total} {script.count / script.total * 100:.0f}%",
+                f"  {script.script_name} {script.count}/{script.total} {script.count / script.total * 100:.1f}%",
                 file=buf,
             )
         return buf.getvalue()
@@ -103,7 +103,7 @@ class UnicodeScript:
         print(f"{self.script_name}", file=buf)
         for range in self.ranges:
             print(
-                f"  {range.start:04X}..{range.end:04X} {range.size}/{self.total_size} {range.size / self.total_size * 100:.0f}%",
+                f"  {range.start:04X}..{range.end:04X} {range.size}/{self.total_size} {range.size / self.total_size * 100:.1f}%",
                 file=buf,
             )
         return buf.getvalue()
@@ -351,7 +351,7 @@ def cmd_inspect_font_coverage_by_blocks(args: argparse.Namespace):
     for coverage in block_coverages:
         if coverage[1] > 0:
             print(
-                f"{coverage[0].block_name} ({coverage[0].range.start:04X}..{coverage[0].range.end:04X}) {coverage[1]}/{coverage[0].size()} {coverage[1] / coverage[0].size() * 100:.0f}%"
+                f"{coverage[0].block_name} ({coverage[0].range.start:04X}..{coverage[0].range.end:04X}) {coverage[1]}/{coverage[0].size()} {coverage[1] / coverage[0].size() * 100:.1f}%"
             )
 
 
@@ -382,11 +382,11 @@ def cmd_inspect_font_coverage_by_scripts(args: argparse.Namespace):
     for coverage in script_coverages:
         if coverage[1] > 0:
             print(
-                f"{coverage[0]} {coverage[1]}/{coverage[2]} {coverage[1] / coverage[2] * 100:.0f}%"
+                f"{coverage[0]} {coverage[1]}/{coverage[2]} {coverage[1] / coverage[2] * 100:.1f}%"
             )
             for range, count in coverage[3]:
                 print(
-                    f"  {range.start:04X}..{range.end:04X} {count}/{range.size} {count / range.size * 100:.0f}%"
+                    f"  {range.start:04X}..{range.end:04X} {count}/{range.size} {count / range.size * 100:.1f}%"
                 )
 
 
