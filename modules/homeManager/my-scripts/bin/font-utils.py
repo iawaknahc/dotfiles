@@ -93,22 +93,17 @@ class UnicodeBlock:
 
 
 @dataclasses.dataclass
-class UnicodeScriptStatistics:
-    range: UnicodeRange
-    total: int
-
-
-@dataclasses.dataclass
 class UnicodeScript:
     script_name: str
-    ranges: list[UnicodeScriptStatistics]
+    total_size: int
+    ranges: list[UnicodeRange]
 
     def __str__(self) -> str:
         buf = io.StringIO()
         print(f"{self.script_name}", file=buf)
         for range in self.ranges:
             print(
-                f"  {range.range.start:04X}..{range.range.end:04X} {range.range.size}/{range.total} {range.range.size / range.total * 100:.0f}%",
+                f"  {range.start:04X}..{range.end:04X} {range.size}/{self.total_size} {range.size / self.total_size * 100:.0f}%",
                 file=buf,
             )
         return buf.getvalue()
@@ -212,7 +207,7 @@ def cmd_list_unicode_blocks(args: argparse.Namespace):
         print(block, end="")
 
 
-def cmd_list_unicode_scripts(args: argparse.Namespace):
+def prepare_unicode_scripts(args: argparse.Namespace) -> list[UnicodeScript]:
     range_and_script_pairs = parse_scripts_txt(
         pathlib.Path(args.unicode_directory) / "ucd" / "Scripts.txt"
     )
@@ -247,14 +242,16 @@ def cmd_list_unicode_scripts(args: argparse.Namespace):
         scripts.append(
             UnicodeScript(
                 script_name=script_name,
-                ranges=[
-                    UnicodeScriptStatistics(range=unicode_range, total=total)
-                    for unicode_range in ranges
-                ],
+                total_size=total,
+                ranges=ranges,
             )
         )
     scripts = sorted(scripts, key=lambda script: script.script_name)
+    return scripts
 
+
+def cmd_list_unicode_scripts(args: argparse.Namespace):
+    scripts = prepare_unicode_scripts(args)
     for script in scripts:
         print(script, end="")
 
@@ -356,6 +353,41 @@ def cmd_inspect_font_coverage_by_blocks(args: argparse.Namespace):
             print(
                 f"{coverage[0].block_name} ({coverage[0].range.start:04X}..{coverage[0].range.end:04X}) {coverage[1]}/{coverage[0].size()} {coverage[1] / coverage[0].size() * 100:.0f}%"
             )
+
+
+def cmd_inspect_font_coverage_by_scripts(args: argparse.Namespace):
+    scripts = prepare_unicode_scripts(args)
+    ranges = prepare_fonts_ranges(args.fonts)
+
+    script_coverages: list[tuple[str, int, int, list[tuple[UnicodeRange, int]]]] = []
+    for script in scripts:
+        coverage_in_this_script: list[tuple[UnicodeRange, int]] = []
+        count_in_this_script = 0
+        for script_range in script.ranges:
+            count_in_this_range = 0
+            for font_range in ranges:
+                size = script_range.intersect_size(font_range)
+                count_in_this_range += size
+                count_in_this_script += size
+            coverage_in_this_script.append((script_range, count_in_this_range))
+        script_coverages.append(
+            (
+                script.script_name,
+                count_in_this_script,
+                script.total_size,
+                coverage_in_this_script,
+            )
+        )
+
+    for coverage in script_coverages:
+        if coverage[1] > 0:
+            print(
+                f"{coverage[0]} {coverage[1]}/{coverage[2]} {coverage[1] / coverage[2] * 100:.0f}%"
+            )
+            for range, count in coverage[3]:
+                print(
+                    f"  {range.start:04X}..{range.end:04X} {count}/{range.size} {count / range.size * 100:.0f}%"
+                )
 
 
 def load_font_faces(
@@ -658,12 +690,25 @@ def main():
 
     inspect_font_coverage_by_blocks = subcommand.add_parser(
         "inspect-font-coverage-by-blocks",
-        help="Inspect the coverage of the font",
+        help="Inspect the coverage of the font by Unicode Blocks",
     )
     inspect_font_coverage_by_blocks.set_defaults(
         command="inspect-font-coverage-by-blocks"
     )
     inspect_font_coverage_by_blocks.add_argument(
+        "fonts",
+        help="The paths to the font files",
+        nargs="+",
+    )
+
+    inspect_font_coverage_by_scripts = subcommand.add_parser(
+        "inspect-font-coverage-by-scripts",
+        help="Inspect the coverage of the font by Unicode Scripts",
+    )
+    inspect_font_coverage_by_scripts.set_defaults(
+        command="inspect-font-coverage-by-scripts"
+    )
+    inspect_font_coverage_by_scripts.add_argument(
         "fonts",
         help="The paths to the font files",
         nargs="+",
@@ -700,6 +745,8 @@ def main():
             cmd_list_unicode_scripts(args)
         case "inspect-font-coverage-by-blocks":
             cmd_inspect_font_coverage_by_blocks(args)
+        case "inspect-font-coverage-by-scripts":
+            cmd_inspect_font_coverage_by_scripts(args)
         case "patch-cjk-font":
             cmd_patch_cjk_font(args)
 
