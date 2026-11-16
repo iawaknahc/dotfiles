@@ -266,6 +266,7 @@ def cmd_inspect_font_coverage(args: argparse.Namespace):
         cmap: fontTools.ttLib.tables._c_m_a_p.table__c_m_a_p = font["cmap"]
     except KeyError:
         raise TypeError(f"cmap not found: {path_to_font}")
+
     target: fontTools.ttLib.tables._c_m_a_p.CmapSubtable | None = None
     for table in cmap.tables:
         # platformID 3 means Windows
@@ -274,10 +275,16 @@ def cmd_inspect_font_coverage(args: argparse.Namespace):
         # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
         if table.platformID == 3 and table.platEncID == 10 and table.format == 12:
             target = table
+    for table in cmap.tables:
+        # platformID 3 means Windows
+        # platEncID 1 means Unicode BMP
+        # format 4 is a must when platformID == 3 and platEncID == 1.
+        # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
+        if table.platformID == 3 and table.platEncID == 1 and table.format == 4:
+            target = table
     if target is None:
-        raise TypeError(
-            f"cmap platformID==3 platEncID==10 format==12 not found: {path_to_font}"
-        )
+        raise TypeError(f"cmap not found: {path_to_font}")
+
     codepoint_to_name: dict[int, str] = target.cmap
     codepoints = list(codepoint_to_name.keys())
     codepoints = sorted(codepoints, key=lambda codepoint: codepoint)
