@@ -70,6 +70,7 @@ clientpidmap
 cljfmt
 closeoff
 cmake
+cmap
 cmdline
 cnoreabbrev
 codespell
