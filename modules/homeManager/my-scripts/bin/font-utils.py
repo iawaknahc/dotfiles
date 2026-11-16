@@ -33,8 +33,26 @@ class UnicodeRange:
             return type(self)(start=self.start, end=codepoint)
         return None
 
-    def intersect(self, that: Self) -> int:
-        return max(0, min(self.end, that.end) - max(self.start, that.start) + 1)
+    def intersect(self, that: Self) -> Self | None:
+        start = max(self.start, that.start)
+        end = min(self.end, that.end)
+        if start > end:
+            return None
+        return type(self)(start=start, end=end)
+
+    def intersect_size(self, that: Self) -> int:
+        r = self.intersect(that)
+        if r is None:
+            return 0
+        return r.size
+
+    def union(self, that: Self) -> Self | None:
+        intersection = self.intersect(that)
+        if intersection is None:
+            return None
+        return type(self)(
+            start=min(self.start, that.start), end=max(self.end, that.end)
+        )
 
 
 @dataclasses.dataclass
@@ -165,7 +183,7 @@ def prepare_unicode_blocks(args: argparse.Namespace) -> list[UnicodeBlock]:
     for block in blocks:
         working_dict: dict[str, int] = {}
         for pair in range_and_script_pairs:
-            intersection = block.range.intersect(pair[0])
+            intersection = block.range.intersect_size(pair[0])
             if intersection > 0:
                 working_dict[pair[1]] = (
                     working_dict.setdefault(pair[1], 0) + intersection
@@ -255,56 +273,84 @@ def codepoints_to_unicode_ranges(codepoints: list[int]) -> list[UnicodeRange]:
     return out
 
 
-def cmd_inspect_font_coverage(args: argparse.Namespace):
-    path_to_font = pathlib.Path(args.font).expanduser()
+def prepare_fonts_ranges(raw_paths: list[str]) -> list[UnicodeRange]:
+    overlapping_ranges: list[UnicodeRange] = []
+    for path in raw_paths:
+        path_to_font = pathlib.Path(path).expanduser()
 
-    try:
-        collection = fontTools.ttLib.TTCollection(str(path_to_font))
-        font = collection.fonts[0]
-    except fontTools.ttLib.TTLibError:
-        font = fontTools.ttLib.TTFont(str(path_to_font))
+        try:
+            collection = fontTools.ttLib.TTCollection(str(path_to_font))
+            font = collection.fonts[0]
+        except fontTools.ttLib.TTLibError:
+            font = fontTools.ttLib.TTFont(str(path_to_font))
 
-    try:
-        cmap: fontTools.ttLib.tables._c_m_a_p.table__c_m_a_p = font["cmap"]
-    except KeyError:
-        raise TypeError(f"cmap not found: {path_to_font}")
+        try:
+            cmap: fontTools.ttLib.tables._c_m_a_p.table__c_m_a_p = font["cmap"]
+        except KeyError:
+            raise TypeError(f"cmap not found: {path_to_font}")
 
-    target: fontTools.ttLib.tables._c_m_a_p.CmapSubtable | None = None
-    for table in cmap.tables:
-        # platformID 3 means Windows
-        # platEncID 10 means Unicode full repertoire
-        # format 12 is a must when platformID == 3 and platEncID == 10.
-        # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
-        if table.platformID == 3 and table.platEncID == 10 and table.format == 12:
-            target = table
-    for table in cmap.tables:
-        # platformID 3 means Windows
-        # platEncID 1 means Unicode BMP
-        # format 4 is a must when platformID == 3 and platEncID == 1.
-        # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
-        if table.platformID == 3 and table.platEncID == 1 and table.format == 4:
-            target = table
-    if target is None:
-        raise TypeError(f"cmap not found: {path_to_font}")
+        target: fontTools.ttLib.tables._c_m_a_p.CmapSubtable | None = None
+        if target is None:
+            for table in cmap.tables:
+                # platformID 3 means Windows
+                # platEncID 10 means Unicode full repertoire
+                # format 12 is a must when platformID == 3 and platEncID == 10.
+                # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
+                if (
+                    table.platformID == 3
+                    and table.platEncID == 10
+                    and table.format == 12
+                ):
+                    target = table
+        if target is None:
+            for table in cmap.tables:
+                # platformID 3 means Windows
+                # platEncID 1 means Unicode BMP
+                # format 4 is a must when platformID == 3 and platEncID == 1.
+                # See https://learn.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
+                if table.platformID == 3 and table.platEncID == 1 and table.format == 4:
+                    target = table
+        if target is None:
+            raise TypeError(f"cmap not found: {path_to_font}")
 
-    codepoint_to_name: dict[int, str] = target.cmap
-    codepoints = list(codepoint_to_name.keys())
-    codepoints = sorted(codepoints, key=lambda codepoint: codepoint)
-    ranges = codepoints_to_unicode_ranges(codepoints)
+        codepoint_to_name: dict[int, str] = target.cmap
+        codepoints = list(codepoint_to_name.keys())
+        codepoints = sorted(codepoints, key=lambda codepoint: codepoint)
+        overlapping_ranges.extend(codepoints_to_unicode_ranges(codepoints))
 
-    total = 0
-    for range in ranges:
-        total += range.size
+    overlapping_ranges = sorted(
+        overlapping_ranges, key=lambda range: (range.start, -range.end)
+    )
+
+    ranges: list[UnicodeRange] = []
+    for r in overlapping_ranges:
+        if len(ranges) == 0:
+            ranges.append(r)
+        else:
+            union = ranges[-1].union(r)
+            if union is not None:
+                ranges[-1] = union
+            else:
+                ranges.append(r)
+
+    for idx, r in enumerate(ranges):
+        if idx > 0 and r.intersect(ranges[idx - 1]) is not None:
+            raise TypeError("ranges must be non-overlapping")
+
+    return ranges
+
+
+def cmd_inspect_font_coverage_by_blocks(args: argparse.Namespace):
+    blocks = prepare_unicode_blocks(args)
+    ranges = prepare_fonts_ranges(args.fonts)
 
     block_coverages: list[tuple[UnicodeBlock, int]] = []
-    blocks = prepare_unicode_blocks(args)
     for block in blocks:
         count = 0
         for range in ranges:
-            count += block.range.intersect(range)
+            count += block.range.intersect_size(range)
         block_coverages.append((block, count))
 
-    print(font["name"].getBestFullName())
     for coverage in block_coverages:
         if coverage[1] > 0:
             print(
@@ -610,14 +656,17 @@ def main():
     )
     list_unicode_scripts.set_defaults(command="list-unicode-scripts")
 
-    inspect_font_coverage = subcommand.add_parser(
-        "inspect-font-coverage",
+    inspect_font_coverage_by_blocks = subcommand.add_parser(
+        "inspect-font-coverage-by-blocks",
         help="Inspect the coverage of the font",
     )
-    inspect_font_coverage.set_defaults(command="inspect-font-coverage")
-    inspect_font_coverage.add_argument(
-        "font",
-        help="The path to the font file",
+    inspect_font_coverage_by_blocks.set_defaults(
+        command="inspect-font-coverage-by-blocks"
+    )
+    inspect_font_coverage_by_blocks.add_argument(
+        "fonts",
+        help="The paths to the font files",
+        nargs="+",
     )
 
     patch_cjk_font = subcommand.add_parser(
@@ -649,8 +698,8 @@ def main():
             cmd_list_unicode_blocks(args)
         case "list-unicode-scripts":
             cmd_list_unicode_scripts(args)
-        case "inspect-font-coverage":
-            cmd_inspect_font_coverage(args)
+        case "inspect-font-coverage-by-blocks":
+            cmd_inspect_font_coverage_by_blocks(args)
         case "patch-cjk-font":
             cmd_patch_cjk_font(args)
 
