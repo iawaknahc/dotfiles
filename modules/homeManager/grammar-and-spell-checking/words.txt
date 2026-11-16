@@ -129,6 +129,7 @@ eldoc
 elec
 elisp
 elispfeature
+elt
 emacsclient
 emmylua
 emmyrc
@@ -473,6 +474,7 @@ subshell
 surrogatepass
 swapfile
 swiftformat
+symbolp
 tabclose
 tabpages
 tabstop
@@ -515,6 +517,7 @@ utcoffset
 vcalendar
 vcard
 vconcat
+vectorp
 vertico
 vevent
 vimgrep
