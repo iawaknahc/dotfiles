@@ -103,7 +103,16 @@ Apply F with ARGS."
     :jump t
     (flymake-goto-prev-error count))
   (evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-flymake-next-error)
-  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-flymake-prev-error))
+  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-flymake-prev-error)
+
+  ;; Make "w" works more like Vim.
+  ;; In particular, underscore should be a word character.
+  ;; See https://evil.readthedocs.io/en/latest/faq.html#underscore-is-not-a-word-character
+  (define-key evil-outer-text-objects-map "w" 'evil-a-symbol)
+  (define-key evil-inner-text-objects-map "w" 'evil-inner-symbol)
+  (define-key evil-outer-text-objects-map "o" 'evil-a-word)
+  (define-key evil-inner-text-objects-map "o" 'evil-inner-word)
+  (defalias 'forward-evil-word 'forward-evil-symbol))
 
 (add-hook 'after-init-hook #'evil-mode)
 
