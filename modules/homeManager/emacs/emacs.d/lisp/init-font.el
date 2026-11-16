@@ -13,211 +13,88 @@
  ;; Use the default font if it has the glyph.
  use-default-font-for-symbols t)
 
-(defconst my/noto-font-mapping '((latin . "Noto Sans")
-                                 (phonetic . "Noto Sans")
-                                 (greek . "Noto Sans")
-                                 (coptic . "Noto Sans Coptic")
-                                 (cyrillic . "Noto Sans")
-                                 (armenian . "Noto Sans Armenian")
-                                 (hebrew . "Noto Sans Hebrew")
-                                 (vai . "Noto Sans Vai")
-                                 (arabic . "Noto Sans Arabic")
-                                 (syriac . "Noto Sans Syriac")
-                                 (thaana . "Noto Sans Thaana")
-                                 (devanagari . "Noto Sans Devanagari")
-                                 (bengali . "Noto Sans Bengali")
-                                 (gurmukhi . "Noto Sans Gurmukhi")
-                                 (gujarati . "Noto Sans Gujarati")
-                                 (oriya . "Noto Sans Oriya")
-                                 (tamil . "Noto Sans Tamil")
-                                 (telugu . "Noto Sans Telugu")
-                                 (kannada . "Noto Sans Kannada")
-                                 (malayalam . "Noto Sans Malayalam")
-                                 (sinhala . "Noto Sans Sinhala")
-                                 (thai . "Noto Sans Thai")
-                                 (lao . "Noto Sans Lao")
-                                 (tibetan . "Noto Serif Tibetan")
-                                 (burmese . "Noto Sans Myanmar")
-                                 (georgian . "Noto Sans Georgian")
-                                 (ethiopic . "Noto Sans Ethiopic")
-                                 (cherokee . "Noto Sans Cherokee")
-                                 (canadian-aboriginal . "Noto Sans Canadian Aboriginal")
-                                 (ogham . "Noto Sans Ogham")
-                                 (runic . "Noto Sans Runic")
-                                 (tagalog . "Noto Sans Tagalog")
-                                 (hanunoo . "Noto Sans Hanunoo")
-                                 (buhid . "Noto Sans Buhid")
-                                 (tagbanwa . "Noto Sans Tagbanwa")
-                                 (khmer . "Noto Sans Khmer")
-                                 (mongolian . "Noto Sans Mongolian")
-                                 (limbu . "Noto Sans Limbu")
-                                 (buginese . "Noto Sans Buginese")
-                                 (balinese . "Noto Sans Balinese")
-                                 (sundanese . "Noto Sans Sundanese")
-                                 (batak . "Noto Sans Batak")
-                                 (lepcha . "Noto Sans Lepcha")
-                                 (tai-le . "Noto Sans Tai Le")
-                                 (tai-lue . "Noto Sans New Tai Lue")
-                                 (tai-tham . "Noto Sans Tai Tham")
-                                 (symbol . "Noto Sans Symbols 2")
-                                 (braille . "Noto Sans Symbols 2")
-                                 (ideographic-description . "Noto Sans CJK HK")
-                                 (cjk-misc . "Noto Sans CJK HK")
-                                 (kana . "Noto Sans CJK JP")
-                                 (bopomofo . "Noto Sans CJK HK")
-                                 (kanbun . "Noto Sans CJK JP")
-                                 (han . "Noto Sans CJK HK")
-                                 (yi . "Noto Sans Yi")
-                                 (syloti-nagri . "Noto Sans Syloti Nagri")
-                                 (rejang . "Noto Sans Rejang")
-                                 (javanese . "Noto Sans Javanese")
-                                 (cham . "Noto Sans Cham")
-                                 (tai-viet . "Noto Sans Tai Viet")
-                                 (meetei-mayek . "Noto Sans Meetei Mayek")
-                                 (hangul . "Noto Sans CJK KR")
-                                 (linear-b . "Noto Sans Linear B")
-                                 (aegean-number . "Noto Sans Linear B")
-                                 (ancient-greek-number . "Noto Sans Symbols 2")
-                                 (ancient-symbol . "Noto Sans Symbols 2")
-                                 (phaistos-disc . "Noto Sans Symbols 2")
-                                 (lycian . "Noto Sans Lycian")
-                                 (carian . "Noto Sans Carian")
-                                 (old-italic . "Noto Sans Old Italic")
-                                 (gothic . "Noto Sans Gothic")
-                                 (ugaritic . "Noto Sans Ugaritic")
-                                 (old-permic . "Noto Sans Old Permic")
-                                 (old-persian . "Noto Sans Old Persian")
-                                 (deseret . "Noto Sans Deseret")
-                                 (shavian . "Noto Sans Shavian")
-                                 (osmanya . "Noto Sans Osmanya")
-                                 (osage . "Noto Sans Osage")
-                                 (elbasan . "Noto Sans Elbasan")
-                                 (caucasian-albanian . "Noto Sans Caucasian Albanian")
-                                 (vithkuqi . "Noto Sans Vithkuqi")
-                                 (linear-a . "Noto Sans Linear A")
-                                 (cypriot-syllabary . "Noto Sans Cypriot")
-                                 (palmyrene . "Noto Sans Palmyrene")
-                                 (nabataean . "Noto Sans Nabataean")
-                                 (phoenician . "Noto Sans Phoenician")
-                                 (lydian . "Noto Sans Lydian")
-                                 (kharoshthi . "Noto Sans Kharoshthi")
-                                 (manichaean . "Noto Sans Manichaean")
-                                 (avestan . "Noto Sans Avestan")
-                                 (old-turkic . "Noto Sans Old Turkic")
-                                 (hanifi-rohingya . "Noto Sans Hanifi Rohingya")
-                                 (yezidi . "Noto Serif Yezidi")
-                                 (old-sogdian . "Noto Sans Old Sogdian")
-                                 (sogdian . "Noto Sans Sogdian")
-                                 (chorasmian . "Noto Sans Chorasmian")
-                                 (elymaic . "Noto Sans Elymaic")
-                                 (old-uyghur . "Noto Serif Old Uyghur")
-                                 (brahmi . "Noto Sans Brahmi")
-                                 (kaithi . "Noto Sans Kaithi")
-                                 (chakma . "Noto Sans Chakma")
-                                 (mahajani . "Noto Sans Mahajani")
-                                 (sharada . "Noto Sans Sharada")
-                                 (khojki . "Noto Sans Khojki")
-                                 (khudawadi . "Noto Sans Khudawadi")
-                                 (grantha . "Noto Sans Grantha")
-                                 (newa . "Noto Sans Newa")
-                                 (tirhuta . "Noto Sans Tirhuta")
-                                 (siddham . "Noto Sans Siddham")
-                                 (modi . "Noto Sans Modi")
-                                 (takri . "Noto Sans Takri")
-                                 (dogra . "Noto Serif Dogra")
-                                 (warang-citi . "Noto Sans Warang Citi")
-                                 (dives-akuru . "Noto Serif Dives Akuru")
-                                 (nandinagari . "Noto Sans Nandinagari")
-                                 (zanabazar-square . "Noto Sans Zanabazar Square")
-                                 (soyombo . "Noto Sans Soyombo")
-                                 (pau-cin-hau . "Noto Sans Pau Cin Hau")
-                                 (bhaiksuki . "Noto Sans Bhaiksuki")
-                                 (marchen . "Noto Sans Marchen")
-                                 (masaram-gondi . "Noto Sans Masaram Gondi")
-                                 (gunjala-gondi . "Noto Sans Gunjala Gondi")
-                                 (makasar . "Noto Serif Makasar")
-                                 (kawi . "Noto Sans Kawi")
-                                 (cuneiform . "Noto Sans Cuneiform")
-                                 (cypro-minoan . "Noto Sans Cypro Minoan")
-                                 (egyptian . "Noto Sans Egyptian Hieroglyphs")
-                                 (mro . "Noto Sans Mro")
-                                 (tangsa . "Noto Sans Tangsa")
-                                 (bassa-vah . "Noto Sans Bassa Vah")
-                                 (pahawh-hmong . "Noto Sans Pahawh Hmong")
-                                 (medefaidrin . "Noto Sans Medefaidrin")
-                                 (tangut . "Noto Serif Tangut")
-                                 (khitan-small-script . "Noto Serif Khitan Small Script")
-                                 (nushu . "Noto Sans Nushu")
-                                 (duployan-shorthand . "Noto Sans Duployan")
-                                 (znamenny-musical-notation . "Noto Znamenny Musical Notation")
-                                 (byzantine-musical-symbol . "Noto Music")
-                                 (musical-symbol . "Noto Music")
-                                 (ancient-greek-musical-notation . "Noto Music")
-                                 (kaktovik-numeral . "Noto Sans Symbols 2")
-                                 (tai-xuan-jing-symbol . "Noto Sans Symbols 2")
-                                 (counting-rod-numeral . "Noto Sans Symbols 2")
-                                 (nyiakeng-puachue-hmong . "Noto Serif NP Hmong")
-                                 (toto . "Noto Serif Toto")
-                                 (wancho . "Noto Sans Wancho")
-                                 (nag-mundari . "Noto Sans Nag Mundari")
-                                 (mende-kikakui . "Noto Sans Mende Kikakui")
-                                 (adlam . "Noto Sans Adlam")
-                                 (indic-siyaq-number . "Noto Sans Indic Siyaq Numbers")
-                                 (ottoman-siyaq-number . "Noto Serif Ottoman Siyaq")
-                                 ;; This range is `mahjong-tile'.
-                                 ;; See another comment in this file for details.
-                                 ((#x1F000 . #x1F02F) . "Noto Sans Symbols 2")
-                                 (domino-tile . "Noto Sans Symbols 2")
-                                 (chess-symbol . "Noto Sans Symbols 2")))
+(defconst my/unicode-cjk-ranges
+  '((#x02EA . #x02EB)     ; Spacing Modifier Letters (Bopomofo tone marks only)
+    (#x1100 . #x11FF)     ; Hangul Jamo
+    (#x2E80 . #x2EFF)     ; CJK Radicals Supplement
+    (#x2F00 . #x2FDF)     ; Kangxi Radicals
+    (#x2FF0 . #x2FFF)     ; Ideographic Description Characters
+    (#x3000 . #x303F)     ; CJK Symbols and Punctuation
+    (#x3040 . #x309F)     ; Hiragana
+    (#x30A0 . #x30FF)     ; Katakana
+    (#x3100 . #x312F)     ; Bopomofo
+    (#x3130 . #x318F)     ; Hangul Compatibility Jamo
+    (#x3190 . #x319F)     ; Kanbun
+    (#x31A0 . #x31BF)     ; Bopomofo Extended
+    (#x31C0 . #x31EF)     ; CJK Strokes
+    (#x31F0 . #x31FF)     ; Katakana Phonetic Extensions
+    (#x3200 . #x32FF)     ; Enclosed CJK Letters and Months
+    (#x3300 . #x33FF)     ; CJK Compatibility
+    (#x3400 . #x4DBF)     ; CJK Unified Ideographs Extension A
+    (#x4E00 . #x9FFF)     ; CJK Unified Ideographs
+    (#xA960 . #xA97F)     ; Hangul Jamo Extended-A
+    (#xAC00 . #xD7AF)     ; Hangul Syllables
+    (#xD7B0 . #xD7FF)     ; Hangul Jamo Extended-B
+    (#xF900 . #xFAFF)     ; CJK Compatibility Ideographs
+    (#xFE10 . #xFE1F)     ; Vertical Forms
+    (#xFE30 . #xFE4F)     ; CJK Compatibility Forms
+    (#xFE50 . #xFE6F)     ; Small Form Variants
+    (#xFF00 . #xFFEF)     ; Halfwidth and Fullwidth Forms
+    (#x16FE2 . #x16FE3)   ; Ideographic Symbols and Punctuation (Han only)
+    (#x16FF0 . #x16FF6)   ; Ideographic Symbols and Punctuation (Han only)
+    (#x1AFF0 . #x1AFFF)   ; Kana Extended-B
+    (#x1B000 . #x1B0FF)   ; Kana Supplement
+    (#x1B100 . #x1B12F)   ; Kana Extended-A
+    (#x1B130 . #x1B16F)   ; Small Kana Extension
+    (#x1F200 . #x1F2FF)   ; Enclosed Ideographic Supplement
+    (#x20000 . #x2A6DF)   ; CJK Unified Ideographs Extension B
+    (#x2A700 . #x2B73F)   ; CJK Unified Ideographs Extension C
+    (#x2B740 . #x2B81F)   ; CJK Unified Ideographs Extension D
+    (#x2B820 . #x2CEAF)   ; CJK Unified Ideographs Extension E
+    (#x2CEB0 . #x2EBEF)   ; CJK Unified Ideographs Extension F
+    (#x2EBF0 . #x2EE5F)   ; CJK Unified Ideographs Extension I
+    (#x2F800 . #x2FA1F)   ; CJK Compatibility Ideographs Supplement
+    (#x30000 . #x3134F)   ; CJK Unified Ideographs Extension G
+    (#x31350 . #x323AF)   ; CJK Unified Ideographs Extension H
+    (#x323B0 . #x3347F))  ; CJK Unified Ideographs Extension J
+  "A list of Unicode ranges that should be rendered with a CJK font.
 
-(defun my/configure-noto-font (fontset)
-  "Configure FONTSET so that all recognized scripts are configured to use Noto.
+Each range has a comment.
+If the comment does not end with a bracket, then the range is actually a Unicode block.
+If the comment ends with a bracket, then the range is a sub-range in a Unicode block.
 
-The list was obtained by `script-representative-chars'.
-
-Some entries at the end of the list are injected at runtime,
-and they are not really valid recognized script.
-As of Emacs 30.2, they all start with `mathematical-'."
-  (let* ((for-all-frames nil))
-    (dolist (entry my/noto-font-mapping)
-      (set-fontset-font fontset (car entry) (font-spec :family (cdr entry)) for-all-frames 'prepend))))
+Last updated for Unicode 18.0.0")
 
 (defun my/configure-nerd-font (fontset)
   "Configure FONTSET so that Symbols Nerd Font Mono is used to display symbols."
   (let* ((for-all-frames nil)
          (nerd-font (font-spec :family "Symbols Nerd Font Mono")))
-    ;; U+E000 to U+F8FF is Private Use Area in Basic Multilingual Plane.
+    ;; U+E000..U+F8FF is Private Use Area in Basic Multilingual Plane.
     (set-fontset-font fontset '(#xE000 . #xF8FF) nerd-font for-all-frames 'prepend)
-    ;; U+F0000 to U+FFFFD is Supplementary Private Use Area-A
+    ;; U+F0000..U+FFFFD is Supplementary Private Use Area-A
     (set-fontset-font fontset '(#xF0000 . #xFFFFD) nerd-font for-all-frames 'prepend)))
 
 ;; Create a new fontset for face `variable-pitch'.
 (new-fontset "-*-*-*-*-*-*-*-*-*-*-*-*-fontset-proportional" '())
-(my/configure-noto-font "fontset-proportional")
 (my/configure-nerd-font "fontset-proportional")
 
-(my/configure-noto-font "fontset-default")
 (let* ((for-all-frames nil)
        (jetbrains-mono (font-spec :family "JetBrains Mono NL"))
        (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK RealMono"))
-       (noto-sans-mono-cjk-jp (font-spec :family "Noto Sans Mono CJK JP RealMono"))
-       (noto-sans-mono-cjk-kr (font-spec :family "Noto Sans Mono CJK KR RealMono"))
        (julia-mono (font-spec :family "JuliaMono"))
        (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC"))
        (jigmo1 (font-spec :family "Jigmo RealMono"))
        (jigmo2 (font-spec :family "Jigmo2 RealMono"))
        (jigmo3 (font-spec :family "Jigmo3 RealMono")))
   (set-fontset-font "fontset-default" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'han                      jigmo1                 for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'han                      jigmo2                 for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'han                      jigmo3                 for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'ideographic-description  noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'cjk-misc                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'kana                     noto-sans-mono-cjk-jp  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'bopomofo                 noto-sans-mono-cjk-hk  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'kanbun                   noto-sans-mono-cjk-jp  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'hangul                   noto-sans-mono-cjk-kr  for-all-frames 'prepend)
-  (set-fontset-font "fontset-default" 'han                      noto-sans-mono-cjk-hk  for-all-frames 'prepend)
+  (dolist (range my/unicode-cjk-ranges)
+    (set-fontset-font "fontset-default" range jigmo1 for-all-frames 'prepend))
+  (dolist (range my/unicode-cjk-ranges)
+    (set-fontset-font "fontset-default" range jigmo2 for-all-frames 'prepend))
+  (dolist (range my/unicode-cjk-ranges)
+    (set-fontset-font "fontset-default" range jigmo3 for-all-frames 'prepend))
+  (dolist (range my/unicode-cjk-ranges)
+    (set-fontset-font "fontset-default" range noto-sans-mono-cjk-hk for-all-frames 'prepend))
   (set-fontset-font "fontset-default" 'symbol                   julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'braille                  julia-mono             for-all-frames 'prepend)
   (set-fontset-font "fontset-default" 'kaktovik-numeral         julia-mono             for-all-frames 'prepend)
