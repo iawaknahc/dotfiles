@@ -48,6 +48,9 @@ in
     # The original JetBrains Mono without Nerd Font patch.
     jetbrains-mono
 
+    # A monospace font for coding with support for Hangul.
+    d2coding
+
     # The Nerd Font (Symbols only).
     # It is used in Emacs because Emacs allows me to specify which font to use for
     # a particular Unicode code point range.
@@ -56,7 +59,7 @@ in
 
     # JuliaMono contains a lot of glyphs for symbols.
     julia-mono
-    # This font has monospace and mahjong tiles coverage.
+    # This font is monospace and has mahjong tiles coverage.
     # https://github.com/lxgw/lxgwwenkaitc
     lxgw-wenkai-tc
     # This font has very high CJK coverage.

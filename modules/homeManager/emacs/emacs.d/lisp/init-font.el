@@ -9,13 +9,23 @@
  ;; 3. A few CJK characters.
  ;; 4. An emoji.
  ;; 5. A Nerd Font symbol.
- list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 😀 ♥ "
+ list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 안녕하세요 😀 ♥ "
  ;; Use the default font if it has the glyph.
  use-default-font-for-symbols t)
 
+(defconst my/unicode-korean-ranges
+  '((#x1100 . #x11FF)     ; Hangul Jamo
+    (#x3130 . #x318F)     ; Hangul Compatibility Jamo
+    (#xAC00 . #xD7AF))    ; Hangul Syllables
+  "A list of Unicode ranges that should be rendered with a Korean font.
+
+This is needed because Hangul in Noto Sans Mono CJK is 0.92 em wide.
+
+See `my/unicode-cjk-ranges'.")
+
 (defconst my/unicode-cjk-ranges
   '((#x02EA . #x02EB)     ; Spacing Modifier Letters (Bopomofo tone marks only)
-    (#x1100 . #x11FF)     ; Hangul Jamo
+    ;;(#x1100 . #x11FF)   ; Hangul Jamo
     (#x2E80 . #x2EFF)     ; CJK Radicals Supplement
     (#x2F00 . #x2FDF)     ; Kangxi Radicals
     (#x2FF0 . #x2FFF)     ; Ideographic Description Characters
@@ -23,7 +33,7 @@
     (#x3040 . #x309F)     ; Hiragana
     (#x30A0 . #x30FF)     ; Katakana
     (#x3100 . #x312F)     ; Bopomofo
-    (#x3130 . #x318F)     ; Hangul Compatibility Jamo
+    ;;(#x3130 . #x318F)   ; Hangul Compatibility Jamo
     (#x3190 . #x319F)     ; Kanbun
     (#x31A0 . #x31BF)     ; Bopomofo Extended
     (#x31C0 . #x31EF)     ; CJK Strokes
@@ -33,7 +43,7 @@
     (#x3400 . #x4DBF)     ; CJK Unified Ideographs Extension A
     (#x4E00 . #x9FFF)     ; CJK Unified Ideographs
     (#xA960 . #xA97F)     ; Hangul Jamo Extended-A
-    (#xAC00 . #xD7AF)     ; Hangul Syllables
+    ;;(#xAC00 . #xD7AF)   ; Hangul Syllables
     (#xD7B0 . #xD7FF)     ; Hangul Jamo Extended-B
     (#xF900 . #xFAFF)     ; CJK Compatibility Ideographs
     (#xFE10 . #xFE1F)     ; Vertical Forms
@@ -85,8 +95,11 @@ Last updated for Unicode 18.0.0")
        (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC"))
        (jigmo1 (font-spec :family "Jigmo RealMono"))
        (jigmo2 (font-spec :family "Jigmo2 RealMono"))
-       (jigmo3 (font-spec :family "Jigmo3 RealMono")))
+       (jigmo3 (font-spec :family "Jigmo3 RealMono"))
+       (d2coding (font-spec :family "D2Coding")))
   (set-fontset-font "fontset-default" '(#x0000 . #x10ffff)      jetbrains-mono         for-all-frames 'prepend)
+  (dolist (range my/unicode-korean-ranges)
+    (set-fontset-font "fontset-default" range d2coding for-all-frames 'prepend))
   (dolist (range my/unicode-cjk-ranges)
     (set-fontset-font "fontset-default" range jigmo1 for-all-frames 'prepend))
   (dolist (range my/unicode-cjk-ranges)
@@ -115,6 +128,7 @@ Last updated for Unicode 18.0.0")
         ("Noto Sans Mono CJK .* RealMono" . 1.2)
         ("LXGW WenKai Mono" . 1.2)
         ("Jigmo.* RealMono" . 1.2)
+        ("D2Coding" . 1.2)
         ("Apple Color Emoji" . 0.94117647)))
 
 ;; Assign the faces to their fontsets.
