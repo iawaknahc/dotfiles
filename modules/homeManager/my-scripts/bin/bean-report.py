@@ -1333,7 +1333,12 @@ def main():
 
     # The order is important.
     # The subcommand comes before the required filepath.
-    subcommand = parser.add_subparsers(dest="subcommand", required=True)
+    #
+    # Instead of using the keyword argument `destination` here,
+    # we have to use set_defaults.
+    # It is because when `aliases` is used, the stored subcommand is the alias.
+    # A plain string match will not match.
+    subcommand = parser.add_subparsers(required=True)
 
     income_statement = subcommand.add_parser(
         "income-statement",
