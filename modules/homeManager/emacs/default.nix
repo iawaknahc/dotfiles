@@ -18,7 +18,9 @@
   ];
 
   programs.emacs.enable = true;
-  programs.emacs.package = pkgs.emacs31-pgtk;
+  programs.emacs.package =
+    # Use NS build on macOS, and PGTK build on Linux.
+    if pkgs.stdenv.hostPlatform.isLinux then pkgs.emacs31-pgtk else pkgs.emacs31;
 
   # overrides is the documented way to ensure a package is from a specific package set.
   # See https://nixos.org/manual/nixpkgs/stable/#sec-emacs-config

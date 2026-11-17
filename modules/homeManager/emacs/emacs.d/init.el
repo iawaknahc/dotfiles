@@ -54,7 +54,7 @@
 ;; Maybe this feature is for writing my own library packages.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-;; When using the PGTK build on macOS, and
+;; When using the NS build on macOS, and
 ;; the application is launched by Spotlight or something similar,
 ;; the environment variables are minimal.
 ;; We need the environment variables initialized like in a shell.

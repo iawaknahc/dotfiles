@@ -87,7 +87,7 @@
  ;; we want to track the time we spent on creating the capture,
  ;; but definitely do not want to mark the TODO item as DONE.
  org-clock-out-switch-to-state nil
- ;; On macOS PGTK build, frame-title-format is buggy.
+ ;; On macOS NS build, frame-title-format is buggy.
  ;; Here are the steps to reproduce the bug:
  ;; 1. Clock in
  ;; 2. See the frame title show the clock correctly.

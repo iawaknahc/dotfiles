@@ -3,7 +3,7 @@
 ;;; Code:
 
 (setq
- ;; On PGTK build, the visible bell is a large image displayed at the center of the screen.
+ ;; On NS build, the visible bell is a large image displayed at the center of the screen.
  ;; This is too annoying.
  visible-bell nil
  ;; Flashing some faces to indicate a bell.
