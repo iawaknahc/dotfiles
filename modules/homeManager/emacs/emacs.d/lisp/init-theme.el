@@ -2,6 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq
+ window-system-default-frame-alist
+ '((ns . (;; Make the title bar and the scroll bar transparent,
+          ;; and make them take the color of the background of the theme.
+          (ns-transparent-titlebar . t)
+          ;; Make the text color of the title bar readable.
+          ;; Otherwise, it is a dark color in a dark background.
+          (ns-appearance . dark)))))
+
 (load-theme 'catppuccin :no-confirm)
 (setq
  catppuccin-flavor 'mocha
