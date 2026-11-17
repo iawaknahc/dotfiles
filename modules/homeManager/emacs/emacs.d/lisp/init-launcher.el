@@ -65,6 +65,24 @@
                  (format "%s %s" (nth 0 composition) (nth 2 composition)))
                result))))
 
+(defun my/launcher-source--curr (input)
+  "Convert an amount in one currency to another.
+
+INPUT is either one of the following forms:
+1. DECIMAL SOURCE-CURRENCY
+2. DECIMAL SOURCE-CURRENCY TARGET-CURRENCY"
+  (let* ((input (string-trim input))
+         (parts (string-split input))
+         (length-parts (length parts)))
+    (when (or (eql length-parts 2) (eql length-parts 3))
+      (let* ((decimal (nth 0 parts))
+             (source-currency (upcase (nth 1 parts)))
+             (target-currency (and (eql length-parts 3) (upcase (nth 2 parts)))))
+        (when (and (my/currency-decimal-p decimal) (my/currency-syntactically-valid-currency-p source-currency))
+          (if (and target-currency (my/currency-syntactically-valid-currency-p target-currency))
+              (list (my/currency-convert decimal source-currency target-currency))
+            (my/currency-convert-all decimal source-currency)))))))
+
 (defun my/launcher-source--web-search-by-query (format-string query-name)
   "Build a query WITH QUERY-NAME and build a URL with FORMAT-STRING."
   (lambda (input)
@@ -122,6 +140,7 @@
                        (my/launcher-source--by-keyword
                         "uuid" #'my/launcher-source--uuid
                         "cj" #'my/launcher-source--cj
+                        "curr" #'my/launcher-source--curr
                         "jyut" (my/launcher-source--web-search-by-query "https://jyut.net/query?%s" "q")
                         "jwt" (my/launcher-source--web-search-by-query "https://jwt.io/#%s" "id_token")
                         "pypi" (my/launcher-source--web-search-by-query "https://pypi.org/search/?%s" "q")

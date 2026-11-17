@@ -5,6 +5,79 @@
 (require 'xml)
 (require 'iso8601)
 
+(defconst my/currency-decimal-places
+  '(;; Currencies with 0 decimal places.
+    ("BIF" . 0)
+    ("CLP" . 0)
+    ("DJF" . 0)
+    ("GNF" . 0)
+    ("JPY" . 0)
+    ("KMF" . 0)
+    ("KRW" . 0)
+    ("MGA" . 0)
+    ("PYG" . 0)
+    ("RWF" . 0)
+    ("UGX" . 0)
+    ("VND" . 0)
+    ("VUV" . 0)
+    ("XAF" . 0)
+    ("XOF" . 0)
+    ("XPF" . 0)
+    ;; Currencies in special cases.
+    ("ISK" . 0)
+    ("HUF" . 0)
+    ("TWD" . 0)
+    ("UGX" . 0))
+  "A alist of currency and their decimal place.
+
+If a currency does not appear in this list, then it is a 2-decimal place currency.")
+
+(defun my/currency-get-decimal-places (currency)
+  "Return the number of decimal places of CURRENCY.
+
+CURRENCY is a string.
+Return an integer indicating the decimal places of CURRENCY."
+  (alist-get currency my/currency-decimal-places 2 nil #'string=))
+
+(defun my/currency-convert (decimal source-currency target-currency)
+  "Convert DECIMAL in SOURCE-CURRENCY to TARGET-CURRENCY.
+
+Return a string representing the conversion.
+All arguments are strings."
+  (let* ((expr1 (math-read-expr (format "%s %s" decimal source-currency)))
+         (expr2 (math-read-expr (format "%s" target-currency)))
+         (expr3 (math-convert-units expr1 expr2)))
+    ;; expr-3 is something like (* (float 203923241922 -8) (var JPY var-JPY)) or (var JPY var-JPY)
+    (if (eq (nth 0 expr3) '*)
+        (let* ((decimal-place (my/currency-get-decimal-places target-currency))
+               (rounded (math-round (nth 1 expr3) decimal-place))
+               (final-expr (list '* rounded (nth 2 expr3))))
+          (math-format-value final-expr))
+      (math-format-value (list '* 1 expr3)))))
+
+(defun my/currency-convert-all (decimal source-currency)
+  "Convert DECIMAL in SOURCE-CURRENCY to all known currencies.
+
+Return a list of strings representing each conversion.
+All arguments are strings."
+  (seq-map (lambda (unit-specification)
+             (let* ((target-currency (symbol-name (nth 0 unit-specification))))
+               (my/currency-convert decimal source-currency target-currency)))
+           my/math-additional-units))
+
+(defun my/currency-syntactically-valid-currency-p (currency)
+  "Return non-nil if CURRENCY is a string and contains exactly 3 uppercase characters."
+  (and (stringp currency) (eql 3 (length currency)) (string= (upcase currency) currency)))
+
+(defun my/currency-decimal-p (decimal)
+  "Return non-nil if DECIMAL is a string and looks like a decimal number."
+  (let* ((value (string-to-number decimal 10)))
+    (or (floatp value)
+        (and (integerp value)
+             (or (not (zerop value))
+                 (string= decimal "0")
+                 (string= decimal "-0"))))))
+
 (defun calcFunc-xirr (dates amounts)
   "Compute XIRR for DATES and AMOUNTS, using pyxirr.py which is backed by pyxirr.
 DATES is a Calc vector containing dates.
@@ -51,6 +124,7 @@ AMOUNTS is a Calc vector containing numbers."
   "The daily exchange rate published by European Central Bank.
 
 See the homepage https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
+
 (defconst my/calc-currency-url-cbc "https://cpx.cbc.gov.tw/api/OpenData/FTDOpenData_Day"
   "每一營業日新臺幣對美元銀行間成交之收盤匯率.
 

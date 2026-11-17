@@ -12,6 +12,7 @@ currencies.py
 flake.lock
 font-utils.py
 harperignore
+init-calc.el
 init-font.el
 init-mu4e.el
 init-world-clock-mode.el
