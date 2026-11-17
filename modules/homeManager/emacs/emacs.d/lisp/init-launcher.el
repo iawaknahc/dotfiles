@@ -147,7 +147,7 @@
 (with-eval-after-load 'my-rime
   (setq
    my/rime-user-directory "~/Library/Rime"
-   my/rime-cangjie-dict-yaml "cangjie5.base.dict.yaml"))
+   my/rime-cangjie-dict-yaml "cangjie5_hk.dict.yaml"))
 
 (provide 'init-launcher)
 ;;; init-launcher.el ends here
