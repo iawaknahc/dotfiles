@@ -87,14 +87,34 @@
  ;; we want to track the time we spent on creating the capture,
  ;; but definitely do not want to mark the TODO item as DONE.
  org-clock-out-switch-to-state nil
- ;; On macOS NS build, frame-title-format is buggy.
- ;; Here are the steps to reproduce the bug:
- ;; 1. Clock in
- ;; 2. See the frame title show the clock correctly.
- ;; 3. Switch to another tab-bar-mode tab.
- ;; 4. See the frame title does not show the clock.
+ ;; `frame-title-format' may not work as expected when
+ ;; the following conditions hold:
  ;;
- ;; Even running `force-mode-line-update' in the tab does not help.
+ ;; 1. It is on macOS NS build.
+ ;; 2. A tiling window manager, like AeroSpace, is in use.
+ ;; 3. `frame-resize-pixelwise' is nil.
+ ;;
+ ;; In that case, the frame title will be set unconditionally in
+ ;; https://github.com/emacs-mirror/emacs/blob/emacs-31.1/src/nsterm.m#L8285
+ ;; when Emacs considers itself resizing.
+ ;;
+ ;; Condition 1 cannot be changed.
+ ;; Condition 2 is unlikely to be changed because I want to use tiling window manager.
+ ;; Thus, we can only change Condition 3.
+ ;; We just need to set `frame-resize-pixelwise' to t.
+ ;;
+ ;; When `frame-resize-pixelwise' set to t,
+ ;; the symptom occurs less often.
+ ;; It will certainly occur when we move the frame with the tiling window manager,
+ ;; for example, moving the frame of Emacs to another AeroSpace workspace with an existing AeroSpace window.
+ ;;
+ ;; The symptom will correct itself when the clock ticks one more minute.
+ ;; This observation implies if the frame title is different, it will be re-displayed.
+ ;; If we really want a workaround, we can customize `org-clock-frame-title-format',
+ ;; and include something that is different per invocation, like a timestamp.
+ ;; I experimented with this and found that the frame-title-format is actually
+ ;; evaluated more often than I thought.
+ ;; So I left out this workaround.
  org-clock-clocked-in-display 'both)
 ;; This function must be called.
 ;; Otherwise, `org-clock-persist' has no effect.

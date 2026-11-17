@@ -3,6 +3,9 @@
 ;;; Code:
 
 (setq
+ ;; See the comment on `org-clock-clocked-in-display'.
+ frame-resize-pixelwise t
+
  window-system-default-frame-alist
  '((ns . (;; Make the title bar and the scroll bar transparent,
           ;; and make them take the color of the background of the theme.
