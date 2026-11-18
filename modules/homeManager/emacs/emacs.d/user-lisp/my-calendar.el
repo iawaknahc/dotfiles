@@ -2,13 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
 (require 'calendar)
 (require 'holidays)
 
 (defcustom my/calendar-business-day-holidays nil
   "A variable that works like `holiday-other-holidays'.
 It is used for calculating business days."
-  :type 'sexp)
+  :type 'sexp
+  :group 'my/calendar)
 
 ;;;###autoload
 (defun my/calendar-date-string (date)
