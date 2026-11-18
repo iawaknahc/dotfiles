@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+;;;###autoload
 (defun my/evil-normal-p ()
   "Return non-nil if Evil-Mode normal state should be the default."
   (cond
