@@ -39,7 +39,7 @@ Apply F with ARGS."
   (let ((isearch-forward t))
     (apply f args)))
 
-;; Set these before loading evil because some variables have to be set before evil-mode is enabled.
+;; Set the variables that does not have :set before loading evil-mode.
 (setq
  ;; The default state is emacs state.
  evil-default-state 'emacs
@@ -51,6 +51,20 @@ Apply F with ARGS."
  evil-emacs-state-modes nil
  ;; Use `after-change-major-mode-hook' to start in normal state.
  evil-normal-state-modes nil
+ evil-search-wrap nil
+ evil-v$-excludes-newline t
+ ;; C-x 2 is split-window-below
+ evil-split-window-below t
+ ;; C-x 3 is split-window-right
+ evil-vsplit-window-right t
+ ;; Make * and # search for the symbol at point.
+ evil-symbol-word-search t)
+
+;; Actually load evil-mode.
+(require 'evil)
+
+;; Set the variables that have :set so that the :set function can run.
+(setopt
  ;; Make insert state just like emacs state.
  evil-disable-insert-state-bindings t
  ;; I used to set `evil-want-C-u-scroll' to t.
@@ -64,19 +78,8 @@ Apply F with ARGS."
  evil-want-C-i-jump nil
  ;; This matches the behavior of Neovim.
  evil-want-Y-yank-to-eol t
- evil-search-wrap nil
- evil-v$-excludes-newline t
- ;; C-x 2 is split-window-below
- evil-split-window-below t
- ;; C-x 3 is split-window-right
- evil-vsplit-window-right t
  ;; Make CTRL-r work.
- evil-undo-system 'undo-redo
- ;; Make * and # search for the symbol at point.
- evil-symbol-word-search t)
-
-;; Actually load evil-mode.
-(require 'evil)
+ evil-undo-system 'undo-redo)
 
 ;; Rebind `evil-jump-forward' to `<control-i>'.
 ;; This only makes sense if the physical control-i and the physical tab are made separate,
