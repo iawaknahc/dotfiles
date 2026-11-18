@@ -6,7 +6,14 @@
 (require 'iso8601)
 
 (defvar world-clock-buffer-name)
+(defvar world-clock-mode-map)
+(defvar world-clock-sort-order)
+(defvar world-clock-time-format)
+(defvar world-clock-timer-enable)
 (defvar zoneinfo-style-world-list)
+(declare-function org-read-date "org")
+(declare-function world-clock-display "time")
+(declare-function world-clock-update "time")
 
 ;;;; Custom variables
 (defcustom my/world-clock-zoneinfo-directory "/usr/share/zoneinfo"
@@ -67,7 +74,9 @@ the order of the other timezone in the list."
 (defcustom my/world-clock-zoneinfo-list nil
   "A list of zoneinfo names.
 
-This list is used to derived `zoneinfo-style-world-list'.")
+This list is used to derived `zoneinfo-style-world-list'."
+  :type '(repeat string)
+  :group 'my/world-clock)
 
 (defcustom my/world-clock-business-hours '("09:00" "18:00")
   "Business hours as a list (START END) of \"HH:MM\" strings.
@@ -1557,8 +1566,8 @@ Search forward at most 52 weeks.
 Accurate to a second.
 
 Return a time value if found, otherwise nil."
-  (cl-labels ((offset-at (t)
-                (car (current-time-zone t timezone))))
+  (cl-labels ((offset-at (specified-time)
+                (car (current-time-zone specified-time timezone))))
     (cl-block loop
       (let* ((time (time-convert time 'integer))
              (offset-at-time (offset-at time)))
@@ -1595,8 +1604,8 @@ Search backward at most 52 weeks.
 Accurate to a second.
 
 Return a time value if found, otherwise nil."
-  (cl-labels ((offset-at (t)
-                (car (current-time-zone t timezone))))
+  (cl-labels ((offset-at (specified-time)
+                (car (current-time-zone specified-time timezone))))
     (cl-block loop
       (let* ((time (time-convert time 'integer))
              (offset-at-time (offset-at time)))
