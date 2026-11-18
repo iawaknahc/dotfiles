@@ -113,7 +113,7 @@ require("blink.cmp").setup({
     ["<C-f>"] = { "scroll_documentation_down", "fallback" },
   },
   cmdline = {
-    -- Actually :h cmdline-completion is better than blink.cmp.
+    -- Actually, :h cmdline-completion is better than blink.cmp.
     enabled = false,
   },
   snippets = {
