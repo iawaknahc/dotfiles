@@ -40,15 +40,7 @@
  ;; Teach `elisp-flymake-byte-compile' on how to load my Elisp files.
  elisp-flymake-byte-compile-load-path
  '("./"
-   "~/dotfiles/modules/homeManager/emacs/emacs.d/lisp/"
    "~/dotfiles/modules/homeManager/emacs/emacs.d/user-lisp/"))
-
-;; I am aware that there is a User Lisp directory feature since Emacs 31.
-;; But it is not suitable for putting configuration files.
-;; I tried it and when Emacs starts, it generated a lot of warnings,
-;; saying that a symbol from a third package is undefined.
-;; Maybe this feature is for writing my own library packages.
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; When using the NS build on macOS, and
 ;; the application is launched by Spotlight or something similar,

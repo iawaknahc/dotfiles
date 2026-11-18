@@ -260,23 +260,8 @@
       find "$HOME/.emacs.d/user-lisp" -name '*.elc' -delete
     '';
   };
-  home.file.".emacs.d/lisp" = {
-    source = ./emacs.d/lisp;
-    # recursive is needed because .emacs.d/lisp may contain generated files.
-    recursive = true;
-    # Emacs compares the last modified time of the .el and the .elc
-    # to determine whether it should byte-compile the file.
-    # https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/emacs-lisp/bytecomp.el
-    # Since the .el file is a symlink to the Nix store, its date is always 1970.
-    # This means the .elc will become stale.
-    # As a workaround, we delete the .elc files in every switch.
-    # When recursive is true, onChange always run.
-    onChange = ''
-      find "$HOME/.emacs.d/lisp" -name '*.elc' -delete
-    '';
-  };
   home.file.".emacs.d/maplibre".source = ./emacs.d/maplibre;
-  home.file.".emacs.d/lisp/init-exec-path-from-shell.el".text =
+  home.file.".emacs.d/user-lisp/init-exec-path-from-shell.el".text =
     let
       pairs = (lib.attrsets.attrsToList config.home.sessionVariables);
       quoted = (builtins.map ({ name, ... }: ''"${name}"'') pairs);
@@ -286,6 +271,9 @@
       ;;; init-exec-path-from-shell.el --- init-exec-path-from-shell.el -*- lexical-binding: t -*-
       ;;; Commentary:
       ;;; Code:
+
+      (defvar exec-path-from-shell-variables)
+      (declare-function exec-path-from-shell-initialize "exec-path-from-shell")
 
       (setq exec-path-from-shell-variables (list "NIX_PROFILES" "NIX_SSL_CERT_FILE" "NIX_USER_PROFILE_DIR" "PATH" "SSH_AUTH_SOCK" ${vars}))
       (when (memq window-system '(ns))

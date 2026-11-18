@@ -464,8 +464,11 @@ in
     ) enabledEmailAccounts;
 
     # Use enabledEmailAccountsList so that the first context is the primary account.
-    home.file.".emacs.d/lisp/init-mu4e-contexts.el".text = ''
+    home.file.".emacs.d/user-lisp/init-mu4e-contexts.el".text = ''
       ;;; -*- lexical-binding: t -*-
+
+      (defvar mu4e-contexts)
+      (declare-function make-mu4e-context "mu4e-context")
 
       (setq mu4e-contexts (list ${
         lib.strings.concatStrings (lib.lists.map (value: mkMu4eContext value) enabledEmailAccountsList)

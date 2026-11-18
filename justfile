@@ -140,9 +140,8 @@ emacs-test:
 # Each file is byte-compile in isolation, so previous requires will not affect the compilation.
 # Run Emacs byte-compile.
 emacs-byte-compile:
-    find ./modules/homeManager/emacs/emacs.d/lisp ./modules/homeManager/emacs/emacs.d/user-lisp -type f -name '*.el' \
+    find ./modules/homeManager/emacs/emacs.d/user-lisp -type f -name '*.el' \
       | xargs -n1 -P {{num_cpus()}} emacs --batch \
-          --directory ./modules/homeManager/emacs/emacs.d/lisp \
           --directory ./modules/homeManager/emacs/emacs.d/user-lisp \
           --eval '(setq byte-compile-dest-file-function (lambda (_) (make-temp-file "emacs-byte-compile-")))' \
           --eval '(setq byte-compile-error-on-warn t)' \
