@@ -70,7 +70,7 @@ where 0 means 朔月, 4 means 望月, and 8 means 晦月"
 (defun my/lunar-phase-date-string (date)
   "Return a string intended to be used in `calendar-mode-line-format' for DATE."
   (pcase-let* ((`(,lunar-cycle-length ,elapsed ,phase) (my/lunar-phase-of-date date))
-               (`(,english ,chinese ,emoji) (nth phase my/lunar-phase-names))
+               (`(,_english ,chinese ,emoji) (nth phase my/lunar-phase-names))
                (percent (* 100 (/ elapsed lunar-cycle-length))))
     (format "(%5.2f/%5.2f %3.0f%%%% %s %s)" elapsed lunar-cycle-length percent chinese emoji)))
 

@@ -5,12 +5,7 @@
 (defvar orderless-affix-dispatch-alist)
 (defvar orderless-component-separator)
 
-(defun my/no-filter-try-completion (string collection pred point)
-  "Ignore STRING, COLLECTION, PRED, AND POINT.
-Just return t."
-  t)
-
-(defun my/no-filter-all-completions (string collection pred point)
+(defun my/no-filter-all-completions (string collection pred _point)
   "Just call `all-completions' with STRING, COLLECTION, PRED.
 POINT is ignored."
   (all-completions string collection pred))
@@ -18,7 +13,7 @@ POINT is ignored."
 (add-to-list
  'completion-styles-alist
  '(my/no-filter
-   my/no-filter-try-completion
+   always
    my/no-filter-all-completions
    "Accept all candidates from the collection unfiltered."))
 

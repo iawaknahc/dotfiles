@@ -305,7 +305,7 @@ REPORT-FN is respected."
          (reports-alist (org-lint))
          diags)
     (dolist (element reports-alist)
-      (pcase-let* ((`(,id [,line ,trust ,msg ,checker]) element)
+      (pcase-let* ((`(,_id [,line ,_trust ,msg ,checker]) element)
                    (`(,beg . ,end) (flymake-diag-region source (string-to-number line)))
                    (code (symbol-name (org-lint-checker-name checker)))
                    (info (list "org-lint" code msg))

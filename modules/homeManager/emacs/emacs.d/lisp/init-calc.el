@@ -5,6 +5,7 @@
 (require 'xml)
 (require 'iso8601)
 
+(defvar calc-date-format)
 (defvar math-additional-units)
 (defvar math-units-table)
 (defvar my/math-additional-units)

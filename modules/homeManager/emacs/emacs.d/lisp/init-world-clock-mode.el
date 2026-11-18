@@ -799,7 +799,6 @@ See `my/world-clock--cldr-json-bcp47-timezones'."
                       (let* ((alias (plist-get value :_alias))
                              (iana (plist-get value :_iana))
                              (region (plist-get value :_region))
-                             (iana (plist-get value :_iana))
                              (aliases (split-string alias " "))
                              (aliases (if iana (cons iana aliases) aliases))
                              alpha2)

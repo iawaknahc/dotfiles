@@ -112,7 +112,7 @@ INPUT is either one of the following forms:
 
 (defun my/launcher-make-sync-collection (fun)
   "Turn FUN into a programmed completion collection function."
-  (lambda (input pred flag)
+  (lambda (input _pred flag)
     (pcase flag
       ;; Return t to signify the input should be kept intact.
       ('nil t)

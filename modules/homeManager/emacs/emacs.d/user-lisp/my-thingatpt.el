@@ -1212,7 +1212,7 @@ Therefore, it should be safe to enable this minor mode globally."
     t))
 
 ;;;###autoload
-(defun my/thingatpt-increment (arg)
+(defun my/thingatpt-increment (_arg)
   "Increment thing at point with ARG."
   (interactive "P")
   (when-let* ((thing (cl-loop
@@ -1236,7 +1236,7 @@ Therefore, it should be safe to enable this minor mode globally."
     t))
 
 ;;;###autoload
-(defun my/thingatpt-decrement (arg)
+(defun my/thingatpt-decrement (_arg)
   "Decrement thing at point with ARG."
   (interactive "P")
   (when-let* ((thing (cl-loop
