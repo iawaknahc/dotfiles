@@ -360,25 +360,24 @@ Therefore, point does not move."
            (date (list month day year))
            (point (point))
            new-date)
-      (unwind-protect
-          (progn
-            ;; Handle 0000-mm-dd
-            (unless (calendar-date-is-valid-p date)
-              (error "Date %s is not supported" original))
-            (cond
-             ((>= point (match-beginning 3))
-              (setq new-date (my/calendar-gregorian-add date :days count)))
-             ((>= point (match-beginning 2))
-              (setq new-date (my/calendar-gregorian-add date :months count)))
-             (t
-              (setq new-date (my/calendar-gregorian-add date :years count))))
-            (when (> (calendar-extract-year new-date) 9999)
-              (error "Year must be <= 9999"))
-            (replace-region-contents
-             (match-beginning 6)
-             (match-end 6)
-             (my/calendar-gregorian-to-org-string new-date))
-            (goto-char point))))))
+      (progn
+        ;; Handle 0000-mm-dd
+        (unless (calendar-date-is-valid-p date)
+          (error "Date %s is not supported" original))
+        (cond
+         ((>= point (match-beginning 3))
+          (setq new-date (my/calendar-gregorian-add date :days count)))
+         ((>= point (match-beginning 2))
+          (setq new-date (my/calendar-gregorian-add date :months count)))
+         (t
+          (setq new-date (my/calendar-gregorian-add date :years count))))
+        (when (> (calendar-extract-year new-date) 9999)
+          (error "Year must be <= 9999"))
+        (replace-region-contents
+         (match-beginning 6)
+         (match-end 6)
+         (my/calendar-gregorian-to-org-string new-date))
+        (goto-char point)))))
 
 ;;;###autoload
 (defun my/thingatpt-org-date-decrement (count)
@@ -433,25 +432,24 @@ Match data is set according to `my/thingatpt-iso8601-date-regexp'."
            (date (list month day year))
            (point (point))
            new-date)
-      (unwind-protect
-          (progn
-            ;; Handle 0000-mm-dd
-            (unless (calendar-date-is-valid-p date)
-              (error "Date %s is not supported" original))
-            (cond
-             ((>= point (match-beginning 3))
-              (setq new-date (my/calendar-gregorian-add date :days count)))
-             ((>= point (match-beginning 2))
-              (setq new-date (my/calendar-gregorian-add date :months count)))
-             (t
-              (setq new-date (my/calendar-gregorian-add date :years count))))
-            (when (> (calendar-extract-year new-date) 9999)
-              (error "Year must be <= 9999"))
-            (replace-region-contents
-             (match-beginning 6)
-             (match-end 6)
-             (my/calendar-gregorian-iso8601-date-string new-date))
-            (goto-char point))))))
+      (progn
+        ;; Handle 0000-mm-dd
+        (unless (calendar-date-is-valid-p date)
+          (error "Date %s is not supported" original))
+        (cond
+         ((>= point (match-beginning 3))
+          (setq new-date (my/calendar-gregorian-add date :days count)))
+         ((>= point (match-beginning 2))
+          (setq new-date (my/calendar-gregorian-add date :months count)))
+         (t
+          (setq new-date (my/calendar-gregorian-add date :years count))))
+        (when (> (calendar-extract-year new-date) 9999)
+          (error "Year must be <= 9999"))
+        (replace-region-contents
+         (match-beginning 6)
+         (match-end 6)
+         (my/calendar-gregorian-iso8601-date-string new-date))
+        (goto-char point)))))
 
 ;;;###autoload
 (defun my/thingatpt-iso8601-date-decrement (count)
@@ -1175,7 +1173,13 @@ Therefore, more specific thing should be placed at the front of the list.
 
 The commands in :increment and :decrement must
 edit the buffer in-place, and move point such that
-the command itself can be repeated.")
+the command itself can be repeated."
+  :type '(repeat
+          (plist :options ((:match function)
+                           (:increment function)
+                           (:decrement function))
+                 :value-type function))
+  :group 'my/thingatpt)
 
 (defvar-keymap my/thingatpt-mode-map
   :doc "Key map for `my/thingatpt-mode'.
