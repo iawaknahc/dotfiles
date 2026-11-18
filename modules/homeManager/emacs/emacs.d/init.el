@@ -29,8 +29,15 @@
  ;; :safe means allow `safe-local-variable-values' and `enable-local-eval'.
  ;; If it is nil, then `enable-local-eval' is completely ignored.
  enable-local-variables :safe
- ;; No values are safe.
- safe-local-variable-values nil
+
+ ;; Allow `org-agenda-skip-archived-trees' to be set.
+ ;; This enables a use case where we want to use :ARCHIVE: on a headline to
+ ;; make S-TAB does not cycle on the headline.
+ ;; But we still want the agenda view to treat it as not archived.
+ safe-local-variable-values
+ '((org-agenda-skip-archived-trees . nil)
+   (org-agenda-skip-archived-trees . t))
+
  ;; Always allow `lexical-binding' and `read-symbol-shorthands'.
  ;; This is the default.
  permanently-enabled-local-variables '(lexical-binding read-symbol-shorthands)
