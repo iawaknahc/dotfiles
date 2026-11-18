@@ -146,7 +146,19 @@ Last updated for Unicode 18.0.0")
    ;; :fontset is an undocumented feature.
    :fontset "fontset-proportional"
    :height 160
-   :weight 'light))
+   :weight 'light)
+  ;; Make face `fixed-pitch' and face `fixed-pitch-serif' inherit face `default'.
+  ;; Themes like Modus expect `fixed-pitch' to be configured by the user.
+  (set-face-attribute
+   'fixed-pitch
+   for-all-frames
+   :family 'unspecified
+   :inherit 'default)
+  (set-face-attribute
+   'fixed-pitch-serif
+   for-all-frames
+   :family 'unspecified
+   :inherit 'default))
 
 (provide 'init-font)
 ;;; init-font.el ends here
