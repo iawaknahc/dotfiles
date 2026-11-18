@@ -5,6 +5,9 @@
 (require 'solar)
 (require 'iso8601)
 
+(defvar world-clock-buffer-name)
+(defvar zoneinfo-style-world-list)
+
 ;;;; Custom variables
 (defcustom my/world-clock-zoneinfo-directory "/usr/share/zoneinfo"
   "The path to the zoneinfo directory."

@@ -13,6 +13,8 @@
 ;;
 ;;; Code:
 
+(declare-function server-running-p "server")
+
 (defun my/enable-server-mode-after-init ()
   "Call `server-mode' if server is not running already."
   (require 'server)

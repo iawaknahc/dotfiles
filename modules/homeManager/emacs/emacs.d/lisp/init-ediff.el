@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar ediff-merge-split-window-function)
+(defvar ediff-split-window-function)
+(defvar ediff-window-setup-function)
+(declare-function ediff-setup-windows-plain "ediff-wind")
+
 (setq
  ;; By default, Ediff displays the control buffer in another frame.
  ediff-window-setup-function #'ediff-setup-windows-plain

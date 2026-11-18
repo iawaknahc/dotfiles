@@ -4,6 +4,11 @@
 
 (require 'calendar)
 
+(defvar tempel-map)
+(defvar tempel-template-sources)
+(declare-function tempel-next "tempel")
+(declare-function tempel-previous "tempel")
+
 (defun my/tempel-templates-elisp ()
   "Return a list of Elisp Tempel templates."
   (let* ((file-name (buffer-file-name))

@@ -31,6 +31,15 @@
 ;;
 ;;; Code:
 
+(defvar grep-files-aliases)
+(defvar grep-find-ignored-directories)
+(defvar grep-find-ignored-files)
+(defvar grep-quoting-style)
+(defvar grep-save-buffers)
+(defvar grep-template)
+(defvar grep-use-null-device)
+(defvar grep-use-null-filename-separator)
+
 (setq
  ;; Do not ask to save buffers before search.
  grep-save-buffers nil

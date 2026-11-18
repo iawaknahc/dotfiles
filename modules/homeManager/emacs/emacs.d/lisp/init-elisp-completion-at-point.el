@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function cape-wrap-properties "cape")
+
 (defun my/elisp-completion-at-point-annotation-function (candidate)
   "Annotation function for `elisp-completion-at-point'.
 CANDIDATE is used as usual."

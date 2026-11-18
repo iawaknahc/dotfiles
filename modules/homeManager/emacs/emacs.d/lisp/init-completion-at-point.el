@@ -2,6 +2,21 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar corfu-auto)
+(defvar corfu-auto-delay)
+(defvar corfu-auto-prefix)
+(defvar corfu-auto-trigger)
+(defvar corfu-map)
+(defvar corfu-max-width)
+(defvar corfu-popupinfo-delay)
+(defvar corfu-preselect)
+(defvar corfu-sort-override-function)
+(defvar tempel--active)
+(declare-function corfu-complete "corfu")
+(declare-function corfu-popupinfo-mode "corfu-popupinfo")
+(declare-function global-corfu-mode "corfu")
+(declare-function tempel-next "tempel")
+
 (autoload 'corfu-sort-length-alpha "corfu" "Run (require corfu) to see the actual documentation")
 (setq
  ;; Preselect the prompt, that is, what was typed.

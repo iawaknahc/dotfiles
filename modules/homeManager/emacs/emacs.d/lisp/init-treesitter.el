@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar treesit-font-lock-level)
+
 ;; FIXME: nix-ts-mode does not add-to-list auto-mode-alist, as nix-mode does.
 ;; See https://github.com/NixOS/nix-mode/blob/v1.5.0/nix-mode.el#L1054
 (add-to-list 'auto-mode-alist `(,(rx ".nix" string-end) . nix-ts-mode))

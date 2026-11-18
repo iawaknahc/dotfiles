@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar magit-commit-show-diff)
+(defvar org-agenda-window-setup)
+
 (setq
  ;; Set the base action.
  ;; The intention is to avoid splitting windows.

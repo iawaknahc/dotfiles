@@ -2,6 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar corfu-prescient-enable-filtering)
+(defvar corfu-prescient-override-sorting)
+(defvar prescient-aggressive-file-save)
+(defvar vertico-prescient-enable-filtering)
+(defvar vertico-prescient-override-sorting)
+(declare-function corfu-prescient-mode "corfu-prescient")
+(declare-function prescient-persist-mode "prescient")
+(declare-function vertico-prescient-mode "vertico-prescient")
+
 (setq prescient-aggressive-file-save t)
 (add-hook
  'after-init-hook

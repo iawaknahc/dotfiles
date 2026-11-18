@@ -2,6 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar eglot-code-action-indications)
+(defvar eglot-code-action-indicator)
+(defvar eglot-documentation-renderer)
+(defvar eglot-server-programs)
+(declare-function eglot-format-buffer "eglot")
+(declare-function eglot-inlay-hints-mode "eglot")
+(declare-function eglot-semantic-tokens-mode "eglot")
+(declare-function markdown-ts-view-mode "markdown-ts-mode")
+(declare-function project-root "project")
+
 ;; In beancount file, beancount-language-server reported aligned balance as inlay hint.
 ;; The default face has :height 0.8 which breaks the alignment.
 ;; Therefore, we reset the face to have unspecified :height.

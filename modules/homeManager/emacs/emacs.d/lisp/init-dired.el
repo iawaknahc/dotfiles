@@ -2,6 +2,19 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar dired-auto-revert-buffer)
+(defvar dired-dwim-target)
+(defvar dired-hide-details-hide-information-lines)
+(defvar dired-hide-details-hide-symlink-targets)
+(defvar dired-hide-details-preserved-columns)
+(defvar dired-kill-when-opening-new-dired-buffer)
+(defvar dired-mode-map)
+(defvar dired-omit-extensions)
+(defvar dired-omit-files)
+(declare-function dired-create-empty-file "dired-aux")
+(declare-function dired-hide-details-mode "dired")
+(declare-function dired-omit-mode "dired-x")
+
 (setq
  insert-directory-program "gls"
  dired-listing-switches "--all --format=long --human-readable --group-directories-first"

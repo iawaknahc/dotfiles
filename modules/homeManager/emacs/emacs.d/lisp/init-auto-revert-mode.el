@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar auto-revert-avoid-polling)
+(defvar auto-revert-check-vc-info)
+(defvar global-auto-revert-non-file-buffers)
+
 (setq
  ;; I have a 30k lines beancount file.
  ;; When `auto-revert-check-vc-info' is set to t,

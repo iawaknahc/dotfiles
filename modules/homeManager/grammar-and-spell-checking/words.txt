@@ -74,6 +74,7 @@ cmap
 cmdline
 cnoreabbrev
 codespell
+colview
 commandp
 completeopt
 comptime

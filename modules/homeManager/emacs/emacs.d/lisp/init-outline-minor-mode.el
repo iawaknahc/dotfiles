@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar outline-minor-mode-cycle)
+(defvar outline-minor-mode-map)
+(declare-function outline-demote "outline")
+(declare-function outline-move-subtree-down "outline")
+(declare-function outline-move-subtree-up "outline")
+(declare-function outline-promote "outline")
+
 ;; Bind TAB and <backtab> in `outline-minor-mode-cycle-map'.
 (setq outline-minor-mode-cycle t)
 

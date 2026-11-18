@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function consult--lookup-prop "consult")
+(declare-function consult--read "consult")
+(declare-function marginalia-annotate-tab "marginalia")
+
 (setq
  ;; Show tab number.
  tab-bar-tab-hints t

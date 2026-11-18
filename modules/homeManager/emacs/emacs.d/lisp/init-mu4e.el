@@ -2,6 +2,37 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar gnus-article-date-headers)
+(defvar gnus-blocked-images)
+(defvar gnus-default-directory)
+(defvar mu4e-bookmarks)
+(defvar mu4e-change-filenames-when-moving)
+(defvar mu4e-compose-context-policy)
+(defvar mu4e-confirm-quit)
+(defvar mu4e-context-policy)
+(defvar mu4e-eldoc-support)
+(defvar mu4e-get-mail-command)
+(defvar mu4e-header-info-custom)
+(defvar mu4e-headers-advance-after-mark)
+(defvar mu4e-headers-date-format)
+(defvar mu4e-headers-eldoc-format)
+(defvar mu4e-headers-fields)
+(defvar mu4e-headers-time-format)
+(defvar mu4e-hide-index-messages)
+(defvar mu4e-main-mode-map)
+(defvar mu4e-search-include-related)
+(defvar mu4e-search-skip-duplicates)
+(defvar mu4e-trash-without-flag)
+(defvar mu4e-update-interval)
+(defvar mu4e-view-fields)
+(defvar mu4e-view-mode-map)
+(defvar mu4e-view-scroll-to-next)
+(declare-function mu4e "mu4e")
+(declare-function mu4e-action-view-in-xwidget "mu4e-view")
+(declare-function mu4e-message-at-point "mu4e-message")
+(declare-function mu4e-quit "mu4e")
+(declare-function sendmail-send-it "sendmail")
+
 (setq
  ;; Use `sendmail-program' to send emails.
  ;; `report-emacs-bug' use this function to send emails.

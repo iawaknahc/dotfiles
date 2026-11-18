@@ -8,6 +8,9 @@
 ;; embark-prefix-help-command and embark-bindings share the same UI.
 ;;; Code:
 
+(declare-function embark-act "embark")
+(declare-function embark-dwim "embark")
+
 ;; C-c . is bound to `org-timestamp',
 ;; so we bind to C-c C-. instead.
 (keymap-global-set "C-c C-." #'embark-act)

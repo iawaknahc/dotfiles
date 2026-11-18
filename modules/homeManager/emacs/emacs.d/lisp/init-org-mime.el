@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar org-mime-export-ascii)
+(defvar org-mime-export-options)
+
 (setq
  ;; Make the HTML more relevant for emails.
  org-mime-export-options '(

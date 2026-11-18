@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar hs-allow-nesting)
+(defvar hs-cycle-filter)
+(defvar hs-display-lines-hidden)
+(defvar hs-isearch-open)
+
 (setq
  ;; Bind TAB in `hs-minor-mode-map'.
  hs-cycle-filter t

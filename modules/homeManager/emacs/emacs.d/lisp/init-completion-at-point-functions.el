@@ -2,6 +2,19 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar cape-file-directory)
+(defvar cape-file-prefix)
+(declare-function cape-capf-properties "cape" t t)
+(declare-function cape-file "cape")
+(declare-function cape-wrap-choose "cape")
+(declare-function cape-wrap-properties "cape")
+(declare-function cape-wrap-silent "cape")
+(declare-function cape-wrap-super "cape")
+(declare-function cape-wrap-trigger "cape")
+(declare-function my/vulpea-insert-capf "init-vulpea")
+(declare-function pcomplete-completions-at-point "pcomplete")
+(declare-function tempel-complete "tempel")
+
 (defun my/get-filepath-before-point ()
   "Looking before point and see if there is a filepath.
 Return the filepath if found, otherwise nil."

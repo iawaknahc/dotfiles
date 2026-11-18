@@ -4,6 +4,8 @@
 
 (require 'simple-httpd)
 
+(declare-function my/vulpea-geojson "init-vulpea")
+
 (setq
  ;; Bind to loopback interface only.
  httpd-host "127.0.0.1"

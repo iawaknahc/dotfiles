@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar flash-face-attributes)
+(defvar flash-face-faces)
+(declare-function catppuccin-color "catppuccin-theme")
+
 (setq
  ;; On NS build, the visible bell is a large image displayed at the center of the screen.
  ;; This is too annoying.

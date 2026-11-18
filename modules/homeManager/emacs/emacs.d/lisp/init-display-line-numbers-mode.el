@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function my/evil-normal-p "my-evil")
+
 (setq display-line-numbers-width 4)
 
 (defun my/display-line-numbers-mode-after-change-major-mode-hook ()

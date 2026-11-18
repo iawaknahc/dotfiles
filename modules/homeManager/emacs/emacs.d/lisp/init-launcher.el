@@ -2,6 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar my/rime-cangjie-dict-yaml)
+(defvar my/rime-user-directory)
+(declare-function calc-load-everything "calc-ext")
+(declare-function math-check-unit-name "calc-units")
+(declare-function math-const-var "calc-ext")
+(declare-function math-format-value "calc")
+(declare-function my/currency-convert "init-calc")
+(declare-function my/currency-convert-all "init-calc")
+(declare-function my/currency-decimal-p "init-calc")
+(declare-function my/currency-syntactically-valid-currency-p "init-calc")
+(declare-function my/rime-cangjie-lookup "my-rime")
+(declare-function my/uuid-to-string "my-rng")
+(declare-function my/uuid4-bytes "my-rng")
+
 (defun my/launcher--calc-no-unbound-vars (expr)
   "Return non-nil if EXPR contains no unbound variables."
   (if (null expr)

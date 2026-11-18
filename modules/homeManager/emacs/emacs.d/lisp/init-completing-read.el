@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar vertico-count)
+(defvar vertico-multiform-commands)
+(defvar vertico-preselect)
+(defvar vertico-resize)
+(declare-function vertico-mode "vertico")
+(declare-function vertico-multiform-mode "vertico-multiform")
+
 ;; I tried a few combinations:
 ;; 1. Install vertico-posframe. But the frame becomes invisible if I switch to another Application on macOS.
 ;; 2. Use vertico-multiform and vertico-buffer. But it becomes overwhelming that I need to choose which command use which configuration.

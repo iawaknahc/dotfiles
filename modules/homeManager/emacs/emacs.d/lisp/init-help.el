@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar help-for-help-use-variable-pitch)
+
 (setq
  ;; Use monospace font in C-h C-h.
  help-for-help-use-variable-pitch nil

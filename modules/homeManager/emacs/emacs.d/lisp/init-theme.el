@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar catppuccin-flavor)
+(defvar catppuccin-italic-comments)
+(declare-function catppuccin-color "catppuccin-theme")
+(declare-function catppuccin-reload "catppuccin-theme")
+
 (setq
  ;; See the comment on `org-clock-clocked-in-display'.
  frame-resize-pixelwise t

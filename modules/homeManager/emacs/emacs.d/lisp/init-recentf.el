@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function recentf-track-opened-file "recentf")
+
 (with-eval-after-load 'recentf
   (add-hook 'buffer-list-update-hook #'recentf-track-opened-file))
 

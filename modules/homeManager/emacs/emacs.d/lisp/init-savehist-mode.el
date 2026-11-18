@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar savehist-autosave-interval)
+
 ;; Save every minute.
 ;; The default is every 5 minutes.
 (setq savehist-autosave-interval 60)

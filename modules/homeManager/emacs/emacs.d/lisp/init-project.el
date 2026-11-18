@@ -3,6 +3,11 @@
 ;;
 ;;; Code:
 
+(declare-function ghostel-project "ghostel-project")
+(declare-function ghostel-project-new "ghostel-project")
+(declare-function magit-project-status "magit-extras")
+(declare-function my/lgrep-project "init-grep-mode")
+
 (with-eval-after-load 'project
   (keymap-set project-prefix-map "g" #'my/lgrep-project)
   (keymap-set project-prefix-map "m" #'ghostel-project)

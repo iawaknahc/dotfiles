@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar orderless-affix-dispatch-alist)
+(defvar orderless-component-separator)
+
 (defun my/no-filter-try-completion (string collection pred point)
   "Ignore STRING, COLLECTION, PRED, AND POINT.
 Just return t."

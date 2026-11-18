@@ -2,6 +2,14 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar apheleia-formatters)
+(defvar apheleia-mode-alist)
+(declare-function apheleia-mode "apheleia")
+(declare-function org-align-tags "org")
+(declare-function org-indent-region "org")
+(declare-function org-table-align "org-table")
+(declare-function org-table-map-tables "org-table")
+
 (add-hook 'conf-mode-hook #'apheleia-mode)
 (add-hook 'prog-mode-hook #'apheleia-mode)
 (add-hook 'text-mode-hook #'apheleia-mode)

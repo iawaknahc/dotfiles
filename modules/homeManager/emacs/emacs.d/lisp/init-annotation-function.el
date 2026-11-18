@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function marginalia-annotate-binding "marginalia")
+(declare-function marginalia-mode "marginalia")
+
+(eval-when-compile (require 'marginalia))
+
 (defun my/marginalia-annotate-binding (command)
   "Annotate COMMAND with all keybindings.
 

@@ -9,6 +9,16 @@
 (require 'iso8601)
 (require 'vulpea-db)
 
+(declare-function org-entry-get "org")
+(declare-function org-get-heading "org")
+(declare-function org-map-entries "org")
+(declare-function org-parse-time-string "org-macs")
+(declare-function vulpea-db-get-by-id "vulpea-db-query")
+(declare-function vulpea-note-id "vulpea-note" t t)
+(declare-function vulpea-note-meta-get "vulpea-note")
+(declare-function vulpea-note-meta-get-list "vulpea-note")
+(declare-function vulpea-note-title "vulpea-note" t t)
+
 (defun my/calendar-date-to-org-timestamp (date)
   "Format calendar-gregorian DATE to a Org timestamp."
   (let* ((time (encode-time (list 0 0 0

@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar diff-hl-flydiff-delay)
+(declare-function diff-hl-flydiff-mode "diff-hl-flydiff")
+(declare-function diff-hl-magit-post-refresh "diff-hl")
+(declare-function diff-hl-margin-mode "diff-hl-margin")
+(declare-function diff-hl-update "diff-hl")
+(declare-function global-diff-hl-mode "diff-hl")
+
 (setq diff-hl-flydiff-delay 0.1)
 
 (add-hook 'after-init-hook #'global-diff-hl-mode)

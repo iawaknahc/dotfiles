@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar sh-shell-file)
+
 ;; Always use /bin/sh, instead of reading SHELL.
 (setq
  shell-file-name "/bin/sh"

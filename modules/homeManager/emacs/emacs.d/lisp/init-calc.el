@@ -5,6 +5,18 @@
 (require 'xml)
 (require 'iso8601)
 
+(defvar math-additional-units)
+(defvar math-units-table)
+(defvar my/math-additional-units)
+(declare-function math-convert-units "calc-units")
+(declare-function math-format-date "calc-forms")
+(declare-function math-format-number "calc")
+(declare-function math-format-value "calc")
+(declare-function math-read-expr "calc-ext")
+(declare-function math-read-number "calc")
+(declare-function math-round "calc-arith")
+(declare-function my/call-command "my-lib")
+
 (defconst my/currency-decimal-places
   '(;; Currencies with 0 decimal places.
     ("BIF" . 0)

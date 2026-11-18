@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar sh-basic-offset)
+
 ;; shfmt uses tab by default.
 ;; By default, sh-basic-offset is 4 while tab-width is 8.
 ;; If tab is used for indentation, the two must be equal.

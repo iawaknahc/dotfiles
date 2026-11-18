@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar evil-mode-line-format)
+
 (setq
  ;; Collapse minor modes that do not report additional information in the mode line.
  mode-line-collapse-minor-modes '(apheleia-mode

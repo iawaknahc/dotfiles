@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar so-long-target-modes)
+(defvar so-long-threshold)
+
 (setq
  ;; Line with more than 4000 bytes are so long.
  so-long-threshold 4000

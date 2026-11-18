@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar whitespace-line-column)
+(defvar whitespace-style)
+
 ;; Turn on whitespace-mode.
 (add-hook 'conf-mode-hook #'whitespace-mode)
 (add-hook 'prog-mode-hook #'whitespace-mode)

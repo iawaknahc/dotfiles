@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar ghostel-mode-map)
+(declare-function ghostel-buffer-name-by-title "ghostel")
+
 ;;;; Custom commands
 (defun my/text-property-search-backward (property &optional value predicate not-current)
   "Call `text-property-search-backward' and return point.

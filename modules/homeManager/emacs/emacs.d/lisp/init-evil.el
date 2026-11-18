@@ -2,6 +2,37 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar evil-default-state)
+(defvar evil-disable-insert-state-bindings)
+(defvar evil-emacs-state-modes)
+(defvar evil-inner-text-objects-map)
+(defvar evil-insert-state-modes)
+(defvar evil-motion-state-map)
+(defvar evil-motion-state-modes)
+(defvar evil-normal-state-modes)
+(defvar evil-outer-text-objects-map)
+(defvar evil-search-wrap)
+(defvar evil-split-window-below)
+(defvar evil-symbol-word-search)
+(defvar evil-undo-system)
+(defvar evil-v$-excludes-newline)
+(defvar evil-vsplit-window-right)
+(defvar evil-want-C-d-scroll)
+(defvar evil-want-C-i-jump)
+(defvar evil-want-C-u-scroll)
+(defvar evil-want-Y-yank-to-eol)
+(declare-function diff-hl-next-hunk "diff-hl")
+(declare-function diff-hl-previous-hunk "diff-hl")
+(declare-function evil-jump-forward "evil-commands" t t)
+(declare-function evil-mode "evil-core")
+(declare-function evil-normal-state "evil-states" t t)
+(declare-function evil-normal-state-p "evil-states" t t)
+(declare-function evil-scroll-down "evil-commands" t t)
+(declare-function evil-scroll-up "evil-commands" t t)
+(declare-function flymake-goto-next-error "flymake")
+(declare-function flymake-goto-prev-error "flymake")
+(declare-function my/evil-normal-p "my-evil")
+
 (defun my/evil-search-next (f &rest args)
   "An :around advice of `evil-search-next' to make it always search forward.
 Apply F with ARGS."

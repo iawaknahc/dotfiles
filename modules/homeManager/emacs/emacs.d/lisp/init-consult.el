@@ -3,6 +3,14 @@
 ;;
 ;;; Code:
 
+(declare-function consult-bookmark "consult")
+(declare-function consult-buffer "consult")
+(declare-function consult-buffer-other-window "consult")
+(declare-function consult-goto-line "consult")
+(declare-function consult-imenu "consult-imenu")
+(declare-function consult-project-buffer "consult")
+(declare-function consult-yank-pop "consult")
+
 ;; C-x b
 (keymap-global-set "<remap> <switch-to-buffer>" #'consult-buffer)
 ;; C-x 4 b
