@@ -47,12 +47,18 @@
  ;; Allow starting Org in Columns View.
  safe-local-eval-forms '((org-columns))
 
- ;; Nothing is trusted.
- ;; This effects the return value of `trusted-content-p'.
+ ;; Trust only the code I wrote.
+ ;; This affects the return value of `trusted-content-p'.
  ;; As far as I know, users are `elisp-flymake-byte-compile' and `elisp-completion-at-point'.
  ;; The expected result is that no macros will be expanded.
  ;; See https://eshelyaron.com/posts/2024-11-27-emacs-aritrary-code-execution-and-how-to-avoid-it.html
- trusted-content nil)
+ trusted-content '("~/dotfiles/modules/homeManager/emacs/emacs.d/")
+
+ ;; Teach `elisp-flymake-byte-compile' on how to load my Elisp files.
+ elisp-flymake-byte-compile-load-path
+ '("./"
+   "~/dotfiles/modules/homeManager/emacs/emacs.d/lisp/"
+   "~/dotfiles/modules/homeManager/emacs/emacs.d/user-lisp/"))
 
 ;; I am aware that there is a User Lisp directory feature since Emacs 31.
 ;; But it is not suitable for putting configuration files.
