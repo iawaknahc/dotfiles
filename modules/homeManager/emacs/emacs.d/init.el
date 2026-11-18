@@ -49,6 +49,9 @@
 ;; There is a third party package `exec-path-from-shell' designed exactly for this purpose.
 ;; To keep environment variables synced with my Nix configuration,
 ;; this file is generated in Nix.
+;;
+;; For example, vulpea needs PATH to find fswatch,
+;; mu4e needs PATH to find mbsync.
 (require 'init-exec-path-from-shell)
 
 ;; Theme must be configured BEFORE font.
