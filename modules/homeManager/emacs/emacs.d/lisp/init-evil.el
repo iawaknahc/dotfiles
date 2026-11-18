@@ -5,12 +5,9 @@
 (defvar evil-default-state)
 (defvar evil-disable-insert-state-bindings)
 (defvar evil-emacs-state-modes)
-(defvar evil-inner-text-objects-map)
 (defvar evil-insert-state-modes)
-(defvar evil-motion-state-map)
 (defvar evil-motion-state-modes)
 (defvar evil-normal-state-modes)
-(defvar evil-outer-text-objects-map)
 (defvar evil-search-wrap)
 (defvar evil-split-window-below)
 (defvar evil-symbol-word-search)
@@ -23,12 +20,6 @@
 (defvar evil-want-Y-yank-to-eol)
 (declare-function diff-hl-next-hunk "diff-hl")
 (declare-function diff-hl-previous-hunk "diff-hl")
-(declare-function evil-jump-forward "evil-commands" t t)
-(declare-function evil-mode "evil-core")
-(declare-function evil-normal-state "evil-states" t t)
-(declare-function evil-normal-state-p "evil-states" t t)
-(declare-function evil-scroll-down "evil-commands" t t)
-(declare-function evil-scroll-up "evil-commands" t t)
 (declare-function flymake-goto-next-error "flymake")
 (declare-function flymake-goto-prev-error "flymake")
 (declare-function my/evil-normal-p "my-evil")
@@ -84,66 +75,68 @@ Apply F with ARGS."
  ;; Make * and # search for the symbol at point.
  evil-symbol-word-search t)
 
-(with-eval-after-load 'evil
-  ;; Rebind `evil-jump-forward' to `<control-i>'.
-  ;; This only makes sense if the physical control-i and the physical tab are made separate,
-  ;; otherwise, it is a no-op because `<tab>' is mapped to `[9]' in `function-key-map'.
-  ;; The separation is done in `init-keymap.el'.
-  ;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
-  ;; In addition, it is very nice to have `<control-i>' to jump forward, and
-  ;; `C-o' to jump backward.
-  (keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
+;; Actually load evil-mode.
+(require 'evil)
 
-  ;; I do not use `evil-scroll-page-down' or `evil-scroll-page-up',
-  ;; so replace their bindings to scroll half page.
-  (keymap-set evil-motion-state-map "C-f" #'evil-scroll-down)
-  (keymap-set evil-motion-state-map "C-b" #'evil-scroll-up)
-  ;; We have to bind C-d to `ignore', otherwise, `delete-char' is invoked.
-  (keymap-set evil-motion-state-map "C-d" #'ignore)
+;; Rebind `evil-jump-forward' to `<control-i>'.
+;; This only makes sense if the physical control-i and the physical tab are made separate,
+;; otherwise, it is a no-op because `<tab>' is mapped to `[9]' in `function-key-map'.
+;; The separation is done in `init-keymap.el'.
+;; The motivation of this rebinding is to reserve TAB for org-mode `org-cycle'.
+;; In addition, it is very nice to have `<control-i>' to jump forward, and
+;; `C-o' to jump backward.
+(keymap-set evil-motion-state-map "<control-i>" #'evil-jump-forward)
 
-  ;; Make n and N have deterministic direction.
-  (advice-add 'evil-search-next :around #'my/evil-search-next)
-  (advice-add 'evil-search-previous :around #'my/evil-search-previous)
+;; I do not use `evil-scroll-page-down' or `evil-scroll-page-up',
+;; so replace their bindings to scroll half page.
+(keymap-set evil-motion-state-map "C-f" #'evil-scroll-down)
+(keymap-set evil-motion-state-map "C-b" #'evil-scroll-up)
+;; We have to bind C-d to `ignore', otherwise, `delete-char' is invoked.
+(keymap-set evil-motion-state-map "C-d" #'ignore)
 
-  ;; Navigate between hunks.
-  (evil-define-motion my/evil-diff-hl-next-hunk (count)
-    "Move point to the beginning of next hunk."
-    :type inclusive
-    :jump t
-    (dotimes (_ (or count 1))
-      (diff-hl-next-hunk)))
-  (evil-define-motion my/evil-diff-hl-prev-hunk (count)
-    "Move point to the beginning of previous hunk."
-    :type inclusive
-    :jump t
-    (dotimes (_ (or count 1))
-      (diff-hl-previous-hunk)))
-  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "]h") #'my/evil-diff-hl-next-hunk)
-  (evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "[h") #'my/evil-diff-hl-prev-hunk)
+;; Make n and N have deterministic direction.
+(advice-add 'evil-search-next :around #'my/evil-search-next)
+(advice-add 'evil-search-previous :around #'my/evil-search-previous)
 
-  ;; Navigate between Flymake errors.
-  ;; The choice of "d" is inspired by Neovim ":help ]d-default"
-  (evil-define-motion my/evil-flymake-next-error (count)
-    "Move point to the beginning of next Flymake error."
-    :type inclusive
-    :jump t
-    (flymake-goto-next-error count))
-  (evil-define-motion my/evil-flymake-prev-error (count)
-    "Move point to the beginning of previous Flymake error."
-    :type inclusive
-    :jump t
-    (flymake-goto-prev-error count))
-  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-flymake-next-error)
-  (evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-flymake-prev-error)
+;; Navigate between hunks.
+(evil-define-motion my/evil-diff-hl-next-hunk (count)
+  "Move point to the beginning of next hunk."
+  :type inclusive
+  :jump t
+  (dotimes (_ (or count 1))
+    (diff-hl-next-hunk)))
+(evil-define-motion my/evil-diff-hl-prev-hunk (count)
+  "Move point to the beginning of previous hunk."
+  :type inclusive
+  :jump t
+  (dotimes (_ (or count 1))
+    (diff-hl-previous-hunk)))
+(evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "]h") #'my/evil-diff-hl-next-hunk)
+(evil-define-key '(normal visual motion) 'diff-hl-mode (kbd "[h") #'my/evil-diff-hl-prev-hunk)
 
-  ;; Make "w" works more like Vim.
-  ;; In particular, underscore should be a word character.
-  ;; See https://evil.readthedocs.io/en/latest/faq.html#underscore-is-not-a-word-character
-  (define-key evil-outer-text-objects-map "w" 'evil-a-symbol)
-  (define-key evil-inner-text-objects-map "w" 'evil-inner-symbol)
-  (define-key evil-outer-text-objects-map "o" 'evil-a-word)
-  (define-key evil-inner-text-objects-map "o" 'evil-inner-word)
-  (defalias 'forward-evil-word 'forward-evil-symbol))
+;; Navigate between Flymake errors.
+;; The choice of "d" is inspired by Neovim ":help ]d-default"
+(evil-define-motion my/evil-flymake-next-error (count)
+  "Move point to the beginning of next Flymake error."
+  :type inclusive
+  :jump t
+  (flymake-goto-next-error count))
+(evil-define-motion my/evil-flymake-prev-error (count)
+  "Move point to the beginning of previous Flymake error."
+  :type inclusive
+  :jump t
+  (flymake-goto-prev-error count))
+(evil-define-key '(normal visual motion) 'flymake-mode (kbd "]d") #'my/evil-flymake-next-error)
+(evil-define-key '(normal visual motion) 'flymake-mode (kbd "[d") #'my/evil-flymake-prev-error)
+
+;; Make "w" works more like Vim.
+;; In particular, underscore should be a word character.
+;; See https://evil.readthedocs.io/en/latest/faq.html#underscore-is-not-a-word-character
+(define-key evil-outer-text-objects-map "w" 'evil-a-symbol)
+(define-key evil-inner-text-objects-map "w" 'evil-inner-symbol)
+(define-key evil-outer-text-objects-map "o" 'evil-a-word)
+(define-key evil-inner-text-objects-map "o" 'evil-inner-word)
+(defalias 'forward-evil-word 'forward-evil-symbol)
 
 (add-hook 'after-init-hook #'evil-mode)
 
