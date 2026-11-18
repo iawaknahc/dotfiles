@@ -249,11 +249,31 @@
     source = ./emacs.d/user-lisp;
     # recursive is needed because .emacs.d/user-lisp may contain generated files.
     recursive = true;
+    # Emacs compares the last modified time of the .el and the .elc
+    # to determine whether it should byte-compile the file.
+    # https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/emacs-lisp/bytecomp.el
+    # Since the .el file is a symlink to the Nix store, its date is always 1970.
+    # This means the .elc will become stale.
+    # As a workaround, we delete the .elc files in every switch.
+    # When recursive is true, onChange always run.
+    onChange = ''
+      find "$HOME/.emacs.d/user-lisp" -name '*.elc' -delete
+    '';
   };
   home.file.".emacs.d/lisp" = {
     source = ./emacs.d/lisp;
     # recursive is needed because .emacs.d/lisp may contain generated files.
     recursive = true;
+    # Emacs compares the last modified time of the .el and the .elc
+    # to determine whether it should byte-compile the file.
+    # https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/emacs-lisp/bytecomp.el
+    # Since the .el file is a symlink to the Nix store, its date is always 1970.
+    # This means the .elc will become stale.
+    # As a workaround, we delete the .elc files in every switch.
+    # When recursive is true, onChange always run.
+    onChange = ''
+      find "$HOME/.emacs.d/lisp" -name '*.elc' -delete
+    '';
   };
   home.file.".emacs.d/maplibre".source = ./emacs.d/maplibre;
   home.file.".emacs.d/lisp/init-exec-path-from-shell.el".text =
