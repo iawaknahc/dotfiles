@@ -18,7 +18,5 @@
 ;; so we bind to C-c C-; instead.
 (keymap-global-set "C-c C-;" #'embark-dwim)
 
-(setq embark-auto-prefix-help-delay 0)
-
 (provide 'init-embark)
 ;;; init-embark.el ends here
