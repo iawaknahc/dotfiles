@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'marginalia)
 (declare-function cape-wrap-properties "cape")
 
 (defun my/elisp-completion-at-point-annotation-function (candidate)
