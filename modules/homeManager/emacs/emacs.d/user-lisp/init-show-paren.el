@@ -8,13 +8,17 @@
  '(show-paren-match-expression ((t (:background "#313244" :extend unspecified :inherit region)))))
 
 (setq
- show-paren-delay 0
  show-paren-context-when-offscreen t
  show-paren-highlight-openparen t
  ;; Highlight parenthesis only for non-Lisp languages.
  show-paren-style 'parenthesis
  show-paren-when-point-in-periphery t
  show-paren-when-point-inside-paren t)
+
+(with-eval-after-load 'paren
+  (setopt
+   show-paren-delay 0))
+
 ;; But for Lisp languages, highlight the whole expression because there are too many parenthesis.
 (add-hook 'lisp-data-mode-hook (lambda () (setq-local show-paren-style 'expression)))
 
