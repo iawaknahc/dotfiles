@@ -3,10 +3,13 @@
 ;;
 ;;; Code:
 
+(defvar project-buffers-viewer)
+(defvar project-switch-commands)
 (declare-function ghostel-project "ghostel-project")
 (declare-function ghostel-project-new "ghostel-project")
 (declare-function magit-project-status "magit-extras")
 (declare-function my/lgrep-project "init-grep-mode")
+(declare-function project-name "project")
 
 (with-eval-after-load 'project
   (keymap-set project-prefix-map "g" #'my/lgrep-project)

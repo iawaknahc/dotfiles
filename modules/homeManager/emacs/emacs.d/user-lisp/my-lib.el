@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 ;;;###autoload
 (cl-defun my/call-process (&key
                            (working-directory default-directory)

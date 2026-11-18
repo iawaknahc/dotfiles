@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (defvar org-agenda-custom-commands)
 (defvar org-agenda-files)
 (defvar org-agenda-include-diary)
@@ -33,6 +35,8 @@
 (defvar org-startup-folded)
 (defvar org-timestamp-custom-formats)
 (defvar org-timestamp-rounding-minutes)
+(declare-function diary-mark-entries "diary-lib")
+(declare-function diary-view-entries "diary-lib")
 (declare-function org-capture-goto-last-stored "org-capture")
 (declare-function org-clock-in "org-clock")
 (declare-function org-columns "org-colview")

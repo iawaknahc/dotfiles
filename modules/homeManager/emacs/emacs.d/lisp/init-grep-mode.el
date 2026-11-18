@@ -39,6 +39,7 @@
 (defvar grep-template)
 (defvar grep-use-null-device)
 (defvar grep-use-null-filename-separator)
+(declare-function project-root "project")
 
 (setq
  ;; Do not ask to save buffers before search.

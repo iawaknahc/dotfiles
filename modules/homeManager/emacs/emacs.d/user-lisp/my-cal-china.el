@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(declare-function my/solar-longitude-chinese "my-solar")
+
 ;; `holiday-chinese'
 ;; `calendar-chinese-from-absolute'
 ;; `calendar-chinese-to-absolute'

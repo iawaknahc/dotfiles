@@ -2,6 +2,17 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar flymake-autoresize-margins)
+(defvar flymake-indicator-type)
+(defvar flymake-margin-indicators-string)
+(defvar flymake-show-diagnostics-at-end-of-line)
+(defvar flymake-suppress-zero-counters)
+(defvar flymake-wrap-around)
+(declare-function flymake-diagnostic-backend "flymake" t t)
+(declare-function flymake-diagnostic-code "flymake" t t)
+(declare-function flymake-diagnostic-message "flymake" t t)
+(declare-function flymake-diagnostic-origin "flymake" t t)
+
 (add-hook 'conf-mode-hook #'flymake-mode)
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'text-mode-hook #'flymake-mode)

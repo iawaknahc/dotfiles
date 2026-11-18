@@ -4,6 +4,8 @@
 
 (require 'simple-httpd)
 
+(defvar calendar-latitude)
+(defvar calendar-longitude)
 (declare-function my/vulpea-geojson "init-vulpea")
 
 (setq

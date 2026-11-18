@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (declare-function consult--lookup-prop "consult")
 (declare-function consult--read "consult")
 (declare-function marginalia-annotate-tab "marginalia")

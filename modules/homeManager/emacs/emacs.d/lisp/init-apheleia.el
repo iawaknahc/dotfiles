@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (defvar apheleia-formatters)
 (defvar apheleia-mode-alist)
 (declare-function apheleia-mode "apheleia")

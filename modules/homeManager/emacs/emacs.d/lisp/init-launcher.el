@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (defvar my/rime-cangjie-dict-yaml)
 (defvar my/rime-user-directory)
 (declare-function calc-load-everything "calc-ext")

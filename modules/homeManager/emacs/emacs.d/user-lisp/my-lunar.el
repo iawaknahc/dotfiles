@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 ;; `lunar-new-moon-on-or-after'
 (require 'lunar)
 ;; `calendar-astro-from-absolute'

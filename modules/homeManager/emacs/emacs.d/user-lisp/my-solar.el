@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 ;; `calendar-daylight-savings-starts'
 ;; `calendar-daylight-savings-starts-time'
 ;; `calendar-daylight-savings-ends'
