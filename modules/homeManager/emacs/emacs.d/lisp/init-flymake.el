@@ -32,7 +32,8 @@ Turn DIAG into text.
 Note that this function is used in many places, for example,
 ElDoc, end-of-line, tabulated list.
 In these contexts, the level and the line are shown already.
-So the text only contains the origin (or the backend), the code (optional), and the message."
+So the text only contains the origin (or the backend), the code (optional),
+and the message."
   (let* ((origin (flymake-diagnostic-origin diag))
          (code (flymake-diagnostic-code diag))
          (msg (flymake-diagnostic-message diag))

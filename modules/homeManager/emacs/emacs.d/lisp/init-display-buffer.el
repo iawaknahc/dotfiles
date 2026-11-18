@@ -93,7 +93,8 @@
 ;; We cannot use `display-buffer-same-window' because
 ;; the *Help* buffer is displayed in a dedicated side window.
 (defun my/display-buffer-alist-from-help-to-info-match (buffer-or-name &rest _args)
-  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a *Help* buffer."
+  "Return non-nil if BUFFER-OR-NAME is an *info* buffer shown from a *Help* buffer.
+This is a `buffer-match-p' predicate function."
   (when-let* ((selected-buf (window-buffer))
               (_ (with-current-buffer selected-buf (derived-mode-p 'help-mode)))
               (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))
@@ -103,7 +104,8 @@
 ;; When I am in some project, and I need to look up the manual.
 ;; I want display the manual in a side window, rather than taking up the whole frame.
 (defun my/display-buffer-alist-from-project-file-to-info-match (buffer-or-name &rest _args)
-  "A `buffer-match-p' predicate function to check if BUFFER-OR-NAME is an *info* buffer and it is being displayed from a project file."
+  "Return non-nil if BUFFER-OR-NAME is an *info* buffer shown from a project file.
+This is a `buffer-match-p' predicate function."
   (when-let* ((selected-buf (window-buffer))
               (current-proj (with-current-buffer selected-buf (project-current)))
               (_ (with-current-buffer buffer-or-name (derived-mode-p 'Info-mode))))

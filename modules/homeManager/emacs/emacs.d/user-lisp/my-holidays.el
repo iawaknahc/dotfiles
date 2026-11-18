@@ -39,11 +39,13 @@
 
 ;;;###autoload
 (cl-defmacro my/holiday-bind (expr &key year month)
-  "Surround EXPR with `displayed-year' bound to YEAR and `displayed-month' bound to MONTH.
+  "Surround EXPR with `displayed-year' and `displayed-month' bound.
+`displayed-year' is bound to YEAR and `displayed-month' is bound to MONTH.
 
 If YEAR is nil, then it is assumed to be the current year.
 
-If MONTH is nil, then it is assumed to be 2 and `calendar-total-months' is bound to 12,
+If MONTH is nil, then it is assumed to be 2
+and `calendar-total-months' is bound to 12,
 resulting in `calendar-get-month-range' reporting all months in YEAR."
   `(funcall (lambda ()
               (defvar displayed-year)
@@ -80,7 +82,8 @@ resulting in `calendar-get-month-range' reporting all months in YEAR."
 
 Functions like `holiday-fixed' need `displayed-year' and `displayed-month',
 but they are not bound when a diary sexp is evaluated.
-A diary sexp is evaluated with `date' bound instead, and is expected to return a string or nil."
+A diary sexp is evaluated with `date' bound instead,
+and is expected to return a string or nil."
   `(progn
      (with-no-warnings (defvar date))
      (let* ((year (calendar-extract-year date))
@@ -94,7 +97,8 @@ A diary sexp is evaluated with `date' bound instead, and is expected to return a
 
 ;;;###autoload
 (defun my/holiday-anniversary (year month day description)
-  "A `holiday-other-holidays' s-expression for anniversary on YEAR MONTH DAY with DESCRIPTION."
+  "A `holiday-other-holidays' s-expression for anniversary on YEAR MONTH DAY.
+DESCRIPTION is the description of the holiday."
   (pcase-let* ((`(_ ,y1 _ ,y2) (calendar-get-month-range)))
     (let* ((y1-instance (list month day y1))
            (y2-instance (list month day y2))
@@ -109,7 +113,8 @@ A diary sexp is evaluated with `date' bound instead, and is expected to return a
 
 ;;;###autoload
 (defun my/holiday-exact (year month day description)
-  "A `holiday-other-holidays' s-expression for date ON YEAR MONTH DAY with DESCRIPTION."
+  "A `holiday-other-holidays' s-expression for date on YEAR MONTH DAY.
+DESCRIPTION is the description of the holiday."
   (holiday-filter-visible-calendar (list (list (list month day year) description))))
 
 ;;;###autoload
@@ -136,7 +141,8 @@ an OFFSET of 1 is Easter Monday."
 
 ;;;###autoload
 (defun my/holiday-prefix (prefix hlist)
-  "A `holiday-other-holidays' s-expression to add PREFIX to the description of holidays in HLIST."
+  "A `holiday-other-holidays' s-expression to add PREFIX to holidays in HLIST.
+PREFIX is added to the description of each holiday."
   (seq-map (lambda (holiday)
              (list (car holiday) (format "%s%s" prefix (cadr holiday))))
            hlist))
@@ -149,7 +155,8 @@ HLIST must either be an empty list, or a singleton list.
 
 The substitution is determined by converting the element to an absolute date,
 and add OFFSET to it.
-OFFSET, therefore, must be an integer, either positive or negative, but not zero.
+OFFSET, therefore, must be an integer, either positive or negative,
+but not zero.
 
 DESCRIPTION will be used as the description of the substitution."
   (pcase hlist
@@ -165,7 +172,8 @@ DESCRIPTION will be used as the description of the substitution."
 
 ;;;###autoload
 (defun my/holiday-day-of-week (day-of-week description)
-  "A `holiday-other-holidays' s-expression to make DAY-OF-WEEK a holiday with DESCRIPTION."
+  "A `holiday-other-holidays' s-expression to make DAY-OF-WEEK a holiday.
+DESCRIPTION is the description of the holiday."
   (pcase-let* ((`(,beg . ,end) (calendar-get-date-range t)))
     (let* ((beg-abs (calendar-absolute-from-gregorian beg))
            (end-abs (calendar-absolute-from-gregorian end)))
@@ -261,7 +269,7 @@ DESCRIPTION will be used as the description of the substitution."
     ;; 1999年第191號法律公告
     ;; https://www.elegislation.gov.hk/hk/1999/ln191
     (my/holiday-exact 1999 12 31 "1999年第191號法律公告所定的公眾假期"))
-  "A `holiday-other-holidays' like variables to define Hong Kong General Holidays.")
+  "A `holiday-other-holidays' like variable to define Hong Kong General Holidays.")
 
 (defconst my/holiday-hong-kong-statutory-holidays
   '(;; Cap. 57 Section 39(1)(a) Lunar New Year’s Day
@@ -322,7 +330,7 @@ DESCRIPTION will be used as the description of the substitution."
     ;; 2021年第21號條例
     (when (>= displayed-year 2030)
       (my/holiday-easter -1 "耶穌受難節翌日")))
-  "A `holiday-other-holidays' like variables to define Hong Kong Statutory Holidays.")
+  "A `holiday-other-holidays' like variable to define Hong Kong Statutory Holidays.")
 
 (cl-defun my/holiday-hong-kong (holidays &key strict)
   "Return a list of holidays derived algorithmically for year >= 1997.
@@ -348,8 +356,10 @@ In this case, the function `my/holiday-exact' is used to define such holiday.
 The second case is a statutory holiday without substitution rule.
 For example, Chung Yeung Festival has no substitution rule.
 
-When it is a 2-element list, the first element is the holiday and the second element is the substitution.
-When the holiday clashes with a previous holiday in the same year, the substitution is used.
+When it is a 2-element list, the first element is the holiday
+and the second element is the substitution.
+When the holiday clashes with a previous holiday in the same year,
+the substitution is used.
 The function `my/holiday-substitution' is used to define such holiday."
   (let* ((table (make-hash-table :test #'eql))
          result)

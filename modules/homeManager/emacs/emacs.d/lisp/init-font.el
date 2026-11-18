@@ -70,8 +70,10 @@ See `my/unicode-cjk-ranges'.")
   "A list of Unicode ranges that should be rendered with a CJK font.
 
 Each range has a comment.
-If the comment does not end with a bracket, then the range is actually a Unicode block.
-If the comment ends with a bracket, then the range is a sub-range in a Unicode block.
+If the comment does not end with a bracket,
+then the range is actually a Unicode block.
+If the comment ends with a bracket,
+then the range is a sub-range in a Unicode block.
 
 Last updated for Unicode 18.0.0")
 

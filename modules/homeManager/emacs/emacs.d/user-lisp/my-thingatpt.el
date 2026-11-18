@@ -742,7 +742,7 @@ It is invalid if it is followed by a letter that is not a hexadecimal digit.")
     (seq (or "#o" "#O")
          (? my/thingatpt-rx-sign)
          (group-n 8 (in "89") my/thingatpt-rx-tail))))
-  "A regular expression for an Elisp-style base prefix that is followed by a foreign digit.
+  "A regular expression for an Elisp-style base prefix followed by a foreign digit.
 
 It is always invalid.")
 
@@ -1020,12 +1020,14 @@ Otherwise return an empty string."
 
 ;;;###autoload
 (defun my/thingatpt--increment (style sign base-prefix digits-with-underscore count)
-  "Increment DIGITS-WITH-UNDERSCORE whose sign is SIGN in base indicated by BASE-PREFIX with COUNT.
+  "Increment DIGITS-WITH-UNDERSCORE by COUNT.
+The sign is SIGN and the base is indicated by BASE-PREFIX.
 
 STYLE is a symbol returned by `my/thingatpt--base-prefix-to-style'.
 It decides the order of the sign and the base prefix in the result.
 BASE-PREFIX is a string accepted by `my/thingatpt--base-prefix-to-base'.
-DIGITS-WITH-UNDERSCORE is a string whose characters must be valid with respect to BASE-PREFIX, or underscores.
+DIGITS-WITH-UNDERSCORE is a string whose characters must be valid
+with respect to BASE-PREFIX, or underscores.
 SIGN is a string either an empty string, -, or +.
 COUNT is an integer.
 
@@ -1084,7 +1086,9 @@ The underscores are aligned from the right, and they are kept if possible."
 
 ;;;###autoload
 (defun my/thingatpt--float-increment (sign integral-digits-with-underscore fraction-digits-with-underscore count place)
-  "Increment the float made of SIGN, INTEGRAL-DIGITS-WITH-UNDERSCORE, and FRACTION-DIGITS-WITH-UNDERSCORE.
+  "Increment a float.
+The float is made of SIGN, INTEGRAL-DIGITS-WITH-UNDERSCORE,
+and FRACTION-DIGITS-WITH-UNDERSCORE.
 
 SIGN is a string either an empty string, -, or +.
 INTEGRAL-DIGITS-WITH-UNDERSCORE and FRACTION-DIGITS-WITH-UNDERSCORE
@@ -1170,7 +1174,8 @@ The first thing that matches thing at point is used.
 Therefore, more specific thing should be placed at the front of the list.
 
 The commands in :increment and :decrement must
-edit the buffer in-place, and move point such that the command itself can be repeated.")
+edit the buffer in-place, and move point such that
+the command itself can be repeated.")
 
 (defvar-keymap my/thingatpt-mode-map
   :doc "Key map for `my/thingatpt-mode'.

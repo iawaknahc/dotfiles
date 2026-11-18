@@ -139,7 +139,8 @@
 (defun my/org-agenda-before--set-org-agenda-files (&rest _args)
   "Set variable `org-agenda-files' if it is not bound already.
 
-A custom agenda command may specify variable `org-agenda-files' and make it bound."
+A custom agenda command may specify variable `org-agenda-files'
+and make it bound."
   ;; If variable `org-agenda-files' is unbound, for example,
   ;; invoking the ordinary agenda.
   (when (or (null org-agenda-files)
@@ -194,7 +195,8 @@ And in fact, it has a higher priority than us."
 (cl-defun my/org-capture-template
     (&rest args &key key description type target template &allow-other-keys)
   "A helper to create a capture template.
-ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted according to the manual."
+ARGS, KEY, DESCRIPTION, TYPE, TARGET, TEMPLATE, PROPERTIES are interpreted
+according to the manual."
   (let* ((rest (copy-sequence args)))
     (cl-remf rest :key)
     (cl-remf rest :description)
@@ -279,7 +281,8 @@ Repeating and diary timestamps are never considered past."
 
 ;;;###autoload
 (defun my/org-archive-past-events ()
-  "Refile past top-level events into a datetree under `org-archive-sibling-heading'.
+  "Refile past top-level events into a datetree.
+The datetree is under `org-archive-sibling-heading'.
 An event is a top-level headline with a planning or an active timestamp.
 The datetree entry is taken from the start of that timestamp."
   (interactive)

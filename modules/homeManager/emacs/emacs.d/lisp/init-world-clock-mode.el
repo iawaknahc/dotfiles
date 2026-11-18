@@ -56,8 +56,8 @@ If it is nil, then it is taken from the environment variable TZ.
 If TZ is nil or an empty string, then \"Etc/UTC\" is the home timezone.
 
 The home timezone is displayed as the first item in the list.
-The offset between the home timezone and the other timezone determines the order of
-the other timezone in the list."
+The offset between the home timezone and the other timezone determines
+the order of the other timezone in the list."
   :type 'string
   :group 'my/world-clock)
 
@@ -122,7 +122,8 @@ In other words, the return value of (time-convert TIME 'integer).")
 The plist has the following properties:
 - :name The name of the timezone
 - :aliases The list of aliases
-- :alpha2 The ISO 3166 alpha-2 code of the most populous area the timezone covers
+- :alpha2 The ISO 3166 alpha-2 code of the most populous area
+  the timezone covers
 - :latitude The latitude of the principle location of the timezone
 - :longitude The longitude of the principle location of the timezone
 
@@ -490,7 +491,9 @@ it will be moved to the front."
     (apply fn args)))
 
 (defun my/world-clock-display--after (&rest _)
-  "Apply the face stored in `my/world-clock--face' and `my/world-clock--business-hours-face'."
+  "Apply the faces stored in text properties.
+The text properties are `my/world-clock--face' and
+`my/world-clock--business-hours-face'."
   (let ((inhibit-read-only t)
         (pos (point-min)))
     (while (setq pos (text-property-not-all pos (point-max) 'my/world-clock--face nil))
@@ -671,7 +674,8 @@ Links in tzdata.zi become aliases, unless the alias is in zone.tab."
         (puthash alias plist my/world-clock--timezones-index)))))
 
 (defun my/world-clock--parse-cldr-json-weekData-json ()
-  "Parse the file cldr-core/supplemental/weekData.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-core/supplemental/weekData.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil."
   (when my/world-clock-cldr-json-directory
@@ -683,7 +687,8 @@ If `my/world-clock-cldr-json-directory' is nil, return nil."
         result))))
 
 (defun my/world-clock--parse-cldr-json-territory-names ()
-  "Parse the file cldr-localenames-full/main/*/territories.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-localenames-full/main/*/territories.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil."
   (when-let* ((root (when my/world-clock-cldr-json-directory
@@ -731,7 +736,8 @@ Return nil if localization is unavailable."
   (gethash alpha2 my/world-clock--cldr-json-territory-names-index))
 
 (defun my/world-clock--parse-cldr-json-primary-zones ()
-  "Parse the file cldr-core/supplemental/primaryZones.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-core/supplemental/primaryZones.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 if `my/world-clock-cldr-json-directory' is nil, return nil.
 See `my/world-clock--cldr-json-primary-zones'."
@@ -765,7 +771,8 @@ Return nil if ALPHA2 has no primary zone."
              :timezone))
 
 (defun my/world-clock--parse-cldr-json-bcp47-timezones ()
-  "Parse the file cldr-bcp47/bcp47/timezone.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-bcp47/bcp47/timezone.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil.
 See `my/world-clock--cldr-json-bcp47-timezones'."
@@ -847,7 +854,8 @@ If TIMEZONE is not associated with a region, return nil."
      (my/world-clock--get-primary-zone alpha2))))
 
 (defun my/world-clock--parse-cldr-json-metazones ()
-  "Parse the file cldr-core/supplemental/metaZones.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-core/supplemental/metaZones.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil.
 Otherwise return a list of plist.
@@ -916,7 +924,8 @@ Return nil if METAZONE cannot be found."
       (or preferred-zone golden-zone))))
 
 (defun my/world-clock--parse-cldr-json-metazone-mappings ()
-  "Parse the file cldr-core/supplemental/metaZones.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-core/supplemental/metaZones.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil.
 Otherwise return a list of plist.
@@ -1064,7 +1073,8 @@ The return value is a list of strings."
      collect (plist-get membership :name))))
 
 (defun my/world-clock--parse-cldr-json-timezone-localization ()
-  "Parse the file cldr-dates-full/main/*/timeZoneNames.json at `my/world-clock-cldr-json-directory'.
+  "Parse the file cldr-dates-full/main/*/timeZoneNames.json.
+The file is under `my/world-clock-cldr-json-directory'.
 
 If `my/world-clock-cldr-json-directory' is nil, return nil.
 See `my/world-clock--cldr-json-timezone-localization'."
@@ -1173,7 +1183,8 @@ described below.
 2. Otherwise, let
    TIMEZONE-ALPHA2 be the ISO 3166 alpha-2 code of TIMEZONE
    METAZONE be the metazone of TIMEZONE at TIME
-3. If the member timezones of METAZONE at TIME are all from the same territory, use long.generic of METAZONE.
+3. If the member timezones of METAZONE at TIME are all from the same territory,
+   use long.generic of METAZONE.
 4. Otherwise, use fallbackFormat with {0} being the name of TIMEZONE-ALPHA2
                                       {1} being long.generic of METAZONE
 
@@ -1235,9 +1246,11 @@ so the format does not apply to it."
 
 (defun my/world-clock--weekends (alpha2)
   "Return a list containing the day of week that are weekends in ALPHA2.
-Each element is an integer ranged from 0 to 6, with 0 being Sunday and 6 being Saturday.
+Each element is an integer ranged from 0 to 6,
+with 0 being Sunday and 6 being Saturday.
 
-If `my/world-clock-cldr-json-directory' is non-nil, cldr-json data is parsed and consulted.
+If `my/world-clock-cldr-json-directory' is non-nil,
+cldr-json data is parsed and consulted.
 Otherwise, always return (6 0)."
   (if (null my/world-clock-cldr-json-directory)
       (list 6 0)
@@ -1312,7 +1325,8 @@ If WEEKENDS is nil, always return nil."
                             timezone))))
 
 (defun my/world-clock--get-home-timezones (time home-timezone)
-  "Return a list of timezones suitable for being home timezone at TIME with HOME-TIMEZONE."
+  "Return a list of timezones suitable for being home timezone at TIME.
+HOME-TIMEZONE is the configured home timezone."
   (my/world-clock--prepare-timezones)
   (let* ((timezones (seq-map (lambda (plist)
                                (plist-get plist :name))
@@ -1360,17 +1374,19 @@ Given TIME is fixed, results of different TIMEZONE are cached."
                my/world-clock--utc-offset-cache)))
 
 (defun my/world-clock--diff (time home-timezone that-timezone)
-  "Return the difference between HOME-TIMEZONE and THAT-TIMEZONE at TIME in number of seconds."
+  "Return the difference between HOME-TIMEZONE and THAT-TIMEZONE at TIME.
+The difference is in number of seconds."
   (let* ((home-utc-offset (my/world-clock--utc-offset time home-timezone))
          (that-utc-offset (my/world-clock--utc-offset time that-timezone))
          (diff-in-seconds (- that-utc-offset home-utc-offset)))
     diff-in-seconds))
 
 (defun my/world-clock--%z (time this-timezone that-timezone)
-  "Return a string representing the difference between THIS-TIMEZONE and THAT-TIMEZONE at TIME.
+  "Return a string of the difference between THIS-TIMEZONE and THAT-TIMEZONE.
+The difference is computed at TIME.
 
-This is similar to what `format-time-string' does between UTC and timezone for %z,
-except that seconds are included when they are non-zero.
+This is similar to what `format-time-string' does between UTC and timezone
+for %z, except that seconds are included when they are non-zero.
 For example, Asia/Hong_Kong was +073642 from UTC before 1904.
 The result is either 5 or 7 characters long."
   (let* ((diff-in-seconds (my/world-clock--diff time this-timezone that-timezone))
@@ -1398,7 +1414,8 @@ The result is either 5 or 7 characters long."
 (defun my/world-clock--decode-time (time utc-offset)
   "Decode TIME at UTC-OFFSET without switching time zones.
 
-Only the first 7 fields (seconds, minutes, hours, day, month, year, day-of-week, _, _)
+Only the first 7
+fields (seconds, minutes, hours, day, month, year, day-of-week, _, _)
 are meaningful.
 The DST field is nil and the zone field is 0, regardless of the actual zone."
   ;; (decode-time time utc-offset)
@@ -1407,7 +1424,8 @@ The DST field is nil and the zone field is 0, regardless of the actual zone."
 (defun my/world-clock--solar-sunrise-sunset (time timezone)
   "Invoke `solar-sunrise-sunset' at TIME in TIMEZONE.
 
-This function caches its result with `my/world-clock--solar-sunrise-sunset-cache'
+This function caches its result with
+`my/world-clock--solar-sunrise-sunset-cache'
 by (TIMEZONE local-date utc-offset-in-minutes)."
   (when-let* ((plist (my/world-clock--get-plist timezone))
               (latitude (plist-get plist :latitude))
@@ -1806,7 +1824,8 @@ If PLIST has no coordinates, return nil."
 (defun my/world-clock--completing-read (prompt strings label-function)
   "Invoke `completing-read' with PROMPT and STRINGS.
 
-LABEL-FUNCTION is function that takes the element in STRINGS and return a string.
+LABEL-FUNCTION is function that takes the element in STRINGS
+and return a string.
 
 Return an element in STRINGS or nil."
   (let* ((collection (seq-map label-function strings))

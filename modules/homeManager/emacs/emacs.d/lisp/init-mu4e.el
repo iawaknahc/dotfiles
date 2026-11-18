@@ -111,8 +111,9 @@
 This is required because we set `left-margin-width' to 2 globally,
 which mu4e does not account for.
 
-Although the documentation says we should add a hook to `mu4e-headers-mode-hook',
-`header-line-format' was actually set before `mu4e-headers-found-hook' is run.
+Although the documentation says we should add a hook to
+`mu4e-headers-mode-hook', `header-line-format' was actually set
+before `mu4e-headers-found-hook' is run.
 See https://github.com/djcb/mu/blob/v1.14.3/mu4e/mu4e.texi#L4996
 and https://github.com/djcb/mu/blob/v1.14.3/mu4e/mu4e-headers.el#L888"
   (push '(:eval (make-string left-margin-width ?\s)) header-line-format))

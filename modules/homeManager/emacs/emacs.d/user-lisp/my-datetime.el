@@ -28,7 +28,8 @@
 (defun my/decode-time (&optional time zone)
   "Invoke `decode-time' with FORM being t.
 
-If TIME is nil, it is taken to be the current time, obtained by `my/current-time'.
+If TIME is nil, it is taken to be the current time,
+obtained by `my/current-time'.
 If ZONE is nil, it is taken to be the value of environment variable TZ."
   (let* ((form t))
     (pcase (list time zone)

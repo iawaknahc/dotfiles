@@ -30,7 +30,8 @@
     ("UGX" . 0))
   "A alist of currency and their decimal place.
 
-If a currency does not appear in this list, then it is a 2-decimal place currency.")
+If a currency does not appear in this list,
+then it is a 2-decimal place currency.")
 
 (defun my/currency-get-decimal-places (currency)
   "Return the number of decimal places of CURRENCY.
@@ -66,7 +67,7 @@ All arguments are strings."
            my/math-additional-units))
 
 (defun my/currency-syntactically-valid-currency-p (currency)
-  "Return non-nil if CURRENCY is a string and contains exactly 3 uppercase characters."
+  "Return non-nil if CURRENCY is a string of exactly 3 uppercase characters."
   (and (stringp currency) (eql 3 (length currency)) (string= (upcase currency) currency)))
 
 (defun my/currency-decimal-p (decimal)
@@ -98,7 +99,8 @@ AMOUNTS is a Calc vector containing numbers."
       (delete-file stdin))))
 
 (defun calcFunc-xnpv (rate dates amounts)
-  "Compute XNPV for RATE, DATES and AMOUNTS, using pyxirr.py which is backed by pyxirr.
+  "Compute XNPV for RATE, DATES and AMOUNTS.
+It uses pyxirr.py which is backed by pyxirr.
 RATE is a Calc number, like (float 3 -2).
 DATES is a Calc vector containing dates.
 AMOUNTS is a Calc vector containing numbers."
@@ -130,7 +132,8 @@ See the homepage https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_
 
 顯名聲明
 1. 提供機關：中央銀行 [日資料] [https://data.gov.tw/dataset/7232]
-2. 此開放資料依政府資料開放授權條款 (Open Government Data License) 進行公眾釋出，使用者於遵守本條款各項規定之前提下，得利用之。
+2. 此開放資料依政府資料開放授權條款 (Open Government Data License) 進行公眾釋出，
+   使用者於遵守本條款各項規定之前提下，得利用之。
 3. 政府資料開放授權條款：https://data.gov.tw/license")
 
 (defun my/calc-currency-load ()
@@ -166,7 +169,9 @@ See the homepage https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_
   (setq math-units-table nil))
 
 (defun my/calc-currency-write-file ()
-  "Fetch `my/calc-currency-url-ecb' and `my/calc-currency-url-cbc' and then write `my/calc-currency-file-path'."
+  "Fetch exchange rates and write them to `my/calc-currency-file-path'.
+The exchange rates are fetched from `my/calc-currency-url-ecb' and
+`my/calc-currency-url-cbc'."
   (let* ((ecb (with-temp-buffer
                 (url-insert-file-contents my/calc-currency-url-ecb)
                 (let* ((root (xml-parse-region (point-min) (point-max)))

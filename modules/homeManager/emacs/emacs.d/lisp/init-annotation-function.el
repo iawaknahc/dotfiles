@@ -9,7 +9,8 @@ It is like `describe-function', with the following differences:
 1. Keybindings involving mouse- and wheel- are excluded.
 2. Keybindings involving Super are excluded.
 3. Keybindings involving help are excluded.
-4. If the command is bound to 10 or more keybindings, a replacement annotation is shown.
+4. If the command is bound to 10 or more keybindings,
+   a replacement annotation is shown.
    This deals with the long list of keybindings of `digit-argument'."
   (when-let* ((symbol (intern-soft command)))
     (let* ((remapped-to (command-remapping symbol)))

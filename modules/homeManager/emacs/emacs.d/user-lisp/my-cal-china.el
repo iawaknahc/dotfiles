@@ -241,16 +241,19 @@ If the chinese day of DATE is 三十, and the chinese month is of length 29 days
 then 廿九 is considered as the anniversary.
 
 The absolute order is computed by the formula: 60 * cycle + year.
-The order is, therefore, the absolute order of the anniversary minus the absolute order of the original date.
+The order is, therefore, the absolute order of the anniversary
+minus the absolute order of the original date.
 
 Return a plist.
 :order is the order.
 :date-gregorian is DATE.
 :date-chinese is the chinese date of DATE.
-:anniversary-gregorian is the anniversary date matching order.  It is a Gregorian date.
+:anniversary-gregorian is the anniversary date matching order.
+It is a Gregorian date.
 :anniversary-chinese is :anniversary-gregorian converted to a chinese date.
 Note that :anniversary-gregorian may not be always in YEAR.
-When :order is zero, :anniversary-gregorian is always DATE, thus :anniversary-chinese may be in a leap month.
+When :order is zero, :anniversary-gregorian is always DATE,
+thus :anniversary-chinese may be in a leap month.
 When :order is non-zero, :anniversary-chinese is never in a leap month."
   (let* ((date-abs (calendar-absolute-from-gregorian date))
          (date-chinese (calendar-chinese-from-absolute date-abs))

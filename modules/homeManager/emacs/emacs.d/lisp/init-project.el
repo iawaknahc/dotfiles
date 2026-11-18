@@ -25,7 +25,8 @@
 (defun my/project-list-buffers-ibuffer (project &optional files-only)
   "A modified version of `project-list-buffers-ibuffer' that use the same window.
 
-PROJECT and FILES-ONLY are treated the same as in `project-list-buffers-ibuffer'."
+PROJECT and FILES-ONLY are treated the same as in
+`project-list-buffers-ibuffer'."
   (ibuffer
    nil
    (format "*Ibuffer-%s" (project-name project))

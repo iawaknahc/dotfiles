@@ -31,7 +31,8 @@ The third element is the emoji.")
 The return value is a list.
 The first element is the length of the lunar cycle, in Julian day number.
 The second element is the elapsed time in this cycle, in Julian day number.
-The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 4 means 望月, and 8 means 晦月"
+The third element is the lunar phase, ranged from 0 to 8,
+where 0 means 朔月, 4 means 望月, and 8 means 晦月"
   (let* ((next-new-moon (lunar-new-moon-on-or-after astro-date))
          prev-new-moon
          lunar-cycle-length
@@ -59,7 +60,8 @@ The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 
 The return value is a list.
 The first element is the length of the lunar cycle, in Julian day number.
 The second element is the elapsed time in this cycle, in Julian day number.
-The third element is the lunar phase, ranged from 0 to 8, where 0 means 朔月, 4 means 望月, and 8 means 晦月"
+The third element is the lunar phase, ranged from 0 to 8,
+where 0 means 朔月, 4 means 望月, and 8 means 晦月"
   (let* ((abs-date (calendar-absolute-from-gregorian date))
          (astro-date (calendar-astro-from-absolute abs-date)))
     (my/lunar-phase-of-astro astro-date)))

@@ -87,7 +87,8 @@ Each configuration is a plist with the following properties:
 - :contact See `eglot-server-programs'.
 - :root-markers a list of root markers.
 - :eglot-stay-out-of `eglot-stay-out-of' to be set as buffer-local variable.
-- :format-buffer-in-before-save-hook whether to run `eglot-format-buffer' in `before-save-hook'.
+- :format-buffer-in-before-save-hook whether to run `eglot-format-buffer'
+  in `before-save-hook'.
 
 :major-modes and :contact are required, others are optional.")
 

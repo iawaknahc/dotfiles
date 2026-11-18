@@ -4,12 +4,14 @@
 
 ;;;; Custom commands
 (defun my/text-property-search-backward (property &optional value predicate not-current)
-  "Call (text-property-search-backward PROPERTY VALUE PREDICATE NOT-CURRENT) and return point."
+  "Call `text-property-search-backward' and return point.
+PROPERTY, VALUE, PREDICATE and NOT-CURRENT are passed to it."
   (when (text-property-search-backward property value predicate not-current)
     (point)))
 
 (defun my/text-property-search-forward (property &optional value predicate not-current)
-  "Call (text-property-search-forward PROPERTY VALUE PREDICATE NOT-CURRENT) and return point."
+  "Call `text-property-search-forward' and return point.
+PROPERTY, VALUE, PREDICATE and NOT-CURRENT are passed to it."
   (when (text-property-search-forward property value predicate not-current)
     (point)))
 
@@ -70,7 +72,9 @@ Point is placed at the end of the output."
   (keymap-set ghostel-mode-map "C-c <down>" #'my/ghostel-select-next-output))
 
 (defvar-keymap my/ghostel-output-repeat-map
-  :doc "Repeat map for `my/ghostel-select-next-output' and `my/ghostel-select-previous-output'."
+  :doc "Repeat map for selecting the next or previous output.
+The commands are `my/ghostel-select-next-output' and
+`my/ghostel-select-previous-output'."
   :repeat t
   "<up>"   #'my/ghostel-select-previous-output
   "<down>" #'my/ghostel-select-next-output)

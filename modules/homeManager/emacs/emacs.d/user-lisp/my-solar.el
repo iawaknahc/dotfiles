@@ -77,7 +77,8 @@ The second element is the degree of the solar term.
 This is currently unused.
 
 The third element is the typical month-day of the solar term.
-This is used in `solar-date-next-longitude' because the function computes the next date.")
+This is used in `solar-date-next-longitude'
+because the function computes the next date.")
 
 (defconst my/holiday-other-holidays-solar-term
   '((my/holiday-solar-term "春分")
@@ -135,7 +136,8 @@ Forward TIME and TIMEZONE."
 
 ;;;###autoload
 (defun my/solar-date-next-longitude-chinese (date degree)
-  "Invoke `solar-date-next-longitude' with DATE and DEGREE with variables bound to Chinese timezone."
+  "Invoke `solar-date-next-longitude' with DATE and DEGREE.
+The calendar variables are bound to Chinese timezone."
   (let* ((calendar-daylight-savings-starts nil)
          (calendar-daylight-savings-starts-time 0)
          (calendar-daylight-savings-ends nil)
@@ -173,7 +175,8 @@ Forward TIME and TIMEZONE."
 ;;;###autoload
 (defun my/solar-term (solar-term year &optional description)
   "Compute SOLAR-TERM in Gregorian YEAR.
-No daylight saving is considered and the timezone is fixed to be Asia/Hong_Kong (UTC+08:00)
+No daylight saving is considered and
+the timezone is fixed to be Asia/Hong_Kong (UTC+08:00)
 
 If DESCRIPTION is nil, a suitable description is generated.
 

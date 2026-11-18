@@ -203,7 +203,8 @@
 (defun beancount-ts--node-on-prev-line (bol)
   "Return the furthest node on the previous line of position BOL.
 
-Return nil if there is no previous line, or there is no node on the previous line."
+Return nil if there is no previous line,
+or there is no node on the previous line."
   (cl-block block
     (let* (line)
       (save-excursion
@@ -288,7 +289,8 @@ Return nil if there is no posting in PARENT."
 
 ;;;###autoload
 (defun beancount-ts--anchor-closest-posting-before-node (node parent bol)
-  "Return the point of the start of the account of the closest posting before NODE in PARENT.
+  "Return the start of the account of the closest posting before NODE.
+The posting is searched in PARENT.
 
 BOL is unused."
   (let* ((posting (beancount-ts--matcher-closest-posting-before-node node parent bol))

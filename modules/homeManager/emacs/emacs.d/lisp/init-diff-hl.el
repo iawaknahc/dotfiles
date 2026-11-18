@@ -13,7 +13,8 @@
   (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
 
 (defun my/vc-refresh-state-on-focus ()
-  "Listen to `after-focus-change-function' and call `vc-refresh-state' and `diff-hl-update'."
+  "Call `vc-refresh-state' and `diff-hl-update' when the frame gains focus.
+This function is meant for `after-focus-change-function'."
   (when (and (frame-focus-state) buffer-file-name (vc-backend buffer-file-name))
     (vc-refresh-state)
     (when (bound-and-true-p diff-hl-mode)

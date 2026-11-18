@@ -6,7 +6,8 @@
 (require 'holidays)
 
 (defcustom my/calendar-business-day-holidays nil
-  "A variable that works like `holiday-other-holidays' but for calculating business days."
+  "A variable that works like `holiday-other-holidays'.
+It is used for calculating business days."
   :type 'sexp)
 
 ;;;###autoload
@@ -199,7 +200,8 @@ They can be negative, positive or zero."
 (defun my/calendar-gregorian-from-absolute--before (date)
   "`calendar-gregorian-from-absolute' is documented not supporting dates in BC.
 
-This function checks if DATE is in BC, in other words, DATE is less than or equal to 0.
+This function checks if DATE is in BC,
+in other words, DATE is less than or equal to 0.
 Raise an error if so."
   (when (<= date 0)
     (error "Dates in BC are not supported by calendar-gregorian-from-absolute")))
