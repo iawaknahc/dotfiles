@@ -345,32 +345,34 @@ The datetree entry is taken from the start of that timestamp."
   (interactive)
   ;; Make `org-archive-sibling-heading' available.
   (require 'org-archive)
-  (org-with-wide-buffer
-   (let* ((file (buffer-file-name))
-          (archive (org-find-olp (list org-archive-sibling-heading) t))
-          (events nil))
-     ;; Collect first, because refiling moves headlines around.
-     (org-map-entries
-      (lambda ()
-        (when-let* ((timestamp (my/org-event--timestamp))
-                    (_ (/= (point) archive))
-                    (_ (my/org-event--past-p timestamp)))
-          (push (cons (point-marker) timestamp) events)))
-      "LEVEL=1")
-     (pcase-dolist (`(,marker . ,timestamp) (reverse events))
-       (let* ((date (list (org-element-property :month-start timestamp)
-                          (org-element-property :day-start timestamp)
-                          (org-element-property :year-start timestamp)))
-              (target (save-excursion
-                        (save-restriction
-                          (goto-char archive)
-                          (org-datetree-find-date-create date 'subtree-at-point)
-                          (point)))))
-         (goto-char marker)
-         (org-refile nil nil (list org-archive-sibling-heading file nil target))
-         (set-marker marker nil)))
-     (set-marker archive nil)
-     (message "Archived %d past event(s)" (length events)))))
+  (save-excursion
+    (save-restriction
+      (widen)
+      (let* ((file (buffer-file-name))
+             (archive (org-find-olp (list org-archive-sibling-heading) t))
+             (events nil))
+        ;; Collect first, because refiling moves headlines around.
+        (org-map-entries
+         (lambda ()
+           (when-let* ((timestamp (my/org-event--timestamp))
+                       (_ (/= (point) archive))
+                       (_ (my/org-event--past-p timestamp)))
+             (push (cons (point-marker) timestamp) events)))
+         "LEVEL=1")
+        (pcase-dolist (`(,marker . ,timestamp) (reverse events))
+          (let* ((date (list (org-element-property :month-start timestamp)
+                             (org-element-property :day-start timestamp)
+                             (org-element-property :year-start timestamp)))
+                 (target (save-excursion
+                           (save-restriction
+                             (goto-char archive)
+                             (org-datetree-find-date-create date 'subtree-at-point)
+                             (point)))))
+            (goto-char marker)
+            (org-refile nil nil (list org-archive-sibling-heading file nil target))
+            (set-marker marker nil)))
+        (set-marker archive nil)
+        (message "Archived %d past event(s)" (length events))))))
 
 (defun my/org-event--sort-key ()
   "Return the sort key of the top-level headline at point.
@@ -392,14 +394,15 @@ timestamp sort just before it, after all dated events."
   "Sort top-level events by timestamp.
 `org-archive-sibling-heading' is kept last."
   (interactive)
-  (org-with-wide-buffer
-   ;; Sort the whole buffer as a region, so that it works regardless of
-   ;; where point is and whether the buffer starts with a headline.
-   (save-mark-and-excursion
-     (let* ((transient-mark-mode t))
-       (goto-char (point-min))
-       (set-mark (point-max))
-       (org-sort-entries nil ?f #'my/org-event--sort-key #'<)))))
+  ;; Sort the whole buffer as a region, so that it works regardless of
+  ;; where point is and whether the buffer starts with a headline.
+  (save-mark-and-excursion
+    (save-restriction
+      (widen)
+      (let* ((transient-mark-mode t))
+        (goto-char (point-min))
+        (set-mark (point-max))
+        (org-sort-entries nil ?f #'my/org-event--sort-key #'<)))))
 
 ;;;; Latex
 (setq
