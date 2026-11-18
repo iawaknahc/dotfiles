@@ -25,7 +25,7 @@ npm-install:
 setup: clean generate-emmyrc-json npm-install
 
 # Run all checkers. Pyright and Basedpyright are not run because they are not turned on in Neovim.
-check: harper codebook codespell test elisp-checkdoc shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty tsc-check
+check: harper codebook codespell test elisp-checkdoc emacs-byte-compile shellcheck stylua-check ruff-check shfmt-check ruff-format-check nufmt-check pyrefly ty tsc-check
 
 # Run checker `elisp-checkdoc`
 elisp-checkdoc:
@@ -136,6 +136,17 @@ emacs-test:
       --directory modules/homeManager/emacs/emacs.d/user-lisp \
       $(fd --type file --glob '*-tests.el' modules/homeManager/emacs/emacs.d/test | sort | sed 's/^/--load /') \
       --funcall ert-run-tests-batch-and-exit
+
+# Each file is byte-compile in isolation, so previous requires will not affect the compilation.
+# Run Emacs byte-compile.
+emacs-byte-compile:
+    find ./modules/homeManager/emacs/emacs.d/lisp ./modules/homeManager/emacs/emacs.d/user-lisp -type f -name '*.el' \
+      | xargs -n1 -P {{num_cpus()}} emacs --batch \
+          --directory ./modules/homeManager/emacs/emacs.d/lisp \
+          --directory ./modules/homeManager/emacs/emacs.d/user-lisp \
+          --eval '(setq byte-compile-dest-file-function (lambda (_) (make-temp-file "emacs-byte-compile-")))' \
+          --eval '(setq byte-compile-error-on-warn t)' \
+          --funcall batch-byte-compile
 
 # Generate `./modules/homeManager/neovim/config/nvim/.emmyrc.json`
 generate-emmyrc-json:
