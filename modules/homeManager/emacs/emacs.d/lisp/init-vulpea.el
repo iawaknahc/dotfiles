@@ -189,7 +189,7 @@ The region must be a JSON object with the following properties
 - url
 
 The URL must be a Google Map place URL, in this format
-'https://www.google.com/maps/place/TITLE/@LATITUDE,LONGITUDE,ZOOMz/...'."
+\"https://www.google.com/maps/place/TITLE/@LATITUDE,LONGITUDE,ZOOMz/...\"."
   (interactive)
   (unless (region-active-p)
     (user-error "This command must work on an active region"))

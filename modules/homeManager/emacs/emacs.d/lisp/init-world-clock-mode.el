@@ -117,7 +117,7 @@ Public holidays are not considered."
   "The time being displayed in the buffer.
 
 It is number of seconds since the UNIX epoch.
-In other words, the return value of (time-convert TIME 'integer).")
+In other words, the return value of (time-convert TIME integer).")
 
 (defvar my/world-clock--timezones nil
   "A list of plists representing a timezone.

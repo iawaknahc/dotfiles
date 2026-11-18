@@ -107,10 +107,10 @@ FILES is prompted and the resulting string will be split at spaces.
 Each component is treated as a Ripgrep type.
 If the component is prefixed with !,
 then it will be passed as --type-not COMPONENT.
-For example, suppose FILES is 'json yaml',
-it will be translated to '--type json --type yaml'.
-For example, suppose FILES is '!lua',
-it will be translated to '--type-not lua'."
+For example, suppose FILES is \"json yaml\",
+it will be translated to \"--type json --type yaml\".
+For example, suppose FILES is \"!lua\",
+it will be translated to \"--type-not lua\"."
   (interactive
    (let* ((proj (project-current t))
           (proj-root (project-root proj))
