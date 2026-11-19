@@ -44,21 +44,6 @@ let
         python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
           --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
           --family-suffix RealMono \
-          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Light.ttf \
-          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Light.ttf
-        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
-          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
-          --family-suffix RealMono \
-          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Regular.ttf \
-          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Regular.ttf
-        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
-          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
-          --family-suffix RealMono \
-          ${pkgs.lxgw-wenkai-tc}/share/fonts/truetype/LXGWWenKaiMonoTC-Medium.ttf \
-          $out/share/fonts/truetype/LXGWWenKaiMonoTCRealMono-Medium.ttf
-        python ${./my-scripts/bin/font-utils.py} patch-cjk-font \
-          --reference ${pkgs.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNL-Regular.ttf \
-          --family-suffix RealMono \
           ${pkgs.d2coding}/share/fonts/truetype/D2Coding-Ver1.4.0-20261003-all.ttc \
           $out/share/fonts/truetype/D2CodingRealMono-Ver1.4.0-20261003-all.ttc
       '';
@@ -92,9 +77,6 @@ in
     julia-mono
     # This is a patched font with mahjong tile glyphs.
     gl-mahjongtile-clr
-    # This font is monospace and has mahjong tiles coverage.
-    # https://github.com/lxgw/lxgwwenkaitc
-    lxgw-wenkai-tc
     # This font has very high CJK coverage.
     # https://kamichikoichi.github.io/jigmo/
     jigmo
