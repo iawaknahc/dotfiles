@@ -482,6 +482,7 @@ tabstop
 tailwindcss
 taplo
 tempel
+terminfo
 terpri
 thingatpt
 thisweek

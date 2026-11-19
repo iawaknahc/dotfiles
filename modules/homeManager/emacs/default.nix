@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  ghostel = pkgs.emacsPackages.manualPackages.ghostel;
+in
 {
   assertions = [
     {
@@ -16,6 +19,23 @@
     # fswatch is required by vulpea
     fswatch
   ];
+
+  # Official shell integration snippets
+  # See https://dakra.github.io/ghostel/#shell-integration
+  # The modification is changing from referencing EMACS_GHOSTEL_PATH to Nix store path.
+  # We have to do this because Nushell expects to have a parse-time constant path.
+  programs.bash.initExtra = ''
+    [[ "''${INSIDE_EMACS%%,*}" = 'ghostel' ]] && source "${ghostel}/share/emacs/site-lisp/elpa/ghostel-${ghostel.version}/etc/shell/ghostel.bash"
+  '';
+  programs.zsh.initContent = ''
+    [[ "''${''${INSIDE_EMACS-}%%,*}" = 'ghostel' ]] && source "${ghostel}/share/emacs/site-lisp/elpa/ghostel-${ghostel.version}/etc/shell/ghostel.zsh"
+  '';
+  programs.fish.interactiveShellInit = ''
+    string match -qr '^ghostel(,|$)' -- "$INSIDE_EMACS"; and source "${ghostel}/share/emacs/site-lisp/elpa/ghostel-${ghostel.version}/etc/shell/ghostel.fish"
+  '';
+  programs.nushell.extraConfig = ''
+    source "${ghostel}/share/emacs/site-lisp/elpa/ghostel-${ghostel.version}/etc/shell/ghostel.nu"
+  '';
 
   programs.emacs.enable = true;
   programs.emacs.package =

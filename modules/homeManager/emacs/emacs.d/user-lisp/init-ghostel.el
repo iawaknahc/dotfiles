@@ -104,7 +104,21 @@ The commands are `my/ghostel-select-next-output' and
  ;; See https://github.com/fish-shell/fish-shell/blob/4.9.3/share/functions/fish_title.fish#L1
  ghostel-buffer-name-function #'ghostel-buffer-name-by-title
  ;; Just show the buffer name.
- ghostel-buffer-identification-format "%b")
+ ghostel-buffer-identification-format "%b"
+ ;; We do shell integration manually in Nix.
+ ;; See ../../default.nix
+ ghostel-shell-integration nil
+ ;; When `ghostel-tramp-shell-integration' is non-nil,
+ ;; the terminfo will be installed in the home directory of the remote host.
+ ;; Since ghostel 0.60.0, the shell integration script will be pushed to ~/.local/share/ghostel
+ ;; on the remote host, and be sourced in the remote shell.
+ ;; See https://github.com/dakra/ghostel/blob/v0.60.0/CHANGELOG.md#0600--2026-10-29
+ ghostel-tramp-shell-integration t
+ ;; Set GHOSTEL_SSH_INSTALL_TERMINFO to 1
+ ;; When GHOSTEL_SSH_INSTALL_TERMINFO is 1, ssh is shadowed by a shell function
+ ;; in the shell integration script.
+ ;; For example, see https://github.com/dakra/ghostel/blob/v0.59.0/etc/shell/ghostel.fish#L77
+ ghostel-ssh-install-terminfo t)
 
 (provide 'init-ghostel)
 ;;; init-ghostel.el ends here
