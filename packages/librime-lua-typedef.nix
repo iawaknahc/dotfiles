@@ -12,7 +12,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-zEgTdBf8Qjd++kaWkPY+2FEOgPYufspNQPFG52QZkUo=";
   };
   installPhase = ''
-    mkdir -p $out/share/librime-lua
-    cp $src/contrib/librime.lua $out/share/librime-lua/librime.lua
+    runHook preInstall
+    install -Dm644 -t $out/share/librime-lua/ \
+      ./contrib/librime.lua
+    runHook postInstall
   '';
 }

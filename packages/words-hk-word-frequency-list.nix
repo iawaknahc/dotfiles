@@ -27,8 +27,8 @@ stdenvNoCC.mkDerivation {
   '';
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/words-hk-word-frequency-list
-    cp ./words-hk-word-frequency-list.csv $out/share/words-hk-word-frequency-list/
+    install -Dm644 -t $out/share/words-hk-word-frequency-list/ \
+      ./words-hk-word-frequency-list.csv
     runHook postInstall
   '';
 }

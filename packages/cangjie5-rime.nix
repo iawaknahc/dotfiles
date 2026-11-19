@@ -24,8 +24,7 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/cangjie5-rime
-    find . -name '*.yaml' -exec cp {} $out/share/cangjie5-rime/ \;
+    find . -name '*.yaml' -exec install -Dm644 -t $out/share/cangjie5-rime/ {} +
     runHook postInstall
   '';
 }

@@ -11,7 +11,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-OIDiWxyRrAL3/g/W1WN63sF0lYjvQGqo04w42ywtQF8=";
   };
   installPhase = ''
-    mkdir -p $out/share/unicode/${version}/ucdxml
-    cp ucd.nounihan.flat.xml $out/share/unicode/${version}/ucdxml
+    runHook preInstall
+    install -Dm644 -t $out/share/unicode/${version}/ucdxml/ \
+      ./ucd.nounihan.flat.xml
+    runHook postInstall
   '';
 }

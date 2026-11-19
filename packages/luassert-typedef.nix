@@ -12,7 +12,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-p8ohFmag2WKzDG7avgmw7qr9yA5Q/F2vhXakr3WHZUk=";
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/luassert-typedef
-    cp -r $src/library/. $out/share/luassert-typedef/
+    cp --recursive --no-target-directory ./library/. $out/share/luassert-typedef/
+    runHook postInstall
   '';
 }

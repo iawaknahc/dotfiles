@@ -12,7 +12,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-dOwHk+nykmHCcwXZLgph7ucLmSwK3CUoBLg3zmdrqtY=";
   };
   installPhase = ''
-    mkdir -p $out/share/rime-cangjie
-    cp $src/*.dict.yaml $src/*.schema.yaml $out/share/rime-cangjie
+    runHook preInstall
+    install -Dm644 -t $out/share/rime-cangjie/ \
+      ./*.dict.yaml \
+      ./*.schema.yaml
+    runHook postInstall
   '';
 }

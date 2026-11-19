@@ -12,7 +12,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-A8YgMXtKnd9nSsRClkfz8cUbKHIUTRN2vudge6EfSgU=";
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/busted-typedef
-    cp -r $src/library/. $out/share/busted-typedef/
+    cp --recursive --no-target-directory ./library/. $out/share/busted-typedef/
+    runHook postInstall
   '';
 }

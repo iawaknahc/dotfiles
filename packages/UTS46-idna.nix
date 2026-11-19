@@ -23,8 +23,9 @@ symlinkJoin rec {
       hash = "sha256-2Zy6myxMtBj2jPouQ0R82/8b/YtkIJq47sg/OxMdKE0=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/idna
-      cp $src $out/share/unicode/${version}/idna/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/idna/${pname}
+      runHook postInstall
     '';
   };
 
@@ -43,8 +44,9 @@ symlinkJoin rec {
       hash = "sha256-oDses4AyJoxpZAaoPwly1qgVrNLI1BUdQuwP2nD/ztE=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/idna
-      cp $src $out/share/unicode/${version}/idna/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/idna/${pname}
+      runHook postInstall
     '';
   };
 
@@ -63,8 +65,9 @@ symlinkJoin rec {
       hash = "sha256-Aja3XFsg39hXs7XPdVCYh5WdarANbHvam33D31GMH94=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/idna
-      cp $src $out/share/unicode/${version}/idna/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/idna/${pname}
+      runHook postInstall
     '';
   };
 

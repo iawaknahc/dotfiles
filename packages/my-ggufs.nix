@@ -22,8 +22,9 @@ let
           hash = "sha256-PyJweQA63SURQ35bHpSBLjYzhSJb9qm0ewBUpyvIsB4=";
         };
         installPhase = ''
-          mkdir -p $out/${outDir}
-          cp -R $src $out/${outDir}/${name}
+          runHook preInstall
+          install -Dm644 $src $out/${outDir}/${name}
+          runHook postInstall
         '';
       };
       mmproj = stdenvNoCC.mkDerivation rec {
@@ -40,8 +41,9 @@ let
         };
 
         installPhase = ''
-          mkdir -p $out/${outDir}
-          cp -R $src $out/${outDir}/${name}
+          runHook preInstall
+          install -Dm644 $src $out/${outDir}/${name}
+          runHook postInstall
         '';
       };
       pi = {

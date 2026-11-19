@@ -12,7 +12,9 @@ stdenv.mkDerivation {
     hash = "sha256-LeMsmm/au7GbnETVAUNNABanjU1byXpYbzWG/5nT4sM=";
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/Spoons
-    cp -R $src/Source/EmmyLua.spoon/. $out/share/Spoons/EmmyLua.spoon
+    cp --recursive --no-target-directory ./Source/EmmyLua.spoon/. $out/share/Spoons/EmmyLua.spoon/
+    runHook postInstall
   '';
 }

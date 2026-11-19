@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
-    cp -R ./Workflow/. $out/
+    cp --recursive --no-target-directory ./Workflow/. $out/
+    runHook postInstall
   '';
 }

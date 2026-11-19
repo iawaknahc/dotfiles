@@ -21,8 +21,9 @@ symlinkJoin rec {
       hash = "sha256-4GKuMXH7QGMsKPcRZZcUTr8C/NOanWfPCopGpYtSYQM=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/linkification
-      cp $src $out/share/unicode/${version}/linkification/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/linkification/${pname}
+      runHook postInstall
     '';
   };
 
@@ -35,8 +36,9 @@ symlinkJoin rec {
       hash = "sha256-nzkkC/jidFU3t7pJC3p43fD9xb2szDomwJilK0tdjv4=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/linkification
-      cp $src $out/share/unicode/${version}/linkification/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/linkification/${pname}
+      runHook postInstall
     '';
   };
 
@@ -49,8 +51,9 @@ symlinkJoin rec {
       hash = "sha256-q51OC+pEdkRavDYv8dreEv5YsF5YXWg1rHZDQIY99EY=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/linkification
-      cp $src $out/share/unicode/${version}/linkification/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/linkification/${pname}
+      runHook postInstall
     '';
   };
 
@@ -63,8 +66,9 @@ symlinkJoin rec {
       hash = "sha256-/lV0zHdiqm/Yc0TXu+j6y2RLlxGyG6a7DOn6KA1SgBM=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/linkification
-      cp $src $out/share/unicode/${version}/linkification/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/linkification/${pname}
+      runHook postInstall
     '';
   };
 
@@ -77,8 +81,9 @@ symlinkJoin rec {
       hash = "sha256-gVFQQC+vEfnCxLaSwIoe1hM7/ShvDenKQcXUagCawKs=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/linkification
-      cp $src $out/share/unicode/${version}/linkification/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/linkification/${pname}
+      runHook postInstall
     '';
   };
 

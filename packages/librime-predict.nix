@@ -18,15 +18,15 @@ stdenvNoCC.mkDerivation {
     printf 'install(TARGETS build_predict DESTINATION ''${BIN_INSTALL_DIR})\n' >> ./tools/CMakeLists.txt
   '';
 
-  # This package does not built itself.
+  # This package does not build itself.
   # This package is supposed to be built along with librime.
   # So the only thing to do in install phase is to copy the source files.
-  # This handling is taken from the existing packaged librime plug-in librime-octagram.
+  # The idea of copying the source files and letting librime build it is taken from librime-octagram.
   # See https://github.com/NixOS/nixpkgs/blob/nixos-26.05/pkgs/by-name/li/librime-octagram/package.nix#L19
   installPhase = ''
     runHook preInstall
     mkdir $out
-    cp --archive --verbose * $out
+    cp --recursive --no-target-directory ./. $out/
     runHook postInstall
   '';
 }

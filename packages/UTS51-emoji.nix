@@ -23,8 +23,9 @@ symlinkJoin rec {
       hash = "sha256-GCPc5x892csK0Zdnl7ruT/vcGQl1b0OvjOTFf3MoQ6Q=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/emoji
-      cp $src $out/share/unicode/${version}/emoji/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/emoji/${pname}
+      runHook postInstall
     '';
   };
 
@@ -43,8 +44,9 @@ symlinkJoin rec {
       hash = "sha256-jzc1zaH5KnedeK9nz4YGa7HwcUPcIvKsKTlNm8V6sho=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/emoji
-      cp $src $out/share/unicode/${version}/emoji/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/emoji/${pname}
+      runHook postInstall
     '';
   };
 
@@ -63,8 +65,9 @@ symlinkJoin rec {
       hash = "sha256-9htSE734Wld0Gp+QPLONDzmj0Tvm/0rKOzmFfoWakZE=";
     };
     installPhase = ''
-      mkdir -p $out/share/unicode/${version}/emoji
-      cp $src $out/share/unicode/${version}/emoji/${pname}
+      runHook preInstall
+      install -Dm644 $src $out/share/unicode/${version}/emoji/${pname}
+      runHook postInstall
     '';
   };
 

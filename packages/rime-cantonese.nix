@@ -12,7 +12,11 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-ctyYZQVCd9Sc7oqPmP4lO1Q0TYDQILqt/BRloaEWjPg=";
   };
   installPhase = ''
-    mkdir -p $out/share/rime-cantonese
-    cp $src/*.dict.yaml $src/*.schema.yaml $src/essay-cantonese.txt $out/share/rime-cantonese
+    runHook preInstall
+    install -Dm644 -t $out/share/rime-cantonese/ \
+      ./*.dict.yaml \
+      ./*.schema.yaml \
+      ./essay-cantonese.txt
+    runHook postInstall
   '';
 }

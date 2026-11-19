@@ -11,7 +11,9 @@ stdenvNoCC.mkDerivation rec {
     stripRoot = false;
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/unicode/${version}/ucd
-    cp -R $src/. $out/share/unicode/${version}/ucd/
+    cp --recursive --no-target-directory ./. $out/share/unicode/${version}/ucd/
+    runHook postInstall
   '';
 }

@@ -11,7 +11,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-t9YGO7dKGlXZ0TeaY3VZvYzLsY+0LRvY9VXG8Nd6fAc=";
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/cldr-json/${version}
-    mv cldr-* $out/share/cldr-json/${version}/
+    cp --recursive --target-directory $out/share/cldr-json/${version}/ cldr-*
+    runHook postInstall
   '';
 }
