@@ -11,6 +11,7 @@ codebookignore
 currencies.py
 flake.lock
 font-utils.py
+gl-mahjongtile-clr.py
 harperignore
 init-calc.el
 init-font.el

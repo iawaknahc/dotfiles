@@ -41,6 +41,8 @@ let
 
   emacs-ecard = { callPackage }: callPackage ../../packages/emacs-ecard.nix { };
 
+  gl-mahjongtile-clr = { callPackage }: callPackage ../../packages/gl-mahjongtile-clr.nix { };
+
   firefox-addon-inject-jyutping =
     { callPackage, buildFirefoxXpiAddon }:
     callPackage ../../packages/firefox-addon-inject-jyutping.nix { inherit buildFirefoxXpiAddon; };
@@ -96,6 +98,8 @@ in
         rassumfrassum = rassumfrassum { callPackage = pkgs.python3Packages.callPackage; };
 
         emacs-ecard = emacs-ecard { callPackage = pkgs.emacsPackages.callPackage; };
+
+        gl-mahjongtile-clr = gl-mahjongtile-clr { callPackage = pkgs.callPackage; };
 
         firefox-addon-inject-jyutping = firefox-addon-inject-jyutping {
           inherit buildFirefoxXpiAddon;
@@ -241,6 +245,8 @@ in
         };
 
         firefox-addon-inject-jyutping = config.packages.firefox-addon-inject-jyutping;
+
+        gl-mahjongtile-clr = config.packages.gl-mahjongtile-clr;
       }
     );
 }

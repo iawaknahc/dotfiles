@@ -94,7 +94,7 @@ Last updated for Unicode 18.0.0")
        (jetbrains-mono (font-spec :family "JetBrains Mono NL"))
        (noto-sans-mono-cjk-hk (font-spec :family "Noto Sans Mono CJK HK RealMono"))
        (julia-mono (font-spec :family "JuliaMono"))
-       (lxgw-wenkai-mono-tc (font-spec :family "LXGW WenKai Mono TC RealMono"))
+       (gl-mahjongtile-clr-full-width (font-spec :family "GL-MahjongTile-Clr FullWidth"))
        (jigmo1 (font-spec :family "Jigmo RealMono"))
        (jigmo2 (font-spec :family "Jigmo2 RealMono"))
        (jigmo3 (font-spec :family "Jigmo3 RealMono"))
@@ -123,7 +123,7 @@ Last updated for Unicode 18.0.0")
   ;; displayed as an emoji even the text-style variant selector is after the codepoint.
   ;; However, if U+1F004 is classified as a `mahjong-tile' in the first place,
   ;; The codepoint sequence U+1F004 U+FE0F (emoji-style) will be displayed as an emoji.
-  (set-fontset-font "fontset-default" '(#x1F000 . #x1F02F)      lxgw-wenkai-mono-tc    for-all-frames 'prepend))
+  (set-fontset-font "fontset-default" '(#x1F000 . #x1F02F) gl-mahjongtile-clr-full-width for-all-frames 'prepend))
 (my/configure-nerd-font "fontset-default")
 (setq face-font-rescale-alist
       '(("-cdac$" . 1.3)

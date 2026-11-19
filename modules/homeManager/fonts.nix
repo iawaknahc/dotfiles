@@ -90,6 +90,8 @@ in
 
     # JuliaMono contains a lot of glyphs for symbols.
     julia-mono
+    # This is a patched font with mahjong tile glyphs.
+    gl-mahjongtile-clr
     # This font is monospace and has mahjong tiles coverage.
     # https://github.com/lxgw/lxgwwenkaitc
     lxgw-wenkai-tc
