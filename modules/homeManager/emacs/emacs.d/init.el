@@ -169,6 +169,9 @@
 ;; Configure vulpea
 (require 'init-vulpea)
 
+;; Configure Denote
+(require 'init-denote)
+
 ;; Configure Magit
 (require 'init-magit)
 

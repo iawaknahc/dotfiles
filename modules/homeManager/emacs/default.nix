@@ -109,6 +109,7 @@ in
     corfu = self.elpaPackages.corfu;
     # dash is a dependency of vulpea.
     dash = self.elpaPackages.dash;
+    denote = self.elpaPackages.denote;
     eglot = self.elpaPackages.eglot;
     eldoc = self.elpaPackages.eldoc;
     embark = self.elpaPackages.embark;
@@ -246,6 +247,9 @@ in
       # Notes
       vulpea
       vulpea-ui
+
+      # Organizing files
+      denote
 
       # HTTP server
       simple-httpd
