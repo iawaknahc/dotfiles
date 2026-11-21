@@ -22,7 +22,10 @@
  ;; Use the Elisp implementation of ls.
  ;; Note that it is used both locally and for TRAMP.
  ls-lisp-use-insert-directory-program nil
- ls-lisp-format-time-list '("%Y-%m-%d %H:%M" "%Y-%m-%d %H:%M")
+ ;; If there is a space in the time, `dired-hide-details-mode'
+ ;; will consider the time as 2 columns.
+ ;; Thus, we use "T" instead of a space.
+ ls-lisp-format-time-list '("%Y-%m-%dT%H:%M" "%Y-%m-%dT%H:%M")
  ;; Always use `ls-lisp-format-time-list'.
  ls-lisp-use-localized-time-format t)
 (require 'ls-lisp)
@@ -43,14 +46,17 @@
  dired-hide-details-hide-information-lines t
  ;; When -l is given, according to POSIX,
  ;; 7 columns are generated.
- ;; Column 1 is file mode (permissions).
- ;; Column 2 is number of links.
- ;; Column 3 is owner.
- ;; Column 4 is group.
- ;; Column 5 is size.
- ;; Column 6 is date and time.
- ;; Column 7 is path name.
- dired-hide-details-preserved-columns '(5 6 7)
+ ;; - Column 1 is file mode (permissions).
+ ;; - Column 2 is number of links.
+ ;; - Column 3 is owner.
+ ;; - Column 4 is group.
+ ;; - Column 5 is size.
+ ;; - Column 6 is time.
+ ;;   This column can be customized by `ls-lisp-format-time-list'.
+ ;;   If there is a space in the format string, `dired-hide-details-mode'
+ ;;   will consider the time as 2 columns.
+ ;; - Column 7 is path name.
+ dired-hide-details-preserved-columns '(7)
  ;; Never omit files by extensions.
  dired-omit-extensions nil
  ;; Only omit hidden files.
