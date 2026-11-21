@@ -11,13 +11,27 @@
 (defvar dired-mode-map)
 (defvar dired-omit-extensions)
 (defvar dired-omit-files)
+(defvar ls-lisp-format-time-list)
+(defvar ls-lisp-use-insert-directory-program)
+(defvar ls-lisp-use-localized-time-format)
 (declare-function dired-create-empty-file "dired-aux")
 (declare-function dired-hide-details-mode "dired")
 (declare-function dired-omit-mode "dired-x")
 
 (setq
- insert-directory-program "gls"
- dired-listing-switches "--all --format=long --human-readable --group-directories-first"
+ ;; Use the Elisp implementation of ls.
+ ;; Note that it is used both locally and for TRAMP.
+ ls-lisp-use-insert-directory-program nil
+ ls-lisp-format-time-list '("%Y-%m-%d %H:%M" "%Y-%m-%d %H:%M")
+ ;; Always use `ls-lisp-format-time-list'.
+ ls-lisp-use-localized-time-format t)
+(require 'ls-lisp)
+
+(setq
+ ;; Specify the switches supported by ls-lisp.
+ ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/ls-lisp.el#L879
+ dired-listing-switches "-alF --human-readable --group-directories-first"
+
  ;; Stop Dired from keeping too many buffers.
  dired-kill-when-opening-new-dired-buffer t
  ;; Revert the buffer when the buffer is revisited.
