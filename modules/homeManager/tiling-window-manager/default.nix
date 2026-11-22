@@ -1,58 +1,20 @@
 {
-  pkgs,
-  config,
+  lib,
   ...
 }:
 let
-  item_height = 44;
   border_width = 2;
-  sketchybar_spacing = 8;
-  bar_height = item_height + sketchybar_spacing * 2;
+  spacing = 8;
   # When 2 windows are placed adjacent, the visual spacing should be
   # border width of window A + spacing + border width of window B.
-  window_spacing = sketchybar_spacing + border_width * 2;
-  bar_y_offset = 4;
-
-  lua = pkgs.lua5_5.withPackages (luaPackages: [
-    luaPackages.lua-cjson
-    pkgs.sbarlua
-  ]);
+  window_spacing = spacing + border_width * 2;
 in
 {
-  assertions = [
-    {
-      assertion = lua.luaversion == "5.5";
-      message = "It is expected that sbarlua is a Lua ${lua.luaversion} module";
-    }
-  ];
-
   services.jankyborders.enable = true;
   services.jankyborders.settings = {
     style = "round";
     # Apparently, this width is the sum of all 4 borders.
     width = border_width * 4.0;
-  };
-
-  home.packages = with pkgs; [ sketchybar ];
-  xdg.configFile."sketchybar/sketchybarrc" = {
-    executable = true;
-    text = ''
-      #!${lua}/bin/lua
-
-      local aerospace = "${config.home.profileDirectory}/bin/aerospace";
-
-      ${builtins.readFile ./config/sketchybar/sketchybarrc.lua}
-    '';
-  };
-  launchd.agents.sketchybar = {
-    enable = true;
-    config = {
-      Program = "${config.home.profileDirectory}/bin/sketchybar";
-      KeepAlive = true;
-      RunAtLoad = true;
-      StandardOutPath = "/tmp/sketchybar.log";
-      StandardErrorPath = "/tmp/sketchybar.err.log";
-    };
   };
 
   programs.aerospace.enable = true;
@@ -79,21 +41,11 @@ in
     default-root-container-orientation = "auto";
 
     on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
-    exec-on-workspace-change = [
-      "/bin/sh"
-      "-c"
-      "${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_workspace_change AEROSPACE_FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE AEROSPACE_PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
-    ];
 
     key-mapping.preset = "qwerty";
 
     # Make all windows tiled by default.
     on-window-detected = [
-      {
-        "if" = "true";
-        run = "exec-and-forget ${pkgs.sketchybar}/bin/sketchybar --trigger aerospace_on_window_detected";
-        check-further-callbacks = true;
-      }
       {
         "if" = "test %{app-bundle-id} = org.gnu.Emacs && test %{window-title} = mylauncher";
         run = [ "layout floating" ];
@@ -109,7 +61,7 @@ in
       outer = {
         top = window_spacing;
         right = window_spacing;
-        bottom = window_spacing + bar_height + bar_y_offset;
+        bottom = window_spacing;
         left = window_spacing;
       };
     };
@@ -132,6 +84,10 @@ in
       alt-f = "fullscreen";
 
       alt-shift-f = "layout floating tiling";
+
+      alt-m = lib.strings.trim ''
+        exec-and-forget osascript -e 'tell application "System Events" to tell process "AeroSpace" to click menu bar item 1 of menu bar 2'
+      '';
 
       alt-minus = "resize smart -50";
       alt-equal = "resize smart +50";
