@@ -27,9 +27,14 @@ POINT is ignored."
  ;; It is known that gnus will modify completion-category-defaults to add (email (styles substring partial-completion)).
  ;; But it is not a big deal because I do not complete email, at least for now.
  ;;
- ;; For file, Orderless cannot be used because we need to consider the compatibility with TRAMP.
+ ;; In the readme of Orderless, it is explicitly stated that orderless cannot be used with file.
+ ;; So we use basic.
+ ;; Note that partial-completion must not be used.
+ ;; In a remote directory with thousands of files, partial-completion will cause TRAMP to use
+ ;; too much memory.
+ ;; There will be many garbage collection cycles between keystrokes, causing a noticeable lag.
  completion-category-defaults
- '((file (styles partial-completion))
+ '((file (styles basic))
    (my/launcher-item (styles my/no-filter)))
  ;; Set the separators to be one or more SPC, underscore, or hyphen.
  ;; The default is one or more SPC, which does not work well for Corfu with auto-completion.
