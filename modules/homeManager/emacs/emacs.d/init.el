@@ -117,6 +117,7 @@
 (require 'init-goto-address-mode)
 (require 'init-dabbrev)
 (require 'init-so-long-mode)
+(require 'init-menu-bar-mode)
 
 ;; Configure folding
 (require 'init-outline-minor-mode)
