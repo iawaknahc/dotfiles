@@ -33,7 +33,7 @@
 (setq
  ;; Specify the switches supported by ls-lisp.
  ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/ls-lisp.el#L879
- dired-listing-switches "-alF --human-readable --group-directories-first"
+ dired-listing-switches "--almost-all --classify --human-readable --group-directories-first"
 
  ;; Stop Dired from keeping too many buffers.
  dired-kill-when-opening-new-dired-buffer t
@@ -61,10 +61,6 @@
  dired-omit-extensions nil
  ;; Only omit hidden files.
  dired-omit-files (rx (|
-                       ;; The current directory
-                       (seq string-start "." string-end)
-                       ;; The parent directory
-                       (seq string-start ".." string-end)
                        ;; Hidden files
                        (seq string-start "." (+ not-newline) string-end))))
 
