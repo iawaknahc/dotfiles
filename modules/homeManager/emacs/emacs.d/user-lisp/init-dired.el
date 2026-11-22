@@ -14,6 +14,7 @@
 (defvar ls-lisp-format-time-list)
 (defvar ls-lisp-use-insert-directory-program)
 (defvar ls-lisp-use-localized-time-format)
+(declare-function dired-click-to-select-mode "dired")
 (declare-function dired-create-empty-file "dired-aux")
 (declare-function dired-hide-details-mode "dired")
 (declare-function dired-omit-mode "dired-x")
@@ -73,7 +74,11 @@
   ;; it follows naturally that ) is bound to `dired-omit-mode'.
   (keymap-set dired-mode-map ")" #'dired-omit-mode)
   (add-hook 'dired-mode-hook #'dired-omit-mode)
-  (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+  ;; When the file name is long, clicking it to split a window is just annoying.
+  ;; Use the official way to disable `dired-mouse-find-file-other-window',
+  ;; while making the mouse click still useful.
+  (add-hook 'dired-mode-hook #'dired-click-to-select-mode))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here
