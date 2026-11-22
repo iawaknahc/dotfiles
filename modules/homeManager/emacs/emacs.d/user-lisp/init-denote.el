@@ -28,6 +28,17 @@
  denote-known-keywords nil
  denote-infer-keywords t)
 
+;;;; Faces
+(with-eval-after-load 'denote
+  ;; The time is not very important.
+  (set-face-attribute 'denote-faces-hour nil :inherit 'denote-faces-time)
+  (set-face-attribute 'denote-faces-minute nil :inherit 'denote-faces-time)
+  (set-face-attribute 'denote-faces-second nil :inherit 'denote-faces-time)
+  (set-face-attribute 'denote-faces-time nil :inherit 'shadow)
+  ;; The face `denote-faces-delimiter' has a hard-coded gray color.
+  ;; Unset it and make it inherit from the face `shadow'.
+  (set-face-attribute 'denote-faces-delimiter nil :foreground 'unspecified :inherit 'shadow))
+
 ;;;; Hooks
 (add-hook 'dired-mode-hook #'denote-dired-mode)
 
