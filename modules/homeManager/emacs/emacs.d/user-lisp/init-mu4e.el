@@ -83,8 +83,6 @@
  ;; 2006-01-02
  mu4e-headers-date-format "%F"
  mu4e-headers-time-format "%T"
- ;; Do not move point after mark
- mu4e-headers-advance-after-mark nil
  mu4e-headers-fields
  `((:maildir-first-component . 30)
    (:datetime-local . ,(length "2006-01-02 03:04:05"))
