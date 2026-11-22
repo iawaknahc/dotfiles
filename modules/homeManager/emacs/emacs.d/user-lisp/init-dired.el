@@ -75,15 +75,5 @@
   (add-hook 'dired-mode-hook #'dired-omit-mode)
   (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
-(defun my/dired ()
-  "Open Dired."
-  (interactive)
-  (tab-new)
-  (dired "~")
-  (split-window-right)
-  (other-window 1)
-  (dired (format "~/Volumes/nas_samba/%s" user-login-name)))
-(keymap-global-set "C-c d" #'my/dired)
-
 (provide 'init-dired)
 ;;; init-dired.el ends here

@@ -119,6 +119,7 @@ dotimes
 dtstart
 dtz
 duckdb
+dups
 dvisvgm
 dwim
 ecard
@@ -320,6 +321,7 @@ multiclient
 mylauncher
 myvimrc
 nargs
+nas
 natively
 natnump
 nconc
@@ -456,6 +458,7 @@ shlvl
 showbreak
 signcolumn
 sketchybar
+sluggify
 smartcase
 softtabstop
 sourcekit
