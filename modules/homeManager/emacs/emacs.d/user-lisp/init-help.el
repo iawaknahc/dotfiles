@@ -4,13 +4,12 @@
 
 (defvar help-for-help-use-variable-pitch)
 
-(setq
- ;; Use monospace font in C-h C-h.
- help-for-help-use-variable-pitch nil
- ;; Reuse the same help window.
- help-window-keep-selected t
- ;; Always select the help window.
- help-window-select t)
+;; Use monospace font in C-h C-h.
+(setq help-for-help-use-variable-pitch nil)
+;; Reuse the same help window.
+(setq help-window-keep-selected t)
+;; Always select the help window.
+(setq help-window-select t)
 
 (provide 'init-help)
 ;;; init-help.el ends here

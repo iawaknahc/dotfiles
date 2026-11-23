@@ -5,63 +5,62 @@
 (defvar magit-commit-show-diff)
 (defvar org-agenda-window-setup)
 
-(setq
- ;; Set the base action.
- ;; The intention is to avoid splitting windows.
- ;; Sometimes it is unavoidable because packages have hard-coded '(inhibit-same-window . t).
- ;; In that case, we use `display-buffer-in-direction'
- display-buffer-base-action
- `((
-    ;; Reuse a window already showing the buffer.
-    display-buffer-reuse-window
-    ;; Reuse a window whose major mode is the same as that of the buffer about to being displayed.
-    display-buffer-reuse-mode-window
-    ;; Reuse the selected window
-    display-buffer-same-window
-    ;; Reuse a window which is not dedicated.
-    display-buffer-use-some-window
-    ;; As a last resort, make a new window on the right
-    display-buffer-in-direction) .
-    ;; in the selected frame
-    ((reusable-frames . the-selected-frame)
-     ;; Allow reusing the selected window
-     (inhibit-same-window . nil)
-     ;; Use the most recently used window
-     (some-window . mru)
-     ;; Make a window on the right
-     (direction . right)
-     ;; relative to `window-main-window'.
-     (window . main)))
+;; Set the base action.
+;; The intention is to avoid splitting windows.
+;; Sometimes it is unavoidable because packages have hard-coded '(inhibit-same-window . t).
+;; In that case, we use `display-buffer-in-direction'
+(setq display-buffer-base-action
+      `((
+         ;; Reuse a window already showing the buffer.
+         display-buffer-reuse-window
+         ;; Reuse a window whose major mode is the same as that of the buffer about to being displayed.
+         display-buffer-reuse-mode-window
+         ;; Reuse the selected window
+         display-buffer-same-window
+         ;; Reuse a window which is not dedicated.
+         display-buffer-use-some-window
+         ;; As a last resort, make a new window on the right
+         display-buffer-in-direction) .
+         ;; in the selected frame
+         ((reusable-frames . the-selected-frame)
+          ;; Allow reusing the selected window
+          (inhibit-same-window . nil)
+          ;; Use the most recently used window
+          (some-window . mru)
+          ;; Make a window on the right
+          (direction . right)
+          ;; relative to `window-main-window'.
+          (window . main))))
 
- ;; By default, `magit-commit-show-diff' is non-nil.
- ;; When commit, Magit first shows the commit buffer, followed by the diff buffer.
- ;; But `magit-commit-diff-inhibit-same-window' is nil by default, thus,
- ;; The diff buffer will hide the commit buffer, making the commit flow looks broken.
- ;; When we are committing, we expect the UI to be ready to accept commit message,
- ;; not viewing the diff.
- ;; On the other hand, we have enable the flag --verbose by default in git config.
- ;; The diff is already included in the commit buffer.
- magit-commit-show-diff nil
+;; By default, `magit-commit-show-diff' is non-nil.
+;; When commit, Magit first shows the commit buffer, followed by the diff buffer.
+;; But `magit-commit-diff-inhibit-same-window' is nil by default, thus,
+;; The diff buffer will hide the commit buffer, making the commit flow looks broken.
+;; When we are committing, we expect the UI to be ready to accept commit message,
+;; not viewing the diff.
+;; On the other hand, we have enable the flag --verbose by default in git config.
+;; The diff is already included in the commit buffer.
+(setq magit-commit-show-diff nil)
 
- ;; *Org Agenda*
- ;;
- ;; I used to set `org-agenda-window-setup' to other-tab,
- ;; but that would always create new tabs in the following case:
- ;; 1. Hit c in the agenda to open calendar
- ;; 2. Hit c in calendar to open agenda. This will create a new tab.
- ;; 3. Hit c in the agenda to open calendar
- ;; 4. Hit c in calendar to open agenda. This will create yet another tab.
- ;;
- ;; The default value is reorganize-frame, which shows at most 2 windows.
- ;; Setting to current-window will cause Org to use `pop-to-buffer-same-window'.
- ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3928
- ;;
- ;; Before displaying *Org Agenda*, *Agenda Commands* is displayed.
- ;; That buffer is hard-coded to be displayed with `org-display-buffer-split'.
- ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3132
- ;; And `org-display-buffer-split' uses `display-buffer-in-direction' internally.
- ;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-macs.el#L1846
- org-agenda-window-setup 'current-window)
+;; *Org Agenda*
+;;
+;; I used to set `org-agenda-window-setup' to other-tab,
+;; but that would always create new tabs in the following case:
+;; 1. Hit c in the agenda to open calendar
+;; 2. Hit c in calendar to open agenda. This will create a new tab.
+;; 3. Hit c in the agenda to open calendar
+;; 4. Hit c in calendar to open agenda. This will create yet another tab.
+;;
+;; The default value is reorganize-frame, which shows at most 2 windows.
+;; Setting to current-window will cause Org to use `pop-to-buffer-same-window'.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3928
+;;
+;; Before displaying *Org Agenda*, *Agenda Commands* is displayed.
+;; That buffer is hard-coded to be displayed with `org-display-buffer-split'.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-agenda.el#L3132
+;; And `org-display-buffer-split' uses `display-buffer-in-direction' internally.
+;; See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/org/org-macs.el#L1846
+(setq org-agenda-window-setup 'current-window)
 
 
 ;; Buffers that I prefer displaying in the bottom side window.

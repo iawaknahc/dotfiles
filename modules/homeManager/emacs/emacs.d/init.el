@@ -2,45 +2,46 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Security
-(setq
- ;; No directories are safe.
- safe-local-variable-directories nil
- ;; Disable dir-local variables in remote files.
- enable-remote-dir-locals nil
+;;;; Security
+;; No directories are safe.
+(setq safe-local-variable-directories nil)
+;; Disable dir-local variables in remote files.
+(setq enable-remote-dir-locals nil)
 
- ;; :safe means allow `safe-local-variable-values' and `enable-local-eval'.
- ;; If it is nil, then `enable-local-eval' is completely ignored.
- enable-local-variables :safe
+;; :safe means allow `safe-local-variable-values' and `enable-local-eval'.
+;; If it is nil, then `enable-local-eval' is completely ignored.
+(setq enable-local-variables :safe)
 
- ;; Allow `org-agenda-skip-archived-trees' to be set.
- ;; This enables a use case where we want to use :ARCHIVE: on a headline to
- ;; make S-TAB does not cycle on the headline.
- ;; But we still want the agenda view to treat it as not archived.
- safe-local-variable-values
- '((org-agenda-skip-archived-trees . nil)
-   (org-agenda-skip-archived-trees . t))
+;; Allow `org-agenda-skip-archived-trees' to be set.
+;; This enables a use case where we want to use :ARCHIVE: on a headline to
+;; make S-TAB does not cycle on the headline.
+;; But we still want the agenda view to treat it as not archived.
+(setq safe-local-variable-values
+      '((org-agenda-skip-archived-trees . nil)
+        (org-agenda-skip-archived-trees . t)))
 
- ;; Always allow `lexical-binding' and `read-symbol-shorthands'.
- ;; This is the default.
- permanently-enabled-local-variables '(lexical-binding read-symbol-shorthands)
+;; Always allow `lexical-binding' and `read-symbol-shorthands'.
+;; This is the default.
+(setq permanently-enabled-local-variables '(lexical-binding read-symbol-shorthands))
 
- ;; Unless allowed in `safe-local-eval-forms', ask first.
- enable-local-eval :x-ask-me-first
- ;; Allow starting Org in Columns View.
- safe-local-eval-forms '((org-columns))
+;; Unless allowed in `safe-local-eval-forms', ask first.
+(setq enable-local-eval :x-ask-me-first)
+;; Allow starting Org in Columns View.
+(setq safe-local-eval-forms '((org-columns)))
 
- ;; Trust only the code I wrote.
- ;; This affects the return value of `trusted-content-p'.
- ;; As far as I know, users are `elisp-flymake-byte-compile' and `elisp-completion-at-point'.
- ;; The expected result is that no macros will be expanded.
- ;; See https://eshelyaron.com/posts/2024-11-27-emacs-aritrary-code-execution-and-how-to-avoid-it.html
- trusted-content '("~/dotfiles/modules/homeManager/emacs/emacs.d/")
+;; Trust only the code I wrote.
+;; This affects the return value of `trusted-content-p'.
+;; As far as I know, users are `elisp-flymake-byte-compile' and `elisp-completion-at-point'.
+;; The expected result is that no macros will be expanded.
+;; See https://eshelyaron.com/posts/2024-11-27-emacs-aritrary-code-execution-and-how-to-avoid-it.html
+(setq trusted-content '("~/dotfiles/modules/homeManager/emacs/emacs.d/"))
 
- ;; Teach `elisp-flymake-byte-compile' on how to load my Elisp files.
- elisp-flymake-byte-compile-load-path
- '("./"
-   "~/dotfiles/modules/homeManager/emacs/emacs.d/user-lisp/"))
+;; Teach `elisp-flymake-byte-compile' on how to load my Elisp files.
+(setq elisp-flymake-byte-compile-load-path
+      '("./"
+        "~/dotfiles/modules/homeManager/emacs/emacs.d/user-lisp/"))
+
+;;;; Other configurations
 
 ;; When using the NS build on macOS, and
 ;; the application is launched by Spotlight or something similar,

@@ -2,16 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq
- ;; Customize the sample text so that it includes:
- ;; 1. All uppercase and lowercase English characters.
- ;; 2. All digits.
- ;; 3. A few CJK characters.
- ;; 4. An emoji.
- ;; 5. A Nerd Font symbol.
- list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 안녕하세요 😀 ♥ "
- ;; Use the default font if it has the glyph.
- use-default-font-for-symbols t)
+;; Customize the sample text so that it includes:
+;; 1. All uppercase and lowercase English characters.
+;; 2. All digits.
+;; 3. A few CJK characters.
+;; 4. An emoji.
+;; 5. A Nerd Font symbol.
+(setq list-faces-sample-text "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 你好世界 こんにちは 안녕하세요 😀 ♥ ")
+;; Use the default font if it has the glyph.
+(setq use-default-font-for-symbols t)
 
 (defconst my/unicode-korean-ranges
   '((#x1100 . #x11FF)     ; Hangul Jamo

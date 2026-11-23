@@ -5,9 +5,8 @@
 (defvar sh-shell-file)
 
 ;; Always use /bin/sh, instead of reading SHELL.
-(setq
- shell-file-name "/bin/sh"
- sh-shell-file "/bin/sh")
+(setq shell-file-name "/bin/sh")
+(setq sh-shell-file "/bin/sh")
 
 (provide 'init-shell)
 ;;; init-shell.el ends here

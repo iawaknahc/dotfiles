@@ -111,9 +111,8 @@ to return candidates."
   (when (derived-mode-p '(conf-mode prog-mode text-mode))
     (add-hook 'completion-at-point-functions #'my/capf -1 t)))
 
-(setq
- cape-file-directory #'my/resolve-directory-before-point
- cape-file-prefix '("/" "~/" "./" "../"))
+(setq cape-file-directory #'my/resolve-directory-before-point)
+(setq cape-file-prefix '("/" "~/" "./" "../"))
 
 (add-hook 'after-change-major-mode-hook #'my/cape-after-change-major-mode-hook)
 

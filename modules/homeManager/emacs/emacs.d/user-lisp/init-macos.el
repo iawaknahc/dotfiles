@@ -2,9 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq
- mac-command-modifier 'meta
- mac-right-command-modifier 'none)
+(setq mac-command-modifier 'meta)
+(setq mac-right-command-modifier 'none)
 
 (provide 'init-macos)
 ;;; init-macos.el ends here

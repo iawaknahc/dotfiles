@@ -17,24 +17,23 @@
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'text-mode-hook #'flymake-mode)
 
-(setq
- ;; Use margin instead of fringe.
- flymake-indicator-type 'margins
- ;; This variable is for flymake-margin-indicators-string.
- ;; It does not consider existing things in the margin.
- flymake-autoresize-margins nil
- ;; Use initials to represent levels.
- flymake-margin-indicators-string
- '((error "E" compilation-error)
-   (warning "W" compilation-warning)
-   (note "I" compilation-info))
- ;; Do not wrap around.
- flymake-wrap-around nil
- ;; Always show 3 counts.
- flymake-suppress-zero-counters nil
- ;; The end-of-line message will get wrapped, making the buffer
- ;; keep flickering during editing.
- flymake-show-diagnostics-at-end-of-line nil)
+;; Use margin instead of fringe.
+(setq flymake-indicator-type 'margins)
+;; This variable is for flymake-margin-indicators-string.
+;; It does not consider existing things in the margin.
+(setq flymake-autoresize-margins nil)
+;; Use initials to represent levels.
+(setq flymake-margin-indicators-string
+      '((error "E" compilation-error)
+        (warning "W" compilation-warning)
+        (note "I" compilation-info)))
+;; Do not wrap around.
+(setq flymake-wrap-around nil)
+;; Always show 3 counts.
+(setq flymake-suppress-zero-counters nil)
+;; The end-of-line message will get wrapped, making the buffer
+;; keep flickering during editing.
+(setq flymake-show-diagnostics-at-end-of-line nil)
 
 (defun my/flymake-diagnostic-text (diag &optional _ignored)
   "Override `flymake-diagnostic-text'.

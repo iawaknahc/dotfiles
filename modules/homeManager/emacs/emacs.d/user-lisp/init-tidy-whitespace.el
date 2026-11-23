@@ -2,11 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq
- ;; Fix newline as soon as the file is visited.
- mode-require-final-newline 'visit-save
- ;; Make `delete-trailing-whitespace' delete blank lines at the end of buffer.
- delete-trailing-lines t)
+;; Fix newline as soon as the file is visited.
+(setq mode-require-final-newline 'visit-save)
+;; Make `delete-trailing-whitespace' delete blank lines at the end of buffer.
+(setq delete-trailing-lines t)
 
 (defun my/delete-trailing-whitespace ()
   "Invoke `delete-trailing-whitespace' if buffer is not read-only.

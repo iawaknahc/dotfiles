@@ -12,9 +12,8 @@
 (add-hook
  'sh-base-mode-hook
  (lambda ()
-   (setq
-    indent-tabs-mode t
-    sh-basic-offset tab-width)))
+   (setq indent-tabs-mode t)
+   (setq sh-basic-offset tab-width)))
 
 (provide 'init-sh-mode)
 ;;; init-sh-mode.el ends here

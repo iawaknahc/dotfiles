@@ -41,45 +41,44 @@
 (defvar grep-use-null-filename-separator)
 (declare-function project-root "project")
 
-(setq
- ;; Do not ask to save buffers before search.
- grep-save-buffers nil
- ;; Suppress appending /dev/null to `grep-command'.
- grep-use-null-device nil
- ;; This corresponds to --null in `grep-command'.
- grep-use-null-filename-separator t
- ;; This corresponds to --color=ansi in `grep-command'.
- grep-highlight-matches 'always
- ;; Always quote for POSIX shell.
- ;; This is eventually passed as the optional argument to `shell-quote-argument'.
- grep-quoting-style t
- ;; Ripgrep uses --type, so the default aliases are not applicable.
- ;; Reset them to ni.
- grep-files-aliases nil
- ;; Ripgrep respects VC ignore file by default.
- grep-find-ignored-directories nil
- ;; This variable is unsupported for now.
- grep-find-ignored-files nil
+;; Do not ask to save buffers before search.
+(setq grep-save-buffers nil)
+;; Suppress appending /dev/null to `grep-command'.
+(setq grep-use-null-device nil)
+;; This corresponds to --null in `grep-command'.
+(setq grep-use-null-filename-separator t)
+;; This corresponds to --color=ansi in `grep-command'.
+(setq grep-highlight-matches 'always)
+;; Always quote for POSIX shell.
+;; This is eventually passed as the optional argument to `shell-quote-argument'.
+(setq grep-quoting-style t)
+;; Ripgrep uses --type, so the default aliases are not applicable.
+;; Reset them to ni.
+(setq grep-files-aliases nil)
+;; Ripgrep respects VC ignore file by default.
+(setq grep-find-ignored-directories nil)
+;; This variable is unsupported for now.
+(setq grep-find-ignored-files nil)
 
- ;; Also set `grep-program' to match `grep-command'.
- ;; `grep-program' is not actually used because `grep-command' is set.
- grep-program "rg"
+;; Also set `grep-program' to match `grep-command'.
+;; `grep-program' is not actually used because `grep-command' is set.
+(setq grep-program "rg")
 
- ;; `grep-template' is used by `lgrep'.
- ;; <C> is not included because we have inlined the options.
- ;;
- ;; <X> corresponds to `grep-find-ignored-files'.
- ;; It is not included because `grep-find-ignored-files' is unsupported.
- ;;
- ;; <N> is not included because `grep-use-null-device' is nil.
- ;; <R> is the answer of the first interactive prompt, which is the search pattern.
- ;;
- ;; <F> is the answer of the second interactive prompt, which are the type filters and paths.
- ;; `grep-read-files' is called with the first answer to derive the value.
- grep-template "rg --color=ansi --no-heading --with-filename --line-number --null --regexp <R> <F>"
+;; `grep-template' is used by `lgrep'.
+;; <C> is not included because we have inlined the options.
+;;
+;; <X> corresponds to `grep-find-ignored-files'.
+;; It is not included because `grep-find-ignored-files' is unsupported.
+;;
+;; <N> is not included because `grep-use-null-device' is nil.
+;; <R> is the answer of the first interactive prompt, which is the search pattern.
+;;
+;; <F> is the answer of the second interactive prompt, which are the type filters and paths.
+;; `grep-read-files' is called with the first answer to derive the value.
+(setq grep-template "rg --color=ansi --no-heading --with-filename --line-number --null --regexp <R> <F>")
 
- ;; `grep-command' is used by `grep'.
- grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
+;; `grep-command' is used by `grep'.
+(setq grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
 
 (defun my/lgrep-parse-files (files)
   "Implement the algorithm documented in `my/lgrep-override'.

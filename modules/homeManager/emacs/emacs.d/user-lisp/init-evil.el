@@ -40,46 +40,44 @@ Apply F with ARGS."
     (apply f args)))
 
 ;; Set the variables that does not have :set before loading evil-mode.
-(setq
- ;; The default state is emacs state.
- evil-default-state 'emacs
- ;; Never start with insert state.
- evil-insert-state-modes nil
- ;; Never start with motion state.
- evil-motion-state-modes nil
- ;; The default is emacs state already.
- evil-emacs-state-modes nil
- ;; Use `after-change-major-mode-hook' to start in normal state.
- evil-normal-state-modes nil
- evil-search-wrap nil
- evil-v$-excludes-newline t
- ;; C-x 2 is split-window-below
- evil-split-window-below t
- ;; C-x 3 is split-window-right
- evil-vsplit-window-right t
- ;; Make * and # search for the symbol at point.
- evil-symbol-word-search t)
+;; The default state is emacs state.
+(setq evil-default-state 'emacs)
+;; Never start with insert state.
+(setq evil-insert-state-modes nil)
+;; Never start with motion state.
+(setq evil-motion-state-modes nil)
+;; The default is emacs state already.
+(setq evil-emacs-state-modes nil)
+;; Use `after-change-major-mode-hook' to start in normal state.
+(setq evil-normal-state-modes nil)
+(setq evil-search-wrap nil)
+(setq evil-v$-excludes-newline t)
+;; C-x 2 is split-window-below
+(setq evil-split-window-below t)
+;; C-x 3 is split-window-right
+(setq evil-vsplit-window-right t)
+;; Make * and # search for the symbol at point.
+(setq evil-symbol-word-search t)
 
 ;; Actually load evil-mode.
 (require 'evil)
 
 ;; Set the variables that have :set so that the :set function can run.
-(setopt
- ;; Make insert state just like emacs state.
- evil-disable-insert-state-bindings t
- ;; I used to set `evil-want-C-u-scroll' to t.
- ;; But we are using Emacs, C-u should be `universal-argument'.
- evil-want-C-u-scroll nil
- ;; Since C-u does not scroll,
- ;; C-d should not scroll.
- evil-want-C-d-scroll nil
- ;; We will rebind `evil-jump-forward' below.
- ;; Thus, the default binding can be reset.
- evil-want-C-i-jump nil
- ;; This matches the behavior of Neovim.
- evil-want-Y-yank-to-eol t
- ;; Make CTRL-r work.
- evil-undo-system 'undo-redo)
+;; Make insert state just like emacs state.
+(setopt evil-disable-insert-state-bindings t)
+;; I used to set `evil-want-C-u-scroll' to t.
+;; But we are using Emacs, C-u should be `universal-argument'.
+(setopt evil-want-C-u-scroll nil)
+;; Since C-u does not scroll,
+;; C-d should not scroll.
+(setopt evil-want-C-d-scroll nil)
+;; We will rebind `evil-jump-forward' below.
+;; Thus, the default binding can be reset.
+(setopt evil-want-C-i-jump nil)
+;; This matches the behavior of Neovim.
+(setopt evil-want-Y-yank-to-eol t)
+;; Make CTRL-r work.
+(setopt evil-undo-system 'undo-redo)
 
 ;; Rebind `evil-jump-forward' to `<control-i>'.
 ;; This only makes sense if the physical control-i and the physical tab are made separate,

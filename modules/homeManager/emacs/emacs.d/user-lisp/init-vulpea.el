@@ -41,32 +41,31 @@
 (declare-function vulpea-select-describe-outline-full "vulpea-select")
 
 ;;;; Options
-(setq
- vulpea-db-sync-directories (list "~/org/")
- vulpea-default-notes-directory "~/org/"
+(setq vulpea-db-sync-directories (list "~/org/"))
+(setq vulpea-default-notes-directory "~/org/")
 
- ;; Use fswatch instead of polling to watch external changes.
- vulpea-db-sync-external-method 'fswatch
- ;; Fully async indexing.
- vulpea-db-async-extraction 'full
- ;; Do not index links without square brackets.
- vulpea-db-index-plain-links nil
- ;; Skip `org-mode-hook' while indexing.
- ;; See also `vulpea-ui-fast-parse'.
- vulpea-db-parse-method 'single-temp-buffer
- ;; Skip `org-mode-hook' while parsing.
- ;; See also `vulpea-db-parse-method'.
- vulpea-ui-fast-parse t
+;; Use fswatch instead of polling to watch external changes.
+(setq vulpea-db-sync-external-method 'fswatch)
+;; Fully async indexing.
+(setq vulpea-db-async-extraction 'full)
+;; Do not index links without square brackets.
+(setq vulpea-db-index-plain-links nil)
+;; Skip `org-mode-hook' while indexing.
+;; See also `vulpea-ui-fast-parse'.
+(setq vulpea-db-parse-method 'single-temp-buffer)
+;; Skip `org-mode-hook' while parsing.
+;; See also `vulpea-db-parse-method'.
+(setq vulpea-ui-fast-parse t)
 
- vulpea-create-default-template `(
-                                  :file-name "${title}.org"
-                                  :properties (("CREATED" . "%<<%Y-%m-%d %a %H:%M>>")))
+(setq vulpea-create-default-template `(
+                                       :file-name "${title}.org"
+                                       :properties (("CREATED" . "%<<%Y-%m-%d %a %H:%M>>"))))
 
- ;; Prevent typing the word "org" from matching all notes.
- ;; It is because "org_" is used as the prefix of all IDs.
- vulpea-select-match-ids nil
- ;; Show "Filename -> Parent Heading -> Note Title" for heading notes.
- vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
+;; Prevent typing the word "org" from matching all notes.
+;; It is because "org_" is used as the prefix of all IDs.
+(setq vulpea-select-match-ids nil)
+;; Show "Filename -> Parent Heading -> Note Title" for heading notes.
+(setq vulpea-select-describe-fn #'vulpea-select-describe-outline-full)
 
 ;;;; Turn on auto sync
 (vulpea-db-autosync-mode 1)

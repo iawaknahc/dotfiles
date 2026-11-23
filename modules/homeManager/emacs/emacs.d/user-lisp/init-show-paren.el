@@ -7,13 +7,12 @@
 (custom-set-faces
  '(show-paren-match-expression ((t (:background "#313244" :extend unspecified :inherit region)))))
 
-(setq
- show-paren-context-when-offscreen t
- show-paren-highlight-openparen t
- ;; Highlight parenthesis only for non-Lisp languages.
- show-paren-style 'parenthesis
- show-paren-when-point-in-periphery t
- show-paren-when-point-inside-paren t)
+(setq show-paren-context-when-offscreen t)
+(setq show-paren-highlight-openparen t)
+;; Highlight parenthesis only for non-Lisp languages.
+(setq show-paren-style 'parenthesis)
+(setq show-paren-when-point-in-periphery t)
+(setq show-paren-when-point-inside-paren t)
 
 (with-eval-after-load 'paren
   (setopt

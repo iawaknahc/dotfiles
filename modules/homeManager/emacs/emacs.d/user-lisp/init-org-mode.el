@@ -67,118 +67,112 @@
 (declare-function vulpea-note-tags "vulpea-note" t t)
 
 ;;;; Make sure Org-mode only read and write in ~/org
-(setq
- org-directory "~/org"
- org-default-notes-file "~/org/inbox.org"
- org-attach-id-dir "~/org/attachments/")
+(setq org-directory "~/org")
+(setq org-default-notes-file "~/org/inbox.org")
+(setq org-attach-id-dir "~/org/attachments/")
 
 
 ;;;; Source blocks
-(setq
- ;; To work around a very annoying bug.
- ;; 1. It is in org-mode.
- ;; 2. It is in a src block of emacs-lisp.
- ;; 3. electric-indent-mode is t.
- ;; 4. tab-always-indent is t.
- ;; 5. Type RET
- ;; 6. Nothing happens.
- org-src-tab-acts-natively nil
- ;; Change the indentation added by C-c ' to 0.
- org-src-content-indentation 0)
+;; To work around a very annoying bug.
+;; 1. It is in org-mode.
+;; 2. It is in a src block of emacs-lisp.
+;; 3. electric-indent-mode is t.
+;; 4. tab-always-indent is t.
+;; 5. Type RET
+;; 6. Nothing happens.
+(setq org-src-tab-acts-natively nil)
+;; Change the indentation added by C-c ' to 0.
+(setq org-src-content-indentation 0)
 
 
 ;;;; Startup visibility
-(setq
- ;; This is equivalent to having =#+startup: content= in every file.
- ;; This is particularly useful since every file now has a top-level properties drawer
- ;; containing an ID property.
- org-startup-folded 'content
- ;; Hide blocks.
- org-hide-block-startup t)
+;; This is equivalent to having =#+startup: content= in every file.
+;; This is particularly useful since every file now has a top-level properties drawer
+;; containing an ID property.
+(setq org-startup-folded 'content)
+;; Hide blocks.
+(setq org-hide-block-startup t)
 
 
 ;;;; Timestamps
-(setq
- ;; Org-mode timestamp format cannot be customized.
- ;; Attempt to modify `org-timestamp-formats' will cause Org-mode unable to parse the timestamp correctly.
- ;; Therefore, we work around by using `org-timestamp-custom-formats'.
- org-timestamp-custom-formats '("%G-W%V-%u" . "%G-W%V-%u %H:%M")
- ;; Increment minute by 5 minutes. This is the default.
- org-timestamp-rounding-minutes '(0 5))
+;; Org-mode timestamp format cannot be customized.
+;; Attempt to modify `org-timestamp-formats' will cause Org-mode unable to parse the timestamp correctly.
+;; Therefore, we work around by using `org-timestamp-custom-formats'.
+(setq org-timestamp-custom-formats '("%G-W%V-%u" . "%G-W%V-%u %H:%M"))
+;; Increment minute by 5 minutes. This is the default.
+(setq org-timestamp-rounding-minutes '(0 5))
 
 
 ;;;; Links and IDs
-(setq
- ;; Do not conceal links.
- org-link-descriptive nil
- ;; Use `org-id-ts-format' to generate ID.
- org-id-method 'ts
- ;; When prefix is non-nil,
- ;; The generated ID is PREFIX : GENERATED
- ;; That is, a colon is always added between the prefix and the generated part.
- ;; This is not documented in `org-id-prefix',
- ;; but documented in the example given in `org-id-new'.
- ;; I do not like this behavior, so just leave `org-id-prefix' as nil, which is also the default.
- org-id-prefix nil
- ;; Make `org-store-link' create an ID.
- ;; This is barely useful because we want to be able to fuzzy search any headlines in any files, and
- ;; generate an ID in-just-time, and finally insert the link to that ID.
- ;; The built-in pcomplete "[[*" of Org does not support this.
- ;; It merely inserts the search-based link in the same file.
- org-id-link-to-org-use-id 'create-if-interactive
- ;; Instead of using `org-id-prefix' to add prefix,
- ;; we embed the prefix in `org-id-ts-format'.
- org-id-ts-format "org_%Y%m%d_%H%M%S_%N")
+;; Do not conceal links.
+(setq org-link-descriptive nil)
+;; Use `org-id-ts-format' to generate ID.
+(setq org-id-method 'ts)
+;; When prefix is non-nil,
+;; The generated ID is PREFIX : GENERATED
+;; That is, a colon is always added between the prefix and the generated part.
+;; This is not documented in `org-id-prefix',
+;; but documented in the example given in `org-id-new'.
+;; I do not like this behavior, so just leave `org-id-prefix' as nil, which is also the default.
+(setq org-id-prefix nil)
+;; Make `org-store-link' create an ID.
+;; This is barely useful because we want to be able to fuzzy search any headlines in any files, and
+;; generate an ID in-just-time, and finally insert the link to that ID.
+;; The built-in pcomplete "[[*" of Org does not support this.
+;; It merely inserts the search-based link in the same file.
+(setq org-id-link-to-org-use-id 'create-if-interactive)
+;; Instead of using `org-id-prefix' to add prefix,
+;; we embed the prefix in `org-id-ts-format'.
+(setq org-id-ts-format "org_%Y%m%d_%H%M%S_%N")
 
 
 ;;;; TODO and clock
-(setq
- ;; Log timestamp when a TODO is DONE.
- org-log-done 'time
- ;; Only save the running clock.
- ;; `org-clock-persistence-insinuate' must be called in order to make this effective.
- org-clock-persist 'clock
- ;; Update the clock mode line string every 20 seconds.
- org-clock-update-period 20
- ;; Clock out when the task is marked DONE.
- ;; The default is t.
- org-clock-out-when-done t
- ;; Do not switch state when clocking out.
- ;; When a capture template has :clock-in and :clock-resume,
- ;; the time spent on creating the capture is clocked.
- ;; When the capture is a TODO item,
- ;; we want to track the time we spent on creating the capture,
- ;; but definitely do not want to mark the TODO item as DONE.
- org-clock-out-switch-to-state nil
- ;; `frame-title-format' may not work as expected when
- ;; the following conditions hold:
- ;;
- ;; 1. It is on macOS NS build.
- ;; 2. A tiling window manager, like AeroSpace, is in use.
- ;; 3. `frame-resize-pixelwise' is nil.
- ;;
- ;; In that case, the frame title will be set unconditionally in
- ;; https://github.com/emacs-mirror/emacs/blob/emacs-31.1/src/nsterm.m#L8285
- ;; when Emacs considers itself resizing.
- ;;
- ;; Condition 1 cannot be changed.
- ;; Condition 2 is unlikely to be changed because I want to use tiling window manager.
- ;; Thus, we can only change Condition 3.
- ;; We just need to set `frame-resize-pixelwise' to t.
- ;;
- ;; When `frame-resize-pixelwise' set to t,
- ;; the symptom occurs less often.
- ;; It will certainly occur when we move the frame with the tiling window manager,
- ;; for example, moving the frame of Emacs to another AeroSpace workspace with an existing AeroSpace window.
- ;;
- ;; The symptom will correct itself when the clock ticks one more minute.
- ;; This observation implies if the frame title is different, it will be re-displayed.
- ;; If we really want a workaround, we can customize `org-clock-frame-title-format',
- ;; and include something that is different per invocation, like a timestamp.
- ;; I experimented with this and found that the frame-title-format is actually
- ;; evaluated more often than I thought.
- ;; So I left out this workaround.
- org-clock-clocked-in-display 'both)
+;; Log timestamp when a TODO is DONE.
+(setq org-log-done 'time)
+;; Only save the running clock.
+;; `org-clock-persistence-insinuate' must be called in order to make this effective.
+(setq org-clock-persist 'clock)
+;; Update the clock mode line string every 20 seconds.
+(setq org-clock-update-period 20)
+;; Clock out when the task is marked DONE.
+;; The default is t.
+(setq org-clock-out-when-done t)
+;; Do not switch state when clocking out.
+;; When a capture template has :clock-in and :clock-resume,
+;; the time spent on creating the capture is clocked.
+;; When the capture is a TODO item,
+;; we want to track the time we spent on creating the capture,
+;; but definitely do not want to mark the TODO item as DONE.
+(setq org-clock-out-switch-to-state nil)
+;; `frame-title-format' may not work as expected when
+;; the following conditions hold:
+;;
+;; 1. It is on macOS NS build.
+;; 2. A tiling window manager, like AeroSpace, is in use.
+;; 3. `frame-resize-pixelwise' is nil.
+;;
+;; In that case, the frame title will be set unconditionally in
+;; https://github.com/emacs-mirror/emacs/blob/emacs-31.1/src/nsterm.m#L8285
+;; when Emacs considers itself resizing.
+;;
+;; Condition 1 cannot be changed.
+;; Condition 2 is unlikely to be changed because I want to use tiling window manager.
+;; Thus, we can only change Condition 3.
+;; We just need to set `frame-resize-pixelwise' to t.
+;;
+;; When `frame-resize-pixelwise' set to t,
+;; the symptom occurs less often.
+;; It will certainly occur when we move the frame with the tiling window manager,
+;; for example, moving the frame of Emacs to another AeroSpace workspace with an existing AeroSpace window.
+;;
+;; The symptom will correct itself when the clock ticks one more minute.
+;; This observation implies if the frame title is different, it will be re-displayed.
+;; If we really want a workaround, we can customize `org-clock-frame-title-format',
+;; and include something that is different per invocation, like a timestamp.
+;; I experimented with this and found that the frame-title-format is actually
+;; evaluated more often than I thought.
+;; So I left out this workaround.
+(setq org-clock-clocked-in-display 'both)
 ;; This function must be called.
 ;; Otherwise, `org-clock-persist' has no effect.
 (org-clock-persistence-insinuate)
@@ -218,8 +212,8 @@ and make it bound."
                       (or (seq-contains-p tags "project")
                           (seq-contains-p tags "area")))))))
            (filepaths (seq-map #'vulpea-note-path file-notes)))
-      (setq my/org-agenda-files-last filepaths
-            org-agenda-files filepaths))))
+      (setq my/org-agenda-files-last filepaths)
+      (setq org-agenda-files filepaths))))
 ;; Just-in-time set variable `org-agenda-files' before `org-agenda-list' runs.
 ;; The advice is added to `org-agenda-list' so that `org-agenda' and `org-calendar-goto-agenda' can benefit.
 (advice-add #'org-agenda-list :before #'my/org-agenda-before--set-org-agenda-files)
@@ -304,18 +298,17 @@ according to the manual."
          (filepaths (seq-map #'vulpea-note-path file-notes)))
     filepaths))
 
-(setq
- ;; All file-level notes are refile targets.
- org-refile-targets '((my/org-refile-targets-with-vulpea . t))
- ;; Setting to file means the candidate in the Refile interface looks like
- ;; "file.org/heading1/heading2/heading3".
- ;; Having the filename allows me to fuzzy search using Orderless.
- org-refile-use-outline-path 'file
- ;; Setting this to nil means populate the Refile interface
- ;; with all target headlines at once.
- ;; This is useful because we are using Orderless.
- ;; Typically we type something like "filename partial-heading1 partial-heading2" to locate the target.
- org-outline-path-complete-in-steps nil)
+;; All file-level notes are refile targets.
+(setq org-refile-targets '((my/org-refile-targets-with-vulpea . t)))
+;; Setting to file means the candidate in the Refile interface looks like
+;; "file.org/heading1/heading2/heading3".
+;; Having the filename allows me to fuzzy search using Orderless.
+(setq org-refile-use-outline-path 'file)
+;; Setting this to nil means populate the Refile interface
+;; with all target headlines at once.
+;; This is useful because we are using Orderless.
+;; Typically we type something like "filename partial-heading1 partial-heading2" to locate the target.
+(setq org-outline-path-complete-in-steps nil)
 
 
 ;;;; Integrate `org-lint' with `flymake'.
@@ -422,9 +415,8 @@ timestamp sort just before it, after all dated events."
         (org-sort-entries nil ?f #'my/org-event--sort-key #'<)))))
 
 ;;;; Latex
-(setq
- org-preview-latex-default-process 'dvisvgm
- org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
+(setq org-preview-latex-default-process 'dvisvgm)
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
 
 ;;;; Babel
 (org-babel-do-load-languages

@@ -33,107 +33,106 @@
 (declare-function mu4e-quit "mu4e")
 (declare-function sendmail-send-it "sendmail")
 
-(setq
- ;; Use `sendmail-program' to send emails.
- ;; `report-emacs-bug' use this function to send emails.
- send-mail-function #'sendmail-send-it
- ;; Use mu4e in `compose-mail' (C-x m).
- mail-user-agent 'mu4e-user-agent
- ;; This configures the command that the menu item Tools -> Read Mail executes.
- read-mail-command #'mu4e
- ;; Set `default-directory' in Gnus buffers.
- ;; So these buffers do not inherit `default-directory' from current buffer.
- gnus-default-directory "~/Maildir/"
+;; Use `sendmail-program' to send emails.
+;; `report-emacs-bug' use this function to send emails.
+(setq send-mail-function #'sendmail-send-it)
+;; Use mu4e in `compose-mail' (C-x m).
+(setq mail-user-agent 'mu4e-user-agent)
+;; This configures the command that the menu item Tools -> Read Mail executes.
+(setq read-mail-command #'mu4e)
+;; Set `default-directory' in Gnus buffers.
+;; So these buffers do not inherit `default-directory' from current buffer.
+(setq gnus-default-directory "~/Maildir/")
 
- ;; Teach mu4e to retrieve emails.
- mu4e-get-mail-command "mbsync --all"
- ;; mbsync puts UID in the filename.
- ;; Moving a mail without changing filename may retain a stale UID.
- mu4e-change-filenames-when-moving t
- ;; When trash a mail, just move it to the trash directory without
- ;; setting the T flag.
- ;; This is particular important when mbsync is used.
- ;; See https://github.com/djcb/mu/issues/1136#issuecomment-2543938870
- mu4e-trash-without-flag t
- ;; Gmail represents labels as directories.
- ;; So the same mail can appear in multiple directories.
- ;; Accept that face and show them all.
- mu4e-search-skip-duplicates nil
- ;; Do not ask when quitting mu4e.
- mu4e-confirm-quit nil
- ;; Do not echo messages to echo area.
- mu4e-hide-index-messages t
- ;; Update every 5 minutes.
- mu4e-update-interval 300
+;; Teach mu4e to retrieve emails.
+(setq mu4e-get-mail-command "mbsync --all")
+;; mbsync puts UID in the filename.
+;; Moving a mail without changing filename may retain a stale UID.
+(setq mu4e-change-filenames-when-moving t)
+;; When trash a mail, just move it to the trash directory without
+;; setting the T flag.
+;; This is particular important when mbsync is used.
+;; See https://github.com/djcb/mu/issues/1136#issuecomment-2543938870
+(setq mu4e-trash-without-flag t)
+;; Gmail represents labels as directories.
+;; So the same mail can appear in multiple directories.
+;; Accept that face and show them all.
+(setq mu4e-search-skip-duplicates nil)
+;; Do not ask when quitting mu4e.
+(setq mu4e-confirm-quit nil)
+;; Do not echo messages to echo area.
+(setq mu4e-hide-index-messages t)
+;; Update every 5 minutes.
+(setq mu4e-update-interval 300)
 
- ;; Contexts
- mu4e-context-policy 'pick-first
- mu4e-compose-context-policy 'ask-if-none
+;; Contexts
+(setq mu4e-context-policy 'pick-first)
+(setq mu4e-compose-context-policy 'ask-if-none)
 
- ;; Do not move to the next message when scrolled to the end of a message.
- mu4e-view-scroll-to-next nil
- ;; Load remote images.
- gnus-blocked-images nil
- ;; Show the Date: header three times, in different forms.
- ;; 1. The original header.
- ;; 2. The original header converted to local timezone.
- ;; 3. The lapsed time in human readable form.
- gnus-article-date-headers '(original local lapsed)
+;; Do not move to the next message when scrolled to the end of a message.
+(setq mu4e-view-scroll-to-next nil)
+;; Load remote images.
+(setq gnus-blocked-images nil)
+;; Show the Date: header three times, in different forms.
+;; 1. The original header.
+;; 2. The original header converted to local timezone.
+;; 3. The lapsed time in human readable form.
+(setq gnus-article-date-headers '(original local lapsed))
 
- ;; 2006-01-02
- mu4e-headers-date-format "%F"
- mu4e-headers-time-format "%T"
- mu4e-headers-fields
- `((:maildir-first-component . 30)
-   (:datetime-local . ,(length "2006-01-02 03:04:05"))
-   (:flags . 6)
-   (:from . 30)
-   (:subject . nil))
- ;; Show more information in the echo area via Eldoc.
- mu4e-eldoc-support t
- ;; %F is the stringified Lisp form of flags, for example, (seen personal).
- ;; %s is the subject.
- mu4e-headers-eldoc-format "%F %s"
+;; 2006-01-02
+(setq mu4e-headers-date-format "%F")
+(setq mu4e-headers-time-format "%T")
+(setq mu4e-headers-fields
+      `((:maildir-first-component . 30)
+        (:datetime-local . ,(length "2006-01-02 03:04:05"))
+        (:flags . 6)
+        (:from . 30)
+        (:subject . nil)))
+;; Show more information in the echo area via Eldoc.
+(setq mu4e-eldoc-support t)
+;; %F is the stringified Lisp form of flags, for example, (seen personal).
+;; %s is the subject.
+(setq mu4e-headers-eldoc-format "%F %s")
 
- ;; By default, when `mu4e-search-include-related' is t,
- ;; forwarded messages in another maildir (for example, Sent Mail) appears in Inbox.
- ;; This is very confusing.
- ;; If we really want to see the thread of a particular message,
- ;; we should invoke `mu4e-action-show-thread', which is bound to "a s" in the headers view.
- mu4e-search-include-related nil
+;; By default, when `mu4e-search-include-related' is t,
+;; forwarded messages in another maildir (for example, Sent Mail) appears in Inbox.
+;; This is very confusing.
+;; If we really want to see the thread of a particular message,
+;; we should invoke `mu4e-action-show-thread', which is bound to "a s" in the headers view.
+(setq mu4e-search-include-related nil)
 
- mu4e-view-fields
- `(:from
-   :to
-   :cc
-   :bcc
-   :subject
-   :mailing-list
-   :date
-   :flags
-   :tags
-   :labels
-   :message-id
-   :maildir
-   :path-abbreviated)
+(setq mu4e-view-fields
+      `(:from
+        :to
+        :cc
+        :bcc
+        :subject
+        :mailing-list
+        :date
+        :flags
+        :tags
+        :labels
+        :message-id
+        :maildir
+        :path-abbreviated))
 
- mu4e-bookmarks
- '((:name
-    "Unread non-trashed non-junk messages"
-    :query "flag:unread AND NOT maildir:/[tT]rash/ AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
-    :key ?u
-    ;; Make this favorite.
-    ;; This will be used in the global modeline.
-    ;; See https://www.djcbsoftware.nl/code/mu/mu4e/Modeline.html#Favorite-bookmark-modeline-item
-    :favorite t)
-   (:name
-    "Junk messages"
-    :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
-    :key ?j)
-   (:name
-    "Trashed messages"
-    :query "maildir:/[tT]rash/"
-    :key ?t)))
+(setq mu4e-bookmarks
+      '((:name
+         "Unread non-trashed non-junk messages"
+         :query "flag:unread AND NOT maildir:/[tT]rash/ AND NOT maildir:/[jJ]unk/ AND NOT maildir:/[sS]pam/"
+         :key ?u
+         ;; Make this favorite.
+         ;; This will be used in the global modeline.
+         ;; See https://www.djcbsoftware.nl/code/mu/mu4e/Modeline.html#Favorite-bookmark-modeline-item
+         :favorite t)
+        (:name
+         "Junk messages"
+         :query "maildir:/[jJ]unk/ OR maildir:/[sS]pam/"
+         :key ?j)
+        (:name
+         "Trashed messages"
+         :query "maildir:/[tT]rash/"
+         :key ?t)))
 
 (defun my/mu4e-headers-found-hook ()
   "Fix the alignment of the header in the headers view.

@@ -7,57 +7,56 @@
 (require 'my-cal-china)
 (require 'my-holidays)
 
-(setopt
- ;; ISO calendar starts on Monday.
- calendar-week-start-day 1
+;; ISO calendar starts on Monday.
+(setopt calendar-week-start-day 1)
 
- ;; Display ISO week number.
- calendar-left-margin (+ 2 (length "W01"))
- calendar-intermonth-spacing (+ 5 (length "W01"))
- calendar-intermonth-text
- '(propertize
-   (format "W%.2d"
-           (calendar-extract-month (calendar-iso-from-absolute (calendar-absolute-from-gregorian (list month day year)))))
-   'font-lock-face 'calendar-month-header)
+;; Display ISO week number.
+(setopt calendar-left-margin (+ 2 (length "W01")))
+(setopt calendar-intermonth-spacing (+ 5 (length "W01")))
+(setopt calendar-intermonth-text
+        '(propertize
+          (format "W%.2d"
+                  (calendar-extract-month (calendar-iso-from-absolute (calendar-absolute-from-gregorian (list month day year)))))
+          'font-lock-face 'calendar-month-header))
 
- ;; Display ISO week day number instead of two-letter abbreviation of day name.
- calendar-day-header-array [" 7" " 1" " 2" " 3" " 4" " 5" " 6"]
+;; Display ISO week day number instead of two-letter abbreviation of day name.
+(setopt calendar-day-header-array [" 7" " 1" " 2" " 3" " 4" " 5" " 6"])
 
- ;; Display numeric month.
- calendar-month-header
- '(propertize
-   (format "%d-%.2d" year month)
-   'font-lock-face 'calendar-month-header)
+;; Display numeric month.
+(setopt calendar-month-header
+        '(propertize
+          (format "%d-%.2d" year month)
+          'font-lock-face 'calendar-month-header))
 
- ;; Roughly the center of Hong Kong at zoom level 11.
- ;; These two variables are used by `calendar-sunrise-sunset', `sunrise-sunset', and `osm-home'.
- ;; According to the manual, the number of decimal places should be 1.
- calendar-latitude 22.3
- calendar-longitude 114.1
- calendar-location-name "Hong Kong"
+;; Roughly the center of Hong Kong at zoom level 11.
+;; These two variables are used by `calendar-sunrise-sunset', `sunrise-sunset', and `osm-home'.
+;; According to the manual, the number of decimal places should be 1.
+(setopt calendar-latitude 22.3)
+(setopt calendar-longitude 114.1)
+(setopt calendar-location-name "Hong Kong")
 
- ;; Display date in Org style.
- calendar-date-display-form
- '((format "%s-%.2d-%.2d"
-           year
-           (string-to-number month)
-           (string-to-number day))
-   (if dayname (concat " " (substring dayname 0 3))))
+;; Display date in Org style.
+(setopt calendar-date-display-form
+        '((format "%s-%.2d-%.2d"
+                  year
+                  (string-to-number month)
+                  (string-to-number day))
+          (if dayname (concat " " (substring dayname 0 3)))))
 
- ;; Display time in European style.
- calendar-time-display-form
- '(24-hours ":" minutes
-            (if time-zone " (") time-zone (if time-zone ")"))
+;; Display time in European style.
+(setopt calendar-time-display-form
+        '(24-hours ":" minutes
+                   (if time-zone " (") time-zone (if time-zone ")")))
 
- ;; Display today in various forms.
- calendar-mode-line-format
- '((my/calendar-date-string date)
-   (my/lunar-phase-date-string date)
-   (my/calendar-chinese-date-string-from-gregorian date)
-   (my/sexagenary-month-day-string date)
-   (my/astrological-sign-string date))
- ;; Increase the right margin to allow more room for mode line.
- calendar-right-margin 140)
+;; Display today in various forms.
+(setopt calendar-mode-line-format
+        '((my/calendar-date-string date)
+          (my/lunar-phase-date-string date)
+          (my/calendar-chinese-date-string-from-gregorian date)
+          (my/sexagenary-month-day-string date)
+          (my/astrological-sign-string date)))
+;; Increase the right margin to allow more room for mode line.
+(setopt calendar-right-margin 140)
 
 ;; Adopted from https://www.gnu.org/software/emacs/manual/html_node/emacs/Calendar-Customizing.html
 ;; This marks today with face `calendar-today'.

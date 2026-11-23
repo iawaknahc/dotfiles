@@ -1877,45 +1877,44 @@ Return an element in STRINGS or nil."
                      #'my/world-clock-jump))
 
 ;;;; Configuration
-(setq
- ;; Turn off the timer
- world-clock-timer-enable nil
- ;; 2006-01-02 Mon 15:04
- world-clock-time-format "%F %a %H:%M"
- ;; The timezones already sorted.
- world-clock-sort-order nil
- my/world-clock-cldr-json-directory "~/.nix-profile/share/cldr-json/48.2.3"
- my/world-clock-zoneinfo-list
- '("Asia/Hong_Kong"
-   "Asia/Tokyo"
-   "Asia/Seoul"
-   "Asia/Bangkok"
-   "Asia/Kolkata"
-   "Asia/Karachi"
-   "Asia/Dhaka"
-   "Asia/Tehran"
-   "Asia/Jerusalem"
-   "Asia/Dubai"
-   "Australia/Sydney"
-   "Pacific/Auckland"
-   "Africa/Nairobi"
-   "Africa/Johannesburg"
-   "Africa/Lagos"
-   "Europe/London"
-   "Europe/Amsterdam"
-   "Etc/UTC"
-   "America/New_York"
-   "America/Chicago"
-   "America/Phoenix"
-   "America/Denver"
-   "America/Los_Angeles"
-   "America/Anchorage"
-   "Pacific/Honolulu"
-   "America/Toronto"
-   "America/Vancouver"
-   "America/Mexico_City"
-   "America/Bogota"
-   "America/Sao_Paulo"))
+;; Turn off the timer
+(setq world-clock-timer-enable nil)
+;; 2006-01-02 Mon 15:04
+(setq world-clock-time-format "%F %a %H:%M")
+;; The timezones already sorted.
+(setq world-clock-sort-order nil)
+(setq my/world-clock-cldr-json-directory "~/.nix-profile/share/cldr-json/48.2.3")
+(setq my/world-clock-zoneinfo-list
+      '("Asia/Hong_Kong"
+        "Asia/Tokyo"
+        "Asia/Seoul"
+        "Asia/Bangkok"
+        "Asia/Kolkata"
+        "Asia/Karachi"
+        "Asia/Dhaka"
+        "Asia/Tehran"
+        "Asia/Jerusalem"
+        "Asia/Dubai"
+        "Australia/Sydney"
+        "Pacific/Auckland"
+        "Africa/Nairobi"
+        "Africa/Johannesburg"
+        "Africa/Lagos"
+        "Europe/London"
+        "Europe/Amsterdam"
+        "Etc/UTC"
+        "America/New_York"
+        "America/Chicago"
+        "America/Phoenix"
+        "America/Denver"
+        "America/Los_Angeles"
+        "America/Anchorage"
+        "Pacific/Honolulu"
+        "America/Toronto"
+        "America/Vancouver"
+        "America/Mexico_City"
+        "America/Bogota"
+        "America/Sao_Paulo"))
 
 (provide 'init-world-clock-mode)
 ;;; init-world-clock-mode.el ends here

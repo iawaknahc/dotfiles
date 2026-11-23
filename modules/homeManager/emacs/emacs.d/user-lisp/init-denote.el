@@ -22,12 +22,11 @@
 (declare-function denote-title-prompt "denote")
 
 ;;;; Options
-(setq
- denote-directory (format "/ssh:nas:/data/smb/%s/archive/" user-login-name)
- denote-prompts '(date title keywords)
- denote-date-prompt-use-org-read-date t
- denote-known-keywords nil
- denote-infer-keywords t)
+(setq denote-directory (format "/ssh:nas:/data/smb/%s/archive/" user-login-name))
+(setq denote-prompts '(date title keywords))
+(setq denote-date-prompt-use-org-read-date t)
+(setq denote-known-keywords nil)
+(setq denote-infer-keywords t)
 
 ;;;; Faces
 (with-eval-after-load 'denote

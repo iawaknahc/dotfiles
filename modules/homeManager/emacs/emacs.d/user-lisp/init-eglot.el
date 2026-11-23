@@ -18,16 +18,15 @@
 (custom-set-faces
  '(eglot-inlay-hint-face ((t (:inherit shadow)))))
 
-(setq
- ;; The default is a light bulb emoji, which causes
- ;; the text to flicker when point lands on the line.
- ;; So we set it to a printable ASCII character.
- eglot-code-action-indicator "?"
- ;; The default is '(eldoc-hint margin)
- ;; We already have the indicator in the margin,
- ;; the indicator of eldoc is just redundant and takes up precious space.
- eglot-code-action-indications '(margin)
- eglot-documentation-renderer #'markdown-ts-view-mode)
+;; The default is a light bulb emoji, which causes
+;; the text to flicker when point lands on the line.
+;; So we set it to a printable ASCII character.
+(setq eglot-code-action-indicator "?")
+;; The default is '(eldoc-hint margin)
+;; We already have the indicator in the margin,
+;; the indicator of eldoc is just redundant and takes up precious space.
+(setq eglot-code-action-indications '(margin))
+(setq eglot-documentation-renderer #'markdown-ts-view-mode)
 
 (defun my/eglot-managed-mode-hook ()
   "Disable inlay hints and semantic tokens by default."

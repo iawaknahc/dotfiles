@@ -18,15 +18,14 @@
 (declare-function tempel-next "tempel")
 
 (autoload 'corfu-sort-length-alpha "corfu" "Run (require corfu) to see the actual documentation")
-(setq
- ;; Preselect the prompt, that is, what was typed.
- ;; Use corfu-next select the first candidate.
- corfu-preselect 'prompt
- ;; The default is 100, which is too large.
- corfu-max-width 50
- ;; cape-capf-super unconditionally set :display-sort-function to identity.
- ;; So we revert to use the default sort function.
- corfu-sort-override-function #'corfu-sort-length-alpha)
+;; Preselect the prompt, that is, what was typed.
+;; Use corfu-next select the first candidate.
+(setq corfu-preselect 'prompt)
+;; The default is 100, which is too large.
+(setq corfu-max-width 50)
+;; cape-capf-super unconditionally set :display-sort-function to identity.
+;; So we revert to use the default sort function.
+(setq corfu-sort-override-function #'corfu-sort-length-alpha)
 
 (defun corfu-complete-or-tempel-next ()
   "Invoke either `corfu-complete' or `tempel-next'.
@@ -73,19 +72,18 @@ See https://github.com/minad/corfu/blob/2.16/corfu.el#L1143"
 ;; Enable in the minibuffer is essential for commands like M-:
 (add-hook 'after-init-hook #'global-corfu-mode)
 
-(setq
- corfu-auto t
- ;; FIXME: corfu-auto-delay seems to have timing issue.
- ;; If I set corfu-auto-delay to 0.1, in the scratch buffer.
- ;; 1. I type ., see the candidates from `elisp-completion-at-point'.
- ;; 2. I type /, see nothing, while I expect to see candidates from `cape-file'.
- ;;
- ;; If corfu-auto-delay is 0 or 0.2, or 0.3, this issue does not appear.
- corfu-auto-delay 0.2
- ;; Start auto completion when there is 1 character before point.
- corfu-auto-prefix 1
- ;; No characters can override `corfu-auto-prefix'.
- corfu-auto-trigger "")
+(setq corfu-auto t)
+;; FIXME: corfu-auto-delay seems to have timing issue.
+;; If I set corfu-auto-delay to 0.1, in the scratch buffer.
+;; 1. I type ., see the candidates from `elisp-completion-at-point'.
+;; 2. I type /, see nothing, while I expect to see candidates from `cape-file'.
+;;
+;; If corfu-auto-delay is 0 or 0.2, or 0.3, this issue does not appear.
+(setq corfu-auto-delay 0.2)
+;; Start auto completion when there is 1 character before point.
+(setq corfu-auto-prefix 1)
+;; No characters can override `corfu-auto-prefix'.
+(setq corfu-auto-trigger "")
 
 (setq corfu-popupinfo-delay '(0.1 . 0.1))
 (add-hook 'after-init-hook #'corfu-popupinfo-mode)

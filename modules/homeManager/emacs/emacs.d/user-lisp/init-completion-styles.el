@@ -21,26 +21,25 @@ POINT is ignored."
   "Match COMPONENT as a literal suffix string."
   `(seq (literal ,component) string-end))
 
-(setq
- ;; Use Orderless everything.
- completion-styles '(orderless basic)
- ;; It is known that gnus will modify completion-category-defaults to add (email (styles substring partial-completion)).
- ;; But it is not a big deal because I do not complete email, at least for now.
- ;;
- ;; In the readme of Orderless, it is explicitly stated that orderless cannot be used with file.
- ;; So we use basic.
- ;; Note that partial-completion must not be used.
- ;; In a remote directory with thousands of files, partial-completion will cause TRAMP to use
- ;; too much memory.
- ;; There will be many garbage collection cycles between keystrokes, causing a noticeable lag.
- completion-category-defaults
- '((file (styles basic))
-   (my/launcher-item (styles my/no-filter)))
- ;; Set the separators to be one or more SPC, underscore, or hyphen.
- ;; The default is one or more SPC, which does not work well for Corfu with auto-completion.
- ;; With underscore and hyphen added, I can type `foo_bar` to means `foo bar`.
- ;; Note that corfu-separator is left unchanged and set to SPC by default.
- orderless-component-separator (rx (+ (in "- _"))))
+;; Use Orderless everything.
+(setq completion-styles '(orderless basic))
+;; It is known that gnus will modify completion-category-defaults to add (email (styles substring partial-completion)).
+;; But it is not a big deal because I do not complete email, at least for now.
+;;
+;; In the readme of Orderless, it is explicitly stated that orderless cannot be used with file.
+;; So we use basic.
+;; Note that partial-completion must not be used.
+;; In a remote directory with thousands of files, partial-completion will cause TRAMP to use
+;; too much memory.
+;; There will be many garbage collection cycles between keystrokes, causing a noticeable lag.
+(setq completion-category-defaults
+      '((file (styles basic))
+        (my/launcher-item (styles my/no-filter))))
+;; Set the separators to be one or more SPC, underscore, or hyphen.
+;; The default is one or more SPC, which does not work well for Corfu with auto-completion.
+;; With underscore and hyphen added, I can type `foo_bar` to means `foo bar`.
+;; Note that corfu-separator is left unchanged and set to SPC by default.
+(setq orderless-component-separator (rx (+ (in "- _"))))
 
 (with-eval-after-load 'orderless
   ;; Add `foo$` to match the end of the candidate literally.

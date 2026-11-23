@@ -8,18 +8,17 @@
 (defvar calendar-longitude)
 (declare-function my/vulpea-geojson "init-vulpea")
 
-(setq
- ;; Bind to loopback interface only.
- httpd-host "127.0.0.1"
- httpd-port 8080
- ;; No public root.
- httpd-root nil
- ;; Do not serve `httpd-root'.
- httpd-serve-files nil
- ;; No directory listings.
- httpd-listings nil
- ;; Allow the use of httpd/ functions.
- httpd-servlets t)
+;; Bind to loopback interface only.
+(setq httpd-host "127.0.0.1")
+(setq httpd-port 8080)
+;; No public root.
+(setq httpd-root nil)
+;; Do not serve `httpd-root'.
+(setq httpd-serve-files nil)
+;; No directory listings.
+(setq httpd-listings nil)
+;; Allow the use of httpd/ functions.
+(setq httpd-servlets t)
 
 ;; Teach it about .mjs
 (push (cons "mjs" "text/javascript") httpd-mime-types)

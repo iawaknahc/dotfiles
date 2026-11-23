@@ -4,16 +4,15 @@
 
 (defvar evil-mode-line-format)
 
-(setq
- ;; Collapse minor modes that do not report additional information in the mode line.
- mode-line-collapse-minor-modes '(apheleia-mode
-                                  auto-revert-mode
-                                  eldoc-mode
-                                  whitespace-mode)
- ;; Place the evil state tag at the beginning of the mode line.
- ;; The default value of `before' really means after mode-line-position.
- ;; See https://github.com/emacs-evil/evil/blob/1.14.2/evil-core.el#L405
- evil-mode-line-format '(after . mode-line-buffer-identification))
+;; Collapse minor modes that do not report additional information in the mode line.
+(setq mode-line-collapse-minor-modes '(apheleia-mode
+                                       auto-revert-mode
+                                       eldoc-mode
+                                       whitespace-mode))
+;; Place the evil state tag at the beginning of the mode line.
+;; The default value of `before' really means after mode-line-position.
+;; See https://github.com/emacs-evil/evil/blob/1.14.2/evil-core.el#L405
+(setq evil-mode-line-format '(after . mode-line-buffer-identification))
 
 ;; Turn on `column-number-mode'.
 ;; This causes `mode-line-position' to use `mode-line-position-column-line-format'.
@@ -40,23 +39,22 @@ So we customize `mode-line-buffer-identification' to keep the basename only."
 ;;    Since we are not on Windows, it is just spaces.
 ;; 3. (vc-mode vc-mode) is omitted.
 ;; 4. (project-mode-line project-mode-line-format) is omitted.
-(setq-default
- mode-line-buffer-identification `(:eval (my/mode-line-buffer-identification))
- mode-line-format
- `("%e"
-   mode-line-front-space
-   mode-line-buffer-identification
-   ;; evil-mode-line-tag is inserted here, after mode-line-buffer-identification
-   mode-line-mule-info
-   mode-line-client
-   mode-line-modified
-   mode-line-remote
-   mode-line-window-dedicated
-   (:eval (format " %d/%d " (point) (point-max)))
-   mode-line-position
-   mode-line-modes
-   mode-line-misc-info
-   mode-line-end-spaces))
+(setq-default mode-line-buffer-identification `(:eval (my/mode-line-buffer-identification)))
+(setq-default mode-line-format
+              `("%e"
+                mode-line-front-space
+                mode-line-buffer-identification
+                ;; evil-mode-line-tag is inserted here, after mode-line-buffer-identification
+                mode-line-mule-info
+                mode-line-client
+                mode-line-modified
+                mode-line-remote
+                mode-line-window-dedicated
+                (:eval (format " %d/%d " (point) (point-max)))
+                mode-line-position
+                mode-line-modes
+                mode-line-misc-info
+                mode-line-end-spaces))
 
 
 ;; Here is the breakdown of the default mode-line-format.
