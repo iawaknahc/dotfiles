@@ -75,7 +75,7 @@ Call ORIG-FUN with ARGS when the agenda range is not available."
   (setq my/org-calendar-holiday--cache-key nil))
 
 ;;;###autoload
-(defun my/org-agenda-list--around (orig-fun &rest args)
+(defun my/org-agenda-optimize--around (orig-fun &rest args)
   "Memoize `abbreviate-file-name' and bind `file-name-coding-system'.
 
 On my macOS, `file-name-coding-system' is utf-8-hfs-unix.

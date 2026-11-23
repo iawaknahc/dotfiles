@@ -38,7 +38,7 @@
 (defvar org-timestamp-rounding-minutes)
 (declare-function diary-mark-entries "diary-lib")
 (declare-function diary-view-entries "diary-lib")
-(declare-function my/org-agenda-list--around "my-org")
+(declare-function my/org-agenda-optimize--around "my-org")
 (declare-function my/org-calendar-holiday--around "my-org")
 (declare-function my/org-calendar-holiday--invalidate "my-org")
 (declare-function org-agenda-redo "org-agenda")
@@ -244,7 +244,11 @@ and make it bound."
   (message "Show all dates: %s" (if org-agenda-show-all-dates "on" "off")))
 
 ;;; Speed up `org-agenda-list'.
-(advice-add #'org-agenda-list :around #'my/org-agenda-list--around)
+(advice-add #'org-agenda-list :around #'my/org-agenda-optimize--around)
+
+;;; Speed up `org-diary'.
+(advice-add #'org-diary :around #'my/org-agenda-optimize--around)
+
 
 ;;;; Column view
 (defun my/org-ctrl-c-ctrl-c-column-view ()
