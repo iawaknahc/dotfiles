@@ -54,7 +54,7 @@
   '(
     (:major-modes
      (lua-ts-mode)
-     :contact ("emmylua_ls")
+     :contact ("rass" "lua")
      :root-markers (".emmyrc.json"))
     (:major-modes
      (beancount-ts-mode)
@@ -85,7 +85,7 @@
      :contact ("tsc" "--lsp" "--stdio"))
     (:major-modes
      (html-ts-mode mhtml-ts-mode)
-     :contact ("vscode-html-language-server" "--stdio"))
+     :contact ("rass" "html"))
     (:major-modes
      (nix-ts-mode)
      :contact ("rass" "nix")
