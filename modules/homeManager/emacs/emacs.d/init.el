@@ -118,6 +118,8 @@
 (require 'init-dabbrev)
 (require 'init-so-long-mode)
 (require 'init-menu-bar-mode)
+(require 'init-doc-view-mode)
+(require 'init-mwheel)
 
 ;; Configure folding
 (require 'init-outline-minor-mode)

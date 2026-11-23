@@ -321,6 +321,8 @@ moze
 mru
 multibyte
 multiclient
+mupdf
+mwheel
 mylauncher
 myvimrc
 nargs
@@ -498,6 +500,7 @@ tls
 tmux
 tolower
 topk
+trackpad
 trailspace
 treesit
 treesj

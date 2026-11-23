@@ -18,5 +18,7 @@
     qpdf
     poppler-utils
     ghostscript
+    # mupdf is required by DocView of Emacs to render PDF to SVG.
+    mupdf
   ];
 }
