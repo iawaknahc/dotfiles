@@ -57,7 +57,18 @@ nufmt-check:
 
 # Run checker `harper-cli-lint`
 harper *FLAGS:
-    just list-tracked --ignore-file harperignore | xargs harper-cli-lint --format compact {{FLAGS}}
+    just list-tracked \
+      --extension js \
+      --extension lua \
+      --extension md \
+      --extension nix \
+      --extension py \
+      --extension sh \
+      --extension toml \
+      --extension ts \
+      --extension txt \
+      --extension zig \
+      --ignore-file harperignore | xargs harper-cli-lint --format compact {{FLAGS}}
 
 # Run checker `codebook-lsp lint` with respect to codebookignore
 codebook *FLAGS:

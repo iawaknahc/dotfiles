@@ -6,11 +6,6 @@
 }:
 let
   codebook_home = "${config.home.homeDirectory}/.config/codebook";
-  harper_ls_home =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      "${config.home.homeDirectory}/Library/Application Support/harper-ls"
-    else
-      "${config.home.homeDirectory}/.config/harper-ls";
 
   harperLintersToBeDisabled = [
     "CapitalizePersonalPronouns" # It is common to have a lone 'i' character.
@@ -182,24 +177,5 @@ in
     mkdir -p "${codebook_home}"
     ${pkgs.jq}/bin/jq --raw-input --null-input '[inputs] | { words: . }' ${./words.txt} > /tmp/codebook_words.json
     ${pkgs.jq}/bin/jq --slurp '.[0] * .[1]' /tmp/codebook_words.json ${codebook_config_json} | ${pkgs.remarshal}/bin/json2toml | ${pkgs.taplo}/bin/taplo fmt - | ${pkgs.moreutils}/bin/sponge "${codebook_home}/codebook.toml"
-  '';
-
-  home.activation.check-config-harper-ls = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
-    src="${harper_ls_home}/dictionary.txt"
-    if [ -f "$src" ]; then
-      ${pkgs.jq}/bin/jq --raw-input --null-input -r '[inputs] | sort | .[]' "$src" | ${pkgs.moreutils}/bin/sponge /tmp/harper-ls-dictionary.txt
-      difference="$(LC_ALL=C ${pkgs.coreutils}/bin/comm -23 /tmp/harper-ls-dictionary.txt ${./words.txt})"
-      if [ -n "$difference" ]; then
-        printf 1>&2 "%s has the following additions which you must manually add to words.txt\n" "$src"
-        printf 1>&2 "\n"
-        printf 1>&2 "%s\n" "$difference"
-        exit 1
-      fi
-    fi
-  '';
-
-  home.activation.write-config-harper-ls = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p "${harper_ls_home}"
-    ${pkgs.moreutils}/bin/sponge <${./words.txt} "${harper_ls_home}/dictionary.txt"
   '';
 }
