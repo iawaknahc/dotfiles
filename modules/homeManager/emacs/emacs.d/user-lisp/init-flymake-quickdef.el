@@ -62,18 +62,20 @@
          (msg (match-string 4)))
     (list fmqd-source beg end type (list "hadolint" code msg))))
 
-(defun my/flymake-add-all-custom-backends ()
-  "Add all custom backends to `flymake-diagnostic-functions'."
+(defun my/flymake-add-codespell ()
+  "Add `flymake-codespell' to `flymake-diagnostic-functions'."
   (add-hook 'flymake-diagnostic-functions #'flymake-codespell nil t))
 
-(add-hook 'conf-mode-hook #'my/flymake-add-all-custom-backends)
-(add-hook 'prog-mode-hook #'my/flymake-add-all-custom-backends)
-(add-hook 'text-mode-hook #'my/flymake-add-all-custom-backends)
+(defun my/flymake-add-hadolint ()
+  "Add `flymake-hadolint' to `flymake-diagnostic-functions'."
+  (add-hook 'flymake-diagnostic-functions #'flymake-hadolint nil t))
 
-(add-hook
- 'dockerfile-ts-mode-hook
- (lambda ()
-   (add-hook 'flymake-diagnostic-functions #'flymake-hadolint nil t)))
+(add-hook 'conf-mode-hook #'my/flymake-add-codespell)
+(add-hook 'prog-mode-hook #'my/flymake-add-codespell)
+;; Do not add `flymake-codespell' to `text-mode' because
+;; we do not want to run codespell in `org-mode'.
+
+(add-hook 'dockerfile-ts-mode-hook #'my/flymake-add-hadolint)
 
 (provide 'init-flymake-quickdef)
 ;;; init-flymake-quickdef.el ends here
