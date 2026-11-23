@@ -216,6 +216,7 @@ headerline
 healthcheck
 helpgrep
 hexkey
+hfs
 hideshow
 hkt
 hledger
@@ -265,6 +266,7 @@ lclose
 leadmultispace
 leadtab
 lessp
+letf
 lgrep
 lhelpgrep
 lhistory

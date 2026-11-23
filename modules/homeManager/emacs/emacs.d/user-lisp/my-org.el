@@ -3,6 +3,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'my-holidays))
+(require 'cl-lib)
 (require 'calendar)
 (require 'holidays)
 
@@ -72,6 +73,28 @@ Call ORIG-FUN with ARGS when the agenda range is not available."
 (defun my/org-calendar-holiday--invalidate (&rest _args)
   "Invalidate the cache."
   (setq my/org-calendar-holiday--cache-key nil))
+
+;;;###autoload
+(defun my/org-agenda-list--around (orig-fun &rest args)
+  "Memoize `abbreviate-file-name' and bind `file-name-coding-system'.
+
+On my macOS, `file-name-coding-system' is utf-8-hfs-unix.
+With this coding system, it will perform unicode normalization.
+See https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/international/ucs-normalize.el
+Binding `file-name-coding-system' to utf-8-unix skips the normalization.
+
+`abbreviate-file-name' will be called many times to
+construct the tip tool of agenda line.
+
+Call ORIG-FUN with ARGS."
+  (let* ((file-name-coding-system 'utf-8-unix)
+         (cache (make-hash-table :test #'equal))
+         (abbreviate (symbol-function 'abbreviate-file-name)))
+    (cl-letf (((symbol-function 'abbreviate-file-name)
+               (lambda (filename)
+                 (or (gethash filename cache)
+                     (puthash filename (funcall abbreviate filename) cache)))))
+      (apply orig-fun args))))
 
 (provide 'my-org)
 ;;; my-org.el ends here
