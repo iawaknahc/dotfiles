@@ -226,7 +226,7 @@ and make it bound."
  ;; it is faster to use `org-calendar-holiday' to show holidays in the agenda view.
  org-agenda-include-diary nil)
 
-;;; Speed up `org-calendar-holiday'
+;; Speed up `org-calendar-holiday'
 (advice-add #'org-calendar-holiday :around #'my/org-calendar-holiday--around)
 (advice-add #'org-agenda-redo :before #'my/org-calendar-holiday--invalidate)
 
@@ -237,10 +237,10 @@ and make it bound."
   (org-agenda-redo)
   (message "Show all dates: %s" (if org-agenda-show-all-dates "on" "off")))
 
-;;; Speed up `org-agenda-list'.
+;; Speed up `org-agenda-list'.
 (advice-add #'org-agenda-list :around #'my/org-agenda-optimize--around)
 
-;;; Speed up `org-diary'.
+;; Speed up `org-diary'.
 (advice-add #'org-diary :around #'my/org-agenda-optimize--around)
 
 
