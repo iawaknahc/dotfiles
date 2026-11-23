@@ -7,10 +7,6 @@ from rassumfrassum.json import JSON
 from rassumfrassum.util import dmerge
 
 
-def codebook() -> list[str]:
-    return ["codebook-lsp", "serve"]
-
-
 def harper() -> list[str]:
     return ["harper-ls", "--stdio"]
 

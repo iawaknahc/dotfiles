@@ -6,7 +6,6 @@ def servers():
         ["pyrefly", "lsp"],
         ["ty", "server"],
         ["ruff", "server"],
-        common.codebook(),
         common.harper(),
         common.typos(),
     ]

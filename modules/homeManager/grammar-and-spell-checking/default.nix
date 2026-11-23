@@ -5,8 +5,6 @@
   ...
 }:
 let
-  codebook_home = "${config.home.homeDirectory}/.config/codebook";
-
   harperLintersToBeDisabled = [
     "CapitalizePersonalPronouns" # It is common to have a lone 'i' character.
     "Dashes" # Comments in Lua starts with two dashes.
@@ -107,14 +105,6 @@ let
           --add-flag '--ignore' \
           --add-flag '${builtins.concatStringsSep "," harperLintersToBeDisabled}'
       '';
-
-  codebook_config = {
-    ignore_patterns = [
-      # Ignore Neovim abbreviations.
-      "^cnoreabbrev.*"
-    ];
-  };
-  codebook_config_json = pkgs.writeText "codebook.json" (builtins.toJSON codebook_config);
 in
 {
   home.packages = with pkgs; [
@@ -123,13 +113,13 @@ in
     harper
     harper-cli-lint
 
-    codebook
-
     typos
     typos-lsp
 
     # Without dictionary, cspell produces many false positives.
     #nodePackages.cspell
+    # Without dictionary, codebook produces many false positives.
+    #codebook
 
     codespell
 
@@ -149,35 +139,4 @@ in
   }";
 
   xdg.configFile."nvim/lsp/harper_ls.lua".source = "${harper-ls_lspconfig_lua}";
-
-  # words.txt must be in lowercase because codebook normalizes the file to lowercase when it adds new words.
-
-  home.activation.check-words-txt = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
-    src="${./words.txt}"
-    ${pkgs.jq}/bin/jq --raw-input --null-input -r '[inputs] | sort | .[]' "$src" | ${pkgs.moreutils}/bin/sponge /tmp/words.txt
-    if ! diff "$src" /tmp/words.txt; then
-      printf 1>&2 "words.txt is not sorted.\n"
-      exit 1
-    fi
-  '';
-
-  home.activation.check-config-codebook = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
-    src="${codebook_home}/codebook.toml"
-    if [ -f "$src" ]; then
-      ${config.mypython.pythonPackages.remarshal}/bin/toml2json "$src" | ${pkgs.jq}/bin/jq '.words | sort | .[]' -r | ${pkgs.moreutils}/bin/sponge /tmp/codebook_words.txt
-      difference="$(LC_ALL=C ${pkgs.coreutils}/bin/comm -23 /tmp/codebook_words.txt ${./words.txt})"
-      if [ -n "$difference" ]; then
-        printf 1>&2 "%s has the following additions which you must manually add to words.txt\n" "$src"
-        printf 1>&2 "\n"
-        printf 1>&2 "%s\n" "$difference"
-        exit 1
-      fi
-    fi
-  '';
-
-  home.activation.write-config-codebook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p "${codebook_home}"
-    ${pkgs.jq}/bin/jq --raw-input --null-input '[inputs] | { words: . }' ${./words.txt} > /tmp/codebook_words.json
-    ${pkgs.jq}/bin/jq --slurp '.[0] * .[1]' /tmp/codebook_words.json ${codebook_config_json} | ${pkgs.remarshal}/bin/json2toml | ${pkgs.taplo}/bin/taplo fmt - | ${pkgs.moreutils}/bin/sponge "${codebook_home}/codebook.toml"
-  '';
 }

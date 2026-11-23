@@ -46,7 +46,6 @@ vim.lsp.config("beancount", {
 vim.lsp.enable("beancount")
 
 -- Language servers that should always run.
-vim.lsp.enable("codebook")
 vim.lsp.enable("harper_ls")
 vim.lsp.enable("typos_lsp")
 
