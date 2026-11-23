@@ -9,6 +9,7 @@
   ];
 
   # https://clojure.org/reference/clojure_cli#config_dir
+  # codespell:ignore-next-line edn
   home.file.".clojure/deps.edn".text = ''
     {
       :deps {

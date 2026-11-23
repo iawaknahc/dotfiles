@@ -14,6 +14,7 @@ font-utils.py
 gl-mahjongtile-clr.py
 harperignore
 init-calc.el
+init-denote.el
 init-font.el
 init-mu4e.el
 init-world-clock-mode.el

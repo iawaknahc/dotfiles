@@ -53,6 +53,7 @@
       enable = false;
     };
 
+    # codespell:ignore-next-line ede
     ede = {
       enable = false;
     };

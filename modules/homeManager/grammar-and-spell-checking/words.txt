@@ -142,7 +142,6 @@ eof
 eql
 esac
 esc
-etcc
 expandtab
 exportcert
 exrc
@@ -464,7 +463,6 @@ shlvl
 showbreak
 signcolumn
 sketchybar
-sluggify
 smartcase
 softtabstop
 sourcekit
@@ -568,7 +566,6 @@ xwidget
 xyz
 yamlls
 yeung
-zar
 zls
 zoxide
 zwj

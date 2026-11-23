@@ -91,6 +91,7 @@ INITIAL-TITLE and PROMPT-TEXT are handled like `denote-title-prompt'."
   (if-let* ((initial-keywords (nth 1 args))
             (my/denote--renaming)
             (title my/denote--title)
+            ;; codespell:ignore-next-line sluggify
             (title (denote-sluggify-title title))
             ;; All files
             (files (denote-directory-files))

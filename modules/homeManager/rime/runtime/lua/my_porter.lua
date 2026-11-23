@@ -232,6 +232,7 @@ end
 
 local step3_rules = {
   { "icate", "ic" },
+  -- codespell:ignore-next-line ative
   { "ative", "" },
   { "alize", "al" },
   { "iciti", "ic" },
@@ -267,6 +268,7 @@ local step4_rules = {
   { "ible", nil },
   { "ant", nil },
   { "ement", nil },
+  -- codespell:ignore-next-line ment
   { "ment", nil },
   { "ent", nil },
   {

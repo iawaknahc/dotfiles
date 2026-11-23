@@ -115,6 +115,7 @@ TWO_DECIMAL_CURRENCIES: frozenset[str] = frozenset(
         "XCD",
         "XCG",
         "YER",
+        # codespell:ignore-next-line zar
         "ZAR",
         "ZMW",
     )

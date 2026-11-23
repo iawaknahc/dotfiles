@@ -64,6 +64,7 @@ const KnownFile = enum {
                     Mn,
                     Mc,
                     Me,
+                    // codespell:ignore-next-line nd
                     Nd,
                     Nl,
                     No,
@@ -445,6 +446,7 @@ const KnownFile = enum {
                     @"New Tai Lue",
                     @"Khmer Symbols",
                     Buginese,
+                    // codespell:ignore-next-line tham
                     @"Tai Tham",
                     @"Combining Diacritical Marks Extended",
                     Balinese,
@@ -513,6 +515,7 @@ const KnownFile = enum {
                     @"Yi Syllables",
                     @"Yi Radicals",
                     Lisu,
+                    // codespell:ignore-next-line vai
                     Vai,
                     @"Cyrillic Extended-B",
                     Bamum,
