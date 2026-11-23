@@ -108,7 +108,7 @@ DESCRIPTION is the description of the holiday."
       (when (>= y1-instance-nth 0)
         (setq result (append result (list (list y1-instance (format "%s %d 周年" description y1-instance-nth))) nil)))
       (when (and (>= y2-instance-nth 0) (/= y1-instance-nth y2-instance-nth))
-        (setq result (append result (list (list y2-instance (format "%s %d 周年" description y1-instance-nth))) nil)))
+        (setq result (append result (list (list y2-instance (format "%s %d 周年" description y2-instance-nth))) nil)))
       (holiday-filter-visible-calendar result))))
 
 ;;;###autoload
