@@ -118,28 +118,6 @@ DESCRIPTION is the description of the holiday."
   (holiday-filter-visible-calendar (list (list (list month day year) description))))
 
 ;;;###autoload
-(defun my/holiday-easter (offset description)
-  "A `holiday-other-holidays' s-expression for Easter with OFFSET and DESCRIPTION.
-`holiday-easter-etc-abs' is used to calculate Easter.
-
-For example, an OFFSET of -2 is Good Friday,
-an OFFSET of -1 is Holy Saturday,
-an OFFSET of 0 is Easter Sunday,
-an OFFSET of 1 is Easter Monday."
-  (pcase-let* ((`(_ ,y1 _ ,y2) (calendar-get-month-range)))
-    (let* ((y1-abs (holiday-easter-etc-abs y1))
-           (y2-abs (holiday-easter-etc-abs y2))
-           (y1-abs (+ y1-abs offset))
-           (y2-abs (+ y2-abs offset))
-           (y1-date (calendar-gregorian-from-absolute y1-abs))
-           (y2-date (calendar-gregorian-from-absolute y2-abs))
-           result)
-      (setq result (append result (list (list y1-date description)) nil))
-      (when (/= y1-abs y2-abs)
-        (setq result (append result (list (list y2-date description)) nil)))
-      (holiday-filter-visible-calendar result))))
-
-;;;###autoload
 (defun my/holiday-prefix (prefix hlist)
   "A `holiday-other-holidays' s-expression to add PREFIX to holidays in HLIST.
 PREFIX is added to the description of each holiday."
@@ -215,9 +193,9 @@ DESCRIPTION is the description of the holiday."
     ;; Cap. 149 General Holidays Ordinance Schedule (g) Good Friday
     ;; Cap. 149 General Holidays Ordinance Schedule (h) the day following Good Friday
     ;; Cap. 149 General Holidays Ordinance Schedule (i) Easter Monday
-    (my/holiday-substitution (my/holiday-easter -2 "耶穌受難節") 4 "復活節星期一翌日")
-    (my/holiday-substitution (my/holiday-easter -1 "耶穌受難節翌日") 3 "復活節星期一翌日")
-    (my/holiday-substitution (my/holiday-easter 1 "復活節星期一") 1 "復活節星期一翌日")
+    (my/holiday-substitution (holiday-easter-etc -2 "耶穌受難節") 4 "復活節星期一翌日")
+    (my/holiday-substitution (holiday-easter-etc -1 "耶穌受難節翌日") 3 "復活節星期一翌日")
+    (my/holiday-substitution (holiday-easter-etc 1 "復活節星期一") 1 "復活節星期一翌日")
     ;; Cap. 149 General Holidays Ordinance Schedule (j) Labor day
     (when (>= displayed-year 1999)
       (my/holiday-substitution (holiday-fixed 5 1 "勞動節") 1 "勞動節翌日"))
@@ -321,15 +299,15 @@ DESCRIPTION is the description of the holiday."
     ;; Cap. 57 Section 39(1)(n) Easter Monday
     ;; 2021年第21號條例
     (when (>= displayed-year 2026)
-      (my/holiday-easter 1 "復活節星期一"))
+      (holiday-easter-etc 1 "復活節星期一"))
     ;; Cap. 57 Section 39(1)(o) Good Friday
     ;; 2021年第21號條例
     (when (>= displayed-year 2028)
-      (my/holiday-easter -2 "耶穌受難節"))
+      (holiday-easter-etc -2 "耶穌受難節"))
     ;; Cap. 57 Section 39(1)(p) the day following Good Friday
     ;; 2021年第21號條例
     (when (>= displayed-year 2030)
-      (my/holiday-easter -1 "耶穌受難節翌日")))
+      (holiday-easter-etc -1 "耶穌受難節翌日")))
   "A `holiday-other-holidays' like variable to define Hong Kong Statutory Holidays.")
 
 (cl-defun my/holiday-hong-kong (holidays &key strict)
@@ -660,7 +638,7 @@ then nil is returned."
   '((holiday-sexp '(my/holiday-nyse-observed 1 1 year) "New Year's Day")
     (holiday-float 1 1 3 "Martin Luther King Jr. Day")
     (holiday-float 2 1 3 "Washington's Birthday")
-    (my/holiday-easter -2 "Good Friday")
+    (holiday-easter-etc -2 "Good Friday")
     (holiday-float 5 1 -1 "Memorial Day")
     (holiday-sexp '(when (>= year 2022) (my/holiday-nyse-observed 6 19 year))
                   "Juneteenth National Independence Day")
