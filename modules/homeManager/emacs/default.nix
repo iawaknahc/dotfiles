@@ -269,21 +269,37 @@ in
     (setq mu4e-attachment-dir "${config.home.homeDirectory}/Downloads")
   '';
   home.file.".emacs.d/init.el".source = ./emacs.d/init.el;
-  home.file.".emacs.d/user-lisp" = {
-    source = ./emacs.d/user-lisp;
-    # recursive is needed because .emacs.d/user-lisp may contain generated files.
-    recursive = true;
-    # Emacs compares the last modified time of the .el and the .elc
-    # to determine whether it should byte-compile the file.
-    # https://github.com/emacs-mirror/emacs/blob/emacs-31.1/lisp/emacs-lisp/bytecomp.el
-    # Since the .el file is a symlink to the Nix store, its date is always 1970.
-    # This means the .elc will become stale.
-    # As a workaround, we delete the .elc files in every switch.
-    # When recursive is true, onChange always run.
-    onChange = ''
-      find "$HOME/.emacs.d/user-lisp" -name '*.elc' -delete
-    '';
-  };
+
+  # We used to use recursive=true to copy the whole directory.
+  # But that will cause the resolved path to a .el file changes on every switch.
+  # By generating each file one by one, the resolved path will change only when
+  # its contents change between the switches.
+  # When the resolved path and the contents of the file stays stable,
+  # Emacs will skip native-compile the .el file.
+  # This results in a greatly reduced time of the first launch after a switch.
+  imports = [
+    {
+      home.file =
+        lib.mapAttrs'
+          (
+            filename: _:
+            lib.nameValuePair ".emacs.d/user-lisp/${filename}" {
+              source = ./emacs.d/user-lisp + "/${filename}";
+              # The .el is a file in Nix store, so it has a 1970 mtime.
+              # Emacs uses mtime to determine whether to byte-compile a .el into .elc.
+              # Thus, it never byte-compile a .el file.
+              # To force byte-compilation, we remove the .elc file.
+              onChange = ''rm -f "$HOME/.emacs.d/user-lisp/${filename}c"'';
+            }
+          )
+          (
+            lib.filterAttrs (filename: filetype: filetype == "regular" && lib.hasSuffix ".el" filename) (
+              builtins.readDir ./emacs.d/user-lisp
+            )
+          );
+    }
+  ];
+
   home.file.".emacs.d/maplibre".source = ./emacs.d/maplibre;
   home.file.".emacs.d/user-lisp/init-exec-path-from-shell.el".text =
     let
