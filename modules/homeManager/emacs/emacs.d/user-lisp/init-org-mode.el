@@ -37,6 +37,10 @@
 (defvar org-timestamp-rounding-minutes)
 (declare-function diary-mark-entries "diary-lib")
 (declare-function diary-view-entries "diary-lib")
+(declare-function my/org-calendar-holiday--around "my-org")
+(declare-function my/org-calendar-holiday--invalidate "my-org")
+(declare-function org-agenda-redo "org-agenda")
+(declare-function org-calendar-holiday "org")
 (declare-function org-capture-goto-last-stored "org-capture")
 (declare-function org-clock-in "org-clock")
 (declare-function org-columns "org-colview")
@@ -232,6 +236,9 @@ and make it bound."
      (org-agenda-span 'year)
      (org-agenda-show-all-dates nil)))))
 
+;;; Speed up `org-calendar-holiday'
+(advice-add #'org-calendar-holiday :around #'my/org-calendar-holiday--around)
+(advice-add #'org-agenda-redo :before #'my/org-calendar-holiday--invalidate)
 
 ;;;; Column view
 (defun my/org-ctrl-c-ctrl-c-column-view ()

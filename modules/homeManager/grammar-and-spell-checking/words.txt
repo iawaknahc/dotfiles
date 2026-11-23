@@ -69,6 +69,7 @@ cli
 clientpidmap
 cljfmt
 closeoff
+clrhash
 cmake
 cmap
 cmdline
@@ -325,6 +326,7 @@ nas
 natively
 natnump
 nconc
+ndays
 neovim
 netrw
 nextweek
