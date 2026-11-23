@@ -83,7 +83,6 @@
 (require 'init-recentf)
 (require 'init-project)
 (require 'init-whitespace-mode)
-(require 'init-tidy-whitespace)
 (require 'init-show-paren)
 (require 'init-electric-pair-mode)
 (require 'init-indent-tabs-mode)

@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar whitespace-action)
 (defvar whitespace-line-column)
 (defvar whitespace-style)
 
@@ -39,6 +40,11 @@
         ;; I found it quite distracting in a file with `indent-tabs-mode' on and `tab-width' being 8.
         ;;big-indent
         ))
+
+;; cleanup means cleanup bogus whitespace when `whitespace-mode' is turned on.
+;; auto-cleanup means cleanup bogus whitespace when the buffer is written.
+;; Both of them handle read-only buffers gracefully.
+(setq whitespace-action '(cleanup auto-cleanup))
 
 (provide 'init-whitespace-mode)
 ;;; init-whitespace-mode.el ends here
