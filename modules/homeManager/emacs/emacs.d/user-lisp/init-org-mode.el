@@ -191,6 +191,8 @@
 (keymap-global-set "C-c C" #'org-capture-goto-last-stored)
 ;; C-c C-l is `org-insert-link' in `org-mode-map'.
 (keymap-global-set "C-c C-l" #'org-insert-link-global)
+;; C-c C-o is `org-open-at-point' in `org-mode-map'.
+(keymap-global-set "C-c C-o" #'org-open-at-point-global)
 (with-eval-after-load 'org
   ;; The default "C-c C-x C-t" is too long.
   (keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays)
