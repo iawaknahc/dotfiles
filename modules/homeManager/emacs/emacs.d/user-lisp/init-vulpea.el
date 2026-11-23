@@ -39,6 +39,7 @@
 (declare-function vulpea-select--completion-table "vulpea-select")
 (declare-function vulpea-select-describe "vulpea-select")
 (declare-function vulpea-select-describe-outline-full "vulpea-select")
+(declare-function vulpea-ui-sidebar-toggle "vulpea-ui")
 
 ;;;; Options
 (setq vulpea-db-sync-directories (list "~/org/"))
@@ -85,6 +86,11 @@
 ;;;; Keymap
 ;; `vulpea-find' is used to open notes or create a new note.
 (keymap-global-set "C-c o" #'vulpea-find)
+(defun my/vulpea-ctrl-c-ctrl-c-toggle-sidebar ()
+  "\\[org-ctrl-c-ctrl-c] anywhere in a Org buffer to toggle vulpea sidebar."
+  (vulpea-ui-sidebar-toggle)
+  t)
+(add-hook 'org-ctrl-c-ctrl-c-final-hook #'my/vulpea-ctrl-c-ctrl-c-toggle-sidebar)
 
 ;;;; CAPF
 ;; Re-implement `vulpea-insert' as a custom CAPF.
