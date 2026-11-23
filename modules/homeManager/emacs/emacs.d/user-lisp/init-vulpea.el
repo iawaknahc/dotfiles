@@ -3,10 +3,12 @@
 ;;
 ;; vulpea has 2 main entrypoints, namely `vulpea-find' and `vulpea-insert'.
 ;; `vulpea-find' is bound in the global keymap.
-;; The functionality of `vulpea-insert' is re-implemented as a custom CAPF.
+;; `vulpea-insert' is replaced by `org-insert-link-global'.
 ;;
 ;;; Code:
 
+(require 'subr-x)
+(require 'org-macs)
 (require 'calendar)
 
 (defvar org-directory)
@@ -17,14 +19,13 @@
 (defvar vulpea-db-sync-directories)
 (defvar vulpea-db-sync-external-method)
 (defvar vulpea-default-notes-directory)
-(defvar vulpea-find-default-candidates-source)
 (defvar vulpea-select-describe-fn)
 (defvar vulpea-select-match-ids)
 (defvar vulpea-ui-fast-parse)
 (declare-function my/holiday-birth-and-death "my-holidays")
 (declare-function my/holiday-sort "my-holidays")
+(declare-function org-id-description "org-id")
 (declare-function org-id-get-create "org-id")
-(declare-function org-in-regexp "org-macs")
 (declare-function org-parse-time-string "org-macs")
 (declare-function url-path-and-query "url-parse")
 (declare-function vulpea-db-autosync-mode "vulpea-db-sync")
@@ -36,8 +37,6 @@
 (declare-function vulpea-note-title "vulpea-note" t t)
 (declare-function vulpea-schema-applies-p "vulpea-schema")
 (declare-function vulpea-schema-flymake-mode "vulpea-schema-flymake")
-(declare-function vulpea-select--completion-table "vulpea-select")
-(declare-function vulpea-select-describe "vulpea-select")
 (declare-function vulpea-select-describe-outline-full "vulpea-select")
 (declare-function vulpea-ui-sidebar-toggle "vulpea-ui")
 
@@ -91,39 +90,6 @@
   (vulpea-ui-sidebar-toggle)
   t)
 (add-hook 'org-ctrl-c-ctrl-c-final-hook #'my/vulpea-ctrl-c-ctrl-c-toggle-sidebar)
-
-;;;; CAPF
-;; Re-implement `vulpea-insert' as a custom CAPF.
-(defconst my/vulpea-insert-capf--re (rx "[[id:" (group-n 1 (* (not (in "][")))) "]]")
-  "The regexp to define BEG and END.")
-
-(defun my/vulpea-insert-capf--collection ()
-  "The completion table for `vulpea-insert'."
-  ;; Respect `vulpea-find-default-candidates-source'.
-  (let* ((notes (funcall vulpea-find-default-candidates-source))
-         ;; Respect `vulpea-select-describe-fn'.
-         (alist (seq-map (lambda (note) (vulpea-select-describe note)) notes)))
-    (vulpea-select--completion-table alist)))
-
-(defun my/vulpea-insert-capf ()
-  "The completion-at-point-function for `vulpea-insert'."
-  (when (org-in-regexp my/vulpea-insert-capf--re)
-    (let* ((beg (match-beginning 1))
-           (end (match-end 1)))
-      (when (<= beg (point) end)
-        (list
-         beg
-         end
-         (completion-table-dynamic (lambda (_) (my/vulpea-insert-capf--collection)))
-         :exclusive 'no
-         ;; On exit the completion, delete the candidate string, and insert the ID link and the note title.
-         :exit-function (lambda (candidate _status)
-                          (when-let* ((note-id (get-text-property 0 'vulpea-note-id candidate))
-                                      ;; FIXME: Make use of https://github.com/d12frosted/vulpea/issues/436
-                                      (note (vulpea-db-get-by-id note-id))
-                                      (note-title (vulpea-note-title note)))
-                            (delete-char (- (length candidate)))
-                            (insert note-id "][" note-title))))))))
 
 ;;;; Integration with calendar
 (defun my/vulpea--note-get-date (note name)
@@ -227,6 +193,21 @@ The URL must be a Google Map place URL, in this format
 - location_kind :: landmark" title location url latitude longitude))
     (goto-char beg)
     (org-id-get-create)))
+
+;;;; Work around some Org bugs
+
+(defun my/org-id-description (link desc)
+  "Replace the buggy implementation of `org-id-description'.
+The bug is that `org-id-description' will error if ID is a file-level ID.
+
+DESC is returned if it is non-empty.
+Otherwise, ID will be extracted from LINK and query vulpea for the title."
+  (or (org-string-nw-p desc)
+      (let ((id (string-remove-prefix "id:" link)))
+        (if-let* ((note (vulpea-db-get-by-id id)))
+            (vulpea-note-title note)
+          (user-error "No vulpea note with ID %s" id)))))
+(advice-add #'org-id-description :override #'my/org-id-description)
 
 (provide 'init-vulpea)
 ;;; init-vulpea.el ends here

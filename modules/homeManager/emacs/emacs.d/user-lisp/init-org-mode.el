@@ -20,6 +20,7 @@
 (defvar org-directory)
 (defvar org-format-latex-options)
 (defvar org-hide-block-startup)
+(defvar org-id-completion-targets)
 (defvar org-id-link-to-org-use-id)
 (defvar org-id-method)
 (defvar org-id-prefix)
@@ -51,6 +52,7 @@
 (declare-function org-entry-get "org")
 (declare-function org-find-olp "org")
 (declare-function org-get-heading "org")
+(declare-function org-insert-link-global "ol")
 (declare-function org-lint "org-lint")
 (declare-function org-lint-checker-name "org-lint" t t)
 (declare-function org-map-entries "org")
@@ -124,7 +126,11 @@
 ;; Instead of using `org-id-prefix' to add prefix,
 ;; we embed the prefix in `org-id-ts-format'.
 (setq org-id-ts-format "org_%Y%m%d_%H%M%S_%N")
-
+;; The default value of `org-id-completion-targets' includes (nil . t) as the car of the list.
+;; That will make id completion skip file-level IDs in Org buffers.
+;; (nil . t) will also cause `org-insert-link-globally' to fail in non-Org buffers.
+;; So it is better to drop it.
+(setq org-id-completion-targets '((org-id-files . t)))
 
 ;;;; TODO and clock
 ;; Log timestamp when a TODO is DONE.
@@ -183,6 +189,8 @@
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-c C" #'org-capture-goto-last-stored)
+;; C-c C-l is `org-insert-link' in `org-mode-map'.
+(keymap-global-set "C-c C-l" #'org-insert-link-global)
 (with-eval-after-load 'org
   ;; The default "C-c C-x C-t" is too long.
   (keymap-set org-mode-map "C-c t" #'org-toggle-timestamp-overlays)

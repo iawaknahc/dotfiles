@@ -4,14 +4,12 @@
 
 (defvar cape-file-directory)
 (defvar cape-file-prefix)
-(declare-function cape-capf-properties "cape" t t)
 (declare-function cape-file "cape")
 (declare-function cape-wrap-choose "cape")
 (declare-function cape-wrap-properties "cape")
 (declare-function cape-wrap-silent "cape")
 (declare-function cape-wrap-super "cape")
 (declare-function cape-wrap-trigger "cape")
-(declare-function my/vulpea-insert-capf "init-vulpea")
 (declare-function pcomplete-completions-at-point "pcomplete")
 (declare-function tempel-complete "tempel")
 
@@ -96,9 +94,7 @@ to return candidates."
 
 (defun my/capf ()
   "Return the first of these CAPFs that has a candidate at point."
-  ;; We want it to trigger when the string before point is "[[id:"
-  (cape-wrap-choose (cape-capf-properties #'my/vulpea-insert-capf :company-prefix-length t)
-                    #'my/tempel-capf
+  (cape-wrap-choose #'my/tempel-capf
                     #'cape-file
                     #'my/org-pcomplete-capf
                     #'my/rest-capfs))
