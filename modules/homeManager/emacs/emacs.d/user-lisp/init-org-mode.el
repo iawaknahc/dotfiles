@@ -214,9 +214,10 @@ and make it bound."
            (filepaths (seq-map #'vulpea-note-path file-notes)))
       (setq my/org-agenda-files-last filepaths)
       (setq org-agenda-files filepaths))))
-;; Just-in-time set variable `org-agenda-files' before `org-agenda-list' runs.
-;; The advice is added to `org-agenda-list' so that `org-agenda' and `org-calendar-goto-agenda' can benefit.
-(advice-add #'org-agenda-list :before #'my/org-agenda-before--set-org-agenda-files)
+;; Just-in-time set variable `org-agenda-files' in various agenda view entrypoints.
+(advice-add #'org-agenda :before #'my/org-agenda-before--set-org-agenda-files)
+(advice-add #'org-calendar-goto-agenda :before #'my/org-agenda-before--set-org-agenda-files)
+(advice-add #'org-agenda-redo :before #'my/org-agenda-before--set-org-agenda-files)
 (advice-add #'diary-mark-entries :before #'my/org-agenda-before--set-org-agenda-files)
 (advice-add #'diary-view-entries :before #'my/org-agenda-before--set-org-agenda-files)
 
