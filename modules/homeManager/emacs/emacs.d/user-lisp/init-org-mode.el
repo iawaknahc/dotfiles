@@ -7,6 +7,7 @@
 (defvar org-agenda-custom-commands)
 (defvar org-agenda-files)
 (defvar org-agenda-include-diary)
+(defvar org-agenda-show-all-dates)
 (defvar org-archive-sibling-heading)
 (defvar org-attach-id-dir)
 (defvar org-capture-templates)
@@ -233,6 +234,13 @@ and make it bound."
 ;;; Speed up `org-calendar-holiday'
 (advice-add #'org-calendar-holiday :around #'my/org-calendar-holiday--around)
 (advice-add #'org-agenda-redo :before #'my/org-calendar-holiday--invalidate)
+
+(defun my/org-agenda-toggle-show-all-dates ()
+  "Toggle the global value of `org-agenda-show-all-dates' and rebuild the agenda."
+  (interactive)
+  (setq org-agenda-show-all-dates (not org-agenda-show-all-dates))
+  (org-agenda-redo)
+  (message "Show all dates: %s" (if org-agenda-show-all-dates "on" "off")))
 
 ;;;; Column view
 (defun my/org-ctrl-c-ctrl-c-column-view ()
