@@ -17,6 +17,7 @@
 (declare-function denote-rename-file "denote")
 (declare-function denote-retrieve-filename-identifier "denote")
 (declare-function denote-retrieve-filename-title "denote")
+;; typos:ignore-next-line
 (declare-function denote-sluggify-title "denote")
 (declare-function denote-title-prompt "denote")
 

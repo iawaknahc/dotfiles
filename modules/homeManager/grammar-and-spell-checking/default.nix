@@ -124,6 +124,8 @@ in
     harper-cli-lint
 
     codebook
+
+    typos
     typos-lsp
 
     # Without dictionary, cspell produces many false positives.

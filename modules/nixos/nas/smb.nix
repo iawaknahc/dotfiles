@@ -20,7 +20,7 @@
     path = "/data/smb";
     browsable = "yes";
     public = "no";
-    writeable = "yes";
+    writable = "yes";
     "valid users" = "nixos";
     "create mask" = "0666";
     "directory mask" = "0777";

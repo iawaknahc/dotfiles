@@ -29,4 +29,5 @@ my_porter_spec.lua
 my_porter_voc.txt
 parse_ucd.zig
 secrets/secrets.yaml
+typos.toml
 vimrc.vim

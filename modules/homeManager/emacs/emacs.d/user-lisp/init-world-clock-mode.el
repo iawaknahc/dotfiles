@@ -161,7 +161,7 @@ All properties are non-nil.")
 Localized according to `my/world-clock-cldr-json-locale'.
 
 The plist has the following properties:
-- :alpha2 The ISO 3166 alpah-2 code
+- :alpha2 The ISO 3166 alpha-2 code
 - :name The name
 - :short-name The short name
 

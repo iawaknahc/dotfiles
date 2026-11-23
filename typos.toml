@@ -1,0 +1,21 @@
+[files]
+extend-exclude = [
+  "adguard.json",
+  "my_porter_output.txt",
+  "my_porter_voc.txt"
+]
+[default]
+extend-ignore-re = [
+  # Ignore the line after `typos:ignore-next-line`:
+  "typos:ignore-next-line.*\\n.*",
+  # Ignore the line after `codespell:ignore-next-line`:
+  "codespell:ignore-next-line.*\\n.*",
+  # Ignore Syncthing device IDs: 8 groups of 7 base32 characters, e.g. AAAAAAA-BBBBBBB-
+  "\\b[A-Z2-7]{7}(-[A-Z2-7]{7}){7}\\b",
+  # Ignore Unicode code points.
+  "\\b([A-F0-9a-f]){4,6}\\b"
+]
+
+[default.extend-words]
+# catppuccin tmux uses the word "thm" extensively.
+thm = "thm"

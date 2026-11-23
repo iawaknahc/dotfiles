@@ -157,6 +157,7 @@ local function step1b(str)
   end
   -- Add stem ~= nil checking to make the typechecker happy.
   if do_additional_work and stem ~= nil then
+    -- typos:ignore-next-line
     if ends_with(str, "at") or ends_with(str, "bl") or ends_with(str, "iz") then
       str = str .. "e"
     elseif
@@ -203,6 +204,7 @@ local step2_rules = {
   { "ator", "ate" },
   { "alism", "al" },
   { "iveness", "ive" },
+  -- typos:ignore-next-line
   { "fulness", "ful" },
   { "ousness", "ous" },
   { "aliti", "al" },
@@ -237,6 +239,7 @@ local step3_rules = {
   { "alize", "al" },
   { "iciti", "ic" },
   { "ical", "ic" },
+  -- typos:ignore-next-line
   { "ful", "" },
   { "ness", "" },
 }
