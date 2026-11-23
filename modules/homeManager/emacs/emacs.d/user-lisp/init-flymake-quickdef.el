@@ -10,7 +10,13 @@
   :pre-let ((codespell-exec (executable-find "codespell")))
   :pre-check (unless codespell-exec (error "The command codespell not found in PATH"))
   :write-type 'pipe
-  :proc-form (list codespell-exec "--stdin-single-line" "-")
+  :proc-form (let* ((command (list codespell-exec))
+                    (flags (list "--stdin-single-line"))
+                    (positionals (list "-"))
+                    (directory (locate-dominating-file default-directory ".codespellrc")))
+               (when directory
+                 (setq flags (append flags (list "--config" (expand-file-name ".codespellrc" directory)))))
+               (append command flags positionals))
   :search-regexp (rx line-start (group-n 1 (+ digit)) ": " (group-n 2 (* not-newline)) line-end)
   :prep-diagnostic
   (let* ((lnum (string-to-number (match-string 1)))
