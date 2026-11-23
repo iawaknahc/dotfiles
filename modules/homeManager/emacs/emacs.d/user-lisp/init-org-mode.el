@@ -228,13 +228,7 @@ and make it bound."
  ;; According to the manual
  ;; https://orgmode.org/manual/Weekly_002fdaily-agenda.html#Calendar_002fDiary-integration-1
  ;; it is faster to use `org-calendar-holiday' to show holidays in the agenda view.
- org-agenda-include-diary nil
-
- org-agenda-custom-commands
- `(("c" "Yearly agenda of calendar" agenda ""
-    ((org-agenda-files (list "~/org/diary-integration.org"))
-     (org-agenda-span 'year)
-     (org-agenda-show-all-dates nil)))))
+ org-agenda-include-diary nil)
 
 ;;; Speed up `org-calendar-holiday'
 (advice-add #'org-calendar-holiday :around #'my/org-calendar-holiday--around)
