@@ -8,6 +8,10 @@
 (setq mode-line-collapse-minor-modes '(apheleia-mode
                                        auto-revert-mode
                                        eldoc-mode
+                                       flyspell-mode
+                                       outline-minor-mode
+                                       visual-line-mode
+                                       vulpea-schema-flymake-mode
                                        whitespace-mode))
 ;; Place the evil state tag at the beginning of the mode line.
 ;; The default value of `before' really means after mode-line-position.
