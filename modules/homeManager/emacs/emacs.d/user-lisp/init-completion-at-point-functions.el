@@ -99,18 +99,16 @@ to return candidates."
                     #'my/org-pcomplete-capf
                     #'my/rest-capfs))
 
-(defun my/cape-after-change-major-mode-hook ()
-  "Add `my/capf' ahead of the CAPFs of the major mode and minor modes."
-  ;; It is important to check the major mode,
-  ;; otherwise all minibuffers will have `completion-at-point-functions' set, and
-  ;; Corfu will interfere with Vertico.
-  (when (derived-mode-p '(conf-mode prog-mode text-mode))
-    (add-hook 'completion-at-point-functions #'my/capf -1 t)))
+(defun my/cape-add-capf ()
+  "Add `my/capf' to `completion-at-point-functions' locally at depth -1."
+  (add-hook 'completion-at-point-functions #'my/capf -1 t))
 
 (setq cape-file-directory #'my/resolve-directory-before-point)
 (setq cape-file-prefix '("/" "~/" "./" "../"))
 
-(add-hook 'after-change-major-mode-hook #'my/cape-after-change-major-mode-hook)
+(add-hook 'conf-mode-hook #'my/cape-add-capf)
+(add-hook 'prog-mode-hook #'my/cape-add-capf)
+(add-hook 'text-mode-hook #'my/cape-add-capf)
 
 ;; A private function used by `dabbrev-capf' `dabbrev--abbrev-at-point' may signal (user-error "No possible abbreviation preceding point").
 ;; In my experience, this situation MUST happen in a Magit gitcommit buffer when I start typing.
