@@ -6,8 +6,10 @@
 
 (defvar cape-file-directory)
 (defvar cape-file-prefix)
+(declare-function cape-capf-properties "cape")
 (declare-function cape-file "cape")
 (declare-function cape-wrap-choose "cape")
+(declare-function cape-wrap-prefix-length "cape")
 (declare-function cape-wrap-properties "cape")
 (declare-function cape-wrap-silent "cape")
 (declare-function cape-wrap-super "cape")
@@ -80,8 +82,10 @@ Always add :annotation-function to show this candidate is from pcomplete."
 (advice-add #'pcomplete-completions-at-point :around #'my/pcomplete-completions-at-point--around)
 
 (defun my/ispell-completion-at-point--around (capf)
-  "Advise CAPF to add annotation."
-  (cape-wrap-properties capf :annotation-function (cl-constantly " Ispell")))
+  "Advise CAPF to add annotation and require a prefix of at least 3 characters."
+  (cape-wrap-prefix-length
+   (cape-capf-properties capf :annotation-function (cl-constantly " Ispell"))
+   3))
 
 (advice-add #'ispell-completion-at-point :around #'my/ispell-completion-at-point--around)
 
