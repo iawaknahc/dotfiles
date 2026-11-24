@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (defvar cape-file-directory)
 (defvar cape-file-prefix)
 (declare-function cape-file "cape")
@@ -63,15 +65,19 @@ Return /homeless-shelter if there is no such directory."
   "`tempel-complete' triggered by @."
   (cape-wrap-trigger #'tempel-complete ?@))
 
-(defun my/org-pcomplete-capf ()
-  "`pcomplete-completions-at-point' in `org-mode' only.
+(defun my/pcomplete-completions-at-point--around (capf)
+  "Advise CAPF to improve user experience.
 
-Calling it in all major modes makes Emacs lag on every keystroke.
+If it is `org-mode', then add :company-prefix-length t.
+This triggers auto completion when the string before point is #+.
 
-We want to trigger auto completion when the string before point is #+
-To do so, we use :company-prefix-length to override `corfu-auto-prefix'."
-  (when (derived-mode-p 'org-mode)
-    (cape-wrap-properties #'pcomplete-completions-at-point :company-prefix-length t)))
+Always add :annotation-function to show this candidate is from pcomplete."
+  (let* ((arguments (list capf :annotation-function (cl-constantly " Pcomplete"))))
+    (when (derived-mode-p 'org-mode)
+      (setq arguments (append arguments (list :company-prefix-length t))))
+    (apply #'cape-wrap-properties arguments)))
+
+(advice-add #'pcomplete-completions-at-point :around #'my/pcomplete-completions-at-point--around)
 
 (defun my/rest-capfs ()
   "Wrap the remaining CAPFs in `completion-at-point-functions'.
@@ -96,7 +102,6 @@ to return candidates."
   "Return the first of these CAPFs that has a candidate at point."
   (cape-wrap-choose #'my/tempel-capf
                     #'cape-file
-                    #'my/org-pcomplete-capf
                     #'my/rest-capfs))
 
 (defun my/cape-add-capf ()
