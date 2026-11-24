@@ -6,10 +6,12 @@
 (require 'cl-lib)
 (require 'calendar)
 (require 'holidays)
+(require 'org-element)
 
 (defvar org-agenda-buffer)
 (defvar org-agenda-current-date)
 (declare-function org-agenda-span-to-ndays "org-agenda")
+(declare-function my/calendar-gregorian-to-org-string "my-calendar")
 
 (defvar my/org-calendar-holiday--cache-key nil
   "(`org-starting-day' . `org-agenda-current-span').")
@@ -95,6 +97,74 @@ Call ORIG-FUN with ARGS."
                  (or (gethash filename cache)
                      (puthash filename (funcall abbreviate filename) cache)))))
       (apply orig-fun args))))
+
+;;;###autoload
+(defun my/org-element-timestamp-at-point ()
+  "Return a timestamp object at point.
+
+Return nil if there is no timestamp object at point."
+  (let* ((context (org-element-context)))
+    (pcase (org-element-type context)
+      ('timestamp context)
+      ('clock (org-element-property :value context))
+      ('planning (seq-find (lambda (timestamp)
+                             (and timestamp
+                                  (>= (point) (org-element-begin timestamp))
+                                  (< (point) (org-element-end timestamp))))
+                           (seq-map (lambda (property)
+                                      (org-element-property property context))
+                                    '(:scheduled :deadline :closed)))))))
+
+;;;###autoload
+(defun my/org-element-timestamp-date-at-point ()
+  "Return a Gregorian date of the timestamp object at point.
+
+Return nil if point is not on a date."
+  (when-let* ((timestamp (my/org-element-timestamp-at-point)))
+    (pcase (org-element-property :type timestamp)
+      ((or 'active 'inactive)
+       (list (org-element-property :month-start timestamp)
+             (org-element-property :day-start timestamp)
+             (org-element-property :year-start timestamp)))
+      ((or 'active-range 'inactive-range)
+       (pcase (org-element-property :range-type timestamp)
+         ('daterange
+          (pcase (org-at-timestamp-p 'lax)
+            ;; The first "-" in "--".
+            ((and 'after (guard (eql (match-beginning 0) (org-element-begin timestamp))))
+             nil)
+            ;;            trailing space                                 repeater
+            ((or 'bracket 'after         'year 'month 'day 'hour 'minute (pred integerp))
+             (list
+              (string-to-number (buffer-substring-no-properties (match-beginning 3) (match-end 3)) 10)
+              (string-to-number (buffer-substring-no-properties (match-beginning 4) (match-end 4)) 10)
+              (string-to-number (buffer-substring-no-properties (match-beginning 2) (match-end 2)) 10)))))
+         ('timerange
+          (list (org-element-property :month-start timestamp)
+                (org-element-property :day-start timestamp)
+                (org-element-property :year-start timestamp))))))))
+
+;;;###autoload
+(defun my/org-element-timestamp-print-human-readable-difference-in-days ()
+  "Print the difference between the Gregorian date at point and today.
+
+Do nothing if there is no Gregorian date at point.
+Always return nil."
+  (interactive)
+  (when-let* ((date (my/org-element-timestamp-date-at-point))
+              (today (calendar-current-date))
+              (date-abs (calendar-absolute-from-gregorian date))
+              (today-abs (calendar-absolute-from-gregorian today))
+              (difference (- date-abs today-abs))
+              (formatted-date (my/calendar-gregorian-to-org-string date)))
+    (cond
+     ((> difference 0)
+      (message "%d day(s) until %s" difference formatted-date))
+     ((< difference 0)
+      (message "%d day(s) since %s" (abs difference) formatted-date))
+     (t
+      (message "Today is %s" formatted-date))))
+  nil)
 
 (provide 'my-org)
 ;;; my-org.el ends here

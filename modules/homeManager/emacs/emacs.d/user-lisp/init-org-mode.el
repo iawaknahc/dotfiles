@@ -42,6 +42,7 @@
 (declare-function my/org-agenda-optimize--around "my-org")
 (declare-function my/org-calendar-holiday--around "my-org")
 (declare-function my/org-calendar-holiday--invalidate "my-org")
+(declare-function my/org-element-timestamp-print-human-readable-difference-in-days "my-org")
 (declare-function org-agenda-redo "org-agenda")
 (declare-function org-calendar-holiday "org")
 (declare-function org-capture-goto-last-stored "org-capture")
@@ -103,7 +104,7 @@
 (setq org-timestamp-custom-formats '("%G-W%V-%u" . "%G-W%V-%u %H:%M"))
 ;; Increment minute by 5 minutes. This is the default.
 (setq org-timestamp-rounding-minutes '(0 5))
-
+(add-hook 'org-ctrl-c-ctrl-c-hook #'my/org-element-timestamp-print-human-readable-difference-in-days)
 
 ;;;; Links and IDs
 ;; Do not conceal links.
