@@ -1,7 +1,5 @@
 {
   pkgs,
-  lib,
-  config,
   ...
 }:
 let
@@ -124,7 +122,9 @@ in
     codespell
 
     (hunspell.withDicts (dicts: [
-      dicts.en_US
+      # The difference between dicts.en_US and dicts.en_US-large is that
+      # en_US-large contains words like café.
+      dicts.en_US-large
     ]))
     # The following tools are not very practical.
     # They consume 1GB, even without the n-gram data.
