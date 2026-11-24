@@ -79,6 +79,12 @@ Always add :annotation-function to show this candidate is from pcomplete."
 
 (advice-add #'pcomplete-completions-at-point :around #'my/pcomplete-completions-at-point--around)
 
+(defun my/ispell-completion-at-point--around (capf)
+  "Advise CAPF to add annotation."
+  (cape-wrap-properties capf :annotation-function (cl-constantly " Ispell")))
+
+(advice-add #'ispell-completion-at-point :around #'my/ispell-completion-at-point--around)
+
 (defun my/rest-capfs ()
   "Wrap the remaining CAPFs in `completion-at-point-functions'.
 
