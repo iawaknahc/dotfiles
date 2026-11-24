@@ -6,7 +6,7 @@
 (defvar whitespace-line-column)
 (defvar whitespace-style)
 
-;; Turn on whitespace-mode.
+;; Turn on `whitespace-mode'.
 (add-hook 'conf-mode-hook #'whitespace-mode)
 (add-hook 'prog-mode-hook #'whitespace-mode)
 (add-hook 'text-mode-hook #'whitespace-mode)
@@ -42,9 +42,13 @@
         ))
 
 ;; cleanup means cleanup bogus whitespace when `whitespace-mode' is turned on.
+;; It is not included because the Git commit message buffer is in `text-mode'.
+;; The buffer begins with an empty line.
+;; Having cleanup will strip the the empty line.
+;;
 ;; auto-cleanup means cleanup bogus whitespace when the buffer is written.
-;; Both of them handle read-only buffers gracefully.
-(setq whitespace-action '(cleanup auto-cleanup))
+;; It handles read-only buffers gracefully.
+(setq whitespace-action '(auto-cleanup))
 
 (provide 'init-whitespace-mode)
 ;;; init-whitespace-mode.el ends here
