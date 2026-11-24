@@ -5,6 +5,10 @@
 (with-eval-after-load 'ispell
   (setopt ispell-program-name "hunspell")
   (setopt ispell-dictionary "en_US")
+  ;; Use the same dictionary for completion.
+  (setopt ispell-complete-word-dict (expand-file-name "~/.local/share/dict/hunspell-en_US-large-words"))
+  ;; Use `ispell-grep-command' instead of `ispell-look-command' to read the above file.
+  (setopt ispell-look-command nil)
   (rx-let ((en-letter (any
                        ;; The sub-ranges in Unicode Block Basic Latin.
                        (?A . ?Z) (?a . ?z)

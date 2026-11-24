@@ -103,6 +103,19 @@ let
           --add-flag '--ignore' \
           --add-flag '${builtins.concatStringsSep "," harperLintersToBeDisabled}'
       '';
+
+  hunspellWithDicts = pkgs.hunspell.withDicts (dicts: [
+    # The difference between dicts.en_US and dicts.en_US-large is that
+    # en_US-large contains words like café.
+    dicts.en_US-large
+  ]);
+
+  hunspell-en_US-large-words = pkgs.runCommand "hunspell-en_US-large-words" { } ''
+    ${pkgs.hunspell.bin}/bin/unmunch \
+      ${hunspellWithDicts}/share/hunspell/en_US.dic \
+      ${hunspellWithDicts}/share/hunspell/en_US.aff \
+      | LC_ALL=C sort -df | uniq | grep -v -E '^[[:digit:]]' > $out
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -121,11 +134,8 @@ in
 
     codespell
 
-    (hunspell.withDicts (dicts: [
-      # The difference between dicts.en_US and dicts.en_US-large is that
-      # en_US-large contains words like café.
-      dicts.en_US-large
-    ]))
+    hunspellWithDicts
+
     # The following tools are not very practical.
     # They consume 1GB, even without the n-gram data.
     # Even if I start a languagetool HTTP server, and ask ltex-ls-plus to connect to it.
@@ -139,4 +149,6 @@ in
   }";
 
   xdg.configFile."nvim/lsp/harper_ls.lua".source = "${harper-ls_lspconfig_lua}";
+
+  xdg.dataFile."dict/hunspell-en_US-large-words".source = hunspell-en_US-large-words;
 }
