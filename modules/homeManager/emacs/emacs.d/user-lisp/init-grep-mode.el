@@ -1,45 +1,28 @@
 ;;; init-grep-mode.el --- init-grep-mode.el -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
-;; I tried deadgrep.
-;; But it is too simple.
-;; For example, it does not support specifying multiple file types.
-;; See https://github.com/Wilfred/deadgrep/issues/129
+;; To search in a project, just use `my/project-find-regexp' (C-x p g).
+;; Unlike `project-find-regexp', it does not accept prefix argument.
+;; Instead, it always prompts for the regexp to search, the base directory, and
+;; a list of filename patterns.
+;; The base directory is the project root by default.
+;; The list of filename patterns can just be empty.
+;; The list of filename patterns is a space-separated string of patterns
+;; accepted by `wildcard-to-regexp'.
+;; In addition to patterns like "*.el",
+;; the pattern can also be entries in `grep-files-aliases'.
+;; Note that the result is shown in a XREF buffer, not a `grep-mode' buffer.
 ;;
-;; So I decided to stick with the built-in `grep-mode'.
-;; grep(1) does not respect VC ignore files, so we must customize `grep-mode' to use ripgrep.
-;; `grep' uses whatever value `default-directory' as the working directory for `grep-command'.
-;; Since the common case is to find-in-project, I installed an advice to `grep' to rebind `default-directory' dynamically to `project-root'.
-;; So `grep' means find in project.
-;;
-;; Note that it is different from `project-find-regexp'.
-;; `project-find-regexp' does not use `grep-mode', instead, the buffer is xref.
-;;
-;; A common use case is to refine the search term after an initial search.
-;; This is supported by `grep-mode' out of the box.
-;; C-u g brings up a minibuffer with the previous command pre-filled.
-;;
-;; Grug-far.nvim is a Neovim plugin is similar to grep-mode, and it has native support for type filter and paths.
-;; To replicate it, we can append the type filter and paths after the regexp.
-;; When `grep' is called interactively, the prompt is pre-filled with `grep-command', like this:
-;;
-;;  rg --color=auto ... --regexp
-;;
-;; Let's say we want to search "local" in all Lua files rooted at ./a/b,
-;; we will type in:
-;;  rg --color=auto ... --regexp local --type lua ./a/b
+;; Compared to `project-find-regexp', `my/project-find-regexp' offers:
+;; 1. Refining the search with `repeat-complex-command' (C-x M-:).
+;;    It is because `my/project-find-regexp' records the three prompts in three arguments.
+;; 2. A unified interface, no more different behavior based on prefix argument.
 ;;
 ;;; Code:
 
-(defvar grep-files-aliases)
-(defvar grep-find-ignored-directories)
-(defvar grep-find-ignored-files)
-(defvar grep-quoting-style)
-(defvar grep-save-buffers)
-(defvar grep-template)
-(defvar grep-use-null-device)
-(defvar grep-use-null-filename-separator)
-(declare-function project-root "project")
+(require 'cl-lib)
+(require 'grep)
+(require 'project)
 
 ;; Do not ask to save buffers before search.
 (setq grep-save-buffers nil)
@@ -53,7 +36,7 @@
 ;; This is eventually passed as the optional argument to `shell-quote-argument'.
 (setq grep-quoting-style t)
 ;; Ripgrep uses --type, so the default aliases are not applicable.
-;; Reset them to ni.
+;; Reset them to nil.
 (setq grep-files-aliases nil)
 ;; Ripgrep respects VC ignore file by default.
 (setq grep-find-ignored-directories nil)
@@ -80,50 +63,76 @@
 ;; `grep-command' is used by `grep'.
 (setq grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
 
-(defun my/lgrep-parse-files (files)
-  "Implement the algorithm documented in `my/lgrep-override'.
-FILES is parsed and a string is returned."
-  (let* ((components (split-string files))
-         (transformed (mapconcat
-                       (lambda (component)
-                         (pcase component
-                           ((pred (string-prefix-p "!" _))
-                            (format "--type-not=%s" (substring component 1)))
-                           (_
-                            (format "--type=%s" component))))
-                       components
-                       " ")))
-    transformed))
+(defun my/project--all-directories (root files)
+  "Return the directories of FILES and their parents up to ROOT."
+  (let* ((root (file-name-as-directory (expand-file-name root)))
+         (seen (make-hash-table :test #'equal))
+         (dirs nil))
+    (dolist (file files)
+      (let* ((directory (file-name-directory (expand-file-name file))))
+        (while (and directory (string-prefix-p root directory) (not (gethash directory seen)))
+          (puthash directory t seen)
+          (push directory dirs)
+          (setq directory (file-name-directory (directory-file-name directory))))))
+    (nreverse dirs)))
 
-(defun my/lgrep-project (regexp &optional files dir)
-  "Run a modified version of `lgrep' in project.
+;;;###autoload
+(defun my/project-find-regexp (regexp &optional directory filename-patterns)
+  "An improved version of `project-find-regexp'.
 
-First, prompt for project if there is none contextually.
-The root of the project is then used as DIR.
-
-REGEXP is prompted and quoted for shell.
-
-FILES is prompted and the resulting string will be split at spaces.
-Each component is treated as a Ripgrep type.
-If the component is prefixed with !,
-then it will be passed as --type-not COMPONENT.
-For example, suppose FILES is \"json yaml\",
-it will be translated to \"--type json --type yaml\".
-For example, suppose FILES is \"!lua\",
-it will be translated to \"--type-not lua\"."
+Always prompt for REGEXP, DIRECTORY, and FILENAME-PATTERNS.
+When called non-interactively, DIRECTORY is the project root by default,
+and FILENAME-PATTERNS is an empty string, which matches all files."
   (interactive
    (let* ((proj (project-current t))
-          (proj-root (project-root proj))
-          (regexp (read-regexp "Enter a Ripgrep regexp to search: " 'grep-tag-default 'grep-regexp-history))
-          (files (read-from-minibuffer "[Optional] space-separated list of Ripgrep types (e.g. sh !zsh): ")))
-     (list regexp files proj-root)))
-  (let* ((types (my/lgrep-parse-files files))
-         (command (grep-expand-template grep-template regexp types))
-         (default-directory (expand-file-name dir)))
-    (compilation-start command #'grep-mode)))
-;; `grep-expand-template' is used in the above function, but
-;; it is not autoloaded.
-(autoload 'grep-expand-template "grep")
+          (regexp (project--read-regexp)))
+     (when (string-empty-p regexp)
+       (user-error "An empty regexp matches everything, which may not be what you want"))
+     (let* ((proj-root (project-root proj))
+            (all-files (project-files proj))
+            (all-directories (my/project--all-directories proj-root all-files))
+            (directory (project--read-file-name
+                        ;; PROJECT
+                        proj
+                        ;; PROMPT
+                        "Base directory"
+                        ;; ALL-FILES
+                        all-directories
+                        ;; PREDICATE
+                        nil
+                        ;; HIST
+                        'file-name-history
+                        ;; MB-DEFAULT
+                        (project--find-default-from proj-root proj)))
+            ;; Re-bind `grep-read-files-function' so that
+            ;; the extension of the filename of the current buffer is not used
+            ;; to build a candidate.
+            ;; For example, if it is a .el file, then *.el is suggested.
+            ;; I do not want it.
+            (grep-read-files-function (cl-constantly ""))
+            ;; Re-bind `grep-files-aliases' to have an empty entry at the front,
+            ;; so that the default value is an empty pattern.
+            (grep-files-aliases (cons '("" . "") grep-files-aliases))
+            (filename-patterns (grep-read-files regexp)))
+       (list regexp directory filename-patterns))))
+  (let* ((proj (project-current t (or directory default-directory)))
+         (proj-root (project-root proj)))
+    (when (string-empty-p regexp)
+      (user-error "An empty regexp matches everything, which may not be what you want"))
+    (unless directory
+      (setq directory proj-root))
+    (unless filename-patterns
+      (setq filename-patterns ""))
+    (let* ((files (project-files proj (list directory)))
+           (filename-patterns-regexp (mapconcat #'wildcard-to-regexp (split-string filename-patterns) "\\|"))
+           (files (if (string-empty-p filename-patterns-regexp)
+                      files
+                    (seq-filter (lambda (file)
+                                  (string-match-p filename-patterns-regexp (file-name-nondirectory file)))
+                                files))))
+      (xref-show-xrefs
+       (apply-partially #'project--find-regexp-in-files regexp files)
+       nil))))
 
 (provide 'init-grep-mode)
 ;;; init-grep-mode.el ends here

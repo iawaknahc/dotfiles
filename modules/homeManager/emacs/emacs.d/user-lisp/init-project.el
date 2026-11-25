@@ -8,11 +8,11 @@
 (declare-function ghostel-project "ghostel-project")
 (declare-function ghostel-project-new "ghostel-project")
 (declare-function magit-project-status "magit-extras")
-(declare-function my/lgrep-project "init-grep-mode")
+(declare-function my/project-find-regexp "init-grep-mode")
 (declare-function project-name "project")
 
 (with-eval-after-load 'project
-  (keymap-set project-prefix-map "g" #'my/lgrep-project)
+  (keymap-set project-prefix-map "g" #'my/project-find-regexp)
   (keymap-set project-prefix-map "m" #'ghostel-project)
   (keymap-set project-prefix-map "M" #'ghostel-project-new)
   (keymap-set project-prefix-map "v" #'magit-project-status)
@@ -24,7 +24,7 @@
      (ghostel-project-new "New Ghostel")
      (project-find-file "Find file")
      (project-find-dir "Find directory")
-     (my/lgrep-project "Grep")
+     (my/project-find-regexp "Xref")
      (magit-project-status "Magit")
      ;; project-any-command was omitted.
      ;; I haven't figured the use case of it.
