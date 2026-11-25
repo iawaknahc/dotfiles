@@ -12,6 +12,13 @@
 ;; to `wildcard-to-regexp'.
 ;; Note that the result is shown in a XREF buffer, not a `grep-mode' buffer.
 ;;
+;; By default, the search is done in a smart case way.
+;; If the search term has an uppercase character,
+;; then it is case-sensitive.
+;; To force case-sensitive search, press M-s c once.
+;; To force case-insensitive search, press M-s c twice.
+;; This works because `read-regexp' is used behind the scenes.
+;;
 ;; Compared to `project-find-regexp', `my/project-find-regexp' offers:
 ;; 1. Refining the search with `repeat-complex-command' (C-x M-:).
 ;;    It is because `my/project-find-regexp' records the three prompts in three arguments.
@@ -41,6 +48,29 @@
 ;; Always quote for POSIX shell.
 ;; This is eventually passed as the optional argument to `shell-quote-argument'.
 (setq grep-quoting-style t)
+
+;; `read-regexp' attaches a text property case-fold to the regexp when the user
+;; toggles case folding with M-s c.
+;; `grep-expand-template' does not respect it.
+;; Instead, `grep-expand-template' adds the flag -i only when
+;; `case-fold-search' is non-nil and the regexp has no uppercase characters.
+;; This advice checks if the text property exists and put -i to MORE-OPTS accordingly.
+(defun my/grep-expand-template--around--respect-case-fold (orig template &optional regexp files dir excl more-opts)
+  "Make ORIG respect the `case-fold' text property of REGEXP.
+TEMPLATE, REGEXP, FILES, DIR, EXCL and MORE-OPTS are passed to ORIG."
+  (pcase (and (stringp regexp)
+              (> (length regexp) 0)
+              (get-text-property 0 'case-fold regexp))
+    ('fold
+     (let ((case-fold-search nil))
+       (funcall orig template regexp files dir excl (cons "-i" more-opts))))
+    ('inhibit-fold
+     (let ((case-fold-search nil))
+       (funcall orig template regexp files dir excl more-opts)))
+    (_
+     (funcall orig template regexp files dir excl more-opts))))
+
+(advice-add 'grep-expand-template :around #'my/grep-expand-template--around--respect-case-fold)
 
 (defun my/grep-set-grep-files-aliases-with-ripgrep ()
   "Invoke \"rg --type-list\" and set `grep-files-aliases'."
@@ -160,7 +190,18 @@ Return nil."
                                   (string-match-p filename-patterns-regexp (file-name-nondirectory file)))
                                 files)))
            (buf (xref-show-xrefs
-                 (apply-partially #'project--find-regexp-in-files regexp files)
+                 (lambda ()
+                   ;; `project--find-regexp-in-files' uses `xref-matches-in-files',
+                   ;; and `xref-matches-in-files' does not use `read-regexp-case-fold-search'
+                   ;; to respect the text property case-fold.
+                   ;; So we do it here.
+                   (let ((case-fold-search (if (get-text-property 0 'case-fold regexp)
+                                               ;; Use the text property if it exists.
+                                               (read-regexp-case-fold-search regexp)
+                                             ;; Otherwise, if `case-fold-search' is non-nil,
+                                             ;; an uppercase character will cause `case-fold-search' to be nil.
+                                             (and case-fold-search (isearch-no-upper-case-p regexp t)))))
+                     (project--find-regexp-in-files regexp files)))
                  nil)))
       (unless (bufferp buf)
         (error "Expected `xref-show-xrefs' to return a buffer, but got %S" buf))
