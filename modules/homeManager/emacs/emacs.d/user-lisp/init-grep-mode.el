@@ -7,10 +7,9 @@
 ;; a list of filename patterns.
 ;; The base directory is the project root by default.
 ;; The list of filename patterns can just be empty.
-;; The list of filename patterns is a space-separated string of patterns
-;; accepted by `wildcard-to-regexp'.
-;; In addition to patterns like "*.el",
-;; the pattern can also be entries in `grep-files-aliases'.
+;; A filename pattern is either an entry in `grep-files-aliases',
+;; or a space-separated string which will be split by `split-string' before passing
+;; to `wildcard-to-regexp'.
 ;; Note that the result is shown in a XREF buffer, not a `grep-mode' buffer.
 ;;
 ;; Compared to `project-find-regexp', `my/project-find-regexp' offers:
@@ -32,7 +31,6 @@
 ;;
 ;;; Code:
 
-(require 'cl-lib)
 (require 'grep)
 (require 'project)
 
@@ -101,7 +99,7 @@ All paths returned are expanded."
 
 Always prompt for REGEXP, DIRECTORY, and FILENAME-PATTERNS.
 When called non-interactively, DIRECTORY is the project root by default,
-and FILENAME-PATTERNS is an empty string, which matches all files.
+and FILENAME-PATTERNS is an empty list, which matches all files.
 
 Return nil."
   (interactive
@@ -136,16 +134,29 @@ Return nil."
                          ;; INHERIT-INPUT-METHOD
                          nil)
                         proj-root))
-            ;; Re-bind `grep-read-files-function' so that
-            ;; the extension of the filename of the current buffer is not used
-            ;; to build a candidate.
-            ;; For example, if it is a .el file, then *.el is suggested.
-            ;; I do not want it.
-            (grep-read-files-function (cl-constantly ""))
-            ;; Re-bind `grep-files-aliases' to have an empty entry at the front,
-            ;; so that the default value is an empty pattern.
-            (grep-files-aliases (cons '("" . "") grep-files-aliases))
-            (filename-patterns (grep-read-files regexp)))
+            (filename-patterns (let* ((aliases (cons '("*" . "*") grep-files-aliases)))
+                                 (completing-read-multiple
+                                  ;; PROMPT
+                                  (format-prompt "Search %s in files matching wildcard" "*" regexp)
+                                  ;; TABLE
+                                  (completion-table-with-metadata
+                                   (mapcar #'car aliases)
+                                   `((category . my/grep-files-aliases)
+                                     (annotation-function . ,(lambda (candidate)
+                                                               (let* ((patterns (cdr (assoc candidate aliases))))
+                                                                 (concat " " patterns))))))
+                                  ;; PREDICATE
+                                  nil
+                                  ;; REQUIRE-MATCH
+                                  nil
+                                  ;; INITIAL-INPUT
+                                  nil
+                                  ;; HIST
+                                  t
+                                  ;; DEF
+                                  "*"
+                                  ;; INHERIT-INPUT-METHOD
+                                  nil))))
        (list regexp directory filename-patterns))))
   (let* ((proj (project-current t (or directory default-directory)))
          (proj-root (expand-file-name (project-root proj))))
@@ -153,10 +164,15 @@ Return nil."
       (user-error "An empty regexp matches everything, which may not be what you want"))
     (unless directory
       (setq directory proj-root))
-    (unless filename-patterns
-      (setq filename-patterns ""))
-    (let* ((files (project-files proj (list directory)))
-           (filename-patterns-regexp (mapconcat #'wildcard-to-regexp (split-string filename-patterns) "\\|"))
+    ;; Assume FILENAME-PATTERNS is ("elisp" "*.el" "ts")
+    ;; ("elisp" "*.el" "ts") => ("*.el" "*.el" "*.ts *.tsx")
+    (let* ((filename-patterns (seq-map (lambda (pattern)
+                                         (or (cdr (assoc pattern grep-files-aliases)) pattern))
+                                       filename-patterns))
+           ;; ("*.el" "*.el" "*.ts *.tsx") => ("*.el" "*.el" "*.ts" "*.tsx")
+           (filename-patterns (seq-mapcat #'split-string filename-patterns))
+           (files (project-files proj (list directory)))
+           (filename-patterns-regexp (mapconcat #'wildcard-to-regexp filename-patterns "\\|"))
            (files (if (string-empty-p filename-patterns-regexp)
                       files
                     (seq-filter (lambda (file)
