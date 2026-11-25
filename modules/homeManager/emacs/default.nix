@@ -103,29 +103,32 @@ in
     zig-ts-mode = self.melpaStablePackages.zig-ts-mode;
 
     # elpaPackages
+    # Setting to null drop the packages from dependents' requirements.
+    # This is not documented but used in upstream.
+    # See https://github.com/NixOS/nixpkgs/blob/26.05/pkgs/applications/editors/emacs/elisp-packages/elpa-common-overrides.nix#L75
     cape = self.elpaPackages.cape;
-    compat = self.elpaPackages.compat;
+    compat = null;
     consult = self.elpaPackages.consult;
     corfu = self.elpaPackages.corfu;
     # dash is a dependency of vulpea.
     dash = self.elpaPackages.dash;
     denote = self.elpaPackages.denote;
-    eglot = self.elpaPackages.eglot;
-    eldoc = self.elpaPackages.eldoc;
+    eglot = null;
+    eldoc = null;
     embark = self.elpaPackages.embark;
     embark-consult = self.elpaPackages.embark-consult;
-    flymake = self.elpaPackages.flymake;
-    jsonrpc = self.elpaPackages.jsonrpc;
+    flymake = null;
+    jsonrpc = null;
     marginalia = self.elpaPackages.marginalia;
     orderless = self.elpaPackages.orderless;
     org = self.elpaPackages.org;
-    project = self.elpaPackages.project;
-    seq = self.elpaPackages.seq;
+    project = null;
+    seq = null;
     tempel = self.elpaPackages.tempel;
-    track-changes = self.elpaPackages.track-changes;
-    tramp = self.elpaPackages.tramp;
+    track-changes = null;
+    tramp = null;
     vertico = self.elpaPackages.vertico;
-    xref = self.elpaPackages.xref;
+    xref = null;
     # transient is a dependency of magit.
     transient = self.elpaPackages.transient;
     vlf = self.elpaPackages.vlf;
@@ -226,20 +229,8 @@ in
       # Define Flymake backends
       flymake-quickdef
 
-      # Install the latest version of builtin packages that I really care about.
-      # Note that the following list is not exhaustive.
-      # There are way more bundled packages that are also available on GNU ELPA.
-      compat
-      eglot
-      eldoc
-      flymake
-      jsonrpc
+      # Install the latest version of Org
       org
-      project
-      seq
-      track-changes
-      tramp
-      xref
 
       # Very Large File
       vlf
