@@ -491,9 +491,14 @@ BOL is unused."
 
 (defconst beancount-ts--syntax-table
   (let ((table (make-syntax-table)))
+    ;; The following 3 entries are borrowed from the original beancount-mode.
     (modify-syntax-entry ?\; "<" table)
     (modify-syntax-entry ?\n ">" table)
     (modify-syntax-entry ?\" "\"" table)
+    ;; We additionally make colon a symbol character.
+    ;; When point is in an account name,
+    ;; the symbol at point is the whole account name.
+    (modify-syntax-entry ?: "_" table)
     table)
   "Syntax table for `beancount-ts-mode'.")
 
