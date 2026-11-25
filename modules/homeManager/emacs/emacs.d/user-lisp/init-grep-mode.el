@@ -104,6 +104,16 @@ All paths returned are expanded."
 (defvar-local my/project-find-regexp-regexp nil
   "The regexp used in `my/project-find-regexp'.")
 
+(defun my/project-find-regexp--case-fold-search (regexp)
+  "Return the value of `case-fold-search' to use for REGEXP.
+If REGEXP has the text property `case-fold', which `read-regexp' attaches,
+the value of the text property determines the value of `case-fold-search'.
+Otherwise, if `case-fold-search' is non-nil,
+an uppercase character in REGEXP makes the search case-sensitive."
+  (if (get-text-property 0 'case-fold regexp)
+      (read-regexp-case-fold-search regexp)
+    (and case-fold-search (isearch-no-upper-case-p regexp t))))
+
 ;;;###autoload
 (defun my/project-find-regexp (regexp &optional directory filename-patterns)
   "An improved version of `project-find-regexp'.
@@ -195,12 +205,7 @@ Return nil."
                    ;; and `xref-matches-in-files' does not use `read-regexp-case-fold-search'
                    ;; to respect the text property case-fold.
                    ;; So we do it here.
-                   (let ((case-fold-search (if (get-text-property 0 'case-fold regexp)
-                                               ;; Use the text property if it exists.
-                                               (read-regexp-case-fold-search regexp)
-                                             ;; Otherwise, if `case-fold-search' is non-nil,
-                                             ;; an uppercase character will cause `case-fold-search' to be nil.
-                                             (and case-fold-search (isearch-no-upper-case-p regexp t)))))
+                   (let ((case-fold-search (my/project-find-regexp--case-fold-search regexp)))
                      (project--find-regexp-in-files regexp files)))
                  nil)))
       (unless (bufferp buf)
@@ -220,7 +225,17 @@ This command is intended to be run in a *xref* buffer produced by
      (unless my/project-find-regexp-regexp
        (user-error "Current buffer is not a *xref* buffer produced by `my/project-find-regexp'"))
      (list (query-replace-read-to my/project-find-regexp-regexp "Replace" t))))
-  (my/xref-multi-file-replace-regexp-as-diff my/project-find-regexp-regexp to-string))
+  (let* ((regexp my/project-find-regexp-regexp)
+         ;; `my/xref-multi-file-replace-regexp-as-diff' uses `multi-file-replace-regexp-as-diff'.
+         ;; `multi-file-replace-regexp-as-diff' uses `multi-file-replace-as-diff'.
+         ;; `multi-file-replace-as-diff' uses `perform-replace'.
+         ;; `perform-replace' is used by `query-replace-regexp'.
+         ;; `query-replace-regexp' is documented to reads `case-fold-search' and `search-upper-case'.
+         ;; Since case-sensitivity is determined by `my/project-find-regexp-regexp',
+         ;; we bind these two variables to force a predictable behavior.
+         (case-fold-search (my/project-find-regexp--case-fold-search regexp))
+         (search-upper-case nil))
+    (my/xref-multi-file-replace-regexp-as-diff regexp to-string)))
 
 (provide 'init-grep-mode)
 ;;; init-grep-mode.el ends here
