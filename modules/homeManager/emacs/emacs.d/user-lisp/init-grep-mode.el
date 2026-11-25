@@ -47,9 +47,6 @@
 ;; Always quote for POSIX shell.
 ;; This is eventually passed as the optional argument to `shell-quote-argument'.
 (setq grep-quoting-style t)
-;; Ripgrep uses --type, so the default aliases are not applicable.
-;; Reset them to nil.
-(setq grep-files-aliases nil)
 ;; Ripgrep respects VC ignore file by default.
 (setq grep-find-ignored-directories nil)
 ;; This variable is unsupported for now.
@@ -74,6 +71,20 @@
 
 ;; `grep-command' is used by `grep'.
 (setq grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
+
+(defun my/grep-set-grep-files-aliases-with-ripgrep ()
+  "Invoke \"rg --type-list\" and set `grep-files-aliases'."
+  (setq grep-files-aliases
+        (mapcar (lambda (line)
+                  ;; Each line of the output looks like "NAME: GLOB, GLOB, ...".
+                  ;; It becomes the entry ("NAME" . "GLOB GLOB ...").
+                  (unless (string-match "\\`\\([^:]+\\): \\(.+\\)\\'" line)
+                    (error "Unexpected line in \"rg --type-list\" output: %S" line))
+                  (cons (match-string 1 line)
+                        (string-join (split-string (match-string 2 line) ", ") " ")))
+                (process-lines "rg" "--type-list"))))
+
+(add-hook 'after-init-hook #'my/grep-set-grep-files-aliases-with-ripgrep)
 
 (defun my/project--all-directories (root files)
   "Return the directories of FILES and their parents up to ROOT.
