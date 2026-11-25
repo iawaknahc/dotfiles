@@ -78,7 +78,9 @@
 (setq grep-command "rg --color=ansi --no-heading --with-filename --line-number --null --regexp ")
 
 (defun my/project--all-directories (root files)
-  "Return the directories of FILES and their parents up to ROOT."
+  "Return the directories of FILES and their parents up to ROOT.
+
+All paths returned are expanded."
   (let* ((root (file-name-as-directory (expand-file-name root)))
          (seen (make-hash-table :test #'equal))
          (dirs nil))
@@ -107,22 +109,33 @@ Return nil."
           (regexp (project--read-regexp)))
      (when (string-empty-p regexp)
        (user-error "An empty regexp matches everything, which may not be what you want"))
-     (let* ((proj-root (project-root proj))
+     (let* ((proj-root (expand-file-name (project-root proj)))
             (all-files (project-files proj))
             (all-directories (my/project--all-directories proj-root all-files))
-            (directory (project--read-file-name
-                        ;; PROJECT
-                        proj
-                        ;; PROMPT
-                        "Base directory"
-                        ;; ALL-FILES
-                        all-directories
-                        ;; PREDICATE
-                        nil
-                        ;; HIST
-                        'file-name-history
-                        ;; MB-DEFAULT
-                        (project--find-default-from proj-root proj)))
+            (all-directories-relative (seq-map (lambda (directory)
+                                                 (file-relative-name directory proj-root))
+                                               all-directories))
+            (directory (expand-file-name
+                        (completing-read
+                         ;; PROMPT
+                         (format-prompt "Base directory" "./")
+                         ;; COLLECTION
+                         (completion-table-with-metadata
+                          all-directories-relative
+                          '((category . project-file)))
+                         ;; PREDICATE
+                         nil
+                         ;; REQUIRE-MATCH
+                         t
+                         ;; INITIAL-INPUT
+                         nil
+                         ;; HIST
+                         t
+                         ;; DEF
+                         "./"
+                         ;; INHERIT-INPUT-METHOD
+                         nil)
+                        proj-root))
             ;; Re-bind `grep-read-files-function' so that
             ;; the extension of the filename of the current buffer is not used
             ;; to build a candidate.
@@ -135,7 +148,7 @@ Return nil."
             (filename-patterns (grep-read-files regexp)))
        (list regexp directory filename-patterns))))
   (let* ((proj (project-current t (or directory default-directory)))
-         (proj-root (project-root proj)))
+         (proj-root (expand-file-name (project-root proj))))
     (when (string-empty-p regexp)
       (user-error "An empty regexp matches everything, which may not be what you want"))
     (unless directory
