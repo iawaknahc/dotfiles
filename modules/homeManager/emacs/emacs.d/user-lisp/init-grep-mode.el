@@ -17,12 +17,26 @@
 ;; 1. Refining the search with `repeat-complex-command' (C-x M-:).
 ;;    It is because `my/project-find-regexp' records the three prompts in three arguments.
 ;; 2. A unified interface, no more different behavior based on prefix argument.
+;; 3. An integration with `multi-file-replace-regexp-as-diff', via
+;;    `my/project-find-regexp-replace', which see.
+;;
+;; To do search-and-replace, do the search with `my/project-find-regexp' first.
+;; In the *xref* buffer, M-x `my/project-find-regexp-replace'.
+;; It will prompt for a replacement.
+;; The replacement is an ordinary Emacs regexp replacement,
+;; so back references like \1 are allowed.
+;; The command uses `multi-file-replace-regexp-as-diff' behind the scenes,
+;; so a diff buffer is produced.
+;; If the changes are good, M-x `diff-apply-buffer' to apply the diff.
+;; If all hunks apply cleanly, the changed buffers will be saved automatically.
 ;;
 ;;; Code:
 
 (require 'cl-lib)
 (require 'grep)
 (require 'project)
+
+(declare-function my/xref-multi-file-replace-regexp-as-diff "my-xref")
 
 ;; Do not ask to save buffers before search.
 (setq grep-save-buffers nil)
@@ -76,13 +90,18 @@
           (setq directory (file-name-directory (directory-file-name directory))))))
     (nreverse dirs)))
 
+(defvar-local my/project-find-regexp-regexp nil
+  "The regexp used in `my/project-find-regexp'.")
+
 ;;;###autoload
 (defun my/project-find-regexp (regexp &optional directory filename-patterns)
   "An improved version of `project-find-regexp'.
 
 Always prompt for REGEXP, DIRECTORY, and FILENAME-PATTERNS.
 When called non-interactively, DIRECTORY is the project root by default,
-and FILENAME-PATTERNS is an empty string, which matches all files."
+and FILENAME-PATTERNS is an empty string, which matches all files.
+
+Return nil."
   (interactive
    (let* ((proj (project-current t))
           (regexp (project--read-regexp)))
@@ -129,10 +148,28 @@ and FILENAME-PATTERNS is an empty string, which matches all files."
                       files
                     (seq-filter (lambda (file)
                                   (string-match-p filename-patterns-regexp (file-name-nondirectory file)))
-                                files))))
-      (xref-show-xrefs
-       (apply-partially #'project--find-regexp-in-files regexp files)
-       nil))))
+                                files)))
+           (buf (xref-show-xrefs
+                 (apply-partially #'project--find-regexp-in-files regexp files)
+                 nil)))
+      (unless (bufferp buf)
+        (error "Expected `xref-show-xrefs' to return a buffer, but got %S" buf))
+      (with-current-buffer buf
+        (setq my/project-find-regexp-regexp regexp))
+      nil)))
+
+;;;###autoload
+(defun my/project-find-regexp-replace (to-string)
+  "Prompt for TO-STRING and do `multi-file-replace-regexp-as-diff'.
+
+This command is intended to be run in a *xref* buffer produced by
+`my/project-find-regexp'."
+  (interactive
+   (progn
+     (unless my/project-find-regexp-regexp
+       (user-error "Current buffer is not a *xref* buffer produced by `my/project-find-regexp'"))
+     (list (query-replace-read-to my/project-find-regexp-regexp "Replace" t))))
+  (my/xref-multi-file-replace-regexp-as-diff my/project-find-regexp-regexp to-string))
 
 (provide 'init-grep-mode)
 ;;; init-grep-mode.el ends here
